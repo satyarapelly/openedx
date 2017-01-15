@@ -3,7 +3,8 @@
 # Licensed under the MIT license. See LICENSE file on the project webpage for details.
 
 set -x
-export OPENEDX_RELEASE=$1
+export EDX_RELEASE=$1
+export OPENEDX_RELEASE=$2
 CONFIG_REPO=https://github.com/edx/configuration.git
 ANSIBLE_ROOT=/edx/app/edx_ansible
 
@@ -11,7 +12,7 @@ wget https://raw.githubusercontent.com/edx/configuration/master/util/install/ans
 
 bash -c "cat <<EOF >extra-vars.yml
 ---
-edx_platform_version: \"$OPENEDX_RELEASE\"
+edx_platform_version: \"$EDX_RELEASE\"
 certs_version: \"$OPENEDX_RELEASE\"
 forum_version: \"$OPENEDX_RELEASE\"
 xqueue_version: \"$OPENEDX_RELEASE\"
