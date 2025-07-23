@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace Microsoft.Commerce.Payments.PXCommon
 {
@@ -17,17 +18,21 @@ namespace Microsoft.Commerce.Payments.PXCommon
     /// </summary>
     public class PXTracingHandler : DelegatingHandler
     {
+        private readonly IHttpContextAccessor? _httpContextAccessor;
+
         public PXTracingHandler(
             string serviceName,
             Action<string, EventTraceActivity>? logError = null,
             Action<string, string, EventTraceActivity>? logRequest = null,
-            Action<string, EventTraceActivity>? logResponse = null)
+            Action<string, EventTraceActivity>? logResponse = null,
+            IHttpContextAccessor? httpContextAccessor = null)
             : base()
         {
             ServiceName = serviceName;
             LogError = logError ?? ((m, t) => { });
             LogRequest = logRequest ?? ((a, m, t) => { });
             LogResponse = logResponse ?? ((m, t) => { });
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public PXTracingHandler(
@@ -35,13 +40,15 @@ namespace Microsoft.Commerce.Payments.PXCommon
             HttpMessageHandler httpMessageHandler,
             Action<string, EventTraceActivity>? logError = null,
             Action<string, string, EventTraceActivity>? logRequest = null,
-            Action<string, EventTraceActivity>? logResponse = null)
+            Action<string, EventTraceActivity>? logResponse = null,
+            IHttpContextAccessor? httpContextAccessor = null)
             : base(httpMessageHandler)
         {
             ServiceName = serviceName;
             LogError = logError ?? ((m, t) => { });
             LogRequest = logRequest ?? ((a, m, t) => { });
             LogResponse = logResponse ?? ((m, t) => { });
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public string ServiceName { get; set; }
@@ -77,7 +84,16 @@ namespace Microsoft.Commerce.Payments.PXCommon
             try
             {
                 string requestPayload = await request.GetRequestPayload();
-                LogRequest(request.GetOperationName(), $"Url:{request.RequestUri}, Payload:{requestPayload}", traceId);
+                string prefix = string.Empty;
+                if (_httpContextAccessor?.HttpContext?.TraceIdentifier is { Length: > 0 } id)
+                {
+                    prefix = $"TraceIdentifier:{id}, ";
+                }
+
+                LogRequest(
+                    request.GetOperationName(),
+                    $"{prefix}Url:{request.RequestUri}, Payload:{requestPayload}",
+                    traceId);
             }
             catch (Exception ex)
             {
@@ -107,6 +123,11 @@ namespace Microsoft.Commerce.Payments.PXCommon
                             sb.AppendLine(await response.Content.ReadAsStringAsync());
                         }
                     }
+                }
+
+                if (_httpContextAccessor?.HttpContext is HttpContext ctx)
+                {
+                    sb.AppendLine($"HttpContext TraceIdentifier: {ctx.TraceIdentifier}");
                 }
 
                 string operationName = request.GetOperationNameWithPendingOnInfo();
