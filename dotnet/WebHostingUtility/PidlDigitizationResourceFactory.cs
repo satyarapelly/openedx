@@ -455,7 +455,7 @@ namespace Microsoft.Commerce.Payments.PidlFactory.V7
         {
             // TODO Remove dependency on HttpContext.  For example when running as part of unit tests, HttpContext will be null
             Uri currentUrl = new Uri("http://localhost"); // lgtm[cs/non-https-url] Suppressing Semmle warning // DevSkim: ignore DS137138 as this to access the locally hosted endpoint
-            if (!WebHostingUtility.IsApplicationSelfHosted())
+            if (!WebHostingUtility.IsApplicationSelfHosted() && HttpContext.Current != null)
             {
                 currentUrl = new Uri(HttpContext.Current.Request.Url.ToString().ToLower());
             }
