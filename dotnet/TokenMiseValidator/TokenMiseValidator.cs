@@ -95,11 +95,11 @@ namespace Microsoft.Commerce.Payments.PXCommon
 
             try
             {
-                // Use dynamic for HttpRequestData and MiseHttpContext
-                dynamic httpRequestData = new HttpRequestData();
-                httpRequestData.Headers.Add("Authorization", "Bearer " + token);
+                // Use dynamic for HttpRequest and MiseHttpContext
+                dynamic httpRequest = new HttpRequest();
+                httpRequest.Headers.Add("Authorization", "Bearer " + token);
 
-                dynamic context = new MiseHttpContext(httpRequestData)
+                dynamic context = new MiseHttpContext(httpRequest)
                 {
                     CorrelationId = incomingRequestId
                 };
@@ -216,17 +216,17 @@ namespace Microsoft.Commerce.Payments.PXCommon
         }
     }
 
-    public class HttpRequestData
+    public class HttpRequest
     {
         public Dictionary<string, string> Headers { get; } = new();
     }
 
     public class MiseHttpContext
     {
-        public HttpRequestData Request { get; }
+        public HttpRequest Request { get; }
         public string? CorrelationId { get; set; }
 
-        public MiseHttpContext(HttpRequestData request)
+        public MiseHttpContext(HttpRequest request)
         {
             Request = request;
         }
