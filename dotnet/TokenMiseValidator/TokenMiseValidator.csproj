@@ -5,5 +5,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\logger\IAuthenticationLogger.cs" />
+  </ItemGroup>
 
 </Project>
