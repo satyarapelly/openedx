@@ -1,14 +1,18 @@
-// <copyright file="SllLogger.cs" company="Microsoft">Copyright (c) Microsoft 2025. All rights reserved.</copyright>
+// <copyright file="SllLogger.cs" company="Microsoft">Copyright (c) Microsoft 2013. All rights reserved.</copyright>
 
-namespace Microsoft.Commerce.Payments.Common.OpenTelemetry
+namespace Microsoft.Commerce.Payments.Common.Tracing
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using Microsoft.Commerce.Payments.Common.Tracing;
-    using Microsoft.Extensions.Logging;
+    using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Tracing;
+    using System.Net.Http;
+    using Microsoft.Commerce.Payments.Common;
+    using Microsoft.Commerce.Payments.Common.Web;
+    using Microsoft.Commerce.Tracing.Sll;
+    using Microsoft.CommonSchema.Services;
+    using Microsoft.CommonSchema.Services.Logging;
+    using Ms.Qos;
     using Newtonsoft.Json;
 
     /// <summary>
@@ -16,42 +20,75 @@ namespace Microsoft.Commerce.Payments.Common.OpenTelemetry
     /// </summary>
     public static class SllLogger
     {
-        private const string SllLoggerMessageFormat =
-          "{ActivityId} {RelatedActivityId} {Component} {EventName} {Message} {Parameters}";
+        static SllLogger()
+        {
+            EnvironmentLogOption = LogOption.None;
+            Masker = new JsonDataMasker();
+        }
 
-        public static JsonDataMasker Masker { get; } = new JsonDataMasker();
+        public static LogOption EnvironmentLogOption { get; private set; }
+
+        public static JsonDataMasker Masker { get; private set; }
+
+        public static void SetRealtimeLogging()
+        {
+            EnvironmentLogOption = LogOption.Realtime;
+        }
 
         /// <summary>
-        /// Trace a general server message for debugging purpose.
+        /// Trace a general server message for debugging purpose. 
         /// </summary>
-        /// <param name="logger">The logger instance.</param>
         /// <param name="message">The trace message.</param>
         /// <param name="eventLevel">The event trace level. </param>
         /// <param name="correlationId">The request correlation id, if it exists. </param>
         /// <param name="trackingGuid">The request tracking guid, if it exists. </param>
-        public static void TraceMessage(ILogger logger, string message, QosEventLevel eventLevel, string correlationId = null, string trackingGuid = null)
+        public static void TraceMessage(string message, EventLevel eventLevel, string correlationId = null, string trackingGuid = null)
         {
-            switch (eventLevel)
+            ServerMessage serverMessage = new ServerMessage()
             {
-                case QosEventLevel.Error:
-                    logger.LogError(SllLoggerMessageFormat, trackingGuid, correlationId, string.Empty, "BaseError", Masker.MaskSingle(message), string.Empty);
-                    break;
-                case QosEventLevel.Information:
-                    logger.LogInformation(SllLoggerMessageFormat, trackingGuid, correlationId, string.Empty, "BaseInformational", Masker.MaskSingle(message), string.Empty);
-                    break;
-                case QosEventLevel.Warning:
-                    logger.LogWarning(SllLoggerMessageFormat, trackingGuid, correlationId, string.Empty, "BaseWarning", Masker.MaskSingle(message), string.Empty);
-                    break;
-                default:
-                    logger.LogTrace(SllLoggerMessageFormat, trackingGuid, correlationId, string.Empty, "TraceMessage", Masker.MaskSingle(message), string.Empty);
-                    break;
-            }
+                CorrelationId = correlationId,
+                TrackingGuid = trackingGuid,
+                Message = Masker.MaskSingle(message)
+            };
+
+            serverMessage.Log(eventLevel, EnvironmentLogOption);
+        }
+
+        public static void TraceMetrics(
+            EventLevel eventLevel,
+            string serviceName, 
+            string metricsName, 
+            string status, 
+            string timestamp, 
+            double quantity,
+            string description = null,
+            string message = null,
+            string provider = null,
+            string merchantId = null,
+            string currency = null,
+            string filename = null)
+        {
+            MetricsDetails metrics = new MetricsDetails()
+            {
+                ServiceName = serviceName,
+                MetricsName = metricsName,
+                Status = status,
+                Timestamp = timestamp,
+                Quantity = quantity,
+                Description = description,
+                Message = message,
+                Provider = provider,
+                MerchantId = merchantId,
+                Currency = currency,
+                IngestedFileName = filename
+            };
+
+            metrics.Log(eventLevel, EnvironmentLogOption);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801", Justification = "wfcRequest not yet used")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801", Justification = "wfcResponse not yet used")]
         public static void TraceServiceLoggingOutgoing(
-            ILogger logger,
             string dependencyServiceName,
             string operationName,
             string operationVersion,
@@ -69,7 +106,6 @@ namespace Microsoft.Commerce.Payments.Common.OpenTelemetry
             CommerceServiceRequestStatus serviceRequestStatus)
         {
             TraceOutgoingServiceRequest(
-                logger,
                 dependencyServiceName,
                 dependencyServiceName,
                 "Service",
@@ -96,7 +132,6 @@ namespace Microsoft.Commerce.Payments.Common.OpenTelemetry
         }
 
         public static void TraceOutgoingServiceRequest(
-            ILogger logger,
             string serviceName,
             string targetName,
             string targetType,
@@ -129,7 +164,7 @@ namespace Microsoft.Commerce.Payments.Common.OpenTelemetry
 
             bool succeeded = success ?? operationStatus == Ms.Qos.ServiceRequestStatus.Success;
 
-            var operationDetails = new
+            ClientOperationDetails operationDetails = new ClientOperationDetails()
             {
                 ServiceName = serviceName,
                 RequestTraceId = requestTraceId,
@@ -139,46 +174,36 @@ namespace Microsoft.Commerce.Payments.Common.OpenTelemetry
                 RequestDetails = Masker.MaskSingle((string)requestPayload),
                 ResponseDetails = Masker.MaskSingle((string)responsePayload),
                 Message = message,
-                baseData = new
+                baseData =
                 {
-                    operationName,
-                    latencyMs,
+                    operationName = operationName,
+                    latencyMs = latencyMs,
                     serviceErrorCode = 0,
                     protocol = protocol ?? string.Empty,
                     protocolStatusCode = protocolStatusCode ?? string.Empty,
-                    requestMethod,
-                    responseContentType,
+                    requestMethod = requestMethod,
+                    responseContentType = responseContentType,
                     requestStatus = operationStatus,
-                    succeeded,
-                    targetUri,
+                    succeeded = succeeded,
+                    targetUri = targetUri,
                     dependencyName = targetName,
                     dependencyOperationName = targetOperationName,
                     dependencyOperationVersion = targetOperationVersion,
                     dependencyType = targetType,
                     responseSizeBytes = responseLength,
-                },
-                flightingExperimentId
+                }
             };
 
-            string serializedOperationDetails;
-            try
-            {
-                serializedOperationDetails = JsonConvert.SerializeObject(operationDetails);
-            }
-            catch (JsonSerializationException ex)
-            {
-                logger.LogError("Serialization failed for operation details: {0}", ex.Message);
-                serializedOperationDetails = "SerializationError";
-            }
-
-            if (succeeded)
-            {
-                logger.LogInformation(SllLoggerMessageFormat, requestTraceId, serverTraceId, serviceName, "Microsoft.Commerce.Tracing.Sll.ClientOperationDetails", message, serializedOperationDetails);
-            }
-            else
-            {
-                logger.LogError(SllLoggerMessageFormat, requestTraceId, serverTraceId, serviceName, "Microsoft.Commerce.Tracing.Sll.ClientOperationDetails", message, serializedOperationDetails);
-            }
+            operationDetails.Log(
+                succeeded ? EventLevel.Informational : EventLevel.Error,
+                EnvironmentLogOption,
+                (envelope) =>
+                {
+                    if (!string.IsNullOrEmpty(flightingExperimentId))
+                    {
+                        envelope.SetApp(new Telemetry.Extensions.app { expId = flightingExperimentId.ToString() });
+                    }
+                });
         }
     }
 }
