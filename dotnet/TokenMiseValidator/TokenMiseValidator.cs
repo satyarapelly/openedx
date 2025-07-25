@@ -171,17 +171,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
         }
     }
 
-    // Stub interfaces and classes to allow compilation without the original
-    // Microsoft authentication libraries. These provide just enough structure
-    // for the sample TokenMiseValidator to build on .NET 8.
-    public interface IAuthenticationLogger
-    {
-        void LogMiseTokenValidationResult(
-            MiseTokenValidationResult result,
-            long latency,
-            Exception? exception,
-            string incomingRequestId);
-    }
+
 
     public static class Constants
     {

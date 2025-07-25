@@ -794,7 +794,7 @@
     <Compile Include="Model\WalletService\DirectIntegrationData.cs" />
     <Compile Include="Model\WalletService\SetupWalletProviderSessionPayload.cs" />
     <Compile Include="PartnerSettingsHelper.cs" />
-    <Compile Include="Model\Authentication\TokenGenerationLogger.cs" />
+    <Compile Include="..\logger\TokenGenerationLogger.cs" />
     <Compile Include="Model\HIPService\HIPCaptchaUserInput.cs" />
     <Compile Include="Accessors\CatalogService\CatalogServiceAccessor.cs" />
     <Compile Include="Accessors\CatalogService\ICatalogServiceAccessor.cs" />
@@ -849,8 +849,9 @@
     <Compile Include="Accessors\PurchaseService\PurchaseServiceAccessor.cs" />
     <Compile Include="CTPCommerceHelper.cs" />
     <Compile Include="CommerceHelper.cs" />
-    <Compile Include="Model\Authentication\AuthenticationLogger.cs" />
-    <Compile Include="Model\Authentication\CertificateLogger.cs" />
+    <Compile Include="..\logger\IAuthenticationLogger.cs" />
+    <Compile Include="..\logger\AuthenticationLogger.cs" />
+    <Compile Include="..\logger\CertificateLogger.cs" />
     <Compile Include="Model\Authentication\Partner.cs" />
     <Compile Include="Model\D365Service\ApiError.cs" />
     <Compile Include="Model\D365Service\BillingEvent.cs" />
