@@ -202,7 +202,11 @@ namespace Microsoft.Commerce.Payments.Tools.InstallCertificates
 
             try
             {
+#if NET8_0_OR_GREATER
+                rsa = this.certificate.GetRSAPrivateKey() as RSACryptoServiceProvider;
+#else
                 rsa = this.certificate.PrivateKey as RSACryptoServiceProvider;
+#endif
                 if (rsa == null)
                 {
                     Logger.Log("Could not cast private key to RSACryptoServiceProvider");
@@ -254,7 +258,11 @@ namespace Microsoft.Commerce.Payments.Tools.InstallCertificates
 
             try
             {
+#if NET8_0_OR_GREATER
+                rsa = this.certificate.GetRSAPrivateKey() as RSACryptoServiceProvider;
+#else
                 rsa = this.certificate.PrivateKey as RSACryptoServiceProvider;
+#endif
                 if (rsa == null)
                 {
                     Logger.Log("Could not cast private key to RSACryptoServiceProvider");
