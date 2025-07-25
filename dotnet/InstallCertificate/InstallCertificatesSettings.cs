@@ -19,8 +19,8 @@ namespace Microsoft.Commerce.Payments.Tools.InstallCertificates
 
         public static InstallCertificatesSettings Create(string certsDir, EventTraceActivity traceActivityId)
         {
-            EnvironmentType environmentType = Environment.Current.EnvironmentType;
-            string environmentName = Environment.Current.EnvironmentName;
+            Common.Environments.EnvironmentType environmentType = Common.Environment.Current.EnvironmentType;
+            string environmentName = Common.Environment.Current.EnvironmentName;
 
             Logger.Log("Environment: {0}", environmentName);
 
@@ -88,7 +88,7 @@ namespace Microsoft.Commerce.Payments.Tools.InstallCertificates
 
         private static byte[] ReadFileBytes(string file, EventTraceActivity traceActivityId)
         {
-            ISecretStore secretStore = Environment.Current.SecretStore;
+            ISecretStore secretStore = Common.Environment.Current.SecretStore;
             Logger.Log("Read file: {0}", file);
             if (string.Equals(Path.GetExtension(file), ".encr", StringComparison.InvariantCultureIgnoreCase))
             {
