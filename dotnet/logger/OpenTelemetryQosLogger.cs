@@ -6,8 +6,8 @@ namespace Microsoft.Commerce.Payments.Common.OpenTelemetry
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
-    using System.Net.Http;
     using System.Text;
+    using Microsoft.AspNetCore.Http;
     using System.Threading.Tasks;
     using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Commerce.Payments.Common.Web;
@@ -53,15 +53,15 @@ namespace Microsoft.Commerce.Payments.Common.OpenTelemetry
             }
         }
 
-        public void TracePXServiceException(string exceptionMessage, EventTraceActivity requestTraceId)
+        public void TracePXServiceException(EventTraceActivity requestTraceId, string exceptionMessage)
         {
             foreach (IQosLogger logger in this.loggers)
             {
-                logger.TracePXServiceException(exceptionMessage, requestTraceId);
+                logger.TracePXServiceException(requestTraceId, exceptionMessage);
             }
         }
 
-        public void TracePXServiceIncomingOperation(string operationName, string accountId, string paymentInstrumentId, string paymentMethodFamily, string paymentMethodType, string country, HttpRequestMessage request, HttpResponseMessage response, string requestPayload, string responsePayload, string startTime, Stopwatch stopwatch, string requestTraceId, string authenticationInfo, string serverTraceId = null, string message = null, string errorCode = null, string errorMessage = null, bool isTest = false, string partner = null, string pidlOperation = null, string avsSuggest = null)
+        public void TracePXServiceIncomingOperation(string operationName, string accountId, string paymentInstrumentId, string paymentMethodFamily, string paymentMethodType, string country, HttpRequest request, HttpResponse response, string requestPayload, string responsePayload, string startTime, Stopwatch stopwatch, string requestTraceId, string authenticationInfo, string serverTraceId = null, string message = null, string errorCode = null, string errorMessage = null, bool isTest = false, string partner = null, string pidlOperation = null, string avsSuggest = null)
         {
             foreach (IQosLogger logger in this.loggers)
             {
@@ -77,7 +77,7 @@ namespace Microsoft.Commerce.Payments.Common.OpenTelemetry
             }
         }
 
-        public void TracePXServiceOutgoingOperation(string operationName, string serviceName, HttpRequestMessage request, HttpResponseMessage response, string requestPayload, string responsePayload, string startTime, Stopwatch stopwatch, string requestTraceId, string message, string certInfo, string servicePointData = null)
+        public void TracePXServiceOutgoingOperation(string operationName, string serviceName, HttpRequest request, HttpResponse response, string requestPayload, string responsePayload, string startTime, Stopwatch stopwatch, string requestTraceId, string message, string certInfo, string servicePointData = null)
         {
             foreach (IQosLogger logger in this.loggers)
             {
@@ -93,7 +93,7 @@ namespace Microsoft.Commerce.Payments.Common.OpenTelemetry
             }
         }
 
-        public void TracePXServicePIAddedOnOffer(string serviceName, HttpRequestMessage request, string requestTraceId, string paymentInstrumentId, string paymentMethodFamily, string paymentMethodType, string partner, string country, string offerId, string puid)
+        public void TracePXServicePIAddedOnOffer(string serviceName, HttpRequest request, string requestTraceId, string paymentInstrumentId, string paymentMethodFamily, string paymentMethodType, string partner, string country, string offerId, string puid)
         {
             foreach (IQosLogger logger in this.loggers)
             {
@@ -109,7 +109,7 @@ namespace Microsoft.Commerce.Payments.Common.OpenTelemetry
             }
         }
 
-        public void TraceServiceLoggingIncoming(string operationName, HttpRequestMessage request, HttpResponseMessage response, string requestPayload, string responsePayload, int latencyMs, string requestTraceId, string serverTraceId, string message)
+        public void TraceServiceLoggingIncoming(string operationName, HttpRequest request, HttpResponse response, string requestPayload, string responsePayload, int latencyMs, string requestTraceId, string serverTraceId, string message)
         {
             foreach (IQosLogger logger in this.loggers)
             {

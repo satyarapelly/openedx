@@ -6,7 +6,7 @@ namespace Microsoft.Commerce.Payments.Common.Tracing
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
-    using System.Net.Http;
+    using Microsoft.AspNetCore.Http;
     using System.Runtime.CompilerServices;
     using System.Text;
     using System.Threading.Tasks;
@@ -104,12 +104,12 @@ namespace Microsoft.Commerce.Payments.Common.Tracing
                 LogMessage(new { serviceName, targetName, targetType, operationName, targetOperationName, targetOperationVersion, requestTraceId, serverTraceId, targetUri, protocol, protocolStatusCode, requestMethod, responseContentType, requestHeader, responseHeader, responseLength, latencyMs, message, flightingExperimentId, success, serviceRequestStatus });
             }
 
-            public void TracePXServiceException(string exceptionMessage, EventTraceActivity requestTraceId)
+            public void TracePXServiceException(EventTraceActivity requestTraceId, string exceptionMessage)
             {
                 LogMessage(new { exceptionMessage });
             }
 
-            public void TracePXServiceIncomingOperation(string operationName, string accountId, string paymentInstrumentId, string paymentMethodFamily, string paymentMethodType, string country, HttpRequestMessage request, HttpResponseMessage response, string requestPayload, string responsePayload, string startTime, Stopwatch stopwatch, string requestTraceId, string authenticationInfo, string serverTraceId = null, string message = null, string errorCode = null, string errorMessage = null, bool isTest = false, string partner = null, string pidlOperation = null, string avsSuggest = null)
+            public void TracePXServiceIncomingOperation(string operationName, string accountId, string paymentInstrumentId, string paymentMethodFamily, string paymentMethodType, string country, HttpRequest request, HttpResponse response, string requestPayload, string responsePayload, string startTime, Stopwatch stopwatch, string requestTraceId, string authenticationInfo, string serverTraceId = null, string message = null, string errorCode = null, string errorMessage = null, bool isTest = false, string partner = null, string pidlOperation = null, string avsSuggest = null)
             {
                 LogMessage(new { operationName, accountId, paymentInstrumentId, paymentMethodFamily, paymentMethodType, country, requestPayload, responsePayload, startTime, requestTraceId, authenticationInfo, serverTraceId, message, errorCode, errorMessage, isTest, partner, pidlOperation, avsSuggest });
             }
@@ -119,7 +119,7 @@ namespace Microsoft.Commerce.Payments.Common.Tracing
                 LogMessage(new { serviceName, message, requestTraceId, serverTraceId, correlationVector });
             }
 
-            public void TracePXServiceOutgoingOperation(string operationName, string serviceName, HttpRequestMessage request, HttpResponseMessage response, string requestPayload, string responsePayload, string startTime, Stopwatch stopwatch, string requestTraceId, string message, string certInfo, string servicePointData = null)
+            public void TracePXServiceOutgoingOperation(string operationName, string serviceName, HttpRequest request, HttpResponse response, string requestPayload, string responsePayload, string startTime, Stopwatch stopwatch, string requestTraceId, string message, string certInfo, string servicePointData = null)
             {
                 LogMessage(new { operationName, serviceName, requestPayload, responsePayload, startTime, requestTraceId, message, certInfo, servicePointData });
             }
@@ -129,7 +129,7 @@ namespace Microsoft.Commerce.Payments.Common.Tracing
                 LogMessage(new { operationName, serviceName, targetUri, requestPayload, responsePayload, startTime, latencyMs, requestTraceId, correlationVector, isSucceeded, message, certInfo });
             }
 
-            public void TracePXServicePIAddedOnOffer(string serviceName, HttpRequestMessage request, string requestTraceId, string paymentInstrumentId, string paymentMethodFamily, string paymentMethodType, string partner, string country, string offerId, string puid)
+            public void TracePXServicePIAddedOnOffer(string serviceName, HttpRequest request, string requestTraceId, string paymentInstrumentId, string paymentMethodFamily, string paymentMethodType, string partner, string country, string offerId, string puid)
             {
                 LogMessage(new { serviceName, requestTraceId, paymentInstrumentId, paymentMethodFamily, paymentMethodType, partner, country, offerId, puid });
             }
@@ -139,7 +139,7 @@ namespace Microsoft.Commerce.Payments.Common.Tracing
                 LogMessage(new { serviceName, correlationId, trackingGuid, message, eventLevel });
             }
 
-            public void TraceServiceLoggingIncoming(string operationName, HttpRequestMessage request, HttpResponseMessage response, string requestPayload, string responsePayload, int latencyMs, string requestTraceId, string serverTraceId, string message)
+            public void TraceServiceLoggingIncoming(string operationName, HttpRequest request, HttpResponse response, string requestPayload, string responsePayload, int latencyMs, string requestTraceId, string serverTraceId, string message)
             {
                 LogMessage(new { operationName, requestPayload, responsePayload, latencyMs, requestTraceId, serverTraceId, message });
             }
