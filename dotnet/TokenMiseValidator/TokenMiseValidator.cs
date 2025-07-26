@@ -95,11 +95,11 @@ namespace Microsoft.Commerce.Payments.PXCommon
 
             try
             {
-                // Use dynamic for HttpRequestData and MiseHttpContext
-                dynamic httpRequestData = new HttpRequestData();
-                httpRequestData.Headers.Add("Authorization", "Bearer " + token);
+                // Use dynamic for HttpRequest and MiseHttpContext
+                dynamic httpRequest = new HttpRequest();
+                httpRequest.Headers.Add("Authorization", "Bearer " + token);
 
-                dynamic context = new MiseHttpContext(httpRequestData)
+                dynamic context = new MiseHttpContext(httpRequest)
                 {
                     CorrelationId = incomingRequestId
                 };
@@ -171,17 +171,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
         }
     }
 
-    // Stub interfaces and classes to allow compilation without the original
-    // Microsoft authentication libraries. These provide just enough structure
-    // for the sample TokenMiseValidator to build on .NET 8.
-    public interface IAuthenticationLogger
-    {
-        void LogMiseTokenValidationResult(
-            MiseTokenValidationResult result,
-            long latency,
-            Exception? exception,
-            string incomingRequestId);
-    }
+
 
     public static class Constants
     {
@@ -216,17 +206,17 @@ namespace Microsoft.Commerce.Payments.PXCommon
         }
     }
 
-    public class HttpRequestData
+    public class HttpRequest
     {
         public Dictionary<string, string> Headers { get; } = new();
     }
 
     public class MiseHttpContext
     {
-        public HttpRequestData Request { get; }
+        public HttpRequest Request { get; }
         public string? CorrelationId { get; set; }
 
-        public MiseHttpContext(HttpRequestData request)
+        public MiseHttpContext(HttpRequest request)
         {
             Request = request;
         }

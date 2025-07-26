@@ -1,0 +1,196 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\..\..\..\NugetPackages\Bond.CSharp.13.0.0\build\Bond.CSharp.props" Condition="Exists('..\..\..\..\NugetPackages\Bond.CSharp.13.0.0\build\Bond.CSharp.props')" />
+  <Import Project="..\..\..\..\NugetPackages\Ms.Qos.OutgoingServiceRequest.4.0.17341.1\build\Ms.Qos.OutgoingServiceRequest.props" Condition="Exists('..\..\..\..\NugetPackages\Ms.Qos.OutgoingServiceRequest.4.0.17341.1\build\Ms.Qos.OutgoingServiceRequest.props')" />
+  <Import Project="..\..\..\..\NugetPackages\Ms.Qos.IncomingServiceRequest.4.0.17341.1\build\Ms.Qos.IncomingServiceRequest.props" Condition="Exists('..\..\..\..\NugetPackages\Ms.Qos.IncomingServiceRequest.4.0.17341.1\build\Ms.Qos.IncomingServiceRequest.props')" />
+  <Import Project="..\..\..\..\NugetPackages\Ms.Qos.4.0.17341.1\build\Ms.Qos.props" Condition="Exists('..\..\..\..\NugetPackages\Ms.Qos.4.0.17341.1\build\Ms.Qos.props')" />
+  <Import Project="..\..\..\..\NugetPackages\Microsoft.CommonSchema.Bond.4.0.17341.1\build\Microsoft.CommonSchema.Bond.props" Condition="Exists('..\..\..\..\NugetPackages\Microsoft.CommonSchema.Bond.4.0.17341.1\build\Microsoft.CommonSchema.Bond.props')" />
+  <Import Project="..\..\..\..\NugetPackages\ApSecretStore.1.13.0\build\ApSecretStore.props" Condition="Exists('..\..\..\..\NugetPackages\ApSecretStore.1.13.0\build\ApSecretStore.props')" />
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), build.root))\msbuild\Environment.props" />
+  <Import Project="$(INETROOT)\private\Payments\Payments.targets" />
+  <PropertyGroup>
+    <ProjectGuid>{70AE2202-8F2B-4417-A9D5-B400979D56A9}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Microsoft.Commerce.Payments.Tools.InstallCertificates</RootNamespace>
+    <AssemblyName>Microsoft.Commerce.Payments.Tools.InstallCertificates</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <OutputPath>bin\Debug\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ApSecretStoreManaged, Version=7.7.0.0, Culture=neutral, PublicKeyToken=411e0a33ac21c4f4, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\NugetPackages\ApSecretStore.1.13.0\lib\net40\ApSecretStoreManaged.dll</HintPath>
+    </Reference>
+    <Reference Include="Bond, Version=13.0.0.100, Culture=neutral, PublicKeyToken=87e9ead25a117286, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\NugetPackages\Bond.Core.CSharp.13.0.0\lib\net462\Bond.dll</HintPath>
+    </Reference>
+    <Reference Include="Bond.Attributes, Version=13.0.0.100, Culture=neutral, PublicKeyToken=87e9ead25a117286, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\NugetPackages\Bond.Core.CSharp.13.0.0\lib\net462\Bond.Attributes.dll</HintPath>
+    </Reference>
+    <Reference Include="Bond.IO, Version=13.0.0.100, Culture=neutral, PublicKeyToken=87e9ead25a117286, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\NugetPackages\Bond.Core.CSharp.13.0.0\lib\net462\Bond.IO.dll</HintPath>
+    </Reference>
+    <Reference Include="Bond.JSON, Version=13.0.0.100, Culture=neutral, PublicKeyToken=87e9ead25a117286, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\NugetPackages\Bond.Runtime.CSharp.13.0.0\lib\net462\Bond.JSON.dll</HintPath>
+    </Reference>
+    <Reference Include="Bond.Reflection, Version=13.0.0.100, Culture=neutral, PublicKeyToken=87e9ead25a117286, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\NugetPackages\Bond.Core.CSharp.13.0.0\lib\net462\Bond.Reflection.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CommonSchema.Bond, Version=4.0.17341.1, Culture=neutral, PublicKeyToken=872fbc9102191257, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\NugetPackages\Microsoft.CommonSchema.Bond.4.0.17341.1\lib\net461\Microsoft.CommonSchema.Bond.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CommonSchema.Services, Version=5.1.218.0, Culture=neutral, PublicKeyToken=872fbc9102191257, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\NugetPackages\Microsoft.CommonSchema.Services.5.1.218\lib\net46\Microsoft.CommonSchema.Services.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Diagnostics.Tracing.EventSource, Version=1.1.28.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\NugetPackages\Microsoft.Diagnostics.Tracing.EventSource.Redist.1.1.28\lib\net46\Microsoft.Diagnostics.Tracing.EventSource.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Diagnostics.Tracing.TraceEvent, Version=1.0.41.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\NugetPackages\Microsoft.Diagnostics.Tracing.TraceEvent.1.0.41\lib\net40\Microsoft.Diagnostics.Tracing.TraceEvent.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\NugetPackages\Microsoft.Search.Autopilot.dll.3.43.3480132.112\lib\Microsoft.IdentityModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Search.Autopilot, Version=3.43.0.0, Culture=neutral, PublicKeyToken=471e7408fd06c98f, processorArchitecture=AMD64">
+      <HintPath>..\..\..\..\NugetPackages\Microsoft.Search.Autopilot.dll.3.43.3480132.112\lib\Microsoft.Search.Autopilot.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Search.Autopilot.DMCommands, Version=3.43.0.0, Culture=neutral, PublicKeyToken=471e7408fd06c98f, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\NugetPackages\Microsoft.Search.Autopilot.dll.3.43.3480132.112\lib\Microsoft.Search.Autopilot.DMCommands.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Search.Autopilot.Monitoring.Web, Version=7.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\NugetPackages\Microsoft.Search.Autopilot.dll.3.43.3480132.112\lib\Microsoft.Search.Autopilot.Monitoring.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Search.Autopilot.TestUtilities, Version=3.43.0.0, Culture=neutral, PublicKeyToken=471e7408fd06c98f, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\NugetPackages\Microsoft.Search.Autopilot.dll.3.43.3480132.112\lib\Microsoft.Search.Autopilot.TestUtilities.dll</HintPath>
+    </Reference>
+    <Reference Include="MonitoringWebClientWrapper, Version=0.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\..\..\..\NugetPackages\Microsoft.Search.Autopilot.dll.3.43.3480132.112\lib\MonitoringWebClientWrapper.dll</HintPath>
+    </Reference>
+    <Reference Include="Ms.Qos, Version=4.0.17341.1, Culture=neutral, PublicKeyToken=872fbc9102191257, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\NugetPackages\Ms.Qos.4.0.17341.1\lib\net461\Ms.Qos.dll</HintPath>
+    </Reference>
+    <Reference Include="Ms.Qos.IncomingServiceRequest, Version=4.0.17341.1, Culture=neutral, PublicKeyToken=872fbc9102191257, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\NugetPackages\Ms.Qos.IncomingServiceRequest.4.0.17341.1\lib\net461\Ms.Qos.IncomingServiceRequest.dll</HintPath>
+    </Reference>
+    <Reference Include="Ms.Qos.OutgoingServiceRequest, Version=4.0.17341.1, Culture=neutral, PublicKeyToken=872fbc9102191257, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\NugetPackages\Ms.Qos.OutgoingServiceRequest.4.0.17341.1\lib\net461\Ms.Qos.OutgoingServiceRequest.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\NugetPackages\Newtonsoft.Json.13.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.IO, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\NugetPackages\System.IO.4.3.0\lib\net462\System.IO.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http, Version=4.1.1.3, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\NugetPackages\System.Net.Http.4.3.4\lib\net46\System.Net.Http.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\NugetPackages\System.Runtime.4.3.0\lib\net462\System.Runtime.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Algorithms, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\NugetPackages\System.Security.Cryptography.Algorithms.4.3.0\lib\net463\System.Security.Cryptography.Algorithms.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Encoding, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\NugetPackages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\NugetPackages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\NugetPackages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Dataflow, Version=4.6.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\NugetPackages\System.Threading.Tasks.Dataflow.4.8.0\lib\netstandard2.0\System.Threading.Tasks.Dataflow.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="InstallCertificatesIntSettings.cs" />
+    <Compile Include="InstallCertificatesOneBoxSettings.cs" />
+    <Compile Include="InstallCertificatesProdSettings.cs" />
+    <Compile Include="InstallCertificatesSettings.cs" />
+    <Compile Include="Logger.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="CertificateContainer.cs" />
+    <Compile Include="SecretStore\AutopilotSecretStore.cs" />
+    <Compile Include="SecretStore\ComponentBasedKeyValueSet.cs" />
+    <Compile Include="SecretStore\Environment.cs" />
+    <Compile Include="SecretStore\EnvironmentNames.cs" />
+    <Compile Include="SecretStore\EnvironmentType.cs" />
+    <Compile Include="SecretStore\FileHelper.cs" />
+    <Compile Include="SecretStore\ISecretStore.cs" />
+    <Compile Include="SecretStore\NonAutopilotSecretStore.cs" />
+    <Compile Include="SecretStore\SecretStoreBase.cs" />
+    <Compile Include="SecretStore\SecretStoreException.cs" />
+    <Compile Include="SecretStore\SecretStoreIntSettings.cs" />
+    <Compile Include="SecretStore\SecretStoreOneboxSettings.cs" />
+    <Compile Include="SecretStore\SecretStoreProdSettings.cs" />
+    <Compile Include="SecretStore\SecretStoreSettings.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\shared\Library\Tracing\EventSource\EventSource.csproj">
+      <Project>{9036684C-6FE2-4542-97BE-1430F2032354}</Project>
+      <Name>EventSource</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Common.DotNetFramework\Common.DotNetFramework.csproj">
+      <Project>{af0a4f8f-4ed6-4720-b75f-0c06a6dfa932}</Project>
+      <Name>Common.DotNetFramework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Common\Common.csproj">
+      <Project>{717e55e4-ccc7-4eea-b138-15ca4d7911bf}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+    <None Include="readme.md" />
+    <None Include="_TraceEventProgrammersGuide.docx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="TraceEvent.ReadMe.txt" />
+    <Content Include="TraceEvent.ReleaseNotes.txt" />
+  </ItemGroup>
+  <Import Project="$(ExtendedTargetsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\..\..\NugetPackages\ApSecretStore.1.13.0\build\ApSecretStore.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\NugetPackages\ApSecretStore.1.13.0\build\ApSecretStore.props'))" />
+    <Error Condition="!Exists('..\..\..\..\NugetPackages\Microsoft.Diagnostics.Tracing.TraceEvent.1.0.41\build\Microsoft.Diagnostics.Tracing.TraceEvent.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\NugetPackages\Microsoft.Diagnostics.Tracing.TraceEvent.1.0.41\build\Microsoft.Diagnostics.Tracing.TraceEvent.targets'))" />
+    <Error Condition="!Exists('..\..\..\..\NugetPackages\Microsoft.CommonSchema.Bond.4.0.17341.1\build\Microsoft.CommonSchema.Bond.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\NugetPackages\Microsoft.CommonSchema.Bond.4.0.17341.1\build\Microsoft.CommonSchema.Bond.props'))" />
+    <Error Condition="!Exists('..\..\..\..\NugetPackages\Ms.Qos.4.0.17341.1\build\Ms.Qos.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\NugetPackages\Ms.Qos.4.0.17341.1\build\Ms.Qos.props'))" />
+    <Error Condition="!Exists('..\..\..\..\NugetPackages\Ms.Qos.IncomingServiceRequest.4.0.17341.1\build\Ms.Qos.IncomingServiceRequest.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\NugetPackages\Ms.Qos.IncomingServiceRequest.4.0.17341.1\build\Ms.Qos.IncomingServiceRequest.props'))" />
+    <Error Condition="!Exists('..\..\..\..\NugetPackages\Ms.Qos.OutgoingServiceRequest.4.0.17341.1\build\Ms.Qos.OutgoingServiceRequest.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\NugetPackages\Ms.Qos.OutgoingServiceRequest.4.0.17341.1\build\Ms.Qos.OutgoingServiceRequest.props'))" />
+    <Error Condition="!Exists('..\..\..\..\NugetPackages\Bond.CSharp.13.0.0\build\Bond.CSharp.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\NugetPackages\Bond.CSharp.13.0.0\build\Bond.CSharp.props'))" />
+    <Error Condition="!Exists('..\..\..\..\NugetPackages\Bond.CSharp.13.0.0\build\Bond.CSharp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\NugetPackages\Bond.CSharp.13.0.0\build\Bond.CSharp.targets'))" />
+  </Target>
+  <Import Project="..\..\..\..\NugetPackages\Microsoft.Diagnostics.Tracing.TraceEvent.1.0.41\build\Microsoft.Diagnostics.Tracing.TraceEvent.targets" Condition="Exists('..\..\..\..\NugetPackages\Microsoft.Diagnostics.Tracing.TraceEvent.1.0.41\build\Microsoft.Diagnostics.Tracing.TraceEvent.targets')" />
+  <Import Project="..\..\..\..\NugetPackages\Bond.CSharp.13.0.0\build\Bond.CSharp.targets" Condition="Exists('..\..\..\..\NugetPackages\Bond.CSharp.13.0.0\build\Bond.CSharp.targets')" />
+</Project>
