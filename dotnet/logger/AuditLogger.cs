@@ -83,7 +83,7 @@ namespace Microsoft.Commerce.Payments.Common.Web
                 "PUT" => OperationType.Update,
                 "PATCH" => OperationType.Update,
                 "DELETE" => OperationType.Delete,
-                _ => throw new ValidationException(ErrorCode.InvalidRequestData, "Unsupported Request method " + requestMethod)
+                _ => throw new ArgumentException("Unsupported Request method " + requestMethod, nameof(requestMethod))
             };
         }
     }
