@@ -10,7 +10,6 @@ namespace Microsoft.Commerce.Payments.PidlFactory.V7
     using System.Net;
     using System.Text;
     using System.Text.RegularExpressions;
-    using System.Web;
     using Microsoft.Commerce.Payments.PartnerSettingsModel;
     using Microsoft.Commerce.Payments.Pidl.Localization;
     using Microsoft.Commerce.Payments.PidlFactory.V7.FeatureContextProcess;
@@ -5368,10 +5367,47 @@ namespace Microsoft.Commerce.Payments.PidlFactory.V7
 
         private static string AddOrUpdateQueryParam(string pollingActionUrl, string queryParam, string queryParamValue)
         {
-            var nameValues = HttpUtility.ParseQueryString(pollingActionUrl.Substring(pollingActionUrl.IndexOf('?') + 1));
-            nameValues.Set(queryParam, queryParamValue);
-            string updatedQueryString = "?" + nameValues.ToString();
-            return pollingActionUrl.Substring(0, pollingActionUrl.IndexOf('?')) + updatedQueryString;
+            if (string.IsNullOrEmpty(pollingActionUrl))
+            {
+                return pollingActionUrl;
+            }
+
+            var uri = new Uri(pollingActionUrl);
+            string query = uri.Query.TrimStart('?');
+            Dictionary<string, string> parameters = new (StringComparer.OrdinalIgnoreCase);
+
+            if (!string.IsNullOrEmpty(query))
+            {
+                foreach (string part in query.Split('&', StringSplitOptions.RemoveEmptyEntries))
+                {
+                    var kv = part.Split('=', 2);
+                    string key = WebUtility.UrlDecode(kv[0]);
+                    string value = kv.Length > 1 ? WebUtility.UrlDecode(kv[1]) : string.Empty;
+                    parameters[key] = value;
+                }
+            }
+
+            parameters[queryParam] = queryParamValue;
+
+            var sb = new StringBuilder();
+            foreach (var kvp in parameters)
+            {
+                if (sb.Length > 0)
+                {
+                    sb.Append('&');
+                }
+
+                sb.Append(WebUtility.UrlEncode(kvp.Key));
+                sb.Append('=');
+                sb.Append(WebUtility.UrlEncode(kvp.Value));
+            }
+
+            var builder = new UriBuilder(uri)
+            {
+                Query = sb.ToString()
+            };
+
+            return builder.Uri.ToString();
         }
 
         private static DisplayHintAction CheckoutChallengePollingAction(
