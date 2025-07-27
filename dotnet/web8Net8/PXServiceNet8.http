@@ -1,0 +1,6 @@
+@PXServiceNet8_HostAddress = http://localhost:5290
+
+GET {{PXServiceNet8_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
