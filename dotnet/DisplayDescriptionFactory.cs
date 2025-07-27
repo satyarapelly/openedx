@@ -568,15 +568,13 @@ namespace Microsoft.Commerce.Payments.PidlFactory.V7
 
             if (WebHostingUtility.IsApplicationSelfHosted())
             {
-                string locationBeforeShadowCopy = typeof(Microsoft.Commerce.Payments.PidlFactory.V7.PIDLResourceFactory).Assembly.CodeBase;
-                UriBuilder uri = new UriBuilder(new Uri(locationBeforeShadowCopy));
-                string locationWithoutUriPrefixes = Uri.UnescapeDataString(uri.Path);
-                string dir = Path.GetDirectoryName(locationWithoutUriPrefixes);
-                displayDescriptionFolderPath = Path.Combine(dir, Constants.PidlConfig.DisplayDescriptionFolderRootPath);
+                string assemblyLocation = typeof(Microsoft.Commerce.Payments.PidlFactory.V7.PIDLResourceFactory).Assembly.Location;
+                string? dir = Path.GetDirectoryName(assemblyLocation);
+                displayDescriptionFolderPath = Path.Combine(dir ?? string.Empty, Constants.PidlConfig.DisplayDescriptionFolderRootPath);
             }
             else
             {
-                displayDescriptionFolderPath = System.Web.HttpContext.Current.Server.MapPath(GlobalConstants.FolderNames.WebAppData + Constants.PidlConfig.DisplayDescriptionFolderRootPath);
+                displayDescriptionFolderPath = Path.Combine(AppContext.BaseDirectory, GlobalConstants.FolderNames.WebAppData, Constants.PidlConfig.DisplayDescriptionFolderRootPath);
             }
 
             return displayDescriptionFolderPath;
