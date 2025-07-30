@@ -60,7 +60,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
         }
 
         [HttpPost]
-        public async Task<HttpResponseMessage> Authenticate([FromBody] Newtonsoft.Json.Linq.JObject authRequest)
+        public async Task<IActionResult> Authenticate([FromBody] Newtonsoft.Json.Linq.JObject authRequest)
         {
             string apiVersion = this.Request.GetRequestHeader("api-version");
 
@@ -74,7 +74,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
             }
             else
             {
-                return this.Request.CreateResponse(HttpStatusCode.BadRequest, "Invalid Api Request sent to PX.DependencyEmulators.PayerAuth");
+                return this.BadRequest("Invalid Api Request sent to PX.DependencyEmulators.PayerAuth");
             }
         }
 
@@ -155,7 +155,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
             return "2103";
         }
 
-        private async Task<HttpResponseMessage> Authenticate(AReq authRequest)
+        private async Task<IActionResult> Authenticate(AReq authRequest)
         {
             TestContext testContext = null;
             this.Request.TryGetTestContext(out testContext);
@@ -166,7 +166,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
                     EnrollmentStatus = PaymentInstrumentEnrollmentStatus.Bypassed,
                 };
 
-                return this.Request.CreateResponse(HttpStatusCode.OK, payAuthAres);
+                return this.Ok(payAuthAres);
             }
             else if (testContext.ScenariosContain(Constants.TestScenarios.PXPayerAuthPSD2ChallengeSkipcreq))
             {
@@ -176,7 +176,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
                     AcsTransactionId = authRequest.ThreeDSServerTransactionId
                 };
 
-                return this.Request.CreateResponse(HttpStatusCode.OK, payAuthAres);
+                return this.Ok(payAuthAres);
             }
             else if (testContext.ScenariosContain(Constants.TestScenarios.PXPayerAuthPSD2ChallengeFailed))
             {
@@ -186,7 +186,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
                     AcsTransactionId = authRequest.ThreeDSServerTransactionId
                 };
 
-                return this.Request.CreateResponse(HttpStatusCode.OK, payAuthAres);
+                return this.Ok(payAuthAres);
             }
             else
             {
@@ -198,7 +198,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
             }
         }
         
-        private async Task<HttpResponseMessage> Authenticate(AuthenticationRequest authRequest)
+        private async Task<IActionResult> Authenticate(AuthenticationRequest authRequest)
         {
             TestContext testContext = null;
             this.Request.TryGetTestContext(out testContext);
@@ -209,7 +209,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
                     EnrollmentStatus = PaymentInstrumentEnrollmentStatus.Bypassed,
                 };
 
-                return this.Request.CreateResponse(HttpStatusCode.OK, payAuthAres);
+                return this.Ok(payAuthAres);
             }
             else if (testContext.ScenariosContain(Constants.TestScenarios.PXPayerAuthPSD2ChallengeSkipcreq))
             {
@@ -219,7 +219,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
                     AcsTransactionId = authRequest.ThreeDSServerTransId
                 };
 
-                return this.Request.CreateResponse(HttpStatusCode.OK, payAuthAres);
+                return this.Ok(payAuthAres);
             }
             else if (testContext.ScenariosContain(Constants.TestScenarios.PXPayerAuthPSD2ChallengeFailed))
             {
@@ -229,7 +229,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
                     AcsTransactionId = authRequest.ThreeDSServerTransId
                 };
 
-                return this.Request.CreateResponse(HttpStatusCode.OK, payAuthAres);
+                return this.Ok(payAuthAres);
             }
             else if (testContext.ScenariosContain(Constants.TestScenarios.PXPayerAuthPSD2ChallengeSuccess))
             {
@@ -243,7 +243,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
 
                 payAuthAres.AcsSignedContent = payAuthAres.AcsSignedContent.Replace("Placeholder_", string.Empty);
 
-                return this.Request.CreateResponse(HttpStatusCode.OK, payAuthAres);
+                return this.Ok(payAuthAres);
             }
             else if (testContext.ScenariosContain(Constants.TestScenarios.PXPayerAuth3DS1ChallengeSuccess))
             {
@@ -260,7 +260,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
                     IsFullPageRedirect = true
                 };
 
-                return this.Request.CreateResponse(HttpStatusCode.OK, payAuthAres);
+                return this.Ok(payAuthAres);
             }
             else if (testContext.ScenariosContain(Constants.TestScenarios.PXPayerAuthXboxRedemRewardsSuccess))
             {
@@ -270,19 +270,19 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
                     EnrollmentStatus = PaymentInstrumentEnrollmentStatus.Bypassed,
                 };
 
-                return this.Request.CreateResponse(HttpStatusCode.OK, payAuthAres);
+                return this.Ok(payAuthAres);
             }
             else
             {
                 return await this.CallAcsEmulator(
                     payerAuthApiVersion: PayerAuthApiVersion.V3,
                     v2AuthRequest: null,
-                    v3AuthRequest: authRequest, 
+                    v3AuthRequest: authRequest,
                     testContext: testContext);
             }
         }
 
-        private async Task<HttpResponseMessage> CallAcsEmulator(
+        private async Task<IActionResult> CallAcsEmulator(
             PayerAuthApiVersion payerAuthApiVersion,
             AReq v2AuthRequest,
             AuthenticationRequest v3AuthRequest,
@@ -361,7 +361,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
                                     EnrollmentStatus = PaymentInstrumentEnrollmentStatus.Enrolled,
                                     AcsUrl = string.Format(AcsEmulatorUrlPrefix, "creq"),
                                 };
-                                return this.Request.CreateResponse(HttpStatusCode.OK, payAuthAres);
+                                return this.Ok(payAuthAres);
                             }
                             else
                             {
@@ -374,12 +374,12 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
                                     AcsUrl = string.Format(AcsEmulatorUrlPrefix, "creq"),
                                     MessageVersion = acsAres.MessageVersion
                                 };
-                                return this.Request.CreateResponse(HttpStatusCode.OK, payAuthAres);
+                                return this.Ok(payAuthAres);
                             }
                         }
                         else
                         {
-                            return this.Request.CreateResponse(HttpStatusCode.InternalServerError, string.Format("PX ACS emulator didn't respond with success response, response status code is {0}, response message is {1}", httpResponseMessage.StatusCode, responseMessage));
+                            return this.StatusCode((int)HttpStatusCode.InternalServerError, string.Format("PX ACS emulator didn't respond with success response, response status code is {0}, response message is {1}", httpResponseMessage.StatusCode, responseMessage));
                         }
                     }
                 }
@@ -387,8 +387,9 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
             {
                 // swallow the exception for PX emulator call failure
                 var exception = ex;
-                return this.Request.CreateResponse(HttpStatusCode.InternalServerError, string.Format("Call PX ACS emulator fail with exception {0}", ex));
+                return this.StatusCode((int)HttpStatusCode.InternalServerError, string.Format("Call PX ACS emulator fail with exception {0}", ex));
             }
         }
     }
 }
+
