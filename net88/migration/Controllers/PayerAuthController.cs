@@ -383,7 +383,6 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
                         }
                     }
                 }
-            }
             catch (Exception ex)
             {
                 // swallow the exception for PX emulator call failure
