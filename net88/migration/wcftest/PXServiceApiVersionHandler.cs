@@ -7,6 +7,8 @@ namespace Microsoft.Commerce.Payments.PXService
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using HttpRequest = System.Net.Http.HttpRequestMessage;
+    using HttpResponse = System.Net.Http.HttpResponseMessage;
     using System.Text.RegularExpressions;
     using System.Threading;
     using System.Threading.Tasks;
@@ -58,7 +60,7 @@ namespace Microsoft.Commerce.Payments.PXService
         /// <param name="cancellationToken">A token which may be used to listen
         /// for cancellation.</param>
         /// <returns>The outbound response.</returns>
-        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        protected override async Task<HttpResponse> SendAsync(HttpRequest request, CancellationToken cancellationToken)
         {
             IHttpRouteData routeData;
             if (!WebHostingUtility.IsApplicationSelfHosted())
@@ -1035,7 +1037,7 @@ namespace Microsoft.Commerce.Payments.PXService
             if (exposableFeatures != null
                 && exposableFeatures.Contains(Flighting.Features.PXReturn502ForMaliciousRequest, StringComparer.OrdinalIgnoreCase))
             {
-                HttpResponseMessage responseMessage = request.CreateResponse(HttpStatusCode.BadGateway);
+                HttpResponse responseMessage = request.CreateResponse(HttpStatusCode.BadGateway);
                 responseMessage.Headers.Add(RetryOnServerErrorHeader, "false");
                 return responseMessage;
             }
@@ -1075,7 +1077,7 @@ namespace Microsoft.Commerce.Payments.PXService
                 request.Properties.Add(PaymentConstants.Web.Properties.Version, apiVersion);
             }
 
-            HttpResponseMessage response = await base.SendAsync(request, cancellationToken);
+            HttpResponse response = await base.SendAsync(request, cancellationToken);
 
             // Add the version selected for this request to the response header.  This will be used
             // by the PIDLSDK when logging client side telemetry events.  UX health (e.g. Add-PI funnel)
@@ -1117,7 +1119,7 @@ namespace Microsoft.Commerce.Payments.PXService
         /// <param name="request">Http request message</param>
         /// <param name="exposableFeatures">Flight features list</param>
         /// <param name="flightName">Flight to be removed</param>
-        private static void ExtractAndRemovePartnerFlight(HttpRequestMessage request, List<string> exposableFeatures, string flightName)
+        private static void ExtractAndRemovePartnerFlight(HttpRequest request, List<string> exposableFeatures, string flightName)
         {
             string partnerFlight = GetPartnerFlight(request, flightName);
             if (!string.IsNullOrEmpty(partnerFlight))
@@ -1127,7 +1129,7 @@ namespace Microsoft.Commerce.Payments.PXService
             }
         }
 
-        private static void HandleSecureFieldFlights(List<string> exposableFeatures, HttpRequestMessage request)
+        private static void HandleSecureFieldFlights(List<string> exposableFeatures, HttpRequest request)
         {
             HandleFlight(exposableFeatures, request, V7.Constants.PartnerFlightValues.PXEnableSecureFieldAddCreditCard);
             HandleFlight(exposableFeatures, request, V7.Constants.PartnerFlightValues.PXEnableSecureFieldUpdateCreditCard);
@@ -1137,7 +1139,7 @@ namespace Microsoft.Commerce.Payments.PXService
             HandleFlight(exposableFeatures, request, V7.Constants.PartnerFlightValues.PXEnableSecureFieldIndia3DSChallenge);
         }
 
-        private static void HandleFlight(List<string> exposableFeatures, HttpRequestMessage request, string flightPrefix)
+        private static void HandleFlight(List<string> exposableFeatures, HttpRequest request, string flightPrefix)
         {
             string flight = GetPartnerFlight(request, flightPrefix);
             if (!string.IsNullOrEmpty(flight))
@@ -1147,7 +1149,7 @@ namespace Microsoft.Commerce.Payments.PXService
             }
         }
 
-        private static string GetPartnerFlight(HttpRequestMessage request, string flightPrefix)
+        private static string GetPartnerFlight(HttpRequest request, string flightPrefix)
         {
             string flightValueString = request.GetRequestHeader(GlobalConstants.HeaderValues.ExtendedFlightName);
             if (flightValueString != null)
@@ -1159,7 +1161,7 @@ namespace Microsoft.Commerce.Payments.PXService
             return null;
         }
 
-        private static void RemovePartnerFlight(HttpRequestMessage request, string flightName)
+        private static void RemovePartnerFlight(HttpRequest request, string flightName)
         {
             string flightValueString = request.GetRequestHeader(GlobalConstants.HeaderValues.ExtendedFlightName);
             if (flightValueString != null)
@@ -1214,7 +1216,7 @@ namespace Microsoft.Commerce.Payments.PXService
             return GlobalConstants.ThreeDSTestAccountIds.Contains(accountId, StringComparer.OrdinalIgnoreCase);
         }
 
-        private string GetUserIpAddress(HttpRequestMessage request)
+        private string GetUserIpAddress(HttpRequest request)
         {
             string retVal = null;
             try

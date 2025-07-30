@@ -6,6 +6,8 @@ namespace Microsoft.Commerce.Payments.PXService
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using HttpRequest = System.Net.Http.HttpRequestMessage;
+    using HttpResponse = System.Net.Http.HttpResponseMessage;
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
@@ -31,7 +33,7 @@ namespace Microsoft.Commerce.Payments.PXService
 
         public Task ExecuteExceptionFilterAsync(HttpActionExecutedContext actionExecutedContext, CancellationToken cancellationToken)
         {
-            HttpRequestMessage request = actionExecutedContext.Request;
+            HttpRequest request = actionExecutedContext.Request;
             Exception exception = actionExecutedContext.Exception;
 
             HttpStatusCode statusCode = HttpStatusCode.BadRequest;

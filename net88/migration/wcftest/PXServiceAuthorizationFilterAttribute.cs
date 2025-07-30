@@ -8,6 +8,8 @@ namespace Microsoft.Commerce.Payments.PXService
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using HttpRequest = System.Net.Http.HttpRequestMessage;
+    using HttpResponse = System.Net.Http.HttpResponseMessage;
     using System.Net.Http.Headers;
     using System.Security.Cryptography.X509Certificates;
     using System.Security.Principal;
@@ -110,7 +112,7 @@ namespace Microsoft.Commerce.Payments.PXService
 
         private static void HandleDecline(HttpActionContext actionContext, HttpStatusCode statusCode, string errorMessage)
         {
-            actionContext.Response = new HttpResponseMessage(statusCode)
+            actionContext.Response = new HttpResponse(statusCode)
             {
                 ReasonPhrase = errorMessage
             };
