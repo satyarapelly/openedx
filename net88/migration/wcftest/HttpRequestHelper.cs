@@ -6,6 +6,8 @@ namespace Microsoft.Commerce.Payments.PXService
     using System.Collections.Generic;
     using System.Linq;
     using System.Net.Http;
+    using HttpRequest = System.Net.Http.HttpRequestMessage;
+    using HttpResponse = System.Net.Http.HttpResponseMessage;
     using System.Web;
     using Microsoft.Commerce.Payments.Common;
     using Microsoft.Commerce.Payments.Common.Tracing;
@@ -52,7 +54,7 @@ namespace Microsoft.Commerce.Payments.PXService
             return headerValue;
         }
 
-        public static string GetRequestHeader(string headerName, HttpRequestMessage request)
+        public static string GetRequestHeader(string headerName, HttpRequest request)
         {
             string headerValue = null;
             if (request != null && request.Headers != null && request.Headers.Contains(headerName))
@@ -82,7 +84,7 @@ namespace Microsoft.Commerce.Payments.PXService
         /// </summary>
         /// <param name="request">http request</param>
         /// <returns>True | False</returns>
-        public static bool IsEncoded(HttpRequestMessage request)
+        public static bool IsEncoded(HttpRequest request)
         {
             bool isEncoded = false;
             string clientContextEncoding = null;
@@ -108,7 +110,7 @@ namespace Microsoft.Commerce.Payments.PXService
         /// </summary>
         /// <param name="request">http request</param>
         /// <returns>Value of userAgent</returns>
-        public static string GetUserAgent(HttpRequestMessage request)
+        public static string GetUserAgent(HttpRequest request)
         {
             string devicInfoHeaderValue = GetRequestHeader(GlobalConstants.HeaderValues.DeviceInfoHeader, request);
             
@@ -144,7 +146,7 @@ namespace Microsoft.Commerce.Payments.PXService
         /// </summary>
         /// <param name="request">Current request object</param>
         /// <returns>Client info</returns>
-        public static ClientInfo GetClientInfo(HttpRequestMessage request)
+        public static ClientInfo GetClientInfo(HttpRequest request)
         {
             var userAgent = GetUserAgentDecoded(request) ?? request.Headers.UserAgent?.ToString();
             if (!string.IsNullOrWhiteSpace(userAgent))
@@ -161,7 +163,7 @@ namespace Microsoft.Commerce.Payments.PXService
         /// </summary>
         /// <param name="request">Current request object</param>
         /// <returns>Device class - web/mobile/console</returns>
-        public static string GetDeviceClass(HttpRequestMessage request)
+        public static string GetDeviceClass(HttpRequest request)
         {
             var clientInfo = GetClientInfo(request);
 
@@ -182,7 +184,7 @@ namespace Microsoft.Commerce.Payments.PXService
         /// </summary>
         /// <param name="request">Current request object</param>
         /// <returns>Browser name - safari/chrome/etc</returns>
-        public static string GetBrowser(HttpRequestMessage request)
+        public static string GetBrowser(HttpRequest request)
         {
             var clientInfo = GetClientInfo(request);
             string family = clientInfo?.UA.Family.ToLower();
@@ -195,7 +197,7 @@ namespace Microsoft.Commerce.Payments.PXService
         /// </summary>
         /// <param name="request">Current request object</param>
         /// <returns>device Family</returns>
-        public static string GetOSFamily(HttpRequestMessage request)
+        public static string GetOSFamily(HttpRequest request)
         {
             var clientInfo = GetClientInfo(request);
             string deviceFamily = clientInfo?.OS.Family.ToLower();
@@ -208,7 +210,7 @@ namespace Microsoft.Commerce.Payments.PXService
         /// </summary>
         /// <param name="request">Request Object</param>
         /// <returns>Browser version</returns>
-        public static string GetBrowserVer(HttpRequestMessage request)
+        public static string GetBrowserVer(HttpRequest request)
         {
             var clientInfo = GetClientInfo(request);
             var majorVersion = clientInfo?.UA.Major ?? "0";
@@ -223,7 +225,7 @@ namespace Microsoft.Commerce.Payments.PXService
         /// </summary>
         /// <param name="request">Request Object</param>
         /// <returns>Browser major version</returns>
-        public static int GetBrowserMajorVer(HttpRequestMessage request)
+        public static int GetBrowserMajorVer(HttpRequest request)
         {
             var clientInfo = GetClientInfo(request);
             var majorVersion = clientInfo?.UA.Major ?? "0";
@@ -244,7 +246,7 @@ namespace Microsoft.Commerce.Payments.PXService
         /// </summary>
         /// <param name="request">http request</param>
         /// <returns>Value of userAgent</returns>
-        public static string GetUserAgentDecoded(HttpRequestMessage request)
+        public static string GetUserAgentDecoded(HttpRequest request)
         {
             string userAgent = GetUserAgent(request);
             if (string.IsNullOrWhiteSpace(userAgent))
@@ -275,7 +277,7 @@ namespace Microsoft.Commerce.Payments.PXService
         /// </summary>
         /// <param name="request">http request</param>
         /// <returns>PidlSDK Version</returns>
-        public static Version GetFullPidlSdkVersion(HttpRequestMessage request)
+        public static Version GetFullPidlSdkVersion(HttpRequest request)
         {
             IEnumerable<string> xboxNativePidlsdkVersions;
             request.Headers.TryGetValues(GlobalConstants.HeaderValues.PidlSdkVersion, out xboxNativePidlsdkVersions);            
@@ -313,7 +315,7 @@ namespace Microsoft.Commerce.Payments.PXService
             }
         }
 
-        public static TestContext GetTestHeader(HttpRequestMessage incomingRequest = null)
+        public static TestContext GetTestHeader(HttpRequest incomingRequest = null)
         {
             TestContext testContext = null;
             string value = GetRequestHeader(PaymentConstants.PaymentExtendedHttpHeaders.TestHeader);
@@ -348,7 +350,7 @@ namespace Microsoft.Commerce.Payments.PXService
             }
         }
 
-        public static void TransferTargetHeadersFromIncomingRequestToOutgoingRequest(List<string> targetHeaders, HttpRequestMessage outgoingRequest)
+        public static void TransferTargetHeadersFromIncomingRequestToOutgoingRequest(List<string> targetHeaders, HttpRequest outgoingRequest)
         {
             foreach (string header in targetHeaders)
             {
@@ -447,7 +449,7 @@ namespace Microsoft.Commerce.Payments.PXService
             return Has3dsTestScenario(testContext, "px-service-3ds1-show-iframe");
         }
 
-        public static RequestContext GetRequestContext(HttpRequestMessage request, EventTraceActivity traceActivityId)
+        public static RequestContext GetRequestContext(HttpRequest request, EventTraceActivity traceActivityId)
         {
             RequestContext requestContext = null;
             var requestContextHeader = GetRequestHeader(GlobalConstants.HeaderValues.XMsRequestContext, request) ?? GetRequestHeader(GlobalConstants.HeaderValues.RequestContext, request);

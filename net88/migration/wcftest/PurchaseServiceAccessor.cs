@@ -6,6 +6,8 @@ namespace Microsoft.Commerce.Payments.PXService
     using System.Collections.Generic;
     using System.Linq;
     using System.Net.Http;
+    using HttpRequest = System.Net.Http.HttpRequestMessage;
+    using HttpResponse = System.Net.Http.HttpResponseMessage;
     using System.Net.Http.Headers;
     using System.Text;
     using System.Threading.Tasks;
@@ -256,7 +258,7 @@ namespace Microsoft.Commerce.Payments.PXService
             string apiVersion = null)
         {
             string fullRequestUrl = string.IsNullOrWhiteSpace(baseUrl) ? actionPath : string.Format("{0}/{1}", this.BaseUrl, actionPath);
-            using (HttpRequestMessage requestMessage = new HttpRequestMessage(method, fullRequestUrl))
+            using (HttpRequest requestMessage = new HttpRequest(method, fullRequestUrl))
             {
                 requestMessage.IncrementCorrelationVector(traceActivityId);
                 requestMessage.Headers.Add(PaymentConstants.PaymentExtendedHttpHeaders.CorrelationId, traceActivityId.ActivityId.ToString());
@@ -281,7 +283,7 @@ namespace Microsoft.Commerce.Payments.PXService
                 }
 
                 // CodeQL [SM03781] Safe to use. We have implemented the fix in line 144-152.
-                using (HttpResponseMessage response = await this.purchaseServiceHttpClient.SendAsync(requestMessage))
+                using (HttpResponse response = await this.purchaseServiceHttpClient.SendAsync(requestMessage))
                 {
                     string responseMessage = await response.Content.ReadAsStringAsync();
 
