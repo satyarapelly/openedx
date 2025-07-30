@@ -3,7 +3,7 @@
 namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Controllers
 {
     using System.Net.Http;
-    using System.Web.Http;
+    using Microsoft.AspNetCore.Mvc;
     using Constants = Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Constants;
 
     public class TokenPolicyDescriptionController : EmulatorBaseController
@@ -13,7 +13,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
         }
 
         [HttpPost]
-        public HttpResponseMessage GetTokenPolicyDescription([FromUri] string version, [FromUri]string userId)
+        public HttpResponseMessage GetTokenPolicyDescription([FromQuery] string version, [FromQuery]string userId)
         {
             return this.GetResponse(Constants.TokenPolicyApiName.GetTokenPolicyDescription);
         }

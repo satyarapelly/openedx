@@ -4,7 +4,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
 {
     using System.Diagnostics.CodeAnalysis;
     using System.Net.Http;
-    using System.Web.Http;
+    using Microsoft.AspNetCore.Mvc;
     using Constants = Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Constants;
 
     public class AccountCustomersController : EmulatorBaseController
@@ -15,7 +15,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
 
         [SuppressMessage("Microsoft.Performance", "CA1801", Justification = "Extra params needed for routing")]
         [HttpGet]
-        public HttpResponseMessage GetCustomers([FromUri] string accountId)
+        public HttpResponseMessage GetCustomers([FromQuery] string accountId)
         {
             var resp = this.GetResponse(Constants.AccountApiName.GetCustomers);
             this.PlaceholderReplacements[Constants.Placeholders.AccountId] = accountId;

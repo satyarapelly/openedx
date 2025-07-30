@@ -3,7 +3,7 @@
 namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Controllers
 {
     using System.Net.Http;
-    using System.Web.Http;
+    using Microsoft.AspNetCore.Mvc;
     using Constants = Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Constants;
 
     public class SellersController : EmulatorBaseController
@@ -13,7 +13,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
         }
 
         [HttpGet]
-        public HttpResponseMessage GetSeller([FromUri]string paymentProviderId, [FromUri]string sellerId)
+        public HttpResponseMessage GetSeller([FromQuery]string paymentProviderId, [FromQuery]string sellerId)
         {
             return this.GetResponse(Constants.SellerMarketPlaceApiName.GetSeller);
         }

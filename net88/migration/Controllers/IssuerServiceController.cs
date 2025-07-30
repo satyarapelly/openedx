@@ -3,7 +3,7 @@
 namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Controllers
 {
     using System.Net.Http;
-    using System.Web.Http;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.Commerce.Payments.PXService.Model.IssuerService;
     using Constants = Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Constants;
 
@@ -16,7 +16,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
         [ActionName("Apply")]
         [HttpPost]
         public HttpResponseMessage Apply(
-            [FromUri] string customerPuid,
+            [FromQuery] string customerPuid,
             [FromBody] ApplyRequest applyData)
         {
             var response = this.GetResponse(Constants.IssuerServiceApiName.Apply);
@@ -26,9 +26,9 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
         [ActionName("Apply")]
         [HttpGet]
         public HttpResponseMessage ApplicationDetails(
-            [FromUri] string customerPuid,
-            [FromUri] string cardProduct,
-            [FromUri] string sessionId)
+            [FromQuery] string customerPuid,
+            [FromQuery] string cardProduct,
+            [FromQuery] string sessionId)
         {
             var response = this.GetResponse(Constants.IssuerServiceApiName.ApplicationDetails);
             return response;
@@ -45,8 +45,8 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
         [ActionName("ApplyEligibility")]
         [HttpGet]
         public HttpResponseMessage ApplyEligibility(
-            [FromUri] string customerPuid,
-            [FromUri] string cardProduct)
+            [FromQuery] string customerPuid,
+            [FromQuery] string cardProduct)
         {
             return this.GetResponse(Constants.IssuerServiceApiName.Eligibility);
         }

@@ -9,7 +9,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
     using System.Net.Http.Headers;
     using System.Text;
     using System.Threading.Tasks;
-    using System.Web.Http;
+    using Microsoft.AspNetCore.Mvc;
     using Common;
     using Common.Transaction;
     using Common.Web;
@@ -23,7 +23,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
         V3
     }
 
-    public class PayerAuthController : ApiController
+    public class PayerAuthController : ControllerBase
     {
         private const string AcsEmulatorUrlPrefix = "https://payments-acs-emulator-fzeug0g7atchf8d7.b02.azurefd.net/acs/{0}";
 
@@ -335,17 +335,16 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
                 // For e2e test purpose, need to call PX emulator to tell them the callback notification URL per PX's requirement
                 Uri requestUri = new Uri(string.Format(AcsEmulatorUrlPrefix, "auth"));
 
-                using (HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, requestUri))
-                {
-                    httpRequestMessage.Content = new StringContent(JsonConvert.SerializeObject(acsAreq), Encoding.UTF8, "application/json");
-                    httpRequestMessage.Headers.Add(PaymentConstants.PaymentExtendedHttpHeaders.TestHeader, JsonConvert.SerializeObject(testContext));
+                HttpClient httpClient = new HttpClient();
+                httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(PaymentConstants.HttpMimeTypes.JsonContentType));
+                httpClient.DefaultRequestHeaders.Add(PaymentConstants.HttpHeaders.Connection, PaymentConstants.HttpHeaders.KeepAlive);
+                httpClient.DefaultRequestHeaders.Add(PaymentConstants.HttpHeaders.KeepAlive, string.Format(PaymentConstants.HttpHeaders.KeepAliveParameter, 60));
+                httpClient.DefaultRequestHeaders.Add(PaymentConstants.PaymentExtendedHttpHeaders.TestHeader, JsonConvert.SerializeObject(testContext));
 
-                    HttpClient httpClient = new HttpClient();
-                    httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(PaymentConstants.HttpMimeTypes.JsonContentType));
-                    httpClient.DefaultRequestHeaders.Add(PaymentConstants.HttpHeaders.Connection, PaymentConstants.HttpHeaders.KeepAlive);
-                    httpClient.DefaultRequestHeaders.Add(PaymentConstants.HttpHeaders.KeepAlive, string.Format(PaymentConstants.HttpHeaders.KeepAliveParameter, 60));
-                    using (HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage))
-                    {
+                var content = new StringContent(JsonConvert.SerializeObject(acsAreq), Encoding.UTF8, "application/json");
+                var httpResponseMessage = await httpClient.PostAsync(requestUri, content);
+                using (httpResponseMessage)
+                {
                         var responseMessage = await httpResponseMessage.Content.ReadAsStringAsync();
 
                         if (httpResponseMessage.StatusCode == HttpStatusCode.OK && !string.IsNullOrEmpty(responseMessage))
