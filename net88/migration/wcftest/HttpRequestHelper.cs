@@ -6,8 +6,8 @@ namespace Microsoft.Commerce.Payments.PXService
     using System.Collections.Generic;
     using System.Linq;
     using System.Net.Http;
-    using HttpRequest = System.Net.Http.HttpRequestMessage;
-    using HttpResponse = System.Net.Http.HttpResponseMessage;
+    using HttpRequest = System.Net.Http.HttpRequest;
+    using HttpResponse = System.Net.Http.HttpResponse;
     using System.Web;
     using Microsoft.Commerce.Payments.Common;
     using Microsoft.Commerce.Payments.Common.Tracing;
