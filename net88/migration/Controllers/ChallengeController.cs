@@ -3,7 +3,7 @@
 namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Controllers
 {
     using System.Net.Http;
-    using System.Web.Http;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.Commerce.Payments.PXService.Model.ChallengeManagementService;
     using Constants = Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Constants;
 
@@ -16,7 +16,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
         [ActionName("CreateChallenge")]
         [HttpPost]
         public HttpResponseMessage CreateChallenge(
-            [FromUri] string customerPuid,
+            [FromQuery] string customerPuid,
             [FromBody] ChallengeCreationModel applyData)
         {
             return this.GetResponse(Constants.ChallengeManagementApiName.CreateChallenge);
@@ -25,7 +25,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
         [ActionName("GetChallengeStatus")]
         [HttpGet]
         public HttpResponseMessage GetChallengeStatus(
-            [FromUri] string sessionId)
+            [FromQuery] string sessionId)
         {
             return this.GetResponse(Constants.ChallengeManagementApiName.GetChallengeStatus);
         }

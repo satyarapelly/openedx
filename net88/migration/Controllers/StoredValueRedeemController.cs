@@ -3,14 +3,14 @@
 namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Controllers
 {
     using System.Diagnostics.CodeAnalysis;
-    using System.Web.Http;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Mocks;
 
-    public class StoredValueRedeemController : ApiController
+    public class StoredValueRedeemController : ControllerBase
     {
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "This needs to be instance methods for web app to work.")]
         [HttpPost]
-        public FundStoredValueTransaction PostFunding([FromUri]string legacyAccountId, [FromBody]FundStoredValuePayload payload)
+        public FundStoredValueTransaction PostFunding([FromQuery]string legacyAccountId, [FromBody]FundStoredValuePayload payload)
         {
             return new FundStoredValueTransaction()
             {
@@ -32,7 +32,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
         
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "This needs to be instance methods for web app to work.")]
         [HttpGet]
-        public FundStoredValueTransaction GetFundingStatus([FromUri]string legacyAccountId, [FromUri]string referenceId, [FromBody]FundStoredValuePayload payload)
+        public FundStoredValueTransaction GetFundingStatus([FromQuery]string legacyAccountId, [FromQuery]string referenceId, [FromBody]FundStoredValuePayload payload)
         {
             if (payload == null)
             {

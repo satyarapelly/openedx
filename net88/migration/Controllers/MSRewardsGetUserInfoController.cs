@@ -3,7 +3,7 @@
 namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Controllers
 {
     using System.Net.Http;
-    using System.Web.Http;
+    using Microsoft.AspNetCore.Mvc;
     using Constants = Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Constants;
 
     public class MSRewardsGetUserInfoController : EmulatorBaseController
@@ -14,7 +14,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
 
         [ActionName("GetUserInfo")]
         [HttpGet]
-        public HttpResponseMessage GetUserInfo([FromUri] string userId)
+        public HttpResponseMessage GetUserInfo([FromQuery] string userId)
         {
             return this.GetResponse(Constants.MSRewardsApiName.GetUserInfo);
         }

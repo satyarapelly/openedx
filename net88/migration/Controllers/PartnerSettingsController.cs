@@ -3,7 +3,7 @@
 namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Controllers
 {
     using System.Net.Http;
-    using System.Web.Http;
+    using Microsoft.AspNetCore.Mvc;
     using Constants = Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Constants;
 
     public class PartnerSettingsController : EmulatorBaseController
@@ -14,9 +14,9 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
 
         [HttpGet]
         public HttpResponseMessage GetPartnerSettings(
-            [FromUri] string partnerName,
-            [FromUri] string settingsType,
-            [FromUri] string version = null)
+            [FromQuery] string partnerName,
+            [FromQuery] string settingsType,
+            [FromQuery] string version = null)
         {
             return this.GetResponse(Constants.PartnerSettingsApiName.GetPartnerSettings);
         }

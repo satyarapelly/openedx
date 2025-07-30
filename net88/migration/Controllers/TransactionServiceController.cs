@@ -3,7 +3,7 @@
 namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Controllers
 {
     using System.Net.Http;
-    using System.Web.Http;
+    using Microsoft.AspNetCore.Mvc;
     using Constants = Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Constants;
 
     public class TransactionServiceController : EmulatorBaseController

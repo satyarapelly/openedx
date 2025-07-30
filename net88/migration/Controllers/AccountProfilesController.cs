@@ -4,7 +4,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
 {
     using System.Diagnostics.CodeAnalysis;
     using System.Net.Http;
-    using System.Web.Http;
+    using Microsoft.AspNetCore.Mvc;
     using Constants = Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Constants;
 
     public class AccountProfilesController : EmulatorBaseController
@@ -15,7 +15,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
 
         [SuppressMessage("Microsoft.Performance", "CA1801", Justification = "Extra params needed for routing")]
         [HttpGet]
-        public HttpResponseMessage GetProfiles([FromUri] string accountId, [FromUri] string type)
+        public HttpResponseMessage GetProfiles([FromQuery] string accountId, [FromQuery] string type)
         {
             var resp = this.GetResponse(Constants.AccountApiName.GetProfiles);
             this.PlaceholderReplacements[Constants.Placeholders.AccountId] = accountId;
@@ -25,7 +25,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
 
         [SuppressMessage("Microsoft.Performance", "CA1801", Justification = "Extra params needed for routing")]
         [HttpPut]
-        public HttpResponseMessage PutProfile([FromUri] string accountId, [FromUri] string profileId, [FromBody] object profileInfo)
+        public HttpResponseMessage PutProfile([FromQuery] string accountId, [FromQuery] string profileId, [FromBody] object profileInfo)
         {
             var resp = this.GetResponse(Constants.AccountApiName.PutProfile);
             this.PlaceholderReplacements[Constants.Placeholders.AccountId] = accountId;
@@ -36,7 +36,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
 
         [SuppressMessage("Microsoft.Performance", "CA1801", Justification = "Extra params needed for routing")]
         [HttpPatch]
-        public HttpResponseMessage PatchProfile([FromUri] string accountId, [FromUri] string profileId, [FromBody] object profileInfo)
+        public HttpResponseMessage PatchProfile([FromQuery] string accountId, [FromQuery] string profileId, [FromBody] object profileInfo)
         {
             var resp = this.GetResponse(Constants.AccountApiName.PatchProfile);
             this.PlaceholderReplacements[Constants.Placeholders.AccountId] = accountId;

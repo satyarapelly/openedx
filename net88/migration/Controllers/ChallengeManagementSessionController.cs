@@ -3,7 +3,7 @@
 namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Controllers
 {
     using System.Net.Http;
-    using System.Web.Http;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.Commerce.Payments.PXService.Model.ChallengeManagementService;
     using Constants = Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Constants;
 
@@ -24,7 +24,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
         [ActionName("GetChallengeSessionData")]
         [HttpGet]
         public HttpResponseMessage GetChallengeSessionData(
-            [FromUri] string sessionId)
+            [FromQuery] string sessionId)
         {
             return this.GetResponse(Constants.ChallengeManagementApiName.GetChallengeSessionData);
         }

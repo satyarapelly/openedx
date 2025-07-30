@@ -3,7 +3,7 @@
 namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Controllers
 {
     using System.Net.Http;
-    using System.Web.Http;
+    using Microsoft.AspNetCore.Mvc;
     using Constants = Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Constants;
 
     public class PaymentThirdPartyPaymentAndCheckoutsController : EmulatorBaseController
@@ -13,13 +13,13 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
         }
 
         [HttpGet]
-        public HttpResponseMessage GetPaymentRequest([FromUri] string paymentProviderId, [FromUri] string paymentRequestId)
+        public HttpResponseMessage GetPaymentRequest([FromQuery] string paymentProviderId, [FromQuery] string paymentRequestId)
         {
             return this.GetResponse(Constants.PaymentThirdPartyApiName.GetPaymentRequest);
         }
 
         [HttpGet]
-        public HttpResponseMessage GetCheckout([FromUri] string paymentProviderId, [FromUri]string checkoutId)
+        public HttpResponseMessage GetCheckout([FromQuery] string paymentProviderId, [FromQuery]string checkoutId)
         {
             return this.GetResponse(Constants.PaymentThirdPartyApiName.GetCheckout);
         }

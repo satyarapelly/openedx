@@ -3,7 +3,7 @@
 namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Controllers
 {
     using System.Net.Http;
-    using System.Web.Http;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.Commerce.Payments.PXService.Model.PaymentOrchestratorService;
     using Newtonsoft.Json;
     using Constants = Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Constants;
@@ -15,55 +15,55 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
         }
 
         [HttpPost]
-        public HttpResponseMessage AttachAddress([FromUri]string checkoutId, [FromBody] object address, [FromUri] string type)
+        public HttpResponseMessage AttachAddress([FromQuery]string checkoutId, [FromBody] object address, [FromQuery] string type)
         {
             return this.GetResponse(Constants.PaymentOchestratorApiName.AttachAddress);
         }
 
         [HttpPost]
-        public HttpResponseMessage PRAttachAddress([FromUri]string paymentRequestId, [FromUri] string type)
+        public HttpResponseMessage PRAttachAddress([FromQuery]string paymentRequestId, [FromQuery] string type)
         {
             return this.GetResponse(Constants.PaymentOchestratorApiName.PRAttachAddress);
         }
 
         [HttpPost]
-        public HttpResponseMessage AttachProfile([FromUri] string checkoutId, [FromBody] object address)
+        public HttpResponseMessage AttachProfile([FromQuery] string checkoutId, [FromBody] object address)
         {
             return this.GetResponse(Constants.PaymentOchestratorApiName.AttachProfile);
         }
 
         [HttpPost]
-        public HttpResponseMessage PRAttachProfile([FromUri] string paymentRequestId, [FromBody] object address)
+        public HttpResponseMessage PRAttachProfile([FromQuery] string paymentRequestId, [FromBody] object address)
         {
             return this.GetResponse(Constants.PaymentOchestratorApiName.PRAttachProfile);
         }
 
         [HttpPost]
-        public HttpResponseMessage AttachPaymentInstruments([FromUri] string checkoutId, [FromBody] object pi)
+        public HttpResponseMessage AttachPaymentInstruments([FromQuery] string checkoutId, [FromBody] object pi)
         {
             return this.GetResponse(Constants.PaymentOchestratorApiName.AttachPaymentInstruments);
         }
 
         [HttpPost]
-        public HttpResponseMessage PRAttachPaymentInstruments([FromUri] string paymentRequestId, [FromBody] object pi)
+        public HttpResponseMessage PRAttachPaymentInstruments([FromQuery] string paymentRequestId, [FromBody] object pi)
         {
             return this.GetResponse(Constants.PaymentOchestratorApiName.PRAttachPaymentInstruments);
         }
 
         [HttpPost]
-        public HttpResponseMessage Confirm([FromUri] string checkoutId, [FromBody] object confirmpayload)
+        public HttpResponseMessage Confirm([FromQuery] string checkoutId, [FromBody] object confirmpayload)
         {
             return this.GetResponse(Constants.PaymentOchestratorApiName.Confirm);
         }
 
         [HttpPost]
-        public HttpResponseMessage PRConfirm([FromUri] string paymentRequestId, [FromBody] object confirmpayload)
+        public HttpResponseMessage PRConfirm([FromQuery] string paymentRequestId, [FromBody] object confirmpayload)
         {
             return this.GetResponse(Constants.PaymentOchestratorApiName.PRConfirm);
         }
 
         [HttpGet]
-        public HttpResponseMessage ClientAction([FromUri] string checkoutId)
+        public HttpResponseMessage ClientAction([FromQuery] string checkoutId)
         {
             var response = this.GetResponse(Constants.PaymentOchestratorApiName.GetClientAction);
             var responsePayload = response.Content.ReadAsStringAsync().Result;
@@ -82,7 +82,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
         }
 
         [HttpGet]
-        public HttpResponseMessage GetClientActions([FromUri] string paymentRequestId)
+        public HttpResponseMessage GetClientActions([FromQuery] string paymentRequestId)
         {
             var response = this.GetResponse(Constants.PaymentOchestratorApiName.GetClientActions);
             this.PlaceholderReplacements[Constants.Placeholders.PaymentRequestId] = paymentRequestId;
