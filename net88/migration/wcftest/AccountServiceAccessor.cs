@@ -8,8 +8,8 @@ namespace Microsoft.Commerce.Payments.PXService
     using System.Net;
     using System.Net.Http;
     using System.Net.Http.Headers;
-    using HttpRequest = System.Net.Http.HttpRequest;
-    using HttpResponse = System.Net.Http.HttpResponse;
+    using HttpRequest = Microsoft.AspNetCore.Http.HttpRequest;
+    using HttpResponse = Microsoft.AspNetCore.Http.HttpResponse;
     using System.Text;
     using System.Threading.Tasks;
     using Microsoft.Commerce.Payments.Common;
@@ -356,7 +356,7 @@ namespace Microsoft.Commerce.Payments.PXService
                 traceActivityId);
         }
 
-        private static async Task HandleLegacyAddressValidationError(HttpResponse response, EventTraceActivity traceActivityId)
+        private static async Task HandleLegacyAddressValidationError(HttpResponseMessage response, EventTraceActivity traceActivityId)
         {
             string responseMessage = await response.Content.ReadAsStringAsync();
             ServiceErrorResponse error = null;
@@ -374,7 +374,7 @@ namespace Microsoft.Commerce.Payments.PXService
             throw TraceCore.TraceException(traceActivityId, new ServiceErrorResponseException() { Error = error, Response = response });
         }
 
-        private static async Task HandlePostAddressValidationError(HttpResponse response, EventTraceActivity traceActivityId)
+        private static async Task HandlePostAddressValidationError(HttpResponseMessage response, EventTraceActivity traceActivityId)
         {
             string responseMessage = await response.Content.ReadAsStringAsync();
             ServiceErrorResponse error = null;
@@ -442,7 +442,7 @@ namespace Microsoft.Commerce.Payments.PXService
         private async Task<T> SendGetRequest<T>(string requestUrl, string apiVersion, string actionName, EventTraceActivity traceActivityId)
         {
             string fullRequestUrl = string.Format("{0}{1}", this.BaseUrl, requestUrl);
-            using (HttpRequest request = new HttpRequest(HttpMethod.Get, fullRequestUrl))
+            using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, fullRequestUrl))
             {
                 request.IncrementCorrelationVector(traceActivityId);
                 request.Headers.Add(PaymentConstants.PaymentExtendedHttpHeaders.CorrelationId, traceActivityId.ActivityId.ToString());
@@ -452,7 +452,7 @@ namespace Microsoft.Commerce.Payments.PXService
                 // Add action name to the request properties so that this request's OperationName is logged properly
                 request.AddOrReplaceActionName(actionName);
 
-                using (HttpResponse response = await this.accountServiceHttpClient.SendAsync(request))
+                using (HttpResponseMessage response = await this.accountServiceHttpClient.SendAsync(request))
                 {
                     string responseMessage = await response.Content.ReadAsStringAsync();
 
@@ -486,11 +486,11 @@ namespace Microsoft.Commerce.Payments.PXService
             string actionName,
             EventTraceActivity traceActivityId,
             string etag = null,
-            Func<HttpResponse, EventTraceActivity, Task> errorHandler = null,
+            Func<HttpResponseMessage, EventTraceActivity, Task> errorHandler = null,
             bool regionIsoEnabled = false)
         {
             string fullRequestUrl = string.Format("{0}{1}", this.BaseUrl, url);
-            using (HttpRequest requestMessage = new HttpRequest(HttpMethod.Post, fullRequestUrl))
+            using (HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Post, fullRequestUrl))
             {
                 requestMessage.IncrementCorrelationVector(traceActivityId);
                 requestMessage.Headers.Add(PaymentConstants.PaymentExtendedHttpHeaders.CorrelationId, traceActivityId.ActivityId.ToString());
@@ -522,7 +522,7 @@ namespace Microsoft.Commerce.Payments.PXService
                     requestMessage.Content = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, PaymentConstants.HttpMimeTypes.JsonContentType); // lgtm[cs/sensitive-data-transmission] lgtm[cs/web/xss] The request is being made to a web service and not to a web page.
                 }
 
-                using (HttpResponse response = await this.accountServiceHttpClient.SendAsync(requestMessage))
+                using (HttpResponseMessage response = await this.accountServiceHttpClient.SendAsync(requestMessage))
                 {
                     string responseMessage = await response.Content.ReadAsStringAsync();
 
@@ -562,10 +562,10 @@ namespace Microsoft.Commerce.Payments.PXService
             EventTraceActivity traceActivityId,
             HttpMethod method,
             string etag = null,
-            Func<HttpResponse, EventTraceActivity, Task> errorHandler = null)
+            Func<HttpResponseMessage, EventTraceActivity, Task> errorHandler = null)
         {
             string fullRequestUrl = string.Format("{0}{1}", this.BaseUrl, url);
-            using (HttpRequest requestMessage = new HttpRequest(method, fullRequestUrl))
+            using (HttpRequestMessage requestMessage = new HttpRequestMessage(method, fullRequestUrl))
             {
                 requestMessage.IncrementCorrelationVector(traceActivityId);
                 requestMessage.Headers.Add(PaymentConstants.PaymentExtendedHttpHeaders.CorrelationId, traceActivityId.ActivityId.ToString());
@@ -600,7 +600,7 @@ namespace Microsoft.Commerce.Payments.PXService
                     requestMessage.Content = new StringContent(payload, Encoding.UTF8, PaymentConstants.HttpMimeTypes.JsonContentType);
                 }
 
-                using (HttpResponse response = await this.accountServiceHttpClient.SendAsync(requestMessage))
+                using (HttpResponseMessage response = await this.accountServiceHttpClient.SendAsync(requestMessage))
                 {
                     string responseMessage = await response.Content.ReadAsStringAsync();
 
