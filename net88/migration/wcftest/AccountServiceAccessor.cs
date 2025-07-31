@@ -6,8 +6,6 @@ namespace Microsoft.Commerce.Payments.PXService
     using System.Collections.Generic;
     using System.Linq;
     using System.Net;
-    using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Text;
     using System.Threading.Tasks;
     using Microsoft.Commerce.Payments.Common;
@@ -26,25 +24,26 @@ namespace Microsoft.Commerce.Payments.PXService
     {
         private const string AccountServiceName = "AccountService";
 
-        private HttpClient accountServiceHttpClient;
+        private PXTracingHttpClient accountServiceHttpClient;
 
         private string serviceBaseUrl;
         private string emulatorBaseUrl;
 
         public AccountServiceAccessor(
             string serviceBaseUrl,
-            string emulatorBaseUrl,
-            HttpMessageHandler messageHandler)
+            string emulatorBaseUrl)
         {
             this.serviceBaseUrl = serviceBaseUrl;
             this.emulatorBaseUrl = emulatorBaseUrl;
 
-            var httpClient = new HttpClient(messageHandler);
-            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(PaymentConstants.HttpMimeTypes.JsonContentType));
-            httpClient.DefaultRequestHeaders.Add(PaymentConstants.HttpHeaders.Connection, PaymentConstants.HttpHeaders.KeepAlive);
-            httpClient.DefaultRequestHeaders.Add(PaymentConstants.HttpHeaders.KeepAlive, string.Format(PaymentConstants.HttpHeaders.KeepAliveParameter, 60));
+            var defaultHeaders = new Dictionary<string, string>
+            {
+                { "Accept", PaymentConstants.HttpMimeTypes.JsonContentType },
+                { PaymentConstants.HttpHeaders.Connection, PaymentConstants.HttpHeaders.KeepAlive },
+                { PaymentConstants.HttpHeaders.KeepAlive, string.Format(PaymentConstants.HttpHeaders.KeepAliveParameter, 60) }
+            };
 
-            this.accountServiceHttpClient = new PXTracingHttpClient(AccountService.V7.Constants.ServiceNames.AccountService, httpClient, ApplicationInsightsProvider.LogOutgoingOperation);
+            this.accountServiceHttpClient = new PXTracingHttpClient(AccountService.V7.Constants.ServiceNames.AccountService, defaultHeaders);
         }
 
         private string BaseUrl => string.IsNullOrWhiteSpace(this.emulatorBaseUrl) ? this.serviceBaseUrl : this.emulatorBaseUrl;
@@ -64,7 +63,7 @@ namespace Microsoft.Commerce.Payments.PXService
                     address,
                     "PatchAddress",
                     traceActivityId,
-                    new HttpMethod(GlobalConstants.HTTPVerbs.PATCH),
+                    GlobalConstants.HTTPVerbs.PATCH,
                     eTag);
         }
 
@@ -220,7 +219,7 @@ namespace Microsoft.Commerce.Payments.PXService
                     profile,
                     isPatchProfile ? "PatchProfile" : "PutProfile",
                     traceActivityId,
-                    isPatchProfile ? new HttpMethod(GlobalConstants.HTTPVerbs.PATCH) : HttpMethod.Put,
+                    isPatchProfile ? GlobalConstants.HTTPVerbs.PATCH : GlobalConstants.HTTPVerbs.PUT,
                     profile.Etag);
             }
         }
@@ -341,9 +340,9 @@ namespace Microsoft.Commerce.Payments.PXService
                 traceActivityId);
         }
 
-        private static async Task HandleLegacyAddressValidationError(HttpResponseMessage response, EventTraceActivity traceActivityId)
+        private static Task HandleLegacyAddressValidationError(PXHttpResponse response, EventTraceActivity traceActivityId)
         {
-            string responseMessage = await response.Content.ReadAsStringAsync();
+            string responseMessage = response.Content;
             ServiceErrorResponse error = null;
             try
             {
@@ -359,9 +358,9 @@ namespace Microsoft.Commerce.Payments.PXService
             throw TraceCore.TraceException(traceActivityId, new ServiceErrorResponseException() { Error = error, Response = response });
         }
 
-        private static async Task HandlePostAddressValidationError(HttpResponseMessage response, EventTraceActivity traceActivityId)
+        private static Task HandlePostAddressValidationError(PXHttpResponse response, EventTraceActivity traceActivityId)
         {
-            string responseMessage = await response.Content.ReadAsStringAsync();
+            string responseMessage = response.Content;
             ServiceErrorResponse error = null;
             try
             {
@@ -433,29 +432,27 @@ namespace Microsoft.Commerce.Payments.PXService
                 { PaymentConstants.PaymentExtendedHttpHeaders.ApiVersion, apiVersion }
             };
 
-            using (HttpResponseMessage response = await this.accountServiceHttpClient.SendAsync(HttpMethod.Get, fullRequestUrl, traceActivityId, actionName, headers))
-            {
-                string responseMessage = await response.Content.ReadAsStringAsync();
+            var response = await this.accountServiceHttpClient.SendAsync("GET", fullRequestUrl, traceActivityId, actionName, headers);
+            string responseMessage = response.Content;
 
-                if (response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
+            {
+                try
                 {
-                    try
-                    {
-                        return JsonConvert.DeserializeObject<T>(responseMessage);
-                    }
-                    catch
-                    {
-                        throw TraceCore.TraceException(traceActivityId, new FailedOperationException("Failed to deserialize Account service response message."));
-                    }
+                    return JsonConvert.DeserializeObject<T>(responseMessage);
                 }
-                else if (response.StatusCode == HttpStatusCode.BadRequest)
+                catch
                 {
-                    throw TraceCore.TraceException(traceActivityId, new InvalidOperationException(string.Format("Receive a bad request response from Account service: {0}.", responseMessage ?? string.Empty)));
+                    throw TraceCore.TraceException(traceActivityId, new FailedOperationException("Failed to deserialize Account service response message."));
                 }
-                else
-                {
-                    throw TraceCore.TraceException(traceActivityId, new FailedOperationException(string.Format("Received an error response from Account service, response status code: {0}, error: {1}", response.StatusCode, responseMessage != null ? responseMessage : string.Empty)));
-                }
+            }
+            else if (response.StatusCode == HttpStatusCode.BadRequest)
+            {
+                throw TraceCore.TraceException(traceActivityId, new InvalidOperationException(string.Format("Receive a bad request response from Account service: {0}.", responseMessage ?? string.Empty)));
+            }
+            else
+            {
+                throw TraceCore.TraceException(traceActivityId, new FailedOperationException(string.Format("Received an error response from Account service, response status code: {0}, error: {1}", response.StatusCode, responseMessage != null ? responseMessage : string.Empty)));
             }
         }
 
@@ -466,7 +463,7 @@ namespace Microsoft.Commerce.Payments.PXService
             string actionName,
             EventTraceActivity traceActivityId,
             string etag = null,
-            Func<HttpResponseMessage, EventTraceActivity, Task> errorHandler = null,
+            Func<PXHttpResponse, EventTraceActivity, Task> errorHandler = null,
             bool regionIsoEnabled = false)
         {
             string fullRequestUrl = string.Format("{0}{1}", this.BaseUrl, url);
@@ -490,15 +487,14 @@ namespace Microsoft.Commerce.Payments.PXService
                 headers.Add(AccountService.V7.Constants.AccountV3ExtendedHttpHeaders.IfMatch, etag);
             }
 
-            HttpContent content = null;
+            string content = null;
             if (request != null)
             {
-                content = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, PaymentConstants.HttpMimeTypes.JsonContentType); // lgtm[cs/sensitive-data-transmission] lgtm[cs/web/xss] The request is being made to a web service and not to a web page.
+                content = JsonConvert.SerializeObject(request);
             }
 
-            using (HttpResponseMessage response = await this.accountServiceHttpClient.SendAsync(HttpMethod.Post, fullRequestUrl, traceActivityId, actionName, headers, content))
-            {
-                string responseMessage = await response.Content.ReadAsStringAsync();
+            var response = await this.accountServiceHttpClient.SendAsync("POST", fullRequestUrl, traceActivityId, actionName, headers, content);
+            string responseMessage = response.Content;
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -524,7 +520,6 @@ namespace Microsoft.Commerce.Payments.PXService
                 {
                     throw TraceCore.TraceException(traceActivityId, new FailedOperationException(string.Format("Received an error response from Account service, response status code: {0}, error: {1}", response.StatusCode, responseMessage != null ? responseMessage : string.Empty)));
                 }
-            }
         }
 
         private async Task<T> SendRequest<T>(
@@ -533,9 +528,9 @@ namespace Microsoft.Commerce.Payments.PXService
             object request,
             string actionName,
             EventTraceActivity traceActivityId,
-            HttpMethod method,
+            string method,
             string etag = null,
-            Func<HttpResponseMessage, EventTraceActivity, Task> errorHandler = null)
+            Func<PXHttpResponse, EventTraceActivity, Task> errorHandler = null)
         {
             string fullRequestUrl = string.Format("{0}{1}", this.BaseUrl, url);
             var headers = new Dictionary<string, string>
@@ -553,7 +548,7 @@ namespace Microsoft.Commerce.Payments.PXService
                 headers.Add(AccountService.V7.Constants.AccountV3ExtendedHttpHeaders.IfMatch, etag);
             }
 
-            HttpContent content = null;
+            string content = null;
             if (request != null)
             {
                 string payload = JsonConvert.SerializeObject(
@@ -563,12 +558,11 @@ namespace Microsoft.Commerce.Payments.PXService
                     {
                         NullValueHandling = NullValueHandling.Ignore
                     });
-                content = new StringContent(payload, Encoding.UTF8, PaymentConstants.HttpMimeTypes.JsonContentType);
+                content = payload;
             }
 
-            using (HttpResponseMessage response = await this.accountServiceHttpClient.SendAsync(method, fullRequestUrl, traceActivityId, actionName, headers, content))
-            {
-                string responseMessage = await response.Content.ReadAsStringAsync();
+            var response = await this.accountServiceHttpClient.SendAsync(method, fullRequestUrl, traceActivityId, actionName, headers, content);
+            string responseMessage = response.Content;
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -594,7 +588,6 @@ namespace Microsoft.Commerce.Payments.PXService
                 {
                     throw TraceCore.TraceException(traceActivityId, new FailedOperationException(string.Format("Received an error response from Account service, response status code: {0}, error: {1}", response.StatusCode, responseMessage != null ? responseMessage : string.Empty)));
                 }
-            }
         }
 
         private async Task<T> GetProfileV3ByType<T>(string requestUrl, EventTraceActivity traceActivityId)
