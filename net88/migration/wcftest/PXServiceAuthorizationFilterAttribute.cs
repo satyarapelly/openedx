@@ -2,9 +2,6 @@
 
 namespace Microsoft.Commerce.Payments.PXService
 {
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.Commerce.Payments.Common.Authorization;
-    using Microsoft.Commerce.Payments.PXCommon;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
@@ -16,9 +13,11 @@ namespace Microsoft.Commerce.Payments.PXService
     using System.Security.Principal;
     using System.Threading;
     using System.Threading.Tasks;
-    using HttpRequest = Microsoft.AspNetCore.Http.HttpRequest;
-    using HttpResponse = Microsoft.AspNetCore.Http.HttpResponse;
-    using Properties = Common.PaymentConstants.Web.Properties;
+    using System.Web.Http;
+    using System.Web.Http.Controllers;
+    using Microsoft.Commerce.Payments.Common.Authorization;
+    using Microsoft.Commerce.Payments.PXCommon;
+    using Properties = Microsoft.Commerce.Payments.Common.PaymentConstants.Web.Properties;
 
     public sealed class PXServiceAuthorizationFilterAttribute : AuthorizeAttribute
     {
