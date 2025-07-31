@@ -1,29 +1,28 @@
-﻿// <copyright file="PXServiceAuthorizationFilterAttribute.cs" company="Microsoft">Copyright (c) Microsoft. All rights reserved.</copyright>
+// <copyright file="PXServiceAuthorizationFilterAttribute.cs" company="Microsoft">Copyright (c) Microsoft. All rights reserved.</copyright>
 
 namespace Microsoft.Commerce.Payments.PXService
 {
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.Commerce.Payments.Common.Authorization;
+    using Microsoft.Commerce.Payments.PXCommon;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using HttpRequest = Microsoft.AspNetCore.Http.HttpRequest;
-    using HttpResponse = Microsoft.AspNetCore.Http.HttpResponse;
     using System.Net.Http.Headers;
     using System.Security.Cryptography.X509Certificates;
     using System.Security.Principal;
     using System.Threading;
     using System.Threading.Tasks;
-    using System.Web.Http;
-    using System.Web.Http.Controllers;
-    using Microsoft.Commerce.Payments.Common.Authorization;
-    using Microsoft.Commerce.Payments.PXCommon;
+    using HttpRequest = Microsoft.AspNetCore.Http.HttpRequest;
+    using HttpResponse = Microsoft.AspNetCore.Http.HttpResponse;
     using Properties = Common.PaymentConstants.Web.Properties;
 
     public sealed class PXServiceAuthorizationFilterAttribute : AuthorizeAttribute
     {
-        private static readonly IIdentity NullIdentity = new GenericIdentity("NULL", "NULL"); 
+        private static readonly IIdentity NullIdentity = new GenericIdentity("NULL", "NULL");
 
         public bool AllowUnauthenticatedHttpCalls { get; set; }
 
@@ -56,17 +55,17 @@ namespace Microsoft.Commerce.Payments.PXService
 
                     // Fail back to certificate authentication, once PIFD migration out certificate, 
                     // the following lines should be removed.
-                    if (partner == null) 
+                    if (partner == null)
                     {
                         tokenAuthResult = GlobalConstants.AuthResult.Failed;
                         partner = this.AuthenticateByCert(actionContext);
-                        certAuthResult = partner == null ? 
-                            GlobalConstants.AuthResult.Failed : 
+                        certAuthResult = partner == null ?
+                            GlobalConstants.AuthResult.Failed :
                             GlobalConstants.AuthResult.Succeed;
                     }
 
                     // Authorize partners
-                    if (partner != null) 
+                    if (partner != null)
                     {
                         actionContext.Request.Properties[Properties.CertConfig] = string.Format("role {0}, requestUri {1}, authrizedCert allow path {2}, allow account {3}, AllowedUnAuthenticatedPath {4} ", partner.Role, actionContext.Request.RequestUri.AbsoluteUri, partner.AllowedAuthenticatedPathTemplate, partner.AllowedAccounts, partner.AllowedUnAuthenticatedPaths);
                         if (UserInformation.IsAuthorized(actionContext.Request.RequestUri, partner))
@@ -121,7 +120,7 @@ namespace Microsoft.Commerce.Payments.PXService
         private UserInformation GetCertificateBySubjectName(string subject)
         {
             return this.UberUserDirectory.UserInformation.SingleOrDefault(
-                p => p?.CertificateVerificationRule != null 
+                p => p?.CertificateVerificationRule != null
                 && string.Equals(CertificateHelper.NormalizeDistinguishedName(p.CertificateVerificationRule.Subject), subject, StringComparison.OrdinalIgnoreCase));
         }
 
