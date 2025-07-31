@@ -1,93 +1,89 @@
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Microsoft.Commerce.Payments.Common.Tracing;
-using Microsoft.Commerce.Payments.Common.Web;
+// <copyright file="PXTracingHttpClient.cs" company="Microsoft">Copyright (c) Microsoft 2015. All rights reserved.</copyright>
 
 namespace Microsoft.Commerce.Payments.PXCommon
 {
-    /// <summary>
-    /// A lightweight tracing-enabled HttpClient wrapper for outgoing requests.
-    /// </summary>
-    public class PXTracingHttpClient
-    {
-        private readonly HttpClient _client;
-        private readonly string _serviceName;
-        private readonly Action<string, EventTraceActivity> _logError;
-        private readonly Action<string, string, EventTraceActivity> _logRequest;
-        private readonly Action<string, EventTraceActivity> _logResponse;
+    using System;
+    using System.Diagnostics;
+    using System.Net.Http;
+    using Microsoft.Commerce.Payments.Common.Web;
+    using Microsoft.Commerce.Tracing;
 
+    /// <summary>
+    /// This client class wraps a typical HttpClient into a tracing handler
+    /// </summary>
+    public class PXTracingHttpClient : HttpClient
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PXTracingHttpClient" /> class.
+        /// </summary>
+        /// <param name="serviceName">The name of the service using this Tracing Client. This name is used for identification of the trace logs.</param>
+        /// <param name="logError">A tracing action that will be executed if there is an error when sending or receiving a request.</param>
+        /// <param name="logRequest">A tracing action that will be executed to log the request that's being sent. Default is no action. Do not use if the request could contain sensitive data.</param>
+        /// <param name="logResponse">A tracing action that will be executed to log the response that's received. Default is no action. Do not use if the response could contain sensitive data.</param>
         public PXTracingHttpClient(
             string serviceName,
-            HttpClient httpClient,
             Action<string, EventTraceActivity> logError = null,
             Action<string, string, EventTraceActivity> logRequest = null,
             Action<string, EventTraceActivity> logResponse = null)
+            : base(new PXTraceCorrelationHandler(
+                serviceName: serviceName, 
+                innerHandler: new PXTracingHandler(
+                    serviceName: serviceName, 
+                    httpMessageHandler: new HttpClientHandler(), 
+                    logError: logError, 
+                    logRequest: logRequest, 
+                    logResponse: logResponse), 
+                isDependentServiceRequest: true))
         {
-            _client = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-            _serviceName = serviceName;
-            _logError = logError ?? ((m, t) => { });
-            _logRequest = logRequest ?? ((a, m, t) => { });
-            _logResponse = logResponse ?? ((m, t) => { });
         }
 
-        public async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PXTracingHttpClient" /> class.
+        /// </summary>
+        /// <param name="serviceName">The name of the service using this Tracing Client. This name is used for identification of the trace logs.</param>
+        /// <param name="httpMessageHandler">An inner handler that is attached to this HttpClient object.</param>
+        /// <param name="logError">An tracing action that will be executed if there is an error when sending or receiving a request.</param>
+        /// <param name="logRequest">A tracing action that will be executed to log the request that's being sent. Default is no action. Do not use if the request could contain sensitive data.</param>
+        /// <param name="logResponse">A tracing action that will be executed to log the response that's received. Default is no action. Do not use if the response could contain sensitive data.</param>
+        public PXTracingHttpClient(
+            string serviceName,
+            HttpMessageHandler httpMessageHandler,
+            Action<string, EventTraceActivity> logError = null,
+            Action<string, string, EventTraceActivity> logRequest = null,
+            Action<string, EventTraceActivity> logResponse = null) :
+            base(new PXTraceCorrelationHandler(
+                serviceName: serviceName, 
+                innerHandler: new PXTracingHandler(
+                    serviceName: serviceName, 
+                    httpMessageHandler: httpMessageHandler, 
+                    logError: logError, 
+                    logRequest: logRequest, 
+                    logResponse: logResponse), 
+                isDependentServiceRequest: true))
         {
-            var traceActivity = EventTraceActivity.Current ?? new EventTraceActivity();
-
-            try
-            {
-                string payload = request.Content != null ? await request.Content.ReadAsStringAsync() : "<no body>";
-                _logRequest?.Invoke(request.RequestUri.ToString(), payload, traceActivity);
-
-                HttpResponseMessage response = await _client.SendAsync(request);
-                string responseContent = response.Content != null ? await response.Content.ReadAsStringAsync() : "<no response>";
-                _logResponse?.Invoke(responseContent, traceActivity);
-
-                return response;
-            }
-            catch (Exception ex)
-            {
-                _logError?.Invoke($"Exception in tracing HTTP call: {ex.Message}", traceActivity);
-                throw;
-            }
         }
 
-        public async Task<HttpResponseMessage> SendAsync(
-            HttpMethod method,
-            string requestUri,
-            EventTraceActivity traceActivity,
-            string actionName,
-            IDictionary<string, string> headers = null,
-            HttpContent content = null)
+        public PXTracingHttpClient(
+            string serviceName,
+            HttpMessageHandler httpMessageHandler,
+            Action<string, string, HttpRequestMessage, HttpResponseMessage, string, string, string, string> logOutgoingRequestToApplicationInsight) :
+            base(new PXTraceCorrelationHandler(
+                serviceName: serviceName,
+                innerHandler: httpMessageHandler,
+                isDependentServiceRequest: true,
+                logOutgoingToAppInsight: logOutgoingRequestToApplicationInsight))
         {
-            using var request = new HttpRequestMessage(method, requestUri);
+        }
 
-            if (traceActivity != null)
-            {
-                request.IncrementCorrelationVector(traceActivity);
-            }
-
-            if (!string.IsNullOrWhiteSpace(actionName))
-            {
-                request.AddOrReplaceActionName(actionName);
-            }
-
-            if (headers != null)
-            {
-                foreach (var header in headers)
-                {
-                    request.Headers.TryAddWithoutValidation(header.Key, header.Value);
-                }
-            }
-
-            if (content != null)
-            {
-                request.Content = content;
-            }
-
-            return await SendAsync(request);
+        public PXTracingHttpClient(
+            string serviceName,
+            Action<string, string, HttpRequestMessage, HttpResponseMessage, string, string, string, string> logOutgoingRequestToApplicationInsight) :
+            base(new PXTraceCorrelationHandler(
+                serviceName: serviceName,
+                innerHandler: new HttpClientHandler(),
+                isDependentServiceRequest: true,
+                logOutgoingToAppInsight: logOutgoingRequestToApplicationInsight))
+        {
         }
     }
 }
