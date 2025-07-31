@@ -3,9 +3,8 @@
 namespace Microsoft.Commerce.Payments.PXCommon
 {
     using System.Collections.Generic;
-    using System.IO;
-    using System.Net;
     using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.Commerce.Tracing;
 
     /// <summary>
@@ -14,11 +13,13 @@ namespace Microsoft.Commerce.Payments.PXCommon
     public class PXTracingHttpClient
     {
         private readonly IDictionary<string, string> defaultHeaders;
+        private readonly System.Net.Http.HttpClient httpClient;
 
-        public PXTracingHttpClient(string serviceName, IDictionary<string, string>? defaultHeaders = null)
+        public PXTracingHttpClient(string serviceName, IDictionary<string, string>? defaultHeaders = null, System.Net.Http.HttpClient? client = null)
         {
             this.ServiceName = serviceName;
             this.defaultHeaders = defaultHeaders ?? new Dictionary<string, string>();
+            this.httpClient = client ?? new System.Net.Http.HttpClient();
         }
 
         public string ServiceName { get; }
@@ -31,46 +32,34 @@ namespace Microsoft.Commerce.Payments.PXCommon
             IDictionary<string, string>? headers = null,
             string? content = null)
         {
-            var request = (HttpWebRequest)WebRequest.Create(url);
-            request.Method = method;
+            var request = new System.Net.Http.HttpRequestMessage(new System.Net.Http.HttpMethod(method), url);
 
             foreach (var header in this.defaultHeaders)
             {
-                request.Headers[header.Key] = header.Value;
+                request.Headers.TryAddWithoutValidation(header.Key, header.Value);
             }
 
             if (headers != null)
             {
                 foreach (var header in headers)
                 {
-                    request.Headers[header.Key] = header.Value;
+                    request.Headers.TryAddWithoutValidation(header.Key, header.Value);
                 }
             }
 
             if (!string.IsNullOrEmpty(content))
             {
-                using var writer = new StreamWriter(await request.GetRequestStreamAsync());
-                await writer.WriteAsync(content);
+                request.Content = new System.Net.Http.StringContent(content);
             }
 
-            try
-            {
-                using var response = (HttpWebResponse)await request.GetResponseAsync();
-                using var reader = new StreamReader(response.GetResponseStream());
-                var body = await reader.ReadToEndAsync();
-                return new PXHttpResponse(response.StatusCode, body);
-            }
-            catch (WebException ex) when (ex.Response is HttpWebResponse errorResponse)
-            {
-                using var reader = new StreamReader(errorResponse.GetResponseStream());
-                var body = await reader.ReadToEndAsync();
-                return new PXHttpResponse(errorResponse.StatusCode, body);
-            }
+            using var response = await this.httpClient.SendAsync(request);
+            var responseContent = response.Content != null ? await response.Content.ReadAsStringAsync() : string.Empty;
+            return new PXHttpResponse((int)response.StatusCode, responseContent);
         }
     }
 
-    public record PXHttpResponse(HttpStatusCode StatusCode, string Content)
+    public record PXHttpResponse(int StatusCode, string Content)
     {
-        public bool IsSuccessStatusCode => (int)StatusCode >= 200 && (int)StatusCode <= 299;
+        public bool IsSuccessStatusCode => StatusCode >= 200 && StatusCode <= 299;
     }
 }

@@ -5,9 +5,9 @@ namespace Microsoft.Commerce.Payments.PXService
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Net;
     using System.Text;
     using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.Commerce.Payments.Common;
     using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Commerce.Payments.PimsModel.V4;
@@ -127,7 +127,7 @@ namespace Microsoft.Commerce.Payments.PXService
             }
             catch (FailedOperationException ex)
             {
-                if (!ex.Message.Contains(HttpStatusCode.NotFound.ToString()))
+                if (!ex.Message.Contains(StatusCodes.Status404NotFound.ToString()))
                 {
                     throw;
                 }
@@ -446,7 +446,7 @@ namespace Microsoft.Commerce.Payments.PXService
                     throw TraceCore.TraceException(traceActivityId, new FailedOperationException("Failed to deserialize Account service response message."));
                 }
             }
-            else if (response.StatusCode == HttpStatusCode.BadRequest)
+            else if (response.StatusCode == StatusCodes.Status400BadRequest)
             {
                 throw TraceCore.TraceException(traceActivityId, new InvalidOperationException(string.Format("Receive a bad request response from Account service: {0}.", responseMessage ?? string.Empty)));
             }
@@ -507,7 +507,7 @@ namespace Microsoft.Commerce.Payments.PXService
                         throw TraceCore.TraceException(traceActivityId, new FailedOperationException("Failed to deserialize success response from Accounts"));
                     }
                 }
-                else if (response.StatusCode == HttpStatusCode.BadRequest)
+                else if (response.StatusCode == StatusCodes.Status400BadRequest)
                 {
                     if (errorHandler != null)
                     {
@@ -575,7 +575,7 @@ namespace Microsoft.Commerce.Payments.PXService
                         throw TraceCore.TraceException(traceActivityId, new FailedOperationException("Failed to deserialize success response from PIMS"));
                     }
                 }
-                else if (response.StatusCode == HttpStatusCode.BadRequest)
+                else if (response.StatusCode == StatusCodes.Status400BadRequest)
                 {
                     if (errorHandler != null)
                     {
@@ -608,7 +608,7 @@ namespace Microsoft.Commerce.Payments.PXService
             }
             catch (FailedOperationException ex)
             {
-                if (!ex.Message.Contains(HttpStatusCode.NotFound.ToString()))
+                if (!ex.Message.Contains(StatusCodes.Status404NotFound.ToString()))
                 {
                     throw;
                 }

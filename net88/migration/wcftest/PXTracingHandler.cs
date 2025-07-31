@@ -9,6 +9,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
     using Microsoft.AspNetCore.Http;
     using Microsoft.Commerce.Payments.Common;
     using Microsoft.Commerce.Payments.Common.Tracing;
+    using Microsoft.Commerce.Payments.Common.Web;
 
     public class PXTracingHandler
     {
@@ -30,6 +31,45 @@ namespace Microsoft.Commerce.Payments.PXCommon
             _logError = logError ?? ((m, t) => { });
             _logRequest = logRequest ?? ((a, m, t) => { });
             _logResponse = logResponse ?? ((m, t) => { });
+        }
+
+        public async Task Invoke(HttpContext context)
+        {
+            var traceId = context.Request.GetRequestCorrelationId();
+            var startTime = DateTime.UtcNow;
+
+            try
+            {
+                var requestInfo = new StringBuilder(1000);
+                requestInfo.AppendLine($"Request: {context.Request.Method} {context.Request.Path}");
+
+                foreach (var header in context.Request.Headers)
+                {
+                    requestInfo.AppendLine($"{header.Key}: {string.Join(",", header.Value)}");
+                }
+
+                if (context.Request.ContentLength > 0 && context.Request.Body != null)
+                {
+                    context.Request.EnableBuffering();
+                    using var reader = new StreamReader(context.Request.Body, Encoding.UTF8, leaveOpen: true);
+                    var body = await reader.ReadToEndAsync();
+                    context.Request.Body.Position = 0;
+                    requestInfo.AppendLine(body);
+                }
+
+                _logRequest(context.Request.Path, requestInfo.ToString(), traceId);
+
+                await _next(context);
+            }
+            catch (Exception ex)
+            {
+                _logError($"Exception in Invoke: {ex.Message}", traceId);
+                throw;
+            }
+            finally
+            {
+                await PostSendOperation(context, startTime, traceId);
+            }
         }
 
         private async Task PostSendOperation(HttpContext context, DateTime startTime, EventTraceActivity traceId)
