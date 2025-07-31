@@ -8,13 +8,10 @@ namespace Microsoft.Commerce.Payments.PXService
     using System.Net;
     using System.Net.Http;
     using System.Net.Http.Headers;
-    using HttpRequest = Microsoft.AspNetCore.Http.HttpRequest;
-    using HttpResponse = Microsoft.AspNetCore.Http.HttpResponse;
     using System.Text;
     using System.Threading.Tasks;
     using Microsoft.Commerce.Payments.Common;
     using Microsoft.Commerce.Payments.Common.Tracing;
-    using Microsoft.Commerce.Payments.Common.Web;
     using Microsoft.Commerce.Payments.PimsModel.V4;
     using Microsoft.Commerce.Payments.PXCommon;
     using Microsoft.Commerce.Payments.PXService.Accessors.AccountService.DataModel;
@@ -29,7 +26,6 @@ namespace Microsoft.Commerce.Payments.PXService
     {
         private const string AccountServiceName = "AccountService";
 
-        private readonly List<string> passThroughHeaders = new List<string> { PaymentConstants.PaymentExtendedHttpHeaders.TestHeader };
         private HttpClient accountServiceHttpClient;
 
         private string serviceBaseUrl;
@@ -43,26 +39,15 @@ namespace Microsoft.Commerce.Payments.PXService
             this.serviceBaseUrl = serviceBaseUrl;
             this.emulatorBaseUrl = emulatorBaseUrl;
 
-            this.accountServiceHttpClient = new PXTracingHttpClient(AccountService.V7.Constants.ServiceNames.AccountService, messageHandler, ApplicationInsightsProvider.LogOutgoingOperation);
-            this.accountServiceHttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(PaymentConstants.HttpMimeTypes.JsonContentType));
-            this.accountServiceHttpClient.DefaultRequestHeaders.Add(PaymentConstants.HttpHeaders.Connection, PaymentConstants.HttpHeaders.KeepAlive);
-            this.accountServiceHttpClient.DefaultRequestHeaders.Add(PaymentConstants.HttpHeaders.KeepAlive, string.Format(PaymentConstants.HttpHeaders.KeepAliveParameter, 60));
+            var httpClient = new HttpClient(messageHandler);
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(PaymentConstants.HttpMimeTypes.JsonContentType));
+            httpClient.DefaultRequestHeaders.Add(PaymentConstants.HttpHeaders.Connection, PaymentConstants.HttpHeaders.KeepAlive);
+            httpClient.DefaultRequestHeaders.Add(PaymentConstants.HttpHeaders.KeepAlive, string.Format(PaymentConstants.HttpHeaders.KeepAliveParameter, 60));
+
+            this.accountServiceHttpClient = new PXTracingHttpClient(AccountService.V7.Constants.ServiceNames.AccountService, httpClient, ApplicationInsightsProvider.LogOutgoingOperation);
         }
 
-        private string BaseUrl
-        {
-            get
-            {
-                if (HttpRequestHelper.IsPXTestRequest() && !string.IsNullOrWhiteSpace(this.emulatorBaseUrl))
-                {
-                    return this.emulatorBaseUrl;
-                }
-                else
-                {
-                    return this.serviceBaseUrl;
-                }
-            }
-        }
+        private string BaseUrl => string.IsNullOrWhiteSpace(this.emulatorBaseUrl) ? this.serviceBaseUrl : this.emulatorBaseUrl;
 
         public async Task<AddressInfoV3> PatchAddress(string accountId, string addressId, AddressInfoV3 address, string eTag, EventTraceActivity traceActivityId)
         {
@@ -442,39 +427,34 @@ namespace Microsoft.Commerce.Payments.PXService
         private async Task<T> SendGetRequest<T>(string requestUrl, string apiVersion, string actionName, EventTraceActivity traceActivityId)
         {
             string fullRequestUrl = string.Format("{0}{1}", this.BaseUrl, requestUrl);
-            using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, fullRequestUrl))
+            var headers = new Dictionary<string, string>
             {
-                request.IncrementCorrelationVector(traceActivityId);
-                request.Headers.Add(PaymentConstants.PaymentExtendedHttpHeaders.CorrelationId, traceActivityId.ActivityId.ToString());
-                request.Headers.Add(PaymentConstants.PaymentExtendedHttpHeaders.ApiVersion, apiVersion);
-                HttpRequestHelper.TransferTargetHeadersFromIncomingRequestToOutgoingRequest(this.passThroughHeaders, request);
+                { PaymentConstants.PaymentExtendedHttpHeaders.CorrelationId, traceActivityId.ActivityId.ToString() },
+                { PaymentConstants.PaymentExtendedHttpHeaders.ApiVersion, apiVersion }
+            };
 
-                // Add action name to the request properties so that this request's OperationName is logged properly
-                request.AddOrReplaceActionName(actionName);
+            using (HttpResponseMessage response = await this.accountServiceHttpClient.SendAsync(HttpMethod.Get, fullRequestUrl, traceActivityId, actionName, headers))
+            {
+                string responseMessage = await response.Content.ReadAsStringAsync();
 
-                using (HttpResponseMessage response = await this.accountServiceHttpClient.SendAsync(request))
+                if (response.IsSuccessStatusCode)
                 {
-                    string responseMessage = await response.Content.ReadAsStringAsync();
-
-                    if (response.IsSuccessStatusCode)
+                    try
                     {
-                        try
-                        {
-                            return JsonConvert.DeserializeObject<T>(responseMessage);
-                        }
-                        catch
-                        {
-                            throw TraceCore.TraceException(traceActivityId, new FailedOperationException("Failed to deserialize Account service response message."));
-                        }
+                        return JsonConvert.DeserializeObject<T>(responseMessage);
                     }
-                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    catch
                     {
-                        throw TraceCore.TraceException(traceActivityId, new InvalidOperationException(string.Format("Receive a bad request response from Account service: {0}.", responseMessage ?? string.Empty)));
+                        throw TraceCore.TraceException(traceActivityId, new FailedOperationException("Failed to deserialize Account service response message."));
                     }
-                    else
-                    {
-                        throw TraceCore.TraceException(traceActivityId, new FailedOperationException(string.Format("Received an error response from Account service, response status code: {0}, error: {1}", response.StatusCode, responseMessage != null ? responseMessage : string.Empty)));
-                    }
+                }
+                else if (response.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    throw TraceCore.TraceException(traceActivityId, new InvalidOperationException(string.Format("Receive a bad request response from Account service: {0}.", responseMessage ?? string.Empty)));
+                }
+                else
+                {
+                    throw TraceCore.TraceException(traceActivityId, new FailedOperationException(string.Format("Received an error response from Account service, response status code: {0}, error: {1}", response.StatusCode, responseMessage != null ? responseMessage : string.Empty)));
                 }
             }
         }
@@ -490,66 +470,59 @@ namespace Microsoft.Commerce.Payments.PXService
             bool regionIsoEnabled = false)
         {
             string fullRequestUrl = string.Format("{0}{1}", this.BaseUrl, url);
-            using (HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Post, fullRequestUrl))
+            var headers = new Dictionary<string, string>
             {
-                requestMessage.IncrementCorrelationVector(traceActivityId);
-                requestMessage.Headers.Add(PaymentConstants.PaymentExtendedHttpHeaders.CorrelationId, traceActivityId.ActivityId.ToString());
-                requestMessage.Headers.Add(PaymentConstants.PaymentExtendedHttpHeaders.TrackingId, Guid.NewGuid().ToString());
-                requestMessage.Headers.Add(PaymentConstants.PaymentExtendedHttpHeaders.ApiVersion, apiVersion);
-                if (HttpRequestHelper.IsPXTestRequest())
+                { PaymentConstants.PaymentExtendedHttpHeaders.CorrelationId, traceActivityId.ActivityId.ToString() },
+                { PaymentConstants.PaymentExtendedHttpHeaders.TrackingId, Guid.NewGuid().ToString() },
+                { PaymentConstants.PaymentExtendedHttpHeaders.ApiVersion, apiVersion }
+            };
+
+            if (regionIsoEnabled)
+            {
+                headers.Add(AddressEnrichmentService.V7.Constants.ExtendedHttpHeaders.RegionIsoEnabled, Value.True);
+            }
+
+            // Etag and IfMatch are mandatory headers for account service V3.
+            // For existing account service V2, etag is null by default and no extra headers are added.
+            if (!string.IsNullOrEmpty(etag))
+            {
+                headers.Add(AccountService.V7.Constants.AccountV3ExtendedHttpHeaders.Etag, etag);
+                headers.Add(AccountService.V7.Constants.AccountV3ExtendedHttpHeaders.IfMatch, etag);
+            }
+
+            HttpContent content = null;
+            if (request != null)
+            {
+                content = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, PaymentConstants.HttpMimeTypes.JsonContentType); // lgtm[cs/sensitive-data-transmission] lgtm[cs/web/xss] The request is being made to a web service and not to a web page.
+            }
+
+            using (HttpResponseMessage response = await this.accountServiceHttpClient.SendAsync(HttpMethod.Post, fullRequestUrl, traceActivityId, actionName, headers, content))
+            {
+                string responseMessage = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
                 {
-                    HttpRequestHelper.TransferTargetHeadersFromIncomingRequestToOutgoingRequest(this.passThroughHeaders, requestMessage);
-                }
-
-                if (regionIsoEnabled)
-                {
-                    requestMessage.Headers.Add(AddressEnrichmentService.V7.Constants.ExtendedHttpHeaders.RegionIsoEnabled, Value.True);
-                }
-
-                // Etag and IfMatch are mandatory headers for account service V3.
-                // For existing account service V2, etag is null by default and no extra headers are added.
-                if (!string.IsNullOrEmpty(etag))
-                {
-                    requestMessage.Headers.Add(AccountService.V7.Constants.AccountV3ExtendedHttpHeaders.Etag, etag);
-                    requestMessage.Headers.Add(AccountService.V7.Constants.AccountV3ExtendedHttpHeaders.IfMatch, etag);
-                }
-
-                // Add action name to the request properties so that this request's OperationName is logged properly
-                requestMessage.AddOrReplaceActionName(actionName);
-
-                if (request != null)
-                {
-                    requestMessage.Content = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, PaymentConstants.HttpMimeTypes.JsonContentType); // lgtm[cs/sensitive-data-transmission] lgtm[cs/web/xss] The request is being made to a web service and not to a web page.
-                }
-
-                using (HttpResponseMessage response = await this.accountServiceHttpClient.SendAsync(requestMessage))
-                {
-                    string responseMessage = await response.Content.ReadAsStringAsync();
-
-                    if (response.IsSuccessStatusCode)
+                    try
                     {
-                        try
-                        {
-                            return JsonConvert.DeserializeObject<T>(responseMessage);
-                        }
-                        catch
-                        {
-                            throw TraceCore.TraceException(traceActivityId, new FailedOperationException("Failed to deserialize success response from Accounts"));
-                        }
+                        return JsonConvert.DeserializeObject<T>(responseMessage);
                     }
-                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    catch
                     {
-                        if (errorHandler != null)
-                        {
-                            await errorHandler(response, traceActivityId);
-                        }
+                        throw TraceCore.TraceException(traceActivityId, new FailedOperationException("Failed to deserialize success response from Accounts"));
+                    }
+                }
+                else if (response.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    if (errorHandler != null)
+                    {
+                        await errorHandler(response, traceActivityId);
+                    }
 
-                        throw TraceCore.TraceException(traceActivityId, new InvalidOperationException(string.Format("Receive a bad request response from Account service: {0}.", responseMessage ?? string.Empty)));
-                    }
-                    else
-                    {
-                        throw TraceCore.TraceException(traceActivityId, new FailedOperationException(string.Format("Received an error response from Account service, response status code: {0}, error: {1}", response.StatusCode, responseMessage != null ? responseMessage : string.Empty)));
-                    }
+                    throw TraceCore.TraceException(traceActivityId, new InvalidOperationException(string.Format("Receive a bad request response from Account service: {0}.", responseMessage ?? string.Empty)));
+                }
+                else
+                {
+                    throw TraceCore.TraceException(traceActivityId, new FailedOperationException(string.Format("Received an error response from Account service, response status code: {0}, error: {1}", response.StatusCode, responseMessage != null ? responseMessage : string.Empty)));
                 }
             }
         }
@@ -565,69 +538,61 @@ namespace Microsoft.Commerce.Payments.PXService
             Func<HttpResponseMessage, EventTraceActivity, Task> errorHandler = null)
         {
             string fullRequestUrl = string.Format("{0}{1}", this.BaseUrl, url);
-            using (HttpRequestMessage requestMessage = new HttpRequestMessage(method, fullRequestUrl))
+            var headers = new Dictionary<string, string>
             {
-                requestMessage.IncrementCorrelationVector(traceActivityId);
-                requestMessage.Headers.Add(PaymentConstants.PaymentExtendedHttpHeaders.CorrelationId, traceActivityId.ActivityId.ToString());
-                requestMessage.Headers.Add(PaymentConstants.PaymentExtendedHttpHeaders.TrackingId, Guid.NewGuid().ToString());
-                requestMessage.Headers.Add(PaymentConstants.PaymentExtendedHttpHeaders.ApiVersion, apiVersion);
-                if (HttpRequestHelper.IsPXTestRequest())
-                {
-                    HttpRequestHelper.TransferTargetHeadersFromIncomingRequestToOutgoingRequest(this.passThroughHeaders, requestMessage);
-                }
+                { PaymentConstants.PaymentExtendedHttpHeaders.CorrelationId, traceActivityId.ActivityId.ToString() },
+                { PaymentConstants.PaymentExtendedHttpHeaders.TrackingId, Guid.NewGuid().ToString() },
+                { PaymentConstants.PaymentExtendedHttpHeaders.ApiVersion, apiVersion }
+            };
 
-                // Etag and IfMatch are mandatory headers for account service V3.
-                // For existing account service V2, etag is null by default and no extra headers are added.
-                if (!string.IsNullOrEmpty(etag))
-                {
-                    requestMessage.Headers.Add(AccountService.V7.Constants.AccountV3ExtendedHttpHeaders.Etag, etag);
-                    //// https://stackoverflow.com/questions/47028022/setting-the-if-match-in-the-headers-c-sharp
-                    requestMessage.Headers.TryAddWithoutValidation(AccountService.V7.Constants.AccountV3ExtendedHttpHeaders.IfMatch, etag);
-                }
+            // Etag and IfMatch are mandatory headers for account service V3.
+            // For existing account service V2, etag is null by default and no extra headers are added.
+            if (!string.IsNullOrEmpty(etag))
+            {
+                headers.Add(AccountService.V7.Constants.AccountV3ExtendedHttpHeaders.Etag, etag);
+                headers.Add(AccountService.V7.Constants.AccountV3ExtendedHttpHeaders.IfMatch, etag);
+            }
 
-                // Add action name to the request properties so that this request's OperationName is logged properly
-                requestMessage.AddOrReplaceActionName(actionName);
-
-                if (request != null)
-                {
-                    string payload = JsonConvert.SerializeObject(
-                        request,
-                        Formatting.None,
-                        new JsonSerializerSettings
-                        {
-                            NullValueHandling = NullValueHandling.Ignore
-                        });
-                    requestMessage.Content = new StringContent(payload, Encoding.UTF8, PaymentConstants.HttpMimeTypes.JsonContentType);
-                }
-
-                using (HttpResponseMessage response = await this.accountServiceHttpClient.SendAsync(requestMessage))
-                {
-                    string responseMessage = await response.Content.ReadAsStringAsync();
-
-                    if (response.IsSuccessStatusCode)
+            HttpContent content = null;
+            if (request != null)
+            {
+                string payload = JsonConvert.SerializeObject(
+                    request,
+                    Formatting.None,
+                    new JsonSerializerSettings
                     {
-                        try
-                        {
-                            return JsonConvert.DeserializeObject<T>(responseMessage);
-                        }
-                        catch
-                        {
-                            throw TraceCore.TraceException(traceActivityId, new FailedOperationException("Failed to deserialize success response from PIMS"));
-                        }
-                    }
-                    else if (response.StatusCode == HttpStatusCode.BadRequest)
-                    {
-                        if (errorHandler != null)
-                        {
-                            await errorHandler(response, traceActivityId);
-                        }
+                        NullValueHandling = NullValueHandling.Ignore
+                    });
+                content = new StringContent(payload, Encoding.UTF8, PaymentConstants.HttpMimeTypes.JsonContentType);
+            }
 
-                        throw TraceCore.TraceException(traceActivityId, new InvalidOperationException(string.Format("Receive a bad request response from Account service: {0}.", responseMessage ?? string.Empty)));
-                    }
-                    else
+            using (HttpResponseMessage response = await this.accountServiceHttpClient.SendAsync(method, fullRequestUrl, traceActivityId, actionName, headers, content))
+            {
+                string responseMessage = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    try
                     {
-                        throw TraceCore.TraceException(traceActivityId, new FailedOperationException(string.Format("Received an error response from Account service, response status code: {0}, error: {1}", response.StatusCode, responseMessage != null ? responseMessage : string.Empty)));
+                        return JsonConvert.DeserializeObject<T>(responseMessage);
                     }
+                    catch
+                    {
+                        throw TraceCore.TraceException(traceActivityId, new FailedOperationException("Failed to deserialize success response from PIMS"));
+                    }
+                }
+                else if (response.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    if (errorHandler != null)
+                    {
+                        await errorHandler(response, traceActivityId);
+                    }
+
+                    throw TraceCore.TraceException(traceActivityId, new InvalidOperationException(string.Format("Receive a bad request response from Account service: {0}.", responseMessage ?? string.Empty)));
+                }
+                else
+                {
+                    throw TraceCore.TraceException(traceActivityId, new FailedOperationException(string.Format("Received an error response from Account service, response status code: {0}, error: {1}", response.StatusCode, responseMessage != null ? responseMessage : string.Empty)));
                 }
             }
         }
