@@ -69,18 +69,18 @@ namespace Microsoft.Commerce.Payments.PXService
                     AuthorizationHeaderHandler authenticationHandler = new AuthorizationHeaderHandler((r, c) => tokenLoader.GetTokenStringAsync(null, default).ContinueWith<(string, string)>(t => ("Bearer", t.Result)))
                     { InnerHandler = messageHandler };
 
+                    var httpClient = new HttpClient(authenticationHandler);
+                    httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(PaymentConstants.HttpMimeTypes.JsonContentType));
+                    httpClient.DefaultRequestHeaders.Add(PaymentConstants.HttpHeaders.Connection, PaymentConstants.HttpHeaders.KeepAlive);
+                    httpClient.DefaultRequestHeaders.Add(PaymentConstants.HttpHeaders.KeepAlive, string.Format(PaymentConstants.HttpHeaders.KeepAliveParameter, 60));
 
-                    var azureExPPollingClient = new PXTracingHttpClient(PXCommon.Constants.ServiceNames.AzureExPService, authenticationHandler);
-                    azureExPPollingClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(PaymentConstants.HttpMimeTypes.JsonContentType));
-                    azureExPPollingClient.DefaultRequestHeaders.Add(PaymentConstants.HttpHeaders.Connection, PaymentConstants.HttpHeaders.KeepAlive);
-                    azureExPPollingClient.DefaultRequestHeaders.Add(PaymentConstants.HttpHeaders.KeepAlive, string.Format(PaymentConstants.HttpHeaders.KeepAliveParameter, 60));
+                    var azureExPPollingClient = new PXTracingHttpClient(PXCommon.Constants.ServiceNames.AzureExPService, httpClient);
 
                     var pollingInterval = TimeSpan.FromSeconds(60);
                     var pollingUrl = new Uri(expBlobUrl);
                     ILogger logger = new AzureExPLogger();
 
-                    //Initialize Variant Assignment provider and set not to throw error if not initialized. Make sure to not start the provider here, as it may cause longer for app initialization time.
-                    var httpClient = new HttpClient(authenticationHandler);
+                    // Initialize Variant Assignment provider and set not to throw error if not initialized. Make sure to not start the provider here, as it may cause longer for app initialization time.
                     this.variantAssignmentProvider = new VariantAssignmentHttpPollingProvider(azureExPPollingClient, pollingUrl, pollingInterval, logger) { ThrowUntilInitialized = false };
                 }
                 else
