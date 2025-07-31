@@ -7,8 +7,8 @@ namespace Microsoft.Commerce.Payments.PXService
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using HttpRequest = System.Net.Http.HttpRequest;
-    using HttpResponse = System.Net.Http.HttpResponse;
+    using HttpRequest = Microsoft.AspNetCore.Http.HttpRequest;
+    using HttpResponse = Microsoft.AspNetCore.Http.HttpResponse;
     using System.Threading;
     using System.Threading.Tasks;
     using System.Web.Http.Routing;
@@ -56,9 +56,9 @@ namespace Microsoft.Commerce.Payments.PXService
             return validationSucceeded;
         }
 
-        protected override async Task<HttpResponse> SendAsync(HttpRequest request, CancellationToken cancellationToken)
+        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            HttpResponse response = await base.SendAsync(request, cancellationToken);
+            HttpResponseMessage response = await base.SendAsync(request, cancellationToken);
 
             try
             {

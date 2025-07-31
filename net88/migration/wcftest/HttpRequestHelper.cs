@@ -6,8 +6,9 @@ namespace Microsoft.Commerce.Payments.PXService
     using System.Collections.Generic;
     using System.Linq;
     using System.Net.Http;
-    using HttpRequest = System.Net.Http.HttpRequest;
-    using HttpResponse = System.Net.Http.HttpResponse;
+    using HttpRequest = Microsoft.AspNetCore.Http.HttpRequest;
+    using HttpResponse = Microsoft.AspNetCore.Http.HttpResponse;
+    using Microsoft.Net.Http.Headers;
     using System.Web;
     using Microsoft.Commerce.Payments.Common;
     using Microsoft.Commerce.Payments.Common.Tracing;
@@ -57,9 +58,9 @@ namespace Microsoft.Commerce.Payments.PXService
         public static string GetRequestHeader(string headerName, HttpRequest request)
         {
             string headerValue = null;
-            if (request != null && request.Headers != null && request.Headers.Contains(headerName))
+            if (request != null && request.Headers != null && request.Headers.ContainsKey(headerName))
             {
-                headerValue = request.Headers.GetValues(headerName).First();
+                headerValue = request.Headers[headerName].FirstOrDefault();
             }
 
             return headerValue;
@@ -88,13 +89,9 @@ namespace Microsoft.Commerce.Payments.PXService
         {
             bool isEncoded = false;
             string clientContextEncoding = null;
-            if (request?.Headers != null)
+            if (request?.Headers != null && request.Headers.TryGetValue(GlobalConstants.HeaderValues.ClientContextEncoding, out var values))
             {
-                IEnumerable<string> values = new List<string>();
-                if (request.Headers.TryGetValues(GlobalConstants.HeaderValues.ClientContextEncoding, out values))
-                {
-                    clientContextEncoding = values?.FirstOrDefault();
-                }
+                clientContextEncoding = values.FirstOrDefault();
             }
 
             if (!string.IsNullOrWhiteSpace(clientContextEncoding))
@@ -148,7 +145,7 @@ namespace Microsoft.Commerce.Payments.PXService
         /// <returns>Client info</returns>
         public static ClientInfo GetClientInfo(HttpRequest request)
         {
-            var userAgent = GetUserAgentDecoded(request) ?? request.Headers.UserAgent?.ToString();
+            var userAgent = GetUserAgentDecoded(request) ?? request.Headers[HeaderNames.UserAgent].ToString();
             if (!string.IsNullOrWhiteSpace(userAgent))
             {
                 var uaParser = Parser.GetDefault();
@@ -279,8 +276,11 @@ namespace Microsoft.Commerce.Payments.PXService
         /// <returns>PidlSDK Version</returns>
         public static Version GetFullPidlSdkVersion(HttpRequest request)
         {
-            IEnumerable<string> xboxNativePidlsdkVersions;
-            request.Headers.TryGetValues(GlobalConstants.HeaderValues.PidlSdkVersion, out xboxNativePidlsdkVersions);            
+            IEnumerable<string> xboxNativePidlsdkVersions = null;
+            if (request.Headers.TryGetValue(GlobalConstants.HeaderValues.PidlSdkVersion, out var headerValues))
+            {
+                xboxNativePidlsdkVersions = headerValues;
+            }
 
             if (xboxNativePidlsdkVersions != null)
             {
@@ -350,7 +350,7 @@ namespace Microsoft.Commerce.Payments.PXService
             }
         }
 
-        public static void TransferTargetHeadersFromIncomingRequestToOutgoingRequest(List<string> targetHeaders, HttpRequest outgoingRequest)
+        public static void TransferTargetHeadersFromIncomingRequestToOutgoingRequest(List<string> targetHeaders, HttpRequestMessage outgoingRequest)
         {
             foreach (string header in targetHeaders)
             {
