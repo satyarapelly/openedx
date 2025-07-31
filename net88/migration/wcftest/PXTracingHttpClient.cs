@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Commerce.Payments.Common.Tracing;
@@ -51,6 +52,42 @@ namespace Microsoft.Commerce.Payments.PXCommon
                 _logError?.Invoke($"Exception in tracing HTTP call: {ex.Message}", traceActivity);
                 throw;
             }
+        }
+
+        public async Task<HttpResponseMessage> SendAsync(
+            HttpMethod method,
+            string requestUri,
+            EventTraceActivity traceActivity,
+            string actionName,
+            IDictionary<string, string> headers = null,
+            HttpContent content = null)
+        {
+            using var request = new HttpRequestMessage(method, requestUri);
+
+            if (traceActivity != null)
+            {
+                request.IncrementCorrelationVector(traceActivity);
+            }
+
+            if (!string.IsNullOrWhiteSpace(actionName))
+            {
+                request.AddOrReplaceActionName(actionName);
+            }
+
+            if (headers != null)
+            {
+                foreach (var header in headers)
+                {
+                    request.Headers.TryAddWithoutValidation(header.Key, header.Value);
+                }
+            }
+
+            if (content != null)
+            {
+                request.Content = content;
+            }
+
+            return await SendAsync(request);
         }
     }
 }
