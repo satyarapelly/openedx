@@ -123,7 +123,7 @@ namespace Microsoft.Commerce.Payments.PXService.Settings
                 emulatorBaseUrl: "TBD",
                 tokenizationGetTokenURL: "https://tokenization.cp.microsoft.com/tokens",
                 tokenizationGetTokenFromEncryptedValueURL: "https://tokenizationfd.cp.microsoft.com/tokens",
-                messageHandler: new WebRequestHandler());
+                messageHandler: new HttpClientHandler());
 
             var fraudDetectionMessageHandler = GetAADRequestHandler(PXCommon.Constants.ServiceNames.FraudDetectionService, this.AzureActiveDirectoryTokenLoaderFactory);
             this.FraudDetectionServiceAccessor = new FraudDetectionServiceAccessor(

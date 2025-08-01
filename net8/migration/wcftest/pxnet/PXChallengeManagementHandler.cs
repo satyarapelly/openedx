@@ -6,7 +6,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PXChallengeManagement
     using System.Diagnostics.Eventing.Reader;
     using System.Linq;
     using System.Threading.Tasks;
-    using System.Web;
     using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Commerce.Payments.Common.Web;
     using Microsoft.Commerce.Payments.PidlFactory.V7;
