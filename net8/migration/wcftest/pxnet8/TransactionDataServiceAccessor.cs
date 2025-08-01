@@ -28,7 +28,10 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.TransactionDataService
             string apiVersion,
             HttpMessageHandler messageHandler)
         {
-            this.transationDataHttpClient = new PXTracingHttpClient(PXCommon.Constants.ServiceNames.TransactionDataService, messageHandler, ApplicationInsightsProvider.LogOutgoingOperation);
+            this.transationDataHttpClient = new PXTracingHttpClient(
+                PXCommon.Constants.ServiceNames.TransactionDataService,
+                messageHandler,
+                logOutgoingRequestToApplicationInsight: ApplicationInsightsProvider.LogOutgoingOperation);
             this.serviceBaseUrl = serviceBaseUrl;
             this.apiVersion = apiVersion;
             this.emulatorBaseUrl = "http://localhost/TransactionDataEmulator";

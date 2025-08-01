@@ -22,7 +22,9 @@ namespace Microsoft.Commerce.Payments.PXService.MerchantCapabilitiesService.V7
         public MerchantCapabilitiesAccessor(PXServiceSettings settings)
         {
             this.pxsettings = settings;
-            this.merchantCapabilitiesServiceHttpClient = new PXTracingHttpClient(Constants.ServiceNames.MerchantCapabilitiesService, ApplicationInsightsProvider.LogOutgoingOperation);
+            this.merchantCapabilitiesServiceHttpClient = new PXTracingHttpClient(
+                Constants.ServiceNames.MerchantCapabilitiesService,
+                logOutgoingRequestToApplicationInsight: ApplicationInsightsProvider.LogOutgoingOperation);
             this.merchantCapabilitiesServiceHttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(PaymentConstants.HttpMimeTypes.JsonContentType));
             this.merchantCapabilitiesServiceHttpClient.DefaultRequestHeaders.Add(PaymentConstants.HttpHeaders.Connection, PaymentConstants.HttpHeaders.KeepAlive);
             this.merchantCapabilitiesServiceHttpClient.DefaultRequestHeaders.Add(PaymentConstants.HttpHeaders.KeepAlive, string.Format(PaymentConstants.HttpHeaders.KeepAliveParameter, 60));

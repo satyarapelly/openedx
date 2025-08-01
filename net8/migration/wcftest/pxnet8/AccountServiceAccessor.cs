@@ -41,7 +41,10 @@ namespace Microsoft.Commerce.Payments.PXService
             this.serviceBaseUrl = serviceBaseUrl;
             this.emulatorBaseUrl = emulatorBaseUrl;
 
-            this.accountServiceHttpClient = new PXTracingHttpClient(AccountService.V7.Constants.ServiceNames.AccountService, messageHandler, ApplicationInsightsProvider.LogOutgoingOperation);
+            this.accountServiceHttpClient = new PXTracingHttpClient(
+                AccountService.V7.Constants.ServiceNames.AccountService,
+                messageHandler,
+                logOutgoingRequestToApplicationInsight: ApplicationInsightsProvider.LogOutgoingOperation);
             this.accountServiceHttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(PaymentConstants.HttpMimeTypes.JsonContentType));
             this.accountServiceHttpClient.DefaultRequestHeaders.Add(PaymentConstants.HttpHeaders.Connection, PaymentConstants.HttpHeaders.KeepAlive);
             this.accountServiceHttpClient.DefaultRequestHeaders.Add(PaymentConstants.HttpHeaders.KeepAlive, string.Format(PaymentConstants.HttpHeaders.KeepAliveParameter, 60));
