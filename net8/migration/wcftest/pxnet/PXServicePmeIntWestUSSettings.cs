@@ -98,7 +98,7 @@ namespace Microsoft.Commerce.Payments.PXService.Settings
                 apiVersion: "2022-02-09",
                 messageHandler: thirdPartyMarketPlaceServiceWebRequestHandler);
 
-            var msRewardsRequestHandler = new WebRequestHandler();
+            var msRewardsRequestHandler = new HttpClientHandler();
             this.MSRewardsServiceAccessor = new MSRewardsServiceAccessor(
                 serviceBaseUrl: "https://int.rewardsplatform.microsoft.com",
                 emulatorBaseUrl: "https://px-pxdependencyemulators-int-westus.azurewebsites.net",
@@ -141,7 +141,7 @@ namespace Microsoft.Commerce.Payments.PXService.Settings
                 emulatorBaseUrl: "TBD",
                 tokenizationGetTokenURL: "https://tokenization.cp.microsoft-int.com/tokens",
                 tokenizationGetTokenFromEncryptedValueURL: "https://tokenizationfd.cp.microsoft-int.com/tokens",
-                messageHandler: new WebRequestHandler());
+                messageHandler: new HttpClientHandler());
 
             var fraudDetectionMessageHandler = GetAADRequestHandler(PXCommon.Constants.ServiceNames.FraudDetectionService, this.AzureActiveDirectoryTokenLoaderFactory);
             this.FraudDetectionServiceAccessor = new FraudDetectionServiceAccessor(

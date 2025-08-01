@@ -7,7 +7,6 @@ namespace Microsoft.Commerce.Payments.PXService
     using System.Diagnostics.Tracing;
     using System.Threading;
     using System.Threading.Tasks;
-    using System.Web.Hosting;
     using global::Azure.Core;
     using global::Azure.Storage.Blobs;
     using Microsoft.Commerce.Payments.Common.Tracing;
@@ -135,14 +134,14 @@ namespace Microsoft.Commerce.Payments.PXService
             traceActivityId = traceActivityId ?? EventTraceActivity.Empty;
             try
             {
-                if (HostingEnvironment.IsHosted && this.accountIdBlobClient != null && this.clientIPBlobClient != null)
+                if (this.accountIdBlobClient != null && this.clientIPBlobClient != null)
                 {
                     if (this.lastBlobReadTime < DateTime.UtcNow.AddMinutes(-BlobRefreshTimeInMinutes))
                     {
                         if (Interlocked.Exchange(ref this.checkBlobReadCounter, 1) == 0)
                         {
                             SllWebLogger.TraceServerMessage("AnomalyDetectionAccessor", traceActivityId.ToString(), null, "Queue background workitem to read latest blob content", EventLevel.Warning);
-                            HostingEnvironment.QueueBackgroundWorkItem(async cancellationToken =>
+                            _ = Task.Run(async () =>
                             {
                                 try
                                 {
@@ -168,7 +167,7 @@ namespace Microsoft.Commerce.Payments.PXService
                 }
                 else
                 {
-                    SllWebLogger.TraceServerMessage("AnomalyDetectionAccessor", traceActivityId.ToString(), null, $"blodClients didn't exist or not a HostedEnvironment", EventLevel.Warning);
+                    SllWebLogger.TraceServerMessage("AnomalyDetectionAccessor", traceActivityId.ToString(), null, "Blob clients didn't exist", EventLevel.Warning);
                 }
             }
             catch (Exception ex)
