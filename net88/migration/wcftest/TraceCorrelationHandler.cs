@@ -81,27 +81,31 @@ namespace Microsoft.Commerce.Payments.Common.Web
             {
                 isDependentServiceRequest = false;
 
-                // If the operation name does not exist in the request properties, then parse the request data to construct operation name.
-                IHttpRouteData data = request.GetRouteData();
-
+                // If the operation name does not exist in the request properties, then attempt to
+                // construct the operation name from the request URI. This avoids using System.Web
+                // types like IHttpRouteData which are not available in .NET 8.
                 StringBuilder counterNameBuilder = new StringBuilder();
-                if (data != null)
-                {
-                    counterNameBuilder.Append(data.Values["controller"]);
-                    counterNameBuilder.Append("-");
-                    counterNameBuilder.Append(request.Method.ToString());
+                string[] segments = request.RequestUri?.AbsolutePath
+                    .Trim('/')
+                    .Split('/', StringSplitOptions.RemoveEmptyEntries) ?? Array.Empty<string>();
 
-                    if (data.Values.ContainsKey("action"))
+                if (segments.Length > 0)
+                {
+                    counterNameBuilder.Append(segments[0]);
+                    counterNameBuilder.Append("-");
+                    counterNameBuilder.Append(request.Method);
+
+                    if (segments.Length > 1)
                     {
                         counterNameBuilder.Append("-");
-                        counterNameBuilder.Append(data.Values["action"]);
+                        counterNameBuilder.Append(segments[1]);
                     }
                 }
                 else
                 {
-                    // In case there is no request data, get the action name from the request properties
+                    // In case there are no URI segments, get the action name from the request properties
                     string actionName = request.GetActionName();
-                    if (actionName != null)
+                    if (!string.IsNullOrEmpty(actionName))
                     {
                         counterNameBuilder.Append(this.ServiceName);
                         counterNameBuilder.Append("-");
