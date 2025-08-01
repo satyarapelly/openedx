@@ -13,6 +13,8 @@ namespace Microsoft.Commerce.Payments.Common.Web
 
     public static class HttpRequestMessageExtensions
     {
+        private const string MobileCarrierBilling = "mobile_carrier_billing";
+
         private static HttpRequestOptionsKey<object> GetOptionKey(string key)
         {
             return new HttpRequestOptionsKey<object>(key);
@@ -399,6 +401,119 @@ namespace Microsoft.Commerce.Payments.Common.Web
         public static void AddAuthenticationDetailsProperty(this HttpRequestMessage request, string authInfo)
         {
             request.SetOption(PaymentConstants.Web.Properties.AuthenticationDetails, authInfo);
+        }
+
+        public static void AddTracingProperties(this HttpRequestMessage request, string accountId, string paymentInstrumentId, string family = null, string type = null, string country = null)
+        {
+            request.AddAccountIdProperty(accountId);
+            request.AddPaymentInstrumentIdProperty(paymentInstrumentId);
+            request.AddPaymentMethodFamilyProperty(family);
+            request.AddPaymentMethodTypeProperty(type);
+            request.AddCountryProperty(country);
+        }
+
+        public static void AddPartnerProperty(this HttpRequestMessage request, string value)
+        {
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                request.SetOption(PaymentConstants.Web.Properties.Partner, value);
+            }
+        }
+
+        public static void AddScenarioProperty(this HttpRequestMessage request, string value)
+        {
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                request.SetOption(PaymentConstants.Web.Properties.Scenario, value);
+            }
+        }
+
+        public static void AddPidlOperation(this HttpRequestMessage request, string value)
+        {
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                request.SetOption(PaymentConstants.Web.Properties.PidlOperation, value);
+            }
+        }
+
+        public static void AddAvsSuggest(this HttpRequestMessage request, bool value)
+        {
+            request.SetOption(PaymentConstants.Web.Properties.AvsSuggest, value.ToString().ToLowerInvariant());
+        }
+
+        public static void AddPaymentInstrumentIdProperty(this HttpRequestMessage request, string value)
+        {
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                request.SetOption(PaymentConstants.Web.InstrumentManagementProperties.InstrumentId, value);
+            }
+        }
+
+        public static void AddCountryProperty(this HttpRequestMessage request, string value)
+        {
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                request.SetOption(PaymentConstants.Web.InstrumentManagementProperties.Country, value.ToUpperInvariant());
+            }
+        }
+
+        public static void AddPaymentMethodFamilyProperty(this HttpRequestMessage request, string value)
+        {
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                request.SetOption(PaymentConstants.Web.InstrumentManagementProperties.PaymentMethodFamily, value);
+            }
+        }
+
+        public static void AddPaymentMethodTypeProperty(this HttpRequestMessage request, string value)
+        {
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                request.SetOption(PaymentConstants.Web.InstrumentManagementProperties.PaymentMethodType, value);
+            }
+        }
+
+        public static void AddAccountIdProperty(this HttpRequestMessage request, string value)
+        {
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                request.SetOption(PaymentConstants.Web.InstrumentManagementProperties.AccountId, value);
+            }
+        }
+
+        public static void AddErrorCodeProperty(this HttpRequestMessage request, string value)
+        {
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                request.SetOption(PaymentConstants.Web.InstrumentManagementProperties.ErrorCode, value);
+            }
+        }
+
+        public static void AddErrorMessageProperty(this HttpRequestMessage request, string value)
+        {
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                request.SetOption(PaymentConstants.Web.InstrumentManagementProperties.ErrorMessage, value);
+            }
+        }
+
+        public static string GetOperationNameWithPendingOnInfo(this HttpRequestMessage request)
+        {
+            string operationNameWithMoreInfo = request.GetOperationName();
+
+            string pendingOn = request.GetProperty(PaymentConstants.Web.InstrumentManagementProperties.PendingOn) as string;
+            if (!string.IsNullOrEmpty(pendingOn))
+            {
+                operationNameWithMoreInfo = string.Format("{0}-{1}", operationNameWithMoreInfo, pendingOn);
+            }
+
+            string paymentMethodFamily = request.GetProperty(PaymentConstants.Web.InstrumentManagementProperties.PaymentMethodFamily) as string;
+            if (!string.IsNullOrEmpty(paymentMethodFamily) && paymentMethodFamily.Equals(MobileCarrierBilling, StringComparison.OrdinalIgnoreCase))
+            {
+                operationNameWithMoreInfo = string.Format("{0}-{1}", operationNameWithMoreInfo, "Mobi");
+            }
+
+            return operationNameWithMoreInfo;
         }
     }
 }
