@@ -13,6 +13,20 @@ namespace Microsoft.Commerce.Payments.Common.Web
 
     public static class HttpRequestMessageExtensions
     {
+        private static HttpRequestOptionsKey<object> GetOptionKey(string key)
+        {
+            return new HttpRequestOptionsKey<object>(key);
+        }
+
+        private static bool TryGetOption(this HttpRequestMessage request, string key, out object value)
+        {
+            return request.Options.TryGetValue(GetOptionKey(key), out value);
+        }
+
+        private static void SetOption(this HttpRequestMessage request, string key, object value)
+        {
+            request.Options.Set(GetOptionKey(key), value);
+        }
         /// <summary>
         /// Try to get a tracking id from request header
         /// </summary>
@@ -34,8 +48,7 @@ namespace Microsoft.Commerce.Payments.Common.Web
         /// <returns>if there is a valid tracking id in request header, return true, else return false</returns>
         public static string GetTrackingId(this HttpRequestMessage request)
         {
-            object trackingId = null;
-            if (request.Properties.TryGetValue(PaymentConstants.PaymentExtendedHttpHeaders.TrackingId, out trackingId))
+            if (request.TryGetOption(PaymentConstants.PaymentExtendedHttpHeaders.TrackingId, out var trackingId))
             {
                 return trackingId as string;
             }
@@ -43,8 +56,9 @@ namespace Microsoft.Commerce.Payments.Common.Web
             IEnumerable<string> headerValues;
             if (!request.Headers.TryGetValues(PaymentConstants.PaymentExtendedHttpHeaders.TrackingId, out headerValues))
             {
-                request.Properties[PaymentConstants.PaymentExtendedHttpHeaders.TrackingId] = Guid.NewGuid().ToString();
-                return request.Properties[PaymentConstants.PaymentExtendedHttpHeaders.TrackingId] as string;
+                string newId = Guid.NewGuid().ToString();
+                request.SetOption(PaymentConstants.PaymentExtendedHttpHeaders.TrackingId, newId);
+                return newId;
             }
 
             return headerValues.FirstOrDefault();
@@ -71,8 +85,7 @@ namespace Microsoft.Commerce.Payments.Common.Web
         public static EventTraceActivity GetRequestCorrelationId(this HttpRequestMessage request)
         {
             EventTraceActivity traceActivityId = null;
-            object result;
-            if (request.Properties.TryGetValue(PaymentConstants.Web.Properties.ServerTraceId, out result))
+            if (request.TryGetOption(PaymentConstants.Web.Properties.ServerTraceId, out var result))
             {
                 traceActivityId = (EventTraceActivity)result;
             }
@@ -90,10 +103,10 @@ namespace Microsoft.Commerce.Payments.Common.Web
                     // client correlationId
                     EventTraceActivity clientTraceActivityId = new EventTraceActivity(correlationId) { CorrelationVectorV4 = traceActivityId.CorrelationVectorV4 };
                     PaymentsEventSource.Log.CommonMappingCorrelationId(traceActivityId, clientTraceActivityId);
-                    request.Properties[PaymentConstants.Web.Properties.ClientTraceId] = clientTraceActivityId;
+                    request.SetOption(PaymentConstants.Web.Properties.ClientTraceId, clientTraceActivityId);
                 }
 
-                request.Properties[PaymentConstants.Web.Properties.ServerTraceId] = traceActivityId;
+                request.SetOption(PaymentConstants.Web.Properties.ServerTraceId, traceActivityId);
                 Sll.Context.Vector = traceActivityId.CorrelationVectorV4;
             }
 
@@ -109,7 +122,7 @@ namespace Microsoft.Commerce.Payments.Common.Web
         {
             object extendedVector = null;
 
-            if (request.Properties.TryGetValue(CorrelationVector.HeaderName, out extendedVector))
+            if (request.TryGetOption(CorrelationVector.HeaderName, out extendedVector))
             {
                 CorrelationVector incrementVector = extendedVector as CorrelationVector;
                 if (incrementVector != null)
@@ -129,7 +142,7 @@ namespace Microsoft.Commerce.Payments.Common.Web
             {
                 // try to get it from serverTraceId
                 object result;
-                if (request.Properties.TryGetValue(PaymentConstants.Web.Properties.ServerTraceId, out result))
+                if (request.TryGetOption(PaymentConstants.Web.Properties.ServerTraceId, out result))
                 {
                     extendedVector = ((EventTraceActivity)result).CorrelationVectorV4?.Increment();
                 }
@@ -137,7 +150,7 @@ namespace Microsoft.Commerce.Payments.Common.Web
 
             CorrelationVector newCorrelationVector = extendedVector as CorrelationVector ?? new CorrelationVector();
 
-            request.Properties[CorrelationVector.HeaderName] = newCorrelationVector;
+            request.SetOption(CorrelationVector.HeaderName, newCorrelationVector);
 
             return newCorrelationVector;
         }
@@ -172,7 +185,7 @@ namespace Microsoft.Commerce.Payments.Common.Web
 
         public static CorrelationContext GetOrCreateCorrelationContextFromRequestProperty(this HttpRequestMessage request)
         {
-            if (request.Properties.TryGetValue(PaymentConstants.Web.Properties.CorrelationContext, out object ccobject))
+            if (request.TryGetOption(PaymentConstants.Web.Properties.CorrelationContext, out object ccobject))
             {
                 var cc = ccobject as CorrelationContext;
                 if (cc != null)
@@ -215,7 +228,8 @@ namespace Microsoft.Commerce.Payments.Common.Web
         /// <returns>a version object if there is an api version info in header, otherwise, null</returns>
         public static ApiVersion GetApiVersion(this HttpRequestMessage request)
         {
-            return (ApiVersion)request.Properties[PaymentConstants.Web.Properties.Version];
+            request.TryGetOption(PaymentConstants.Web.Properties.Version, out var version);
+            return (ApiVersion)version;
         }
 
         /// <summary>
@@ -265,9 +279,9 @@ namespace Microsoft.Commerce.Payments.Common.Web
             clonedRequest.Content = request.Content;
             clonedRequest.Version = request.Version;
 
-            foreach (KeyValuePair<string, object> prop in request.Properties)
+            foreach (KeyValuePair<string, object> prop in request.Options)
             {
-                clonedRequest.Properties.Add(prop);
+                clonedRequest.Options.Set(new HttpRequestOptionsKey<object>(prop.Key), prop.Value);
             }
 
             foreach (KeyValuePair<string, IEnumerable<string>> header in request.Headers)
@@ -301,14 +315,14 @@ namespace Microsoft.Commerce.Payments.Common.Web
             }
             else
             {
-                if (!request.Properties.ContainsKey(PaymentConstants.Web.Properties.Content))
+                if (!request.TryGetOption(PaymentConstants.Web.Properties.Content, out var content))
                 {
                     requestPayload = await request.Content.ReadAsStringAsync();
-                    request.Properties.Add(PaymentConstants.Web.Properties.Content, requestPayload);
+                    request.SetOption(PaymentConstants.Web.Properties.Content, requestPayload);
                 }
                 else
                 {
-                    requestPayload = (string)request.Properties[PaymentConstants.Web.Properties.Content];
+                    requestPayload = (string)content;
                 }
             }
 
@@ -329,21 +343,21 @@ namespace Microsoft.Commerce.Payments.Common.Web
         public static string GetRequestCallerName(this HttpRequestMessage request)
         {
             object callerObject;
-            request.Properties.TryGetValue(PaymentConstants.Web.Properties.CallerName, out callerObject);
+            request.TryGetOption(PaymentConstants.Web.Properties.CallerName, out callerObject);
             return (string)callerObject;
         }
 
         public static string GetOperationName(this HttpRequestMessage request)
         {
             object propertyValue;
-            request.Properties.TryGetValue(PaymentConstants.Web.Properties.OperationName, out propertyValue);
+            request.TryGetOption(PaymentConstants.Web.Properties.OperationName, out propertyValue);
             return propertyValue as string;
         }
 
         public static string GetVersion(this HttpRequestMessage request)
         {
             object propertyValue;
-            request.Properties.TryGetValue(PaymentConstants.Web.Properties.Version, out propertyValue);
+            request.TryGetOption(PaymentConstants.Web.Properties.Version, out propertyValue);
             if (propertyValue != null)
             {
                 ApiVersion version = propertyValue as ApiVersion;
@@ -358,38 +372,33 @@ namespace Microsoft.Commerce.Payments.Common.Web
 
         public static void AddOrReplaceActionName(this HttpRequestMessage request, string actionName)
         {
-            request.Properties[PaymentConstants.Web.InstrumentManagementProperties.ActionName] = actionName;
+            request.SetOption(PaymentConstants.Web.InstrumentManagementProperties.ActionName, actionName);
         }
 
         public static string GetActionName(this HttpRequestMessage request)
         {
             object actionName;
-            request.Properties.TryGetValue(PaymentConstants.Web.InstrumentManagementProperties.ActionName, out actionName);
+            request.TryGetOption(PaymentConstants.Web.InstrumentManagementProperties.ActionName, out actionName);
             return actionName as string;
         }
 
         public static EventTraceActivity GetServerTraceId(this HttpRequestMessage request)
         {
             object serverTraceIdProperty;
-            request.Properties.TryGetValue(PaymentConstants.Web.Properties.ServerTraceId, out serverTraceIdProperty);
+            request.TryGetOption(PaymentConstants.Web.Properties.ServerTraceId, out serverTraceIdProperty);
             return serverTraceIdProperty as EventTraceActivity;
         }
 
         public static object GetProperty(this HttpRequestMessage request, string propertyName)
         {
-            if (request.Properties == null)
-            {
-                return null;
-            }
-
             object propertyValue = null;
-            request.Properties.TryGetValue(propertyName, out propertyValue);
+            request.TryGetOption(propertyName, out propertyValue);
             return propertyValue;
         }
 
         public static void AddAuthenticationDetailsProperty(this HttpRequestMessage request, string authInfo)
         {
-            request.Properties[PaymentConstants.Web.Properties.AuthenticationDetails] = authInfo;
+            request.SetOption(PaymentConstants.Web.Properties.AuthenticationDetails, authInfo);
         }
     }
 }
