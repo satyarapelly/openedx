@@ -2,11 +2,11 @@
 
 namespace Microsoft.Commerce.Payments.PXCommon
 {
-    using Microsoft.AspNetCore.Http;
     using Microsoft.Commerce.Payments.Common;
     using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Commerce.Payments.Common.Web;
     using Microsoft.Commerce.Tracing;
+    using Microsoft.AspNetCore.Routing;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
@@ -15,8 +15,6 @@ namespace Microsoft.Commerce.Payments.PXCommon
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
-    using System.Web;
-    using System.Web.Http.Routing;
     using static Microsoft.Commerce.Payments.Common.PaymentConstants.Web;
     using CorrelationVector = Microsoft.CommonSchema.Services.Logging.CorrelationVector;
     using Sll = Microsoft.CommonSchema.Services.Logging.Sll;
@@ -158,7 +156,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
                 // Don't even get the route data if both are present
                 if (string.IsNullOrWhiteSpace(accountId) || string.IsNullOrWhiteSpace(paymentInstrumentId))
                 {
-                    IHttpRouteData data = request.GetRouteData();
+                    RouteData? data = GetRouteData(request);
                     if (data != null)
                     {
                         if (string.IsNullOrWhiteSpace(accountId))
@@ -373,15 +371,27 @@ namespace Microsoft.Commerce.Payments.PXCommon
             return trackingId;
         }
 
-        private static void RemoveRequestContextItem(string key)
+        private static void RemoveRequestContextItem(HttpRequestMessage request, string key)
         {
-            if (HttpContext.Current?.Request?.RequestContext?.HttpContext?.Items != null)
+            if (request?.Properties != null && request.Properties.ContainsKey(key))
             {
-                if (HttpContext.Current.Request.RequestContext.HttpContext.Items.Contains(key))
-                {
-                    HttpContext.Current.Request.RequestContext.HttpContext.Items.Remove(key);
-                }
+                request.Properties.Remove(key);
             }
+        }
+
+        private static RouteData? GetRouteData(HttpRequestMessage request)
+        {
+            if (request?.Properties == null)
+            {
+                return null;
+            }
+
+            if (request.Properties.TryGetValue("MS_HttpRouteData", out var value) && value is RouteData routeData)
+            {
+                return routeData;
+            }
+
+            return null;
         }
 
         private static void SetConnectionLeaseTimeout(HttpRequestMessage request)
@@ -433,7 +443,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
             if (operationName == null)
             {
                 // If the operation name does not exist in the request properties, then parse the request data to construct operation name.
-                IHttpRouteData data = request.GetRouteData();
+                RouteData? data = GetRouteData(request);
 
                 StringBuilder counterNameBuilder = new StringBuilder();
                 if (data != null)
@@ -539,7 +549,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
                 response.Headers.Add(PaymentConstants.PaymentExtendedHttpHeaders.CorrelationId, requestTraceId.ActivityId.ToString());
                 foreach (DependenciesCertInfo dependencyNameUsingCert in Enum.GetValues(typeof(DependenciesCertInfo)))
                 {
-                    RemoveRequestContextItem(dependencyNameUsingCert.ToString());
+                    RemoveRequestContextItem(request, dependencyNameUsingCert.ToString());
                 }
 
                 await this.TraceOperation(request, response, request.GetOperationNameWithPendingOnInfo(), startTime, stopwatch, string.Empty, requestTraceId, serverTraceId);
