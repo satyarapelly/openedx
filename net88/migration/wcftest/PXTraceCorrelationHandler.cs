@@ -3,6 +3,7 @@
 namespace Microsoft.Commerce.Payments.PXCommon
 {
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Routing;
     using Microsoft.Commerce.Payments.Common;
     using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Commerce.Payments.Common.Web;
@@ -14,8 +15,6 @@ namespace Microsoft.Commerce.Payments.PXCommon
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
-    using System.Web;
-    using System.Web.Http.Routing;
     using static Microsoft.Commerce.Payments.Common.PaymentConstants.Web;
     using CorrelationVector = Microsoft.CommonSchema.Services.Logging.CorrelationVector;
     using Sll = Microsoft.CommonSchema.Services.Logging.Sll;
@@ -33,34 +32,40 @@ namespace Microsoft.Commerce.Payments.PXCommon
         private const string DefaultLogValue = "<none>";
         private const int DefaultConnectionLeaseTimeoutInMs = 120 * 1000;
         private const int DefaultMaxIdleTime = -1;
+        private readonly IHttpContextAccessor httpContextAccessor;
         private bool isDependentServiceRequest;
 
-        public PXTraceCorrelationHandler(string serviceName, HttpMessageHandler innerHandler, bool isDependentServiceRequest, Action<string, EventTraceActivity> logError = null)
+        public PXTraceCorrelationHandler(string serviceName, HttpMessageHandler innerHandler, bool isDependentServiceRequest, Action<string, EventTraceActivity> logError = null, IHttpContextAccessor httpContextAccessor = null)
             : base(innerHandler)
         {
             this.ServiceName = serviceName;
             this.isDependentServiceRequest = isDependentServiceRequest;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         public PXTraceCorrelationHandler(
             string serviceName,
-            Action<string, string, string, string, string, string, HttpRequestMessage, HttpResponseMessage, string, string, string, string, string, string, string, string> logIncomingRequestToAppInsight)
+            Action<string, string, string, string, string, string, HttpRequestMessage, HttpResponseMessage, string, string, string, string, string, string, string, string> logIncomingRequestToAppInsight,
+            IHttpContextAccessor httpContextAccessor = null)
         {
             this.ServiceName = serviceName;
             this.isDependentServiceRequest = false;
             this.LogIncomingRequestToAppInsight = logIncomingRequestToAppInsight;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         public PXTraceCorrelationHandler(
             string serviceName,
             HttpMessageHandler innerHandler,
             bool isDependentServiceRequest,
-            Action<string, string, HttpRequestMessage, HttpResponseMessage, string, string, string, string> logOutgoingToAppInsight)
+            Action<string, string, HttpRequestMessage, HttpResponseMessage, string, string, string, string> logOutgoingToAppInsight,
+            IHttpContextAccessor httpContextAccessor = null)
            : base(innerHandler)
         {
             this.ServiceName = serviceName;
             this.isDependentServiceRequest = isDependentServiceRequest;
             this.LogToApplicationInsight = logOutgoingToAppInsight;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         private Action<string, string, HttpRequestMessage, HttpResponseMessage, string, string, string, string> LogToApplicationInsight { get; set; }
@@ -156,7 +161,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
                 // Don't even get the route data if both are present
                 if (string.IsNullOrWhiteSpace(accountId) || string.IsNullOrWhiteSpace(paymentInstrumentId))
                 {
-                    IHttpRouteData data = request.GetRouteData();
+                    RouteData data = request.GetRouteData();
                     if (data != null)
                     {
                         if (string.IsNullOrWhiteSpace(accountId))
@@ -499,14 +504,12 @@ namespace Microsoft.Commerce.Payments.PXCommon
             return trackingId;
         }
 
-        private static void RemoveRequestContextItem(string key)
+        private void RemoveRequestContextItem(string key)
         {
-            if (HttpContext.Current?.Request?.RequestContext?.HttpContext?.Items != null)
+            IDictionary<object, object> items = this.httpContextAccessor?.HttpContext?.Items;
+            if (items != null && items.ContainsKey(key))
             {
-                if (HttpContext.Current.Request.RequestContext.HttpContext.Items.Contains(key))
-                {
-                    HttpContext.Current.Request.RequestContext.HttpContext.Items.Remove(key);
-                }
+                items.Remove(key);
             }
         }
 
@@ -571,7 +574,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
             if (operationName == null)
             {
                 // If the operation name does not exist in the request properties, then parse the request data to construct operation name.
-                IHttpRouteData data = request.GetRouteData();
+                RouteData data = request.GetRouteData();
 
                 StringBuilder counterNameBuilder = new StringBuilder();
                 if (data != null)
@@ -676,7 +679,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
                 response.Headers.Add(PaymentConstants.PaymentExtendedHttpHeaders.CorrelationId, requestTraceId.ActivityId.ToString());
                 foreach (DependenciesCertInfo dependencyNameUsingCert in Enum.GetValues(typeof(DependenciesCertInfo)))
                 {
-                    RemoveRequestContextItem(dependencyNameUsingCert.ToString());
+                    this.RemoveRequestContextItem(dependencyNameUsingCert.ToString());
                 }
 
                 await this.TraceOperation(request, response, request.GetOperationNameWithPendingOnInfo(), startTime, stopwatch, string.Empty, requestTraceId, serverTraceId);
