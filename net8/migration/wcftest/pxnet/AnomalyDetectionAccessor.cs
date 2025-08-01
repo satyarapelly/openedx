@@ -141,12 +141,12 @@ namespace Microsoft.Commerce.Payments.PXService
                     {
                         if (Interlocked.Exchange(ref this.checkBlobReadCounter, 1) == 0)
                         {
-                            SllWebLogger.TraceServerMessage("AnomalyDetectionAccessor", traceActivityId.ToString(), null, "Queue background workitem to read latest blob content", Diagnostics.Tracing.EventLevel.Warning);
+                            SllWebLogger.TraceServerMessage("AnomalyDetectionAccessor", traceActivityId.ToString(), null, "Queue background workitem to read latest blob content", EventLevel.Warning);
                             HostingEnvironment.QueueBackgroundWorkItem(async cancellationToken =>
                             {
                                 try
                                 {
-                                    SllWebLogger.TraceServerMessage("AnomalyDetectionAccessor", traceActivityId.ToString(), null, "Try to get latest anomaly detection results", Diagnostics.Tracing.EventLevel.Informational);
+                                    SllWebLogger.TraceServerMessage("AnomalyDetectionAccessor", traceActivityId.ToString(), null, "Try to get latest anomaly detection results", EventLevel.Informational);
 
                                     // refresh anomaly detection results
                                     await this.RefreshAnomalyDetectionResults();
