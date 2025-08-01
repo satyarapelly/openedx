@@ -6,10 +6,6 @@ namespace Microsoft.Commerce.Payments.PXService
     using System.Collections.Generic;
     using System.Linq;
     using System.Net.Http;
-    using HttpRequest = Microsoft.AspNetCore.Http.HttpRequest;
-    using HttpResponse = Microsoft.AspNetCore.Http.HttpResponse;
-    using Microsoft.Net.Http.Headers;
-    using System.Web;
     using Microsoft.Commerce.Payments.Common;
     using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Commerce.Payments.Common.Transaction;
@@ -17,6 +13,7 @@ namespace Microsoft.Commerce.Payments.PXService
     using Microsoft.Commerce.Payments.PXCommon;
     using Microsoft.Commerce.Payments.PXService.Model;
     using Microsoft.Commerce.Payments.PXService.V7.Contexts;
+    using Microsoft.Commerce.Tracing;
     using Newtonsoft.Json;
     using UAParser;
 
@@ -55,12 +52,12 @@ namespace Microsoft.Commerce.Payments.PXService
             return headerValue;
         }
 
-        public static string GetRequestHeader(string headerName, HttpRequest request)
+        public static string GetRequestHeader(string headerName, HttpRequestMessage request)
         {
             string headerValue = null;
-            if (request != null && request.Headers != null && request.Headers.ContainsKey(headerName))
+            if (request != null && request.Headers != null && request.Headers.Contains(headerName))
             {
-                headerValue = request.Headers[headerName].FirstOrDefault();
+                headerValue = request.Headers.GetValues(headerName).First();
             }
 
             return headerValue;
@@ -85,13 +82,17 @@ namespace Microsoft.Commerce.Payments.PXService
         /// </summary>
         /// <param name="request">http request</param>
         /// <returns>True | False</returns>
-        public static bool IsEncoded(HttpRequest request)
+        public static bool IsEncoded(HttpRequestMessage request)
         {
             bool isEncoded = false;
             string clientContextEncoding = null;
-            if (request?.Headers != null && request.Headers.TryGetValue(GlobalConstants.HeaderValues.ClientContextEncoding, out var values))
+            if (request?.Headers != null)
             {
-                clientContextEncoding = values.FirstOrDefault();
+                IEnumerable<string> values = new List<string>();
+                if (request.Headers.TryGetValues(GlobalConstants.HeaderValues.ClientContextEncoding, out values))
+                {
+                    clientContextEncoding = values?.FirstOrDefault();
+                }
             }
 
             if (!string.IsNullOrWhiteSpace(clientContextEncoding))
@@ -107,15 +108,15 @@ namespace Microsoft.Commerce.Payments.PXService
         /// </summary>
         /// <param name="request">http request</param>
         /// <returns>Value of userAgent</returns>
-        public static string GetUserAgent(HttpRequest request)
+        public static string GetUserAgent(HttpRequestMessage request)
         {
             string devicInfoHeaderValue = GetRequestHeader(GlobalConstants.HeaderValues.DeviceInfoHeader, request);
-            
+
             if (string.IsNullOrWhiteSpace(devicInfoHeaderValue))
             {
                 return null;
             }
-            
+
             string[] keyValuePairs = devicInfoHeaderValue?.Split(',');
             string userAgentValue = null;
 
@@ -143,9 +144,9 @@ namespace Microsoft.Commerce.Payments.PXService
         /// </summary>
         /// <param name="request">Current request object</param>
         /// <returns>Client info</returns>
-        public static ClientInfo GetClientInfo(HttpRequest request)
+        public static ClientInfo GetClientInfo(HttpRequestMessage request)
         {
-            var userAgent = GetUserAgentDecoded(request) ?? request.Headers[HeaderNames.UserAgent].ToString();
+            var userAgent = GetUserAgentDecoded(request) ?? request.Headers.UserAgent?.ToString();
             if (!string.IsNullOrWhiteSpace(userAgent))
             {
                 var uaParser = Parser.GetDefault();
@@ -160,7 +161,7 @@ namespace Microsoft.Commerce.Payments.PXService
         /// </summary>
         /// <param name="request">Current request object</param>
         /// <returns>Device class - web/mobile/console</returns>
-        public static string GetDeviceClass(HttpRequest request)
+        public static string GetDeviceClass(HttpRequestMessage request)
         {
             var clientInfo = GetClientInfo(request);
 
@@ -181,7 +182,7 @@ namespace Microsoft.Commerce.Payments.PXService
         /// </summary>
         /// <param name="request">Current request object</param>
         /// <returns>Browser name - safari/chrome/etc</returns>
-        public static string GetBrowser(HttpRequest request)
+        public static string GetBrowser(HttpRequestMessage request)
         {
             var clientInfo = GetClientInfo(request);
             string family = clientInfo?.UA.Family.ToLower();
@@ -194,7 +195,7 @@ namespace Microsoft.Commerce.Payments.PXService
         /// </summary>
         /// <param name="request">Current request object</param>
         /// <returns>device Family</returns>
-        public static string GetOSFamily(HttpRequest request)
+        public static string GetOSFamily(HttpRequestMessage request)
         {
             var clientInfo = GetClientInfo(request);
             string deviceFamily = clientInfo?.OS.Family.ToLower();
@@ -207,7 +208,7 @@ namespace Microsoft.Commerce.Payments.PXService
         /// </summary>
         /// <param name="request">Request Object</param>
         /// <returns>Browser version</returns>
-        public static string GetBrowserVer(HttpRequest request)
+        public static string GetBrowserVer(HttpRequestMessage request)
         {
             var clientInfo = GetClientInfo(request);
             var majorVersion = clientInfo?.UA.Major ?? "0";
@@ -222,7 +223,7 @@ namespace Microsoft.Commerce.Payments.PXService
         /// </summary>
         /// <param name="request">Request Object</param>
         /// <returns>Browser major version</returns>
-        public static int GetBrowserMajorVer(HttpRequest request)
+        public static int GetBrowserMajorVer(HttpRequestMessage request)
         {
             var clientInfo = GetClientInfo(request);
             var majorVersion = clientInfo?.UA.Major ?? "0";
@@ -243,7 +244,7 @@ namespace Microsoft.Commerce.Payments.PXService
         /// </summary>
         /// <param name="request">http request</param>
         /// <returns>Value of userAgent</returns>
-        public static string GetUserAgentDecoded(HttpRequest request)
+        public static string GetUserAgentDecoded(HttpRequestMessage request)
         {
             string userAgent = GetUserAgent(request);
             if (string.IsNullOrWhiteSpace(userAgent))
@@ -274,13 +275,10 @@ namespace Microsoft.Commerce.Payments.PXService
         /// </summary>
         /// <param name="request">http request</param>
         /// <returns>PidlSDK Version</returns>
-        public static Version GetFullPidlSdkVersion(HttpRequest request)
+        public static Version GetFullPidlSdkVersion(HttpRequestMessage request)
         {
-            IEnumerable<string> xboxNativePidlsdkVersions = null;
-            if (request.Headers.TryGetValue(GlobalConstants.HeaderValues.PidlSdkVersion, out var headerValues))
-            {
-                xboxNativePidlsdkVersions = headerValues;
-            }
+            IEnumerable<string> xboxNativePidlsdkVersions;
+            request.Headers.TryGetValues(GlobalConstants.HeaderValues.PidlSdkVersion, out xboxNativePidlsdkVersions);
 
             if (xboxNativePidlsdkVersions != null)
             {
@@ -315,7 +313,7 @@ namespace Microsoft.Commerce.Payments.PXService
             }
         }
 
-        public static TestContext GetTestHeader(HttpRequest incomingRequest = null)
+        public static TestContext GetTestHeader(HttpRequestMessage incomingRequest = null)
         {
             TestContext testContext = null;
             string value = GetRequestHeader(PaymentConstants.PaymentExtendedHttpHeaders.TestHeader);
@@ -392,7 +390,19 @@ namespace Microsoft.Commerce.Payments.PXService
             }
             catch (Exception ex)
             {
-                SllWebLogger.TracePXServiceException("HttpRequestHelper.PXTestScenarioEnabled: " + ex.ToString(), EventTraceActivity.Empty);
+                if (LoggingConfig.Mode == LoggingMode.Sll)
+                {
+                    SllWebLogger.TracePXServiceException("HttpRequestHelper.PXTestScenarioEnabled: " + ex.ToString(), EventTraceActivity.Empty);
+                }
+                else if (LoggingConfig.Mode == LoggingMode.OpenTelemetry)
+                {
+                    Logger.Qos.TracePXServiceException("HttpRequestHelper.PXTestScenarioEnabled: " + ex.ToString(), EventTraceActivity.Empty);
+                }
+                else
+                {
+                    SllWebLogger.TracePXServiceException("HttpRequestHelper.PXTestScenarioEnabled: " + ex.ToString(), EventTraceActivity.Empty);
+                    Logger.Qos.TracePXServiceException("HttpRequestHelper.PXTestScenarioEnabled: " + ex.ToString(), EventTraceActivity.Empty);
+                }
             }
 
             return false;
@@ -449,7 +459,7 @@ namespace Microsoft.Commerce.Payments.PXService
             return Has3dsTestScenario(testContext, "px-service-3ds1-show-iframe");
         }
 
-        public static RequestContext GetRequestContext(HttpRequest request, EventTraceActivity traceActivityId)
+        public static RequestContext GetRequestContext(HttpRequestMessage request, EventTraceActivity traceActivityId)
         {
             RequestContext requestContext = null;
             var requestContextHeader = GetRequestHeader(GlobalConstants.HeaderValues.XMsRequestContext, request) ?? GetRequestHeader(GlobalConstants.HeaderValues.RequestContext, request);
@@ -462,7 +472,19 @@ namespace Microsoft.Commerce.Payments.PXService
                 }
                 catch (Exception ex)
                 {
-                    SllWebLogger.TracePXServiceException("HttpRequestHelper.GetRequestContext: " + ex.ToString(), traceActivityId);
+                    if (LoggingConfig.Mode == LoggingMode.Sll)
+                    {
+                        SllWebLogger.TracePXServiceException("HttpRequestHelper.GetRequestContext: " + ex.ToString(), traceActivityId);
+                    }
+                    else if (LoggingConfig.Mode == LoggingMode.OpenTelemetry)
+                    {
+                        Logger.Qos.TracePXServiceException("HttpRequestHelper.GetRequestContext: " + ex.ToString(), traceActivityId);
+                    }
+                    else
+                    {
+                        SllWebLogger.TracePXServiceException("HttpRequestHelper.GetRequestContext: " + ex.ToString(), traceActivityId);
+                        Logger.Qos.TracePXServiceException("HttpRequestHelper.GetRequestContext: " + ex.ToString(), traceActivityId);
+                    }
                 }
             }
 
@@ -488,7 +510,19 @@ namespace Microsoft.Commerce.Payments.PXService
             }
             catch (Exception ex)
             {
-                SllWebLogger.TracePXServiceException("HttpRequestHelper.hasTestScenario: " + ex.ToString(), EventTraceActivity.Empty);
+                if (LoggingConfig.Mode == LoggingMode.Sll)
+                {
+                    SllWebLogger.TracePXServiceException("HttpRequestHelper.hasTestScenario: " + ex.ToString(), EventTraceActivity.Empty);
+                }
+                else if (LoggingConfig.Mode == LoggingMode.OpenTelemetry)
+                {
+                    Logger.Qos.TracePXServiceException("HttpRequestHelper.hasTestScenario: " + ex.ToString(), EventTraceActivity.Empty);
+                }
+                else
+                {
+                    SllWebLogger.TracePXServiceException("HttpRequestHelper.hasTestScenario: " + ex.ToString(), EventTraceActivity.Empty);
+                    Logger.Qos.TracePXServiceException("HttpRequestHelper.hasTestScenario: " + ex.ToString(), EventTraceActivity.Empty);
+                }
             }
 
             return false;
@@ -516,7 +550,19 @@ namespace Microsoft.Commerce.Payments.PXService
             }
             catch (Exception ex)
             {
-                SllWebLogger.TracePXServiceException("HttpRequestHelper.hasTestScenario: " + ex.ToString(), EventTraceActivity.Empty);
+                if (LoggingConfig.Mode == LoggingMode.Sll)
+                {
+                    SllWebLogger.TracePXServiceException("HttpRequestHelper.hasTestScenario: " + ex.ToString(), EventTraceActivity.Empty);
+                }
+                else if (LoggingConfig.Mode == LoggingMode.OpenTelemetry)
+                {
+                    Logger.Qos.TracePXServiceException("HttpRequestHelper.hasTestScenario: " + ex.ToString(), EventTraceActivity.Empty);
+                }
+                else
+                {
+                    SllWebLogger.TracePXServiceException("HttpRequestHelper.hasTestScenario: " + ex.ToString(), EventTraceActivity.Empty);
+                    Logger.Qos.TracePXServiceException("HttpRequestHelper.hasTestScenario: " + ex.ToString(), EventTraceActivity.Empty);
+                }
             }
 
             return false;
