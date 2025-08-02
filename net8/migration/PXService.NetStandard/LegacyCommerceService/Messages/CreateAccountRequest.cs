@@ -7,10 +7,11 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
     using System.Xml.Serialization;
     using Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.DataModel;
     using Microsoft.Practices.EnterpriseLibrary.Validation.Validators;
+    using System.ComponentModel.DataAnnotations;
+    using System.Collections.Generic;
 
-    [HasSelfValidation]
     [DataContract(Namespace = NamespaceConstants.Namespace)]
-    public class CreateAccountRequest : AbstractRequest
+    public class CreateAccountRequest : AbstractRequest, IValidatableObject
     {
         public override int ApiId
         {
@@ -36,6 +37,11 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
         public override Guid EffectiveTrackingGuid
         {
             get { return APIContext == null ? Guid.Empty : APIContext.TrackingGuid; }
+        }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            yield break;
         }
     }
 }

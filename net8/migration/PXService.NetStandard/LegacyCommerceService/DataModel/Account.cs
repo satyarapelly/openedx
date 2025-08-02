@@ -19,13 +19,12 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
         Closed = 5,
     }
 
-    [HasSelfValidation]
     [KnownType(typeof(PayinAccount))]
     [KnownType(typeof(PayoutAccount))]
     [XmlInclude(typeof(PayinAccount))]
     [XmlInclude(typeof(PayoutAccount))]
     [DataContract(Namespace = NamespaceConstants.Namespace)]
-    public class Account : IExtensibleDataObject
+    public class Account : IExtensibleDataObject, IValidatableObject
     {
         #region IExtensibleDataObject members
         protected ExtensionDataObject _extensionData;
@@ -127,6 +126,10 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
                 BdkId bdk = new BdkId(AccountID);
                 _billableAccountID = bdk.AccountId;
             }
+        }
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            yield break;
         }
     }
 }
