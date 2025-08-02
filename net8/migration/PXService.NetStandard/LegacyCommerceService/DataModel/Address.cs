@@ -4,6 +4,7 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
 {
     using System;
     using System.Runtime.Serialization;
+    using System.ComponentModel.DataAnnotations;
     using Microsoft.Practices.EnterpriseLibrary.Validation.Validators;
     using System.Collections.Generic;
 
@@ -20,12 +21,14 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
         }
         #endregion
 
-        [IgnoreNulls, StringLengthValidator(16, 16, Tag = "Address.AddressID")]
+        [IgnoreNulls]
+        [StringLength(16, MinimumLength = 16)]
         [DataMember]
         public string AddressID { get; set; }
 
-        [IgnoreNulls, StringLengthValidator(64, Tag = "Address.FriendlyName")]
-        [RegexValidator(RegexConstants.XmlString, Tag = "Address.FriendlyName")]
+        [IgnoreNulls]
+        [StringLength(64)]
+        [RegularExpression(RegexConstants.XmlString)]
         [DataMember]
         public string FriendlyName { get; set; }
 
@@ -45,51 +48,59 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
         [DataMember]
         public string CompanyNamePronunciation { get; set; }
 
-        [IgnoreNulls, StringLengthValidator(0, 15, Tag = "Address.UnitNumber")]
-        [RegexValidator(RegexConstants.XmlString, Tag = "Address.UnitNumber")]
+        [IgnoreNulls]
+        [StringLength(15)]
+        [RegularExpression(RegexConstants.XmlString)]
         [DataMember]
         public string UnitNumber { get; set; }
 
-        [StringLengthValidator(1, 128, Tag = "Address.Street1")]
-        [RegexValidator(RegexConstants.XmlString, Tag = "Address.Street1")]
+        [StringLength(128, MinimumLength = 1)]
+        [RegularExpression(RegexConstants.XmlString)]
         [DataMember]
         public string Street1 { get; set; }
 
-        [IgnoreNulls, StringLengthValidator(128, Tag = "Address.Street2")]
-        [RegexValidator(RegexConstants.XmlString, Tag = "Address.Street2")]
+        [IgnoreNulls]
+        [StringLength(128)]
+        [RegularExpression(RegexConstants.XmlString)]
         [DataMember]
         public string Street2 { get; set; }
 
-        [IgnoreNulls, StringLengthValidator(128, Tag = "Address.Street3")]
-        [RegexValidator(RegexConstants.XmlString, Tag = "Address.Street3")]
+        [IgnoreNulls]
+        [StringLength(128)]
+        [RegularExpression(RegexConstants.XmlString)]
         [DataMember]
         public string Street3 { get; set; }
 
-        [StringLengthValidator(1, 64, Tag = "Address.City")]
-        [RegexValidator(RegexConstants.XmlString, Tag = "Address.City")]
+        [StringLength(64, MinimumLength = 1)]
+        [RegularExpression(RegexConstants.XmlString)]
         [DataMember]
         public string City { get; set; }
 
-        [IgnoreNulls, StringLengthValidator(64, Tag = "Address.District")]
-        [RegexValidator(RegexConstants.XmlString, Tag = "Address.District")]
+        [IgnoreNulls]
+        [StringLength(64)]
+        [RegularExpression(RegexConstants.XmlString)]
         [DataMember]
         public string District { get; set; }
 
-        [IgnoreNulls, StringLengthValidator(64, Tag = "Address.State")]
-        [RegexValidator(RegexConstants.XmlString, Tag = "Address.State")]
+        [IgnoreNulls]
+        [StringLength(64)]
+        [RegularExpression(RegexConstants.XmlString)]
         [DataMember]
         public string State { get; set; }
 
-        [IgnoreNulls, StringLengthValidator(2, 2, Tag = "Address.CountryCode")]
-        [RegexValidator(RegexConstants.CountryCode, Tag = "Address.CountryCode")]
+        [IgnoreNulls]
+        [StringLength(2, MinimumLength = 2)]
+        [RegularExpression(RegexConstants.CountryCode)]
         [DataMember]
         public string CountryCode { get; set; }
 
-        [IgnoreNulls, StringLengthValidator(16, Tag = "Address.PostalCode")]
+        [IgnoreNulls]
+        [StringLength(16)]
         [DataMember]
         public string PostalCode { get; set; }
 
-        [IgnoreNulls, ObjectValidator(Tag = "Address.MapAddressResult")]
+        [IgnoreNulls]
+        [ObjectValidator]
         [DataMember]
         public MapAddressResult MapAddressResult { get; set; }
 
