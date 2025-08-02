@@ -19,11 +19,11 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
         }
         #endregion
 
-        // TODO: validate Delegator
+        [ValidateComplexType]
         [DataMember]
         public Identity Delegator { get; set; }
 
-        // TODO: validate Requester
+        [ValidateComplexType]
         [DataMember]
         public Identity Requester { get; set; }
 

@@ -4,6 +4,7 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     using System.Runtime.Serialization;
 
     [DataContract(Namespace = NamespaceConstants.Namespace)]
@@ -506,6 +507,8 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
         public MetaData MetaData { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Legacy code")]
+        [ElementNotNull]
+        [PropertyCollectionValidator]
         [DataMember]
         public Property[] PropertyBag { get; set; }
 

@@ -89,7 +89,7 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
         [DataMember]
         public string PostalCode { get; set; }
 
-        // TODO: validate MapAddressResult
+        [ValidateComplexType]
         [DataMember]
         public MapAddressResult MapAddressResult { get; set; }
 
