@@ -68,27 +68,27 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
         [DataMember]
         public List<Phone> PhoneSet { get; set; }
 
-        [OutputProperty(Tag = "PayinAccount.AnniversaryDate")]
+        [OutputProperty]
         [DataMember]
         public int AnniversaryDate { get; set; }
 
-        [OutputProperty(Tag = "PayinAccount.DefaultAddressID")]
+        [OutputProperty]
         [DataMember]
         public string DefaultAddressID { get; set; }
 
-        [OutputProperty(Tag = "PayinAccount.CorporateIdentity")]
+        [OutputProperty]
         [DataMember]
         public string CorporateIdentity { get; set; }
 
-        [OutputProperty(Tag = "PayinAccount.CorporateLegalEntity")]
+        [OutputProperty]
         [DataMember]
         public string CorporateLegalEntity { get; set; }
 
-        [OutputProperty(Tag = "PayinAccount.CorporateVatId")]
+        [OutputProperty]
         [DataMember]
         public string CorporateVatId { get; set; }
 
-        [OutputProperty(Tag = "PayinAccount.CorporateAddress")]
+        [OutputProperty]
         [DataMember]
         public Address CorporateAddress { get; set; }
 

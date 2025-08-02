@@ -1,70 +1,47 @@
-﻿// <copyright file="OutputProperty.cs" company="Microsoft">Copyright (c) Microsoft. All rights reserved.</copyright>
+// <copyright file="OutputProperty.cs" company="Microsoft">Copyright (c) Microsoft. All rights reserved.</copyright>
 
 namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.DataModel
 {
     using System;
-    using Microsoft.Practices.EnterpriseLibrary.Validation.Validators;
-    using Microsoft.Practices.EnterpriseLibrary.Validation;
+    using System.ComponentModel.DataAnnotations;
 
     /// <summary>
-    /// This class performs validation for an output property, ensure it is null.
+    /// Attribute applied to properties that are intended to be output-only.
+    /// Validation fails when the property is not null or the default value for its type.
     /// </summary>
-    internal class OutputPropertyValidator : ValueValidator
+    [AttributeUsage(AttributeTargets.Property)]
+    internal sealed class OutputPropertyAttribute : ValidationAttribute
     {
-        internal OutputPropertyValidator(string messageTemplate, string tag, bool negated)
-            : base(messageTemplate, tag, negated)
+        public OutputPropertyAttribute()
+            : base("Output property must be null or default.")
         {
-            if (negated)
-            {
-                throw new ArgumentException("Negation is not supported.");
-            }
-        }
-
-        protected override string DefaultNegatedMessageTemplate
-        {
-            get { return String.Empty; }
-        }
-
-        protected override string DefaultNonNegatedMessageTemplate
-        {
-            get { return "Object is not valid."; }
         }
 
         /// <summary>
-        /// Does the action validation
+        /// Validates that the property value is either null or its type's default value.
         /// </summary>
-        /// <param name="objectToValidate">The actual object to validate</param>
-        /// <param name="currentTarget">The root object of the validation tree</param>
-        /// <param name="key">The key for the validation</param>
-        /// <param name="validationResults">The result collection where to put validation results.</param>
-        public override void DoValidate(object objectToValidate, object currentTarget, string key, ValidationResults validationResults)
+        /// <param name="value">The value of the member to validate.</param>
+        /// <param name="validationContext">Context information about the validation operation.</param>
+        /// <returns><see cref="ValidationResult.Success"/> when the value is valid; otherwise a <see cref="ValidationResult"/> with an error message.</returns>
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            if (objectToValidate != null)
+            if (value == null)
             {
-                var defaultValue = GetDefaultValue(objectToValidate.GetType());
-                if (!objectToValidate.Equals(defaultValue))
-                {
-                    LogValidationResult(validationResults,
-                        "OutputPropertyValidator value is not null or default. Valid default: " + defaultValue,
-                        currentTarget, key);
-                }
+                return ValidationResult.Success;
             }
+
+            var defaultValue = GetDefaultValue(value.GetType());
+            if (value.Equals(defaultValue))
+            {
+                return ValidationResult.Success;
+            }
+
+            return new ValidationResult(ErrorMessage);
         }
 
         private static object GetDefaultValue(Type type)
         {
             return type.IsValueType ? Activator.CreateInstance(type) : null;
-        }
-    }
-
-    /// <summary>
-    /// This class is the attribute to enable the inheritance validation.
-    /// </summary>
-    internal sealed class OutputPropertyAttribute : ValueValidatorAttribute
-    {
-        protected override Validator DoCreateValidator(Type targetType)
-        {
-            return new OutputPropertyValidator(this.MessageTemplate, this.Tag, this.Negated);
         }
     }
 }
