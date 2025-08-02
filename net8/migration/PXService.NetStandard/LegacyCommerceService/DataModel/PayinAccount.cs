@@ -59,13 +59,15 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227", Justification = "Legacy code. Should be thrown away once modernAPI is available")]
         [Required]
-        // TODO: validate AddressSet items
+        [ElementNotNull]
+        [ValidateComplexType]
         [DataMember]
         public List<Address> AddressSet { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227", Justification = "Legacy code. Should be thrown away once modernAPI is available")]
         [Required]
-        // TODO: validate PhoneSet items
+        [ElementNotNull]
+        [ValidateComplexType]
         [DataMember]
         public List<Phone> PhoneSet { get; set; }
 
@@ -94,6 +96,8 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
         public Address CorporateAddress { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227", Justification = "Legacy code. Should be thrown away once modernAPI is available")]
+        [ElementNotNull]
+        [ValidateComplexType]
         [DataMember]
         public List<TaxExemption> TaxExemptionSet { get; set; }
     }

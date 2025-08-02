@@ -4,6 +4,7 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     using System.Runtime.Serialization;
 
     [DataContract(Namespace = NamespaceConstants.Namespace)]
@@ -22,15 +23,18 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
         public Guid TrackingGuid { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227", Justification = "Legacy code. Should be thrown away once modernAPI is available")]
-        // TODO: validate PropertyBag items
+        [ElementNotNull]
+        [PropertyCollectionValidator]
         [DataMember]
         public List<Property> PropertyBag { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227", Justification = "Legacy code. Should be thrown away once modernAPI is available")]
-        // TODO: validate FraudDetectionContext items
+        [ElementNotNull]
+        [PropertyCollectionValidator]
         [DataMember]
         public List<Property> FraudDetectionContext { get; set; }
 
+        [ValidateComplexType]
         [DataMember]
         public DeviceInfo DeviceInfo { get; set; }
 

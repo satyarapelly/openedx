@@ -22,7 +22,7 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
         [DataMember]
         public string AccountId { get; set; }
 
-        // TODO: validate Identity
+        [ValidateComplexType]
         [DataMember]
         public Identity Identity { get; set; }
 
