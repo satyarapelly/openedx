@@ -21,7 +21,7 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
         [DataMember]
         public int ViolationID { get; set; }
 
-        [OutputProperty(Tag = "Violation.Name")]
+        [OutputProperty]
         [DataMember]
         public string Name { get; set; }
     }

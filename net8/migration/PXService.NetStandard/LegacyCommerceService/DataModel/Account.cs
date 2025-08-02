@@ -86,20 +86,20 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
 
         #region output properties, must be null or default value when this type is used for input
 
-        [OutputProperty(Tag = "Account.Status")]
+        [OutputProperty]
         [DataMember]
         public AccountStatus? Status { get; set; }
 
-        [OutputProperty(Tag = "Account.CreatedDate")]
+        [OutputProperty]
         [DataMember]
         public DateTime CreatedDate { get; set; }
 
-        [OutputProperty(Tag = "Account.LastUpdatedDate")]
+        [OutputProperty]
         [DataMember]
         public DateTime LastUpdatedDate { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227", Justification = "Legacy code. Should be thrown away once modernAPI is available")]
-        [OutputProperty(Tag = "Account.Violation")]
+        [OutputProperty]
         [ObjectCollectionValidator(typeof(Violation), Tag = "Account.Violation")]
         [DataMember]
         public List<Violation> Violations { get; set; }
