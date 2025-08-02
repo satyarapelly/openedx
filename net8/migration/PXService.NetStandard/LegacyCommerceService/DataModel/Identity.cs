@@ -6,12 +6,15 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
     using System.Linq;
     using System.Runtime.Serialization;
     using System.ComponentModel.DataAnnotations;
+    using Microsoft.Practices.EnterpriseLibrary.Validation;
+    using Microsoft.Practices.EnterpriseLibrary.Validation.Validators;
 
     /// <summary>
     /// Identity represents a certain type of ID. 
     /// </summary>
+    [HasSelfValidation]
     [DataContract(Namespace = NamespaceConstants.Namespace)]
-    public class    Identity : IExtensibleDataObject, IValidatableObject
+    public class    Identity : IExtensibleDataObject
     {
         #region IExtensibleDataObject members
         private ExtensionDataObject _extensionData;
@@ -33,27 +36,31 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
         [DataMember]
         public string PassportMemberName { get; set; }
 
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        [SelfValidation]
+        public void Validate(ValidationResults results)
         {
             if (string.IsNullOrEmpty(IdentityType))
             {
-                yield return new ValidationResult("IdentityType is empty.", new[] { nameof(IdentityType) });
-                yield break;
+                results.AddResult(new ValidationResult(
+                    "IdentityType is empty.",
+                    this,
+                    "IdentityType",
+                    "Identity",
+                    null));
             }
 
             if (!_identityTypes.ContainsKey(IdentityType))
             {
-                yield return new ValidationResult(
+                results.AddResult(new ValidationResult(
                     string.Format("IdentityType {0} is not valid. Accepted: {1}.",
                         IdentityType, string.Join(",", _identityTypes.Keys.OrderBy(k => k).ToArray())),
-                    new[] { nameof(IdentityType) });
-                yield break;
+                    this,
+                    "IdentityType",
+                    "Identity",
+                    null));
             }
 
-            foreach (var result in _identityTypes[IdentityType].Validate(this))
-            {
-                yield return result;
-            }
+            _identityTypes[IdentityType].Validate(this, results);
         }
 
 
@@ -67,18 +74,27 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
 
         private interface IIdentityType
         {
-            IEnumerable<ValidationResult> Validate(Identity id);
+            void Validate(Identity id, ValidationResults results);
+
         }
 
         private class PuidIdentityType : IIdentityType
         {
 
-            public IEnumerable<ValidationResult> Validate(Identity id)
+            public void Validate(Identity id, ValidationResults results)
             {
-                if (!ulong.TryParse(id.IdentityValue, out _))
+                ulong value;
+                if (!ulong.TryParse(id.IdentityValue, out value))
                 {
-                    yield return new ValidationResult("IdentityValue is not a valid ulong.", new[] { nameof(IdentityValue) });
+                    results.AddResult(new ValidationResult(
+                        "IdentityValue is not a valid ulong.",
+                        this,
+                        "IdentityValue",
+                        "Identity",
+                        null));
                 }
+
+
             }
 
 

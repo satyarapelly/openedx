@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PXService.NetStandard")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b1144e1b161a82a5f50be681316d93dee57da4af")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5725991ab4d4f82b9b3f54dc5bb47db1e3aa97ca")]
 [assembly: System.Reflection.AssemblyProductAttribute("PXService.NetStandard")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PXService.NetStandard")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

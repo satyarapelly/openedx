@@ -7,12 +7,3 @@ C:\Users\v-srapelly\source\repos\SC.CSPayments.PX\private\Payments\PXService.Net
 C:\Users\v-srapelly\source\repos\SC.CSPayments.PX\private\Payments\PXService.NetStandard\obj\Debug\net8.0\PXService.NetStandard.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\v-srapelly\source\repos\SC.CSPayments.PX\private\Payments\PXService.NetStandard\obj\Debug\net8.0\PXService.NetStandard.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\v-srapelly\source\repos\SC.CSPayments.PX\private\Payments\PXService.NetStandard\obj\Debug\net8.0\PXService.NetStandard.sourcelink.json
-C:\Users\v-srapelly\openedx\net8\migration\PXService.NetStandard\obj\Debug\net8.0\PXService.NetStandard.csproj.AssemblyReference.cache
-C:\Users\v-srapelly\openedx\net8\migration\PXService.NetStandard\obj\Debug\net8.0\rpswa.dswa.cache.json
-C:\Users\v-srapelly\openedx\net8\migration\PXService.NetStandard\obj\Debug\net8.0\PXService.NetStandard.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\v-srapelly\openedx\net8\migration\PXService.NetStandard\obj\Debug\net8.0\PXService.NetStandard.AssemblyInfoInputs.cache
-C:\Users\v-srapelly\openedx\net8\migration\PXService.NetStandard\obj\Debug\net8.0\PXService.NetStandard.AssemblyInfo.cs
-C:\Users\v-srapelly\openedx\net8\migration\PXService.NetStandard\obj\Debug\net8.0\PXService.NetStandard.csproj.CoreCompileInputs.cache
-C:\Users\v-srapelly\openedx\net8\migration\PXService.NetStandard\obj\Debug\net8.0\PXService.NetStandard.MvcApplicationPartsAssemblyInfo.cs
-C:\Users\v-srapelly\openedx\net8\migration\PXService.NetStandard\obj\Debug\net8.0\PXService.NetStandard.MvcApplicationPartsAssemblyInfo.cache
-C:\Users\v-srapelly\openedx\net8\migration\PXService.NetStandard\obj\Debug\net8.0\PXService.NetStandard.sourcelink.json

@@ -6,19 +6,19 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
     using System.Runtime.Serialization;
     using System.Xml.Serialization;
     using Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.DataModel;
-    using System.ComponentModel.DataAnnotations;
-    using System.Collections.Generic;
+    using Microsoft.Practices.EnterpriseLibrary.Validation.Validators;
 
+    [HasSelfValidation]
     [DataContract(Namespace = NamespaceConstants.Namespace)]
-    public class UpdateAccountRequest : AbstractRequest, IValidatableObject
+    public class UpdateAccountRequest : AbstractRequest
     {
         public override int ApiId
         {
             get { return (int)DataAccessorType.UpdateAccount; }
         }
 
-        [Required]
-        // TODO: validate APIContext
+        [NotNullValidator(Tag = "UpdateAccountRequest")]
+        [ObjectValidator(Tag = "UpdateAccountRequest")]
         [DataMember]
         public APIContext APIContext { get; set; }
 
@@ -28,7 +28,7 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
         [DataMember]
         public Guid OnBehalfOfPartner { get; set; }
 
-        // TODO: validate Account
+        [ObjectValidator(Tag = "UpdateAccountRequest")]
         [DataMember]
         public PayinPayoutAccount Account { get; set; }
 
@@ -36,10 +36,6 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
         public override Guid EffectiveTrackingGuid
         {
             get { return APIContext == null ? Guid.Empty : APIContext.TrackingGuid; }
-        }
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            yield break;
         }
     }
 }
