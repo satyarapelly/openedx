@@ -11,8 +11,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
     using System.Net.Http.Headers;
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
-    using System.Web;
-    using System.Web.Http;
+    using Microsoft.AspNetCore.Mvc;
     using Common;
     using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Commerce.Payments.Common.Transaction;
@@ -50,7 +49,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
         /// <returns>Returns the created PaymentSession</returns>
         [HttpPost]
         [ActionName("PostPaymentSession")]
-        public async Task<PaymentSession> Post([FromUri]string accountId)
+        public async Task<PaymentSession> Post(string accountId)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
 
@@ -99,7 +98,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
         /// <param name="sessionId">Session Id</param>
         /// <returns>Returns queried PaymentSession that matches the session and account id</returns>
         [HttpGet]
-        public async Task<HttpResponseMessage> GetPaymentSession([FromUri] string accountId, [FromUri] string sessionId)
+        public async Task<HttpResponseMessage> GetPaymentSession(string accountId, string sessionId)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
 
@@ -238,7 +237,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
         /// <returns>Returns payment instrument or payment instrument status used for polling</returns>
         [HttpGet]
         [ActionName("qrCodeStatus")]
-        public async Task<Microsoft.Commerce.Payments.PimsModel.V4.PaymentInstrument> GetQRCodePaymentSession([FromUri] string accountId, [FromUri] string sessionId)
+        public async Task<Microsoft.Commerce.Payments.PimsModel.V4.PaymentInstrument> GetQRCodePaymentSession(string accountId, string sessionId)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
 
@@ -336,7 +335,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
         /// <returns>Returns AuthenticationResponse</returns>
         [HttpPost]
         [ActionName("Authenticate")]
-        public async Task<AuthenticationResponse> Authenticate([FromUri] string accountId, [FromUri] string sessionId)
+        public async Task<AuthenticationResponse> Authenticate(string accountId, string sessionId)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
             string payload = await this.Request.GetRequestPayload();
@@ -373,7 +372,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
         /// <returns>Returns the created PaymentSession</returns>
         [HttpPost]
         [ActionName("CreateAndAuthenticate")]
-        public async Task<CreateAndAuthenticateResponse> CreateAndAuthenticate([FromUri] string accountId)
+        public async Task<CreateAndAuthenticateResponse> CreateAndAuthenticate(string accountId)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
             string payload = await this.Request.GetRequestPayload();
@@ -446,7 +445,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
         /// <returns>Returns the created PaymentSession</returns>
         [HttpPost]
         [ActionName("NotifyThreeDSChallengeCompleted")]
-        public async Task<HttpResponseMessage> NotifyThreeDSChallengeCompleted([FromUri] string accountId, [FromUri] string sessionId)
+        public async Task<HttpResponseMessage> NotifyThreeDSChallengeCompleted(string accountId, string sessionId)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
 
@@ -468,7 +467,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
         /// <returns>Returns the created PaymentSession</returns>
         [HttpPost]
         [ActionName("BrowserAuthenticate")]
-        public async Task<HttpResponseMessage> Authenticate([FromUri] string sessionId)
+        public async Task<HttpResponseMessage> Authenticate(string sessionId)
         {
             ClientAction nextAction = null;
             try
@@ -648,7 +647,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
 
         [HttpPost]
         [ActionName("BrowserNotifyThreeDSChallengeCompleted")]
-        public async Task<HttpResponseMessage> NotifyThreeDSChallengeCompleted([FromUri] string sessionId)
+        public async Task<HttpResponseMessage> NotifyThreeDSChallengeCompleted(string sessionId)
         {
             ClientAction clientAction = null;
             try
@@ -743,8 +742,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
         [HttpPost]
         [ActionName("BrowserAuthenticateThreeDSOne")]
         public async Task<HttpResponseMessage> BrowserAuthenticateThreeDSOne(
-            [FromUri] string accountId,
-            [FromUri] string sessionId,
+            string accountId,
+            string sessionId,
             [FromBody] PIDLData cvvChallengePayload)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
@@ -939,7 +938,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
         /// <returns>Returns the HTML that does a POST to ACS Url</returns>
         [HttpGet]
         [ActionName("BrowserAuthenticateRedirectionThreeDSOne")]
-        public async Task<HttpResponseMessage> BrowserAuthenticateRedirectionThreeDSOne([FromUri] string sessionId, string ru, string rx)
+        public async Task<HttpResponseMessage> BrowserAuthenticateRedirectionThreeDSOne(string sessionId, string ru, string rx)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
 
@@ -974,7 +973,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
 
         [HttpPost]
         [ActionName("BrowserNotifyThreeDSOneChallengeCompleted")]
-        public async Task<HttpResponseMessage> BrowserNotifyThreeDSOneChallengeCompleted([FromUri] string sessionId)
+        public async Task<HttpResponseMessage> BrowserNotifyThreeDSOneChallengeCompleted(string sessionId)
         {
             Uri redirectUrl;
 
@@ -1037,7 +1036,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
         /// <returns>Returns RDS URL</returns>
         [HttpPost]
         [ActionName("AuthenticateIndiaThreeDS")]
-        public async Task<HttpResponseMessage> AuthenticateIndiaThreeDS([FromUri] string accountId, [FromUri] string sessionId, [FromBody] PIDLData cvvChallengePayload)
+        public async Task<HttpResponseMessage> AuthenticateIndiaThreeDS(string accountId, string sessionId, [FromBody] PIDLData cvvChallengePayload)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
 
@@ -1134,7 +1133,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
         /// False if the challenge was failed or its status is unknown.</returns>
         [HttpGet]
         [ActionName("AuthenticationStatus")]
-        public async Task<HttpResponseMessage> AuthenticationStatus([FromUri] string accountId, [FromUri] string sessionId, [FromUri] string piId, [FromUri] string paymentContext = null)
+        public async Task<HttpResponseMessage> AuthenticationStatus(string accountId, string sessionId, string piId, string paymentContext = null)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
 

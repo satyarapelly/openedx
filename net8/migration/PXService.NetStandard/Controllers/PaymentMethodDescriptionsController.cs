@@ -9,8 +9,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using System.Net;
     using System.Net.Http;
     using System.Threading.Tasks;
-    using System.Web;
-    using System.Web.Http;
+    using Microsoft.AspNetCore.Mvc;
     using Common;
     using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Commerce.Payments.Common.Web;
@@ -236,7 +235,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpGet]
         public async Task<List<PIDLResource>> GetByFamilyAndType(
-            [FromUri] string accountId,
+            string accountId,
             string family,
             string type = null,
             string country = null,
@@ -639,7 +638,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpGet]
         public async Task<List<PIDLResource>> SelectPaymentResource(
-            [FromUri] string accountId,
+            string accountId,
             string country = null,
             string language = null,
             string partner = Constants.ServiceDefaults.DefaultPartnerName,
@@ -938,7 +937,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpGet]
         public async Task<List<PIDLResource>> GetByFamilyAndTypeWithCompletePrerequisitesOption(
-            [FromUri] string accountId,
+            string accountId,
             string country,
             string family,
             bool completePrerequisites,
@@ -3732,9 +3731,9 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             qrCodeContext.QrCodeCreatedTime = DateTime.UtcNow;
             qrCodeContext.AllowTestHeader = false;
 
-            IEnumerable<string> testHeader = null;
-            this.Request.Headers.TryGetValues(PaymentConstants.PaymentExtendedHttpHeaders.TestHeader, out testHeader);
-            if (this.ExposedFlightFeatures.Contains(V7.Constants.PartnerFlightValues.PXCOTTestAccounts, StringComparer.OrdinalIgnoreCase) || (testHeader != null && testHeader.Contains(Constants.TestAccountHeaders.MDollarPurchase)))
+            Microsoft.Extensions.Primitives.StringValues testHeader;
+            this.Request.Headers.TryGetValue(PaymentConstants.PaymentExtendedHttpHeaders.TestHeader, out testHeader);
+            if (this.ExposedFlightFeatures.Contains(V7.Constants.PartnerFlightValues.PXCOTTestAccounts, StringComparer.OrdinalIgnoreCase) || testHeader.Contains(Constants.TestAccountHeaders.MDollarPurchase))
             {
                 qrCodeContext.AllowTestHeader = true; 
             }

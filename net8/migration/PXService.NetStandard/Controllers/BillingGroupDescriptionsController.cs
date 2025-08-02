@@ -5,7 +5,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
-    using System.Web.Http;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Commerce.Payments.Common.Web;
     using Microsoft.Commerce.Payments.PartnerSettingsModel;
@@ -31,7 +31,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>A list of PIDLResource object</returns>
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpGet]
-        public List<PIDLResource> GetBillingGroupsDescription([FromUri]string accountId, string country, string operation = Constants.Operations.SelectInstance, string type = null, string language = null, string partner = Constants.ServiceDefaults.DefaultPartnerName, string scenario = null)
+        public List<PIDLResource> GetBillingGroupsDescription(string accountId, string country, string operation = Constants.Operations.SelectInstance, string type = null, string language = null, string partner = Constants.ServiceDefaults.DefaultPartnerName, string scenario = null)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
 

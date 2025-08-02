@@ -9,7 +9,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentClient
     using System.Net;
     using System.Net.Http;
     using System.Threading.Tasks;
-    using System.Web.Http;
+    using Microsoft.AspNetCore.Mvc;
     using Common.Web;
     using Microsoft.Commerce.Payments.Common;
     using Microsoft.Commerce.Payments.Common.Tracing;
@@ -49,10 +49,10 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentClient
         [HttpPost]
         public async Task<HttpResponseMessage> AttachAddress(
             [FromBody] PIDLData address,
-            [FromUri] string checkoutRequestId,
-            [FromUri] string type = null,
-            [FromUri] string partner = V7.Constants.ServiceDefaults.DefaultPartnerName,
-            [FromUri] string scenario = null)
+            string checkoutRequestId,
+            string type = null,
+            string partner = V7.Constants.ServiceDefaults.DefaultPartnerName,
+            string scenario = null)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
 
@@ -104,8 +104,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentClient
         [HttpPost]
         public async Task<HttpResponseMessage> AttachProfile(
             [FromBody] PIDLData profile,
-            [FromUri] string checkoutRequestId,
-            [FromUri] string partner = V7.Constants.ServiceDefaults.DefaultPartnerName)
+            string checkoutRequestId,
+            string partner = V7.Constants.ServiceDefaults.DefaultPartnerName)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
 
@@ -146,8 +146,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentClient
         [HttpPost]
         public async Task<HttpResponseMessage> Confirm(
             [FromBody] PIDLData confirmPayload,
-            [FromUri] string checkoutRequestId,
-            [FromUri] string partner = V7.Constants.TemplateName.DefaultTemplate)
+            string checkoutRequestId,
+            string partner = V7.Constants.TemplateName.DefaultTemplate)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
             CheckoutRequestClientActions checkoutRequest = new CheckoutRequestClientActions();
@@ -289,8 +289,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentClient
         [HttpPost]
         public async Task<HttpResponseMessage> AttachPaymentInstrument(
             [FromBody] PIDLData paymentInstrument,
-            [FromUri] string checkoutRequestId,
-            [FromUri] string partner = V7.Constants.ServiceDefaults.DefaultPartnerName)
+            string checkoutRequestId,
+            string partner = V7.Constants.ServiceDefaults.DefaultPartnerName)
         {
             //// This API is not in use and will be removed in future
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();

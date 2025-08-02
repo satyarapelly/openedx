@@ -6,7 +6,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using System.Web.Http;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Commerce.Payments.Common.Web;
     using Microsoft.Commerce.Payments.PidlFactory.V7;
@@ -34,10 +34,10 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         [HttpPost]
         public async Task<PIDLResource> PostRedeemRequest(
             [FromBody] MSRewardsRedeemRequest redeemData,
-            [FromUri] string accountId,
-            [FromUri] string country = null,
-            [FromUri] string language = null,
-            [FromUri] string partner = Constants.ServiceDefaults.DefaultPartnerName)
+            string accountId,
+            string country = null,
+            string language = null,
+            string partner = Constants.ServiceDefaults.DefaultPartnerName)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
             this.Request.AddTracingProperties(accountId, null, null, null);

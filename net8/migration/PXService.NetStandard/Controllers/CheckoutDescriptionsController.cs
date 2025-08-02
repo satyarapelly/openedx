@@ -7,7 +7,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using System.Globalization;
     using System.Linq;
     using System.Threading.Tasks;
-    using System.Web.Http;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Commerce.Payments.Common.Web;
     using Microsoft.Commerce.Payments.PartnerSettingsModel;
