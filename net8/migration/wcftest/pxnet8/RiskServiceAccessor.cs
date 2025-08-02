@@ -42,7 +42,10 @@ namespace Microsoft.Commerce.Payments.PXService.RiskService.V7
             this.emulatorBaseUrl = emulatorBaseUrl;
             this.apiVersion = apiVersion;
 
-            this.riskServiceHttpClient = new PXTracingHttpClient(Constants.ServiceNames.RiskService, messageHandler, ApplicationInsightsProvider.LogOutgoingOperation);
+            this.riskServiceHttpClient = new PXTracingHttpClient(
+                Constants.ServiceNames.RiskService,
+                messageHandler,
+                logOutgoingRequestToApplicationInsight: ApplicationInsightsProvider.LogOutgoingOperation);
             this.riskServiceHttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(PaymentConstants.HttpMimeTypes.JsonContentType));
             this.riskServiceHttpClient.DefaultRequestHeaders.Add(PaymentConstants.HttpHeaders.Connection, PaymentConstants.HttpHeaders.KeepAlive);
             this.riskServiceHttpClient.DefaultRequestHeaders.Add(PaymentConstants.HttpHeaders.KeepAlive, string.Format(PaymentConstants.HttpHeaders.KeepAliveParameter, 60));

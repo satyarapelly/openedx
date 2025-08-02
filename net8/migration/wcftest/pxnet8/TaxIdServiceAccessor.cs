@@ -26,7 +26,10 @@ namespace Microsoft.Commerce.Payments.PXService
             HttpMessageHandler messageHandler)
         {
             this.serviceBaseUrl = serviceBaseUrl;
-            this.taxIdServiceHttpClient = new PXTracingHttpClient(TaxIdService.V7.Constants.ServiceNames.TaxIdService, messageHandler, ApplicationInsightsProvider.LogOutgoingOperation);
+            this.taxIdServiceHttpClient = new PXTracingHttpClient(
+                TaxIdService.V7.Constants.ServiceNames.TaxIdService,
+                messageHandler,
+                logOutgoingRequestToApplicationInsight: ApplicationInsightsProvider.LogOutgoingOperation);
             this.taxIdServiceHttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(PaymentConstants.HttpMimeTypes.JsonContentType));
             this.taxIdServiceHttpClient.DefaultRequestHeaders.Add(PaymentConstants.HttpHeaders.Connection, PaymentConstants.HttpHeaders.KeepAlive);
             this.taxIdServiceHttpClient.DefaultRequestHeaders.Add(PaymentConstants.HttpHeaders.KeepAlive, string.Format(PaymentConstants.HttpHeaders.KeepAliveParameter, 60));

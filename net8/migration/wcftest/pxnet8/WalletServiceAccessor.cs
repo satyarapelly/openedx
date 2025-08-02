@@ -32,7 +32,10 @@ namespace Microsoft.Commerce.Payments.PXService
             string apiVersion,
             HttpMessageHandler messageHandler)
         {
-            this.walletHttpClient = new PXTracingHttpClient(PXCommon.Constants.ServiceNames.WalletService, messageHandler, ApplicationInsightsProvider.LogOutgoingOperation);
+            this.walletHttpClient = new PXTracingHttpClient(
+                PXCommon.Constants.ServiceNames.WalletService,
+                messageHandler,
+                logOutgoingRequestToApplicationInsight: ApplicationInsightsProvider.LogOutgoingOperation);
             this.serviceBaseUrl = serviceBaseUrl;
             this.emulatorBaseUrl = "http://localhost/WalletEmulator";
             this.apiVersion = apiVersion;

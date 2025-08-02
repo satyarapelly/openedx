@@ -31,7 +31,10 @@ namespace Microsoft.Commerce.Payments.PXService
             this.apiVersion = apiVersion;
             this.baseUrl = baseUrl;
 
-            this.sessionServiceHttpClient = new PXTracingHttpClient(SessionService.V7.Constants.ServiceNames.SessionService, requestHandler, ApplicationInsightsProvider.LogOutgoingOperation);
+            this.sessionServiceHttpClient = new PXTracingHttpClient(
+                SessionService.V7.Constants.ServiceNames.SessionService,
+                requestHandler,
+                logOutgoingRequestToApplicationInsight: ApplicationInsightsProvider.LogOutgoingOperation);
             this.sessionServiceHttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(PaymentConstants.HttpMimeTypes.JsonContentType));
             this.sessionServiceHttpClient.DefaultRequestHeaders.Add(PaymentConstants.HttpHeaders.Connection, PaymentConstants.HttpHeaders.KeepAlive);
             this.sessionServiceHttpClient.DefaultRequestHeaders.Add(PaymentConstants.HttpHeaders.KeepAlive, string.Format(PaymentConstants.HttpHeaders.KeepAliveParameter, 60));

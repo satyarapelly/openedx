@@ -35,7 +35,10 @@ namespace Microsoft.Commerce.Payments.PXService
             this.emulatorBaseUrl = emulatorBaseUrl;
             this.defaultApiVersion = apiVersion;
 
-            this.payerAuthServiceHttpClient = new PXTracingHttpClient(Constants.ServiceNames.PayerAuthService, messageHandler, ApplicationInsightsProvider.LogOutgoingOperation);
+            this.payerAuthServiceHttpClient = new PXTracingHttpClient(
+                Constants.ServiceNames.PayerAuthService,
+                messageHandler,
+                logOutgoingRequestToApplicationInsight: ApplicationInsightsProvider.LogOutgoingOperation);
             this.payerAuthServiceHttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(PaymentConstants.HttpMimeTypes.JsonContentType));
             this.payerAuthServiceHttpClient.DefaultRequestHeaders.Add(PaymentConstants.HttpHeaders.Connection, PaymentConstants.HttpHeaders.KeepAlive);
             this.payerAuthServiceHttpClient.DefaultRequestHeaders.Add(PaymentConstants.HttpHeaders.KeepAlive, string.Format(PaymentConstants.HttpHeaders.KeepAliveParameter, 60));

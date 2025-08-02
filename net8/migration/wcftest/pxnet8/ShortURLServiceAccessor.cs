@@ -29,7 +29,10 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.ShortURLService
         {
             this.serviceBaseUrl = serviceBaseUrl;
 
-            this.shortURLServiceHttpClient = new PXTracingHttpClient(PXCommon.Constants.ServiceNames.ShortURLService, messageHandler, ApplicationInsightsProvider.LogOutgoingOperation);
+            this.shortURLServiceHttpClient = new PXTracingHttpClient(
+                PXCommon.Constants.ServiceNames.ShortURLService,
+                messageHandler,
+                logOutgoingRequestToApplicationInsight: ApplicationInsightsProvider.LogOutgoingOperation);
             this.shortURLServiceHttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(PaymentConstants.HttpMimeTypes.JsonContentType));
             this.shortURLServiceHttpClient.DefaultRequestHeaders.Add(PaymentConstants.HttpHeaders.Connection, PaymentConstants.HttpHeaders.KeepAlive);
             this.shortURLServiceHttpClient.DefaultRequestHeaders.Add(PaymentConstants.HttpHeaders.KeepAlive, string.Format(PaymentConstants.HttpHeaders.KeepAliveParameter, 60));
