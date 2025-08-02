@@ -7,7 +7,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Threading.Tasks;
-    using System.Web.Http;
+    using Microsoft.AspNetCore.Mvc;
     using Common;
     using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Commerce.Payments.Common.Web;
@@ -42,7 +42,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpGet]
         public async Task<List<PIDLResource>> GetById(
-            [FromUri]string accountId,
+            string accountId,
             string country,
             string type,
             string language = null,
@@ -373,7 +373,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpGet]
         public async Task<List<PIDLResource>> GetAddressGroupsById(
-            [FromUri]string accountId,
+            string accountId,
             string country,
             string operation = Constants.Operations.SelectInstance,
             string language = null,

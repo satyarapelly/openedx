@@ -8,7 +8,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using System.Net;
     using System.Net.Http;
     using System.Threading.Tasks;
-    using System.Web.Http;
+    using Microsoft.AspNetCore.Mvc;
     using Common.Web;
     using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Commerce.Payments.PartnerSettingsModel;
@@ -39,7 +39,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>A list of PIDLResource object</returns>
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpPost]
-        public async Task<HttpResponseMessage> Tokens([FromBody] PIDLData payload, [FromUri] string accountId, string partner, string piid, string country, string language)
+        public async Task<HttpResponseMessage> Tokens([FromBody] PIDLData payload, string accountId, string partner, string piid, string country, string language)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
             PaymentExperienceSetting setting = this.GetPaymentExperienceSetting(V7.Constants.Operations.Get);
@@ -136,7 +136,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>A list of PIDLResource object</returns>
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpPost]
-        public async Task<HttpResponseMessage> PostChallenge([FromBody] PIDLData payload, [FromUri] string accountId, [FromUri] string ntid, [FromUri] string challengeId, string country, string language, string partner)
+        public async Task<HttpResponseMessage> PostChallenge([FromBody] PIDLData payload, string accountId, string ntid, string challengeId, string country, string language, string partner)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
 
@@ -189,7 +189,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>A list of PIDLResource object</returns>
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpPost]
-        public async Task<HttpResponseMessage> ValidateChallenge([FromBody] PIDLData payload, [FromUri] string accountId, [FromUri] string ntid, [FromUri] string challengeId, string country, string language, string partner, string challengeMethodId)
+        public async Task<HttpResponseMessage> ValidateChallenge([FromBody] PIDLData payload, string accountId, string ntid, string challengeId, string country, string language, string partner, string challengeMethodId)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
 
@@ -241,7 +241,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>A list of PIDLResource object</returns>
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpPost]
-        public async Task<HttpResponseMessage> Mandates([FromBody] PIDLData payload, [FromUri] string accountId, [FromUri] string ntid)
+        public async Task<HttpResponseMessage> Mandates([FromBody] PIDLData payload, string accountId, string ntid)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
 

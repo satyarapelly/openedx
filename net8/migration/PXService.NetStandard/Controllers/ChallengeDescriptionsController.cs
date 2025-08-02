@@ -9,7 +9,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using System.Net;
     using System.Net.Http;
     using System.Threading.Tasks;
-    using System.Web.Http;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.Commerce.Payments.Common;
     using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Commerce.Payments.Common.Web;
@@ -51,7 +51,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpGet]
         public async Task<List<PIDLResource>> GetById(
-            [FromUri] string accountId,
+            string accountId,
             string type,
             string language = null,
             string partner = Constants.ServiceDefaults.DefaultPartnerName)
@@ -106,8 +106,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpGet]
         public async Task<List<PIDLResource>> GetByTypePiidAndSessionId(
-            [FromUri] string accountId,
-            [FromUri] string piid,
+            string accountId,
+            string piid,
             string type,
             string sessionId,
             string language = null,
@@ -170,8 +170,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpGet]
         public async Task<List<PIDLResource>> GetByTypeAndPiid(
-            [FromUri] string accountId,
-            [FromUri] string piid,
+            string accountId,
+            string piid,
             string type,
             string language = null,
             string partner = Constants.ServiceDefaults.DefaultPartnerName)
@@ -227,9 +227,9 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>Returns challenge PIDL for the given type and specfic to the given piid</returns>
         [HttpGet]
         public async Task<HttpResponseMessage> GetPaymentChallenge(
-            [FromUri] string accountId,
-            [FromUri] string paymentSessionOrData,
-            [FromUri] string timezoneOffset = null)
+            string accountId,
+            string paymentSessionOrData,
+            string timezoneOffset = null)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
             List<PIDLResource> resources = new List<PIDLResource>();
@@ -559,7 +559,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>Returns a PIDL representing the next action that needs to be taken</returns>
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpGet]
-        public async Task<List<PIDLResource>> GetByPiidAndSessionId([FromUri] string accountId, [FromUri] string piid, string sessionId, string partner = null, string language = null, string orderId = null)
+        public async Task<List<PIDLResource>> GetByPiidAndSessionId(string accountId, string piid, string sessionId, string partner = null, string language = null, string orderId = null)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
             this.Request.AddTracingProperties(accountId, piid, null, null, null);
@@ -660,11 +660,11 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpGet]
         public async Task<List<PIDLResource>> GetByAccountIdAndPiid(
-            [FromUri] string accountId,
-            [FromUri] string piid,
-            [FromUri] string language = null,
-            [FromUri] bool revertChallengeOption = false,
-            [FromUri] string partner = Constants.ServiceDefaults.DefaultPartnerName)
+            string accountId,
+            string piid,
+            string language = null,
+            bool revertChallengeOption = false,
+            string partner = Constants.ServiceDefaults.DefaultPartnerName)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
             this.Request.AddTracingProperties(accountId, piid, null, null, null);

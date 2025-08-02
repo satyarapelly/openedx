@@ -11,8 +11,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using System.Text;
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
-    using System.Web;
-    using System.Web.Http;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.Commerce.Payments.Common;
     using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Commerce.Payments.Common.Transaction;
@@ -66,12 +65,12 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>Html post message</returns>
         [HttpGet]
         public HttpResponseMessage AnonymousResumePendingOperation(
-            [FromUri] string piid,
-            [FromUri] bool isSuccessful = false,
-            [FromUri] string language = "en",
-            [FromUri] string partner = Constants.ServiceDefaults.DefaultPartnerName,
-            [FromUri] string sessionQueryUrl = null,
-            [FromUri] string country = null)
+            string piid,
+            bool isSuccessful = false,
+            string language = "en",
+            string partner = Constants.ServiceDefaults.DefaultPartnerName,
+            string sessionQueryUrl = null,
+            string country = null)
         {
             this.Request.AddPartnerProperty(partner?.ToLower());
             ClientAction nextAction = null;
@@ -124,15 +123,15 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         [HttpPost]
         public async Task<HttpResponseMessage> CreateModernPI(
             [FromBody] PIDLData pi,
-            [FromUri] string sessionId = null,
-            [FromUri] string language = "en-us",
-            [FromUri] string partner = Constants.ServiceDefaults.DefaultPartnerName,
-            [FromUri] string classicProduct = null,
-            [FromUri] string billableAccountId = null,
-            [FromUri] bool completePrerequisites = false,
-            [FromUri] string country = null,
-            [FromUri] string scenario = null,
-            [FromUri] string orderId = null)
+            string sessionId = null,
+            string language = "en-us",
+            string partner = Constants.ServiceDefaults.DefaultPartnerName,
+            string classicProduct = null,
+            string billableAccountId = null,
+            bool completePrerequisites = false,
+            string country = null,
+            string scenario = null,
+            string orderId = null)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
 
@@ -183,10 +182,10 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>A list of payment instrument or IPidlPayload object</returns>
         [HttpGet]
         public async Task<HttpResponseMessage> ListModernPIs(
-            [FromUri] string accountId,
-            [FromUri] string[] status = null,
-            [FromUri] ulong deviceId = 0,
-            [FromUri] bool includePidl = false,
+            string accountId,
+            string[] status = null,
+            ulong deviceId = 0,
+            bool includePidl = false,
             string language = "en",
             string partner = Constants.ServiceDefaults.DefaultPartnerName,
             string country = null,
@@ -323,16 +322,16 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>A payment instrument object</returns>
         [HttpGet]
         public async Task<PaymentInstrument> GetModernPI(
-            [FromUri] string accountId,
-            [FromUri] string piid,
-            [FromUri] string language = "en",
-            [FromUri] string partner = Constants.ServiceDefaults.DefaultPartnerName,
-            [FromUri] bool completePrerequisites = false,
-            [FromUri] string country = null,
-            [FromUri] string scenario = null,
-            [FromUri] string sessionQueryUrl = null,
-            [FromUri] string classicProduct = null,
-            [FromUri] string sessionId = null)
+            string accountId,
+            string piid,
+            string language = "en",
+            string partner = Constants.ServiceDefaults.DefaultPartnerName,
+            bool completePrerequisites = false,
+            string country = null,
+            string scenario = null,
+            string sessionQueryUrl = null,
+            string classicProduct = null,
+            string sessionId = null)
         {
             PaymentExperienceSetting setting = this.GetPaymentExperienceSetting(Constants.Operations.Add);
             if (PXCommon.Constants.PartnerGroups.IsVenmoEnabledPartner(partner) || TemplateHelper.IsTemplateBasedPIDLIncludingDefaultTemplate(TemplateHelper.GetSettingTemplate(partner, setting, Constants.DescriptionTypes.PaymentMethodDescription, $"{Constants.PaymentMethodFamily.ewallet}.{Constants.PaymentMethodType.Venmo}")))
@@ -533,16 +532,16 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>A payment instrument object</returns>
         [HttpPost]
         public async Task<HttpResponseMessage> PostModernPI(
-            [FromUri] string accountId,
+            string accountId,
             [FromBody] PIDLData pi,
-            [FromUri] string language = "en",
-            [FromUri] string partner = Constants.ServiceDefaults.DefaultPartnerName,
-            [FromUri] string classicProduct = null,
-            [FromUri] string billableAccountId = null,
-            [FromUri] bool completePrerequisites = false,
-            [FromUri] string country = null,
-            [FromUri] string scenario = null,
-            [FromUri] string orderId = null)
+            string language = "en",
+            string partner = Constants.ServiceDefaults.DefaultPartnerName,
+            string classicProduct = null,
+            string billableAccountId = null,
+            bool completePrerequisites = false,
+            string country = null,
+            string scenario = null,
+            string orderId = null)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
             this.Request.AddPartnerProperty(partner?.ToLower());
@@ -577,12 +576,12 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>A payment instrument object</returns>
         [HttpPost]
         public async Task<HttpResponseMessage> UpdateModernPI(
-            [FromUri] string accountId,
-            [FromUri] string piid,
+            string accountId,
+            string piid,
             [FromBody] PIDLData pi,
-            [FromUri] string language = "en",
-            [FromUri] string partner = Constants.ServiceDefaults.DefaultPartnerName,
-            [FromUri] string billableAccountId = null)
+            string language = "en",
+            string partner = Constants.ServiceDefaults.DefaultPartnerName,
+            string billableAccountId = null)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
             this.Request.AddPartnerProperty(partner?.ToLower());
@@ -744,15 +743,15 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>A payment instrument object</returns>
         [HttpPost]
         public async Task<HttpResponseMessage> ReplaceModernPI(
-            [FromUri] string accountId,
-            [FromUri] string piid,
+            string accountId,
+            string piid,
             [FromBody] PIDLData pi,
-            [FromUri] string language = "en",
-            [FromUri] string partner = Constants.ServiceDefaults.DefaultPartnerName,
-            [FromUri] string classicProduct = null,
-            [FromUri] bool completePrerequisites = false,
-            [FromUri] string country = null,
-            [FromUri] string scenario = null)
+            string language = "en",
+            string partner = Constants.ServiceDefaults.DefaultPartnerName,
+            string classicProduct = null,
+            bool completePrerequisites = false,
+            string country = null,
+            string scenario = null)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
             this.Request.AddPartnerProperty(partner?.ToLower());
@@ -871,12 +870,12 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>A PIDLResource object</returns>
         [HttpPost]
         public async Task<PIDLResource> RedeemModernPI(
-            [FromUri] string accountId,
-            [FromUri] string piid,
+            string accountId,
+            string piid,
             [FromBody] PIDLData pi,
-            [FromUri] string country = "us",
-            [FromUri] string language = "en",
-            [FromUri] string partner = Constants.ServiceDefaults.DefaultPartnerName)
+            string country = "us",
+            string language = "en",
+            string partner = Constants.ServiceDefaults.DefaultPartnerName)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
             this.Request.AddTracingProperties(accountId, piid, null, null);
@@ -927,16 +926,16 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>A payment instrument object</returns>
         [HttpGet]
         public async Task<object> RedeemModernPI(
-            [FromUri] string accountId,
-            [FromUri] string piid,
+            string accountId,
+            string piid,
             [FromBody] PIDLData pi,
-            [FromUri] string amount,
-            [FromUri] string referenceId,
-            [FromUri] string country = "us",
-            [FromUri] string language = "en",
-            [FromUri] string currency = "USD",
-            [FromUri] string partner = Constants.ServiceDefaults.DefaultPartnerName,
-            [FromUri] string greenId = "")
+            string amount,
+            string referenceId,
+            string country = "us",
+            string language = "en",
+            string currency = "USD",
+            string partner = Constants.ServiceDefaults.DefaultPartnerName,
+            string greenId = "")
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
             this.Request.AddTracingProperties(accountId, piid, null, null);
@@ -977,11 +976,11 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>A payment instrument object</returns>
         [HttpPost]
         public async Task<HttpResponseMessage> RemoveModernPI(
-            [FromUri] string accountId,
-            [FromUri] string piid,
+            string accountId,
+            string piid,
             [FromBody] object removeReason,
-            [FromUri] string language = "en",
-            [FromUri] string partner = Constants.ServiceDefaults.DefaultPartnerName)
+            string language = "en",
+            string partner = Constants.ServiceDefaults.DefaultPartnerName)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
             this.Request.AddTracingProperties(accountId, piid, null, null);
@@ -1091,15 +1090,15 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>A payment instrument object</returns>
         [HttpPost]
         public async Task<HttpResponseMessage> ResumePendingOperation(
-            [FromUri] string accountId,
-            [FromUri] string piid,
+            string accountId,
+            string piid,
             [FromBody] PIDLData pendingOpRequestData,
-            [FromUri] string language = "en",
-            [FromUri] string partner = Constants.ServiceDefaults.DefaultPartnerName,
-            [FromUri] string classicProduct = null,
-            [FromUri] string billableAccountId = null,
-            [FromUri] bool completePrerequisites = false,
-            [FromUri] string country = null)
+            string language = "en",
+            string partner = Constants.ServiceDefaults.DefaultPartnerName,
+            string classicProduct = null,
+            string billableAccountId = null,
+            bool completePrerequisites = false,
+            string country = null)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
             this.Request.AddTracingProperties(accountId, piid, null, null);
@@ -1334,7 +1333,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A card profeil object</response>
         /// <returns>A payment instrument object</returns>
         [HttpGet]
-        public async Task<object> GetCardProfile([FromUri] string accountId, [FromUri] string piid, [FromUri] ulong deviceId)
+        public async Task<object> GetCardProfile(string accountId, string piid, ulong deviceId)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
             this.Request.AddTracingProperties(accountId, piid, null, null);
@@ -1354,7 +1353,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A card profeil object</response>
         /// <returns>A payment instrument object</returns>
         [HttpGet]
-        public async Task<object> GetSeCardPersos([FromUri] string accountId, [FromUri] string piid, [FromUri] ulong deviceId)
+        public async Task<object> GetSeCardPersos(string accountId, string piid, ulong deviceId)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
             this.Request.AddTracingProperties(accountId, piid, null, null);
@@ -1375,7 +1374,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A payment instrument object</response>
         /// <returns>A object</returns>
         [HttpPost]
-        public async Task<object> PostReplenishTransactionCredentials([FromUri] string accountId, [FromUri] string piid, [FromUri] ulong deviceId, [FromBody] object requestData)
+        public async Task<object> PostReplenishTransactionCredentials(string accountId, string piid, ulong deviceId, [FromBody] object requestData)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
             this.Request.AddTracingProperties(accountId, piid, null, null);
@@ -1396,7 +1395,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A payment instrument object</response>
         /// <returns>A object</returns>
         [HttpPost]
-        public async Task<object> AcquireLUKs([FromUri] string accountId, [FromUri] string piid, [FromUri] ulong deviceId, [FromBody] object requestData)
+        public async Task<object> AcquireLUKs(string accountId, string piid, ulong deviceId, [FromBody] object requestData)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
             this.Request.AddTracingProperties(accountId, piid, null, null);
@@ -1416,7 +1415,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A payment instrument object</response>
         /// <returns>A object</returns>
         [HttpPost]
-        public async Task<object> ConfirmLUKs([FromUri] string accountId, [FromUri] ulong deviceId, [FromUri] string piid)
+        public async Task<object> ConfirmLUKs(string accountId, ulong deviceId, string piid)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
             this.Request.AddTracingProperties(accountId, piid, null, null);
@@ -1437,7 +1436,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A payment instrument object</response>
         /// <returns>A object</returns>
         [HttpPost]
-        public async Task<object> ValidateCvv([FromUri] string accountId, [FromUri] string piid, [FromUri] string language, [FromBody] object requestData)
+        public async Task<object> ValidateCvv(string accountId, string piid, string language, [FromBody] object requestData)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
             this.Request.AddTracingProperties(accountId, piid, null, null);
@@ -1498,12 +1497,12 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>Message from IssuerService API</returns>
         [HttpPost]
         public async Task<HttpResponseMessage> Apply(
-            [FromUri] string partner,
-            [FromUri] string operation,
-            [FromUri] string country,
-            [FromUri] string language,
+            string partner,
+            string operation,
+            string country,
+            string language,
             [FromBody] InitializeRequest initializeData,
-            [FromUri] string sessionId = null)
+            string sessionId = null)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
             this.Request.AddPartnerProperty(partner?.ToLower());
@@ -1586,8 +1585,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         [HttpGet]
         [ActionName("GetChallengeContext")]
         public async Task<HttpResponseMessage> GetChallengeContext(
-            [FromUri] string accountId,
-            [FromUri] string piid)
+            string accountId,
+            string piid)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
             this.Request.AddTracingProperties(accountId, piid);
@@ -3067,7 +3066,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             if (IsCreditCard(paymentMethodFamily, paymentMethodType) && this.ExposedFlightFeatures.Contains(Flighting.Features.PXRateLimitPerAccount))
             {
                 var serviceErrorResp = GenerateValidationFailedServiceErrorResponse(language);
-                this.Request.Properties[PaymentConstants.Web.InstrumentManagementProperties.Message] = $"{GlobalConstants.AbnormalDetection.LogMsgWhenCaughtByPX} " +
+                this.HttpContext.Items[PaymentConstants.Web.InstrumentManagementProperties.Message] = $"{GlobalConstants.AbnormalDetection.LogMsgWhenCaughtByPX} " +
                     $"by flight {Flighting.Features.PXRateLimitPerAccount} limited by accountId {accountId}, family {paymentMethodFamily}, type {paymentMethodType}.";
                 return this.Request.CreateResponse(HttpStatusCode.BadRequest, serviceErrorResp, GlobalConstants.HeaderValues.JsonContent);
             }
@@ -3230,7 +3229,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
 
                 adMessage.Append("Calling IsCardTesting. ");
                 adMessage.Append(string.Join(", ", adData.ToList())).Append(". ");
-                this.Request.Properties[PaymentConstants.Web.InstrumentManagementProperties.Message] = adMessage.ToString();
+                this.HttpContext.Items[PaymentConstants.Web.InstrumentManagementProperties.Message] = adMessage.ToString();
 
                 isAnomaly = this.IsMaliciousAccountId(accountId, traceActivityId, adMessage) || this.IsMaliciousClientIP(ipAddress, traceActivityId, adMessage);
 
@@ -3239,14 +3238,14 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 if (exceedingDimensions == null)
                 {
                     adMessage.Append("Returned null. ");
-                    this.Request.Properties[PaymentConstants.Web.InstrumentManagementProperties.Message] = adMessage.ToString();
+                    this.HttpContext.Items[PaymentConstants.Web.InstrumentManagementProperties.Message] = adMessage.ToString();
                 }
                 else
                 {
                     adMessage.Append("Returned dimensions: ");
                     adMessage.Append(string.Join(", ", exceedingDimensions)).Append(". ");
                     adMessage.Append($"{GlobalConstants.AbnormalDetection.LogMsgWhenCaughtByPX}");
-                    this.Request.Properties[PaymentConstants.Web.InstrumentManagementProperties.Message] = adMessage.ToString();
+                    this.HttpContext.Items[PaymentConstants.Web.InstrumentManagementProperties.Message] = adMessage.ToString();
 
                     AnomalyDetection.AddData(adData, true);
                     isAnomaly = true;
@@ -3268,18 +3267,18 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 if (string.Equals(ObfuscationHelper.GetHashValue(accountId, ObfuscationHelper.JarvisAccountIdHashSalt), jarvisAccountIdHmac, StringComparison.OrdinalIgnoreCase))
                 {
                     adMessage.Append("JarvisAccountIdHmac matched. ");
-                    this.Request.Properties[PaymentConstants.Web.InstrumentManagementProperties.Message] = adMessage.ToString();
+                    this.HttpContext.Items[PaymentConstants.Web.InstrumentManagementProperties.Message] = adMessage.ToString();
                 }
                 else
                 {
                     adMessage.Append("JarvisAccountIdHmac did not match. ");
-                    this.Request.Properties[PaymentConstants.Web.InstrumentManagementProperties.Message] = adMessage.ToString();
+                    this.HttpContext.Items[PaymentConstants.Web.InstrumentManagementProperties.Message] = adMessage.ToString();
 
                     // Short circuit the call if JarvisAccountIdHmac is not as expected
                     var ser = GenerateValidationFailedServiceErrorResponse(language);
                     adMessage.Append($"{GlobalConstants.AbnormalDetection.LogMsgWhenCaughtByPX}");
                     adMessage.Append("Calling AddData for bad request.");
-                    this.Request.Properties[PaymentConstants.Web.InstrumentManagementProperties.Message] = adMessage.ToString();
+                    this.HttpContext.Items[PaymentConstants.Web.InstrumentManagementProperties.Message] = adMessage.ToString();
                     AnomalyDetection.AddData(adData, true);
                     return this.Request.CreateResponse(HttpStatusCode.BadRequest, ser, "application/json");
                 }
@@ -3362,7 +3361,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                     if ((int)ex.Response.StatusCode >= 400 && (int)ex.Response.StatusCode <= 499)
                     {
                         adMessage.Append("Calling AddData for bad request.");
-                        this.Request.Properties[PaymentConstants.Web.InstrumentManagementProperties.Message] = adMessage.ToString();
+                        this.HttpContext.Items[PaymentConstants.Web.InstrumentManagementProperties.Message] = adMessage.ToString();
 
                         AnomalyDetection.AddData(adData, true);
                     }
@@ -3570,13 +3569,13 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             }
 
             // Adding anomaly detection message on the request
-            this.Request.Properties[PaymentConstants.Web.InstrumentManagementProperties.Message] = adMessage.ToString();
+            this.HttpContext.Items[PaymentConstants.Web.InstrumentManagementProperties.Message] = adMessage.ToString();
 
             if (IsCreditCard(paymentMethodFamily, paymentMethodType)
                 && !Constants.PXRateLimitAddCCSkipAccounts.Contains(accountId, StringComparer.OrdinalIgnoreCase))
             {
                 adMessage.Append("Calling AddData for good request.");
-                this.Request.Properties[PaymentConstants.Web.InstrumentManagementProperties.Message] = adMessage.ToString();
+                this.HttpContext.Items[PaymentConstants.Web.InstrumentManagementProperties.Message] = adMessage.ToString();
 
                 AnomalyDetection.AddData(adData, false);
             }
@@ -3756,7 +3755,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             {
                 adMessage.Append("Blocked based on anomaly detection result on accountId.");
                 adMessage.Append($"{GlobalConstants.AbnormalDetection.LogMsgWhenCaughtByPX}");
-                this.Request.Properties[PaymentConstants.Web.InstrumentManagementProperties.Message] = adMessage.ToString();
+                this.HttpContext.Items[PaymentConstants.Web.InstrumentManagementProperties.Message] = adMessage.ToString();
                 //// Task 41895852: Blocking is put behind another flight to remove the need for another deployment to turn on blocking based on malicious account ID
                 return this.ExposedFlightFeatures.Contains(Flighting.Features.PXEnableMaliciousAccountIdRejectionEffect);
             }
@@ -3771,7 +3770,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             {
                 adMessage.Append("Blocked based on anomaly detection result on clientIP.");
                 adMessage.Append($"{GlobalConstants.AbnormalDetection.LogMsgWhenCaughtByPX}");
-                this.Request.Properties[PaymentConstants.Web.InstrumentManagementProperties.Message] = adMessage.ToString();
+                this.HttpContext.Items[PaymentConstants.Web.InstrumentManagementProperties.Message] = adMessage.ToString();
                 //// Task 41895852: Blocking is put behind another flight to remove the need for another deployment to turn on blocking based on malicious client IP
                 return this.ExposedFlightFeatures.Contains(Flighting.Features.PXEnableMaliciousClientIPRejectionEffect);
             }
@@ -3947,7 +3946,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             else
             {
                 var serviceErrorResp = GenerateValidationFailedServiceErrorResponse(language);
-                this.Request.Properties[PaymentConstants.Web.InstrumentManagementProperties.Message] = $"{GlobalConstants.AbnormalDetection.LogMsgWhenCaughtByPX} " +
+                this.HttpContext.Items[PaymentConstants.Web.InstrumentManagementProperties.Message] = $"{GlobalConstants.AbnormalDetection.LogMsgWhenCaughtByPX} " +
                     $"by flight {Flighting.Features.PXChallengeSwitch}. Missing currentContext for Add CreditCard request with AccountId: {accountId}";
                 return this.Request.CreateResponse(HttpStatusCode.BadRequest, serviceErrorResp, GlobalConstants.HeaderValues.JsonContent);
             }

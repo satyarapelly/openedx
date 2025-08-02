@@ -8,7 +8,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using System.IdentityModel.Tokens.Jwt;
     using System.Security.Claims;
     using System.Threading.Tasks;
-    using System.Web.Http;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Commerce.Payments.Common.Web;
     using Microsoft.Commerce.Payments.PXCommon;
@@ -29,7 +29,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>A session object</returns>
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpGet]
-        public async Task<SecondScreenSessionData> GetBySessionId([FromUri]string sessionId)
+        public async Task<SecondScreenSessionData> GetBySessionId(string sessionId)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
 
@@ -57,7 +57,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>A session object</returns>
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpPost]
-        public string PostBySessionId([FromUri]string sessionId)
+        public string PostBySessionId(string sessionId)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
             return sessionId;

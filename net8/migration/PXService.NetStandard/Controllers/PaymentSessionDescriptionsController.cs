@@ -5,7 +5,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Threading.Tasks;
-    using System.Web.Http;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Commerce.Payments.Common.Web;
     using Microsoft.Commerce.Payments.PartnerSettingsModel;
@@ -28,7 +28,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>Returns a PaymentSession PIDL for the given PaymentSessionData</returns>
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpGet]
-        public async Task<List<PIDLResource>> Get([FromUri]string accountId, [FromUri]string paymentSessionData)
+        public async Task<List<PIDLResource>> Get(string accountId, string paymentSessionData)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
             PaymentSessionData paymentSessionDataObj = JsonConvert.DeserializeObject<PaymentSessionData>(paymentSessionData);

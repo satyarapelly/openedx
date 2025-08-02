@@ -4,12 +4,12 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
 {
     using System;
     using System.Collections.Generic;
-    using System.Collections.Specialized;
     using System.IO;
     using System.Linq;
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
-    using System.Web;
+    using Microsoft.AspNetCore.Http.Extensions;
+    using Microsoft.AspNetCore.WebUtilities;
     using Common.Environments;
     using Common.Transaction;
     using Microsoft.Commerce.Payments.Common;
@@ -100,34 +100,46 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
         {
             string url = (paymentSession.ChallengeStatus == PaymentChallengeStatus.Succeeded) ? paymentSession.SuccessUrl : paymentSession.FailureUrl;
 
-            UriBuilder builder = new UriBuilder(new Uri(url));
-            NameValueCollection query = HttpUtility.ParseQueryString(builder.Query);
+            var uri = new Uri(url);
+            var existing = QueryHelpers.ParseQuery(uri.Query);
+            var builder = new QueryBuilder();
+            foreach (var kvp in existing)
+            {
+                foreach (var value in kvp.Value)
+                {
+                    builder.Add(kvp.Key, value);
+                }
+            }
 
-            query["challengeStatus"] = paymentSession.ChallengeStatus.ToString();
+            builder.Add("challengeStatus", paymentSession.ChallengeStatus.ToString());
 
             if (paymentSession.ChallengeStatus == PaymentChallengeStatus.Succeeded)
             {
-                query["sessionId"] = paymentSession.Id;
-                query["piid"] = paymentSession.PaymentInstrumentId;
+                builder.Add("sessionId", paymentSession.Id);
+                builder.Add("piid", paymentSession.PaymentInstrumentId);
             }
             else
             {
-                query["errorCode"] = V7.Constants.PSD2ErrorCodes.RejectedByProvider;
-                query["errorMessage"] = paymentSession.ChallengeStatus.ToString();
-
+                var errorCode = V7.Constants.PSD2ErrorCodes.RejectedByProvider;
                 if (paymentSession.ChallengeStatus == PaymentChallengeStatus.InternalServerError)
                 {
-                    query["errorCode"] = V7.Constants.ThreeDSErrorCodes.InternalServerError;
+                    errorCode = V7.Constants.ThreeDSErrorCodes.InternalServerError;
                 }
+
+                builder.Add("errorCode", errorCode);
+                builder.Add("errorMessage", paymentSession.ChallengeStatus.ToString());
 
                 if (!string.IsNullOrEmpty(paymentSession.UserDisplayMessage))
                 {
-                    query["userDisplayMessage"] = paymentSession.UserDisplayMessage;
+                    builder.Add("userDisplayMessage", paymentSession.UserDisplayMessage);
                 }
             }
 
-            builder.Query = query.ToString();
-            return builder.Uri;
+            var uriBuilder = new UriBuilder(uri)
+            {
+                Query = builder.ToQueryString().Value.TrimStart('?')
+            };
+            return uriBuilder.Uri;
         }
 
         public static string GetTransactionServiceStore(string partner, PaymentExperienceSetting setting)

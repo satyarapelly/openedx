@@ -7,8 +7,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.Checkouts
     using System.Net.Http;
     using System.Net.Http.Headers;
     using System.Threading.Tasks;
-    using System.Web;
-    using System.Web.Http;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.Commerce.Payments.Common;
     using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Commerce.Payments.Common.Web;
@@ -41,9 +40,9 @@ namespace Microsoft.Commerce.Payments.PXService.V7.Checkouts
         /// <returns>Returns the HttpResponse to iFrame that posts message to parent window to redirect the page</returns>
         [HttpGet]
         public HttpResponseMessage Completed(
-            [FromUri] string redirectUrl,
-            [FromUri] string checkoutId,
-            [FromUri] string providerId)
+            string redirectUrl,
+            string checkoutId,
+            string providerId)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
 
@@ -94,12 +93,12 @@ namespace Microsoft.Commerce.Payments.PXService.V7.Checkouts
         /// <returns>Returns the pidl redirect</returns>
         [HttpPost]
         public async Task<HttpResponseMessage> Charge(
-            [FromUri] string paymentProviderId,
-            [FromUri] string checkoutId,
-            [FromUri] string partner,
-            [FromUri] string redirectUrl,
+            string paymentProviderId,
+            string checkoutId,
+            string partner,
+            string redirectUrl,
             [FromBody] CheckoutChargePayload checkoutChargePayload,
-            [FromUri] string language = null)
+            string language = null)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
 
@@ -215,8 +214,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7.Checkouts
         /// <returns>Returns the status pidl</returns>
         [HttpGet]
         public async Task<HttpResponseMessage> Status(
-            [FromUri] string paymentProviderId,
-            [FromUri] string checkoutId)
+            string paymentProviderId,
+            string checkoutId)
         {            
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
 
