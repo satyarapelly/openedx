@@ -31,7 +31,7 @@ namespace Microsoft.Commerce.Payments.PXService
 
         public Messages.GetSubscriptionsResponse GetSubscriptions(Messages.GetSubscriptionsRequest request, EventTraceActivity traceActivityId)
         {
-            return this.Execute<Messages.GetSubscriptionsRequest, Messages.GetSubscriptionsResponse, GetSubscriptionsRequest, GetSubscriptionsResponse>
+            return this.Execute<Messages.GetSubscriptionsRequest, Messages.GetSubscriptionsResponse, Proxy.GetSubscriptionsRequest, Proxy.GetSubscriptionsResponse>
                 (
                     type: DataAccessorType.GetSubscriptions,
                     request: request,
@@ -46,12 +46,12 @@ namespace Microsoft.Commerce.Payments.PXService
                 );
         }
 
-        private GetSubscriptionsRequest ConstructGetSubscriptionsInput(Messages.GetSubscriptionsRequest request)
+        private Proxy.GetSubscriptionsRequest ConstructGetSubscriptionsInput(Messages.GetSubscriptionsRequest request)
         {
             if (request == null)
                 return null;
 
-            GetSubscriptionsRequest input = new GetSubscriptionsRequest();
+            var input = new Proxy.GetSubscriptionsRequest();
             if (request.Requester != null)
             {
                 input.Requester = new Proxy.Identity()
@@ -61,7 +61,7 @@ namespace Microsoft.Commerce.Payments.PXService
                 };
             }
             input.SubscriptionId = request.SubscriptionId;
-            input.DetailLevel = (GetSubscriptionsDetailLevel)request.DetailLevel;
+            input.DetailLevel = (Proxy.GetSubscriptionsDetailLevel)request.DetailLevel;
             input.GetSubscriptionsOfAllPartners = request.GetSubscriptionsOfAllPartners;
             input.PagingOption = request.PagingOption == null ? null : BuildPagingOption(request.PagingOption);
             input.OrderBy = request.OrderBy == null ? null : BuilidOrderBy(request.OrderBy).ToArray();

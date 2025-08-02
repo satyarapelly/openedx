@@ -8,6 +8,8 @@
     <PackageReference Include="CoreWCF.ConfigurationManager" />
     <PackageReference Include="CoreWCF.Http" />
     <PackageReference Include="CoreWCF.Primitives" />
+    <PackageReference Include="System.ServiceModel.Primitives" />
+    <PackageReference Include="System.ServiceModel.Http" />
     <PackageReference Include="Swashbuckle.AspNetCore" />
     <PackageReference Include="Microsoft.AspNetCore.SystemWebAdapters.CoreServices" />
     <PackageReference Include="Yarp.ReverseProxy" />
