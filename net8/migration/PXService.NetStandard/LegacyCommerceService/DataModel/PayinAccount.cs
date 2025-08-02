@@ -4,7 +4,7 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
 {
     using System.Collections.Generic;
     using System.Runtime.Serialization;
-    using Microsoft.Practices.EnterpriseLibrary.Validation.Validators;
+    using System.ComponentModel.DataAnnotations;
 
     [DataContract(Namespace = NamespaceConstants.Namespace)]
     public enum CustomerType
@@ -23,48 +23,49 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
     [DataContract(Namespace = NamespaceConstants.Namespace)]
     public class PayinAccount : Account, IExtensibleDataObject
     {
-        [IgnoreNulls]
         [DataMember]
         public CustomerType? CustomerType { get; set; }
 
 
-        [IgnoreNulls, StringLengthValidator(64, Tag = "PayinAccount.FirstName")]
-        [RegexValidator(RegexConstants.XmlString, Tag = "PayinAccount.FirstName")]
+        [StringLength(64)]
+        [RegularExpression(RegexConstants.XmlString)]
         [DataMember]
         public string FirstName { get; set; }
 
-        [IgnoreNulls, StringLengthValidator(64, Tag = "PayinAccount.FirstNamePronunciation")]
-        [RegexValidator(RegexConstants.XmlString, Tag = "PayinAccount.FirstNamePronunciation")]
+        [StringLength(64)]
+        [RegularExpression(RegexConstants.XmlString)]
         [DataMember]
         public string FirstNamePronunciation { get; set; }
 
-        [IgnoreNulls, StringLengthValidator(64, Tag = "PayinAccount.LastName")]
-        [RegexValidator(RegexConstants.XmlString, Tag = "PayinAccount.LastName")]
+        [StringLength(64)]
+        [RegularExpression(RegexConstants.XmlString)]
         [DataMember]
         public string LastName { get; set; }
 
-        [IgnoreNulls, StringLengthValidator(64, Tag = "PayinAccount.LastNamePronunciation")]
-        [RegexValidator(RegexConstants.XmlString, Tag = "PayinAccount.LastNamePronunciation")]
+        [StringLength(64)]
+        [RegularExpression(RegexConstants.XmlString)]
         [DataMember]
         public string LastNamePronunciation { get; set; }
 
-        [IgnoreNulls, StringLengthValidator(64, Tag = "PayinAccount.CompanyName")]
-        [RegexValidator(RegexConstants.XmlString, Tag = "PayinAccount.CompanyName")]
+        [StringLength(64)]
+        [RegularExpression(RegexConstants.XmlString)]
         [DataMember]
         public string CompanyName { get; set; }
 
-        [IgnoreNulls, StringLengthValidator(64, Tag = "PayinAccount.CompanyNamePronunciation")]
-        [RegexValidator(RegexConstants.XmlString, Tag = "PayinAccount.CompanyNamePronunciation")]
+        [StringLength(64)]
+        [RegularExpression(RegexConstants.XmlString)]
         [DataMember]
         public string CompanyNamePronunciation { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227", Justification = "Legacy code. Should be thrown away once modernAPI is available")]
-        [IgnoreNulls, ElementNotNull, ObjectCollectionValidator(typeof(Address), Tag = "PayinAccount.AddressSet")]
+        [Required]
+        // TODO: validate AddressSet items
         [DataMember]
         public List<Address> AddressSet { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227", Justification = "Legacy code. Should be thrown away once modernAPI is available")]
-        [IgnoreNulls, ElementNotNull, ObjectCollectionValidator(typeof(Phone), Tag = "PayinAccount.PhoneSet")]
+        [Required]
+        // TODO: validate PhoneSet items
         [DataMember]
         public List<Phone> PhoneSet { get; set; }
 
