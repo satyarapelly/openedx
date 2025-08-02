@@ -4,7 +4,7 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
 {
     using System;
     using System.Runtime.Serialization;
-    using Microsoft.Practices.EnterpriseLibrary.Validation.Validators;
+    using System.ComponentModel.DataAnnotations;
 
     [DataContract(Namespace = NamespaceConstants.Namespace)]
     public enum PhoneType
@@ -36,24 +36,23 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
         }
         #endregion
 
-        [IgnoreNulls]
         [DataMember]
         public PhoneType? PhoneType { get; set; }
 
-        [IgnoreNulls, StringLengthValidator(12, Tag = "Phone.PhonePrefix")]
+        [StringLength(12)]
         [DataMember]
         public string PhonePrefix { get; set; }
 
-        [IgnoreNulls, StringLengthValidator(32, Tag = "Phone.PhoneNumber")]
+        [StringLength(32)]
         [DataMember]
         public string PhoneNumber { get; set; }
 
-        [IgnoreNulls, StringLengthValidator(12, Tag = "Phone.PhoneExtension")]
+        [StringLength(12)]
         [DataMember]
         public string PhoneExtension { get; set; }
 
-        [IgnoreNulls, StringLengthValidator(2, 2, Tag = "Phone.CountryCode")]
-        [RegexValidator(RegexConstants.CountryCode, Tag = "Phone.CountryCode")]
+        [StringLength(2, MinimumLength = 2)]
+        [RegularExpression(RegexConstants.CountryCode)]
         [DataMember]
         public string CountryCode { get; set; }
     }

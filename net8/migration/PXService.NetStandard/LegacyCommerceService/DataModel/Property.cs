@@ -4,13 +4,12 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
 {
     using System;
     using System.Runtime.Serialization;
-    using Microsoft.Practices.EnterpriseLibrary.Validation;
-    using Microsoft.Practices.EnterpriseLibrary.Validation.Validators;
+    using System.ComponentModel.DataAnnotations;
+    using System.Collections.Generic;
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1716", Justification = "Legacy code moved from PCS. Needed for serialization")]
-    [HasSelfValidation]
     [DataContract(Namespace = NamespaceConstants.Namespace), Serializable]
-    public class Property : IExtensibleDataObject
+    public class Property : IExtensibleDataObject, IValidatableObject
     {
         #region IExtensibleDataObject members
         [NonSerialized]
@@ -22,29 +21,25 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
         }
         #endregion
 
-        [NotNullValidator(Tag = "Property")]
+        [Required]
         [DataMember]
         public string Namespace { get; set; }
 
-        [NotNullValidator(Tag = "Property")]
+        [Required]
         [DataMember]
         public string Name { get; set; }
 
-        [NotNullValidator(Tag = "Property")]
+        [Required]
         [DataMember]
         public string Value { get; set; }
 
-        [SelfValidation]
-        public void Validate(ValidationResults results)
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (string.IsNullOrEmpty(Namespace) && string.IsNullOrEmpty(Name))
             {
-                results.AddResult(new ValidationResult(
+                yield return new ValidationResult(
                     "Namespace and Name in a Property can not be both empty.",
-                    this,
-                    "Namespace and Name",
-                    "Property",
-                    null));
+                    new[] { nameof(Namespace), nameof(Name) });
             }
         }
     }

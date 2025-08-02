@@ -5,15 +5,13 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
     using System.Collections.Generic;
     using System.Linq;
     using System.Runtime.Serialization;
-    using Microsoft.Practices.EnterpriseLibrary.Validation;
-    using Microsoft.Practices.EnterpriseLibrary.Validation.Validators;
+    using System.ComponentModel.DataAnnotations;
 
     /// <summary>
     /// Identity represents a certain type of ID. 
     /// </summary>
-    [HasSelfValidation]
     [DataContract(Namespace = NamespaceConstants.Namespace)]
-    public class    Identity : IExtensibleDataObject
+    public class    Identity : IExtensibleDataObject, IValidatableObject
     {
         #region IExtensibleDataObject members
         private ExtensionDataObject _extensionData;
@@ -24,46 +22,38 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
         }
         #endregion
 
-        [StringLengthValidator(0, 32,
-            MessageTemplate = "IdentityType:{0} must be between 0 and 32 characters",
-            Tag = "Identity")]
+        [StringLength(32)]
         [DataMember]
         public string IdentityType { get; set; }
 
-        [StringLengthValidator(1, 64,
-            MessageTemplate = "IdentityValue:{0} must be between 1 and 64 characters",
-            Tag = "Identity")]
+        [StringLength(64, MinimumLength = 1)]
         [DataMember]
         public string IdentityValue { get; set; }
 
         [DataMember]
         public string PassportMemberName { get; set; }
 
-        [SelfValidation]
-        public void Validate(ValidationResults results)
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (string.IsNullOrEmpty(IdentityType))
             {
-                results.AddResult(new ValidationResult(
-                    "IdentityType is empty.",
-                    this,
-                    "IdentityType",
-                    "Identity",
-                    null));
+                yield return new ValidationResult("IdentityType is empty.", new[] { nameof(IdentityType) });
+                yield break;
             }
 
             if (!_identityTypes.ContainsKey(IdentityType))
             {
-                results.AddResult(new ValidationResult(
+                yield return new ValidationResult(
                     string.Format("IdentityType {0} is not valid. Accepted: {1}.",
                         IdentityType, string.Join(",", _identityTypes.Keys.OrderBy(k => k).ToArray())),
-                    this,
-                    "IdentityType",
-                    "Identity",
-                    null));
+                    new[] { nameof(IdentityType) });
+                yield break;
             }
 
-            _identityTypes[IdentityType].Validate(this, results);
+            foreach (var result in _identityTypes[IdentityType].Validate(this))
+            {
+                yield return result;
+            }
         }
 
 
@@ -77,27 +67,18 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
 
         private interface IIdentityType
         {
-            void Validate(Identity id, ValidationResults results);
-
+            IEnumerable<ValidationResult> Validate(Identity id);
         }
 
         private class PuidIdentityType : IIdentityType
         {
 
-            public void Validate(Identity id, ValidationResults results)
+            public IEnumerable<ValidationResult> Validate(Identity id)
             {
-                ulong value;
-                if (!ulong.TryParse(id.IdentityValue, out value))
+                if (!ulong.TryParse(id.IdentityValue, out _))
                 {
-                    results.AddResult(new ValidationResult(
-                        "IdentityValue is not a valid ulong.",
-                        this,
-                        "IdentityValue",
-                        "Identity",
-                        null));
+                    yield return new ValidationResult("IdentityValue is not a valid ulong.", new[] { nameof(IdentityValue) });
                 }
-
-
             }
 
 

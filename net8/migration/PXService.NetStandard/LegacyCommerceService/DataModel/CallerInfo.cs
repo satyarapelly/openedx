@@ -4,11 +4,11 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
 {
     using System;
     using System.Runtime.Serialization;
-    using Microsoft.Practices.EnterpriseLibrary.Validation;
-    using Microsoft.Practices.EnterpriseLibrary.Validation.Validators;
+    using System.ComponentModel.DataAnnotations;
+    using System.Collections.Generic;
 
     [DataContract(Namespace = NamespaceConstants.Namespace)]
-    public class CallerInfo : IExtensibleDataObject
+    public class CallerInfo : IExtensibleDataObject, IValidatableObject
     {
         #region IExtensibleDataObject members
         private ExtensionDataObject _extensionData;
@@ -19,42 +19,31 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
         }
         #endregion
 
-        [ObjectValidator(Tag = "CallerInfo")]
+        // TODO: validate Delegator
         [DataMember]
         public Identity Delegator { get; set; }
 
-        [ObjectValidator(Tag = "CallerInfo")]
+        // TODO: validate Requester
         [DataMember]
         public Identity Requester { get; set; }
 
-        [IgnoreNulls]
-        [StringLengthValidator(16, 16,
-            MessageTemplate = "AccountId:{0} must be 16 characters",
-            Tag = "CallerInfo")]
+        [StringLength(16, MinimumLength = 16)]
         [DataMember]
         public string AccountId { get; set; }
 
-        [SelfValidation]
-        public void Validate(ValidationResults results)
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-
             if (Delegator == null && Requester == null)
             {
-                results.AddResult(new ValidationResult(
+                yield return new ValidationResult(
                     "Delegator or Requester is required.",
-                    this,
-                    "Delegator and Requester",
-                    "CallerInfo",
-                    null));
+                    new[] { nameof(Delegator), nameof(Requester) });
             }
             if (Delegator != null && !string.Equals(Delegator.IdentityType, "PUID", StringComparison.OrdinalIgnoreCase))
             {
-                results.AddResult(new ValidationResult(
+                yield return new ValidationResult(
                     "Delegator only supports PUID Identity.",
-                    this,
-                    "Delegator",
-                    "CallerInfo",
-                    null));
+                    new[] { nameof(Delegator) });
             }
         }
 

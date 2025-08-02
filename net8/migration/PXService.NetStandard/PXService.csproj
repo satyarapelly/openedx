@@ -330,10 +330,6 @@
     <Reference Include="Microsoft.Internal.AntiSSRF, Version=2.0.58.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\..\NugetPackages\Microsoft.Internal.AntiSSRF.2.0.58\lib\netstandard2.0\Microsoft.Internal.AntiSSRF.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Validation, Version=5.0.414.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\NugetPackages\Microsoft.Practices.EnterpriseLibrary.Validation.4.0.30319\lib\net\Microsoft.Practices.EnterpriseLibrary.Validation.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Microsoft.Rest.ClientRuntime, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\NugetPackages\Microsoft.Rest.ClientRuntime.2.3.24\lib\net461\Microsoft.Rest.ClientRuntime.dll</HintPath>
     </Reference>
@@ -929,21 +925,6 @@
     <Compile Include="Model\StoredValueService\RESTProperty.cs" />
     <Compile Include="Model\StoredValueService\StoredValueFundingCatalog.cs" />
     <Compile Include="Model\ThreeDSExternalService\ChallengeWindowSize.cs" />
-    <Compile Include="IParameterValidator.cs" />
-    <Compile Include="ParameterRegexValidator.cs" />
-    <Compile Include="PXServicePIDLValidationHandler.cs" />
-    <Compile Include="PXServiceCorsHandler.cs" />
-    <Compile Include="ServiceStatus.cs" />
-    <Compile Include="Settings\FeatureConfig\LocalFeatureConfigs.cs" />
-    <Compile Include="Settings\PXServiceAircapiSettings.cs" />
-    <Compile Include="Settings\PXServiceIntSettings.cs" />
-    <Compile Include="UberUserDirectory.cs" />
-    <Compile Include="PIDLError.cs" />
-    <Compile Include="PIDLErrorDetail.cs" />
-    <Compile Include="PimsSessionException.cs" />
-    <Compile Include="Model\AccountService\Validation\AddressAVSValidationStatus.cs" />
-    <Compile Include="Model\AccountService\Validation\AddressValidationAVSResponse.cs" />
-    <Compile Include="Model\AccountService\LegacyAddressValidationErrorResponse.cs" />
     <Compile Include="Accessors\LegacyCommerceService\CommerceAccountDataAccessor.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
@@ -963,12 +944,6 @@
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
     <Compile Include="Accessors\LegacyCommerceService\DataModel\AccountSearchCriteria.cs">
-      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
-    </Compile>
-    <Compile Include="Accessors\LegacyCommerceService\DataModel\ElementNotNullValidator.cs">
-      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
-    </Compile>
-    <Compile Include="Accessors\LegacyCommerceService\DataModel\PropertyCollectionValidator.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
     <Compile Include="Accessors\LegacyCommerceService\DataModel\TaxExemption.cs">
