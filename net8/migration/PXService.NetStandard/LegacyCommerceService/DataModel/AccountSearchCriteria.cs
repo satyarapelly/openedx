@@ -5,7 +5,6 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
     using System.Runtime.Serialization;
     using System.ComponentModel.DataAnnotations;
     using Microsoft.Practices.EnterpriseLibrary.Validation;
-    using Microsoft.Practices.EnterpriseLibrary.Validation.Validators;
 
     [HasSelfValidation]
     [DataContract(Namespace = NamespaceConstants.Namespace)]
@@ -20,12 +19,10 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
         }
         #endregion
 
-        [IgnoreNulls]
         [StringLength(16, MinimumLength = 16)]
         [DataMember]
         public string AccountId { get; set; }
 
-        [ObjectValidator]
         [DataMember]
         public Identity Identity { get; set; }
 

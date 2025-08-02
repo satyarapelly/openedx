@@ -5,7 +5,6 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
     using System.Collections.Generic;
     using System.Runtime.Serialization;
     using System.ComponentModel.DataAnnotations;
-    using Microsoft.Practices.EnterpriseLibrary.Validation.Validators;
 
     [DataContract(Namespace = NamespaceConstants.Namespace)]
     public enum CustomerType
@@ -24,42 +23,35 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
     [DataContract(Namespace = NamespaceConstants.Namespace)]
     public class PayinAccount : Account, IExtensibleDataObject
     {
-        [IgnoreNulls]
         [DataMember]
         public CustomerType? CustomerType { get; set; }
 
 
-        [IgnoreNulls]
         [StringLength(64)]
         [RegularExpression(RegexConstants.XmlString)]
         [DataMember]
         public string FirstName { get; set; }
 
-        [IgnoreNulls]
         [StringLength(64)]
         [RegularExpression(RegexConstants.XmlString)]
         [DataMember]
         public string FirstNamePronunciation { get; set; }
 
-        [IgnoreNulls]
         [StringLength(64)]
         [RegularExpression(RegexConstants.XmlString)]
         [DataMember]
         public string LastName { get; set; }
 
-        [IgnoreNulls]
         [StringLength(64)]
         [RegularExpression(RegexConstants.XmlString)]
         [DataMember]
         public string LastNamePronunciation { get; set; }
 
-        [IgnoreNulls]
         [StringLength(64)]
         [RegularExpression(RegexConstants.XmlString)]
         [DataMember]
         public string CompanyName { get; set; }
 
-        [IgnoreNulls]
         [StringLength(64)]
         [RegularExpression(RegexConstants.XmlString)]
         [DataMember]
@@ -67,13 +59,11 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227", Justification = "Legacy code. Should be thrown away once modernAPI is available")]
         [Required]
-        [ObjectCollectionValidator(typeof(Address))]
         [DataMember]
         public List<Address> AddressSet { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227", Justification = "Legacy code. Should be thrown away once modernAPI is available")]
         [Required]
-        [ObjectCollectionValidator(typeof(Phone))]
         [DataMember]
         public List<Phone> PhoneSet { get; set; }
 

@@ -6,7 +6,6 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
     using System.Runtime.Serialization;
     using System.ComponentModel.DataAnnotations;
     using Microsoft.Practices.EnterpriseLibrary.Validation;
-    using Microsoft.Practices.EnterpriseLibrary.Validation.Validators;
 
     [DataContract(Namespace = NamespaceConstants.Namespace)]
     public class CallerInfo : IExtensibleDataObject
@@ -20,15 +19,12 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
         }
         #endregion
 
-        [ObjectValidator]
         [DataMember]
         public Identity Delegator { get; set; }
 
-        [ObjectValidator]
         [DataMember]
         public Identity Requester { get; set; }
 
-        [IgnoreNulls]
         [StringLength(16, MinimumLength = 16)]
         [DataMember]
         public string AccountId { get; set; }
