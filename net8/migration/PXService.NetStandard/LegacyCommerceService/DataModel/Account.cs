@@ -7,7 +7,6 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
     using System.Runtime.Serialization;
     using System.Xml.Serialization;
     using System.ComponentModel.DataAnnotations;
-    using Microsoft.Practices.EnterpriseLibrary.Validation.Validators;
 
     [DataContract(Namespace = NamespaceConstants.Namespace)]
     public enum AccountStatus
@@ -20,13 +19,12 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
         Closed = 5,
     }
 
-    [HasSelfValidation]
     [KnownType(typeof(PayinAccount))]
     [KnownType(typeof(PayoutAccount))]
     [XmlInclude(typeof(PayinAccount))]
     [XmlInclude(typeof(PayoutAccount))]
     [DataContract(Namespace = NamespaceConstants.Namespace)]
-    public class Account : IExtensibleDataObject
+    public class Account : IExtensibleDataObject, IValidatableObject
     {
         #region IExtensibleDataObject members
         protected ExtensionDataObject _extensionData;
@@ -56,31 +54,26 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
         [DataMember]
         public string AccountRole { get; set; }
 
-        [IgnoreNulls]
         [StringLength(64)]
         [RegularExpression(RegexConstants.XmlString)]
         [DataMember]
         public string FriendlyName { get; set; }
 
-        [IgnoreNulls]
         [StringLength(129)]
         [RegularExpression(RegexConstants.Email)]
         [DataMember]
         public string Email { get; set; }
 
-        [IgnoreNulls]
         [StringLength(11, MinimumLength = 5)]
         [RegularExpression(RegexConstants.Locale)]
         [DataMember]
         public string Locale { get; set; }
 
-        [IgnoreNulls]
         [StringLength(3, MinimumLength = 3)]
         [RegularExpression(RegexConstants.Currency)]
         [DataMember]
         public string Currency { get; set; }
 
-        [IgnoreNulls]
         [StringLength(2, MinimumLength = 2)]
         [RegularExpression(RegexConstants.CountryCode)]
         [DataMember]
@@ -106,7 +99,7 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227", Justification = "Legacy code. Should be thrown away once modernAPI is available")]
         [OutputProperty]
-        [ObjectCollectionValidator(typeof(Violation))]
+        // TODO: validate Violations items
         [DataMember]
         public List<Violation> Violations { get; set; }
 
@@ -134,6 +127,10 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
                 BdkId bdk = new BdkId(AccountID);
                 _billableAccountID = bdk.AccountId;
             }
+        }
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            yield break;
         }
     }
 }

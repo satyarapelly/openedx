@@ -4,12 +4,10 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
 {
     using System.Runtime.Serialization;
     using System.ComponentModel.DataAnnotations;
-    using Microsoft.Practices.EnterpriseLibrary.Validation;
-    using Microsoft.Practices.EnterpriseLibrary.Validation.Validators;
+    using System.Collections.Generic;
 
-    [HasSelfValidation]
     [DataContract(Namespace = NamespaceConstants.Namespace)]
-    public class AccountSearchCriteria : IExtensibleDataObject
+    public class AccountSearchCriteria : IExtensibleDataObject, IValidatableObject
     {
         #region IExtensibleDataObject members
         private ExtensionDataObject _extensionData;
@@ -20,49 +18,46 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
         }
         #endregion
 
-        [IgnoreNulls]
         [StringLength(16, MinimumLength = 16)]
         [DataMember]
         public string AccountId { get; set; }
 
-        [ObjectValidator]
+        // TODO: validate Identity
         [DataMember]
         public Identity Identity { get; set; }
 
-        [SelfValidation]
-        public void Validate(ValidationResults results)
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
+            var results = new List<ValidationResult>();
             if (AccountId == null && Identity == null)
             {
-                results.AddResult(new ValidationResult(
-                    "No search criteria specified.",
-                    this, "AccountID and Identity", "AccountSearchCriteria", null));
+                results.Add(new ValidationResult("No search criteria specified.", new[] { nameof(AccountId), nameof(Identity) }));
             }
 
             string criteriaSpecified = null;
             if (AccountId != null)
             {
-                criteriaSpecified = ValidateCriteria("AccountID", criteriaSpecified, results);
+                criteriaSpecified = ValidateCriteria(nameof(AccountId), criteriaSpecified, results);
             }
             if (Identity != null)
             {
-                criteriaSpecified = ValidateCriteria("Identity", criteriaSpecified, results);
+                criteriaSpecified = ValidateCriteria(nameof(Identity), criteriaSpecified, results);
             }
+
+            return results;
         }
 
-        private string ValidateCriteria(string currentCriteria, string specifiedCriteria, ValidationResults results)
+        private string ValidateCriteria(string currentCriteria, string specifiedCriteria, ICollection<ValidationResult> results)
         {
             if (specifiedCriteria == null)
             {
                 return currentCriteria;
             }
-            else
-            {
-                results.AddResult(new ValidationResult(
-                    "More than one search criteria specified: " + currentCriteria + " and " + specifiedCriteria,
-                    this, currentCriteria, "AccountSearchCriteria", null));
-                return specifiedCriteria;
-            }
+
+            results.Add(new ValidationResult(
+                $"More than one search criteria specified: {currentCriteria} and {specifiedCriteria}.",
+                new[] { currentCriteria }));
+            return specifiedCriteria;
         }
     }
 }

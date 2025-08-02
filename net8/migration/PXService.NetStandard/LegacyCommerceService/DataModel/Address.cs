@@ -5,7 +5,6 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
     using System;
     using System.Runtime.Serialization;
     using System.ComponentModel.DataAnnotations;
-    using Microsoft.Practices.EnterpriseLibrary.Validation.Validators;
     using System.Collections.Generic;
 
     [DataContract(Namespace = NamespaceConstants.Namespace), Serializable]
@@ -21,12 +20,10 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
         }
         #endregion
 
-        [IgnoreNulls]
         [StringLength(16, MinimumLength = 16)]
         [DataMember]
         public string AddressID { get; set; }
 
-        [IgnoreNulls]
         [StringLength(64)]
         [RegularExpression(RegexConstants.XmlString)]
         [DataMember]
@@ -48,7 +45,6 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
         [DataMember]
         public string CompanyNamePronunciation { get; set; }
 
-        [IgnoreNulls]
         [StringLength(15)]
         [RegularExpression(RegexConstants.XmlString)]
         [DataMember]
@@ -59,13 +55,11 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
         [DataMember]
         public string Street1 { get; set; }
 
-        [IgnoreNulls]
         [StringLength(128)]
         [RegularExpression(RegexConstants.XmlString)]
         [DataMember]
         public string Street2 { get; set; }
 
-        [IgnoreNulls]
         [StringLength(128)]
         [RegularExpression(RegexConstants.XmlString)]
         [DataMember]
@@ -76,31 +70,26 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
         [DataMember]
         public string City { get; set; }
 
-        [IgnoreNulls]
         [StringLength(64)]
         [RegularExpression(RegexConstants.XmlString)]
         [DataMember]
         public string District { get; set; }
 
-        [IgnoreNulls]
         [StringLength(64)]
         [RegularExpression(RegexConstants.XmlString)]
         [DataMember]
         public string State { get; set; }
 
-        [IgnoreNulls]
         [StringLength(2, MinimumLength = 2)]
         [RegularExpression(RegexConstants.CountryCode)]
         [DataMember]
         public string CountryCode { get; set; }
 
-        [IgnoreNulls]
         [StringLength(16)]
         [DataMember]
         public string PostalCode { get; set; }
 
-        [IgnoreNulls]
-        [ObjectValidator]
+        // TODO: validate MapAddressResult
         [DataMember]
         public MapAddressResult MapAddressResult { get; set; }
 
