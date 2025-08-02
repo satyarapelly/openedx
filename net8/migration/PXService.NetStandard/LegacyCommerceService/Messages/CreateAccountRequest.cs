@@ -6,7 +6,6 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
     using System.Runtime.Serialization;
     using System.Xml.Serialization;
     using Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.DataModel;
-    using Microsoft.Practices.EnterpriseLibrary.Validation.Validators;
     using System.ComponentModel.DataAnnotations;
     using System.Collections.Generic;
 
@@ -18,8 +17,8 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
             get { return (int)DataAccessorType.CreateAccount; }
         }
 
-        [NotNullValidator(Tag = "CreateAccountRequest")]
-        [ObjectValidator(Tag = "CreateAccountRequest")]
+        [Required]
+        // TODO: validate APIContext
         [DataMember]
         public APIContext APIContext { get; set; }
 
@@ -29,7 +28,7 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
         [DataMember]
         public Guid OnBehalfOfPartner { get; set; }
 
-        [ObjectValidator(Tag = "CreateAccountRequest")]
+        // TODO: validate Account
         [DataMember]
         public PayinPayoutAccount Account { get; set; }
 
@@ -38,7 +37,6 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
         {
             get { return APIContext == null ? Guid.Empty : APIContext.TrackingGuid; }
         }
-
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             yield break;

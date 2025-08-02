@@ -6,9 +6,8 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
     using System.Runtime.Serialization;
     using System.Xml.Serialization;
     using Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.DataModel;
-    using Microsoft.Practices.EnterpriseLibrary.Validation.Validators;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.Collections.Generic;
 
     [DataContract(Namespace = NamespaceConstants.Namespace)]
     public class GetAccountInfoRequest : AbstractRequest, IValidatableObject
@@ -18,22 +17,21 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
             get { return (int)DataAccessorType.GetAccountInfo; }
         }
 
-        [NotNullValidator(Tag = "GetAccountInfoRequest")]
-        [ObjectValidator(Tag = "GetAccountInfoRequest")]
+        [Required]
+        // TODO: validate APIContext
         [DataMember]
         public APIContext APIContext { get; set; }
 
-        [IgnoreNulls]
         [DataMember]
         public CallerInfo CallerInfo { get; set; }
 
-        [NotNullValidator(Tag = "GetAccountInfoRequest")]
-        [ObjectValidator(Tag = "GetAccountInfoRequest")]
+        [Required]
+        // TODO: validate SearchCriteria
         [DataMember]
         public AccountSearchCriteria SearchCriteria { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227", Justification = "Legacy code moved from PCS. Needed for serialization")]
-        [IgnoreNulls, PropertyCollectionValidator(Tag = "GetAccountInfoRequest")]
+        // TODO: validate Filters items
         [DataMember]
         public List<Property> Filters { get; set; }
 
@@ -83,7 +81,6 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
         {
             get { return APIContext == null ? Guid.Empty : APIContext.TrackingGuid; }
         }
-
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             yield break;

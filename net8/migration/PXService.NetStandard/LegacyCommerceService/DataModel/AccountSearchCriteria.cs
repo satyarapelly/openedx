@@ -22,39 +22,42 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
         [DataMember]
         public string AccountId { get; set; }
 
+        // TODO: validate Identity
         [DataMember]
         public Identity Identity { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
+            var results = new List<ValidationResult>();
             if (AccountId == null && Identity == null)
             {
-                yield return new ValidationResult(
-                    "No search criteria specified.",
-                    new[] { nameof(AccountId), nameof(Identity) });
+                results.Add(new ValidationResult("No search criteria specified.", new[] { nameof(AccountId), nameof(Identity) }));
             }
 
             string criteriaSpecified = null;
             if (AccountId != null)
             {
-                if (criteriaSpecified != null)
-                {
-                    yield return new ValidationResult(
-                        "More than one search criteria specified: AccountID and " + criteriaSpecified,
-                        new[] { nameof(AccountId) });
-                }
-                criteriaSpecified = "AccountID";
+                criteriaSpecified = ValidateCriteria(nameof(AccountId), criteriaSpecified, results);
             }
             if (Identity != null)
             {
-                if (criteriaSpecified != null)
-                {
-                    yield return new ValidationResult(
-                        "More than one search criteria specified: Identity and " + criteriaSpecified,
-                        new[] { nameof(Identity) });
-                }
-                criteriaSpecified = "Identity";
+                criteriaSpecified = ValidateCriteria(nameof(Identity), criteriaSpecified, results);
             }
+
+            return results;
+        }
+
+        private string ValidateCriteria(string currentCriteria, string specifiedCriteria, ICollection<ValidationResult> results)
+        {
+            if (specifiedCriteria == null)
+            {
+                return currentCriteria;
+            }
+
+            results.Add(new ValidationResult(
+                $"More than one search criteria specified: {currentCriteria} and {specifiedCriteria}.",
+                new[] { currentCriteria }));
+            return specifiedCriteria;
         }
     }
 }

@@ -37,23 +37,22 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
         {
             if (string.IsNullOrEmpty(IdentityType))
             {
-                yield return new ValidationResult(
-                    "IdentityType is empty.",
-                    new[] { nameof(IdentityType) });
+                yield return new ValidationResult("IdentityType is empty.", new[] { nameof(IdentityType) });
+                yield break;
             }
-            else if (!_identityTypes.ContainsKey(IdentityType))
+
+            if (!_identityTypes.ContainsKey(IdentityType))
             {
                 yield return new ValidationResult(
                     string.Format("IdentityType {0} is not valid. Accepted: {1}.",
                         IdentityType, string.Join(",", _identityTypes.Keys.OrderBy(k => k).ToArray())),
                     new[] { nameof(IdentityType) });
+                yield break;
             }
-            else
+
+            foreach (var result in _identityTypes[IdentityType].Validate(this))
             {
-                foreach (var result in _identityTypes[IdentityType].Validate(this))
-                {
-                    yield return result;
-                }
+                yield return result;
             }
         }
 
@@ -73,16 +72,16 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
 
         private class PuidIdentityType : IIdentityType
         {
+
             public IEnumerable<ValidationResult> Validate(Identity id)
             {
-                ulong value;
-                if (!ulong.TryParse(id.IdentityValue, out value))
+                if (!ulong.TryParse(id.IdentityValue, out _))
                 {
-                    yield return new ValidationResult(
-                        "IdentityValue is not a valid ulong.",
-                        new[] { nameof(IdentityValue) });
+                    yield return new ValidationResult("IdentityValue is not a valid ulong.", new[] { nameof(IdentityValue) });
                 }
             }
+
+
         }
 
         #endregion

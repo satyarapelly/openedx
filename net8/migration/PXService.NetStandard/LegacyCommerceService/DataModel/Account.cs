@@ -99,6 +99,7 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227", Justification = "Legacy code. Should be thrown away once modernAPI is available")]
         [OutputProperty]
+        // TODO: validate Violations items
         [DataMember]
         public List<Violation> Violations { get; set; }
 

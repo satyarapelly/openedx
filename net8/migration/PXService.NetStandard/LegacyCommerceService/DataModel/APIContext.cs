@@ -5,7 +5,6 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
     using System;
     using System.Collections.Generic;
     using System.Runtime.Serialization;
-    using Microsoft.Practices.EnterpriseLibrary.Validation.Validators;
 
     [DataContract(Namespace = NamespaceConstants.Namespace)]
     public class APIContext : IExtensibleDataObject
@@ -23,14 +22,12 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
         public Guid TrackingGuid { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227", Justification = "Legacy code. Should be thrown away once modernAPI is available")]
-        [ObjectCollectionValidator(typeof(Property))]
-        [PropertyCollectionValidator]
+        // TODO: validate PropertyBag items
         [DataMember]
         public List<Property> PropertyBag { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227", Justification = "Legacy code. Should be thrown away once modernAPI is available")]
-        [ObjectCollectionValidator(typeof(Property))]
-        [PropertyCollectionValidator]
+        // TODO: validate FraudDetectionContext items
         [DataMember]
         public List<Property> FraudDetectionContext { get; set; }
 

@@ -5,10 +5,10 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
     using System;
     using System.Runtime.Serialization;
     using System.ComponentModel.DataAnnotations;
-    using Microsoft.Practices.EnterpriseLibrary.Validation;
+    using System.Collections.Generic;
 
     [DataContract(Namespace = NamespaceConstants.Namespace)]
-    public class CallerInfo : IExtensibleDataObject
+    public class CallerInfo : IExtensibleDataObject, IValidatableObject
     {
         #region IExtensibleDataObject members
         private ExtensionDataObject _extensionData;
@@ -19,9 +19,11 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
         }
         #endregion
 
+        // TODO: validate Delegator
         [DataMember]
         public Identity Delegator { get; set; }
 
+        // TODO: validate Requester
         [DataMember]
         public Identity Requester { get; set; }
 
@@ -29,27 +31,19 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
         [DataMember]
         public string AccountId { get; set; }
 
-        [SelfValidation]
-        public void Validate(ValidationResults results)
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-
             if (Delegator == null && Requester == null)
             {
-                results.AddResult(new ValidationResult(
+                yield return new ValidationResult(
                     "Delegator or Requester is required.",
-                    this,
-                    "Delegator and Requester",
-                    "CallerInfo",
-                    null));
+                    new[] { nameof(Delegator), nameof(Requester) });
             }
             if (Delegator != null && !string.Equals(Delegator.IdentityType, "PUID", StringComparison.OrdinalIgnoreCase))
             {
-                results.AddResult(new ValidationResult(
+                yield return new ValidationResult(
                     "Delegator only supports PUID Identity.",
-                    this,
-                    "Delegator",
-                    "CallerInfo",
-                    null));
+                    new[] { nameof(Delegator) });
             }
         }
 

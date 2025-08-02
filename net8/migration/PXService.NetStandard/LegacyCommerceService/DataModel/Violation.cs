@@ -3,8 +3,8 @@
 namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.DataModel
 {
     using System.Runtime.Serialization;
-    using System.ComponentModel.DataAnnotations;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
 
     [DataContract(Namespace = NamespaceConstants.Namespace)]
     public class Violation : IExtensibleDataObject, IValidatableObject
