@@ -4,6 +4,7 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
 {
     using System;
     using System.Runtime.Serialization;
+    using System.ComponentModel.DataAnnotations;
     using Microsoft.Practices.EnterpriseLibrary.Validation;
     using Microsoft.Practices.EnterpriseLibrary.Validation.Validators;
 
@@ -22,15 +23,15 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
         }
         #endregion
 
-        [NotNullValidator(Tag = "Property")]
+        [Required]
         [DataMember]
         public string Namespace { get; set; }
 
-        [NotNullValidator(Tag = "Property")]
+        [Required]
         [DataMember]
         public string Name { get; set; }
 
-        [NotNullValidator(Tag = "Property")]
+        [Required]
         [DataMember]
         public string Value { get; set; }
 

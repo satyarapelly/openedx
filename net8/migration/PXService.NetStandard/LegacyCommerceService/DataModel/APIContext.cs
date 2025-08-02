@@ -23,14 +23,14 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
         public Guid TrackingGuid { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227", Justification = "Legacy code. Should be thrown away once modernAPI is available")]
-        [ObjectCollectionValidator(typeof(Property), Tag = "APIContext")]
-        [PropertyCollectionValidator(Tag = "APIContext")]
+        [ObjectCollectionValidator(typeof(Property))]
+        [PropertyCollectionValidator]
         [DataMember]
         public List<Property> PropertyBag { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227", Justification = "Legacy code. Should be thrown away once modernAPI is available")]
-        [ObjectCollectionValidator(typeof(Property), Tag = "APIContext")]
-        [PropertyCollectionValidator(Tag = "APIContext")]
+        [ObjectCollectionValidator(typeof(Property))]
+        [PropertyCollectionValidator]
         [DataMember]
         public List<Property> FraudDetectionContext { get; set; }
 

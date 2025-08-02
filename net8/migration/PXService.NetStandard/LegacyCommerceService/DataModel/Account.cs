@@ -6,6 +6,7 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
     using System.Collections.Generic;
     using System.Runtime.Serialization;
     using System.Xml.Serialization;
+    using System.ComponentModel.DataAnnotations;
     using Microsoft.Practices.EnterpriseLibrary.Validation.Validators;
 
     [DataContract(Namespace = NamespaceConstants.Namespace)]
@@ -55,28 +56,33 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
         [DataMember]
         public string AccountRole { get; set; }
 
-        [IgnoreNulls, StringLengthValidator(64, Tag = "Account.FriendlyName")]
-        [RegexValidator(RegexConstants.XmlString, Tag = "Account.FriendlyName")]
+        [IgnoreNulls]
+        [StringLength(64)]
+        [RegularExpression(RegexConstants.XmlString)]
         [DataMember]
         public string FriendlyName { get; set; }
 
-        [IgnoreNulls, StringLengthValidator(129, Tag = "Account.Email")]
-        [RegexValidator(RegexConstants.Email, Tag = "Account.Email")]
+        [IgnoreNulls]
+        [StringLength(129)]
+        [RegularExpression(RegexConstants.Email)]
         [DataMember]
         public string Email { get; set; }
 
-        [IgnoreNulls, StringLengthValidator(5, 11, Tag = "Account.Locale")]
-        [RegexValidator(RegexConstants.Locale, Tag = "Account.Locale")]
+        [IgnoreNulls]
+        [StringLength(11, MinimumLength = 5)]
+        [RegularExpression(RegexConstants.Locale)]
         [DataMember]
         public string Locale { get; set; }
 
-        [IgnoreNulls, StringLengthValidator(3, 3, Tag = "Account.Currency")]
-        [RegexValidator(RegexConstants.Currency, Tag = "Account.Currency")]
+        [IgnoreNulls]
+        [StringLength(3, MinimumLength = 3)]
+        [RegularExpression(RegexConstants.Currency)]
         [DataMember]
         public string Currency { get; set; }
 
-        [IgnoreNulls, StringLengthValidator(2, 2, Tag = "Account.CountryCode")]
-        [RegexValidator(RegexConstants.CountryCode, Tag = "Account.CountryCode")]
+        [IgnoreNulls]
+        [StringLength(2, MinimumLength = 2)]
+        [RegularExpression(RegexConstants.CountryCode)]
         [DataMember]
         public string CountryCode { get; set; }
 
@@ -100,7 +106,7 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227", Justification = "Legacy code. Should be thrown away once modernAPI is available")]
         [OutputProperty]
-        [ObjectCollectionValidator(typeof(Violation), Tag = "Account.Violation")]
+        [ObjectCollectionValidator(typeof(Violation))]
         [DataMember]
         public List<Violation> Violations { get; set; }
 

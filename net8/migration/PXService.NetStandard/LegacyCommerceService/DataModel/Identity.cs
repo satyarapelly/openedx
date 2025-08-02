@@ -5,6 +5,7 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
     using System.Collections.Generic;
     using System.Linq;
     using System.Runtime.Serialization;
+    using System.ComponentModel.DataAnnotations;
     using Microsoft.Practices.EnterpriseLibrary.Validation;
     using Microsoft.Practices.EnterpriseLibrary.Validation.Validators;
 
@@ -24,15 +25,11 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
         }
         #endregion
 
-        [StringLengthValidator(0, 32,
-            MessageTemplate = "IdentityType:{0} must be between 0 and 32 characters",
-            Tag = "Identity")]
+        [StringLength(32)]
         [DataMember]
         public string IdentityType { get; set; }
 
-        [StringLengthValidator(1, 64,
-            MessageTemplate = "IdentityValue:{0} must be between 1 and 64 characters",
-            Tag = "Identity")]
+        [StringLength(64, MinimumLength = 1)]
         [DataMember]
         public string IdentityValue { get; set; }
 

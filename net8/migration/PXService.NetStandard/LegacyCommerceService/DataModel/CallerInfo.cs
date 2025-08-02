@@ -4,6 +4,7 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
 {
     using System;
     using System.Runtime.Serialization;
+    using System.ComponentModel.DataAnnotations;
     using Microsoft.Practices.EnterpriseLibrary.Validation;
     using Microsoft.Practices.EnterpriseLibrary.Validation.Validators;
 
@@ -19,18 +20,16 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
         }
         #endregion
 
-        [ObjectValidator(Tag = "CallerInfo")]
+        [ObjectValidator]
         [DataMember]
         public Identity Delegator { get; set; }
 
-        [ObjectValidator(Tag = "CallerInfo")]
+        [ObjectValidator]
         [DataMember]
         public Identity Requester { get; set; }
 
         [IgnoreNulls]
-        [StringLengthValidator(16, 16,
-            MessageTemplate = "AccountId:{0} must be 16 characters",
-            Tag = "CallerInfo")]
+        [StringLength(16, MinimumLength = 16)]
         [DataMember]
         public string AccountId { get; set; }
 
