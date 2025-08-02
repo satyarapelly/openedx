@@ -5,11 +5,13 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
     using System;
     using System.Runtime.Serialization;
     using System.ComponentModel.DataAnnotations;
-    using System.Collections.Generic;
+    using Microsoft.Practices.EnterpriseLibrary.Validation;
+    using Microsoft.Practices.EnterpriseLibrary.Validation.Validators;
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1716", Justification = "Legacy code moved from PCS. Needed for serialization")]
+    [HasSelfValidation]
     [DataContract(Namespace = NamespaceConstants.Namespace), Serializable]
-    public class Property : IExtensibleDataObject, IValidatableObject
+    public class Property : IExtensibleDataObject
     {
         #region IExtensibleDataObject members
         [NonSerialized]
@@ -33,13 +35,17 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
         [DataMember]
         public string Value { get; set; }
 
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        [SelfValidation]
+        public void Validate(ValidationResults results)
         {
             if (string.IsNullOrEmpty(Namespace) && string.IsNullOrEmpty(Name))
             {
-                yield return new ValidationResult(
+                results.AddResult(new ValidationResult(
                     "Namespace and Name in a Property can not be both empty.",
-                    new[] { nameof(Namespace), nameof(Name) });
+                    this,
+                    "Namespace and Name",
+                    "Property",
+                    null));
             }
         }
     }

@@ -6,32 +6,34 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
     using System.Runtime.Serialization;
     using System.Xml.Serialization;
     using Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.DataModel;
-    using System.ComponentModel.DataAnnotations;
+    using Microsoft.Practices.EnterpriseLibrary.Validation.Validators;
     using System.Collections.Generic;
 
+    [HasSelfValidation]
     [DataContract(Namespace = NamespaceConstants.Namespace)]
-    public class GetAccountInfoRequest : AbstractRequest, IValidatableObject
+    public class GetAccountInfoRequest : AbstractRequest
     {
         public override int ApiId
         {
             get { return (int)DataAccessorType.GetAccountInfo; }
         }
 
-        [Required]
-        // TODO: validate APIContext
+        [NotNullValidator(Tag = "GetAccountInfoRequest")]
+        [ObjectValidator(Tag = "GetAccountInfoRequest")]
         [DataMember]
         public APIContext APIContext { get; set; }
 
+        [IgnoreNulls]
         [DataMember]
         public CallerInfo CallerInfo { get; set; }
 
-        [Required]
-        // TODO: validate SearchCriteria
+        [NotNullValidator(Tag = "GetAccountInfoRequest")]
+        [ObjectValidator(Tag = "GetAccountInfoRequest")]
         [DataMember]
         public AccountSearchCriteria SearchCriteria { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227", Justification = "Legacy code moved from PCS. Needed for serialization")]
-        // TODO: validate Filters items
+        [IgnoreNulls, PropertyCollectionValidator(Tag = "GetAccountInfoRequest")]
         [DataMember]
         public List<Property> Filters { get; set; }
 
@@ -80,10 +82,6 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
         public override Guid EffectiveTrackingGuid
         {
             get { return APIContext == null ? Guid.Empty : APIContext.TrackingGuid; }
-        }
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            yield break;
         }
     }
 }

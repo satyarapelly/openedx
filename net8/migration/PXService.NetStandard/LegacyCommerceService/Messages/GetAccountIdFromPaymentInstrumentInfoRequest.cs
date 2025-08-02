@@ -4,13 +4,13 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
 {
     using System.Runtime.Serialization;
     using Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.DataModel;
-    using System.ComponentModel.DataAnnotations;
+    using Microsoft.Practices.EnterpriseLibrary.Validation.Validators;
 
     [DataContract(Namespace = NamespaceConstants.Namespace)]
     public class GetAccountIdFromPaymentInstrumentInfoRequest : AbstractRequest
     {
-        [Required]
-        // TODO: validate APIContext
+        [NotNullValidator(Tag = "GetAccountIdFromPaymentInstrumentInfoRequest")]
+        [ObjectValidator(Tag = "GetAccountIdFromPaymentInstrumentInfoRequest")]
         [DataMember]
         public APIContext APIContext { get; set; }
 
@@ -19,6 +19,7 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
             get { return (int)DataAccessorType.GetAccountIdFromPaymentInstrumentInfo; }
         }
 
+        [IgnoreNulls]
         [DataMember]
         public CallerInfo CallerInfo { get; set; }
 

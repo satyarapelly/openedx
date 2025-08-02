@@ -3,11 +3,11 @@
 namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.DataModel
 {
     using System.Runtime.Serialization;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
+    using Microsoft.Practices.EnterpriseLibrary.Validation.Validators;
 
+    [HasSelfValidation]
     [DataContract(Namespace = NamespaceConstants.Namespace)]
-    public class Violation : IExtensibleDataObject, IValidatableObject
+    public class Violation : IExtensibleDataObject
     {
         #region IExtensibleDataObject members
         private ExtensionDataObject _extensionData;
@@ -24,10 +24,5 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.
         [OutputProperty]
         [DataMember]
         public string Name { get; set; }
-
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            yield break;
-        }
     }
 }
