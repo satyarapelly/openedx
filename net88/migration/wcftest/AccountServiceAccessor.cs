@@ -87,7 +87,8 @@ namespace Microsoft.Commerce.Payments.PXService
                     address,
                     "PostAddress",
                     traceActivityId,
-                    errorHandler: HandlePostAddressValidationError);
+                    null,
+                    HandlePostAddressValidationError);
         }
 
         /// <summary>
@@ -315,7 +316,8 @@ namespace Microsoft.Commerce.Payments.PXService
                     address,
                     "LegacyValidation",
                     traceActivityId,
-                    errorHandler: HandleLegacyAddressValidationError);
+                    null,
+                    HandleLegacyAddressValidationError);
         }
 
         public async Task<T> ModernValidateAddress<T>(object address, EventTraceActivity traceActivityId, bool regionIsoEnabled = false)
