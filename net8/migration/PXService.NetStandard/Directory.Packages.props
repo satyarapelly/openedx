@@ -135,9 +135,11 @@
 		<ItemGroup>
 			<PackageVersion Include="CoreWCF.ConfigurationManager" Version="1.8.0" />
 			<PackageVersion Include="CoreWCF.Http" Version="1.8.0" />
-			<PackageVersion Include="CoreWCF.Primitives" Version="1.8.0" />
-			<PackageVersion Include="Microsoft.AspNetCore.SystemWebAdapters.CoreServices" Version="2.0.0" />
-			<PackageVersion Include="Swashbuckle.AspNetCore" Version="8.1.0" />
-			<PackageVersion Include="Yarp.ReverseProxy" Version="2.3.0" />
-		</ItemGroup>
+                        <PackageVersion Include="CoreWCF.Primitives" Version="1.8.0" />
+                        <PackageVersion Include="System.ServiceModel.Primitives" Version="7.0.0" />
+                        <PackageVersion Include="System.ServiceModel.Http" Version="7.0.0" />
+                        <PackageVersion Include="Microsoft.AspNetCore.SystemWebAdapters.CoreServices" Version="2.0.0" />
+                        <PackageVersion Include="Swashbuckle.AspNetCore" Version="8.1.0" />
+                        <PackageVersion Include="Yarp.ReverseProxy" Version="2.3.0" />
+                </ItemGroup>
 </Project>
