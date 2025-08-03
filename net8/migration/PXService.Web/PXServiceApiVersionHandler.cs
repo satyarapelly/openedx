@@ -10,7 +10,8 @@ namespace Microsoft.Commerce.Payments.PXService
     using System.Text.RegularExpressions;
     using System.Threading;
     using System.Threading.Tasks;
-    using System.Web.Http.Routing;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Routing;
     using Microsoft.Commerce.Payments.Common;
     using Microsoft.Commerce.Payments.Common.Web;
     using Microsoft.Commerce.Payments.PartnerSettingsModel;
@@ -60,16 +61,7 @@ namespace Microsoft.Commerce.Payments.PXService
         /// <returns>The outbound response.</returns>
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            IHttpRouteData routeData;
-            if (!WebHostingUtility.IsApplicationSelfHosted())
-            {
-                routeData = request.GetRouteData();
-            }
-            else
-            {
-                // We get the route data differently for selfhosted environment. This enables the /probe route.
-                routeData = request.GetConfiguration().Routes.GetRouteData(request);
-            }
+            RouteData? routeData = request.GetHttpContext()?.GetRouteData();
 
             object controller;
             bool allowedVersionlessRequest =
