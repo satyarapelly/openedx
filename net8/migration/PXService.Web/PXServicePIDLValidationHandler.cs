@@ -9,7 +9,8 @@ namespace Microsoft.Commerce.Payments.PXService
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
-    using System.Web.Http.Routing;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Routing;
     using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Commerce.Payments.Common.Web;
     using Microsoft.Commerce.Payments.PXCommon;
@@ -60,17 +61,7 @@ namespace Microsoft.Commerce.Payments.PXService
 
             try
             {
-                IHttpRouteData routeData;
-
-                if (!WebHostingUtility.IsApplicationSelfHosted())
-                {
-                    routeData = request.GetRouteData();
-                }
-                else
-                {
-                    // We get the route data differently for selfhosted environment
-                    routeData = request.GetConfiguration().Routes.GetRouteData(request);
-                }
+                RouteData? routeData = request.GetHttpContext()?.GetRouteData();
 
                 object controller;
                 HttpContent content = response.Content;
