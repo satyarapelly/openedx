@@ -4,7 +4,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentClient
 {
     using System.Net.Http;
     using System.Threading.Tasks;
-    using System.Web.Http;
+    using Microsoft.AspNetCore.Mvc;
     using Common.Web;
     using Microsoft.Commerce.Payments.Common;
     using Microsoft.Commerce.Payments.Common.Tracing;
@@ -27,7 +27,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentClient
         [HttpPost]
         public async Task<HttpResponseMessage> AttachChallengeData(
             [FromBody] PIDLData paymentInstrument,
-            [FromUri] string paymentRequestId)
+            string paymentRequestId)
         {
             const string CvvTokenPath = "cvvToken";
             const string PiIdPath = "piId";
@@ -69,7 +69,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentClient
         [HttpPost]
         public async Task<HttpResponseMessage> RemoveEligiblePaymentmethods(
             [FromBody] PIDLData paymentInstrument,
-            [FromUri] string paymentRequestId)
+            string paymentRequestId)
         {
             const string PiIdPath = "piid";
 

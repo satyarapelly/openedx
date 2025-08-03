@@ -8,7 +8,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using System.Linq;
     using System.Net.Http;
     using System.Threading.Tasks;
-    using System.Web.Http;
+    using Microsoft.AspNetCore.Mvc;
     using Accessors.AddressEnrichmentService.DataModel;
     using Common.Tracing;
     using Common.Web;
@@ -34,7 +34,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">An address object</response>
         /// <returns>An address object</returns>
         [HttpGet]
-        public async Task<HttpResponseMessage> GetAddressById([FromUri] string accountId, string addressId)
+        public async Task<HttpResponseMessage> GetAddressById(string accountId, string addressId)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
 
@@ -60,7 +60,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         [HttpPost]
         public async Task<HttpResponseMessage> Post(
             [FromBody]PIDLData address, 
-            [FromUri]string accountId, 
+            string accountId, 
             string partner, 
             string language, 
             bool avsSuggest,
@@ -92,7 +92,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 if (this.ExposedFlightFeatures.Contains(Flighting.Features.PXRateLimitPerAccount))
                 {
                     var serviceErrorResp = GenerateBadRequestServiceErrorResponse();
-                    this.Request.Properties[PaymentConstants.Web.InstrumentManagementProperties.Message] = $"{GlobalConstants.AbnormalDetection.LogMsgWhenCaughtByPX} " +
+                    this.HttpContext.Items[PaymentConstants.Web.InstrumentManagementProperties.Message] = $"{GlobalConstants.AbnormalDetection.LogMsgWhenCaughtByPX} " +
                     $"flight {Flighting.Features.PXRateLimitPerAccount} limited by accountId {accountId}";
                     return this.Request.CreateResponse(System.Net.HttpStatusCode.BadRequest, serviceErrorResp, GlobalConstants.HeaderValues.JsonContent);
                 }
@@ -128,8 +128,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         [HttpPatch]
         public async Task<HttpResponseMessage> Patch(
             [FromBody] PIDLData address, 
-            [FromUri] string accountId, 
-            [FromUri]string addressId, 
+            string accountId, 
+            string addressId, 
             string partner,
             string scenario = null)
         {
@@ -139,12 +139,12 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             // Todo: Add Scenario to Log and all the controllers
             this.Request.AddScenarioProperty(scenario?.ToLower());
 
-            IEnumerable<string> etags = null;
+            Microsoft.Extensions.Primitives.StringValues etags;
 
             string etag = null;
-            if (this.Request.Headers.TryGetValues(GlobalConstants.HeaderValues.IfMatch, out etags))
+            if (this.Request.Headers.TryGetValue(GlobalConstants.HeaderValues.IfMatch, out etags))
             {
-                etag = etags.First();
+                etag = etags.FirstOrDefault();
             }
 
             if (address.Count != 1 || !address.ContainsKey(GlobalConstants.CMAddressV3Fields.IsUserConsented))

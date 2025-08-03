@@ -6,8 +6,9 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using System.Web;
-    using System.Web.Http;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.DependencyInjection;
     using Common.Helper;
     using Microsoft.Commerce.Payments.Common;
     using Microsoft.Commerce.Payments.Common.Tracing;
@@ -33,7 +34,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using PaymentInstrument = PimsModel.V4.PaymentInstrument;
     using PaymentMethod = PimsModel.V4.PaymentMethod;
 
-    public class ProxyController : ApiController
+    public class ProxyController : ControllerBase
     {
         private Dictionary<string, object> clientContext;
 
@@ -49,13 +50,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
 
         private PartnerSettings partnerSettings;
 
-        protected PXServiceSettings Settings
-        {
-            get
-            {
-                return this.Configuration.Properties[WebApiConfig.PXSettingsType] as PXServiceSettings;
-            }
-        }
+        protected PXServiceSettings Settings => this.HttpContext.RequestServices.GetService<PXServiceSettings>();
 
         // TODO Bug 1682833:[PX AP] Separate userContext from clientContext
         protected Dictionary<string, object> ClientContext
@@ -81,8 +76,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 }
                 else
                 {
-                    return this.Request.Headers.Contains(GlobalConstants.HeaderValues.ForwardedHostHeader)
-                    ? string.Format("https://{0}/V6.0", this.Request.Headers.GetValues(GlobalConstants.HeaderValues.ForwardedHostHeader).FirstOrDefault())
+                    return this.Request.Headers.ContainsKey(GlobalConstants.HeaderValues.ForwardedHostHeader)
+                    ? string.Format("https://{0}/V6.0", this.Request.Headers[GlobalConstants.HeaderValues.ForwardedHostHeader].FirstOrDefault())
                     : this.Settings.PifdBaseUrl;
                 }
             }
@@ -93,8 +88,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             get
             {
                 string offerId = null;
-                IEnumerable<string> offerIds = null;
-                if (this.Request.Headers.TryGetValues(GlobalConstants.HeaderValues.OfferId, out offerIds))
+                Microsoft.Extensions.Primitives.StringValues offerIds;
+                if (this.Request.Headers.TryGetValue(GlobalConstants.HeaderValues.OfferId, out offerIds))
                 {
                     string value = offerIds.FirstOrDefault();
                     if (value != null)
@@ -111,8 +106,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         {
             get
             {
-                IEnumerable<string> pidlsdkVersions;
-                if (this.Request.Headers.TryGetValues(GlobalConstants.HeaderValues.PidlSdkVersion, out pidlsdkVersions))
+                Microsoft.Extensions.Primitives.StringValues pidlsdkVersions;
+                if (this.Request.Headers.TryGetValue(GlobalConstants.HeaderValues.PidlSdkVersion, out pidlsdkVersions))
                 {
                     string value = pidlsdkVersions.FirstOrDefault();
                     if (value != null)
@@ -210,7 +205,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 if (this.exposedFlightFeatures == null)
                 {
                     object exposableFeaturesObject = null;
-                    Request.Properties.TryGetValue(GlobalConstants.RequestPropertyKeys.ExposedFlightFeatures, out exposableFeaturesObject);
+                    this.HttpContext.Items.TryGetValue(GlobalConstants.RequestPropertyKeys.ExposedFlightFeatures, out exposableFeaturesObject);
                     this.exposedFlightFeatures = exposableFeaturesObject as List<string> ?? new List<string>();
                 }
 
@@ -225,7 +220,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 if (this.partnerSettings == null)
                 {
                     object partnerSettingsObject = null;
-                    Request.Properties.TryGetValue(GlobalConstants.RequestPropertyKeys.PartnerSettings, out partnerSettingsObject);
+                    this.HttpContext.Items.TryGetValue(GlobalConstants.RequestPropertyKeys.PartnerSettings, out partnerSettingsObject);
                     this.partnerSettings = partnerSettingsObject as PartnerSettings;
                 }
                 
@@ -1131,20 +1126,19 @@ namespace Microsoft.Commerce.Payments.PXService.V7
 
             try
             {
-                HttpContextWrapper requestContext = null;
-                this.Request.Properties.TryGetValue("MS_HttpContext", out requestContext);
+                var context = this.HttpContext;
 
                 string ipAddress = await this.TryGetClientContext(GlobalConstants.ClientContextKeys.DeviceInfo.IPAddress);
-                clientBrowserInfo.BrowserIP = !string.IsNullOrWhiteSpace(ipAddress) ? ipAddress : requestContext?.Request.UserHostAddress;
+                clientBrowserInfo.BrowserIP = !string.IsNullOrWhiteSpace(ipAddress) ? ipAddress : context?.Connection.RemoteIpAddress?.ToString();
 
                 string userAgent = await this.TryGetClientContext(GlobalConstants.ClientContextKeys.DeviceInfo.UserAgent);
-                clientBrowserInfo.BrowserUserAgent = !string.IsNullOrWhiteSpace(userAgent) ? userAgent : requestContext?.Request.UserAgent;
+                clientBrowserInfo.BrowserUserAgent = !string.IsNullOrWhiteSpace(userAgent) ? userAgent : context?.Request.Headers["User-Agent"].ToString();
 
-                clientBrowserInfo.BrowserAcceptHeader = this.Request.Headers.Accept.ToString();
-                clientBrowserInfo.BrowserJavaEnabled = requestContext?.Request.Browser.JavaApplets;
-                clientBrowserInfo.BrowserColorDepth = requestContext?.Request.Browser.ScreenBitDepth.ToString();
-                clientBrowserInfo.BrowserScreenHeight = requestContext?.Request.Browser.ScreenPixelsHeight.ToString();
-                clientBrowserInfo.BrowserScreenWidth = requestContext?.Request.Browser.ScreenPixelsWidth.ToString();
+                clientBrowserInfo.BrowserAcceptHeader = this.Request.Headers["Accept"].ToString();
+                clientBrowserInfo.BrowserJavaEnabled = null;
+                clientBrowserInfo.BrowserColorDepth = null;
+                clientBrowserInfo.BrowserScreenHeight = null;
+                clientBrowserInfo.BrowserScreenWidth = null;
             }
             catch
             {
@@ -1520,9 +1514,9 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             string clientContextEncoding = null;
             if (this.Request?.Headers != null)
             {
-                IEnumerable<string> values = new List<string>();
-                this.Request?.Headers.TryGetValues(GlobalConstants.HeaderValues.ClientContextEncoding, out values);
-                clientContextEncoding = values?.FirstOrDefault();
+                Microsoft.Extensions.Primitives.StringValues values;
+                this.Request.Headers.TryGetValue(GlobalConstants.HeaderValues.ClientContextEncoding, out values);
+                clientContextEncoding = values.FirstOrDefault();
             }
 
             if (!string.IsNullOrEmpty(clientContextEncoding))
@@ -1535,9 +1529,9 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 string headerValue = null;
                 if (this.Request?.Headers != null)
                 {
-                    IEnumerable<string> values = new List<string>();
-                    this.Request?.Headers.TryGetValues(headerName, out values);
-                    headerValue = values?.FirstOrDefault();
+                    Microsoft.Extensions.Primitives.StringValues values;
+                    this.Request.Headers.TryGetValue(headerName, out values);
+                    headerValue = values.FirstOrDefault();
                 }
 
                 if (headerValue == null)

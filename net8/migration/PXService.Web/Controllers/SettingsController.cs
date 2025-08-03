@@ -8,7 +8,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using System.IO;
     using System.Net;
     using System.Net.Http;
-    using System.Web.Http;
+    using Microsoft.AspNetCore.Mvc;
     using Common.Tracing;
     using Microsoft.Commerce.Payments.Common.Web;
     using Microsoft.Commerce.Payments.Pidl.Localization;
@@ -38,7 +38,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A setting object</response>
         /// <returns>A setting object</returns>
         [HttpGet]
-        public HttpResponseMessage GetSettings([FromUri]string appName, [FromUri]string appVersion, [FromUri] string language = null)
+        public HttpResponseMessage GetSettings(string appName, string appVersion, string language = null)
         {
             if (string.Equals(appName, Constants.AppDetails.WalletPackageName, StringComparison.OrdinalIgnoreCase))
             {
@@ -86,7 +86,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A setting object</response>
         /// <returns>A setting object</returns>
         [HttpPost]
-        public ServerSettingResponse GetSettingsInPost([FromUri] string accountId, [FromBody] ClientConfigData clientConfigData)
+        public ServerSettingResponse GetSettingsInPost(string accountId, [FromBody] ClientConfigData clientConfigData)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
 

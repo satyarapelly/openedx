@@ -2,13 +2,13 @@
 
 namespace Microsoft.Commerce.Payments.PXService.V7
 {
-    using System.Web.Http;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Commerce.Payments.Common.Web;
     using Microsoft.Commerce.Payments.PidlFactory.V7;
     using Microsoft.Commerce.Payments.PidlModel.V7;
 
-    public class PidlValidationController : ApiController
+    public class PidlValidationController : ControllerBase
     {
         /// <summary>
         /// Pidl Validation

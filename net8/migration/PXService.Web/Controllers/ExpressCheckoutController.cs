@@ -7,7 +7,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using System.Linq;
     using System.Net.Http;
     using System.Threading.Tasks;
-    using System.Web.Http;
+    using Microsoft.AspNetCore.Mvc;
     using Common.Web;
     using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Commerce.Payments.PidlFactory.V7;
@@ -29,9 +29,9 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>ExpressCheckoutResult object</returns>
         [HttpPost]
         public async Task<ExpressCheckoutResult> Confirm(
-            [FromUri] string accountId,
+            string accountId,
             [FromBody] PIDLData confirmPayload,
-            [FromUri] string partner = V7.Constants.ServiceDefaults.DefaultPartnerName)
+            string partner = V7.Constants.ServiceDefaults.DefaultPartnerName)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
 

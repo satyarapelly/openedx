@@ -7,7 +7,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using System.Net;
     using System.Net.Http;
     using System.Threading.Tasks;
-    using System.Web.Http;
+    using Microsoft.AspNetCore.Mvc;
     using Common.Tracing;
     using Common.Web;
     using Microsoft.Commerce.Payments.PartnerSettingsModel;
@@ -34,7 +34,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A rds Status Pidl</response>
         /// <returns>A rds Status Pidl</returns>
         [HttpPost]
-        public async Task<HttpResponseMessage> Query([FromBody]PIDLData sessionDetails, [FromUri]string sessionId = null, [FromUri] string piid = null, [FromUri] string partner = null, [FromUri] string language = null, [FromUri] string country = null, [FromUri] string scenario = null)
+        public async Task<HttpResponseMessage> Query([FromBody]PIDLData sessionDetails, string sessionId = null, string piid = null, string partner = null, string language = null, string country = null, string scenario = null)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
 

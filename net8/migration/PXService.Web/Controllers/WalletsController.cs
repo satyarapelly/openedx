@@ -8,8 +8,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using System.Net;
     using System.Net.Http;
     using System.Threading.Tasks;
-    using System.Web;
-    using System.Web.Http;
+    using Microsoft.AspNetCore.Mvc;
     using Common.Web;
     using Microsoft.Commerce.Payments.PidlFactory.V7;
     using Microsoft.Commerce.Payments.PimsModel.V4;
@@ -118,7 +117,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>Returns session id</returns>
         [HttpPost]
         public async Task<HttpResponseMessage> ProvisionWalletToken(
-            [FromUri] string accountId,
+            string accountId,
             [FromBody] ProvisionWalletTokenIncomingPayload payload)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
