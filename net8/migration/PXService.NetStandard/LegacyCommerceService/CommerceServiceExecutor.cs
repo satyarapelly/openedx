@@ -1,4 +1,4 @@
-﻿// <copyright file="CommerceServiceExecutor.cs" company="Microsoft">Copyright (c) Microsoft. All rights reserved.</copyright>
+// <copyright file="CommerceServiceExecutor.cs" company="Microsoft">Copyright (c) Microsoft. All rights reserved.</copyright>
 
 namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService
 {
