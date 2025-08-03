@@ -52,7 +52,7 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService
             this.binding.ReceiveTimeout = TimeSpan.FromMinutes(5);
             this.binding.SendTimeout = TimeSpan.FromMinutes(5);
             this.binding.BypassProxyOnLocal = false;
-            this.binding.HostNameComparisonMode = HostNameComparisonMode.StrongWildcard;
+            // HostNameComparisonMode property is not available in newer WCF stacks
             this.binding.MaxBufferPoolSize = 524288;
             this.binding.MessageEncoding = WSMessageEncoding.Text;
             this.binding.TextEncoding = Encoding.UTF8;
@@ -70,7 +70,7 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService
             // Setup Transport
             this.binding.Security.Transport.ClientCredentialType = HttpClientCredentialType.Certificate;
             this.binding.Security.Transport.ProxyCredentialType = HttpProxyCredentialType.None;
-            this.binding.Security.Transport.Realm = string.Empty;
+            // Realm property is not supported on HttpTransportSecurity in .NET Core/8
             #endregion
 
             #region Build Endpoint Ojbect
@@ -159,12 +159,8 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService
                     {
                         try
                         {
-                            using (PooledObjWrapper<ChannelFactory<TServieChannel>> pooledClientFactory
-                                = new PooledObjWrapper<ChannelFactory<TServieChannel>>(this.clientCert.SerialNumber))
+                            using (ChannelFactory<TServieChannel> clientFactory = new ChannelFactory<TServieChannel>(this.binding, this.address))
                             {
-                                ChannelFactory<TServieChannel> clientFactory = pooledClientFactory.Target;
-                                clientFactory.Endpoint.Binding = this.binding;
-                                clientFactory.Endpoint.Address = this.address;
                                 clientFactory.Endpoint.Contract.Name = ContractName;
 
                                 if (clientFactory.Credentials.ClientCertificate.Certificate == null)
