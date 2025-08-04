@@ -9,8 +9,6 @@ namespace Microsoft.Commerce.Payments.PXService
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Routing;
     using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Commerce.Payments.Common.Web;
     using Microsoft.Commerce.Payments.PXCommon;
@@ -61,19 +59,15 @@ namespace Microsoft.Commerce.Payments.PXService
 
             try
             {
-                RouteData? routeData = request.GetHttpContext()?.GetRouteData();
-
-                object controller;
+                string? controller = request.RequestUri.Segments.LastOrDefault()?.TrimEnd('/');
                 HttpContent content = response.Content;
 
                 bool validationRequired = request.Method == HttpMethod.Get
-                    && routeData != null
-                    && routeData.Values.TryGetValue("controller", out controller)
                     && controller != null
-                    && ValidationAllowedControllers.Contains(controller.ToString(), StringComparer.OrdinalIgnoreCase)
+                    && ValidationAllowedControllers.Contains(controller, StringComparer.OrdinalIgnoreCase)
                     && response.StatusCode == HttpStatusCode.OK
                     && content != null
-                    && content.Headers.ContentType.MediaType == HttpMimeTypes.JsonContentType;
+                    && content.Headers.ContentType?.MediaType == HttpMimeTypes.JsonContentType;
 
                 if (validationRequired)
                 {
