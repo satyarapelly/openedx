@@ -7,7 +7,8 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
     using System.Net.Http;
     using System.Text;
     using System.Threading;
-    using System.Web.Http;
+    using Microsoft.AspNetCore.Mvc;
+using FromUri = Microsoft.AspNetCore.Mvc.FromQueryAttribute;
     using Common.Transaction;
     using Common.Web;
     using Test.Common;
