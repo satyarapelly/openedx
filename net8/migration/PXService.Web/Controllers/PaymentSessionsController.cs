@@ -21,7 +21,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
     using Newtonsoft.Json.Linq;
     using System;
     using System.Collections.Generic;
-    using System.Collections.Specialized;
+    using Microsoft.AspNetCore.Http;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
@@ -500,7 +500,9 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
                 PaymentSessionsHandler paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId, sessionId);
 
                 //// inner iframe is requested for fingerprint step
-                string cspStepValue = formData.Get(V7.Constants.SessionFieldNames.CSPStep);
+                string cspStepValue = formData.TryGetValue(V7.Constants.SessionFieldNames.CSPStep, out var cspStep)
+                    ? cspStep.ToString()
+                    : null;
                 if (PXConstants.CSPStepNames.Fingerprint.Equals(cspStepValue))
                 {
                     BrowserFlowContext browserFlowContext = await paymentSessionsHandler.GetThreeDSMethodData(sessionId, traceActivityId);
@@ -548,7 +550,10 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
                 string testHeader = HttpRequestHelper.GetRequestHeader(PaymentConstants.PaymentExtendedHttpHeaders.TestHeader);
 
                 // check whether fingerprint timedout
-                bool isThreeDSMethodCompleted = string.IsNullOrWhiteSpace(formData.Get(PaymentConstants.NamedPorperties.FingerPrintTimedout));
+                bool isThreeDSMethodCompleted = string.IsNullOrWhiteSpace(
+                    formData.TryGetValue(PaymentConstants.NamedPorperties.FingerPrintTimedout, out var fingerPrintTimedout)
+                        ? fingerPrintTimedout.ToString()
+                        : null);
 
                 BrowserFlowContext result = await paymentSessionsHandler.Authenticate(
                     sessionId: sessionId,
@@ -659,12 +664,12 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
             {
                 EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
 
-                if (!this.Request.Content.IsFormData())
+                if (!this.Request.HasFormContentType)
                 {
                     throw new ValidationException(ErrorCode.InvalidRequestData, "HTML form URL-encoded data is expected");
                 }
 
-                var formData = await Request.Content.ReadAsFormDataAsync();
+                var formData = await Request.ReadFormAsync();
 
                 // Inorder to pass the test header through the iframe. 
                 // The method below set header as the input field in the form 
@@ -986,16 +991,16 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
             {
                 EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
 
-                if (!this.Request.Content.IsFormData())
+                if (!this.Request.HasFormContentType)
                 {
                     throw new ValidationException(ErrorCode.InvalidRequestData, "HTML form URL-encoded data is expected");
                 }
 
-                var formData = await Request.Content.ReadAsFormDataAsync();
+                var formData = await Request.ReadFormAsync();
                 SetupTestHeader(formData);
 
                 Dictionary<string, string> authParams = new Dictionary<string, string>();
-                foreach (string key in formData.AllKeys)
+                foreach (var key in formData.Keys)
                 {
                     authParams.Add(key, formData[key]);
                 }
@@ -1366,17 +1371,17 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
             }
         }
 
-        private static void SetupTestHeader(NameValueCollection formData)
+        private static void SetupTestHeader(IFormCollection formData)
         {
             // check if the form data contains x-ms-test variable
             // Set the test header value to the current context through the HttpRequestHelper
-            var testHeader = formData.Get(PaymentConstants.PaymentExtendedHttpHeaders.TestHeader);
+            string testHeader = formData.TryGetValue(PaymentConstants.PaymentExtendedHttpHeaders.TestHeader, out var headerValue)
+                ? headerValue.ToString()
+                : null;
             if (!string.IsNullOrEmpty(testHeader))
             {
                 var testHeaderData = ThreeDSUtils.DecodeBase64(ThreeDSUtils.DecodeUrl(testHeader));
                 HttpRequestHelper.SetTestHeader(testHeaderData);
-
-                formData.Remove(PaymentConstants.PaymentExtendedHttpHeaders.TestHeader);
             }
         }
 

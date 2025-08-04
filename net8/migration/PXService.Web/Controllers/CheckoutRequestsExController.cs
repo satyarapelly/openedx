@@ -373,9 +373,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentClient
             ProxyController.SetDetailsData(pi, additionalProps, traceActivityId);
 
             // Get query params
-            var queryParams = this.Request.GetQueryNameValuePairs();
-            string countryFromRequest = null;
-            if (!this.Request.TryGetQueryParameterValue(V7.Constants.QueryParameterName.Country, out countryFromRequest))
+            var queryParams = this.Request.Query.AsEnumerable().Select(q => new KeyValuePair<string, string>(q.Key, q.Value));
+            if (!this.Request.Query.TryGetValue(V7.Constants.QueryParameterName.Country, out _))
             {
                 queryParams = queryParams.Concat(new[] { new KeyValuePair<string, string>(V7.Constants.QueryParameterName.Country, country) });
             }
