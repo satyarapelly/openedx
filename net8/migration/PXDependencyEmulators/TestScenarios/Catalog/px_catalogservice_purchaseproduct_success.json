@@ -1,0 +1,184 @@
+{
+  "testScenarioName": "px.catalogservice.purchaseproduct.success",
+  "responsesPerApiCall": {
+    "getProducts": {
+      "statusCode": 200,
+      "content": {
+        "Products": [
+          {
+            "LocalizedProperties": [
+              {
+                "Images": [
+                  {
+                    "BackgroundColor": "",
+                    "Caption": "Xbox Game Pass Ultimate",
+                    "FileSizeInBytes": 0,
+                    "ForegroundColor": "",
+                    "Height": 1080,
+                    "ImagePositionInfo": "",
+                    "ImagePurpose": "BoxArt",
+                    "UnscaledImageSha256Hash": "",
+                    "Uri": "https://img-prod-cms-rt-microsoft-com.akamaized.net/cms/api/am/imageFileData/RE2PlDL",
+                    "Width": 1080
+                  },
+                  {
+                    "BackgroundColor": "",
+                    "Caption": "Xbox Game Pass Ultimate",
+                    "FileSizeInBytes": 0,
+                    "ForegroundColor": "",
+                    "Height": 1080,
+                    "ImagePositionInfo": "",
+                    "ImagePurpose": "Poster",
+                    "UnscaledImageSha256Hash": "",
+                    "Uri": "https://img-prod-cms-rt-microsoft-com.akamaized.net/cms/api/am/imageFileData/RE2TAjc",
+                    "Width": 720
+                  },
+                  {
+                    "BackgroundColor": "",
+                    "Caption": "Xbox Game Pass Ultimate",
+                    "FileSizeInBytes": 0,
+                    "ForegroundColor": "",
+                    "Height": 1080,
+                    "ImagePositionInfo": "",
+                    "ImagePurpose": "UpsellTile",
+                    "UnscaledImageSha256Hash": "",
+                    "Uri": "https://img-prod-cms-rt-microsoft-com.akamaized.net/cms/api/am/imageFileData/RE2PqQK",
+                    "Width": 1920
+                  },
+                  {
+                    "BackgroundColor": "",
+                    "Caption": "Xbox Game Pass Ultimate",
+                    "FileSizeInBytes": 0,
+                    "ForegroundColor": "",
+                    "Height": 1080,
+                    "ImagePositionInfo": "",
+                    "ImagePurpose": "SuperHeroArt",
+                    "UnscaledImageSha256Hash": "",
+                    "Uri": "https://img-prod-cms-rt-microsoft-com.akamaized.net/cms/api/am/imageFileData/RE2VOe0",
+                    "Width": 1920
+                  }
+                ],
+                "ProductTitle": "Xbox Game Pass Ultimate"
+              }
+            ],
+            "ProductBSchema": "ProductPASS;1",
+            "ProductId": "CFQ7TTC0KHS0",
+            "ProductType": "CSV",
+            "DisplaySkuAvailabilities": [
+              {
+                "Sku": {
+                  "SkuBSchema": "SkuPASS;3"
+                },
+                "Availabilities": [
+                  {
+                    "Actions": [ "Browse", "Curate", "Details", "Purchase" ],
+                    "AvailabilityBSchema": "AvailabilityPASS;3",
+                    "OrderManagementData": {
+                      "Price": {
+                        "CurrencyCode": "USD",
+                        "IsPIRequired": true,
+                        "ListPrice": 1.0,
+                        "MSRP": 14.99,
+                        "RecurrencePrice": 14.99,
+                        "TaxType": "TaxesNotIncluded",
+                        "WholesaleCurrencyCode": "",
+                        "RenewalTag": "CFQ7TTC0KHS0_2dc0466e-0483-4335-882e-5dca7dd5364c"
+                      }
+                    }
+                  },
+                  {
+                    "Actions": [ "Browse", "Curate", "Details", "Purchase" ],
+                    "AvailabilityBSchema": "AvailabilityPASS;3",
+                    "OrderManagementData": {
+                      "Price": {
+                        "CurrencyCode": "USD",
+                        "IsPIRequired": true,
+                        "ListPrice": 14.99,
+                        "MSRP": 14.99,
+                        "RecurrencePrice": 14.99,
+                        "TaxType": "TaxesNotIncluded",
+                        "WholesaleCurrencyCode": "",
+                        "RenewalTag": "CFQ7TTC0KHS0_2dc0466e-0483-4335-882e-5dca7dd5364c"
+                      }
+                    }
+                  },
+                  {
+                    "Actions": [ "Renew" ],
+                    "AvailabilityBSchema": "AvailabilityPASS;3",
+                    "OrderManagementData": {
+                      "Price": {
+                        "CurrencyCode": "USD",
+                        "IsPIRequired": true,
+                        "ListPrice": 14.99,
+                        "MSRP": 14.99,
+                        "RecurrencePrice": 14.99,
+                        "TaxType": "TaxesNotIncluded",
+                        "WholesaleCurrencyCode": "",
+                        "RenewalTag": "CFQ7TTC0KHS0_2dc0466e-0483-4335-882e-5dca7dd5364c"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "Sku": {
+                  "SkuBSchema": "SkuPASS;3"
+                },
+                "Availabilities": [
+                  {
+                    "Actions": [ "Browse", "Curate", "Purchase" ],
+                    "AvailabilityBSchema": "AvailabilityPASS;3",
+                    "OrderManagementData": {
+                      "Price": {
+                        "CurrencyCode": "USD",
+                        "IsPIRequired": true,
+                        "ListPrice": 1.0,
+                        "MSRP": 44.99,
+                        "RecurrencePrice": 44.99,
+                        "TaxType": "TaxesNotIncluded",
+                        "WholesaleCurrencyCode": "",
+                        "RenewalTag": "CFQ7TTC0KHS0_c4073682-ef86-48fa-94e7-90430b4701e8"
+                      }
+                    }
+                  },
+                  {
+                    "Actions": [ "Browse", "Curate", "Purchase" ],
+                    "AvailabilityBSchema": "AvailabilityPASS;3",
+                    "OrderManagementData": {
+                      "Price": {
+                        "CurrencyCode": "USD",
+                        "IsPIRequired": true,
+                        "ListPrice": 44.99,
+                        "MSRP": 44.99,
+                        "RecurrencePrice": 44.99,
+                        "TaxType": "TaxesNotIncluded",
+                        "WholesaleCurrencyCode": "",
+                        "RenewalTag": "CFQ7TTC0KHS0_c4073682-ef86-48fa-94e7-90430b4701e8"
+                      }
+                    }
+                  },
+                  {
+                    "Actions": [ "Renew" ],
+                    "AvailabilityBSchema": "AvailabilityPASS;3",
+                    "OrderManagementData": {
+                      "Price": {
+                        "CurrencyCode": "USD",
+                        "IsPIRequired": true,
+                        "ListPrice": 44.99,
+                        "MSRP": 44.99,
+                        "RecurrencePrice": 44.99,
+                        "TaxType": "TaxesNotIncluded",
+                        "WholesaleCurrencyCode": "",
+                        "RenewalTag": "CFQ7TTC0KHS0_c4073682-ef86-48fa-94e7-90430b4701e8"
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

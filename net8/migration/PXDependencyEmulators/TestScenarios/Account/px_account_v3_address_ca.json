@@ -1,0 +1,9 @@
+﻿{
+    "testScenarioName": "px.account.v3.address.ca",
+    "responsesPerApiCall": {
+        "getAddress": {
+            "statusCode": 200,
+            "content": {"customer_id":"<AccountId>","id":"<AddressId>","country":"Canada","region":"ON","city":"Ottawa","address_line1":"100 Queen St","postal_code":"K1P 1A5","first_name":"testName","last_name":"testName","phone_number":"4255382416","validate":false,"etag":"7247023615162416086","links":{"self":{"href":"b95b3cf9-9035-4b1b-9eab-7cc5661da77a/addresses/f5632430-f0a8-59b4-1740-4a13acf991dc","method":"GET"},"delete":{"href":"b95b3cf9-9035-4b1b-9eab-7cc5661da77a/addresses/f5632430-f0a8-59b4-1740-4a13acf991dc","method":"DELETE"}},"object_type":"Address","resource_status":"Active"}
+        }
+    }
+}

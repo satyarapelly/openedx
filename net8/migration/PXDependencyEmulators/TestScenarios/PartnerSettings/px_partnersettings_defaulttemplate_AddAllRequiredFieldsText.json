@@ -1,0 +1,112 @@
+{
+  "testScenarioName": "px.partnersettings.defaulttemplate.addallrequiredfieldstext",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "add": {
+          "template": "defaulttemplate",
+          "redirectionPattern": "fullPage",
+          "resources": {
+            "paymentMethod": {
+              "ewallet.kakaopay": {
+                "template": "defaulttemplate",
+                "redirectionPattern": "fullPage"
+              },
+              "direct_debit.ideal_billing_agreement": {
+                "template": "defaulttemplate",
+                "redirectionPattern": "fullPage"
+              },
+              "ewallet.paypal": {
+                "template": "defaulttemplate",
+                "redirectionPattern": "fullPage"
+              },
+              "ewallet.paypalRedirect": {
+                "template": "defaulttemplate",
+                "redirectionPattern": "fullPage"
+              },
+              "direct_debit.sepa": {
+                "template": "defaulttemplate",
+                "redirectionPattern": "fullPage"
+              }
+            },
+            "challenge": {
+              "paypalqrcode": {
+                "template": "defaulttemplate",
+                "redirectionPattern": "fullPage"
+              }
+            },
+            "static": {
+              "paypalretrystatic": {
+                "redirectionPattern": "fullPage",
+                "template": "defaulttemplate"
+              },
+              "paypalredirectpidl": {
+                "redirectionPattern": "fullPage",
+                "template": "defaulttemplate"
+              }
+            },
+            "profile": {
+              "employee": {
+                "template": "defaulttemplate",
+                "redirectionPattern": "inline"
+              }
+            }
+          },
+          "features": {
+            "customizeDisplayContent": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "addAllFieldsRequiredText": true
+                }
+              ]
+            }
+          }
+        },
+        "update": {
+          "template": "defaulttemplate",
+          "redirectionPattern": "fullPage",
+          "resources": {
+            "paymentMethod": {
+              "direct_debit.sepa": {
+                "template": "defaulttemplate",
+                "redirectionPattern": "fullPage"
+              }
+            },
+            "profile": {
+              "employee": {
+                "template": "defaulttemplate",
+                "redirectionPattern": "inline"
+              }
+            }
+          },
+          "features": {
+            "customizeDisplayContent": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "addAllFieldsRequiredText": true
+                }
+              ]
+            }
+          }
+        },
+        "handlePaymentChallenge": {
+          "template": "defaulttemplate",
+          "redirectionPattern": "fullPage",
+          "features": {
+            "customizeDisplayContent": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "addAllFieldsRequiredText": true
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

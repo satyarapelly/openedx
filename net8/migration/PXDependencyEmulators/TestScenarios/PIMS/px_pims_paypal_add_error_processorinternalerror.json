@@ -1,0 +1,17 @@
+{
+	"testScenarioName": "px.pims.paypal.add.error.processorinternalerror",
+	"responsesPerApiCall": {
+		"addPI": {
+			"statusCode": 400,
+			"content": {"CorrelationId":"56824640-2977-4478-998c-3c2e3b45e5c7","ErrorCode":"ProcessorInternalError","Message":"The processor returned InternalError","Details":[{"ErrorCode":"PGW_E_PAYMENT_PROVIDER_RETRYABLE_ERROR","Message":"Call Pgw failed with error (Message: The underlying connection was closed: The connection was closed unexpectedly.. SCS tracking GUID: da663c8d-30f3-4fad-b105-1e8d55c40d65)","Target":""},{"ErrorCode":"BDK_E_PAYMENT_PROVIDER_CONNECTION_FAILED","Message":"Call legacy payment instrument service failed with error (ErrorCode: 30235. ErrorShortMessage: BDK_E_PAYMENT_PROVIDER_CONNECTION_FAILED. ErrorLongMessage: Unable to connect to payment provider.. SCS tracking GUID: da663c8d-30f3-4fad-b105-1e8d55c40d65)","Target":""}]}
+		},
+		"getPI": {
+			"statusCode": 200,
+			"content": {"id":"9igMnQAAAABJAACA","accountId":"e0ac2a98-9473-4a32-bfe9-ee7b1dce16c0","paymentMethod":{"paymentMethodType":"paypal","properties":{"offlineRecurring":true,"userManaged":true,"soldToAddressRequired":true,"splitPaymentSupported":true,"supportedOperations":["authorize","charge","refund","chargeback"],"taxable":false,"providerRemittable":false},"exclusionTags":["XBOXLegacySubscriptions"],"paymentMethodFamily":"ewallet","display":{"name":"PayPal","logo":"https://pmservices.cp.microsoft.com/staticresourceservice/images/v3/logo_paypal.png","logos":[{"mimeType":"image/png","url":"https://pmservices.cp.microsoft.com/staticresourceservice/images/v3/logo_paypal.png"},{"mimeType":"image/svg+xml","url":"https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_paypal.svg"}]}},"status":"Active","details":{"exportable":false,"redirectUrl":"https://pmservices.cp.microsoft.com/RedirectionService/CoreRedirection/Redirect/5920d107-96ae-544f-bac3-c14bc0622230","picvRequired":false}}
+		},
+		"getPM": {
+			"statusCode": 200,
+			"content": [{"paymentMethodFamily":"ewallet","paymentMethodType":"paypal","display":{"name":"PayPal","logo":"https://pmservices.cp.microsoft.com/staticresourceservice/images/v3/logo_paypal.png","logos":[{"mimeType":"image/png","url":"https://pmservices.cp.microsoft.com/staticresourceservice/images/v3/logo_paypal.png"},{"mimeType":"image/svg+xml","url":"https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_paypal.svg"}]},"properties":{"offlineRecurring":true,"userManaged":true,"soldToAddressRequired":true,"supportedOperations":["authorize","charge","refund","chargeback"],"taxable":false,"providerRemittable":false,"moBillingIdentityUrl":"","riskyPaymentMethod":false,"authWindow":4320,"fundsAvailabilityWindow":0,"multipleLineItemsSupported":true,"splitPaymentSupported":true,"purchaseWaitTime":0},"exclusionTags":["XBOXLegacySubscriptions"]}]
+		}
+	}
+}

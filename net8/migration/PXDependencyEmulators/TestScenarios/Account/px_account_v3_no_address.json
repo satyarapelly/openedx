@@ -1,0 +1,55 @@
+{
+    "testScenarioName": "px.account.v3.no.address",
+    "responsesPerApiCall": {
+        "getProfiles": {
+          "statusCode": 200,
+          "content": {
+            "total_count": 1,
+            "items": [
+              {
+                "culture": "en-US",
+                "name": null,
+                "email": "employee@company.com",
+                "company_name": "Company Name",
+                "language": "en",
+                "love_code": null,
+                "mobile_barcode": null,
+                "id": "EmpAccountNoAddressName-EmpProfile001",
+                "etag": "1877491905292942251",
+                "customer_id": "EmpAccountNoAddressName",
+                "default_address_id": "",
+                "country": null,
+                "snapshot_id": "EmpAccountNoAddressName-EmpProfile001/2",
+                "links": {
+                  "self": {
+                    "href": "EmpAccountNoAddressName/profiles/EmpAccountNoAddressName-EmpProfile001",
+                    "method": "GET"
+                  },
+                  "snapshot": {
+                    "href": "EmpAccountNoAddressName/profiles/EmpAccountNoAddressName-EmpProfile001/2",
+                    "method": "GET"
+                  },
+                  "update": {
+                    "href": "EmpAccountNoAddressName/profiles/EmpAccountNoAddressName-EmpProfile001",
+                    "method": "PUT"
+                  },
+                  "delete": {
+                    "href": "EmpAccountNoAddressName/profiles/EmpAccountNoAddressName-EmpProfile001",
+                    "method": "DELETE"
+                  },
+                  "default_address": {
+                    "href": "EmpAccountNoAddressName/addresses/EmpAccountNoAddressName-Address001",
+                    "method": "GET"
+                  }
+                },
+                "object_type": "Profile",
+                "resource_status": "Active",
+                "type": "employee",
+                "first_name": "EmployeeFirstName",
+                "last_name": "EmployeeLastName"
+              }
+            ]
+          }
+        }
+    }
+}

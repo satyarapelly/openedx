@@ -1,0 +1,17 @@
+{
+	"testScenarioName": "px.pims.touchngo.add.success",
+	"responsesPerApiCall": {
+		"addPI": {
+			"statusCode": 200,
+			"content": {"id":"9igMnQAAAABJAACA","accountId":"e0ac2a98-9473-4a32-bfe9-ee7b1dce16c0","paymentMethod":{"paymentMethodType":"touchngo","properties":{"offlineRecurring":true,"userManaged":true,"soldToAddressRequired":true,"splitPaymentSupported":true,"supportedOperations":["authorize","charge","refund","chargeback"],"taxable":false,"providerRemittable":false},"exclusionTags":["XBOXLegacySubscriptions"],"paymentMethodFamily":"ewallet","display":{"name":"TouchnGo","logo":"https://pmservices.cp.microsoft.com/staticresourceservice/images/v3/logo_touchngo.png","logos":[{"mimeType":"image/png","url":"https://pmservices.cp.microsoft.com/staticresourceservice/images/v3/logo_touchngo.png"},{"mimeType":"image/svg+xml","url":"https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_touchngo.svg"}]}},"status":"Pending","details":{"exportable":false,"redirectUrl":"https://pmservices.cp.microsoft.com/RedirectionService/CoreRedirection/Redirect/5920d107-96ae-544f-bac3-c14bc0622230","picvRequired":false}}
+		},
+		"getPI": {
+			"statusCode": 200,
+			"content": {"id":"9igMnQAAAABJAACA","accountId":"e0ac2a98-9473-4a32-bfe9-ee7b1dce16c0","paymentMethod":{"paymentMethodType":"touchngo","properties":{"offlineRecurring":true,"userManaged":true,"soldToAddressRequired":true,"splitPaymentSupported":true,"supportedOperations":["authorize","charge","refund","chargeback"],"taxable":false,"providerRemittable":false},"exclusionTags":["XBOXLegacySubscriptions"],"paymentMethodFamily":"ewallet","display":{"name":"TouchnGo","logo":"https://pmservices.cp.microsoft.com/staticresourceservice/images/v3/logo_touchngo.png","logos":[{"mimeType":"image/png","url":"https://pmservices.cp.microsoft.com/staticresourceservice/images/v3/logo_touchngo.png"},{"mimeType":"image/svg+xml","url":"https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_touchngo.svg"}]}},"status":"Active","details":{"exportable":false,"redirectUrl":"https://pmservices.cp.microsoft.com/RedirectionService/CoreRedirection/Redirect/5920d107-96ae-544f-bac3-c14bc0622230","picvRequired":false}}
+		},
+		"getPM": {
+			"statusCode": 200,
+			"content": [{"paymentMethodFamily":"ewallet","paymentMethodType":"touchngo","display":{"name":"TouchnGo","logo":"https://pmservices.cp.microsoft.com/staticresourceservice/images/v3/logo_touchngo.png","logos":[{"mimeType":"image/png","url":"https://pmservices.cp.microsoft.com/staticresourceservice/images/v3/logo_touchngo.png"},{"mimeType":"image/svg+xml","url":"https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_touchngo.svg"}]},"properties":{"offlineRecurring":true,"userManaged":true,"soldToAddressRequired":true,"supportedOperations":["authorize","charge","refund","chargeback"],"taxable":false,"providerRemittable":false,"moBillingIdentityUrl":"","riskyPaymentMethod":false,"authWindow":4320,"fundsAvailabilityWindow":0,"multipleLineItemsSupported":true,"splitPaymentSupported":true,"purchaseWaitTime":0},"exclusionTags":["XBOXLegacySubscriptions"]}]
+		}
+	}
+}

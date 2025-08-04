@@ -1,0 +1,23 @@
+{
+  "testScenarioName": "px.partnersettings.listpidropdown.skipSelectInstanceNoPI.cconly",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "selectInstance": {
+          "template": "listpidropdown",
+          "features": {
+            "skipSelectInstanceNoPI": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "returnAddCCOnlyForSkipSelectInstanceNoPI": true
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

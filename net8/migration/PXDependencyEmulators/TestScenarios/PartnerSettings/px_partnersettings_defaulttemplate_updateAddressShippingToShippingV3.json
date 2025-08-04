@@ -1,0 +1,27 @@
+{
+  "testScenarioName": "px.partnersettings.defaulttemplate.updateAddressShippingToShippingV3",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "add": {
+          "template": "defaulttemplate",
+          "features": {
+            "customizeAddressForm": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "addressType": "shipping",
+                  "DataSource": "jarvisShippingV3"
+                }
+              ]
+            },
+            "addressValidation": {
+              "applicableMarkets": []
+            }
+          }
+        }
+      }
+    }
+  }
+}

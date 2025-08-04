@@ -1,0 +1,18 @@
+{
+  "testScenarioName": "px.partnersettings.onepage.noSubmitIfGSTIDEmpty",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "add": {
+          "template": "onepage",
+          "features": {
+            "noSubmitIfGSTIDEmpty": {
+              "applicableMarkets": [ "in" ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

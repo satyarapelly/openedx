@@ -1,0 +1,43 @@
+﻿{
+  "testScenarioName": "px.account.avs.address.validate.in.multiplesuggestions",
+  "responsesPerApiCall": {
+    "postAddressValidateAVS": {
+      "statusCode": 200,
+      "content": {
+        "original_address": {
+          "country": "IN",
+          "region": "maharashtra",
+          "city": "PUNE",
+          "address_line1": "Green park road",
+          "postal_code": "412307"
+        },
+        "status": "StreetPartial",
+        "basic_validation_succeded": true,
+        "suggested_addresses": [
+          {
+            "country": "IN",
+            "region": "Maharashtra",
+            "city": "Pune",
+            "address_line2": "Green park road",
+            "postal_code": "411030"
+          },
+          {
+            "country": "IN",
+            "region": "Maharashtra",
+            "city": "Pune",
+            "address_line2": "Green park road",
+            "postal_code": "411009"
+          },
+          {
+            "country": "IN",
+            "region": "Maharashtra",
+            "city": "Borhadewadi",
+            "address_line1": "Green park road",
+            "postal_code": "412307"
+          }
+        ],
+        "validation_message": "Address field invalid for property: 'Region', 'PostalCode', 'City'"
+      }
+    }
+  }
+}

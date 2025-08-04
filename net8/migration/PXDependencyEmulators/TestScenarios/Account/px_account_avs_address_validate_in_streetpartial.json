@@ -1,0 +1,26 @@
+﻿{
+  "testScenarioName": "px.account.avs.address.validate.in.streetpartial",
+  "responsesPerApiCall": {
+    "postAddressValidateAVS": {
+      "statusCode": 200,
+      "content": {
+        "suggested_address": {
+          "country": "IN",
+          "region": "maharashtra",
+          "city": "Pune",
+          "address_line1": "Green park road",
+          "postal_code": "Army"
+        },
+        "original_address": {
+          "country": "IN",
+          "region": "maharashtra",
+          "city": "Pune",
+          "address_line1": "My Way",
+          "postal_code": "412101"
+        },
+        "status": "StreetPartial",
+        "validation_message": "Address field invalid for property: 'Region', 'PostalCode', 'City'"
+      }
+    }
+  }
+}

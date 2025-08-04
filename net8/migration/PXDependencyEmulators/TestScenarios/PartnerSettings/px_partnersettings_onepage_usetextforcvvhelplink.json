@@ -1,0 +1,24 @@
+{
+  "testScenarioName": "px.partnersettings.onepage.usetextforcvvhelplink",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "add": {
+          "template": "onepage",
+          "features": {
+            "useTextForCVVHelpLink": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "useTextForCVVHelpLink": true,
+                  "cvvDisplayHelpPosition": "floatRight"
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

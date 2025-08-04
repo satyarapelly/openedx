@@ -1,0 +1,48 @@
+{
+  "testScenarioName": "px.partnersettings.defaulttemplate.enablevirtualfamilypm",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "add": {
+          "template": "defaulttemplate",
+          "features": {
+            "enableVirtualFamilyPM": {
+              "applicableMarkets": []
+            },
+            "updatePIaddressToAccount": {
+              "applicableMarkets": []
+            }
+          }
+        },
+        "update": {
+          "template": "defaulttemplate",
+          "features": {
+            "enableVirtualFamilyPM": {
+              "applicableMarkets": []
+            },
+            "updatePIaddressToAccount": {
+              "applicableMarkets": []
+            }
+          }
+        },
+        "select": {
+          "template": "defaulttemplate",
+          "features": {
+            "enableVirtualFamilyPM": {
+              "applicableMarkets": []
+            }
+          }
+        },
+        "default": {
+          "template": "defaulttemplate",
+          "features": {
+            "enableVirtualFamilyPM": {
+              "applicableMarkets": []
+            }
+          }
+        }
+      }
+    }
+  }
+}

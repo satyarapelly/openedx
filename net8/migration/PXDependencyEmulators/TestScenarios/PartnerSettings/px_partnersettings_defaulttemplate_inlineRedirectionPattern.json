@@ -1,0 +1,104 @@
+{
+  "testScenarioName": "px.partnersettings.defaulttemplate.inlineRedirectionPattern",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "add": {
+          "template": "defaulttemplate",
+          "redirectionPattern": "inline",
+          "resources": {
+            "paymentMethod": {
+              "direct_debit.ideal_billing_agreement": {
+                "template": "defaulttemplate",
+                "redirectionPattern": "inline"
+              },
+              "ewallet.paypal": {
+                "template": "defaulttemplate",
+                "redirectionPattern": "inline"
+              },
+              "direct_debit.sepa": {
+                "template": "defaulttemplate",
+                "redirectionPattern": "inline"
+              }
+            },
+            "challenge": {
+              "paypalqrcode": {
+                "template": "defaulttemplate",
+                "redirectionPattern": "inline"
+              }
+            },
+            "address": {
+              "shipping": {
+                "template": "defaulttemplate",
+                "redirectionPattern": null
+              },
+              "shipping_v3": {
+                "template": "defaulttemplate",
+                "redirectionPattern": null
+              }
+            }
+          }
+        },
+        "update": {
+          "template": "defaulttemplate",
+          "redirectionPattern": "inline",
+          "resources": {
+            "paymentMethod": {
+              "direct_debit.sepa": {
+                "template": "defaulttemplate",
+                "redirectionPattern": "inline"
+              }
+            },
+            "address": {
+              "shipping": {
+                "template": "defaulttemplate",
+                "redirectionPattern": null
+              },
+              "shipping_v3": {
+                "template": "defaulttemplate",
+                "redirectionPattern": null
+              }
+            }
+          }
+        },
+        "confirmPayment": {
+          "template": "defaulttemplate",
+          "resources": {
+            "challenge": {
+              "real_time_payments.upi": {
+                "template": "defaultTemplate",
+                "redirectionPattern": "inline"
+              },
+              "real_time_payments.upi_qr": {
+                "template": "defaultTemplate",
+                "redirectionPattern": "inline"
+              },
+              "real_time_payments.upi_commercial": {
+                "template": "defaultTemplate",
+                "redirectionPattern": "inline"
+              },
+              "real_time_payments.upi_qr_commercial": {
+                "template": "defaultTemplate",
+                "redirectionPattern": "inline"
+              }
+            }
+          },
+          "features": null
+        },
+        "replace": {
+          "template": "defaulttemplate",
+          "redirectionPattern": "inline",
+          "resources": {
+            "paymentMethod": {
+              "credit_card": {
+                "template": "defaulttemplate",
+                "redirectionPattern": "inline"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "testScenarioName": "px.partnersettings.onepage.setSaveButtonDisplayContentAsBook.removeCancelButton",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "add": {
+          "template": "onepage",
+          "features": {
+            "customizeDisplayContent": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "setSaveButtonDisplayContentAsBook": true
+                }
+              ]
+            },
+            "removeElement": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "removeCancelButton": true
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

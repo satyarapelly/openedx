@@ -1,0 +1,112 @@
+{
+  "testScenarioName": "px.partnersettings.defaulttemplate.fieldstomakerequired",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "add": {
+          "template": "defaulttemplate",
+          "redirectionPattern": "inline",
+          "resources": {
+            "address": {
+              "shipping": {
+                "template": "defaulttemplate",
+                "redirectionPattern": null
+              },
+              "shipping_v3": {
+                "template": "defaulttemplate",
+                "redirectionPattern": null
+              }
+            }
+          },
+          "features": {
+            "customizeAddressForm": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "addressType": "shipping",
+                  "dataSource": "jarvisShipping",
+                  "fieldsToMakeRequired": [ "firstName", "lastName", "email", "phoneNumber" ]
+                },
+                {
+                  "addressType": "shipping_v3",
+                  "dataSource": "jarvisShippingV3",
+                  "fieldsToMakeRequired": [ "firstName", "lastName", "email", "phoneNumber" ]
+                },
+                {
+                  "addressType": "hapiV1SoldToIndividual",
+                  "dataSource": "hapi",
+                  "fieldsToMakeRequired": [ "companyName", "email", "phoneNumber" ]
+                },
+                {
+                  "addressType": "hapiV1BillToIndividual",
+                  "dataSource": "hapi",
+                  "fieldsToMakeRequired": [ "firstName", "lastName", "companyName", "email", "phoneNumber" ]
+                },
+                {
+                  "addressType": "orgaddress",
+                  "dataSource": "jarvisOrgAddress",
+                  "fieldsToMakeRequired": [ "orgEmail", "orgPhoneNumber" ]
+                }
+              ]
+            },
+            "addressValidation": {
+              "applicableMarkets": []
+            }
+          }
+        },
+        "update": {
+          "template": "defaulttemplate",
+          "redirectionPattern": "inline",
+          "resources": {
+            "address": {
+              "shipping": {
+                "template": "defaulttemplate",
+                "redirectionPattern": null
+              },
+              "shipping_v3": {
+                "template": "defaulttemplate",
+                "redirectionPattern": null
+              }
+            }
+          },
+          "features": {
+            "customizeAddressForm": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "addressType": "shipping",
+                  "dataSource": "jarvisShipping",
+                  "fieldsToMakeRequired": [ "firstName", "lastName", "email", "phoneNumber" ]
+                },
+                {
+                  "addressType": "shipping_v3",
+                  "dataSource": "jarvisShippingV3",
+                  "fieldsToMakeRequired": [ "firstName", "lastName", "email", "phoneNumber" ]
+                },
+                {
+                  "addressType": "hapiV1SoldToIndividual",
+                  "dataSource": "hapi",
+                  "fieldsToMakeRequired": [ "companyName", "email", "phoneNumber" ]
+                },
+                {
+                  "addressType": "hapiV1BillToIndividual",
+                  "dataSource": "hapi",
+                  "fieldsToMakeRequired": [ "firstName", "lastName", "companyName", "email", "phoneNumber" ]
+                },
+                {
+                  "addressType": "orgaddress",
+                  "dataSource": "jarvisOrgAddress",
+                  "fieldsToMakeRequired": [ "orgEmail", "orgPhoneNumber" ]
+                }
+              ]
+            },
+            "addressValidation": {
+              "applicableMarkets": []
+            }
+          }
+        }
+      }
+    }
+  }
+}

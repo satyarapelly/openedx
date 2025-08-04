@@ -1,0 +1,37 @@
+{
+  "testScenarioName": "px.partnersettings.onepage.hidePaymentMethodHeading",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "add": {
+          "template": "onepage",
+          "redirectionPattern": "inline",
+          "resources": {
+            "paymentMethod": {
+              "credit_card": {
+                "template": "onepage",
+                "redirectionPattern": "inline"
+              },
+              "ewallet.type": {
+                "template": "defaulttemplate",
+                "redirectionPattern": "inline"
+              }
+            }
+          },
+          "features": {
+            "hideElement": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "hidePaymentMethodHeading": true,
+                  "hideChangeSettingText": true
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

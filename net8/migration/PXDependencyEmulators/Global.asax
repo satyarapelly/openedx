@@ -1,0 +1,1 @@
+<%@ Application Codebehind="Global.asax.cs" Inherits="Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.PXDependencyEmulatorsWebApplication" Language="C#" %>

@@ -1,0 +1,23 @@
+{
+  "testScenarioName": "px.partnersettings.twopage.change.content",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "add": {
+          "template": "twopage",
+          "features": {
+            "customizeDisplayContent": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "setBackButtonDisplayContentAsCancel": true
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

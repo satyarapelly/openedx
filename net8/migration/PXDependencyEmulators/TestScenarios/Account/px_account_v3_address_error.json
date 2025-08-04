@@ -1,0 +1,82 @@
+﻿{
+  "testScenarioName": "px.account.v3.address.error",
+  "responsesPerApiCall": {
+    "getAddress": {
+      "statusCode": 200,
+      "content": {
+        "customer_id": "<AccountId>",
+        "id": "<AddressId>",
+        "country": "US",
+        "region": "wa",
+        "city": "redmond",
+        "address_line1": "1 Microsoft Way",
+        "postal_code": "98051",
+        "first_name": "testName",
+        "last_name": "testName",
+        "phone_number": "4255382416",
+        "validate": false,
+        "etag": "7247023615162416086",
+        "object_type": "Address",
+        "resource_status": "Active"
+      }
+    },
+    "postAddress": {
+      "statusCode": 500,
+      "content": {
+        "error_code": "ServiceTimeout",
+        "message": "An underlying service was unable to fulfill a request within its service level agreement.",
+        "object_type": "Error"
+      }
+    },
+    "getProfiles": {
+      "statusCode": 200,
+      "content": {
+        "total_count": 1,
+        "items": [
+          {
+            "culture": "en-US",
+            "name": null,
+            "email": "employee@company.com",
+            "company_name": "Company Name",
+            "language": "en",
+            "love_code": null,
+            "mobile_barcode": null,
+            "id": "EmpAccountNoAddressName-EmpProfile001",
+            "etag": null,
+            "customer_id": "EmpAccountNoAddressName",
+            "default_address_id": "273c628b-d687-5886-c0cd-a3d48f30a006",
+            "country": null,
+            "snapshot_id": "EmpAccountNoAddressName-EmpProfile001/2",
+            "links": {
+              "self": {
+                "href": "EmpAccountNoAddressName/profiles/EmpAccountNoAddressName-EmpProfile001",
+                "method": "GET"
+              },
+              "snapshot": {
+                "href": "EmpAccountNoAddressName/profiles/EmpAccountNoAddressName-EmpProfile001/2",
+                "method": "GET"
+              },
+              "update": {
+                "href": "EmpAccountNoAddressName/profiles/EmpAccountNoAddressName-EmpProfile001",
+                "method": "PUT"
+              },
+              "delete": {
+                "href": "EmpAccountNoAddressName/profiles/EmpAccountNoAddressName-EmpProfile001",
+                "method": "DELETE"
+              },
+              "default_address": {
+                "href": "EmpAccountNoAddressName/addresses/EmpAccountNoAddressName-Address001",
+                "method": "GET"
+              }
+            },
+            "object_type": "Profile",
+            "resource_status": "Active",
+            "type": "employee",
+            "first_name": "EmployeeFirstName",
+            "last_name": "EmployeeLastName"
+          }
+        ]
+      }
+    }
+  }
+}

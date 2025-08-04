@@ -1,0 +1,28 @@
+{
+  "testScenarioName": "px.partnersettings.defaulttemplate.setButtonDisplayContentAsOK",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "handlePaymentChallenge": {
+          "template": "defaulttemplate",
+          "redirectionPattern": "inline",
+          "features": {
+            "customizeDisplayContent": {
+              "applicableMarkets": [
+                "in"
+              ],
+              "displayCustomizationDetail": [
+                {
+                  "setButtonDisplayContent": {
+                    "cvv3DSSubmitButton": "OK"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

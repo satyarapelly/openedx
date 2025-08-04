@@ -1,0 +1,18 @@
+{
+  "testScenarioName": "px.partnersettings.skipselectpmradiobuttonlist",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "select": {
+          "template": "selectpmradiobuttonlist",
+          "features": {
+            "skipSelectpm": {
+              "applicableMarkets": []
+            }
+          }
+        }
+      }
+    }
+  }
+}

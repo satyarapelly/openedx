@@ -1,0 +1,9 @@
+﻿{
+    "testScenarioName": "px.account.v2.address.validate.notvalidated",
+    "responsesPerApiCall": {
+        "postAddressValidate": {
+            "statusCode": 200,
+            "content": {"original_address":{"country":"US","region":"wa","city":"Redmond","postal_code":"98052"},"status":"NotValidated","validation_message":"Address field required for property: 'AddressLine1'"}
+        }
+    }
+}

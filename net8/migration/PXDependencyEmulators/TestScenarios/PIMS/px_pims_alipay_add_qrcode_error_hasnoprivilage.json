@@ -1,0 +1,13 @@
+﻿{
+    "testScenarioName": "px.pims.alipay.add.qrcode.error.hasnoprivilage",
+    "responsesPerApiCall": {
+		"addPI": {
+			"statusCode": 400,
+			"content":  {"CorrelationId":"c2ae114d-0413-4178-afc7-f11cf5231d7d","ErrorCode":"ProcessorInternalError","Message":"The processor returned InternalError","Details":[{"ErrorCode":"HAS_NO_PRIVILEGE","Message":"Error response received. Error: 'HAS_NO_PRIVILEGE', Request 'https://intlmapi.alipay.com/gateway.do?sign=0a6070948bdb9e0567699d5b9ef1971a&sign_type=MD5&_input_charset=utf-8&ack_type=M&external_sign_no=%2fmfhksWgqHRSr9Rlja1yN8XVebQ%3d&partner=2088801766902304&product_code=GENERAL_WITHHOLDING_P&scene=INDUSTRY%7cAPPSTORE&service=alipay.dut.customer.agreement.sign&third_party_type=PARTNER', Reponse: '<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<alipay><is_success>F</is_success><error>HAS_NO_PRIVILEGE</error></alipay>'","Target":"AliPayBillingAgreement"}]}
+		},
+		"getPM": {
+			"statusCode": 200,
+			"content": [{"paymentMethodFamily":"ewallet","paymentMethodType":"alipay_billing_agreement","display":{"name":"A...(6)","logo":"https://pmservices.cp.microsoft.com/staticresourceservice/images/v3/logo_alipay.png","logos":[{"mimeType":"image/png","url":"https://pmservices.cp.microsoft.com/staticresourceservice/images/v3/logo_alipay.png"},{"mimeType":"image/svg+xml","url":"https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_alipay.svg"}]},"properties":{"offlineRecurring":true,"userManaged":false,"soldToAddressRequired":true,"supportedOperations":["charge","refund"],"taxable":false,"providerRemittable":false,"moBillingIdentityUrl":"","riskyPaymentMethod":false,"fundsAvailabilityWindow":0,"multipleLineItemsSupported":true,"splitPaymentSupported":false,"purchaseWaitTime":0},"exclusionTags":["LegacySubscriptions"]}]
+		}
+    }
+}

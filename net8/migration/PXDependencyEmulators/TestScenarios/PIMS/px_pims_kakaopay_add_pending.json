@@ -1,0 +1,138 @@
+﻿{
+  "testScenarioName": "px.pims.kakaopay.add.pending",
+  "responsesPerApiCall": {
+    "addPI": {
+      "statusCode": 200,
+      "content": {
+        "id": "c9d1fe5b-2831-4c4b-9624-515495f245ed",
+        "accountId": "16e1ac5f-513a-473a-b1a6-0b19cae56e9f",
+        "paymentMethod": {
+          "paymentMethodType": "kakaopay",
+          "properties": {
+            "offlineRecurring": true,
+            "userManaged": true,
+            "redirectRequired": [ "Add" ],
+            "soldToAddressRequired": true,
+            "splitPaymentSupported": false,
+            "supportedOperations": [ "charge", "refund", "chargeback" ],
+            "taxable": false,
+            "providerRemittable": false,
+            "isNonStoredPaymentMethod": false
+          },
+          "paymentMethodGroup": "ewallet",
+          "groupDisplayName": "eWallet",
+          "exclusionTags": [ "LegacySubscriptions" ],
+          "paymentMethodFamily": "ewallet",
+          "display": {
+            "name": "카카오페이",
+            "logo": "https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_kr_kakaopay.png",
+            "logos": [
+              {
+                "mimeType": "image/png",
+                "url": "https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_kr_kakaopay.png"
+              },
+              {
+                "mimeType": "image/svg+xml",
+                "url": "https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_kr_kakaopay.svg"
+              }
+            ]
+          }
+        },
+        "status": "Pending",
+        "creationDateTime": "2015-08-29T01:54:01.5496558Z",
+        "lastUpdatedDateTime": "2015-08-29T01:54:01.9402882",
+        "details": {
+          "exportable": false,
+          "redirectUrl": "https://paymentsredirectionservice.cp.microsoft.com/CoreRedirection/redirect/b614c0fc-c143-6b87-cb0a-465dd8f265a4",
+          "picvRequired": false,
+          "balance": 0.0,
+          "defaultDisplayName": "카카오페이"
+        }
+      }
+    },
+    "getPI": {
+      "statusCode": 200,
+      "content": {
+        "id": "c9d1fe5b-2831-4c4b-9624-515495f245ed",
+        "accountId": "16e1ac5f-513a-473a-b1a6-0b19cae56e9f",
+        "paymentMethod": {
+          "paymentMethodType": "kakaopay",
+          "properties": {
+            "offlineRecurring": true,
+            "userManaged": true,
+            "redirectRequired": [ "Add" ],
+            "soldToAddressRequired": true,
+            "splitPaymentSupported": true,
+            "supportedOperations": [ "charge", "refund", "chargeback" ],
+            "taxable": false,
+            "providerRemittable": false,
+            "isNonStoredPaymentMethod": false
+          },
+          "paymentMethodGroup": "ewallet",
+          "groupDisplayName": "eWallet",
+          "exclusionTags": [ "LegacySubscriptions" ],
+          "paymentMethodFamily": "ewallet",
+          "display": {
+            "name": "카카오페이",
+            "logo": "https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_kr_kakaopay.png",
+            "logos": [
+              {
+                "mimeType": "image/png",
+                "url": "https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_kr_kakaopay.png"
+              },
+              {
+                "mimeType": "image/svg+xml",
+                "url": "https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_kr_kakaopay.svg"
+              }
+            ]
+          }
+        },
+        "status": "Pending",
+        "creationDateTime": "2015-08-29T01:54:01.5496558Z",
+        "lastUpdatedDateTime": "2015-08-29T01:54:01.9402882",
+        "details": {
+          "exportable": false,
+          "redirectUrl": "https://paymentsredirectionservice.cp.microsoft.com/CoreRedirection/redirect/b614c0fc-c143-6b87-cb0a-465dd8f265a4",
+          "picvRequired": false,
+          "balance": 0.0,
+          "defaultDisplayName": "카카오페이"
+        }
+      }
+    },
+    "getPM": {
+      "statusCode": 200,
+      "content": [
+        {
+          "paymentMethodFamily": "ewallet",
+          "paymentMethodType": "kakaopay",
+          "display": {
+            "name": "카카오페이",
+            "logo": "https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_kr_kakaopay.png",
+            "logos": [
+              {
+                "mimeType": "image/png",
+                "url": "https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_kr_kakaopay.png"
+              },
+              {
+                "mimeType": "image/svg+xml",
+                "url": "https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_kr_kakaopay.svg"
+              }
+            ]
+          },
+          "properties": {
+            "offlineRecurring": true,
+            "userManaged": true,
+            "redirectRequired": [ "Add" ],
+            "soldToAddressRequired": true,
+            "splitPaymentSupported": true,
+            "supportedOperations": [ "charge", "refund", "chargeback" ],
+            "taxable": false,
+            "providerRemittable": false,
+            "isNonStoredPaymentMethod": false
+          },
+          "exclusionTags": [ "LegacySubscriptions" ]
+        }
+      ]
+    }
+  }
+}

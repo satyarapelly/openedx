@@ -1,0 +1,9 @@
+﻿{
+    "testScenarioName": "px.account.v2.address.validate.verifiedshippable",
+    "responsesPerApiCall": {
+        "postAddressValidate": {
+            "statusCode": 200,
+            "content": {"suggested_address":{"country":"US","region":"WA","city":"Redmond","address_line1":"1 Microsoft Way","postal_code":"98052-8300"},"original_address":{"country":"US","region":"wa","city":"Redmond","address_line1":"1 Microsoft Way","postal_code":"98052"},"status":"VerifiedShippable"}
+        }
+    }
+}

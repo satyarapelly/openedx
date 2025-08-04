@@ -1,0 +1,18 @@
+{
+  "testScenarioName": "px.partnersettings.listpibuttonlist.MoveSelectedPIToFirstOption",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "selectinstance": {
+          "template": "listpibuttonlist",
+          "features": {
+            "moveSelectedPIToFirstOption": {
+              "applicableMarkets": []
+            }
+          }
+        }
+      }
+    }
+  }
+}

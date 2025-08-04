@@ -1,0 +1,105 @@
+﻿{
+  "testScenarioName": "px.account.v3.address.zipcode9digits",
+  "responsesPerApiCall": {
+    "getAddress": {
+      "statusCode": 200,
+      "content": {
+        "is_zip_plus_4_present": true,
+        "customer_id": "<AccountId>",
+        "id": "<AddressId>",
+        "country": "US",
+        "region": "wa",
+        "city": "redmond",
+        "address_line1": "1 Microsoft Way",
+        "postal_code": "98052-8300",
+        "first_name": "testName",
+        "last_name": "testName",
+        "phone_number": "4255382416",
+        "validate": false,
+        "etag": "7247023615162416086",
+        "links": {
+          "self": {
+            "href": "b95b3cf9-9035-4b1b-9eab-7cc5661da77a/addresses/f5632430-f0a8-59b4-1740-4a13acf991dc",
+            "method": "GET"
+          },
+          "delete": {
+            "href": "b95b3cf9-9035-4b1b-9eab-7cc5661da77a/addresses/f5632430-f0a8-59b4-1740-4a13acf991dc",
+            "method": "DELETE"
+          }
+        },
+        "object_type": "Address",
+        "resource_status": "Active"
+      }
+    },
+    "postAddressValidate": {
+      "statusCode": 200,
+      "content": {
+        "suggested_address": {
+          "country": "US",
+          "region": "WA",
+          "city": "Redmond",
+          "address_line1": "1 Microsoft Way",
+          "postal_code": "98052"
+        },
+        "original_address": {
+          "country": "US",
+          "region": "wa",
+          "address_line1": "1 Microsoft Way",
+          "postal_code": "98052"
+        },
+        "status": "Verified",
+        "validation_message": ""
+      }
+    },
+    "getProfiles": {
+      "statusCode": 200,
+      "content": {
+        "item_count": 1,
+        "items": [
+          {
+            "first_name": "M...(7)",
+            "last_name": "W...(5)",
+            "birth_date": "11/30/1995",
+            "email_address": "ve...9(12)@gyahoo.com",
+            "culture": "en-US",
+            "account_id": "10fa2a33-a40a-4a11-ad8f-e21daf258be6",
+            "id": "e36710cd-8d0a-4eb3-9a55-2f3ac5b58169",
+            "snapshot_id": "e36710cd-8d0a-4eb3-9a55-2f3ac5b58169/3",
+            "type": "consumer",
+            "default_address_id": "61ffea36-b7a6-417b-9b26-fd390e1c811e",
+            "links": {
+              "self": {
+                "href": "10fa2a33-a40a-4a11-ad8f-e21daf258be6/profiles/e36710cd-8d0a-4eb3-9a55-2f3ac5b58169",
+                "method": "GET"
+              },
+              "snapshot": {
+                "href": "10fa2a33-a40a-4a11-ad8f-e21daf258be6/profiles/e36710cd-8d0a-4eb3-9a55-2f3ac5b58169/3",
+                "method": "GET"
+              },
+              "update": {
+                "href": "10fa2a33-a40a-4a11-ad8f-e21daf258be6/profiles/e36710cd-8d0a-4eb3-9a55-2f3ac5b58169",
+                "method": "POST"
+              },
+              "default_address": {
+                "href": "10fa2a33-a40a-4a11-ad8f-e21daf258be6/addresses/61ffea36-b7a6-417b-9b26-fd390e1c811e",
+                "method": "GET"
+              }
+            },
+            "object_type": "ConsumerProfile",
+            "contract_version": "2014-09-01",
+            "resource_status": "Active"
+          }
+        ],
+        "links": {
+          "add": {
+            "href": "10fa2a33-a40a-4a11-ad8f-e21daf258be6/profiles",
+            "method": "POST"
+          }
+        },
+        "object_type": "Profiles",
+        "contract_version": "2014-09-01",
+        "resource_status": "Active"
+      }
+    }
+  }
+}

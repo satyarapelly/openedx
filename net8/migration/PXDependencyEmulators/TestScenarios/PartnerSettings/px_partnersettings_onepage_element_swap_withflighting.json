@@ -1,0 +1,94 @@
+{
+  "testScenarioName": "px.partnersettings.onepage.element.swap.withflighting",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "add": {
+          "template": "onepage",
+          "features": {
+            "customizeElementLocation": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "moveLastNameBeforeFirstName": true
+                }
+              ]
+            },
+            "disableFirstNameLastNameGrouping": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "usePSSForPXFeatureFlighting": true
+                }
+              ]
+            },
+            "customizeAddressForm": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "addressType": "hapiV1SoldToIndividual",
+                  "dataSource": "hapi",
+                  "fieldsToBeHidden": [ "companyName", "email", "phoneNumber" ]
+                }
+              ]
+            },
+            "showMiddleName": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "usePSSForPXFeatureFlighting": true
+                }
+              ]
+            },
+            "addressValidation": {
+              "applicableMarkets": []
+            }
+          }
+        },
+        "update": {
+          "template": "onepage",
+          "features": {
+            "customizeElementLocation": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "moveLastNameBeforeFirstName": true
+                }
+              ]
+            },
+            "disableFirstNameLastNameGrouping": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "usePSSForPXFeatureFlighting": true
+                }
+              ]
+            },
+            "customizeAddressForm": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "addressType": "hapiV1SoldToIndividual",
+                  "dataSource": "hapi",
+                  "fieldsToBeHidden": [ "companyName", "email", "phoneNumber" ]
+                }
+              ]
+            },
+            "showMiddleName": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "usePSSForPXFeatureFlighting": true
+                }
+              ]
+            },
+            "addressValidation": {
+              "applicableMarkets": []
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "testScenarioName": "px.partnersettings.removeSelectPiNewPaymentMethodLink",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "selectinstance": {
+          "template": "listpidropdown",
+          "features": {
+            "addPMButtonWithPlusIcon": {
+              "applicableMarkets": []
+            },
+            "removeElement": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "removeSelectPiNewPaymentMethodLink": true
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

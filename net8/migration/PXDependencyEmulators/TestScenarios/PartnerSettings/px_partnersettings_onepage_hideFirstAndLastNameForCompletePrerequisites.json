@@ -1,0 +1,23 @@
+{
+  "testScenarioName": "px.partnersettings.onepage.hideelement",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "add": {
+          "template": "onepage",
+          "features": {
+            "hideElement": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "hideFirstAndLastNameForCompletePrerequisites": true
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

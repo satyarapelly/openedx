@@ -1,0 +1,98 @@
+{
+  "testScenarioName": "px.account.v3.putprofile.invalidlocale",
+  "responsesPerApiCall": {
+    "getProfiles": {
+      "statusCode": 200,
+      "content": {
+        "total_count": 1,
+        "items": [
+          {
+            "object_type": "Profile",
+            "customer_id": "<AccountId>",
+            "first_name": "firstName",
+            "last_name": "LastName",
+            "email_address": "emailaddress@yahoo.com",
+            "birth_date": "MASKED(10)",
+            "country": "US",
+            "links": {
+              "self": {
+                "href": "<AccountId>/profiles/ae862c0d-e269-5cf4-b058-02e30c49673a",
+                "method": "GET"
+              },
+              "snapshot": {
+                "href": "<AccountId>/profiles/ae862c0d-e269-5cf4-b058-02e30c49673a/7",
+                "method": "GET"
+              },
+              "update": {
+                "href": "<AccountId>/profiles/ae862c0d-e269-5cf4-b058-02e30c49673a",
+                "method": "PUT"
+              },
+              "update2": {
+                "href": "<AccountId>/profiles/ae862c0d-e269-5cf4-b058-02e30c49673a",
+                "method": "PATCH"
+              },
+              "delete": {
+                "href": "<AccountId>/profiles/ae862c0d-e269-5cf4-b058-02e30c49673a",
+                "method": "DELETE"
+              }
+            },
+            "id": "ae862c0d-e269-5cf4-b058-02e30c49673a",
+            "etag": "3575561744400626769",
+            "snapshot_id": "ae862c0d-e269-5cf4-b058-02e30c49673a/7",
+            "resource_status": "Active",
+            "type": "consumer"
+          }
+        ],
+        "links": {
+          "add": {
+            "href": "<AccountId>/profiles",
+            "method": "POST"
+          }
+        },
+        "object_type": "Profiles",
+        "resource_status": "Active"
+      }
+    },
+    "putProfile": {
+      "statusCode": 400,
+      "content": {
+        "error_code": "InvalidProperty",
+        "message": "A property has invalid data.",
+        "parameters": {
+          "property_name": "locale",
+          "details": "Locale is missing from profile"
+        },
+        "object_type": "Error"
+      }
+    },
+    "postAddress": {
+      "statusCode": 201,
+      "content": {
+        "customer_id": "<AccountId>",
+        "id": "ae862c0d-e269-5cf4-b058-02e30c49675d",
+        "country": "US",
+        "region": "WA",
+        "city": "Spanaway",
+        "address_line1": "MASKED(22)",
+        "postal_code": "98387-4127",
+        "validate": false,
+        "etag": "8327063881508193972",
+        "is_light_weight": false,
+        "is_zip_plus_4_appended": false,
+        "is_zip_plus_4_present": true,
+        "links": {
+          "self": {
+            "href": "<AccountId>/addresses/ae862c0d-e269-5cf4-b058-02e30c49675d",
+            "method": "GET"
+          },
+          "delete": {
+            "href": "<AccountId>/addresses/ae862c0d-e269-5cf4-b058-02e30c49675d",
+            "method": "DELETE"
+          }
+        },
+        "object_type": "Address",
+        "resource_status": "Active"
+      }
+    }
+  }
+}

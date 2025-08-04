@@ -1,0 +1,420 @@
+﻿{
+  "testScenarioName": "px.purchasefd.listtrx.nullobject",
+  "responsesPerApiCall": {
+    "listOrder": {
+      "statusCode": 200,
+      "content": {
+        "items": [
+          {
+            "bundlePrices": [],
+            "clientContext": {
+              "client": "StoreAgent",
+              "deviceId": "68257...(16)",
+              "deviceType": "Unknown"
+            },
+            "createdTime": "2020-07-23T01:43:35.1604588-07:00",
+            "currencyCode": "USD",
+            "displayTotalFeeAmount": 0.0,
+            "isInManualReview": false,
+            "isPIRequired": false,
+            "RequiresPIValidation": "NotRequired",
+            "isUpdatePIAllowed": false,
+            "language": "ru,en,neutral",
+            "manualReviewRiskDecision": "None",
+            "market": "RU",
+            "omniChannelFulfillmentId": "",
+            "orderAdditionalMetadata": "{\"callerApplicationId\":\"svchost\"}",
+            "orderId": "50dc8c2f-1346-4144-8357-144869faaa85",
+            "orderLineItems": [
+              {
+                "availabilityId": "9R7JH2THZW5J",
+                "beneficiary": {
+                  "identityType": "Msa",
+                  "identityValue": "0000000000000000"
+                },
+                "billingState": "Charged",
+                "currencyCode": "USD",
+                "description": "Открывайте для себя новую музыку! Персональные рекомендации — это несколько часов музыки каждый день. Чем больше приложение узнаёт вас, тем точнее предлагает новые треки, альбомы, тематические подборки и песни, которые нравятся вашим друзьям. Все рекомендации удобно собраны в четыре плейлиста: Плейлист дня, Премьера, Дежавю и Тайник.\r\nСлушайте Радио в Музыке\r\nВыбирайте настроение, занятие, любимый жанр или эпоху и слушайте персональный эфир. Отмечайте треки, которые вам нравятся, — они сохранятся в отдельный плейлист. Чем больше вы оцениваете песни, тем лучше Радио понимает, какая музыка вам по душе. Когда приложение узнает вас получше, вы сможете завести личную радиостанцию.\r\nСобирайте свою коллекцию\r\nЛюбые треки и плейлисты можно сохранить в приложении и слушать их в любое время без подключения к сети. Когда вы включаете офлайн-режим, приложение показывает только ту музыку, которая уже была сохранена в телефон.\r\nПопробуйте, это бесплатно\r\nВсе возможности новой Яндекс.Музыки доступны бесплатно в течение трёх месяцев. После этого вы можете продолжить слушать персональные рекомендации и радиостанции. Или оплатите подписку, чтобы продлить доступ к вашей фонотеке и офлайн-режиму.\r\n",
+                "fulfillmentDate": "2020-07-23T01:43:36.6292417-07:00",
+                "fulfillmentState": "Fulfilled",
+                "isPIRequired": false,
+                "isTaxIncluded": true,
+                "lineItemId": "35b338a8-2eff-425d-a5dd-30565e9315c8",
+                "listPrice": 0.0,
+                "fulfillmentStates": [
+                  {
+                    "cancelable": true,
+                    "canceled": false,
+                    "fulfillmentQuantityId": "22897f4f-fe1a-4180-8228-c8d88105497f",
+                    "fulfillmentReturnType": 0,
+                    "fulfillmentState": "Fulfilled",
+                    "refundJustifications": []
+                  }
+                ],
+                "billingStates": [
+                  {
+                    "startIndex": 0,
+                    "endIndex": 0,
+                    "billingState": "Charged",
+                    "totalChargedAmount": 0.0,
+                    "totalRefundedAmount": 0.0,
+                    "totalRefundedTaxAmount": 0.0,
+                    "totalRefundedFeeAmount": 0.0,
+                    "totalRefundedFeeTaxAmount": 0.0
+                  }
+                ],
+                "fulfillmentBillingStates": [
+                  {
+                    "billingState": "Charged",
+                    "count": 1,
+                    "fulfillmentState": "Fulfilled"
+                  }
+                ],
+                "parentalApprovalState": "None",
+                "payments": [],
+                "productId": "9NBLGGH0CB6D",
+                "productReturnCategorization": "App.Purchase",
+                "productType": "Application",
+                "quantity": 1,
+                "retailPrice": 0.0,
+                "shipToAddressId": "",
+                "skuId": "0010",
+                "taxAmount": 0.0,
+                "taxType": "NoApplicableTaxes",
+                "title": "Яндекс.Музыка",
+                "totalAmount": 0.0
+              }
+            ],
+            "orderPlacedDate": "2020-07-23T01:43:36.6292417-07:00",
+            "orderState": "Purchased",
+            "orderValidityEndTime": "2020-07-24T01:43:35.1604588-07:00",
+            "orderValidityStartTime": "2020-07-23T01:43:35.1604588-07:00",
+            "promoCodes": [],
+            "promoTokens": [],
+            "purchaser": {
+              "identityType": "Msa",
+              "identityValue": "0000000000000000"
+            },
+            "taxDetails": [],
+            "testScenarios": "None",
+            "totalAmount": 0.0,
+            "totalAmountBeforeTax": 0.0,
+            "totalAmusementTax": 0.0,
+            "totalChargedToCsvTopOffPI": 0.0,
+            "totalFeeAmount": 0.0,
+            "totalItemAmount": 0.0,
+            "totalSalesTax": 0.0,
+            "totalTaxAmount": 0.0,
+            "version": "7.0"
+          },
+          {
+            "bundlePrices": [],
+            "clientContext": {
+              "client": "RecurrenceQueueReaderV2",
+              "deviceType": "Unknown"
+            },
+            "createdTime": "2020-06-13T08:42:27.3646796-07:00",
+            "currencyCode": "USD",
+            "displayTotalFeeAmount": 0.0,
+            "isInManualReview": false,
+            "isPIRequired": true,
+            "RequiresPIValidation": "NotRequired",
+            "isUpdatePIAllowed": false,
+            "language": "ru",
+            "manualReviewRiskDecision": "None",
+            "market": "RU",
+            "omniChannelFulfillmentId": "",
+            "orderId": "8bb93fbe-513c-4adc-a820-5276f04cd239",
+            "orderLineItems": [
+              {
+                "availabilityId": "CFQ7TTC111M4",
+                "beneficiary": {
+                  "identityType": "Msa",
+                  "identityValue": "0000000000000000"
+                },
+                "billingState": "None",
+                "currencyCode": "USD",
+                "description": "Одна удобная подписка, которой можно поделиться с пятью членами семьи. В состав входят премиум-версии приложений для продуктивной работы, 6 ТБ места в облачном хранилище (по 1 ТБ на пользователя) и расширенные функции безопасности для всех ваших устройств.\r\n\r\nMicrosoft 365 для семьи предоставляет вам и пользователям, с которыми вы поделились подпиской, различные возможности:\r\n•\tИспользование приложений и служб на ваших любимых устройствах под управлением Windows, macOS, iOS и Android *\r\n•\tПолезные рекомендации для текста и дизайна, а также расширенный набор шаблонов, стоковых фотографий, значков и шрифтов в Word, Excel и PowerPoint.\r\n•\tДоступ к файлам и фотографиям с различных устройств и возможность делиться ими благодаря 6 ТБ места в облачном хранилище OneDrive (по 1 ТБ на пользователя)\r\n•\tOutlook — единое решение для работы с сообщениями, календарями и задачами, а также защиты электронной почты с помощью расширенных функций безопасности в службе Outlook.com **\r\n•\tЗащита файлов с помощью встроенных средств обнаружения программ-шантажистов и восстановления данных, а также двухфакторная проверка подлинности при идентификации для доступа к важным документам в личном сейфе в хранилище OneDrive\r\n•\tДоступ к последним возможностям приложений и служб сразу после выпуска новых версий\r\n•\tБесплатная постоянная поддержка специалистов в чате или по телефону на период действия подписки\r\n\r\n* Доступность приложений зависит от устройства и языка. Набор функций и возможностей зависит от платформы.\r\n** Для клиентов, у которых адрес электронной почты оканчивается на @outlook.com, @hotmail.com, @live.com или @msn.com.",
+                "fulfillmentState": "None",
+                "isPIRequired": true,
+                "isTaxIncluded": false,
+                "lineItemId": "d78ba4c7-1a5e-4fee-95b4-88d7dbc6c34f",
+                "listPrice": 0.0,
+                "fulfillmentStates": [
+                  {
+                    "cancelable": true,
+                    "canceled": false,
+                    "fulfillmentQuantityId": "5fbe0c9b-2ac9-40d2-b595-ac4f962dca6d",
+                    "fulfillmentReturnType": 0,
+                    "fulfillmentState": "None",
+                    "refundJustifications": []
+                  }
+                ],
+                "billingStates": [
+                  {
+                    "startIndex": 0,
+                    "endIndex": 0,
+                    "billingState": "None",
+                    "totalChargedAmount": 0.0,
+                    "totalRefundedAmount": 0.0,
+                    "totalRefundedTaxAmount": 0.0,
+                    "totalRefundedFeeAmount": 0.0,
+                    "totalRefundedFeeTaxAmount": 0.0
+                  }
+                ],
+                "fulfillmentBillingStates": [
+                  {
+                    "billingState": "None",
+                    "count": 1,
+                    "fulfillmentState": "None"
+                  }
+                ],
+                "parentalApprovalState": "None",
+                "payments": [],
+                "productId": "CFQ7TTC0K5DM",
+                "productReturnCategorization": "App.Purchase",
+                "productType": "PASS",
+                "quantity": 1,
+                "retailPrice": 0.0,
+                "shipToAddressId": "",
+                "skuId": "00HX",
+                "taxAmount": 0.0,
+                "taxType": "TaxesNotIncluded",
+                "title": "Microsoft 365 для семьи",
+                "tokenIdentifier": "",
+                "totalAmount": 0.0,
+                "recurrenceId": "mdr:1055519018761954:9b2555adc6494df6afe7c684c070fc44:3afd3ba5-b6e2-4c14-a667-38f1e41376bb"
+              }
+            ],
+            "orderState": "Failed",
+            "orderValidityEndTime": "2020-06-14T08:42:27.3646796-07:00",
+            "orderValidityStartTime": "2020-06-13T08:42:27.3646796-07:00",
+            "promoCodes": [],
+            "promoTokens": [],
+            "purchaser": {
+              "identityType": "Msa",
+              "identityValue": "0000000000000000"
+            },
+            "taxDetails": [],
+            "testScenarios": "None",
+            "totalAmount": 0.0,
+            "totalAmountBeforeTax": 0.0,
+            "totalAmusementTax": 0.0,
+            "totalChargedToCsvTopOffPI": 0.0,
+            "totalFeeAmount": 0.0,
+            "totalItemAmount": 0.0,
+            "totalSalesTax": 0.0,
+            "totalTaxAmount": 0.0,
+            "version": "7.0"
+          },
+          {
+            "billingInformation": {
+              "billingRecordId": "93c46e4e-4437-447d-bb1b-80341f2dfef6",
+              "billingRecordVersion": 0,
+              "paymentInstrumentId": "D+-WfwAAAAABAACA",
+              "sessionId": "4a391c91-b7d3-4322-af71-657eeaf3c252",
+              "soldToAddressId": "d77a2bfa-7198-5d37-574f-32b5d6e33b7e",
+              "taxInfoReference": "00000000-0000-0000-0000-000000000000",
+              "tokenizedPaymentInstrumentData": ""
+            },
+            "bundlePrices": [],
+            "clientContext": {
+              "client": "UniversalWebStore.Cart",
+              "deviceFamily": "Web",
+              "deviceType": "Unknown"
+            },
+            "createdTime": "2020-07-13T03:41:11.9647735-07:00",
+            "currencyCode": "GBP",
+            "displayTotalFeeAmount": 0.0,
+            "friendlyName": "MASKED(7)",
+            "isInManualReview": false,
+            "isPIRequired": true,
+            "RequiresPIValidation": "NotRequired",
+            "isUpdatePIAllowed": false,
+            "language": "en-GB",
+            "manualReviewRiskDecision": "None",
+            "market": "GB",
+            "omniChannelFulfillmentId": "",
+            "orderAdditionalMetadata": "{}",
+            "orderId": "fc30a4ba-ba2c-46a3-acec-fe81ca5e92e2",
+            "orderLineItems": [
+              {
+                "availabilityId": "CFQ7TTC0K97S",
+                "beneficiary": {
+                  "identityType": "Msa",
+                  "identityValue": "0000000000000000"
+                },
+                "billingState": "Charged",
+                "currencyCode": "GBP",
+                "description": "Play online with Gold. Gaming on Xbox One is better with Xbox Live Gold. Join the best community of gamers on the fastest, most reliable console gaming network. Quickly find people you’ll love to play with using Clubs and the Looking For group. Get 2-4 free games every month and get discounts of up to 50-75% on Xbox One in Microsoft Store.",
+                "fulfillmentDate": "2020-07-13T03:41:28.9658854-07:00",
+                "fulfillmentState": "Fulfilled",
+                "isPIRequired": true,
+                "isTaxIncluded": true,
+                "lineItemId": "b7696286-9396-41d9-ad5a-4f09ab329baf",
+                "listPrice": 17.99,
+                "fulfillmentStates": [
+                  {
+                    "cancelable": true,
+                    "canceled": false,
+                    "fulfillmentQuantityId": "dabfdb0c-3fff-4268-a6f7-0e9a04888a5d",
+                    "fulfillmentReturnType": 0,
+                    "fulfillmentState": "Fulfilled",
+                    "refundJustifications": [],
+                    "tokenIdentifier": "23F290EA8DF7699B48E417FB2B05BF8884C4C4CD39057C7FB3161A1372180824"
+                  }
+                ],
+                "billingStates": [
+                  {
+                    "startIndex": 0,
+                    "endIndex": 0,
+                    "billingState": "Charged",
+                    "totalChargedAmount": 17.99,
+                    "totalRefundedAmount": 0.0,
+                    "totalRefundedTaxAmount": 0.0,
+                    "totalRefundedFeeAmount": 0.0,
+                    "totalRefundedFeeTaxAmount": 0.0
+                  }
+                ],
+                "fulfillmentBillingStates": [
+                  {
+                    "billingState": "Charged",
+                    "count": 1,
+                    "fulfillmentState": "Fulfilled"
+                  }
+                ],
+                "parentalApprovalState": "None",
+                "payments": [
+                  {
+                    "paymentInstrumentId": "D+-WfwAAAAABAACA",
+                    "chargedAmount": 11.06
+                  },
+                  {
+                    "paymentInstrumentId": "D+-WfwAAAAABAACA",
+                    "chargedAmount": 6.93
+                  }
+                ],
+                "productId": "CFQ7TTC0K5ZM",
+                "productReturnCategorization": "Token",
+                "productType": "PASS",
+                "quantity": 1,
+                "retailPrice": 17.99,
+                "shipToAddressId": "",
+                "skuId": "0002",
+                "taxAmount": 3.0,
+                "taxType": "VATIncluded",
+                "title": "3-Month Xbox Live Gold Membership (Digital Code)",
+                "tokenIdentifier": "23F290EA8DF7699B48E417FB2B05BF8884C4C4CD39057C7FB3161A1372180824",
+                "totalAmount": 17.99
+              }
+            ],
+            "orderPlacedDate": "2020-07-13T03:41:28.9658854-07:00",
+            "orderState": "Purchased",
+            "orderValidityEndTime": "2020-07-14T03:41:11.9647735-07:00",
+            "orderValidityStartTime": "2020-07-13T03:41:11.9647735-07:00",
+            "promoCodes": [],
+            "promoTokens": [],
+            "purchaser": {
+              "identityType": "Msa",
+              "identityValue": "0000000000000000"
+            },
+            "riskSessionId": "d213b543-6b7b-43d9-bfeb-5cdfd7d0984d",
+            "shortOrderId": "9409672347",
+            "taxDetails": [
+              {
+                "jurisdiction": "UNITED KINGDOM",
+                "taxAmount": 3.0,
+                "taxType": "VAT"
+              }
+            ],
+            "testScenarios": "None",
+            "totalAmount": 17.99,
+            "totalAmountBeforeTax": 14.99,
+            "totalAmusementTax": 0.0,
+            "totalChargedToCsvTopOffPI": 0.0,
+            "totalDeliveryPriceAmount": 0.0,
+            "totalDeliveryPriceTaxAmount": 0.0,
+            "totalFeeAmount": 0.0,
+            "totalItemAmount": 14.99,
+            "totalSalesTax": 3.0,
+            "totalTaxAmount": 3.0,
+            "version": "7.0"
+          }
+        ]
+      }
+    },
+    "listSub": {
+      "statusCode": 200,
+      "content": {
+        "items": [
+          {
+            "autoRenew": true,
+            "beneficiary": "msa:985154583002141",
+            "count": 1,
+            "documentVersion": 0,
+            "entitlementId": "1245f14feb5640fd84101ce7ca7f4fe7",
+            "entitlementIds": [ "1245f14feb5640fd84101ce7ca7f4fe7" ],
+            "expirationTime": "2021-07-18T17:00:00-07:00",
+            "id": "mdr:985154583002141:82a30baa1699487d8b6984ad79dce3ca:88ae6c85-a3b4-4a6b-95e6-47e25dc7ea8a",
+            "isMasteredInModern": true,
+            "isTrial": false,
+            "isWithinResellerRestrictionPeriod": false,
+            "language": "en-US",
+            "lastModified": "2020-07-18T19:36:14.3762484-07:00",
+            "market": "US",
+            "billingDate": "2021-07-18T17:00:00-07:00",
+            "modernRevenueRecognitionScheduleId": "b1b24937-fd62-41ed-8fec-e7f816cac4fa",
+            "paymentInstrumentId": "y-ZzhwAAAAADAACA",
+            "paymentInstrumentSessionId": "c90b3437-d21f-4b50-9dd9-8f8ee810d93b",
+            "productId": "CFQ7TTC0K5BF",
+            "purchaser": "msa:985154583002141",
+            "recurrenceGroup": "Office 365 (Worldwide)",
+            "recurrencePolicyId": "Yearly",
+            "recurrenceState": "Active",
+            "revenueRecognitionEndDate": "2021-09-10T17:00:00-07:00",
+            "revenueRecognitionState": "Started",
+            "skuId": "007R",
+            "soldToAddressId": "8e8b19d2-7fe3-5adb-b2a6-e229e4ebe6ca",
+            "startTime": "2020-07-18T17:00:00-07:00",
+            "changeRecords": [
+              {
+                "autoRenew": true,
+                "beneficiary": "msa:985154583002141",
+                "billingDate": "2021-07-18T17:00:00-07:00",
+                "clientContext": {
+                  "client": "OfficeCom"
+                },
+                "convertedFrom": [],
+                "count": 1,
+                "entitlementId": "1245f14feb5640fd84101ce7ca7f4fe7",
+                "entitlementIds": [ "1245f14feb5640fd84101ce7ca7f4fe7" ],
+                "eventSequence": 1,
+                "eventTime": "2020-07-18T19:36:14.2682104-07:00",
+                "eventType": "Created",
+                "expirationTime": "2021-07-18T17:00:00-07:00",
+                "isTrial": false,
+                "language": "en-US",
+                "lotId": 100,
+                "market": "US",
+                "modernRevenueRecognitionScheduleId": "b1b24937-fd62-41ed-8fec-e7f816cac4fa",
+                "orderId": "88ae6c85-a3b4-4a6b-95e6-47e25dc7ea8a",
+                "orderLineItemId": "6a5a85c8-9ecb-4923-971f-46ee809bd75b",
+                "paymentInstrumentId": "y-ZzhwAAAAADAACA",
+                "paymentInstrumentSessionId": "c90b3437-d21f-4b50-9dd9-8f8ee810d93b",
+                "productId": "CFQ7TTC0K5BF",
+                "recurrenceGroup": "Office 365 (Worldwide)",
+                "recurrencePolicyId": "Yearly",
+                "reportingStructure": "{\"CampaignName\":\"\",\"CampaignId\":\"\",\"ChannelName\":\"\",\"ChannelType\":\"Direct\",\"Duration\":\"1\",\"DurationType\":\"Years\",\"PaymentClass\":\"Full\",\"RevenueSKU\":\"QQ2-00002\",\"RecurrenceRevenueSKU\":\"\"}",
+                "revenueRecognitionEndDate": "2021-09-10T17:00:00-07:00",
+                "revenueRecognitionState": "Started",
+                "skuId": "007R",
+                "soldToAddressId": "8e8b19d2-7fe3-5adb-b2a6-e229e4ebe6ca",
+                "trackingId": "1245f14f-eb56-40fd-8410-1ce7ca7f4fe7"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}
