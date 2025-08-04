@@ -15,6 +15,10 @@
     <PackageReference Include="Yarp.ReverseProxy" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="ControllersBackup/**" />
+    <Compile Remove="LegacyCommerceService/**" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Update="wcf.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
