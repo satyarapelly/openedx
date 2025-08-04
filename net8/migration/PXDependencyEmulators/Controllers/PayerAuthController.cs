@@ -9,7 +9,8 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
     using System.Net.Http.Headers;
     using System.Text;
     using System.Threading.Tasks;
-    using System.Web.Http;
+    using Microsoft.AspNetCore.Mvc;
+using FromUri = Microsoft.AspNetCore.Mvc.FromQueryAttribute;
     using Common;
     using Common.Transaction;
     using Common.Web;
@@ -23,7 +24,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
         V3
     }
 
-    public class PayerAuthController : ApiController
+    public class PayerAuthController : ControllerBase
     {
         private const string AcsEmulatorUrlPrefix = "https://payments-acs-emulator-fzeug0g7atchf8d7.b02.azurefd.net/acs/{0}";
 
