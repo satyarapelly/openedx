@@ -1,27 +1,24 @@
-﻿// <copyright file="AddHeaderParameterOperationFilter.cs" company="Microsoft">Copyright (c) Microsoft. All rights reserved.</copyright>
+// <copyright file="AddHeaderParameterOperationFilter.cs" company="Microsoft">Copyright (c) Microsoft. All rights reserved.</copyright>
 
 namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators
 {
     using System.Collections.Generic;
-    using System.Web.Http.Description;
-    using Swashbuckle.Swagger;
+    using Microsoft.OpenApi.Models;
+    using Swashbuckle.AspNetCore.SwaggerGen;
 
     public class AddHeaderParameterOperationFilter : IOperationFilter
     {
-        public void Apply(Operation operation, SchemaRegistry schemaRegistry, ApiDescription apiDescription)
+        public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
-            if (operation.parameters == null)
-            {
-                operation.parameters = new List<Parameter>();
-            }
+            operation.Parameters ??= new List<OpenApiParameter>();
 
-            operation.parameters.Add(new Parameter
+            operation.Parameters.Add(new OpenApiParameter
             {
-                name = "x-ms-test",
-                @in = "header",
-                description = "Send x-ms-test header value",
-                required = false,
-                type = "string"
+                Name = "x-ms-test",
+                In = ParameterLocation.Header,
+                Description = "Send x-ms-test header value",
+                Required = false,
+                Schema = new OpenApiSchema { Type = "string" }
             });
         }
     }
