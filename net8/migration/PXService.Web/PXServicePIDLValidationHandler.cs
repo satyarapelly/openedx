@@ -21,10 +21,10 @@ namespace Microsoft.Commerce.Payments.PXService
     /// <summary>
     /// Delegating handler which validates DisplayDescription with DataDescription in PIDL document at response
     /// </summary>
-    public class PXServicePIDLValidationHandler : DelegatingHandler 
+    public class PXServicePIDLValidationHandler : DelegatingHandler
     {
         private static readonly string[] ValidationAllowedControllers = { "AddressDescriptionsController", "PaymentMethodDescriptionsController", "ProfileDescriptionsController", "ChallengeDescriptionsController", "TaxIdDescriptionsController" };
-        
+
         public PXServicePIDLValidationHandler()
         {
         }

@@ -4,6 +4,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.Tracing;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
@@ -252,7 +253,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 catch (Exception ex)
                 {
                     // Getting the network tokens for card art is a best effort and the ListModernPIs API should not fail because of it, but do log the failure as a warning.
-                    SllWebLogger.TraceServerMessage($"NetworkTokenizationServiceAccessor.GetNetworkTokens:" + ex.ToString(), traceActivityId.ToString(), null, "Failed to get the network tokens.", Diagnostics.Tracing.EventLevel.Warning);
+                    SllWebLogger.TraceServerMessage($"NetworkTokenizationServiceAccessor.GetNetworkTokens:" + ex.ToString(), traceActivityId.ToString(), null, "Failed to get the network tokens.", EventLevel.Warning);
                 }
             }
 
@@ -1622,7 +1623,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                     traceActivityId.ToString(),
                     null,
                     "Public IP address is null",
-                        Diagnostics.Tracing.EventLevel.Warning);
+                        EventLevel.Warning);
             }
 
             return this.Request.CreateResponse(challengeContext);
@@ -2996,7 +2997,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                     && IsCreditCard(paymentMethodFamily, paymentMethodType)
                     && string.IsNullOrEmpty(pxChallengeSessionId))
             {
-                SllWebLogger.TraceServerMessage("AddNewPI", traceActivityId.CorrelationVectorV4.Value, traceActivityId.ActivityId.ToString(), $"Challenge triggered by PXChallengeSwitch and PXEnableChallenge for PXChallengeSessionId:{pxChallengeSessionId}", Diagnostics.Tracing.EventLevel.Informational);
+                SllWebLogger.TraceServerMessage("AddNewPI", traceActivityId.CorrelationVectorV4.Value, traceActivityId.ActivityId.ToString(), $"Challenge triggered by PXChallengeSwitch and PXEnableChallenge for PXChallengeSessionId:{pxChallengeSessionId}", EventLevel.Informational);
                 return await this.CreatePXChallengeResponse(pi, language, partner, pxChallengeSessionId, traceActivityId, null, accountId);
             }
 
@@ -3439,7 +3440,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                     // Checking if PX Challenge switch is on and error Code ChallegeRequired received from PIMS
                     if (this.ExposedFlightFeatures.Contains(Flighting.Features.PXChallengeSwitch) && string.Equals(ex.Error.ErrorCode, Constants.CreditCardErrorCodes.ChallengeRequired, StringComparison.OrdinalIgnoreCase))
                     {
-                        SllWebLogger.TraceServerMessage("AddNewPI", traceActivityId.CorrelationVectorV4.Value, traceActivityId.ActivityId.ToString(), $"Challenge triggered by PIMS Signal for PXChallengeSessionId:{pxChallengeSessionId}", Diagnostics.Tracing.EventLevel.Informational);
+                        SllWebLogger.TraceServerMessage("AddNewPI", traceActivityId.CorrelationVectorV4.Value, traceActivityId.ActivityId.ToString(), $"Challenge triggered by PIMS Signal for PXChallengeSessionId:{pxChallengeSessionId}", EventLevel.Informational);
                         return await this.CreatePXChallengeResponse(pi, language, partner, pxChallengeSessionId, traceActivityId, null, accountId);
                     }
 
@@ -4255,7 +4256,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                     this.Request.Headers.Remove(PaymentConstants.PaymentExtendedHttpHeaders.TestHeader);
                 }
 
-                SllWebLogger.TraceServerMessage("AddNewPI", traceActivityId.CorrelationVectorV4.Value, traceActivityId.ActivityId.ToString(), $"userAccountId:{qrCodePaymentSessionData.AccountId}", Diagnostics.Tracing.EventLevel.Informational);
+                SllWebLogger.TraceServerMessage("AddNewPI", traceActivityId.CorrelationVectorV4.Value, traceActivityId.ActivityId.ToString(), $"userAccountId:{qrCodePaymentSessionData.AccountId}", EventLevel.Informational);
             }
 
             return accountId;

@@ -243,7 +243,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentClient
                     }
                     else
                     {
-                        SllWebLogger.TraceServerMessage("CheckoutRequestEx Confirm", traceActivityId.CorrelationVectorV4.Value, traceActivityId.ActivityId.ToString(), "challenge is required but ChallengePIDL is null", Diagnostics.Tracing.EventLevel.Warning);
+                        SllWebLogger.TraceServerMessage("CheckoutRequestEx Confirm", traceActivityId.CorrelationVectorV4.Value, traceActivityId.ActivityId.ToString(), "challenge is required but ChallengePIDL is null", EventLevel.Warning);
                     }
                 }
 
@@ -267,7 +267,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentClient
                     }
                     else
                     {
-                        SllWebLogger.TraceServerMessage("CheckoutRequestEx Confirm", traceActivityId.CorrelationVectorV4.Value, traceActivityId.ActivityId.ToString(), "ThreeDs2 challenge is required but 3DS2ChallengePIDL is null", Diagnostics.Tracing.EventLevel.Warning);
+                        SllWebLogger.TraceServerMessage("CheckoutRequestEx Confirm", traceActivityId.CorrelationVectorV4.Value, traceActivityId.ActivityId.ToString(), "ThreeDs2 challenge is required but 3DS2ChallengePIDL is null", EventLevel.Warning);
                     }
                 }
 

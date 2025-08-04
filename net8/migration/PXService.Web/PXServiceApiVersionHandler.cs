@@ -260,7 +260,7 @@ namespace Microsoft.Commerce.Payments.PXService
             }
 
             var traceActivityId = request.GetRequestCorrelationId();
-            
+
             // Get the partner name from request context tenant id
             var requestContext = HttpRequestHelper.GetRequestContext(request, traceActivityId);
             if (requestContext?.TenantId != null && string.IsNullOrEmpty(partner))

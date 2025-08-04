@@ -1334,7 +1334,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
                         paymentContextObj
                     };
                 
-                    SllWebLogger.TraceServerMessage("VerifyAdditionalSessionDataParams", piId, paymentSession.Id, JsonConvert.SerializeObject(totalValidationResults), Diagnostics.Tracing.EventLevel.Informational);
+                    SllWebLogger.TraceServerMessage("VerifyAdditionalSessionDataParams", piId, paymentSession.Id, JsonConvert.SerializeObject(totalValidationResults), EventLevel.Informational);
                 }
 
                 if ((decimal)paymentContextObj?.Pretax == 0 && (decimal)paymentContextObj?.PostTax == 0)

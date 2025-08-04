@@ -330,7 +330,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 this.ExposedFlightFeatures,
                 setting?.Features,
                 originalPartner: partner,
-                isGuestAccount: GuestAccountHelper.IsGuestAccount(this.Request));
+                isGuestAccount: GuestAccountHelper.IsGuestAccount(Request));
 
             PostProcessor.Process(pidls, PIDLResourceFactory.FeatureFactory, featureContext);
 

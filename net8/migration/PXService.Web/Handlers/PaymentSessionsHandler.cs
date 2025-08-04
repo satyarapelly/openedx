@@ -997,7 +997,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
                     excludeErrorFeatureFormat: "PSD2SafetyNet-AppAuthN-{0}-{1}"))
             {
                 // TODO : Remove after Fraud Investigation
-                SllWebLogger.TraceServerMessage("V1 Authenticate App", null, sessionId, payerAuthResponse?.TransactionStatus != null ? "TransStatus: " + payerAuthResponse.TransactionStatus.ToString() : "No transStatus available", Diagnostics.Tracing.EventLevel.Informational);
+                SllWebLogger.TraceServerMessage("V1 Authenticate App", null, sessionId, payerAuthResponse?.TransactionStatus != null ? "TransStatus: " + payerAuthResponse.TransactionStatus.ToString() : "No transStatus available", EventLevel.Informational);
 
                 await this.TransactionDataServiceAccessor.UpdateCustomerChallengeAttestation(accountId, sessionId, true, traceActivityId);
 
@@ -1021,7 +1021,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
                 exposedFlights: this.storedSession.ExposedFlightFeatures);
 
             // TODO : Remove after Fraud Investigation
-            SllWebLogger.TraceServerMessage("V1 Authenticate App", null, sessionId, "Mapped Status: " + mappedStatus.ToString(), Diagnostics.Tracing.EventLevel.Informational);
+            SllWebLogger.TraceServerMessage("V1 Authenticate App", null, sessionId, "Mapped Status: " + mappedStatus.ToString(), EventLevel.Informational);
 
             // Localized text to display in PSD2 app native challenges
             var localizations = GetPSD2NativeChallengeLocalizations(authRequest.Language);
@@ -2111,7 +2111,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
             await this.SafetyNetUpdateSession(traceActivityId);
 
             // TODO : Remove after Fraud Investigation
-            SllWebLogger.TraceServerMessage("V1 Authenticate App", null, this.storedSession.Id, authResponse?.TransactionStatus != null ? "TransStatus: " + authResponse.TransactionStatus.ToString() : "No transStatus available", Diagnostics.Tracing.EventLevel.Informational);
+            SllWebLogger.TraceServerMessage("V1 Authenticate App", null, this.storedSession.Id, authResponse?.TransactionStatus != null ? "TransStatus: " + authResponse.TransactionStatus.ToString() : "No transStatus available", EventLevel.Informational);
 
             // 3. Return if challenge is not required.
             PaymentSession paymentSession = new PaymentSession(this.storedSession);

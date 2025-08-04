@@ -1,28 +1,34 @@
 ﻿// <copyright file="ProbeController.cs" company="Microsoft">Copyright (c) Microsoft. All rights reserved.</copyright>
 
-namespace Microsoft.Commerce.Payments.PXService
-{
-    using System.Configuration;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Web.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
+namespace Microsoft.Commerce.Payments.PXService.Controllers
+{
     /// <summary>
     /// Probe Controller for health status
     /// </summary>
-    public class ProbeController : ApiController
+    [ApiController]
+    [Route("api/[controller]")]
+    public class ProbeController : ControllerBase
     {
-        public const string BuildVersionKey = "BuildVersion";
+        private const string BuildVersionKey = "BuildVersion";
+        private readonly IConfiguration configuration;
+
+        public ProbeController(IConfiguration configuration)
+        {
+            this.configuration = configuration;
+        }
 
         /// <summary>
         /// Gets a probe
         /// </summary>
         /// <returns>Probe status</returns>
         [HttpGet]
-        [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method until we update with full functionality.")]
-        public ServiceStatus Get()
+        public ActionResult<ServiceStatus> Get()
         {
-            string buildVersion = ConfigurationManager.AppSettings[BuildVersionKey];
-            return new ServiceStatus { Status = "Alive", BuildVersion = buildVersion };
+            string buildVersion = this.configuration[BuildVersionKey] ?? "unknown";
+            return Ok(new ServiceStatus { Status = "Alive", BuildVersion = buildVersion });
         }
     }
 }

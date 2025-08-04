@@ -16,7 +16,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentTransaction
     using Microsoft.Commerce.Payments.Pidl.Localization;
     using Microsoft.Commerce.Payments.PidlFactory.V7;
     using Microsoft.Commerce.Payments.PXService.V7;
-    using Microsoft.Practices.ObjectBuilder2;
+    using Microsoft.Extensions.DependencyInjection;
     using Model;
     using Newtonsoft.Json.Linq;
     using PXCommon;
@@ -24,9 +24,9 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentTransaction
     using Catalog = PXService.Model.CatalogService;
     using ClientActionContract = GlobalConstants.ClientActionContract;
     using D365 = PXService.Model.D365Service;
-    using EventLevel = Diagnostics.Tracing.EventLevel;
     using PIMSModel = Microsoft.Commerce.Payments.PimsModel.V4;
     using Purchase = PXService.Model.PurchaseService;
+    using System.Diagnostics.Tracing;
 
     /// <summary>
     /// Gets orders and subscriptions from M$ and D365, legacy subscriptions from CTP, product details from 
@@ -710,8 +710,14 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentTransaction
 
                     if (accountLevelTransaction.Orders != null)
                     {
-                        accountLevelTransaction.Orders = accountLevelTransaction.Orders.Where(x => x.Piid == accountInfo.PaymentInstrumentId).ToList();
-                        accountLevelTransaction.Orders.Where(x => x.UserId == puid).ForEach(x => x.Email = email);
+                        accountLevelTransaction.Orders = accountLevelTransaction.Orders
+                            .Where(x => x.Piid == accountInfo.PaymentInstrumentId)
+                            .ToList();
+
+                        foreach (var x in accountLevelTransaction.Orders.Where(x => x.UserId == puid))
+                        {
+                            x.Email = email;
+                        }
 
                         if (transactions == null)
                         {
@@ -798,7 +804,14 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentTransaction
                     loggedInUserEmail = email;
                 }
 
-                searchTransactionRequests.Where(x => x.PaymentInstrumentAccountId == transactionRequest.PaymentInstrumentAccountId).ForEach(x => { x.Email = email; x.Puid = puid; });
+                searchTransactionRequests
+                    .Where(x => x.PaymentInstrumentAccountId == transactionRequest.PaymentInstrumentAccountId)
+                    .ToList()
+                    .ForEach(x =>
+                    {
+                        x.Email = email;
+                        x.Puid = puid;
+                    });
             }
 
             var searchTransactionTasks = searchTransactionRequests.Select(async accountinfo =>
@@ -809,12 +822,29 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentTransaction
 
                 if (!string.IsNullOrWhiteSpace(accountinfo?.Puid))
                 {
-                    accountLevelTransaction = await this.ListTransactionsFromCheckPI(accountinfo?.PaymentInstrumentAccountId, null, null, 0, language, partner, country, accountinfo?.Puid, accountinfo?.PaymentInstruments, Operations.SearchTransactions);
+                    accountLevelTransaction = await this.ListTransactionsFromCheckPI(
+                        accountinfo.PaymentInstrumentAccountId,
+                        null, null, 0,
+                        language, partner, country,
+                        accountinfo.Puid,
+                        accountinfo.PaymentInstruments,
+                        Operations.SearchTransactions);
 
                     if (accountLevelTransaction.Orders != null)
                     {
-                        accountLevelTransaction.Orders = accountLevelTransaction.Orders.Where(x => paymentInstrumentId.Contains(x.Piid)).ToList();
-                        accountLevelTransaction.Orders.Where(x => x.UserId == accountinfo?.Puid).ForEach(x => x.Email = accountinfo?.Email);                        
+                        var filteredOrders = accountLevelTransaction.Orders
+                            .Where(x => paymentInstrumentId.Contains(x.Piid))
+                            .ToList();
+
+                        foreach (var order in filteredOrders)
+                        {
+                            if (order.UserId == accountinfo.Puid)
+                            {
+                                order.Email = accountinfo.Email;
+                            }
+                        }
+
+                        accountLevelTransaction.Orders = filteredOrders;
                     }
                 }
 

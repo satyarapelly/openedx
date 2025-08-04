@@ -3774,7 +3774,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                     string.Empty,
                     null,
                     "IPAddress: " + riskDataObject.IPAddress + ", DeviceId: " + riskDataObject.DeviceId,
-                    (Diagnostics.Tracing.EventLevel)System.Diagnostics.Tracing.EventLevel.Informational);
+                    (Diagnostics.Tracing.EventLevel)System.EventLevel.Informational);
             }
 
             qrCodeContext.RiskData = riskDataObject;
