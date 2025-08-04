@@ -3,12 +3,16 @@
 namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators
 {
     using System.Net.Http;
-    using System.Web.Http;
-    using System.Web.Http.Routing;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Routing;
 
     public static class EmulatorsRouteExtensions
     {
-        internal static void MapPartnerSettingsRoutes(this HttpRouteCollection routes)
+        private static void MapHttpRoute(this IEndpointRouteBuilder routes, string name, string routeTemplate, object defaults, object? constraints = null)
+        {
+            routes.MapControllerRoute(name, routeTemplate, defaults);
+        }
+        internal static void MapPartnerSettingsRoutes(this IEndpointRouteBuilder routes)
         {
             routes.MapHttpRoute(
                 name: Constants.PartnerSettingsApiName.GetPartnerSettings,
@@ -16,7 +20,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators
                 defaults: new { controller = "PartnerSettings", action = Constants.PartnerSettingsApiName.GetPartnerSettings });
         }
 
-        internal static void MapPIMSRoutes(this HttpRouteCollection routes)
+        internal static void MapPIMSRoutes(this IEndpointRouteBuilder routes)
         {
             // PIMS
             routes.MapHttpRoute(
@@ -105,7 +109,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators
                 defaults: new { controller = "PimsPaymentMethods", action = Constants.PIMSApiName.GetPM });
         }
 
-        internal static void MapMSRewardsRoutes(this HttpRouteCollection routes)
+        internal static void MapMSRewardsRoutes(this IEndpointRouteBuilder routes)
         {
             routes.MapHttpRoute(
                 name: Constants.MSRewardsApiName.GetUserInfo,
@@ -128,7 +132,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators
                 defaults: new { controller = "RedeemRewards", action = Constants.MSRewardsApiName.RedeemRewards });
         }
         
-        internal static void MapCatalogRoutes(this HttpRouteCollection routes)
+        internal static void MapCatalogRoutes(this IEndpointRouteBuilder routes)
         {
             routes.MapHttpRoute(
                 name: Constants.CatalogApiName.GetProducts,
@@ -136,7 +140,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators
                 defaults: new { controller = "Catalog", action = Constants.CatalogApiName.GetProducts });
         }
 
-        internal static void MapAccountRoutes(this HttpRouteCollection routes)
+        internal static void MapAccountRoutes(this IEndpointRouteBuilder routes)
         {
             routes.MapHttpRoute(
                 name: Constants.AccountApiName.GetProfiles,
@@ -146,14 +150,12 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators
             routes.MapHttpRoute(
                 name: Constants.AccountApiName.PutProfile,
                 routeTemplate: "{accountId}/profiles/{profileId}",
-                defaults: new { controller = "AccountProfiles", action = Constants.AccountApiName.PutProfile },
-                constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Put) });
+                defaults: new { controller = "AccountProfiles", action = Constants.AccountApiName.PutProfile });
 
             routes.MapHttpRoute(
                 name: Constants.AccountApiName.PatchProfile,
                 routeTemplate: "{accountId}/profiles/{profileId}",
-                defaults: new { controller = "AccountProfiles", action = Constants.AccountApiName.PatchProfile },
-                constraints: new { httpMethod = new HttpMethodConstraint(new HttpMethod("PATCH")) });
+                defaults: new { controller = "AccountProfiles", action = Constants.AccountApiName.PatchProfile });
 
             routes.MapHttpRoute(
                 name: Constants.AccountApiName.GetCustomers,
@@ -163,14 +165,12 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators
             routes.MapHttpRoute(
                 name: Constants.AccountApiName.PostAddress,
                 routeTemplate: "{accountId}/addresses",
-                defaults: new { controller = "AccountAddresses", action = Constants.AccountApiName.PostAddress },
-                constraints: new { httpMethod = new HttpMethodConstraint(new HttpMethod("POST")) });
+                defaults: new { controller = "AccountAddresses", action = Constants.AccountApiName.PostAddress });
 
             routes.MapHttpRoute(
                 name: Constants.AccountApiName.GetAddresses,
                 routeTemplate: "{accountId}/addresses",
-                defaults: new { controller = "AccountAddresses", action = Constants.AccountApiName.GetAddresses },
-                constraints: new { httpMethod = new HttpMethodConstraint(new HttpMethod("Get")) });
+                defaults: new { controller = "AccountAddresses", action = Constants.AccountApiName.GetAddresses });
 
             routes.MapHttpRoute(
                name: Constants.AccountApiName.GetAddress,
@@ -188,7 +188,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators
                 defaults: new { controller = "AccountAddresses", action = Constants.AccountApiName.LegacyValidateAddress });
         }
 
-        internal static void MapIssuerServiceRoutes(this HttpRouteCollection routes)
+        internal static void MapIssuerServiceRoutes(this IEndpointRouteBuilder routes)
         {
             routes.MapHttpRoute(
                 name: Constants.IssuerServiceApiName.Initialize,
@@ -206,7 +206,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators
                 defaults: new { controller = "IssuerService", action = Constants.IssuerServiceApiName.Eligibility });
         }
         
-        internal static void MapChallengeManagementRoutes(this HttpRouteCollection routes)
+        internal static void MapChallengeManagementRoutes(this IEndpointRouteBuilder routes)
         {
             routes.MapHttpRoute(
                 name: Constants.ChallengeManagementApiName.CreateChallenge,
@@ -234,7 +234,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators
                 defaults: new { controller = "ChallengeManagementSession", action = Constants.ChallengeManagementApiName.UpdateChallengeSession });
         }
         
-        internal static void MapPaymentThirdPartyRoutes(this HttpRouteCollection routes)
+        internal static void MapPaymentThirdPartyRoutes(this IEndpointRouteBuilder routes)
         {
             routes.MapHttpRoute(
                 name: Constants.PaymentThirdPartyApiName.GetCheckout,
@@ -252,7 +252,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators
                 defaults: new { controller = "PaymentThirdPartyPaymentAndCheckouts", action = Constants.PaymentThirdPartyApiName.GetPaymentRequest });
         }
 
-        internal static void MapPurchaseRoutes(this HttpRouteCollection routes)
+        internal static void MapPurchaseRoutes(this IEndpointRouteBuilder routes)
         {
             routes.MapHttpRoute(
                 name: Constants.PurchaseApiName.ListOrder,
@@ -280,7 +280,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators
                 defaults: new { controller = "Purchase", action = Constants.PurchaseApiName.CheckPi });
         }
 
-        internal static void MapRiskRoutes(this HttpRouteCollection routes)
+        internal static void MapRiskRoutes(this IEndpointRouteBuilder routes)
         {
             routes.MapHttpRoute(
                 name: Constants.RiskApiName.RiskEvaluation,
@@ -288,7 +288,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators
                 defaults: new { controller = "Risk", action = Constants.RiskApiName.RiskEvaluation });
         }
 
-        internal static void MapSellerMarketPlaceRoutes(this HttpRouteCollection routes)
+        internal static void MapSellerMarketPlaceRoutes(this IEndpointRouteBuilder routes)
         {
             routes.MapHttpRoute(
                 name: Constants.SellerMarketPlaceApiName.GetSeller,
@@ -296,7 +296,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators
                 defaults: new { controller = "Sellers", action = Constants.SellerMarketPlaceApiName.GetSeller });
         }
 
-        internal static void MapTokenPolicyRoutes(this HttpRouteCollection routes)
+        internal static void MapTokenPolicyRoutes(this IEndpointRouteBuilder routes)
         {
             routes.MapHttpRoute(
                 name: Constants.TokenPolicyApiName.GetTokenPolicyDescription,
@@ -304,7 +304,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators
                 defaults: new { controller = "TokenPolicyDescription", action = Constants.TokenPolicyApiName.GetTokenPolicyDescription });
         }
 
-        internal static void MapStoredValueRoutes(this HttpRouteCollection routes)
+        internal static void MapStoredValueRoutes(this IEndpointRouteBuilder routes)
         {
             routes.MapHttpRoute(
                 name: Constants.StoredValueApiName.GetGiftCatalog,
@@ -322,7 +322,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators
                defaults: new { controller = "StoredValueRedeem", action = Constants.StoredValueApiName.GetFundingStatus });
         }
 
-        internal static void MapTransactionServiceRoutes(this HttpRouteCollection routes)
+        internal static void MapTransactionServiceRoutes(this IEndpointRouteBuilder routes)
         {
             routes.MapHttpRoute(
                 name: Constants.TransactionServiceApiName.Payments,
@@ -335,7 +335,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators
                 defaults: new { controller = "TransactionService", action = Constants.TransactionServiceApiName.TransactionValidate });
         }
 
-        internal static void MapPaymentOchestratorRoutes(this HttpRouteCollection routes)
+        internal static void MapPaymentOchestratorRoutes(this IEndpointRouteBuilder routes)
         {
             // Checkout requests routes mapping
             routes.MapHttpRoute(
@@ -390,7 +390,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators
                 defaults: new { controller = "PaymentOchestratorCheckoutRequests", action = Constants.PaymentOchestratorApiName.PRConfirm });
         }
 
-        internal static void MapPayerAuthRoutes(this HttpRouteCollection routes)
+        internal static void MapPayerAuthRoutes(this IEndpointRouteBuilder routes)
         {
             routes.MapHttpRoute(
                name: Constants.PayerAuthApiName.CreatePaymentSessionId,
@@ -418,7 +418,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators
                defaults: new { controller = "PayerAuth", action = Constants.PayerAuthApiName.CompleteChallenge });
         }
         
-        internal static void MapFraudDetectionRoutes(this HttpRouteCollection routes)
+        internal static void MapFraudDetectionRoutes(this IEndpointRouteBuilder routes)
         {
             routes.MapHttpRoute(
                name: Constants.FraudDetectionApiName.BotCheck,
