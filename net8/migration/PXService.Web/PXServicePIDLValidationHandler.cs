@@ -70,10 +70,9 @@ namespace Microsoft.Commerce.Payments.PXService
                     && routeData != null
                     && routeData.Values.TryGetValue("controller", out controller)
                     && controller != null
-                    && ValidationAllowedControllers.Contains(controller.ToString(), StringComparer.OrdinalIgnoreCase)
+                    && ValidationAllowedControllers.Contains(controller.ToString() ?? string.Empty, StringComparer.OrdinalIgnoreCase)
                     && response.StatusCode == HttpStatusCode.OK
-                    && content != null
-                    && content.Headers.ContentType.MediaType == HttpMimeTypes.JsonContentType;
+                    && content?.Headers?.ContentType?.MediaType == HttpMimeTypes.JsonContentType;
 
                 if (validationRequired)
                 {
@@ -83,7 +82,9 @@ namespace Microsoft.Commerce.Payments.PXService
             }
             catch (Exception ex)
             {
-                SllWebLogger.TracePXServiceException("PXServicePIDLValidationHandler had unexpected failure" + ex.ToString(), request.GetRequestCorrelationId());
+                SllWebLogger.TracePXServiceException(
+                    $"PXServicePIDLValidationHandler had unexpected failure: {ex.Message}\n{ex.StackTrace}",
+                    request.GetRequestCorrelationId());
             }
 
             return response;

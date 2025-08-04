@@ -21,7 +21,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
     using Newtonsoft.Json.Linq;
     using System;
     using System.Collections.Generic;
-    using System.Collections.Specialized;
+    using Microsoft.AspNetCore.Http;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
@@ -37,6 +37,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
     using PSD2TransStatus = Microsoft.Commerce.Payments.PXService.Model.PayerAuthService.TransactionStatus;
     using PSD2TransStatusReason = Microsoft.Commerce.Payments.PXService.Model.PayerAuthService.TransactionStatusReason;
     using PXConstants = Microsoft.Commerce.Payments.PXService.V7.Constants;
+    using System.Diagnostics.Tracing;
 
     public class PaymentSessionsController : ProxyController
     {
@@ -245,7 +246,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
             try
             {
                 PXService.Model.PXInternal.QRCodeSecondScreenSession qrCodeSecondScreenSession = new PXService.Model.PXInternal.QRCodeSecondScreenSession();
-                
+
                 // Get the session data 
                 try
                 {
@@ -500,7 +501,9 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
                 PaymentSessionsHandler paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId, sessionId);
 
                 //// inner iframe is requested for fingerprint step
-                string cspStepValue = formData.Get(V7.Constants.SessionFieldNames.CSPStep);
+                string cspStepValue = formData.TryGetValue(V7.Constants.SessionFieldNames.CSPStep, out var cspStep)
+                    ? cspStep.ToString()
+                    : null;
                 if (PXConstants.CSPStepNames.Fingerprint.Equals(cspStepValue))
                 {
                     BrowserFlowContext browserFlowContext = await paymentSessionsHandler.GetThreeDSMethodData(sessionId, traceActivityId);
@@ -548,7 +551,10 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
                 string testHeader = HttpRequestHelper.GetRequestHeader(PaymentConstants.PaymentExtendedHttpHeaders.TestHeader);
 
                 // check whether fingerprint timedout
-                bool isThreeDSMethodCompleted = string.IsNullOrWhiteSpace(formData.Get(PaymentConstants.NamedPorperties.FingerPrintTimedout));
+                bool isThreeDSMethodCompleted = string.IsNullOrWhiteSpace(
+                    formData.TryGetValue(PaymentConstants.NamedPorperties.FingerPrintTimedout, out var fingerPrintTimedout)
+                        ? fingerPrintTimedout.ToString()
+                        : null);
 
                 BrowserFlowContext result = await paymentSessionsHandler.Authenticate(
                     sessionId: sessionId,
@@ -560,7 +566,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
                     string pxAuthUrl = string.Format("{0}/paymentSessions/{1}/authenticate", this.Settings.PifdBaseUrl, sessionId);
                     bool cspFrameEnabled = exposedFlightFeatures != null && exposedFlightFeatures.Contains(Flighting.Features.PXPSD2EnableCSPProxyFrame, StringComparer.OrdinalIgnoreCase);
                     bool cspFrameUrlEnabled = exposedFlightFeatures != null && exposedFlightFeatures.Contains(Flighting.Features.PXPSD2EnableCSPUrlProxyFrame, StringComparer.OrdinalIgnoreCase);
-                    string cspStep = PXConstants.CSPStepNames.None;
+                    cspStep = PXConstants.CSPStepNames.None;
                     string formActionUrl = result.FormActionURL;
 
                     if (cspFrameEnabled || cspFrameUrlEnabled)
@@ -659,12 +665,12 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
             {
                 EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
 
-                if (!this.Request.Content.IsFormData())
+                if (!this.Request.HasFormContentType)
                 {
                     throw new ValidationException(ErrorCode.InvalidRequestData, "HTML form URL-encoded data is expected");
                 }
 
-                var formData = await Request.Content.ReadAsFormDataAsync();
+                var formData = await Request.ReadFormAsync();
 
                 // Inorder to pass the test header through the iframe. 
                 // The method below set header as the input field in the form 
@@ -986,16 +992,16 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
             {
                 EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
 
-                if (!this.Request.Content.IsFormData())
+                if (!this.Request.HasFormContentType)
                 {
                     throw new ValidationException(ErrorCode.InvalidRequestData, "HTML form URL-encoded data is expected");
                 }
 
-                var formData = await Request.Content.ReadAsFormDataAsync();
+                var formData = await Request.ReadFormAsync();
                 SetupTestHeader(formData);
 
                 Dictionary<string, string> authParams = new Dictionary<string, string>();
-                foreach (string key in formData.AllKeys)
+                foreach (var key in formData.Keys)
                 {
                     authParams.Add(key, formData[key]);
                 }
@@ -1174,7 +1180,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
                 {
                     challenges = piSession.RequiredChallenge ?? new List<string>();
                     isChallengeRequired = challenges.Contains(V7.Constants.ScenarioNames.ThreeDSTwo);
-                } 
+                }
                 else
                 {
                     // Look PI and validate the ownership
@@ -1235,8 +1241,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
 
                     VerificationResult verficationResult = VerificationResult.Success;
                     bool additionalParamsVerified = true;
-                    if (this.ExposedFlightFeatures != null && 
-                            (this.ExposedFlightFeatures.Contains(Flighting.Features.ValidatePaymentSessionProperties, StringComparer.OrdinalIgnoreCase) 
+                    if (this.ExposedFlightFeatures != null &&
+                            (this.ExposedFlightFeatures.Contains(Flighting.Features.ValidatePaymentSessionProperties, StringComparer.OrdinalIgnoreCase)
                             || this.ExposedFlightFeatures.Contains(Flighting.Features.ValidatePaymentSessionPropertiesLogging, StringComparer.OrdinalIgnoreCase)))
                     {
                         if (paymentContext != null)
@@ -1285,7 +1291,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
             try
             {
                 PaymentContext paymentContextObj = JsonConvert.DeserializeObject<PaymentContext>(paymentContext);
-           
+
                 // Capture currency values at the exact point of comparison to avoid race conditions
                 string paymentContextCurrency = paymentContextObj?.Currency;
                 string paymentSessionCurrency = paymentSession?.Currency;
@@ -1305,7 +1311,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
                 // Session amount should be within +/-30% of pretax and posttax amounts 
                 decimal preTax_lowerLimit = (decimal)preTaxAmount * (decimal)0.7;
                 decimal preTax_upperLimit = (decimal)preTaxAmount * (decimal)1.3;
-            
+
                 decimal postTax_lowerLimit = (decimal)postTaxAmount * (decimal)0.7;
                 decimal postTax_upperLimit = (decimal)postTaxAmount * (decimal)1.3;
 
@@ -1315,7 +1321,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
 
                 if (exposedFlightFeatures != null && exposedFlightFeatures.Contains(Flighting.Features.ValidatePaymentSessionPropertiesLogging, StringComparer.OrdinalIgnoreCase))
                 {
-                    var totalValidationResults = new                 
+                    var totalValidationResults = new
                     {
                         currencyVerified,
                         partnerVerified,
@@ -1338,7 +1344,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
                         paymentContext,
                         paymentContextObj
                     };
-                
+
                     SllWebLogger.TraceServerMessage("VerifyAdditionalSessionDataParams", piId, paymentSession.Id, JsonConvert.SerializeObject(totalValidationResults), EventLevel.Informational);
                 }
 
@@ -1357,7 +1363,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
                 {
                     return VerificationResult.AmountMismatch;
                 }
-            
+
                 return VerificationResult.Success;
             }
             catch (Exception ex)
@@ -1366,17 +1372,17 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
             }
         }
 
-        private static void SetupTestHeader(NameValueCollection formData)
+        private static void SetupTestHeader(IFormCollection formData)
         {
             // check if the form data contains x-ms-test variable
             // Set the test header value to the current context through the HttpRequestHelper
-            var testHeader = formData.Get(PaymentConstants.PaymentExtendedHttpHeaders.TestHeader);
+            string testHeader = formData.TryGetValue(PaymentConstants.PaymentExtendedHttpHeaders.TestHeader, out var headerValue)
+                ? headerValue.ToString()
+                : null;
             if (!string.IsNullOrEmpty(testHeader))
             {
                 var testHeaderData = ThreeDSUtils.DecodeBase64(ThreeDSUtils.DecodeUrl(testHeader));
                 HttpRequestHelper.SetTestHeader(testHeaderData);
-
-                formData.Remove(PaymentConstants.PaymentExtendedHttpHeaders.TestHeader);
             }
         }
 
@@ -1469,7 +1475,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
                     string errorMsg = Convert.ToString(JObject.Parse(JsonConvert.SerializeObject(transactionResource.StatusDetails.ProcessorResponse))["error_message"]);
                     TransactionDeclineCode code = transactionResource.StatusDetails.Code;
 
-                    if (userErrors.Contains(errorMsg, StringComparer.OrdinalIgnoreCase) 
+                    if (userErrors.Contains(errorMsg, StringComparer.OrdinalIgnoreCase)
                         || ((flights?.Contains(Constants.FlightValues.PXEnableHandleTransactionNotAllowed) ?? false) && string.Equals(code, TransactionDeclineCode.TransactionNotAllowed)))
                     {
                         threeDSRedirectPidl.ClientAction = CreateFailureClientAction(HttpStatusCode.BadRequest, HttpStatusCode.BadRequest.ToString(), errorMsg);
@@ -1548,7 +1554,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
                     ex.Error?.ErrorCode != "AccountPINotFound")
                 {
                     throw;
-                } 
+                }
             }
 
             return paymentInstrument;

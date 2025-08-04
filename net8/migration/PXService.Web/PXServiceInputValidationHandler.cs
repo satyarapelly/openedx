@@ -78,7 +78,7 @@ namespace Microsoft.Commerce.Payments.PXService
                                         var traceActivityId = request.GetRequestCorrelationId();
                                         var innerError = new ServiceErrorResponse(ErrorCode.InvalidParameter.ToString(), message);
                                         var error = new ServiceErrorResponse(traceActivityId.ActivityId.ToString(), GlobalConstants.ServiceName, innerError);
-                                        var response = request.CreateResponse(HttpStatusCode.BadRequest, error);
+                                        var response = await request.CreateJsonResponseAsync(HttpStatusCode.BadRequest, error);
 
                                         // Return the response with 400 Bad Request
                                         return response;

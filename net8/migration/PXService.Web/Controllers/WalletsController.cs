@@ -2,14 +2,9 @@
 
 namespace Microsoft.Commerce.Payments.PXService.V7
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading.Tasks;
-    using Microsoft.AspNetCore.Mvc;
     using Common.Web;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Commerce.Payments.PidlFactory.V7;
     using Microsoft.Commerce.Payments.PimsModel.V4;
     using Microsoft.Commerce.Payments.PXCommon;
@@ -17,6 +12,12 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using Microsoft.Commerce.Payments.PXService.Model.WalletService;
     using Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge.Model;
     using Newtonsoft.Json;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading.Tasks;
     using Tracing;
     using static Microsoft.Commerce.Payments.PXService.V7.Constants;
 
@@ -70,7 +71,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                         response,
                         client,
                         partner,
-                        this.Request,
+                        this.Request.ToHttpRequestMessage(),
                         this.ExposedFlightFeatures,
                         traceActivityId,
                         paymentMethods,
@@ -181,14 +182,13 @@ namespace Microsoft.Commerce.Payments.PXService.V7
 
         private IEnumerable<KeyValuePair<string, string>> GetQueryParamsUpdatePI(string country, string partner)
         {
-            var queryParams = this.Request.GetQueryNameValuePairs();
-            string countryFromRequest = null;
-            if (!this.Request.TryGetQueryParameterValue(V7.Constants.QueryParameterName.Country, out countryFromRequest))
+            var queryParams = this.Request.Query.AsEnumerable().Select(q => new KeyValuePair<string, string>(q.Key, q.Value));
+            if (!this.Request.Query.TryGetValue(V7.Constants.QueryParameterName.Country, out _))
             {
                 queryParams = queryParams.Concat(new[] { new KeyValuePair<string, string>(V7.Constants.QueryParameterName.Country, country) });
             }
 
-            if (!this.Request.TryGetQueryParameterValue(V7.Constants.QueryParameterName.Partner, out countryFromRequest))
+            if (!this.Request.Query.TryGetValue(V7.Constants.QueryParameterName.Partner, out _))
             {
                 queryParams = queryParams.Concat(new[] { new KeyValuePair<string, string>(V7.Constants.QueryParameterName.Partner, partner) });
             }

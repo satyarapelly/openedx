@@ -28,6 +28,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
     using PayerAuth = Microsoft.Commerce.Payments.PXService.Model.PayerAuthService;
     using Purchase = PXService.Model.PurchaseService;
     using PXInternal = Microsoft.Commerce.Payments.PXService.Model.PXInternal;
+    using System.Diagnostics.Tracing;
 
     public class PaymentSessionsHandler
     {

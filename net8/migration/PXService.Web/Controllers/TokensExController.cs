@@ -37,7 +37,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <param name="language" required="false" cref="string" in="query">Language code</param>
         /// <response code="200">A list of PIDLResource</response>
         /// <returns>A list of PIDLResource object</returns>
-        [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpPost]
         public async Task<HttpResponseMessage> Tokens([FromBody] PIDLData payload, string accountId, string partner, string piid, string country, string language)
         {
@@ -106,16 +105,17 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             }
             else
             {
-                // if not tokenizable, return error. We will figure out how to handle this in the future.
-                throw new HttpResponseException(
-                    this.Request.CreateResponse(
-                        HttpStatusCode.BadRequest,
-                        new ErrorMessage()
-                        {
-                            ErrorCode = "NotTokenizable",
-                            Message = "TokensEx: PI is not tokenizable: " + piid,
-                            Retryable = false,
-                        }));
+                var errorMessage = new ErrorMessage
+                {
+                    ErrorCode = "NotTokenizable",
+                    Message = "TokensEx: PI is not tokenizable: " + piid,
+                    Retryable = false
+                };
+
+                return new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = JsonContent.Create(errorMessage)
+                };
             }
         }
 
@@ -500,17 +500,16 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             }
         }
 
-        private void CreateInvalidRequestDataError(string dataName)
+        private IActionResult CreateInvalidRequestDataError(string dataName)
         {
-            throw new HttpResponseException(
-                        this.Request.CreateResponse(
-                            HttpStatusCode.BadRequest,
-                            new ErrorMessage()
-                            {
-                                ErrorCode = ErrorCode.InvalidRequestData.ToString(),
-                                Message = "TokensEx: Missing request data " + dataName,
-                                Retryable = false,
-                            }));
+            var error = new ErrorMessage
+            {
+                ErrorCode = ErrorCode.InvalidRequestData.ToString(),
+                Message = "TokensEx: Missing request data " + dataName,
+                Retryable = false,
+            };
+
+            return new BadRequestObjectResult(error);
         }
     }
 }

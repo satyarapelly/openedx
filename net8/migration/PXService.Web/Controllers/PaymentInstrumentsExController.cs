@@ -2,16 +2,6 @@
 
 namespace Microsoft.Commerce.Payments.PXService.V7
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics.Tracing;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Net.Http.Headers;
-    using System.Text;
-    using System.Text.RegularExpressions;
-    using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Commerce.Payments.Common;
     using Microsoft.Commerce.Payments.Common.Tracing;
@@ -35,7 +25,20 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using Microsoft.Commerce.Payments.PXService.V7.PaymentClient;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
+    using Microsoft.AspNetCore.Http.Extensions;
     using PXService.Model.AccountService.AddressValidation;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.Tracing;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Net.Http.Headers;
+    using System.Net.Http.Json;
+    using System.Text;
+    using System.Text.RegularExpressions;
+    using System.Threading.Tasks;
+    using System.Web;
     using AddressEnrichmentService = Microsoft.Commerce.Payments.PXService.Accessors.AddressEnrichmentService.DataModel;
     using AddressInfo = PimsModel.V4.AddressInfo;
     using ClientActionType = PXCommon.ClientActionType;
@@ -802,11 +805,13 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                     orderId: null,
                     isReplacePI: true);
 
-                if (responseMessage.IsSuccessStatusCode
-                    && responseMessage.TryGetContentValue<PaymentInstrument>(out newPI)
-                    && newPI.ClientAction == null)
+                if (responseMessage.IsSuccessStatusCode)
                 {
-                    targetPaymentInstrumentId = newPI.PaymentInstrumentId;
+                    newPI = await responseMessage.Content.ReadFromJsonAsync<PaymentInstrument>();
+                    if (newPI != null && newPI.ClientAction == null)
+                    {
+                        targetPaymentInstrumentId = newPI.PaymentInstrumentId;
+                    }
                 }
             }
 
@@ -1128,7 +1133,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 await this.AddParameterToPIRiskData(pendingOpRequestData, Constants.DeviceInfoProperty.UserAgent, GlobalConstants.ClientContextKeys.DeviceInfo.UserAgent);
             }
 
-            var queryparams = this.Request.GetQueryNameValuePairs();
+            var queryparams = this.Request.Query.AsEnumerable().Select(q => new KeyValuePair<string, string>(q.Key, q.Value));
             PaymentInstrument updatedPi = null;
             ServiceErrorResponseException ex = null;
 
@@ -1475,15 +1480,14 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             }
 
             // validateCvv returns 204 on success, if content was received, there was some error
-            throw new HttpResponseException(
-                this.Request.CreateResponse(
+            return this.Request.CreateResponse(
                 HttpStatusCode.BadRequest,
                 new ErrorMessage()
                 {
                     ErrorCode = "ValidateCVVReturnedContent",
                     Message = "Validate CVV returned 200 instead of 204",
                     Retryable = false,
-                }));
+                });
         }
 
         /// <summary>
@@ -1527,7 +1531,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             // For xbox partners, don't call Apply directly and instead use the created sessionId to return a static PIDL resource
             if (PXCommon.Constants.PartnerGroups.IsXboxNativePartner(partner))
             {
-                string ocid = Request?.GetQueryNameValuePairs()?.FirstOrDefault(i => i.Key == Constants.QueryParameterName.OCID).Value ?? string.Empty;
+                string ocid = Request?.Query.FirstOrDefault(i => i.Key == Constants.QueryParameterName.OCID).Value.ToString() ?? string.Empty;
                 return await this.GetXboxCoBrandedCardNativePidl(language, partner, country, applySession, initializeData.Channel, initializeData.ReferrerId, ocid, setting);
             }
             else
@@ -2404,7 +2408,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             bool completePrerequisites = false)
         {
             paymentMethodType = string.Join(",", displayedPaymentMethodTypes);
-            ActionContext optionContext = new ActionContext()
+            var optionContext = new PidlModel.V7.ActionContext()
             {
                 Action = PaymentInstrumentActions.ToString(PIActionType.AddResource),
                 Id = $"{paymentMethodFamily}.{paymentMethodType}",
@@ -2633,8 +2637,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 scenario: scenario,
                 orderId: orderId);
 
-            PaymentInstrument newPi = new PaymentInstrument();
-            response.TryGetContentValue(out newPi);
+            PaymentInstrument newPi = await response.Content.ReadFromJsonAsync<PaymentInstrument>();
 
             if (newPi != null)
             {
@@ -2652,13 +2655,13 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         {
             if (completePrerequisites)
             {
-                string country = RetrieveQueryParameterValue(this.Request.GetQueryNameValuePairs(), Constants.QueryParameterName.Country);
+                string country = RetrieveQueryParameterValue(this.Request.Query.Select(q => new KeyValuePair<string, string>(q.Key, q.Value)), Constants.QueryParameterName.Country);
                 if (string.IsNullOrWhiteSpace(country))
                 {
                     throw TraceCore.TraceException(traceActivityId, new ValidationException(ErrorCode.InvalidRequestData, string.Format("response status code: {0}, error: {1}", "MissingQueryParameter", "Country is required.")));
                 }
 
-                string partner = RetrieveQueryParameterValue(this.Request.GetQueryNameValuePairs(), Constants.QueryParameterName.Partner);
+                string partner = RetrieveQueryParameterValue(this.Request.Query.Select(q => new KeyValuePair<string, string>(q.Key, q.Value)), Constants.QueryParameterName.Partner);
                 if (string.IsNullOrWhiteSpace(partner))
                 {
                     throw TraceCore.TraceException(traceActivityId, new ValidationException(ErrorCode.InvalidRequestData, string.Format("response status code: {0}, error: {1}", "MissingQueryParameter", "Partner is required.")));
@@ -2845,7 +2848,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                     string puid = await this.TryGetClientContext(GlobalConstants.ClientContextKeys.MsaProfile.Puid);
                     SllWebLogger.TracePXServicePIAddedOnOffer(
                         serviceName: PXCommon.Constants.ServiceNames.PXService,
-                        request: this.Request,
+                        request: this.Request.ToHttpRequestMessage(),
                         requestTraceId: traceActivityId.ToString(),
                         paymentInstrumentId: newPI.PaymentInstrumentId,
                         paymentMethodFamily: newPI.PaymentMethod?.PaymentMethodFamily,
@@ -2989,7 +2992,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
 
             string pxChallengeSessionId;
             bool isPXChallengeRequired = false;
-            this.Request.TryGetQueryParameterValue(Constants.QueryParameterName.PXChallengeSessionId, out pxChallengeSessionId);
+            this.Request.Query.TryGetValue(Constants.QueryParameterName.PXChallengeSessionId, out var pxChallengeSessionIdValues);
+            pxChallengeSessionId = pxChallengeSessionIdValues.ToString();
 
             //// If switch and enable challenge by default flight is On, show the challenge
             if (this.ExposedFlightFeatures.Contains(Flighting.Features.PXChallengeSwitch, StringComparer.OrdinalIgnoreCase)
@@ -3204,11 +3208,10 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 await this.TryUpdateAddressWith9digitZipCode(pi);
             }
 
-            var queryparams = this.Request.GetQueryNameValuePairs();
+            var queryparams = this.Request.Query.AsEnumerable().Select(q => new KeyValuePair<string, string>(q.Key, q.Value));
             if (!string.IsNullOrEmpty(billableAccountId))
             {
-                string currentBillableAccountId = null;
-                if (!this.Request.TryGetQueryParameterValue(GlobalConstants.QueryParamNames.BillableAccountId, out currentBillableAccountId))
+                if (!this.Request.Query.TryGetValue(GlobalConstants.QueryParamNames.BillableAccountId, out _))
                 {
                     queryparams = queryparams.Concat(new[] { new KeyValuePair<string, string>(GlobalConstants.QueryParamNames.BillableAccountId, billableAccountId) });
                 }
@@ -3505,7 +3508,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                     {
                         ex.Error.ClientAction = new ClientAction(
                                     ClientActionType.UpdatePropertyValue,
-                                    new ActionContext(Constants.ConditionalFieldsDescriptionName.HideAddressGroup, false));
+                                    new PidlModel.V7.ActionContext(Constants.ConditionalFieldsDescriptionName.HideAddressGroup, false));
                     }
                 }
                 else if (IsAch(paymentMethodFamily, paymentMethodType) || IsSepa(paymentMethodFamily, paymentMethodType))
@@ -3781,7 +3784,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
 
         private async Task<bool> IsFullPageRedirect(PaymentInstrument newPI, EventTraceActivity traceActivityId, string partner)
         {
-            TestContext testContext = HttpRequestHelper.GetTestHeader(this.Request);
+            var testContext = HttpRequestHelper.GetTestHeader(this.Request.ToHttpRequestMessage());
 
             //// whether to use "isFullPageRedirect" in PI details to show iframe experience is under discussion. For now, iframe is the experience only for the partners like payin i.e. partners who have not done work to open in new tab or full page redir
             //// for partners who have adopted either new tab or full page redir, do not show iframe experience for now, unless iframe test header is sent
@@ -3904,11 +3907,11 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             {
                 if (string.IsNullOrEmpty(pxChallengeSessionId))
                 {
-                    pxChallengeSessionId = await PXChallengeManagementHandler.CreatePXChallengeSessionId(Request.GetQueryNameValuePairs().ToDictionary(list => list.Key, list => list.Value), accountId, traceActivity, this.PidlSdkVersion);
+                    pxChallengeSessionId = await PXChallengeManagementHandler.CreatePXChallengeSessionId(Request.Query.ToDictionary(list => list.Key, list => list.Value.ToString()), accountId, traceActivity, this.PidlSdkVersion);
                 }
 
                 dynamic getResourceActionContext = Newtonsoft.Json.JsonConvert.DeserializeObject(pidetails[Constants.DataDescriptionPropertyNames.ResourceActionContext].ToString());
-                ActionContext resourceActionContext = Newtonsoft.Json.JsonConvert.DeserializeObject<ActionContext>(pidetails[Constants.DataDescriptionPropertyNames.ResourceActionContext].ToString());
+                var resourceActionContext = Newtonsoft.Json.JsonConvert.DeserializeObject<PidlModel.V7.ActionContext>(pidetails[Constants.DataDescriptionPropertyNames.ResourceActionContext].ToString());
 
                 // ActionContext is not able to extract parameters, so deserializing resourceActionContext again and using SetParameters to set parameters for ActionContext was done as a work around
                 dynamic getParameter = getResourceActionContext.resourceActionContext.pidlDocInfo.parameters;
@@ -4002,7 +4005,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 }
             }
 
-            bool useIntPolling = this.Request.RequestUri.ToString().Contains(Constants.RequestDomains.Localhost);
+            bool useIntPolling = this.Request.GetDisplayUrl().Contains(Constants.RequestDomains.Localhost);
 
             PIDLResourceFactory.UpdateXboxCoBrandedCardQrCodeDescription(
                 retVal,
@@ -4207,7 +4210,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
 
                         // Get CSV PI details
                         csvPI = await PIHelper.GetCSVPI(this.Settings, accountId, partner, country, language, traceActivityId, exposedFlightFeatures: this.ExposedFlightFeatures);
-                        
+
                         clientAction = new ClientAction(ClientActionType.ReturnContext)
                         {
                             Context = new { redeemResult, csvPI }

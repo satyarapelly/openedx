@@ -62,7 +62,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PXChallengeManagement
 
                 if (exposedFlightFeatures != null && exposedFlightFeatures.Contains(Flighting.Features.PXChallengeMultipageChallenge, StringComparer.OrdinalIgnoreCase))
                 {
-                    SllWebLogger.TraceServerMessage("PX-AddPI-CMSHandlerAddChallenge", traceActivity.CorrelationVectorV4.Value, traceActivity.ActivityId.ToString(), $"Starting Multipage pidl transformation for PXChallengeSessionId {sessionId}", EventLevel.Informational);
+                    SllWebLogger.TraceServerMessage("PX-AddPI-CMSHandlerAddChallenge", traceActivity.CorrelationVectorV4.Value, traceActivity.ActivityId.ToString(), $"Starting Multipage pidl transformation for PXChallengeSessionId {sessionId}",System.Diagnostics.Tracing.EventLevel.Informational);
                     
                     var challengePageDisplayHint = (PageDisplayHint)challengeLinkedPidl.GetDisplayHintById(V7.Constants.DisplayHintIds.LoadArkoseChallenge);
                     var backButton = CreateBackButtonWithNextAction();
@@ -92,7 +92,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PXChallengeManagement
                         }
                     }
 
-                    SllWebLogger.TraceServerMessage("PX-AddPI-CMSHandlerAddChallenge", traceActivity.CorrelationVectorV4.Value, traceActivity.ActivityId.ToString(), $"Completed Multipage PIDL transformation for PXChallengeSessionId {sessionId}", EventLevel.Informational);
+                    SllWebLogger.TraceServerMessage("PX-AddPI-CMSHandlerAddChallenge", traceActivity.CorrelationVectorV4.Value, traceActivity.ActivityId.ToString(), $"Completed Multipage PIDL transformation for PXChallengeSessionId {sessionId}", System.Diagnostics.Tracing.EventLevel.Informational);
                 }
                 else
                 {

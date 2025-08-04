@@ -229,7 +229,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                     info.ResourceType = Constants.DescriptionTypes.Checkout;
                     info.AnonymousPidl = true;
 
-                    ActionContext context = new ActionContext()
+                    var context = new PidlModel.V7.ActionContext()
                     {
                         ResourceActionContext = new ResourceActionContext()
                         {

@@ -291,7 +291,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             if (componentInstance != null)
             {
                 // Load component description properties
-                componentInstance.LoadComponentsData(requestContext?.RequestId, this.Settings, traceActivityId, setting, this.ExposedFlightFeatures, operation: operation, partner: partner, family: family, type: type, scenario: scenario, request: this.Request, checkoutRequestClientActions: checkoutRequestClientActions, paymentRequestClientActions: paymentRequestClientActions);
+                componentInstance.LoadComponentsData(requestContext?.RequestId, this.Settings, traceActivityId, setting, this.ExposedFlightFeatures, operation: operation, partner: partner, family: family, type: type, scenario: scenario, request: this.Request.ToHttpRequestMessage(), checkoutRequestClientActions: checkoutRequestClientActions, paymentRequestClientActions: paymentRequestClientActions);
                 this.EnableFlightingsInPartnerSetting(componentInstance.PSSSetting, componentInstance.Country);
 
                 // Component description Generation
