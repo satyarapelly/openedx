@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- File name extension must be .runsettings -->
+<RunSettings>
+      <!-- Configurations that affect the Test Framework -->
+  <RunConfiguration>
+
+    <!-- [x86] | x64 - You can also change it from menu Test, Test Settings, Default Processor Architecture -->
+    <TargetPlatform>x64</TargetPlatform>
+
+    <!-- Framework35 | [Framework40] | Framework45 -->
+    <TargetFrameworkVersion>Framework45</TargetFrameworkVersion>
+
+  </RunConfiguration>
+
+  <TestRunParameters>
+    <!-- If blank, values will be read from local config file. -->
+    <Parameter name="EnvironmentType" value="ProdWestCentralUSPme" />
+  </TestRunParameters>
+
+  <!-- Adapter Specific sections -->
+
+  <!-- MSTest adapter -->
+  <MSTest>
+    <DeploymentEnabled>False</DeploymentEnabled>
+  </MSTest>
+</RunSettings>
