@@ -6,6 +6,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.Checkouts
     using System.Net;
     using System.Net.Http;
     using System.Net.Http.Headers;
+    using System.Text.Encodings.Web;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Commerce.Payments.Common;
@@ -67,7 +68,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.Checkouts
             else if (!string.IsNullOrEmpty(providerId) && providerId.Equals(Constants.PaymentProviderIds.Stripe, System.StringComparison.OrdinalIgnoreCase))
             {
                 clientAction.ActionId = checkoutId;
-                string jsEncodedClientAction = HttpUtility.JavaScriptStringEncode(JsonConvert.SerializeObject(clientAction));
+                string jsEncodedClientAction = JavaScriptEncoder.Default.Encode(JsonConvert.SerializeObject(clientAction));
                 responseContent = string.Format(PostMessageHtmlTemplate, jsEncodedClientAction);
             }
 
