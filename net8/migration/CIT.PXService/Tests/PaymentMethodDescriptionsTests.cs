@@ -1,4 +1,4 @@
-﻿// <copyright file="PaymentMethodDescriptionsTests.cs" company="Microsoft">Copyright (c) Microsoft. All rights reserved.</copyright>
+// <copyright file="PaymentMethodDescriptionsTests.cs" company="Microsoft">Copyright (c) Microsoft. All rights reserved.</copyright>
 
 namespace CIT.PXService.Tests
 {
