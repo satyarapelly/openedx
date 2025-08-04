@@ -3,7 +3,8 @@
 namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Controllers
 {
     using System.Net.Http;
-    using System.Web.Http;
+    using Microsoft.AspNetCore.Mvc;
+using FromUri = Microsoft.AspNetCore.Mvc.FromQueryAttribute;
     using Common.Transaction;
     using Common.Web;
     using Test.Common;

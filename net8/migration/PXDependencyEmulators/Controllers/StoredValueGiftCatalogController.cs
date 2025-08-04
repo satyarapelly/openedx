@@ -4,10 +4,11 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
 {
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
-    using System.Web.Http;
+    using Microsoft.AspNetCore.Mvc;
+using FromUri = Microsoft.AspNetCore.Mvc.FromQueryAttribute;
     using Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Mocks;
 
-    public class StoredValueGiftCatalogController : ApiController
+    public class StoredValueGiftCatalogController : ControllerBase
     {
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "This needs to be instance methods for web app to work.")]
         [HttpGet]

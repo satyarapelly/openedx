@@ -5,13 +5,14 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
     using System;
     using System.Collections.Generic;
     using System.Net.Http;
-    using System.Web.Http;
+    using Microsoft.AspNetCore.Mvc;
+using FromUri = Microsoft.AspNetCore.Mvc.FromQueryAttribute;
     using Common.Transaction;
     using Common.Web;
     using Test.Common;
     using Constants = Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Constants;
 
-    public class EmulatorBaseController : ApiController
+    public class EmulatorBaseController : ControllerBase
     {
         private readonly string testScenarioManagerName;
         private readonly string defaultTestScenario;
@@ -32,7 +33,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
         {
             get
             {
-                return this.Configuration.GetTestScenarioManager(this.testScenarioManagerName);
+                return this.HttpContext.RequestServices.GetTestScenarioManager(this.testScenarioManagerName);
             }
         }
 
