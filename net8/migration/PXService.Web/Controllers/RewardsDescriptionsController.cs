@@ -55,7 +55,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
 
             string userId = await this.TryGetClientContext(GlobalConstants.ClientContextKeys.MsaProfile.Puid);
 
-            Version fullPidlSdkVersion = HttpRequestHelper.GetFullPidlSdkVersion(this.Request);
+            Version fullPidlSdkVersion = HttpRequestHelper.GetFullPidlSdkVersion(this.Request.ToHttpRequestMessage());
 
             long rewardsPoints = 0;
             decimal rewardsAmount = 0;

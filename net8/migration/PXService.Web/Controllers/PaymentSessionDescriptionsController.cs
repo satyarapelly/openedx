@@ -41,7 +41,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             PaymentExperienceSetting setting = this.GetPaymentExperienceSetting(Constants.Component.HandlePaymentChallenge);
             this.EnableFlightingsInPartnerSetting(setting, paymentSessionDataObj.Country);
 
-            PaymentChallenge.PaymentSessionsHandler paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId);
+            var paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId);
             PaymentSession paymentSession = await paymentSessionsHandler.CreatePaymentSession(
                 accountId: accountId, 
                 paymentSessionData: paymentSessionDataObj, 

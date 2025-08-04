@@ -501,7 +501,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
 
         // PaymentSessionsHandlerV2 is refactored from PaymentSessionsHandler.  We want to use V2
         // if either the flight is enabled for user, or if a session has HandlerVersion of "V2".
-        protected async Task<PaymentSessionsHandler> GetVersionBasedPaymentSessionsHandler(EventTraceActivity traceActivityId, string sessionId = null)
+        protected async Task<dynamic> GetVersionBasedPaymentSessionsHandler(EventTraceActivity traceActivityId, string sessionId = null)
         {
             Model.PXInternal.PaymentSession session = null;
             if (sessionId != null)
@@ -1150,7 +1150,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
 
         protected RequestContext GetRequestContext(EventTraceActivity traceActivityId)
         {
-            return HttpRequestHelper.GetRequestContext(this.Request, traceActivityId);
+            return HttpRequestHelper.GetRequestContext(this.Request.ToHttpRequestMessage(), traceActivityId);
         }
 
         private static string BuildHiddenCheckboxHintId(string propertyName)

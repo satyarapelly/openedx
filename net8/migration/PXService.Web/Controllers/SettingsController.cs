@@ -38,14 +38,11 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A setting object</response>
         /// <returns>A setting object</returns>
         [HttpGet]
-        public HttpResponseMessage GetSettings(string appName, string appVersion, string language = null)
+        public ActionResult GetSettings(string appName, string appVersion, string language = null)
         {
             if (string.Equals(appName, Constants.AppDetails.WalletPackageName, StringComparison.OrdinalIgnoreCase))
             {
-                return this.Request.CreateResponse<Dictionary<string, string>>(
-                    HttpStatusCode.OK,
-                    walletSettings,
-                    GlobalConstants.HeaderValues.JsonContent);
+                return this.StatusCode((int)HttpStatusCode.OK, walletSettings);
             }
             else if (string.Equals(appName, Constants.AppDetails.PaymentClientAppName, StringComparison.OrdinalIgnoreCase))
             {
@@ -61,16 +58,14 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                     { Constants.PaymentOptionsAppGenericErrorStringNames.SupportLinkText, LocalizationRepository.Instance.GetLocalizedString(Constants.PaymentOptionsAppErrorStrings.SupportLinkText, language) },
                     { Constants.PaymentOptionsAppGenericErrorStringNames.ButtonText, LocalizationRepository.Instance.GetLocalizedString(Constants.PaymentOptionsAppErrorStrings.ButtonText, language) }
                 };
-                return this.Request.CreateResponse<Dictionary<string, string>>(
-                    HttpStatusCode.OK,
-                    localizedErrorObject);
+                return this.StatusCode((int)HttpStatusCode.OK, localizedErrorObject);
             }
             else
             {
-                return this.Request.CreateResponse(
-                    HttpStatusCode.NotFound, 
+                return this.StatusCode(
+                    (int)HttpStatusCode.NotFound,
                     new ServiceErrorResponse(
-                        "SettingsDataNotFound", 
+                        "SettingsDataNotFound",
                         string.Format("The settings data not found for App : {0}, Version : {1}", appName, appVersion)));
             }
         }
@@ -107,7 +102,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             return response;
         }
 
-        private HttpResponseMessage GetPaymentClientSettings(string version)
+        private ActionResult GetPaymentClientSettings(string version)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
             try
@@ -116,7 +111,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
 
                 if (!paymentClientSettings.TryGetValue(version, out paymentClientConfig))
                 {
-                    paymentClientConfig = File.ReadAllText(
+                    paymentClientConfig = System.IO.File.ReadAllText(
                         Path.Combine(
                             AppDomain.CurrentDomain.BaseDirectory,
                             string.Format(@"App_Data\PSD2Config\{0}\PaymentClientSettings.json", version)));
@@ -125,18 +120,13 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 }
 
                 JObject settingsConfig = JsonConvert.DeserializeObject<JObject>(paymentClientConfig);
-                HttpResponseMessage response = this.Request.CreateResponse<JObject>(
-                    HttpStatusCode.OK,
-                    settingsConfig,
-                    GlobalConstants.HeaderValues.JsonContent);
-
-                return response;
+                return this.StatusCode((int)HttpStatusCode.OK, settingsConfig);
             }
             catch (Exception ex)
             {
                 SllWebLogger.TracePXServiceException(ex.ToString(), traceActivityId);
-                return this.Request.CreateResponse(
-                    HttpStatusCode.NotFound,
+                return this.StatusCode(
+                    (int)HttpStatusCode.NotFound,
                     new ServiceErrorResponse(
                         "SettingsDataNotFound",
                         string.Format("The version not found for Version : {0}", version)));

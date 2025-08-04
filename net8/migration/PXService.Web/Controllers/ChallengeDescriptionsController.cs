@@ -105,7 +105,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>Returns challenge PIDL for the given type and specfic to the given piid</returns>
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpGet]
-        public async Task<List<PIDLResource>> GetByTypePiidAndSessionId(
+        public async Task<ActionResult<List<PIDLResource>>> GetByTypePiidAndSessionId(
             string accountId,
             string piid,
             string type,
@@ -121,7 +121,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             PaymentExperienceSetting setting = this.GetPaymentExperienceSetting(Constants.Component.HandlePurchaseRiskChallenge);
             this.EnableFlightingsInPartnerSetting(setting, string.Empty);
 
-            List<PIDLResource> retVal = await this.GetChallengeDescriptionsByTypePiidAndSessionId(
+            ActionResult<List<PIDLResource>> retVal = await this.GetChallengeDescriptionsByTypePiidAndSessionId(
                 accountId: accountId,
                 piid: piid,
                 type: type,
@@ -130,6 +130,12 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 partner: partner,
                 scenario: scenario,
                 setting);
+            if (retVal.Result != null)
+            {
+                return retVal.Result;
+            }
+
+            List<PIDLResource> resources = retVal.Value;
 
             FeatureContext featureContext = new FeatureContext(
                 country: null,
@@ -147,8 +153,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 tokenizationPublicKey: await this.GetTokenizationPublicKey(traceActivityId),
                 tokenizationServiceUrls: this.Settings.TokenizationServiceAccessor.GetTokenizationServiceUrls());
 
-            PostProcessor.Process(retVal, PIDLResourceFactory.FeatureFactory, featureContext);
-            return retVal;
+            PostProcessor.Process(resources, PIDLResourceFactory.FeatureFactory, featureContext);
+            return resources;
         }
 
         /// <summary>
@@ -169,7 +175,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>Returns challenge PIDL for the given type and specfic to the given piid</returns>
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpGet]
-        public async Task<List<PIDLResource>> GetByTypeAndPiid(
+        public async Task<ActionResult<List<PIDLResource>>> GetByTypeAndPiid(
             string accountId,
             string piid,
             string type,
@@ -184,7 +190,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             PaymentExperienceSetting setting = this.GetPaymentExperienceSetting(Constants.Component.HandlePurchaseRiskChallenge);
             this.EnableFlightingsInPartnerSetting(setting, string.Empty);
 
-            List<PIDLResource> retVal = await this.GetChallengeDescriptionsByTypePiidAndSessionId(
+            ActionResult<List<PIDLResource>> retVal = await this.GetChallengeDescriptionsByTypePiidAndSessionId(
                 accountId: accountId,
                 piid: piid,
                 type: type,
@@ -193,6 +199,13 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 partner: partner,
                 scenario: null,
                 setting);
+
+            if (retVal.Result != null)
+            {
+                return retVal.Result;
+            }
+
+            List<PIDLResource> resources = retVal.Value;
 
             FeatureContext featureContext = new FeatureContext(
                 country: null,
@@ -208,8 +221,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 tokenizationPublicKey: await this.GetTokenizationPublicKey(traceActivityId),
                 tokenizationServiceUrls: this.Settings.TokenizationServiceAccessor.GetTokenizationServiceUrls());
 
-            PostProcessor.Process(retVal, PIDLResourceFactory.FeatureFactory, featureContext);
-            return retVal;
+            PostProcessor.Process(resources, PIDLResourceFactory.FeatureFactory, featureContext);
+            return resources;
         }
 
         /// <summary>
@@ -267,7 +280,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
 
             bool isGuestUser = GuestAccountHelper.IsGuestAccount(this.Request);
 
-            PaymentChallenge.PaymentSessionsHandler paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId);
+            var paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId);
 
             // Create PaymentSession If needed.
             if (paymentSessionData != null)
@@ -718,7 +731,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             if (!string.IsNullOrEmpty(rdsUrl))
             {
                 string rdsSessionId = rdsUrl.TrimEnd('/', ' ').Split('/').LastOrDefault();
-                PaymentChallenge.PaymentSessionsHandler paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId, paymentSession.Id);
+                var paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId, paymentSession.Id);
                 await paymentSessionsHandler.LinkSession(paymentSessionId: paymentSession.Id, linkSessionId: result.TransactionSessionId ?? rdsSessionId ?? paymentSession.Id, traceActivityId: traceActivityId);
                 if (isTemplatePartner && setting != null && setting.RedirectionPattern != null)
                 {
@@ -817,7 +830,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             try
             {
                 string sessionId = paymentSession.Id;
-                PaymentChallenge.PaymentSessionsHandler paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId, sessionId);
+                var paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId, sessionId);
                 Model.PXInternal.PaymentSession storedSession = await paymentSessionsHandler.GetStoredSession(sessionId, traceActivityId);
                 if (!string.IsNullOrEmpty(storedSession.ChallengeType))
                 {
