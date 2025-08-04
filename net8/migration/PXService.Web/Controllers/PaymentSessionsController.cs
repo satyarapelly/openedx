@@ -79,7 +79,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
                 deviceChannel = PXService.Model.ThreeDSExternalService.DeviceChannel.Browser;
             }
 
-            PaymentSessionsHandler paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId);
+            var paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId);
             return await paymentSessionsHandler.CreatePaymentSession(
                 accountId: accountId,
                 paymentSessionData: data,
@@ -106,7 +106,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
 
             try
             {
-                PaymentSessionsHandler paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId, sessionId);
+                var paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId, sessionId);
                 PaymentSession threeDsSession = await paymentSessionsHandler.TryGetPaymentSession(sessionId, traceActivityId);
 
                 if (threeDsSession == null)
@@ -355,7 +355,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
                 authRequest: authenticateRequest,
                 exposedFlightFeatures: this.ExposedFlightFeatures);
 
-            PaymentSessionsHandler paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId, sessionId);
+            var paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId, sessionId);
             return await paymentSessionsHandler.Authenticate(
                 accountId: accountId,
                 sessionId: sessionId,
@@ -395,7 +395,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
             string isMotoAuthorized = this.Request.GetRequestHeader(GlobalConstants.HeaderValues.IsMotoHeader);
             string tid = await this.TryGetClientContext(GlobalConstants.ClientContextKeys.AadInfo.Tid);
 
-            PaymentSessionsHandler paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId);
+            var paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId);
             PaymentSession session = await paymentSessionsHandler.CreatePaymentSession(
                 accountId: accountId,
                 paymentSessionData: request.PaymentSessionData,
@@ -451,7 +451,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
 
-            PaymentSessionsHandler paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId, sessionId);
+            var paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId, sessionId);
             PaymentSession paymentSession = await paymentSessionsHandler.CompleteThreeDSChallenge(
                 accountId: accountId,
                 sessionId: sessionId,
@@ -498,7 +498,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
                     // throw new ValidationException(ErrorCode.InvalidRequestData, string.Format(V7.Constants.MissingErrorMessage.MissingValue, V7.Constants.SessionFieldNames.ThreeDSMethodData));
                 }
 
-                PaymentSessionsHandler paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId, sessionId);
+                var paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId, sessionId);
 
                 //// inner iframe is requested for fingerprint step
                 string cspStepValue = formData.TryGetValue(V7.Constants.SessionFieldNames.CSPStep, out var cspStep)
@@ -678,7 +678,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
 
                 List<string> exposedFlightFeatures = this.ExposedFlightFeatures;
 
-                PaymentSessionsHandler paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId, sessionId);
+                var paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId, sessionId);
                 PaymentSession paymentSession = await paymentSessionsHandler.CompleteThreeDSChallenge(
                     accountId: null,
                     sessionId: sessionId,
@@ -817,7 +817,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
             ClientAction nextAction;
             try
             {
-                PaymentSessionsHandler paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId, sessionId);
+                var paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId, sessionId);
                 BrowserFlowContext result = await paymentSessionsHandler.AuthenticateThreeDSOne(
                     sessionId: sessionId,
                     cvvToken: (string)cvvToken,
@@ -963,7 +963,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
                 return this.Request.CreateResponse(HttpStatusCode.BadRequest, new ErrorMessage() { ErrorCode = V7.Constants.PSD2ErrorCodes.InvalidFailureRedirectionUrl, Message = "Invalid failure redirection url" });
             }
 
-            PaymentSessionsHandler paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId, sessionId);
+            var paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId, sessionId);
             var browserFlowContext = await paymentSessionsHandler.AuthenticateRedirectionThreeDSOne(
                 sessionId: sessionId,
                 successUrl: ru,
@@ -1006,7 +1006,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
                     authParams.Add(key, formData[key]);
                 }
 
-                PaymentSessionsHandler paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId, sessionId);
+                var paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId, sessionId);
                 PaymentSession paymentSession = await paymentSessionsHandler.CompleteThreeDSOneChallenge(
                     accountId: null,
                     sessionId: sessionId,
@@ -1064,7 +1064,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
             this.PartnerSettings = await PXService.PartnerSettingsHelper.GetPaymentExperienceSetting(this.Settings, partnerName, null, traceActivityId, this.ExposedFlightFeatures);
             PaymentExperienceSetting setting = this.GetPaymentExperienceSetting(V7.Constants.Component.HandlePaymentChallenge);
 
-            PaymentSessionsHandler paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId, sessionId);
+            var paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId, sessionId);
             TransactionResource transactionResource = await paymentSessionsHandler.AuthenticateIndiaThreeDS(
                 accountId: accountId,
                 sessionId: sessionId,
