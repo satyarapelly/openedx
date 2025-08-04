@@ -1,0 +1,1136 @@
+﻿[
+  {
+    "affiliationLines": [],
+    "isRequiredAmountPaid": false,
+    "isDiscountFullyCalculated": true,
+    "ignoreDiscountCalculation": false,
+    "amountDue": 6467.96,
+    "amountPaid": 0.0,
+    "attributeValues": [],
+    "beginDateTime": "2021-09-03T01:17:49.186+00:00",
+    "businessDate": null,
+    "cancellationChargeAmount": null,
+    "estimatedShippingAmount": null,
+    "cartLines": [
+      {
+        "lineId": "722851e1d7654d7c945ceba82fdcc5d1",
+        "taxOverrideCode": null,
+        "itemId": "SLZ-00001",
+        "barcode": "889842594799",
+        "entryMethodTypeValue": 0,
+        "description": "",
+        "inventoryDimensionId": "",
+        "comment": "",
+        "productId": 5637169075,
+        "warehouseId": "O0001",
+        "quantity": 1.0,
+        "price": 2299.99,
+        "extendedPrice": 2299.99,
+        "taxAmount": 179.4,
+        "itemTaxGroupId": "PrCmp15t34",
+        "totalAmount": 2479.39,
+        "netAmountWithoutTax": 2299.99,
+        "netPrice": 0.0,
+        "discountAmountWithoutTax": 0.0,
+        "discountAmount": 0.0,
+        "lineDiscount": 0.0,
+        "linePercentageDiscount": 0.0,
+        "lineManualDiscountPercentage": 0.0,
+        "lineManualDiscountAmount": 0.0,
+        "unitOfMeasureSymbol": "EA",
+        "shippingAddress": {
+          "name": "K...(16)",
+          "fullAddress": "18618 39th Dr SE Bothell, WA 98012-7691  USA",
+          "recordId": 64702,
+          "street": "18618 39th Dr SE",
+          "streetNumber": "",
+          "county": "",
+          "countyName": "",
+          "city": "Bothell",
+          "districtName": "",
+          "state": "WA",
+          "stateName": "WA",
+          "zipCode": "98012-7691",
+          "threeLetterISORegionName": "USA",
+          "phone": "42578...(10)",
+          "phoneRecordId": 0,
+          "phoneExt": "",
+          "email": "MASKED(0)",
+          "emailContent": "",
+          "emailRecordId": 0,
+          "url": "34193b7e-c390-5f66-e0eb-4a68299dff9a",
+          "urlRecordId": 0,
+          "twoLetterISORegionName": "",
+          "deactivate": false,
+          "attentionTo": "",
+          "buildingCompliment": "-5452490425828827922",
+          "postbox": "",
+          "taxGroup": "",
+          "addressTypeValue": 0,
+          "isPrimary": false,
+          "isPrivate": false,
+          "partyNumber": "a4671481-79f5-4358-b00c-6d733e87393e",
+          "isAsyncAddress": true,
+          "directoryPartyTableRecordId": 0,
+          "directoryPartyLocationRecordId": 0,
+          "directoryPartyLocationRoleRecordId": 0,
+          "logisticsLocationId": "",
+          "logisticsLocationRecordId": 0,
+          "logisticsLocationExtRecordId": 0,
+          "logisticsLocationRoleRecordId": 0,
+          "phoneLogisticsLocationRecordId": 0,
+          "phoneLogisticsLocationId": "",
+          "emailLogisticsLocationRecordId": 0,
+          "emailLogisticsLocationId": "",
+          "urlLogisticsLocationRecordId": 0,
+          "urlLogisticsLocationId": "",
+          "expireRecordId": 0,
+          "sortOrder": 0,
+          "roleCount": 1,
+          "extensionProperties": [
+            {
+              "key": "FulfillmentData",
+              "value": {
+                "booleanValue": null,
+                "byteValue": null,
+                "dateTimeOffsetValue": null,
+                "decimalValue": null,
+                "integerValue": null,
+                "longValue": null,
+                "stringValue": "{\"items\":[{\"type\":\"DeliveryMethod\",\"version\":\"1\",\"content\":{\"deliveryMethodId\":\"0002\",\"render\":true,\"showDateOverride\":false,\"estimatedDeliveryDate\":{\"date\":\"2021-09-08T12:00:00Z\",\"cutoffTime\":\"2021-09-03T20:45:00Z\",\"plant\":\"N790\",\"estimatedShipDate\":\"2021-09-03T14:00:00Z\",\"deliveryMethodId\":\"0002\"}}}]}"
+              }
+            },
+            {
+              "key": "DeliveryMethodId",
+              "value": {
+                "booleanValue": null,
+                "byteValue": null,
+                "dateTimeOffsetValue": null,
+                "decimalValue": null,
+                "integerValue": null,
+                "longValue": null,
+                "stringValue": "0002"
+              }
+            },
+            {
+              "key": "DistributorId",
+              "value": {
+                "booleanValue": null,
+                "byteValue": null,
+                "dateTimeOffsetValue": null,
+                "decimalValue": null,
+                "integerValue": null,
+                "longValue": null,
+                "stringValue": "9000000013"
+              }
+            }
+          ]
+        },
+        "deliveryMode": "Ground",
+        "deliveryModeChargeAmount": 0.0,
+        "requestedDeliveryDate": null,
+        "isWarrantyLine": false,
+        "warrantableTransactionId": "",
+        "warrantableSalesId": "",
+        "warrantableLineNumber": 0.0,
+        "warrantableSerialNumber": "",
+        "warrantiedId": null,
+        "returnTransactionId": "",
+        "returnLineNumber": 0.0,
+        "returnInventTransId": "",
+        "isVoided": false,
+        "isTaxOverideCodeTaxExempt": false,
+        "isGiftCardLine": false,
+        "isPriceKeyedIn": false,
+        "giftCardId": "",
+        "giftCardCurrencyCode": "",
+        "giftCardOperationValue": 0,
+        "giftCardTypeValue": 0,
+        "salesStatusValue": 1,
+        "quantityOrdered": null,
+        "quantityInvoiced": null,
+        "quantityCanceled": 0.0,
+        "fulfillmentStoreId": "",
+        "serialNumber": "MASKED(0)",
+        "electronicDeliveryEmail": "",
+        "electronicDeliveryEmailContent": "",
+        "isPriceOverridden": false,
+        "originalPrice": null,
+        "isInvoiceLine": false,
+        "invoiceId": "",
+        "invoiceAmount": 0.0,
+        "giftCardBalance": 0.0,
+        "lineVersion": 0,
+        "promotionLines": [],
+        "discountLines": [],
+        "relatedDiscountedLineIds": [],
+        "reasonCodeLines": [],
+        "chargeLines": [],
+        "taxRatePercent": 0.0,
+        "isCustomerAccountDeposit": false,
+        "linkedParentLineId": null,
+        "quantityReturnable": null,
+        "extensionProperties": [
+          {
+            "key": "InventoryControlSkuId",
+            "value": {
+              "booleanValue": null,
+              "byteValue": null,
+              "dateTimeOffsetValue": null,
+              "decimalValue": null,
+              "integerValue": null,
+              "longValue": null,
+              "stringValue": "SLZ-00001"
+            }
+          },
+          {
+            "key": "PSA",
+            "value": {
+              "booleanValue": null,
+              "byteValue": null,
+              "dateTimeOffsetValue": null,
+              "decimalValue": null,
+              "integerValue": null,
+              "longValue": null,
+              "stringValue": "8XBW9G3Z71F1/4Q6R/8VXVHHBQ13SM"
+            }
+          },
+          {
+            "key": "OrderLineType",
+            "value": {
+              "booleanValue": null,
+              "byteValue": null,
+              "dateTimeOffsetValue": null,
+              "decimalValue": null,
+              "integerValue": null,
+              "longValue": null,
+              "stringValue": "Default"
+            }
+          },
+          {
+            "key": "LineItemRetailPrice",
+            "value": {
+              "booleanValue": null,
+              "byteValue": null,
+              "dateTimeOffsetValue": null,
+              "decimalValue": 2299.99,
+              "integerValue": null,
+              "longValue": null,
+              "stringValue": null
+            }
+          },
+          {
+            "key": "FulfillmentData",
+            "value": {
+              "booleanValue": null,
+              "byteValue": null,
+              "dateTimeOffsetValue": null,
+              "decimalValue": null,
+              "integerValue": null,
+              "longValue": null,
+              "stringValue": "{\"items\":[{\"type\":\"DeliveryMethod\",\"version\":\"1\",\"content\":{\"deliveryMethodId\":\"0002\",\"render\":true,\"showDateOverride\":false,\"estimatedDeliveryDate\":{\"date\":\"2021-09-08T12:00:00Z\",\"cutoffTime\":\"2021-09-03T20:45:00Z\",\"plant\":\"N790\",\"estimatedShipDate\":\"2021-09-03T14:00:00Z\",\"deliveryMethodId\":\"0002\"}}}]}"
+            }
+          },
+          {
+            "key": "DeliveryMethodId",
+            "value": {
+              "booleanValue": null,
+              "byteValue": null,
+              "dateTimeOffsetValue": null,
+              "decimalValue": null,
+              "integerValue": null,
+              "longValue": null,
+              "stringValue": "0002"
+            }
+          }
+        ],
+        "lineNumber": 1.0,
+        "commissionSalesGroup": "",
+        "trackingId": null,
+        "staffId": null,
+        "quantityRemained": null,
+        "quantityShipped": null,
+        "catalogId": 0,
+        "attributeValues": [
+          {
+            "textValue": "SLZ-00001",
+            "textValueTranslations": [],
+            "name": "S...(3)",
+            "extensionProperties": []
+          },
+          {
+            "textValue": "False",
+            "textValueTranslations": [],
+            "name": "I...(5)",
+            "extensionProperties": []
+          },
+          {
+            "textValue": "False",
+            "textValueTranslations": [],
+            "name": "I...(15)",
+            "extensionProperties": []
+          },
+          {
+            "textValue": "",
+            "textValueTranslations": [],
+            "name": "C...(21)",
+            "extensionProperties": []
+          },
+          {
+            "textValue": "True",
+            "textValueTranslations": [],
+            "name": "I...(14)",
+            "extensionProperties": []
+          },
+          {
+            "textValue": "False",
+            "textValueTranslations": [],
+            "name": "I...(15)",
+            "extensionProperties": []
+          }
+        ],
+        "thirdPartyGiftCardInfo": {
+          "amount": 0.0,
+          "authorization": "",
+          "extensionProperties": []
+        },
+        "barcodeEmbeddedPrice": 0.0,
+        "priceInBarcode": false,
+        "invoiceTypeValue": 0,
+        "invoicedSalesId": null
+      },
+      {
+        "lineId": "46136dbb109444bc9bd95aec4b0ead9e",
+        "taxOverrideCode": null,
+        "itemId": "LAH-00001",
+        "barcode": "889842368338",
+        "entryMethodTypeValue": 0,
+        "description": "",
+        "inventoryDimensionId": "",
+        "comment": "",
+        "productId": 5637158171,
+        "warehouseId": "O0001",
+        "quantity": 1.0,
+        "price": 3499.99,
+        "extendedPrice": 3499.99,
+        "taxAmount": 273.0,
+        "itemTaxGroupId": "MonGrt35in",
+        "totalAmount": 3772.99,
+        "netAmountWithoutTax": 3499.99,
+        "netPrice": 0.0,
+        "discountAmountWithoutTax": 0.0,
+        "discountAmount": 0.0,
+        "lineDiscount": 0.0,
+        "linePercentageDiscount": 0.0,
+        "lineManualDiscountPercentage": 0.0,
+        "lineManualDiscountAmount": 0.0,
+        "unitOfMeasureSymbol": "EA",
+        "shippingAddress": {
+          "name": "K...(16)",
+          "fullAddress": "18618 39th Dr SE Bothell, WA 98012-7691  USA",
+          "recordId": 64702,
+          "street": "18618 39th Dr SE",
+          "streetNumber": "",
+          "county": "",
+          "countyName": "",
+          "city": "Bothell",
+          "districtName": "",
+          "state": "WA",
+          "stateName": "WA",
+          "zipCode": "98012-7691",
+          "threeLetterISORegionName": "USA",
+          "phone": "42578...(10)",
+          "phoneRecordId": 0,
+          "phoneExt": "",
+          "email": "MASKED(0)",
+          "emailContent": "",
+          "emailRecordId": 0,
+          "url": "34193b7e-c390-5f66-e0eb-4a68299dff9a",
+          "urlRecordId": 0,
+          "twoLetterISORegionName": "",
+          "deactivate": false,
+          "attentionTo": "",
+          "buildingCompliment": "-5452490425828827922",
+          "postbox": "",
+          "taxGroup": "",
+          "addressTypeValue": 0,
+          "isPrimary": false,
+          "isPrivate": false,
+          "partyNumber": "a4671481-79f5-4358-b00c-6d733e87393e",
+          "isAsyncAddress": true,
+          "directoryPartyTableRecordId": 0,
+          "directoryPartyLocationRecordId": 0,
+          "directoryPartyLocationRoleRecordId": 0,
+          "logisticsLocationId": "",
+          "logisticsLocationRecordId": 0,
+          "logisticsLocationExtRecordId": 0,
+          "logisticsLocationRoleRecordId": 0,
+          "phoneLogisticsLocationRecordId": 0,
+          "phoneLogisticsLocationId": "",
+          "emailLogisticsLocationRecordId": 0,
+          "emailLogisticsLocationId": "",
+          "urlLogisticsLocationRecordId": 0,
+          "urlLogisticsLocationId": "",
+          "expireRecordId": 0,
+          "sortOrder": 0,
+          "roleCount": 1,
+          "extensionProperties": [
+            {
+              "key": "FulfillmentData",
+              "value": {
+                "booleanValue": null,
+                "byteValue": null,
+                "dateTimeOffsetValue": null,
+                "decimalValue": null,
+                "integerValue": null,
+                "longValue": null,
+                "stringValue": "{\"items\":[{\"type\":\"DeliveryMethod\",\"version\":\"1\",\"content\":{\"deliveryMethodId\":\"0002\",\"render\":true,\"showDateOverride\":false,\"estimatedDeliveryDate\":{\"date\":\"2021-09-08T12:00:00Z\",\"cutoffTime\":\"2021-09-03T20:45:00Z\",\"plant\":\"N790\",\"estimatedShipDate\":\"2021-09-03T14:00:00Z\",\"deliveryMethodId\":\"0002\"}}}]}"
+              }
+            },
+            {
+              "key": "DeliveryMethodId",
+              "value": {
+                "booleanValue": null,
+                "byteValue": null,
+                "dateTimeOffsetValue": null,
+                "decimalValue": null,
+                "integerValue": null,
+                "longValue": null,
+                "stringValue": "0002"
+              }
+            },
+            {
+              "key": "DistributorId",
+              "value": {
+                "booleanValue": null,
+                "byteValue": null,
+                "dateTimeOffsetValue": null,
+                "decimalValue": null,
+                "integerValue": null,
+                "longValue": null,
+                "stringValue": "9000000013"
+              }
+            }
+          ]
+        },
+        "deliveryMode": "Ground",
+        "deliveryModeChargeAmount": 0.0,
+        "requestedDeliveryDate": null,
+        "isWarrantyLine": false,
+        "warrantableTransactionId": "",
+        "warrantableSalesId": "",
+        "warrantableLineNumber": 0.0,
+        "warrantableSerialNumber": "",
+        "warrantiedId": null,
+        "returnTransactionId": "",
+        "returnLineNumber": 0.0,
+        "returnInventTransId": "",
+        "isVoided": false,
+        "isTaxOverideCodeTaxExempt": false,
+        "isGiftCardLine": false,
+        "isPriceKeyedIn": false,
+        "giftCardId": "",
+        "giftCardCurrencyCode": "",
+        "giftCardOperationValue": 0,
+        "giftCardTypeValue": 0,
+        "salesStatusValue": 1,
+        "quantityOrdered": null,
+        "quantityInvoiced": null,
+        "quantityCanceled": 0.0,
+        "fulfillmentStoreId": "",
+        "serialNumber": "MASKED(0)",
+        "electronicDeliveryEmail": "",
+        "electronicDeliveryEmailContent": "",
+        "isPriceOverridden": false,
+        "originalPrice": null,
+        "isInvoiceLine": false,
+        "invoiceId": "",
+        "invoiceAmount": 0.0,
+        "giftCardBalance": 0.0,
+        "lineVersion": 0,
+        "promotionLines": [],
+        "discountLines": [],
+        "relatedDiscountedLineIds": [],
+        "reasonCodeLines": [],
+        "chargeLines": [],
+        "taxRatePercent": 0.0,
+        "isCustomerAccountDeposit": false,
+        "linkedParentLineId": null,
+        "quantityReturnable": null,
+        "extensionProperties": [
+          {
+            "key": "InventoryControlSkuId",
+            "value": {
+              "booleanValue": null,
+              "byteValue": null,
+              "dateTimeOffsetValue": null,
+              "decimalValue": null,
+              "integerValue": null,
+              "longValue": null,
+              "stringValue": "LAH-00001"
+            }
+          },
+          {
+            "key": "PSA",
+            "value": {
+              "booleanValue": null,
+              "byteValue": null,
+              "dateTimeOffsetValue": null,
+              "decimalValue": null,
+              "integerValue": null,
+              "longValue": null,
+              "stringValue": "8SBJXM0M58T4/D2Q1/8WG5VQP0X5JD"
+            }
+          },
+          {
+            "key": "OrderLineType",
+            "value": {
+              "booleanValue": null,
+              "byteValue": null,
+              "dateTimeOffsetValue": null,
+              "decimalValue": null,
+              "integerValue": null,
+              "longValue": null,
+              "stringValue": "Default"
+            }
+          },
+          {
+            "key": "LineItemRetailPrice",
+            "value": {
+              "booleanValue": null,
+              "byteValue": null,
+              "dateTimeOffsetValue": null,
+              "decimalValue": 3499.99,
+              "integerValue": null,
+              "longValue": null,
+              "stringValue": null
+            }
+          },
+          {
+            "key": "FulfillmentData",
+            "value": {
+              "booleanValue": null,
+              "byteValue": null,
+              "dateTimeOffsetValue": null,
+              "decimalValue": null,
+              "integerValue": null,
+              "longValue": null,
+              "stringValue": "{\"items\":[{\"type\":\"DeliveryMethod\",\"version\":\"1\",\"content\":{\"deliveryMethodId\":\"0002\",\"render\":true,\"showDateOverride\":false,\"estimatedDeliveryDate\":{\"date\":\"2021-09-08T12:00:00Z\",\"cutoffTime\":\"2021-09-03T20:45:00Z\",\"plant\":\"N790\",\"estimatedShipDate\":\"2021-09-03T14:00:00Z\",\"deliveryMethodId\":\"0002\"}}}]}"
+            }
+          },
+          {
+            "key": "DeliveryMethodId",
+            "value": {
+              "booleanValue": null,
+              "byteValue": null,
+              "dateTimeOffsetValue": null,
+              "decimalValue": null,
+              "integerValue": null,
+              "longValue": null,
+              "stringValue": "0002"
+            }
+          }
+        ],
+        "lineNumber": 2.0,
+        "commissionSalesGroup": "",
+        "trackingId": null,
+        "staffId": null,
+        "quantityRemained": null,
+        "quantityShipped": null,
+        "catalogId": 0,
+        "attributeValues": [
+          {
+            "textValue": "LAH-00001",
+            "textValueTranslations": [],
+            "name": "S...(3)",
+            "extensionProperties": []
+          },
+          {
+            "textValue": "False",
+            "textValueTranslations": [],
+            "name": "I...(5)",
+            "extensionProperties": []
+          },
+          {
+            "textValue": "False",
+            "textValueTranslations": [],
+            "name": "I...(15)",
+            "extensionProperties": []
+          },
+          {
+            "textValue": "",
+            "textValueTranslations": [],
+            "name": "C...(21)",
+            "extensionProperties": []
+          },
+          {
+            "textValue": "True",
+            "textValueTranslations": [],
+            "name": "I...(14)",
+            "extensionProperties": []
+          },
+          {
+            "textValue": "False",
+            "textValueTranslations": [],
+            "name": "I...(15)",
+            "extensionProperties": []
+          }
+        ],
+        "thirdPartyGiftCardInfo": {
+          "amount": 0.0,
+          "authorization": "",
+          "extensionProperties": []
+        },
+        "barcodeEmbeddedPrice": 0.0,
+        "priceInBarcode": false,
+        "invoiceTypeValue": 0,
+        "invoicedSalesId": null
+      },
+      {
+        "lineId": "ba365602fcc04736abeefb24104e8a79",
+        "taxOverrideCode": null,
+        "itemId": "EYU-00049",
+        "barcode": "889842530247",
+        "entryMethodTypeValue": 0,
+        "description": "",
+        "inventoryDimensionId": "",
+        "comment": "",
+        "productId": 5637172305,
+        "warehouseId": "O0001",
+        "quantity": 2.0,
+        "price": 99.99,
+        "extendedPrice": 199.98,
+        "taxAmount": 15.6,
+        "itemTaxGroupId": "PeriAcces",
+        "totalAmount": 215.58,
+        "netAmountWithoutTax": 199.98,
+        "netPrice": 0.0,
+        "discountAmountWithoutTax": 0.0,
+        "discountAmount": 0.0,
+        "lineDiscount": 0.0,
+        "linePercentageDiscount": 0.0,
+        "lineManualDiscountPercentage": 0.0,
+        "lineManualDiscountAmount": 0.0,
+        "unitOfMeasureSymbol": "EA",
+        "shippingAddress": {
+          "name": "K...(16)",
+          "fullAddress": "18618 39th Dr SE Bothell, WA 98012-7691  USA",
+          "recordId": 64702,
+          "street": "18618 39th Dr SE",
+          "streetNumber": "",
+          "county": "",
+          "countyName": "",
+          "city": "Bothell",
+          "districtName": "",
+          "state": "WA",
+          "stateName": "WA",
+          "zipCode": "98012-7691",
+          "threeLetterISORegionName": "USA",
+          "phone": "42578...(10)",
+          "phoneRecordId": 0,
+          "phoneExt": "",
+          "email": "MASKED(0)",
+          "emailContent": "",
+          "emailRecordId": 0,
+          "url": "34193b7e-c390-5f66-e0eb-4a68299dff9a",
+          "urlRecordId": 0,
+          "twoLetterISORegionName": "",
+          "deactivate": false,
+          "attentionTo": "",
+          "buildingCompliment": "-5452490425828827922",
+          "postbox": "",
+          "taxGroup": "",
+          "addressTypeValue": 0,
+          "isPrimary": false,
+          "isPrivate": false,
+          "partyNumber": "a4671481-79f5-4358-b00c-6d733e87393e",
+          "isAsyncAddress": true,
+          "directoryPartyTableRecordId": 0,
+          "directoryPartyLocationRecordId": 0,
+          "directoryPartyLocationRoleRecordId": 0,
+          "logisticsLocationId": "",
+          "logisticsLocationRecordId": 0,
+          "logisticsLocationExtRecordId": 0,
+          "logisticsLocationRoleRecordId": 0,
+          "phoneLogisticsLocationRecordId": 0,
+          "phoneLogisticsLocationId": "",
+          "emailLogisticsLocationRecordId": 0,
+          "emailLogisticsLocationId": "",
+          "urlLogisticsLocationRecordId": 0,
+          "urlLogisticsLocationId": "",
+          "expireRecordId": 0,
+          "sortOrder": 0,
+          "roleCount": 1,
+          "extensionProperties": [
+            {
+              "key": "FulfillmentData",
+              "value": {
+                "booleanValue": null,
+                "byteValue": null,
+                "dateTimeOffsetValue": null,
+                "decimalValue": null,
+                "integerValue": null,
+                "longValue": null,
+                "stringValue": "{\"items\":[{\"type\":\"DeliveryMethod\",\"version\":\"1\",\"content\":{\"deliveryMethodId\":\"0002\",\"render\":true,\"showDateOverride\":false,\"estimatedDeliveryDate\":{\"date\":\"2021-09-08T12:00:00Z\",\"cutoffTime\":\"2021-09-03T20:45:00Z\",\"plant\":\"N790\",\"estimatedShipDate\":\"2021-09-03T14:00:00Z\",\"deliveryMethodId\":\"0002\"}}}]}"
+              }
+            },
+            {
+              "key": "DeliveryMethodId",
+              "value": {
+                "booleanValue": null,
+                "byteValue": null,
+                "dateTimeOffsetValue": null,
+                "decimalValue": null,
+                "integerValue": null,
+                "longValue": null,
+                "stringValue": "0002"
+              }
+            },
+            {
+              "key": "DistributorId",
+              "value": {
+                "booleanValue": null,
+                "byteValue": null,
+                "dateTimeOffsetValue": null,
+                "decimalValue": null,
+                "integerValue": null,
+                "longValue": null,
+                "stringValue": "9000000013"
+              }
+            }
+          ]
+        },
+        "deliveryMode": "Ground",
+        "deliveryModeChargeAmount": 0.0,
+        "requestedDeliveryDate": null,
+        "isWarrantyLine": false,
+        "warrantableTransactionId": "",
+        "warrantableSalesId": "",
+        "warrantableLineNumber": 0.0,
+        "warrantableSerialNumber": "",
+        "warrantiedId": null,
+        "returnTransactionId": "",
+        "returnLineNumber": 0.0,
+        "returnInventTransId": "",
+        "isVoided": false,
+        "isTaxOverideCodeTaxExempt": false,
+        "isGiftCardLine": false,
+        "isPriceKeyedIn": false,
+        "giftCardId": "",
+        "giftCardCurrencyCode": "",
+        "giftCardOperationValue": 0,
+        "giftCardTypeValue": 0,
+        "salesStatusValue": 1,
+        "quantityOrdered": null,
+        "quantityInvoiced": null,
+        "quantityCanceled": 0.0,
+        "fulfillmentStoreId": "",
+        "serialNumber": "MASKED(0)",
+        "electronicDeliveryEmail": "",
+        "electronicDeliveryEmailContent": "",
+        "isPriceOverridden": false,
+        "originalPrice": null,
+        "isInvoiceLine": false,
+        "invoiceId": "",
+        "invoiceAmount": 0.0,
+        "giftCardBalance": 0.0,
+        "lineVersion": 0,
+        "promotionLines": [],
+        "discountLines": [],
+        "relatedDiscountedLineIds": [],
+        "reasonCodeLines": [],
+        "chargeLines": [],
+        "taxRatePercent": 0.0,
+        "isCustomerAccountDeposit": false,
+        "linkedParentLineId": null,
+        "quantityReturnable": null,
+        "extensionProperties": [
+          {
+            "key": "InventoryControlSkuId",
+            "value": {
+              "booleanValue": null,
+              "byteValue": null,
+              "dateTimeOffsetValue": null,
+              "decimalValue": null,
+              "integerValue": null,
+              "longValue": null,
+              "stringValue": "EYU-00049"
+            }
+          },
+          {
+            "key": "PSA",
+            "value": {
+              "booleanValue": null,
+              "byteValue": null,
+              "dateTimeOffsetValue": null,
+              "decimalValue": null,
+              "integerValue": null,
+              "longValue": null,
+              "stringValue": "92FP8Q09QHXC/4VRG/8VXWLKZ0LQB4"
+            }
+          },
+          {
+            "key": "OrderLineType",
+            "value": {
+              "booleanValue": null,
+              "byteValue": null,
+              "dateTimeOffsetValue": null,
+              "decimalValue": null,
+              "integerValue": null,
+              "longValue": null,
+              "stringValue": "Default"
+            }
+          },
+          {
+            "key": "LineItemRetailPrice",
+            "value": {
+              "booleanValue": null,
+              "byteValue": null,
+              "dateTimeOffsetValue": null,
+              "decimalValue": 99.99,
+              "integerValue": null,
+              "longValue": null,
+              "stringValue": null
+            }
+          },
+          {
+            "key": "FulfillmentData",
+            "value": {
+              "booleanValue": null,
+              "byteValue": null,
+              "dateTimeOffsetValue": null,
+              "decimalValue": null,
+              "integerValue": null,
+              "longValue": null,
+              "stringValue": "{\"items\":[{\"type\":\"DeliveryMethod\",\"version\":\"1\",\"content\":{\"deliveryMethodId\":\"0002\",\"render\":true,\"showDateOverride\":false,\"estimatedDeliveryDate\":{\"date\":\"2021-09-08T12:00:00Z\",\"cutoffTime\":\"2021-09-03T20:45:00Z\",\"plant\":\"N790\",\"estimatedShipDate\":\"2021-09-03T14:00:00Z\",\"deliveryMethodId\":\"0002\"}}}]}"
+            }
+          },
+          {
+            "key": "DeliveryMethodId",
+            "value": {
+              "booleanValue": null,
+              "byteValue": null,
+              "dateTimeOffsetValue": null,
+              "decimalValue": null,
+              "integerValue": null,
+              "longValue": null,
+              "stringValue": "0002"
+            }
+          }
+        ],
+        "lineNumber": 3.0,
+        "commissionSalesGroup": "",
+        "trackingId": null,
+        "staffId": null,
+        "quantityRemained": null,
+        "quantityShipped": null,
+        "catalogId": 0,
+        "attributeValues": [
+          {
+            "textValue": "EYU-00049",
+            "textValueTranslations": [],
+            "name": "S...(3)",
+            "extensionProperties": []
+          },
+          {
+            "textValue": "False",
+            "textValueTranslations": [],
+            "name": "I...(5)",
+            "extensionProperties": []
+          },
+          {
+            "textValue": "False",
+            "textValueTranslations": [],
+            "name": "I...(15)",
+            "extensionProperties": []
+          },
+          {
+            "textValue": "",
+            "textValueTranslations": [],
+            "name": "C...(21)",
+            "extensionProperties": []
+          },
+          {
+            "textValue": "True",
+            "textValueTranslations": [],
+            "name": "I...(14)",
+            "extensionProperties": []
+          },
+          {
+            "textValue": "False",
+            "textValueTranslations": [],
+            "name": "I...(15)",
+            "extensionProperties": []
+          }
+        ],
+        "thirdPartyGiftCardInfo": {
+          "amount": 0.0,
+          "authorization": "",
+          "extensionProperties": []
+        },
+        "barcodeEmbeddedPrice": 0.0,
+        "priceInBarcode": false,
+        "invoiceTypeValue": 0,
+        "invoicedSalesId": null
+      }
+    ],
+    "cartTypeValue": 1,
+    "channelId": 5637146826,
+    "chargeAmount": 0.0,
+    "customerOrderRemainingBalance": 0.0,
+    "chargeLines": [],
+    "taxViewLines": [],
+    "comment": "",
+    "invoiceComment": "",
+    "coupons": [],
+    "customerId": null,
+    "customerOrderModeValue": 0,
+    "deliveryMode": null,
+    "deliveryModeChargeAmount": 0.0,
+    "discountAmount": 0.0,
+    "discountAmountWithoutTax": 0.0,
+    "discountCodes": [],
+    "id": "Q2ip4n2JqLncYdZAs7Ip71aZd6W0bev8",
+    "suspendedCartId": null,
+    "transactionTypeValue": 0,
+    "customerAccountDepositLines": [],
+    "incomeExpenseLines": [],
+    "incomeExpenseTotalAmount": 0.0,
+    "isReturnByReceipt": false,
+    "returnTransactionHasLoyaltyPayment": false,
+    "isFavorite": false,
+    "isRecurring": false,
+    "isSuspended": false,
+    "loyaltyCardId": "",
+    "modifiedDateTime": "2021-09-03T01:54:04.74+00:00",
+    "name": null,
+    "orderNumber": null,
+    "availableDepositAmount": 0.0,
+    "overriddenDepositAmount": null,
+    "overriddenDepositWithoutCarryoutAmount": null,
+    "prepaymentAmountPaid": 0.0,
+    "prepaymentAppliedOnPickup": 0.0,
+    "promotionLines": [],
+    "quotationExpiryDate": null,
+    "reasonCodeLines": [],
+    "receiptEmail": null,
+    "requestedDeliveryDate": null,
+    "requiredDepositAmount": 0.0,
+    "requiredDepositWithoutCarryoutAmount": 0.0,
+    "salesId": null,
+    "shippingAddress": null,
+    "staffId": null,
+    "subtotalAmount": 5999.96,
+    "subtotalAmountWithoutTax": 5999.96,
+    "netPrice": 0.0,
+    "subtotalSalesAmount": 5999.96,
+    "taxAmount": 468.0,
+    "taxOnCancellationCharge": 0.0,
+    "taxOverrideCode": null,
+    "tenderLines": [],
+    "refundableTenderLines": [],
+    "terminalId": "",
+    "totalAmount": 6467.96,
+    "totalSalesAmount": 6467.96,
+    "totalReturnAmount": 0.0,
+    "totalCarryoutSalesAmount": 6467.96,
+    "totalCustomerOrderSalesAmount": 0.0,
+    "totalManualDiscountAmount": 0.0,
+    "totalManualDiscountPercentage": 0.0,
+    "warehouseId": "O0001",
+    "isCreatedOffline": false,
+    "cartStatusValue": 1,
+    "receiptTransactionTypeValue": 1,
+    "commissionSalesGroup": "",
+    "version": 117244092,
+    "totalItems": 4.0,
+    "hasTaxCalculationTriggered": true,
+    "merchantProperties": [],
+    "hasChargeCalculationTriggered": true,
+    "fiscalTransactions": [],
+    "shippingChargeAmount": 0.0,
+    "otherChargeAmount": 0.0,
+    "extensionProperties": [
+      {
+        "key": "FriendlyName",
+        "value": {
+          "booleanValue": null,
+          "byteValue": null,
+          "dateTimeOffsetValue": null,
+          "decimalValue": null,
+          "integerValue": null,
+          "longValue": null,
+          "stringValue": "cart-US"
+        }
+      },
+      {
+        "key": "Market",
+        "value": {
+          "booleanValue": null,
+          "byteValue": null,
+          "dateTimeOffsetValue": null,
+          "decimalValue": null,
+          "integerValue": null,
+          "longValue": null,
+          "stringValue": "US"
+        }
+      },
+      {
+        "key": "Language",
+        "value": {
+          "booleanValue": null,
+          "byteValue": null,
+          "dateTimeOffsetValue": null,
+          "decimalValue": null,
+          "integerValue": null,
+          "longValue": null,
+          "stringValue": "en-US"
+        }
+      },
+      {
+        "key": "CartState",
+        "value": {
+          "booleanValue": null,
+          "byteValue": null,
+          "dateTimeOffsetValue": null,
+          "decimalValue": null,
+          "integerValue": null,
+          "longValue": null,
+          "stringValue": "Editing"
+        }
+      },
+      {
+        "key": "Cid",
+        "value": {
+          "booleanValue": null,
+          "byteValue": null,
+          "dateTimeOffsetValue": null,
+          "decimalValue": null,
+          "integerValue": null,
+          "longValue": null,
+          "stringValue": "486e9c25-c66b-4d3e-ab2f-fb1e84103dfe"
+        }
+      },
+      {
+        "key": "JarvisProfileId",
+        "value": {
+          "booleanValue": null,
+          "byteValue": null,
+          "dateTimeOffsetValue": null,
+          "decimalValue": null,
+          "integerValue": null,
+          "longValue": null,
+          "stringValue": "4e77ad08-cf57-5376-57c3-f96eebed1a6c"
+        }
+      },
+      {
+        "key": "PUID",
+        "value": {
+          "booleanValue": null,
+          "byteValue": null,
+          "dateTimeOffsetValue": null,
+          "decimalValue": null,
+          "integerValue": null,
+          "longValue": 1055519360004409,
+          "stringValue": null
+        }
+      },
+      {
+        "key": "MUID",
+        "value": {
+          "booleanValue": null,
+          "byteValue": null,
+          "dateTimeOffsetValue": null,
+          "decimalValue": null,
+          "integerValue": null,
+          "longValue": null,
+          "stringValue": "5EFDF3C57D684B49AD6EDFB50199151D"
+        }
+      },
+      {
+        "key": "CurrencyCode",
+        "value": {
+          "booleanValue": null,
+          "byteValue": null,
+          "dateTimeOffsetValue": null,
+          "decimalValue": null,
+          "integerValue": null,
+          "longValue": null,
+          "stringValue": "USD"
+        }
+      },
+      {
+        "key": "AffiliationsMap",
+        "value": {
+          "booleanValue": null,
+          "byteValue": null,
+          "dateTimeOffsetValue": null,
+          "decimalValue": null,
+          "integerValue": null,
+          "longValue": null,
+          "stringValue": "[]"
+        }
+      },
+      {
+        "key": "FriendlyIdV2",
+        "value": {
+          "booleanValue": null,
+          "byteValue": null,
+          "dateTimeOffsetValue": null,
+          "decimalValue": null,
+          "integerValue": null,
+          "longValue": null,
+          "stringValue": "0000000000"
+        }
+      },
+      {
+        "key": "TaxType",
+        "value": {
+          "booleanValue": null,
+          "byteValue": null,
+          "dateTimeOffsetValue": null,
+          "decimalValue": null,
+          "integerValue": null,
+          "longValue": null,
+          "stringValue": "TaxesNotIncluded"
+        }
+      },
+      {
+        "key": "ShipToAddressId",
+        "value": {
+          "booleanValue": null,
+          "byteValue": null,
+          "dateTimeOffsetValue": null,
+          "decimalValue": null,
+          "integerValue": null,
+          "longValue": null,
+          "stringValue": "34193b7e-c390-5f66-e0eb-4a68299dff9a"
+        }
+      },
+      {
+        "key": "RequireTaxCalculation",
+        "value": {
+          "booleanValue": false,
+          "byteValue": null,
+          "dateTimeOffsetValue": null,
+          "decimalValue": null,
+          "integerValue": null,
+          "longValue": null,
+          "stringValue": null
+        }
+      },
+      {
+        "key": "isTaxOverrideDisabled",
+        "value": {
+          "booleanValue": null,
+          "byteValue": null,
+          "dateTimeOffsetValue": null,
+          "decimalValue": null,
+          "integerValue": null,
+          "longValue": null,
+          "stringValue": "false"
+        }
+      }
+    ]
+  }
+]

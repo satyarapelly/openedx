@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Update with actual relative paths if needed -->
+    <ProjectReference Include="..\PXService.Web\PXService.Web.csproj" />
+    <ProjectReference Include="..\PXService.ApiSurface\PXService.ApiSurface.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Include relevant NuGet references based on usage -->
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
+    <PackageReference Include="Microsoft.AspNetCore" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+  </ItemGroup>
+
+</Project>
