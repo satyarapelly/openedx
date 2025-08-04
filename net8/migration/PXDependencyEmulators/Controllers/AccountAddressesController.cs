@@ -6,6 +6,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Net.Http;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
 using FromUri = Microsoft.AspNetCore.Mvc.FromQueryAttribute;
     using Constants = Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Constants;
@@ -82,12 +83,11 @@ using FromUri = Microsoft.AspNetCore.Mvc.FromQueryAttribute;
             return this.ReplacePlaceholders(resp);
         }
 
-        private static bool IsValidateAddressWithAVSFlightExposed(HttpRequestMessage request)
+        private static bool IsValidateAddressWithAVSFlightExposed(HttpRequest request)
         {
-            IEnumerable<string> headerValues;
-            if (request.Headers.TryGetValues(Test.Common.Constants.HeaderValues.ExtendedFlightName, out headerValues))
+            if (request.Headers.TryGetValue(Test.Common.Constants.HeaderValues.ExtendedFlightName, out var headerValues))
             {
-                string xMSFlightValue = headerValues.FirstOrDefault();
+                var xMSFlightValue = headerValues.FirstOrDefault();
                 return xMSFlightValue != null && xMSFlightValue.Contains(Test.Common.Constants.FlightValues.AccountEmulatorValidateAddressWithAVS);
             }
 
