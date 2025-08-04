@@ -9,7 +9,9 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using System.Net;
     using System.Net.Http;
     using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Http.Extensions;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.WebUtilities;
     using Common;
     using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Commerce.Payments.Common.Web;
@@ -27,9 +29,16 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using Newtonsoft.Json.Linq;
     using PaymentCommonInstruments = Microsoft.Commerce.Payments.Common.Instruments;
     using PXCommonConstants = Microsoft.Commerce.Payments.PXCommon.Constants;
+    using ActionContext = Microsoft.Commerce.Payments.PidlModel.V7.ActionContext;
 
     public class PaymentMethodDescriptionsController : ProxyController
     {
+        private static class AccountV3Headers
+        {
+            public const string Etag = "ETag";
+            public const string IfMatch = "If-Match";
+        }
+
         private Dictionary<string, List<string>> northStarExperiencePartnersScenarios = new Dictionary<string, List<string>>
         {
             {
@@ -319,7 +328,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             this.AddOrRemovePartnerFlight(country, Constants.PartnerFlightValues.IndiaExpiryGroupDelete, GlobalConstants.CountryCodes.IN);
 
             // Remove the exposed flights if the pidlsdkversion is less than a specified version in order for styling changes to line up.
-            Version fullPidlSdkVersion = HttpRequestHelper.GetFullPidlSdkVersion(this.Request);
+            Version fullPidlSdkVersion = HttpRequestHelper.GetFullPidlSdkVersion(ToHttpRequestMessage(this.Request));
 
             if (PXCommon.Constants.PartnerGroups.IsXboxNativePartner(partner) && fullPidlSdkVersion != null)
             {
@@ -721,7 +730,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             if (PXCommon.Constants.PartnerGroups.IsGroupedSelectPMPartner(partner)
                 && this.ExposedFlightFeatures.Contains(Constants.PartnerFlightValues.EnablePaymentMethodGrouping, StringComparer.OrdinalIgnoreCase))
             {
-                Version fullPidlSdkVersion = HttpRequestHelper.GetFullPidlSdkVersion(this.Request);
+                Version fullPidlSdkVersion = HttpRequestHelper.GetFullPidlSdkVersion(ToHttpRequestMessage(this.Request));
 
                 if (fullPidlSdkVersion != null)
                 {
@@ -1033,7 +1042,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             }
 
             // Only keep the exposed flights if the pidlsdkversion is greater than a specified version in order for styling changes to line up.
-            Version fullPidlSdkVersion = HttpRequestHelper.GetFullPidlSdkVersion(this.Request);
+            Version fullPidlSdkVersion = HttpRequestHelper.GetFullPidlSdkVersion(ToHttpRequestMessage(this.Request));
 
             if (PXCommon.Constants.PartnerGroups.IsXboxNativePartner(partner) && fullPidlSdkVersion != null)
             {
@@ -1155,18 +1164,18 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                     if ((useJarvisV3 && this.ShouldReturnProfileDescription(profileV3, taxIds, country, ignoreMissingTaxId)) || (!useJarvisV3 && this.ShouldReturnProfileDescription(profile, taxIds, country, ignoreMissingTaxId)))
                     {
                         // Setup nextPidlUrl
-                        string nextPidlUrl = @"https://{pifd-endpoint}/users/{userId}/paymentMethodDescriptions?";
+                        string baseUrl = @"https://{pifd-endpoint}/users/{userId}/paymentMethodDescriptions";
                         bool requiresTaxIds = this.RequiresTaxIds(taxIds, country, ignoreMissingTaxId);
-                        var queryParams = HttpUtility.ParseQueryString(this.Request.RequestUri.Query);
+                        var queryParams = this.Request.Query.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.ToString());
 
                         if (requiresTaxIds)
                         {
                             // Mark ignoreMissingTaxId to be true in the nextPidlUrl to ensure the CPF(TaxId) field only shown once to the user,
                             // no matter user enters the CPF or not
-                            queryParams.Set("ignoreMissingTaxId", "true");
+                            queryParams["ignoreMissingTaxId"] = "true";
                         }
 
-                        nextPidlUrl += queryParams;
+                        string nextPidlUrl = QueryHelpers.AddQueryString(baseUrl, queryParams);
                         PXCommon.RestLink nextPidlLink = new PXCommon.RestLink() { Href = nextPidlUrl, Method = HttpMethod.Get.ToString() };
 
                         // Get Profile PIDL
@@ -1186,8 +1195,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                                     profileOperation = Constants.Operations.Update;
                                     profileV3Headers = new Dictionary<string, string>
                                     {
-                                        { AccountService.V7.Constants.AccountV3ExtendedHttpHeaders.Etag, profileV3.Etag },
-                                        { AccountService.V7.Constants.AccountV3ExtendedHttpHeaders.IfMatch, profileV3.Etag }
+                                        { AccountV3Headers.Etag, profileV3.Etag },
+                                        { AccountV3Headers.IfMatch, profileV3.Etag }
                                     };
                                 }
 
@@ -1340,8 +1349,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                                         if (useJarvisV3)
                                         {
                                             Dictionary<string, string> profileV3Headers = new Dictionary<string, string>();
-                                            profileV3Headers.Add(AccountService.V7.Constants.AccountV3ExtendedHttpHeaders.Etag, profileV3.Etag);
-                                            profileV3Headers.Add(AccountService.V7.Constants.AccountV3ExtendedHttpHeaders.IfMatch, profileV3.Etag);
+                                            profileV3Headers.Add(AccountV3Headers.Etag, profileV3.Etag);
+                                            profileV3Headers.Add(AccountV3Headers.IfMatch, profileV3.Etag);
 
                                             PIDLResourceFactory.AddSecondarySubmitAddressV3Context(profileAddressPidls, profileV3, partner, profileV3Headers, country: country, setting: setting);
                                         }
@@ -1438,8 +1447,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                             if (string.Equals(profileOperation, Constants.Operations.UpdatePartial, StringComparison.OrdinalIgnoreCase))
                             {
                                 profileId = profile.Id;
-                                profileV3Headers.Add(AccountService.V7.Constants.AccountV3ExtendedHttpHeaders.Etag, profile.Etag);
-                                profileV3Headers.Add(AccountService.V7.Constants.AccountV3ExtendedHttpHeaders.IfMatch, profile.Etag);
+                                profileV3Headers.Add(AccountV3Headers.Etag, profile.Etag);
+                                profileV3Headers.Add(AccountV3Headers.IfMatch, profile.Etag);
                             }
 
                             PIDLResource profilePidl = PIDLResourceFactory.Instance.GetProfileDescriptions(
@@ -1663,10 +1672,10 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                             }
 
                             // Setup nextPidlUrl
-                            string nextPidlUrl = @"https://{pifd-endpoint}/users/{userId}/paymentMethodDescriptions?";
-                            var queryParams = HttpUtility.ParseQueryString(this.Request.RequestUri.Query);
+                            string baseUrl = @"https://{pifd-endpoint}/users/{userId}/paymentMethodDescriptions";
+                            var queryParams = this.Request.Query.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.ToString());
 
-                            nextPidlUrl += queryParams;
+                            string nextPidlUrl = QueryHelpers.AddQueryString(baseUrl, queryParams);
                             PXCommon.RestLink nextPidlLink = new PXCommon.RestLink() { Href = nextPidlUrl, Method = HttpMethod.Get.ToString() };
 
                             // Get Profile PIDL
@@ -1676,8 +1685,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                             if (profile != null)
                             {
                                 profileV3Headers = new Dictionary<string, string>();
-                                profileV3Headers.Add(AccountService.V7.Constants.AccountV3ExtendedHttpHeaders.Etag, profile.Etag);
-                                profileV3Headers.Add(AccountService.V7.Constants.AccountV3ExtendedHttpHeaders.IfMatch, profile.Etag);
+                                profileV3Headers.Add(AccountV3Headers.Etag, profile.Etag);
+                                profileV3Headers.Add(AccountV3Headers.IfMatch, profile.Etag);
                             }
 
                             string profileOperation = (profile == null ? Constants.Operations.Add : Constants.Operations.Update) + "_partial";
@@ -2859,7 +2868,10 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             IList<KeyValuePair<string, string>> additionalHeaders = this.GetAdditionalHeadersFromRequest();
             IEnumerable<PaymentMethod> paymentMethods = null;
             string pxChallengeSessionId = string.Empty;
-            pxChallengeSessionId = Request?.GetQueryNameValuePairs()?.FirstOrDefault(i => i.Key == Constants.QueryParameterName.PXChallengeSessionId).Value;
+            if (this.Request.Query.TryGetValue(Constants.QueryParameterName.PXChallengeSessionId, out var pxChallengeValue))
+            {
+                pxChallengeSessionId = pxChallengeValue.ToString();
+            }
 
             // For Apply operations, check if the user is eligible to apply or if an error pidl should be returned
             if (string.Equals(operation, Constants.Operations.Apply, StringComparison.OrdinalIgnoreCase))
@@ -2882,7 +2894,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                     }
                     else if (PXCommon.Constants.PartnerGroups.IsXboxNativePartner(partner) && string.Equals(scenario, Constants.ScenarioNames.XboxCoBrandedCard, StringComparison.OrdinalIgnoreCase))
                     {
-                        string ocid = Request?.GetQueryNameValuePairs()?.FirstOrDefault(i => i.Key == Constants.QueryParameterName.OCID).Value ?? string.Empty;
+                        string ocid = this.Request.Query.TryGetValue(Constants.QueryParameterName.OCID, out var ocidVal) ? ocidVal.ToString() : string.Empty;
                         return PIDLResourceFactory.XboxCoBrandedCardQRCodeRestAction(partner, country, language, this.ExposedFlightFeatures, channel, referrerId, ocid);
                     }
                 }
@@ -3444,7 +3456,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 this.AddActionContext(retVal, type, partner, country, language, family, accountId);
 
                 if (this.ExposedFlightFeatures.Contains(Flighting.Features.PXChallengeSwitch)
-                    && string.Equals(Request?.GetQueryNameValuePairs()?.FirstOrDefault(i => i.Key == Constants.QueryParameterName.ShowChallenge).Value, bool.TrueString, StringComparison.OrdinalIgnoreCase))
+                    && (this.Request.Query.TryGetValue(Constants.QueryParameterName.ShowChallenge, out var showChallengeValue)
+                        && string.Equals(showChallengeValue.ToString(), bool.TrueString, StringComparison.OrdinalIgnoreCase)))
                 {
                     if (!string.IsNullOrEmpty(pxChallengeSessionId))
                     {
@@ -3491,12 +3504,12 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         {
             // Extract the client info from the request header.userAgent. If the device is an Xbox, we need to set the device class to Console.
             string xboxDeviceId = await this.TryGetClientContext(GlobalConstants.ClientContextKeys.DeviceInfo.XboxLiveDeviceId);
-            return !string.IsNullOrWhiteSpace(xboxDeviceId) ? GlobalConstants.DeviceClass.Console : HttpRequestHelper.GetDeviceClass(this.Request);
+            return !string.IsNullOrWhiteSpace(xboxDeviceId) ? GlobalConstants.DeviceClass.Console : HttpRequestHelper.GetDeviceClass(ToHttpRequestMessage(this.Request));
         }
 
         private void AddActionContext(List<PIDLResource> pidlResources, string type, string partner, string country, string language, string family, string accountId)
         {
-            IEnumerable<KeyValuePair<string, string>> queryparams = Request.GetQueryNameValuePairs();
+            IEnumerable<KeyValuePair<string, string>> queryparams = this.Request.Query.Select(kvp => new KeyValuePair<string, string>(kvp.Key, kvp.Value.ToString()));
 
             Dictionary<string, string> parameters = queryparams.ToDictionary(list => list.Key, list => list.Value);
 
@@ -3550,8 +3563,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 // For now, this feature is only required by commercial partners
                 // Will extend it to support consumer partner if required
                 Dictionary<string, string> profileV3Headers = new Dictionary<string, string>();
-                profileV3Headers.Add(AccountService.V7.Constants.AccountV3ExtendedHttpHeaders.Etag, profile.Etag);
-                profileV3Headers.Add(AccountService.V7.Constants.AccountV3ExtendedHttpHeaders.IfMatch, profile.Etag);
+                                profileV3Headers.Add(AccountV3Headers.Etag, profile.Etag);
+                                profileV3Headers.Add(AccountV3Headers.IfMatch, profile.Etag);
 
                 // Task 20658227: [PxService] Remove old "shipping_v3", "emp profile", "org profile" PIDL
                 // MSFB team is in the progress of migration from profile put to profile patch, hardcode operation type to "update_partial" here to use the patch route
@@ -3774,7 +3787,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                     string.Empty,
                     null,
                     "IPAddress: " + riskDataObject.IPAddress + ", DeviceId: " + riskDataObject.DeviceId,
-                    (Diagnostics.Tracing.EventLevel)System.Diagnostics.Tracing.EventLevel.Informational);
+                    System.Diagnostics.Tracing.EventLevel.Informational);
             }
 
             qrCodeContext.RiskData = riskDataObject;
@@ -3864,6 +3877,17 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             }
 
             return true;
+        }
+
+        private static HttpRequestMessage ToHttpRequestMessage(Microsoft.AspNetCore.Http.HttpRequest request)
+        {
+            var requestMessage = new HttpRequestMessage(new HttpMethod(request.Method), new Uri(request.GetDisplayUrl()));
+            foreach (var header in request.Headers)
+            {
+                requestMessage.Headers.TryAddWithoutValidation(header.Key, header.Value.ToArray());
+            }
+
+            return requestMessage;
         }
 
         private async Task<QRCodeSecondScreenSession> GetAndValidateQrCodeSession(string sessionId, EventTraceActivity traceActivityId, List<PaymentMethod> paymentMethodList)
