@@ -106,7 +106,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.Checkouts
             string cV = this.Request.GetCorrelationVector().ToString();
 
             string pifdEndpointUrlOnChallengeComplete = $"{this.PidlBaseUrl}/checkoutsEx/{checkoutId}/completed?redirectUrl={redirectUrl}&providerId={paymentProviderId}";
-            
+
             if (checkoutChargePayload == null)
             {
                 throw TraceCore.TraceException(traceActivityId, new ValidationException(ErrorCode.InvalidRequestData, string.Format("response status code: {0}, error: {1}", "InvalidCheckoutData", "The input checkout data is invalid.")));
@@ -137,7 +137,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.Checkouts
             try
             {
                 Checkout checkout = await this.Settings.PaymentThirdPartyServiceAccessor.GetCheckout(paymentProviderId, checkoutId, traceActivityId);
-                
+
                 if (checkout.Status != CheckoutStatus.Invalid && checkout.Status != CheckoutStatus.Paid)
                 {
                     checkout = await this.Settings.PaymentThirdPartyServiceAccessor.Charge(paymentProviderId, checkoutCharge, traceActivityId);
@@ -199,7 +199,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.Checkouts
                     return this.Request.CreateResponse(ex.Response.StatusCode, ex.Error, "application/json");
                 }
             }
-            
+
             return this.Request.CreateResponse(HttpStatusCode.OK, PIDLResourceFactory.GetRedirectPidl(redirectUrl, true));
         }
 
@@ -217,7 +217,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.Checkouts
         public async Task<HttpResponseMessage> Status(
             string paymentProviderId,
             string checkoutId)
-        {            
+        {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
 
             if (string.IsNullOrEmpty(checkoutId) || string.IsNullOrEmpty(paymentProviderId))
@@ -228,7 +228,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.Checkouts
             Checkout checkout = null;
             try
             {
-               checkout = await this.Settings.PaymentThirdPartyServiceAccessor.GetCheckout(paymentProviderId, checkoutId, traceActivityId);
+                checkout = await this.Settings.PaymentThirdPartyServiceAccessor.GetCheckout(paymentProviderId, checkoutId, traceActivityId);
             }
             catch (ServiceErrorResponseException ex)
             {
@@ -238,7 +238,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.Checkouts
                     return this.Request.CreateResponse(ex.Response.StatusCode, ex.Error, "application/json");
                 }
             }
-            
+
             return this.Request.CreateResponse(HttpStatusCode.OK, new CheckoutStatusResponse { CheckoutStatus = checkout.Status.ToString() });
         }
 

@@ -285,7 +285,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                     traceActivityId: traceActivityId,
                     isMotoAuthorized: isMotoAuthorized,
                     tid: tid,
-                    testContext: HttpRequestHelper.GetTestHeader(this.Request),
+                    testContext: HttpRequestHelper.GetTestHeader(this.Request.ToHttpRequestMessage()),
                     setting: setting,
                     userId: userId,
                     isGuestUser: isGuestUser);
@@ -557,9 +557,10 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <param name="orderId">Identity of user's order</param>
         /// <throws>HttpResponseException if the payment instrument cannot be found</throws>
         /// <returns>Returns a PIDL representing the next action that needs to be taken</returns>
-        [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpGet]
-        public async Task<List<PIDLResource>> GetByPiidAndSessionId(string accountId, string piid, string sessionId, string partner = null, string language = null, string orderId = null)
+        public async Task<ActionResult<List<PIDLResource>>> GetByPiidAndSessionId(
+                string accountId, string piid, string sessionId,
+                string partner = null, string language = null, string orderId = null)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
             this.Request.AddTracingProperties(accountId, piid, null, null, null);
@@ -568,7 +569,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             PaymentInstrument pi = await this.Settings.PIMSAccessor.GetPaymentInstrument(accountId, piid, traceActivityId);
             if (pi == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                return NotFound();
             }
 
             this.Request.AddTracingProperties(null, null, pi.PaymentMethod.PaymentMethodFamily, pi.PaymentMethod.PaymentMethodType);
@@ -659,7 +660,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>Returns a challenge PIDL</returns>
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpGet]
-        public async Task<List<PIDLResource>> GetByAccountIdAndPiid(
+        public async Task<ActionResult<List<PIDLResource>>> GetByAccountIdAndPiid(
             string accountId,
             string piid,
             string language = null,
@@ -676,7 +677,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
 
             if (digitizedCard == null)
             {
-                throw new HttpResponseException(HttpStatusCode.Unauthorized);
+                return Unauthorized(); // in methods returning IActionResult or ActionResult<T>
             }
 
             ChallengePidlArgs challengeArgs = new ChallengePidlArgs()
@@ -772,7 +773,9 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             return clientAction;
         }
 
-        private async Task<List<PIDLResource>> GetChallengeDescriptionsByTypePiidAndSessionId(string accountId, string piid, string type, string sessionId, string language, string partner, string scenario, PaymentExperienceSetting setting = null)
+        private async Task<ActionResult<List<PIDLResource>>> GetChallengeDescriptionsByTypePiidAndSessionId(
+             string accountId, string piid, string type, string sessionId,
+             string language, string partner, string scenario, PaymentExperienceSetting setting = null)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
             this.Request.AddTracingProperties(accountId, piid, null, null);
@@ -783,7 +786,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
 
             if (pi == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                return NotFound();
             }
 
             string emailAddress = await this.TryGetClientContext(GlobalConstants.ClientContextKeys.MsaProfile.EmailAddress);

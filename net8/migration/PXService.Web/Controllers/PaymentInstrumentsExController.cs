@@ -10,7 +10,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using System.Net.Http;
     using System.Net.Http.Headers;
     using System.Text;
-    using System.Text.Encodings.Web;
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
@@ -1683,7 +1682,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
 
         private static HttpResponseMessage ComposeHtmlPostMessageResponse(ClientAction clientAction)
         {
-            string jsEncodedClientAction = JavaScriptEncoder.Default.Encode(JsonConvert.SerializeObject(clientAction));
+            string jsEncodedClientAction = HttpUtility.JavaScriptStringEncode(JsonConvert.SerializeObject(clientAction));
             string responseContent = string.Format(PostMessageHtmlTemplate, jsEncodedClientAction);
             HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
             response.Content = new StringContent(responseContent);

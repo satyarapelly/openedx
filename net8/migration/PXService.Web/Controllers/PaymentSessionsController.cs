@@ -2,18 +2,8 @@
 
 namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.Specialized;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Net.Http.Headers;
-    using System.Text.Encodings.Web;
-    using System.Text.RegularExpressions;
-    using System.Threading.Tasks;
-    using Microsoft.AspNetCore.Mvc;
     using Common;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Commerce.Payments.Common.Transaction;
     using Microsoft.Commerce.Payments.Common.Web;
@@ -29,6 +19,16 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
     using Model;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.Specialized;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Net.Http.Headers;
+    using System.Text.Encodings.Web;
+    using System.Text.RegularExpressions;
+    using System.Threading.Tasks;
     using PaymentContext = PXService.Model.SessionService.PaymentContext;
     using PaymentInstrumentPollingStatus = Microsoft.Commerce.Payments.PimsModel.V4.PaymentInstrumentStatus;
     using PimsSessionDetailsResource = Microsoft.Commerce.Payments.PimsModel.V4.PimsSessionDetailsResource;
@@ -135,7 +135,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
 
                 if (!string.IsNullOrEmpty(paymentSessionId))
                 {
-                    TestContext testContext = HttpRequestHelper.GetTestHeader(this.Request);
+                    TestContext testContext = HttpRequestHelper.GetTestHeader(this.Request.ToHttpRequestMessage());
 
                     if (HttpRequestHelper.HasThreeDSOneTestScenarioWithFailure(testContext))
                     {
@@ -475,19 +475,23 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
             {
                 EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
                 List<string> exposedFlightFeatures = await this.PaymentSessionsHandler.GetExposedFlightFeatures(sessionId, traceActivityId);
-                string browser = HttpRequestHelper.GetBrowser(this.Request);
-                int browserMajorVersion = HttpRequestHelper.GetBrowserMajorVer(this.Request);
+                string browser = HttpRequestHelper.GetBrowser(this.Request.ToHttpRequestMessage());
+                int browserMajorVersion = HttpRequestHelper.GetBrowserMajorVer(this.Request.ToHttpRequestMessage());
 
-                if (!this.Request.Content.IsFormData())
+                if (!this.Request.HasFormContentType)
                 {
                     throw new ValidationException(ErrorCode.InvalidRequestData, "HTML form URL-encoded data is expected");
                 }
 
-                var formData = await Request.Content.ReadAsFormDataAsync();
-                string methodDataFieldValue = formData.Get(V7.Constants.SessionFieldNames.ThreeDSMethodData);
+                var formData = await Request.ReadFormAsync();
+                string methodDataFieldValue = formData[V7.Constants.SessionFieldNames.ThreeDSMethodData];
+
                 if (string.IsNullOrEmpty(methodDataFieldValue))
                 {
-                    SllWebLogger.TracePXServiceException(string.Format("ThreeDSMethodData is missing in Authenticate call for the sessionId - {0}", sessionId), traceActivityId);
+                    SllWebLogger.TracePXServiceException(
+                        $"ThreeDSMethodData is missing in Authenticate call for the sessionId - {sessionId}",
+                        traceActivityId
+                    );
 
                     // TODO: Uncomment the following code when banks are sending this data correctly.
                     // throw new ValidationException(ErrorCode.InvalidRequestData, string.Format(V7.Constants.MissingErrorMessage.MissingValue, V7.Constants.SessionFieldNames.ThreeDSMethodData));
@@ -1383,8 +1387,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
 
         private static HttpResponseMessage ComposeHtmlPostMessageResponse(ClientAction clientAction)
         {
-            string jsEncodedClientAction = JavaScriptEncoder.Default.Encode(JsonConvert.SerializeObject(clientAction));
-            string responseContent = string.Format(PostMessageHtmlTemplate, jsEncodedClientAction);
+            string jsEncodedClientAction = JavaScriptEncoder.Default.Encode(JsonConvert.SerializeObject(clientAction)); string responseContent = string.Format(PostMessageHtmlTemplate, jsEncodedClientAction);
             HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
             response.Content = new StringContent(responseContent);
             response.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("text/html; charset=utf-8");
