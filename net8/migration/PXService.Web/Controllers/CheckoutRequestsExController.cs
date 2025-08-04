@@ -4,6 +4,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentClient
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.Tracing;
     using System.Diagnostics.Eventing.Reader;
     using System.Linq;
     using System.Net;
@@ -220,7 +221,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentClient
                         this.ExposedFlightFeatures,
                         partner: partner,
                         type: paymentMethodType,
-                        request: this.Request,
+                        request: this.Request.ToHttpRequestMessage(),
                         piid: piid,
                         country: paymentRequest.Country,
                         operation: V7.Constants.Operations.Add,
@@ -243,7 +244,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentClient
                     }
                     else
                     {
-                        SllWebLogger.TraceServerMessage("CheckoutRequestEx Confirm", traceActivityId.CorrelationVectorV4.Value, traceActivityId.ActivityId.ToString(), "challenge is required but ChallengePIDL is null", EventLevel.Warning);
+                        SllWebLogger.TraceServerMessage("CheckoutRequestEx Confirm", traceActivityId.CorrelationVectorV4.Value, traceActivityId.ActivityId.ToString(), "challenge is required but ChallengePIDL is null", System.Diagnostics.Tracing.EventLevel.Warning);
                     }
                 }
 
@@ -267,7 +268,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentClient
                     }
                     else
                     {
-                        SllWebLogger.TraceServerMessage("CheckoutRequestEx Confirm", traceActivityId.CorrelationVectorV4.Value, traceActivityId.ActivityId.ToString(), "ThreeDs2 challenge is required but 3DS2ChallengePIDL is null", EventLevel.Warning);
+                        SllWebLogger.TraceServerMessage("CheckoutRequestEx Confirm", traceActivityId.CorrelationVectorV4.Value, traceActivityId.ActivityId.ToString(), "ThreeDs2 challenge is required but 3DS2ChallengePIDL is null", System.Diagnostics.Tracing.EventLevel.Warning);
                     }
                 }
 

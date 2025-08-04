@@ -2,12 +2,7 @@
 
 namespace Microsoft.Commerce.Payments.PXService.V7
 {
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Http.Extensions;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Commerce.Payments.Common;
     using Microsoft.Commerce.Payments.Common.Tracing;
@@ -16,6 +11,12 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using Microsoft.Commerce.Payments.PidlFactory.V7;
     using Microsoft.Commerce.Payments.PidlFactory.V7.PIDLFeatureProcess;
     using Microsoft.Commerce.Payments.PidlModel.V7;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading.Tasks;
 
     public class DescriptionsController : ProxyController
     {
@@ -79,7 +80,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             }
 
             // Set description property to helps generate PIDL
-            await componentInstance.LoadComponentDescription(requestContext?.RequestId, this.Settings, traceActivityId, setting, this.ExposedFlightFeatures, operation: operation, partner: partner, family: family, type: type, scenario: scenario, request: this.Request, piid: piid);
+            await componentInstance.LoadComponentDescription(requestContext?.RequestId, this.Settings, traceActivityId, setting, this.ExposedFlightFeatures, operation: operation, partner: partner, family: family, type: type, scenario: scenario, request: this.Request.ToHttpRequestMessage(), piid: piid);
             this.EnableFlightingsInPartnerSetting(componentInstance.PSSSetting, componentInstance.Country);
 
             // Component description Generation

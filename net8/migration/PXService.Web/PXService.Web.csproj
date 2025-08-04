@@ -1,0 +1,54 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<EnableNETAnalyzers>true</EnableNETAnalyzers>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<RootNamespace>Microsoft.Commerce.Payments.PXService</RootNamespace>
+		<AssemblyName>Microsoft.Commerce.Payments.PXService</AssemblyName>
+	</PropertyGroup>
+
+	<!-- CoreWCF and System.ServiceModel Support -->
+	<ItemGroup>
+		<PackageReference Include="CoreWCF.Primitives" />
+		<PackageReference Include="CoreWCF.Http" />
+		<PackageReference Include="CoreWCF.ConfigurationManager" />
+		<PackageReference Include="Microsoft.AspNetCore.OutputCaching.StackExchangeRedis" />
+		<PackageReference Include="System.ServiceModel.Primitives" />
+		<PackageReference Include="System.ServiceModel.Http" />
+	</ItemGroup>
+
+	<!-- Reverse Proxy and Web Compatibility -->
+	<ItemGroup>
+		<PackageReference Include="Yarp.ReverseProxy" />
+		<PackageReference Include="Microsoft.AspNetCore.SystemWebAdapters.CoreServices" />
+	</ItemGroup>
+
+	<!-- Swagger/OpenAPI -->
+	<ItemGroup>
+		<PackageReference Include="StackExchange.Redis" />
+		<PackageReference Include="Swashbuckle.AspNetCore" />
+	</ItemGroup>
+
+	<!-- Optional Config and JSON -->
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" />
+	</ItemGroup>
+
+	<!-- Optional Caching -->
+
+	<!-- Project references -->
+	<ItemGroup>
+		<ProjectReference Include="..\Common\Common.csproj" />
+		<ProjectReference Include="..\Pidl\PidlFactory\PidlFactory.csproj" />
+		<ProjectReference Include="..\Pidl\PidlModel\PidlModel.csproj" />
+		<ProjectReference Include="..\Pidl\PimsModel\PimsModel.csproj" />
+		<ProjectReference Include="..\Pidl\PXCommon\PXCommon.csproj" />
+		<ProjectReference Include="..\PXService.Core.WCF\PXService.Core.WCF.csproj" />
+		<ProjectReference Include="..\PXServiceCore.NET\PXServiceCore.NET.csproj" />
+	</ItemGroup>
+
+</Project>
