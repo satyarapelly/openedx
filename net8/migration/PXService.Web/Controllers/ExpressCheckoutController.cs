@@ -28,12 +28,12 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">ExpressCheckoutResult object</response>
         /// <returns>ExpressCheckoutResult object</returns>
         [HttpPost]
-        public async Task<ExpressCheckoutResult> Confirm(
+        public async Task<ActionResult<ExpressCheckoutResult>> Confirm(
             string accountId,
             [FromBody] PIDLData confirmPayload,
             string partner = V7.Constants.ServiceDefaults.DefaultPartnerName)
         {
-            EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
+            EventTraceActivity traceActivityId = new EventTraceActivity(HttpContext.TraceIdentifier);
 
             string paymentMethodType = confirmPayload?.TryGetPropertyValueFromPIDLData(V7.Constants.ExpressCheckoutPropertyValue.PaymentMethodType);
 
@@ -41,7 +41,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 || !(paymentMethodType.Equals(V7.Constants.PaymentMethodType.ApplePay, StringComparison.OrdinalIgnoreCase)
                     || paymentMethodType.Equals(V7.Constants.PaymentMethodType.GooglePay, StringComparison.OrdinalIgnoreCase)))
             {
-                throw new HttpResponseException(this.Request.CreateErrorResponse(System.Net.HttpStatusCode.BadRequest, "Invalid Payment Method Type"));
+                return BadRequest("Invalid Payment Method Type");
             }
 
             // Extract apple pay or google pay token as string from payload.
@@ -67,7 +67,11 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             // Check if first/last/emails are available in the profile, if not, update the profile by using fisrt/last/emails from the payload
             try
             {
-                await this.UpdateProfileIfNeeded(accountId, addressV3, traceActivityId);
+                var updateResult = await this.UpdateProfileIfNeeded(accountId, addressV3, traceActivityId);
+                if (!updateResult.Success)
+                {
+                    return BadRequest(updateResult.Message);
+                }
             }
             catch (Exception ex)
             {
@@ -113,9 +117,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
 
         private IEnumerable<KeyValuePair<string, string>> GenerateQueryParamsForPostPi(string country)
         {
-            var queryParams = this.Request.GetQueryNameValuePairs();
-            string countryFromRequest = null;
-            if (!this.Request.TryGetQueryParameterValue(V7.Constants.QueryParameterName.Country, out countryFromRequest))
+            var queryParams = this.Request.Query.AsEnumerable().Select(q => new KeyValuePair<string, string>(q.Key, q.Value));
+            if (!this.Request.Query.TryGetValue(V7.Constants.QueryParameterName.Country, out _))
             {
                 queryParams = queryParams.Concat(new[] { new KeyValuePair<string, string>(V7.Constants.QueryParameterName.Country, country) });
             }
@@ -123,14 +126,14 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             return queryParams;
         }
 
-        private async Task UpdateProfileIfNeeded(string accountId, AddressInfoV3 addressV3, EventTraceActivity traceActivityId)
+        private async Task<(bool Success, string Message)> UpdateProfileIfNeeded(string accountId, AddressInfoV3 addressV3, EventTraceActivity traceActivityId)
         {
             var profileType = this.GetProfileType();
             var profile = await this.Settings.AccountServiceAccessor.GetProfileV3(accountId, profileType, traceActivityId);
 
             if (profile == null)
             {
-                throw new HttpResponseException(this.Request.CreateErrorResponse(System.Net.HttpStatusCode.BadRequest, "Invalid Profile / Profile not found"));
+                return (false, "Invalid Profile / Profile not found");
             }
 
             if (profileType == GlobalConstants.ProfileTypes.Consumer)
@@ -146,8 +149,10 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             }
             else
             {
-                throw new HttpResponseException(this.Request.CreateErrorResponse(System.Net.HttpStatusCode.BadRequest, "profile type " + profileType + " is not supported"));
+                return (false, "profile type " + profileType + " is not supported");
             }
+
+            return (true, null);
         }
     }
 }

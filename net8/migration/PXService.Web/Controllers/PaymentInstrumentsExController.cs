@@ -9,6 +9,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using System.Net;
     using System.Net.Http;
     using System.Net.Http.Headers;
+    using System.Net.Http.Json;
     using System.Text;
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
@@ -802,11 +803,13 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                     orderId: null,
                     isReplacePI: true);
 
-                if (responseMessage.IsSuccessStatusCode
-                    && responseMessage.TryGetContentValue<PaymentInstrument>(out newPI)
-                    && newPI.ClientAction == null)
+                if (responseMessage.IsSuccessStatusCode)
                 {
-                    targetPaymentInstrumentId = newPI.PaymentInstrumentId;
+                    var newPI = await responseMessage.Content.ReadFromJsonAsync<PaymentInstrument>();
+                    if (newPI != null && newPI.ClientAction == null)
+                    {
+                        targetPaymentInstrumentId = newPI.PaymentInstrumentId;
+                    }
                 }
             }
 
@@ -1128,7 +1131,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 await this.AddParameterToPIRiskData(pendingOpRequestData, Constants.DeviceInfoProperty.UserAgent, GlobalConstants.ClientContextKeys.DeviceInfo.UserAgent);
             }
 
-            var queryparams = this.Request.GetQueryNameValuePairs();
+            var queryparams = this.Request.Query.AsEnumerable().Select(q => new KeyValuePair<string, string>(q.Key, q.Value));
             PaymentInstrument updatedPi = null;
             ServiceErrorResponseException ex = null;
 
@@ -1475,15 +1478,14 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             }
 
             // validateCvv returns 204 on success, if content was received, there was some error
-            throw new HttpResponseException(
-                this.Request.CreateResponse(
+            return this.Request.CreateResponse(
                 HttpStatusCode.BadRequest,
                 new ErrorMessage()
                 {
                     ErrorCode = "ValidateCVVReturnedContent",
                     Message = "Validate CVV returned 200 instead of 204",
                     Retryable = false,
-                }));
+                });
         }
 
         /// <summary>
@@ -1527,7 +1529,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             // For xbox partners, don't call Apply directly and instead use the created sessionId to return a static PIDL resource
             if (PXCommon.Constants.PartnerGroups.IsXboxNativePartner(partner))
             {
-                string ocid = Request?.GetQueryNameValuePairs()?.FirstOrDefault(i => i.Key == Constants.QueryParameterName.OCID).Value ?? string.Empty;
+                string ocid = Request?.Query.FirstOrDefault(i => i.Key == Constants.QueryParameterName.OCID).Value.ToString() ?? string.Empty;
                 return await this.GetXboxCoBrandedCardNativePidl(language, partner, country, applySession, initializeData.Channel, initializeData.ReferrerId, ocid, setting);
             }
             else
@@ -2633,8 +2635,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 scenario: scenario,
                 orderId: orderId);
 
-            PaymentInstrument newPi = new PaymentInstrument();
-            response.TryGetContentValue(out newPi);
+            PaymentInstrument newPi = await response.Content.ReadFromJsonAsync<PaymentInstrument>();
 
             if (newPi != null)
             {
@@ -2652,13 +2653,13 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         {
             if (completePrerequisites)
             {
-                string country = RetrieveQueryParameterValue(this.Request.GetQueryNameValuePairs(), Constants.QueryParameterName.Country);
+                string country = RetrieveQueryParameterValue(this.Request.Query.Select(q => new KeyValuePair<string, string>(q.Key, q.Value)), Constants.QueryParameterName.Country);
                 if (string.IsNullOrWhiteSpace(country))
                 {
                     throw TraceCore.TraceException(traceActivityId, new ValidationException(ErrorCode.InvalidRequestData, string.Format("response status code: {0}, error: {1}", "MissingQueryParameter", "Country is required.")));
                 }
 
-                string partner = RetrieveQueryParameterValue(this.Request.GetQueryNameValuePairs(), Constants.QueryParameterName.Partner);
+                string partner = RetrieveQueryParameterValue(this.Request.Query.Select(q => new KeyValuePair<string, string>(q.Key, q.Value)), Constants.QueryParameterName.Partner);
                 if (string.IsNullOrWhiteSpace(partner))
                 {
                     throw TraceCore.TraceException(traceActivityId, new ValidationException(ErrorCode.InvalidRequestData, string.Format("response status code: {0}, error: {1}", "MissingQueryParameter", "Partner is required.")));
@@ -2989,7 +2990,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
 
             string pxChallengeSessionId;
             bool isPXChallengeRequired = false;
-            this.Request.TryGetQueryParameterValue(Constants.QueryParameterName.PXChallengeSessionId, out pxChallengeSessionId);
+            this.Request.Query.TryGetValue(Constants.QueryParameterName.PXChallengeSessionId, out var pxChallengeSessionIdValues);
+            pxChallengeSessionId = pxChallengeSessionIdValues.ToString();
 
             //// If switch and enable challenge by default flight is On, show the challenge
             if (this.ExposedFlightFeatures.Contains(Flighting.Features.PXChallengeSwitch, StringComparer.OrdinalIgnoreCase)
@@ -3204,11 +3206,10 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 await this.TryUpdateAddressWith9digitZipCode(pi);
             }
 
-            var queryparams = this.Request.GetQueryNameValuePairs();
+            var queryparams = this.Request.Query.AsEnumerable().Select(q => new KeyValuePair<string, string>(q.Key, q.Value));
             if (!string.IsNullOrEmpty(billableAccountId))
             {
-                string currentBillableAccountId = null;
-                if (!this.Request.TryGetQueryParameterValue(GlobalConstants.QueryParamNames.BillableAccountId, out currentBillableAccountId))
+                if (!this.Request.Query.TryGetValue(GlobalConstants.QueryParamNames.BillableAccountId, out _))
                 {
                     queryparams = queryparams.Concat(new[] { new KeyValuePair<string, string>(GlobalConstants.QueryParamNames.BillableAccountId, billableAccountId) });
                 }
@@ -3904,7 +3905,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             {
                 if (string.IsNullOrEmpty(pxChallengeSessionId))
                 {
-                    pxChallengeSessionId = await PXChallengeManagementHandler.CreatePXChallengeSessionId(Request.GetQueryNameValuePairs().ToDictionary(list => list.Key, list => list.Value), accountId, traceActivity, this.PidlSdkVersion);
+                    pxChallengeSessionId = await PXChallengeManagementHandler.CreatePXChallengeSessionId(Request.Query.ToDictionary(list => list.Key, list => list.Value.ToString()), accountId, traceActivity, this.PidlSdkVersion);
                 }
 
                 dynamic getResourceActionContext = Newtonsoft.Json.JsonConvert.DeserializeObject(pidetails[Constants.DataDescriptionPropertyNames.ResourceActionContext].ToString());
