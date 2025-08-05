@@ -2,6 +2,7 @@
 
 namespace SelfHostedPXServiceCore.Mocks
 {
+    using Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Mocks;
     using Test.Common;
 
     public class TokenizationService : MockServiceWebRequestHandler
