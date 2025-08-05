@@ -91,7 +91,7 @@ namespace SelfHostedPXServiceCore.Mocks
 
         private readonly Dictionary<Type, HostableService> selfHostedDependencies;
 
-        public PXServiceSettings(Dictionary<Type, HostableService> selfHostedDependencies = null, bool useArrangedResponses = true)
+        public PXServiceSettings(Dictionary<Type, HostableService>? selfHostedDependencies = null, bool useArrangedResponses = true)
         {
             this.selfHostedDependencies = selfHostedDependencies ?? new Dictionary<Type, HostableService>();
             AccountsService = new Mocks.AccountService(new AccountServiceMockResponseProvider(), useArrangedResponses);
