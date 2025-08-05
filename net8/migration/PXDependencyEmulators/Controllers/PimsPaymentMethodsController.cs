@@ -8,6 +8,7 @@ using FromUri = Microsoft.AspNetCore.Mvc.FromQueryAttribute;
     using Common.Transaction;
     using Common.Web;
     using Test.Common;
+    using Microsoft.Commerce.Payments.Common.Testing;
     using Constants = Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Constants;
     using Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Extensions;
 
@@ -39,7 +40,7 @@ using FromUri = Microsoft.AspNetCore.Mvc.FromQueryAttribute;
                 }
             }
 
-            return TestScenarioManager.GetResponse(apiName, testContext);
+            return this.TestScenarioManager.GetResponse(apiName, testContext);
         }
     }
 }

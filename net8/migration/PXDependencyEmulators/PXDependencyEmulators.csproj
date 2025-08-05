@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators</RootNamespace>
     <AssemblyName>Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators</AssemblyName>
-    <OutputType>Library</OutputType>
+    <OutputType>Exe</OutputType>
     <EnableDefaultContentItems>false</EnableDefaultContentItems>
   </PropertyGroup>
 
