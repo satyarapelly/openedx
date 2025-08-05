@@ -2,8 +2,12 @@
 
 namespace SelfHostedPXServiceCore.Mocks
 {
+    using System;
+    using System.Collections.Generic;
     using System.Linq;
+    using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.Commerce.Payments.Common.Tracing;
@@ -15,8 +19,23 @@ namespace SelfHostedPXServiceCore.Mocks
 
     public class OrchestrationService : MockServiceWebRequestHandler
     {
+        public List<string> Requests { get; } = new();
+
+        public Action<HttpRequestMessage>? PreProcess { get; set; }
+
+        public List<Response> Responses { get; } = new();
+
         public OrchestrationService(OrchestrationServiceMockResponseProvider resolver, bool useArrangedResponses) : base(resolver, useArrangedResponses)
         {
+        }
+
+        public class Response
+        {
+            public Func<HttpRequestMessage, bool> IsMatch { get; set; }
+
+            public HttpStatusCode StatusCode { get; set; }
+
+            public string Content { get; set; }
         }
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
@@ -39,7 +58,7 @@ namespace SelfHostedPXServiceCore.Mocks
                     Content = new StringContent(
                             content: foundMatch.Content,
                             encoding: System.Text.Encoding.UTF8,
-                            mediaType: "application/json")
+                            mediaType: new MediaTypeHeaderValue("application/json"))
                 };
             }
 

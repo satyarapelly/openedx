@@ -44,7 +44,7 @@ namespace SelfHostedPXServiceCore
 
         public void Dispose()
         {
-            WebApp.Dispose();
+            WebApp.DisposeAsync().GetAwaiter().GetResult();
         }
     }
 }
