@@ -10,6 +10,7 @@ using FromUri = Microsoft.AspNetCore.Mvc.FromQueryAttribute;
     using Common.Web;
     using Test.Common;
     using Constants = Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Constants;
+    using Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Extensions;
 
     public class PimsPaymentInstrumentsController : EmulatorBaseController
     {

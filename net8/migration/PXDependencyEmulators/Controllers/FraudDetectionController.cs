@@ -10,10 +10,11 @@ using FromUri = Microsoft.AspNetCore.Mvc.FromQueryAttribute;
     using Microsoft.Commerce.Payments.Common.Transaction;
     using Test.Common;
     using Constants = Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Constants;
+    using Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Extensions;
 
     public class FraudDetectionController : ControllerBase
     {
-        private TestScenarioManager TestScenarioManager
+        private IScenarioManager TestScenarioManager
         {
             get
             {
