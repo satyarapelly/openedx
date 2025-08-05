@@ -1,4 +1,4 @@
-namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Extensions
+namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators
 {
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.DependencyInjection.Extensions;
