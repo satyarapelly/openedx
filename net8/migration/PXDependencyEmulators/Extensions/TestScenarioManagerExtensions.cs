@@ -1,6 +1,7 @@
 namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Extensions
 {
     using Common.Transaction;
+    using Microsoft.Commerce.Payments.Common.Testing;
     using System.Net.Http;
 
     public static class TestScenarioManagerExtensions
