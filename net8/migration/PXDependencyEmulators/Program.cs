@@ -20,9 +20,6 @@ builder.Services.AddSwaggerGen(c =>
     c.OperationFilter<AddHeaderParameterOperationFilter>();
 });
 
-// Configure Web API services before building the app
-WebApiConfig.ConfigureServices(builder.Services);
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -37,12 +34,24 @@ if (app.Environment.IsDevelopment() || true)
     });
 }
 
-app.UseRouting();
-
-// Configure Web API app
-WebApiConfig.ConfigureApp(app);
-
 app.MapControllers();
+app.MapPartnerSettingsRoutes();
+app.MapPIMSRoutes();
+app.MapMSRewardsRoutes();
+app.MapCatalogRoutes();
+app.MapAccountRoutes();
+app.MapIssuerServiceRoutes();
+app.MapChallengeManagementRoutes();
+app.MapPaymentThirdPartyRoutes();
+app.MapPurchaseRoutes();
+app.MapRiskRoutes();
+app.MapSellerMarketPlaceRoutes();
+app.MapTokenPolicyRoutes();
+app.MapStoredValueRoutes();
+app.MapTransactionServiceRoutes();
+app.MapPaymentOchestratorRoutes();
+app.MapPayerAuthRoutes();
+app.MapFraudDetectionRoutes();
 
 Console.WriteLine("PXDependencyEmulators is starting...");
 Console.WriteLine($"Application running on .NET {Environment.Version}");
