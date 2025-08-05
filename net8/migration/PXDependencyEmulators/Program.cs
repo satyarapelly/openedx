@@ -12,12 +12,12 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
-    {
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo {
         Title = "PXDependencyEmulators",
         Version = "v1",
-        Description = "Payment X Dependency Emulators (.NET 8.0)"
+        Description = "Payment X Dependency Emulators (.NET 8.0)",
     });
+    c.OperationFilter<AddHeaderParameterOperationFilter>();
 });
 
 // Configure Web API services before building the app
