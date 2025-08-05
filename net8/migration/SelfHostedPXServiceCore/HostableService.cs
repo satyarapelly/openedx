@@ -1,86 +1,50 @@
-﻿namespace SelfHostedPXServiceCore
+namespace SelfHostedPXServiceCore
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Net.Http;
-    using System.Net.NetworkInformation;
-    using System.Web.Http.SelfHost;
-    using Castle.Components.DictionaryAdapter;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.TestHost;
+    using Microsoft.Extensions.DependencyInjection;
 
     public class HostableService : IDisposable
     {
-        public static List<int> PreRegisteredPorts { get; private set; }
+        public static List<int> PreRegisteredPorts { get; } = new();
 
         public string Port { get; private set; }
 
         public Uri BaseUri { get; private set; }
 
-        public HttpSelfHostConfiguration SelfHostConfiguration { get; private set; }
+        public WebApplication WebApp { get; private set; }
 
-        public HttpSelfHostServer SelfHostServer { get; private set; }
+        public HttpClient HttpSelfHttpClient { get; set; }
 
-        public HttpClient HttpSelfHttpClient { get; private set; }
-
-        static HostableService()
+        public HostableService(Action<WebApplication> registerConfig, string fullBaseUrl, string protocol, Action<WebApplicationBuilder>? configureBuilder = null)
         {
-            PreRegisteredPorts = new EditableList<int>();
-        }
+            var builder = WebApplication.CreateBuilder();
+            builder.WebHost.UseTestServer();
+            builder.Services.AddControllers().AddNewtonsoftJson();
+            configureBuilder?.Invoke(builder);
 
-        public HostableService(Action<HttpSelfHostConfiguration> registerConfig, string fullBaseUrl, string protocol)
-        {
-            if (string.IsNullOrEmpty(fullBaseUrl))
-            {
-                Port = GetAvailablePort();
+            WebApp = builder.Build();
 
-                if (string.IsNullOrEmpty(protocol))
-                {
-                    protocol = "https";
-                }
+            registerConfig?.Invoke(WebApp);
 
-                BaseUri = new Uri(string.Format("{0}://localhost:{1}", protocol, Port));
-            }
-            else
-            {
-                BaseUri = new Uri(fullBaseUrl);
-            }
+            WebApp.Start();
 
-            SelfHostConfiguration = new HttpSelfHostConfiguration(BaseUri.AbsoluteUri);
-            registerConfig(SelfHostConfiguration);
+            BaseUri = string.IsNullOrEmpty(fullBaseUrl)
+                ? new Uri($"{(string.IsNullOrEmpty(protocol) ? "http" : protocol)}://localhost")
+                : new Uri(fullBaseUrl);
+            Port = BaseUri.Port.ToString();
 
-            SelfHostServer = new HttpSelfHostServer(SelfHostConfiguration);
-            SelfHostServer.OpenAsync().Wait();
-
-            HttpSelfHttpClient = new HttpClient(SelfHostServer);
+            HttpSelfHttpClient = WebApp.GetTestClient();
             HttpSelfHttpClient.BaseAddress = BaseUri;
         }
 
         public void Dispose()
         {
-            SelfHostServer.CloseAsync().Wait();
-        }
-        
-        private static string GetAvailablePort()
-        {
-            var netProperties = IPGlobalProperties.GetIPGlobalProperties();
-            var tcpListeners = netProperties.GetActiveTcpListeners();
-            var udpListeners = netProperties.GetActiveUdpListeners();
-
-            var portsInUse = new List<int>();
-            portsInUse.AddRange(tcpListeners.Select(tl => tl.Port));
-            portsInUse.AddRange(udpListeners.Select(ul => ul.Port));
-
-            int firstAvailablePort = 0;
-            for (int port = 49152; port < 65535; port++)
-            {
-                if (!portsInUse.Contains(port) && !PreRegisteredPorts.Contains(port))
-                {
-                    firstAvailablePort = port;
-                    break;
-                }
-            }
-
-            return firstAvailablePort.ToString();
+            WebApp.Dispose();
         }
     }
 }
