@@ -7,7 +7,6 @@ namespace SelfHostedPXServiceCore.Mocks
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.Commerce.Payments.Common.Tracing;
@@ -58,7 +57,7 @@ namespace SelfHostedPXServiceCore.Mocks
                     Content = new StringContent(
                             content: foundMatch.Content,
                             encoding: System.Text.Encoding.UTF8,
-                            mediaType: new MediaTypeHeaderValue("application/json"))
+                            mediaType: "application/json")
                 };
             }
 
