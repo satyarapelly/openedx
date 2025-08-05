@@ -12,16 +12,13 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
-    {
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo {
         Title = "PXDependencyEmulators",
         Version = "v1",
-        Description = "Payment X Dependency Emulators (.NET 8.0)"
+        Description = "Payment X Dependency Emulators (.NET 8.0)",
     });
+    c.OperationFilter<AddHeaderParameterOperationFilter>();
 });
-
-// Configure Web API services before building the app
-WebApiConfig.ConfigureServices(builder.Services);
 
 var app = builder.Build();
 
@@ -37,12 +34,24 @@ if (app.Environment.IsDevelopment() || true)
     });
 }
 
-app.UseRouting();
-
-// Configure Web API app
-WebApiConfig.ConfigureApp(app);
-
 app.MapControllers();
+app.MapPartnerSettingsRoutes();
+app.MapPIMSRoutes();
+app.MapMSRewardsRoutes();
+app.MapCatalogRoutes();
+app.MapAccountRoutes();
+app.MapIssuerServiceRoutes();
+app.MapChallengeManagementRoutes();
+app.MapPaymentThirdPartyRoutes();
+app.MapPurchaseRoutes();
+app.MapRiskRoutes();
+app.MapSellerMarketPlaceRoutes();
+app.MapTokenPolicyRoutes();
+app.MapStoredValueRoutes();
+app.MapTransactionServiceRoutes();
+app.MapPaymentOchestratorRoutes();
+app.MapPayerAuthRoutes();
+app.MapFraudDetectionRoutes();
 
 Console.WriteLine("PXDependencyEmulators is starting...");
 Console.WriteLine($"Application running on .NET {Environment.Version}");
