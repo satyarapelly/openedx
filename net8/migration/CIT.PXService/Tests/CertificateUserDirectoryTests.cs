@@ -56,7 +56,7 @@ namespace CIT.PXService.Tests
         private void TestUserDirectory_ValidateCertificate(string environment, string partnerName, bool isValidCert, string certBase64)
         {
             X509Certificate2 cert = new X509Certificate2(Encoding.UTF8.GetBytes(certBase64));
-            ReadOnlyDictionary<string, IEnumerable<IVerificationRule>> rules = null;
+            ReadOnlyDictionary<string, IEnumerable<Microsoft.Commerce.Payments.Management.CertificateVerificationCore.IVerificationRule>> rules = null;
             UserDirectory userDirectory = null;
             switch (environment)
             {
