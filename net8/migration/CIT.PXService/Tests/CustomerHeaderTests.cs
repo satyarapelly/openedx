@@ -2,7 +2,7 @@
 
 namespace CIT.PXService.Tests
 {
-    using System.Net.Http;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.Commerce.Payments.PXService.V7.Contexts;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     
@@ -14,7 +14,8 @@ namespace CIT.PXService.Tests
         [TestMethod]
         public void Test_ParseHeader()
         {
-            HttpRequestMessage request = new HttpRequestMessage();
+            var context = new DefaultHttpContext();
+            var request = context.Request;
             request.Headers.Add(
                 "x-ms-customer",
                 CustomerHeaderTestToken);
@@ -27,7 +28,8 @@ namespace CIT.PXService.Tests
         [TestMethod]
         public void Test_ParseHeader_InvalidHeader()
         {
-            HttpRequestMessage request = new HttpRequestMessage();
+            var context = new DefaultHttpContext();
+            var request = context.Request;
             request.Headers.Add("x-ms-customer", "invalid");
 
             CustomerHeader customerHeader = CustomerHeader.Parse(request);

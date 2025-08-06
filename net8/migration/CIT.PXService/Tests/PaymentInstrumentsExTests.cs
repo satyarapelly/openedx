@@ -10,6 +10,7 @@ namespace CIT.PXService.Tests
     using System.Reflection;
     using System.Text;
     using System.Threading.Tasks;
+    using Microsoft.AspNetCore.WebUtilities;
     using global::Tests.Common.Model;
     using global::Tests.Common.Model.Pidl;
     using global::Tests.Common.Model.Pims;
@@ -5139,8 +5140,8 @@ namespace CIT.PXService.Tests
             {
                 if (request.RequestUri.AbsolutePath.Contains($"/v4.0/Account001/paymentInstruments"))
                 {
-                    var queryparams = request.GetQueryNameValuePairs();
-                    Assert.IsFalse(queryparams.Contains(new KeyValuePair<string, string>("billableAccountId", expectedBillableAccountId)), "Correct billable account id was extracted from the given piid");
+                    var queryparams = QueryHelpers.ParseQuery(request.RequestUri.Query);
+                    Assert.IsFalse(queryparams.TryGetValue("billableAccountId", out var values) && values.Contains(expectedBillableAccountId), "Correct billable account id was extracted from the given piid");
                     assertCalled = true;
                 }
             };

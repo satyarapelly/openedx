@@ -2056,10 +2056,10 @@ namespace CIT.PXService.Tests
 
                 Assert.AreEqual(HttpStatusCode.OK, pxResponse.StatusCode);
 
-                bool gotResource = pxResponse.TryGetContentValue(out Microsoft.Commerce.Payments.PidlModel.V7.PIDLResource resource);
+                var contentString = await pxResponse.Content.ReadAsStringAsync();
+                var resource = JsonConvert.DeserializeObject<Microsoft.Commerce.Payments.PidlModel.V7.PIDLResource>(contentString);
 
                 Assert.IsNotNull(resource);
-                Assert.IsTrue(gotResource);
 
                 // Assert
                 if (string.Equals(challengeStatus, "Success"))
