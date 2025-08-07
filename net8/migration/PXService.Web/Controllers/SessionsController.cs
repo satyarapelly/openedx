@@ -31,6 +31,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>A session object</returns>
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpGet]
+        [Route("[action]")]
         public async Task<SecondScreenSessionData> GetBySessionId(string sessionId)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
@@ -59,6 +60,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>A session object</returns>
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpPost]
+        [Route("[action]")]
         public string PostBySessionId(string sessionId)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
@@ -76,6 +78,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">The created session resource</response>
         /// <returns>The created session resource</returns>
         [HttpPost]
+        [Route("[action]")]
         public async Task<SessionResponse> PostSession([FromBody]SessionRequest sessionTokenInfo)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();

@@ -22,6 +22,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A PidlTransformationResult object</response>
         /// <returns>A PidlTransformationResult object</returns>
         [HttpPost]
+        [Route("[action]")]
         public PidlTransformationResult<string> Post([FromBody] PidlTransformationParameter transformationParameter)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();

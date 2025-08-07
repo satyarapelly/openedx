@@ -39,6 +39,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <param name="scenario" required="false" cref="string" in="query">Scenario name</param>
         /// <returns>A list of PIDLResource</returns>
         [HttpGet]
+        [Route("[action]")]
         public async Task<object> GetCheckoutDescriptions(
             string checkoutId,
             string paymentProviderId,

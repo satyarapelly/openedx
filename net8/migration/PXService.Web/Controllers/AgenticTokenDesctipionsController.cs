@@ -30,6 +30,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>A list of PIDLResource object</returns>
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]        
         [HttpGet]
+        [Route("[action]")]
         public List<PIDLResource> Get(string accountId, string country, string type, string operation, string language = null, string partner = Constants.ServiceDefaults.DefaultPartnerName, string piid = null)
         {
             // Use Partner Settings if enabled for the partner

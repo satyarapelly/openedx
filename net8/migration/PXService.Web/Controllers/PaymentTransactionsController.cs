@@ -87,6 +87,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentTransaction
         /// indicating if the associated PI should be blocked from deletion (e.g. a hardware order which has not yet
         /// shipped and hence funds have been authorized but not captured yet.)</returns>
         [HttpGet]
+        [Route("[action]")]
         public async Task<PaymentTransactions> ListTransactions(
             string accountId,
             string continuationToken = null,
@@ -114,6 +115,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentTransaction
         /// indicating if the associated PI should be blocked from deletion (e.g. a hardware order which has not yet
         /// shipped and hence funds have been authorized but not captured yet.)</returns>
         [HttpPost]
+        [Route("[action]")]
         public async Task<HttpResponseMessage> ListTransactions(string accountId, string country, string language, string partner, [FromBody] PIDLData requestData)
         {
             // NOTE Add traces and logs

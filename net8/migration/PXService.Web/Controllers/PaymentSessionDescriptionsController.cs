@@ -30,6 +30,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>Returns a PaymentSession PIDL for the given PaymentSessionData</returns>
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpGet]
+        [Route("[action]")]
         public async Task<List<PIDLResource>> Get(string accountId, string paymentSessionData)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();

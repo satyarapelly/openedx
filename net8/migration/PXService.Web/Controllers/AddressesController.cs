@@ -34,6 +34,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A validation result</response>
         /// <returns>A validation result</returns>
         [HttpPost]
+        [Route("[action]")]
         public async Task<HttpResponseMessage> LegacyValidate([FromBody]PIDLData address, string type = null)
         {
             const string ValidAddressResponse = "Valid";
@@ -92,6 +93,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A validation result</response>
         /// <returns>A validation result</returns>
         [HttpPost]
+        [Route("[action]")]
         public async Task<HttpResponseMessage> ModernValidate([FromBody]PIDLData address)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
@@ -143,6 +145,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A validation result</response>
         /// <returns>A validation result</returns>
         [HttpPost]
+        [Route("[action]")]
         public async Task<HttpResponseMessage> ModernValidate(
             [FromBody] PIDLData address,
             string partner,

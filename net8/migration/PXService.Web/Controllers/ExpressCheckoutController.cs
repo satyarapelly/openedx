@@ -30,6 +30,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">ExpressCheckoutResult object</response>
         /// <returns>ExpressCheckoutResult object</returns>
         [HttpPost]
+        [Route("[action]")]
         public async Task<ActionResult<ExpressCheckoutResult>> Confirm(
             string accountId,
             [FromBody] PIDLData confirmPayload,

@@ -36,6 +36,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">An address object</response>
         /// <returns>An address object</returns>
         [HttpGet]
+        [Route("[action]")]
         public async Task<HttpResponseMessage> GetAddressById(string accountId, string addressId)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
@@ -60,6 +61,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">An address object</response>
         /// <returns>An address object</returns>
         [HttpPost]
+        [Route("[action]")]
         public async Task<HttpResponseMessage> Post(
             [FromBody]PIDLData address, 
             string accountId, 
@@ -128,6 +130,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">An address object</response>
         /// <returns>An address object</returns>
         [HttpPatch]
+        [Route("[action]")]
         public async Task<HttpResponseMessage> Patch(
             [FromBody] PIDLData address, 
             string accountId, 

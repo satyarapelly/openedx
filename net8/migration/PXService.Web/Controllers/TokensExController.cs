@@ -40,6 +40,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A list of PIDLResource</response>
         /// <returns>A list of PIDLResource object</returns>
         [HttpPost]
+        [Route("[action]")]
         public async Task<HttpResponseMessage> Tokens([FromBody] PIDLData payload, string accountId, string partner, string piid, string country, string language)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
@@ -138,6 +139,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>A list of PIDLResource object</returns>
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpPost]
+        [Route("[action]")]
         public async Task<HttpResponseMessage> PostChallenge([FromBody] PIDLData payload, string accountId, string ntid, string challengeId, string country, string language, string partner)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
@@ -191,6 +193,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>A list of PIDLResource object</returns>
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpPost]
+        [Route("[action]")]
         public async Task<HttpResponseMessage> ValidateChallenge([FromBody] PIDLData payload, string accountId, string ntid, string challengeId, string country, string language, string partner, string challengeMethodId)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
@@ -243,6 +246,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>A list of PIDLResource object</returns>
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpPost]
+        [Route("[action]")]
         public async Task<HttpResponseMessage> Mandates([FromBody] PIDLData payload, string accountId, string ntid)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();

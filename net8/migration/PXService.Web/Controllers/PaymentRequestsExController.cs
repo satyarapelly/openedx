@@ -27,6 +27,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentClient
         /// <response code="200">PaymentRequest object</response>
         /// <returns>PaymentRequest object</returns>
         [HttpPost]
+        [Route("[action]")]
         public async Task<HttpResponseMessage> AttachChallengeData(
             [FromBody] PIDLData paymentInstrument,
             string paymentRequestId)
@@ -69,6 +70,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentClient
         /// <response code="200">PaymentRequest object</response>
         /// <returns>PaymentRequest object</returns>
         [HttpPost]
+        [Route("[action]")]
         public async Task<HttpResponseMessage> RemoveEligiblePaymentmethods(
             [FromBody] PIDLData paymentInstrument,
             string paymentRequestId)
