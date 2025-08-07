@@ -376,7 +376,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpGet]
         [Route("[action]")]
-        [Route("[action]")]
         public async Task<List<PIDLResource>> GetAddressGroupsById(
             string accountId,
             string country,
@@ -411,7 +410,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>A list of PIDLResource object</returns>
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpGet]
-        [Route("[action]")]
         [Route("[action]")]
         public object GetAddressDescriptions(
             string country,
