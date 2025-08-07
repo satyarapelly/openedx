@@ -79,7 +79,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
                 deviceChannel = PXService.Model.ThreeDSExternalService.DeviceChannel.Browser;
             }
 
-            var paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId);
+            PaymentSessionsHandler paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId);
             return await paymentSessionsHandler.CreatePaymentSession(
                 accountId: accountId,
                 paymentSessionData: data,
@@ -106,7 +106,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
 
             try
             {
-                var paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId, sessionId);
+                PaymentSessionsHandler paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId, sessionId);
                 PaymentSession threeDsSession = await paymentSessionsHandler.TryGetPaymentSession(sessionId, traceActivityId);
 
                 if (threeDsSession == null)
@@ -206,7 +206,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
                                 threeDsSession.Id,
                                 null,
                                 pxBrowserAuthenticateRedirectionUrl,
-                                Constants.StaticDescriptionTypes.Cc3DSStatusCheckPidl,
+                                PXCommon.Constants.StaticDescriptionTypes.Cc3DSStatusCheckPidl,
                                 false,
                                 setting);
                             tryAgainPidl = PIDLGenerator.Generate(PIDLResourceFactory.ClientActionGenerationFactory, context).Context as PIDLResource;
@@ -355,7 +355,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
                 authRequest: authenticateRequest,
                 exposedFlightFeatures: this.ExposedFlightFeatures);
 
-            var paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId, sessionId);
+            PaymentSessionsHandler paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId, sessionId);
             return await paymentSessionsHandler.Authenticate(
                 accountId: accountId,
                 sessionId: sessionId,
@@ -395,7 +395,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
             string isMotoAuthorized = this.Request.GetRequestHeader(GlobalConstants.HeaderValues.IsMotoHeader);
             string tid = await this.TryGetClientContext(GlobalConstants.ClientContextKeys.AadInfo.Tid);
 
-            var paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId);
+            PaymentSessionsHandler paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId);
             PaymentSession session = await paymentSessionsHandler.CreatePaymentSession(
                 accountId: accountId,
                 paymentSessionData: request.PaymentSessionData,
@@ -451,7 +451,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
 
-            var paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId, sessionId);
+            PaymentSessionsHandler paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId, sessionId);
             PaymentSession paymentSession = await paymentSessionsHandler.CompleteThreeDSChallenge(
                 accountId: accountId,
                 sessionId: sessionId,
@@ -498,7 +498,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
                     // throw new ValidationException(ErrorCode.InvalidRequestData, string.Format(V7.Constants.MissingErrorMessage.MissingValue, V7.Constants.SessionFieldNames.ThreeDSMethodData));
                 }
 
-                var paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId, sessionId);
+                PaymentSessionsHandler paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId, sessionId);
 
                 //// inner iframe is requested for fingerprint step
                 string cspStepValue = formData.TryGetValue(V7.Constants.SessionFieldNames.CSPStep, out var cspStep)
@@ -678,7 +678,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
 
                 List<string> exposedFlightFeatures = this.ExposedFlightFeatures;
 
-                var paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId, sessionId);
+                PaymentSessionsHandler paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId, sessionId);
                 PaymentSession paymentSession = await paymentSessionsHandler.CompleteThreeDSChallenge(
                     accountId: null,
                     sessionId: sessionId,
@@ -775,7 +775,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
                 if (PartnerHelper.IsThreeDSOneQrCodeBasedPurchasePartner(session.Partner, setting))
                 {
                     var clientAction = new ClientAction(ClientActionType.Pidl);
-                    clientAction.Context = PIDLResourceFactory.Instance.GetQrCodeChallengeDescriptionForThreeDSOnePurchase(rdsUrl, Constants.ChallengeTypes.ThreeDSOneQrCode, session.Language, session.Country, session.Partner, sessionId, session);
+                    clientAction.Context = PIDLResourceFactory.Instance.GetQrCodeChallengeDescriptionForThreeDSOnePurchase(rdsUrl, PXCommon.Constants.ChallengeTypes.ThreeDSOneQrCode, session.Language, session.Country, session.Partner, sessionId, session);
                     resource.ClientAction = clientAction;
                 }
                 else
@@ -793,7 +793,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
                                     session.Id,
                                     null,
                                     rdsUrl,
-                                    Constants.StaticDescriptionTypes.Cc3DSRedirectAndStatusCheckPidl,
+                                    PXCommon.Constants.StaticDescriptionTypes.Cc3DSRedirectAndStatusCheckPidl,
                                     false,
                                     setting);
                         resource = PIDLGenerator.Generate(PIDLResourceFactory.ClientActionGenerationFactory, context).Context as PIDLResource;
@@ -817,7 +817,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
             ClientAction nextAction;
             try
             {
-                var paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId, sessionId);
+                PaymentSessionsHandler paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId, sessionId);
                 BrowserFlowContext result = await paymentSessionsHandler.AuthenticateThreeDSOne(
                     sessionId: sessionId,
                     cvvToken: (string)cvvToken,
@@ -841,7 +841,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
                     {
                         string rdsUrl = $"{this.PidlBaseUrl}/paymentSessions/{session.Id}/browserAuthenticateRedirectionThreeDSOne";
                         var clientAction = new ClientAction(ClientActionType.Pidl);
-                        clientAction.Context = PIDLResourceFactory.Instance.GetQrCodeChallengeDescriptionForThreeDSOnePurchase(rdsUrl, Constants.ChallengeTypes.ThreeDSOneQrCode, session.Language, session.Country, session.Partner, sessionId, session);
+                        clientAction.Context = PIDLResourceFactory.Instance.GetQrCodeChallengeDescriptionForThreeDSOnePurchase(rdsUrl, PXCommon.Constants.ChallengeTypes.ThreeDSOneQrCode, session.Language, session.Country, session.Partner, sessionId, session);
                         var resource = new PIDLResource
                         {
                             ClientAction = clientAction
@@ -879,7 +879,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
                     if (PartnerHelper.IsThreeDSOneQrCodeBasedPurchasePartner(session.Partner, setting))
                     {
                         var clientAction = new ClientAction(ClientActionType.Pidl);
-                        clientAction.Context = PIDLResourceFactory.Instance.GetQrCodeChallengeDescriptionForThreeDSOnePurchase(redirectUrl, Constants.ChallengeTypes.ThreeDSOneQrCode, session.Language, session.Country, session.Partner, sessionId, session);
+                        clientAction.Context = PIDLResourceFactory.Instance.GetQrCodeChallengeDescriptionForThreeDSOnePurchase(redirectUrl, PXCommon.Constants.ChallengeTypes.ThreeDSOneQrCode, session.Language, session.Country, session.Partner, sessionId, session);
                         resource = new PIDLResource
                         {
                             ClientAction = clientAction
@@ -900,7 +900,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
                                         session.Id,
                                         null,
                                         redirectUrl,
-                                        Constants.StaticDescriptionTypes.Cc3DSRedirectAndStatusCheckPidl,
+                                        PXCommon.Constants.StaticDescriptionTypes.Cc3DSRedirectAndStatusCheckPidl,
                                         false,
                                         setting);
                             resource = PIDLGenerator.Generate(PIDLResourceFactory.ClientActionGenerationFactory, context).Context as PIDLResource;
@@ -963,7 +963,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
                 return this.Request.CreateResponse(HttpStatusCode.BadRequest, new ErrorMessage() { ErrorCode = V7.Constants.PSD2ErrorCodes.InvalidFailureRedirectionUrl, Message = "Invalid failure redirection url" });
             }
 
-            var paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId, sessionId);
+            PaymentSessionsHandler paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId, sessionId);
             var browserFlowContext = await paymentSessionsHandler.AuthenticateRedirectionThreeDSOne(
                 sessionId: sessionId,
                 successUrl: ru,
@@ -1006,7 +1006,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
                     authParams.Add(key, formData[key]);
                 }
 
-                var paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId, sessionId);
+                PaymentSessionsHandler paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId, sessionId);
                 PaymentSession paymentSession = await paymentSessionsHandler.CompleteThreeDSOneChallenge(
                     accountId: null,
                     sessionId: sessionId,
@@ -1064,7 +1064,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
             this.PartnerSettings = await PXService.PartnerSettingsHelper.GetPaymentExperienceSetting(this.Settings, partnerName, null, traceActivityId, this.ExposedFlightFeatures);
             PaymentExperienceSetting setting = this.GetPaymentExperienceSetting(V7.Constants.Component.HandlePaymentChallenge);
 
-            var paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId, sessionId);
+            PaymentSessionsHandler paymentSessionsHandler = await this.GetVersionBasedPaymentSessionsHandler(traceActivityId, sessionId);
             TransactionResource transactionResource = await paymentSessionsHandler.AuthenticateIndiaThreeDS(
                 accountId: accountId,
                 sessionId: sessionId,
@@ -1095,7 +1095,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
                         sessionId: sessionId,
                         rdsSessionId: rdsSessionId,
                         redirectUrl: rdsUrl,
-                        Constants.StaticDescriptionTypes.Cc3DSRedirectAndStatusCheckPidl,
+                        PXCommon.Constants.StaticDescriptionTypes.Cc3DSRedirectAndStatusCheckPidl,
                         true,
                         setting);
 
@@ -1110,7 +1110,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
                 if (PartnerHelper.IsAzurePartner(partnerName))
                 {
                     clientAction = new ClientAction(ClientActionType.Pidl);
-                    clientAction.Context = PIDLResourceFactory.Instance.Get3DSRedirectAndStatusCheckDescriptionForPaymentAuth(rdsUrl, rdsSessionId, sessionId, partnerName, paymentSession?.Language, paymentSession?.Country, Constants.StaticDescriptionTypes.Cc3DSRedirectAndStatusCheckPidl);
+                    clientAction.Context = PIDLResourceFactory.Instance.Get3DSRedirectAndStatusCheckDescriptionForPaymentAuth(rdsUrl, rdsSessionId, sessionId, partnerName, paymentSession?.Language, paymentSession?.Country, PXCommon.Constants.StaticDescriptionTypes.Cc3DSRedirectAndStatusCheckPidl);
                 }
                 else
                 {
@@ -1476,7 +1476,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
                     TransactionDeclineCode code = transactionResource.StatusDetails.Code;
 
                     if (userErrors.Contains(errorMsg, StringComparer.OrdinalIgnoreCase)
-                        || ((flights?.Contains(Constants.FlightValues.PXEnableHandleTransactionNotAllowed) ?? false) && string.Equals(code, TransactionDeclineCode.TransactionNotAllowed)))
+                        || ((flights?.Contains(PXCommon.Constants.FlightValues.PXEnableHandleTransactionNotAllowed) ?? false) && string.Equals(code, TransactionDeclineCode.TransactionNotAllowed)))
                     {
                         threeDSRedirectPidl.ClientAction = CreateFailureClientAction(HttpStatusCode.BadRequest, HttpStatusCode.BadRequest.ToString(), errorMsg);
                     }

@@ -17,7 +17,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
 
     public class SettingsController : ProxyController
     {
-        private static readonly Dictionary<string, string> walletSettings = new Dictionary<string, string>() 
+        private static readonly Dictionary<string, string> walletSettings = new Dictionary<string, string>()
         {
             { "ReplenishmentThresholdCount", "2" },
             { "ReplenishmentThresholdPercentage", "25" },

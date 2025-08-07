@@ -2,6 +2,7 @@
 
 namespace Microsoft.Commerce.Payments.PXService.V7
 {
+    using Microsoft.AspNetCore.Http.Extensions;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Commerce.Payments.Common;
     using Microsoft.Commerce.Payments.Common.Tracing;
@@ -25,7 +26,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using Microsoft.Commerce.Payments.PXService.V7.PaymentClient;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
-    using Microsoft.AspNetCore.Http.Extensions;
     using PXService.Model.AccountService.AddressValidation;
     using System;
     using System.Collections.Generic;
@@ -36,9 +36,9 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using System.Net.Http.Headers;
     using System.Net.Http.Json;
     using System.Text;
+    using System.Text.Encodings.Web;
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
-    using System.Web;
     using AddressEnrichmentService = Microsoft.Commerce.Payments.PXService.Accessors.AddressEnrichmentService.DataModel;
     using AddressInfo = PimsModel.V4.AddressInfo;
     using ClientActionType = PXCommon.ClientActionType;
@@ -1686,7 +1686,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
 
         private static HttpResponseMessage ComposeHtmlPostMessageResponse(ClientAction clientAction)
         {
-            string jsEncodedClientAction = HttpUtility.JavaScriptStringEncode(JsonConvert.SerializeObject(clientAction));
+            string jsEncodedClientAction = JavaScriptEncoder.Default.Encode(JsonConvert.SerializeObject(clientAction));
             string responseContent = string.Format(PostMessageHtmlTemplate, jsEncodedClientAction);
             HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
             response.Content = new StringContent(responseContent);

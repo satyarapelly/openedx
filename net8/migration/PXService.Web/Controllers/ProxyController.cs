@@ -223,7 +223,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                     this.HttpContext.Items.TryGetValue(GlobalConstants.RequestPropertyKeys.PartnerSettings, out partnerSettingsObject);
                     this.partnerSettings = partnerSettingsObject as PartnerSettings;
                 }
-                
+
                 return this.partnerSettings;
             }
 
@@ -461,7 +461,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                     resourceId = $"{family}.{type}";
                 }
             }
-            
+
             return TemplateHelper.GetSettingTemplate(partner, setting, descriptionType, resourceId);
         }
 
@@ -659,7 +659,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
 
         protected void AddModernValidationActionForPaymentMethodDescription(PIDLResource paymentMethodPidl, string propertyName, string addressType, string partner, string language, string country)
         {
-            DisplayHint modernValidateButtonDisplayHint; 
+            DisplayHint modernValidateButtonDisplayHint;
 
             // In XboxNative flows, the address validation check should come after the 2nd of 3 pages.
             // NextModernValidateButton won't exist for flows without the summary page
@@ -698,7 +698,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             {
                 modernAVSForTradeScenario = Constants.ScenarioNames.SuggestAddressesTradeAVSUsePidlModal;
             }
-            
+
             if (this.ExposedFlightFeatures != null && this.exposedFlightFeatures.Contains(Flighting.Features.TradeAVSUsePidlPageV2, StringComparer.OrdinalIgnoreCase))
             {
                 modernAVSForTradeScenario = Constants.ScenarioNames.SuggestAddressesTradeAVSUsePidlPageV2;

@@ -12,9 +12,6 @@ builder.Services
     .AddNewtonsoftJson(options =>
         options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore);
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
 var validateCors = builder.Configuration.GetValue<bool>("PXServiceSettings:ValidateCors");
 var corsOrigins = builder.Configuration.GetSection("PXServiceSettings:CorsAllowedOrigins").Get<string[]>();
 
@@ -32,12 +29,6 @@ if (validateCors)
 }
 
 var app = builder.Build();
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
 
 if (!app.Environment.IsDevelopment())
 {
