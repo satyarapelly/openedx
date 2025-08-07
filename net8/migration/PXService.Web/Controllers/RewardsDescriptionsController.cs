@@ -41,6 +41,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>Returns a rewards PIDL for the given rewardscontext</returns>
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpGet]
+        [Route("[action]")]
         public async Task<List<PIDLResource>> Get(
             string accountId,
             string type,

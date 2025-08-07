@@ -36,6 +36,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A rds Status Pidl</response>
         /// <returns>A rds Status Pidl</returns>
         [HttpPost]
+        [Route("[action]")]
         public async Task<HttpResponseMessage> Query([FromBody]PIDLData sessionDetails, string sessionId = null, string piid = null, string partner = null, string language = null, string country = null, string scenario = null)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();

@@ -33,6 +33,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>A list of PIDLResource object</returns>
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpGet]
+        [Route("[action]")]
         public List<PIDLResource> Get(string accountId, string country, string language = null, string partner = Constants.ServiceDefaults.DefaultPartnerName, string type = null)
         {
             // Use Partner Settings if enabled for the partner
@@ -59,6 +60,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>A list of PIDLResource object</returns>
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpGet]
+        [Route("[action]")]
         public List<PIDLResource> GetStandaloneTaxPidl(string accountId, string country, string operation, string language = null, string partner = Constants.ServiceDefaults.DefaultPartnerName, string type = null, string scenario = null)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
@@ -274,6 +276,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>A list of PIDLResource object</returns>
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpGet]
+        [Route("[action]")]
         public List<PIDLResource> GetStandaloneTaxPidl(string country, string operation, string language = null, string partner = Constants.ServiceDefaults.DefaultPartnerName, string type = null, string scenario = null)
         {
             return this.GetStandaloneTaxPidl(

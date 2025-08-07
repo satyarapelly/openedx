@@ -33,6 +33,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>A list of PIDLResource object</returns>
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpGet]
+        [Route("[action]")]
         public List<PIDLResource> GetBillingGroupsDescription(string accountId, string country, string operation = Constants.Operations.SelectInstance, string type = null, string language = null, string partner = Constants.ServiceDefaults.DefaultPartnerName, string scenario = null)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();

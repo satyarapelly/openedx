@@ -33,6 +33,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">An Initialize object</response>
         /// <returns>A Initialize result include all payment client component props</returns>
         [HttpPost]
+        [Route("[action]")]
         public async Task<HttpResponseMessage> Initialize(
             [FromBody] PIDLData initializeData)
         {

@@ -40,6 +40,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A setting object</response>
         /// <returns>A setting object</returns>
         [HttpGet]
+        [Route("[action]")]
         public ActionResult GetSettings(string appName, string appVersion, string language = null)
         {
             if (string.Equals(appName, Constants.AppDetails.WalletPackageName, StringComparison.OrdinalIgnoreCase))
@@ -83,6 +84,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A setting object</response>
         /// <returns>A setting object</returns>
         [HttpPost]
+        [Route("[action]")]
         public ServerSettingResponse GetSettingsInPost(string accountId, [FromBody] ClientConfigData clientConfigData)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();

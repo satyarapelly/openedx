@@ -25,6 +25,7 @@ namespace Microsoft.Commerce.Payments.PXService.Controllers
         /// </summary>
         /// <returns>Probe status</returns>
         [HttpGet]
+        [Route("[action]")]
         public ActionResult<ServiceStatus> Get()
         {
             string buildVersion = this.configuration[BuildVersionKey] ?? "unknown";

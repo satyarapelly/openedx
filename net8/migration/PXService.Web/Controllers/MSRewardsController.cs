@@ -34,6 +34,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">Redeem Response object</response>
         /// <returns>Redeem Response object</returns>
         [HttpPost]
+        [Route("[action]")]
         public async Task<PIDLResource> PostRedeemRequest(
             [FromBody] MSRewardsRedeemRequest redeemData,
             string accountId,
