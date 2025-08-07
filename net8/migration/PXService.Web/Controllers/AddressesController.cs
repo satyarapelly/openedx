@@ -131,7 +131,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         }
 
         /// <summary>
-        /// Modern Validate address ("/ModernValidateByType" is not in the real path, just as a workaround to show multiple APIs with the same path and http verb but with different params in open API doc)
+        /// Modern Validate address by type.
         /// </summary>
         /// <group>Addresses</group>
         /// <verb>POST</verb>
@@ -146,7 +146,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>A validation result</returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<HttpResponseMessage> ModernValidate(
+        public async Task<HttpResponseMessage> ModernValidateByType(
             [FromBody] PIDLData address,
             string partner,
             string language,
