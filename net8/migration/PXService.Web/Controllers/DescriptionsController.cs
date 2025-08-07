@@ -18,6 +18,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using System.Net.Http;
     using System.Threading.Tasks;
 
+    [ApiController]
+    [Route("api/[controller]")]
     public class DescriptionsController : ProxyController
     {
         /// <summary>

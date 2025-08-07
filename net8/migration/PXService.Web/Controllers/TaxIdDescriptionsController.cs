@@ -14,6 +14,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using Microsoft.Commerce.Payments.PidlModel.V7;
     using Microsoft.Commerce.Payments.PXCommon;
 
+    [ApiController]
+    [Route("api/[controller]")]
     public class TaxIdDescriptionsController : ProxyController
     {
         /// <summary>

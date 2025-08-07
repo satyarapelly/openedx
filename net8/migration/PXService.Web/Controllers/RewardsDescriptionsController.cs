@@ -20,6 +20,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using Microsoft.Commerce.Payments.PXService.Model.RewardsService;
     using Newtonsoft.Json;
 
+    [ApiController]
+    [Route("api/[controller]")]
     public class RewardsDescriptionsController : ProxyController
     {
         /// <summary>

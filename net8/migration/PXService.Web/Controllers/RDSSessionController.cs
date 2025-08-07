@@ -16,6 +16,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using Microsoft.Commerce.Payments.PXCommon;
     using Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge.Model;
 
+    [ApiController]
+    [Route("api/[controller]")]
     public class RDSSessionController : ProxyController
     {
         /// <summary>

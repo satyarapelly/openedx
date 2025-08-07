@@ -16,6 +16,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using Microsoft.Commerce.Payments.PXService.Model.SessionService;
     using Microsoft.Commerce.Payments.PXService.Model.ThreeDSExternalService;
 
+    [ApiController]
+    [Route("api/[controller]")]
     public class SessionsController : ProxyController
     {
         /// <summary>

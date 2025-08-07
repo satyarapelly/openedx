@@ -12,6 +12,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentClient
     using Microsoft.Commerce.Payments.PXService.Model.PaymentOrchestratorService;
     using static Microsoft.Commerce.Payments.PXService.V7.Constants;
 
+    [ApiController]
+    [Route("api/[controller]")]
     public class PaymentRequestsExController : ProxyController
     {
         /// <summary>

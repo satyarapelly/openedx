@@ -21,6 +21,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7.Checkouts
     using Newtonsoft.Json;
     using Constants = Constants;
 
+    [ApiController]
+    [Route("api/[controller]")]
     public class CheckoutsExController : ProxyController
     {
         private const string PostMessageHtmlTemplate = "<html><script>window.parent.postMessage(\"{0}\", \"*\");</script><body/></html>";

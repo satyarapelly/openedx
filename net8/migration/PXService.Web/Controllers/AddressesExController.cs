@@ -21,6 +21,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using PimsModel.V4;
     using PXCommon;
 
+    [ApiController]
+    [Route("api/[controller]")]
     public class AddressesExController : ProxyController
     {
         /// <summary>

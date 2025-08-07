@@ -14,6 +14,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge.Model;
     using Newtonsoft.Json;
 
+    [ApiController]
+    [Route("api/[controller]")]
     public class PaymentSessionDescriptionsController : ProxyController
     {
         /// <summary>

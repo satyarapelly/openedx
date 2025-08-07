@@ -32,6 +32,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentClient
     using ClientActionType = PXCommon.ClientActionType;
     using PayerAuth = PXService.Model.PayerAuthService;
 
+    [ApiController]
+    [Route("api/[controller]")]
     public class CheckoutRequestsExController : ProxyController
     {
         /// <summary>

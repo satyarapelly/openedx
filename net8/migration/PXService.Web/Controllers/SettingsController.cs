@@ -15,6 +15,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
 
+    [ApiController]
+    [Route("api/[controller]")]
     public class SettingsController : ProxyController
     {
         private static readonly Dictionary<string, string> walletSettings = new Dictionary<string, string>()
