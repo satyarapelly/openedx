@@ -31,6 +31,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using PXCommonConstants = Microsoft.Commerce.Payments.PXCommon.Constants;
     using ActionContext = Microsoft.Commerce.Payments.PidlModel.V7.ActionContext;
 
+    [ApiController]
+    [Route("api/[controller]")]
     public class PaymentMethodDescriptionsController : ProxyController
     {
         private static class AccountV3Headers

@@ -16,6 +16,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using Microsoft.Commerce.Payments.PXService.Accessors.MSRewardsService.DataModel;
     using Microsoft.Commerce.Payments.PXService.Model.RewardsService;
 
+    [ApiController]
+    [Route("api/[controller]")]
     public class MSRewardsController : ProxyController
     {
         /// <summary>

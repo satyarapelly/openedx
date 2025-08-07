@@ -21,6 +21,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using Tracing;
     using static Microsoft.Commerce.Payments.PXService.V7.Constants;
 
+    [ApiController]
+    [Route("api/[controller]")]
     public class WalletsController : ProxyController
     {
         /// <summary>

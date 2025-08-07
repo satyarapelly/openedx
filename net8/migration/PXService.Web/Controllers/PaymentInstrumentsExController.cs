@@ -48,6 +48,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using PIMSModel = Microsoft.Commerce.Payments.PimsModel.V4;
     using Purchase = PXService.Model.PurchaseService;
 
+    [ApiController]
+    [Route("api/[controller]")]
     public class PaymentInstrumentsExController : ProxyController
     {
         private const string PostMessageHtmlTemplate = "<html><script>window.parent.postMessage(\"{0}\", \"*\");</script><body/></html>";

@@ -17,6 +17,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using Microsoft.Commerce.Payments.PimsModel.V4;
     using Microsoft.Commerce.Payments.PXCommon;
 
+    [ApiController]
+    [Route("api/[controller]")]
     public class ProfileDescriptionsController : ProxyController
     {
         /// <summary>

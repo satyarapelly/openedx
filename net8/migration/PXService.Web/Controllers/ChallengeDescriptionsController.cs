@@ -25,6 +25,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using PaymentChallenge.Model;
     using PayerAuth = PXService.Model.PayerAuthService;
 
+    [ApiController]
+    [Route("api/[controller]")]
     public class ChallengeDescriptionsController : ProxyController
     {
         private readonly HashSet<string> upiPaymentMethodSet = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase)

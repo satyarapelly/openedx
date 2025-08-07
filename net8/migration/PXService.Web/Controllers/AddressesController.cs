@@ -19,6 +19,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using PXCommon;
     using PXService.Model.AccountService.AddressValidation;
 
+    [ApiController]
+    [Route("api/[controller]")]
     public class AddressesController : ProxyController
     {
         /// <summary>

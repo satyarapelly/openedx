@@ -21,6 +21,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using PaymentInstrument = PimsModel.V4.PaymentInstrument;
     using RestLink = PXCommon.RestLink;
 
+    [ApiController]
+    [Route("api/[controller]")]
     public class TokensExController : ProxyController
     {
         /// <summary>

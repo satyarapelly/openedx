@@ -39,6 +39,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
     using PXConstants = Microsoft.Commerce.Payments.PXService.V7.Constants;
     using System.Diagnostics.Tracing;
 
+    [ApiController]
+    [Route("api/[controller]")]
     public class PaymentSessionsController : ProxyController
     {
         private const string PostMessageHtmlTemplate = "<html><script>window.parent.postMessage(\"{0}\", \"*\");</script><body/></html>";

@@ -19,6 +19,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using Microsoft.Commerce.Payments.PXService.V7.Contexts;
     using Newtonsoft.Json;
 
+    [ApiController]
+    [Route("api/[controller]")]
     public class InitializationController : ProxyController
     {
         /// <summary>
