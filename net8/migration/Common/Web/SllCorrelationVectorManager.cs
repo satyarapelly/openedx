@@ -3,9 +3,9 @@
 namespace Microsoft.Commerce.Payments.Common.Web
 {
     using System.Linq;
+    using System.Net;
     using System.Net.Http;
     using System.Text;
-    using System.Web;
     using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.CommonSchema.Services.Logging;
     using Microsoft.Diagnostics.Tracing;
@@ -34,7 +34,7 @@ namespace Microsoft.Commerce.Payments.Common.Web
                 string correlationVectorString = request.Headers.GetValues(CorrelationVector.HeaderName).First();
 
                 // UrlDecode fixes the cases where the CV has characters like '/' and '+'
-                string errorMessage = ValidateCorrelationVector(HttpUtility.UrlDecode(correlationVectorString, Encoding.UTF8));
+                string errorMessage = ValidateCorrelationVector(WebUtility.UrlDecode(correlationVectorString));
 
                 if (errorMessage != null)
                 {

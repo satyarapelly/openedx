@@ -5,12 +5,9 @@ namespace Microsoft.Commerce.Payments.Common.Web
     using System.Collections.Generic;
     using System.Linq;
     using System.Net.Http;
-    using System.Security.Cryptography.X509Certificates;
     using System.Security.Principal;
     using System.Threading;
     using System.Threading.Tasks;
-    using System.Web;
-    using Authorization;
 
     public class ClientAuthenticationHandler : DelegatingHandler
     {
@@ -51,18 +48,7 @@ namespace Microsoft.Commerce.Payments.Common.Web
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             IEnumerable<IIdentity> identities = new[] { Thread.CurrentPrincipal.Identity };
-            X509Certificate2 cert = request.GetClientCertificate();
             bool certificateUser = false;
-            if (cert != null)
-            {
-                string subject = CertificateHelper.NormalizeDistinguishedName(cert.Subject);
-                string issuer = CertificateHelper.NormalizeDistinguishedName(cert.Issuer);
-                string thumbprint = CertificateHelper.NormalizeThumbprint(cert.Thumbprint);
-                string subjectName = cert.SubjectName.Name;
-
-                identities = this.helper.MapCertificateToUsers(new CertificateDescription { Issuer = issuer, Subject = subject, Thumbprint = thumbprint, SubjectName = subjectName });
-                certificateUser = true;
-            }
 
             if (identities == null || !identities.Any())
             {
@@ -114,15 +100,16 @@ namespace Microsoft.Commerce.Payments.Common.Web
                 }
             }
 
-            // This have to be done because of ASP.net limitation documented at: http://aspnetwebstack.codeplex.com/workitem/264
-            if (HttpContext.Current != null)
-            {
-                HttpContext.Current.User = Thread.CurrentPrincipal;
-            }
-
             if (Thread.CurrentPrincipal != null && Thread.CurrentPrincipal.Identity != null)
             {
-                request.Properties[PaymentConstants.Web.Properties.CallerName] = Thread.CurrentPrincipal.Identity.Name;
+                if (request.Properties.ContainsKey(PaymentConstants.Web.Properties.CallerName))
+                {
+                    request.Properties[PaymentConstants.Web.Properties.CallerName] = Thread.CurrentPrincipal.Identity.Name;
+                }
+                else
+                {
+                    request.Properties.Add(PaymentConstants.Web.Properties.CallerName, Thread.CurrentPrincipal.Identity.Name);
+                }
             }
 
             return base.SendAsync(request, cancellationToken);

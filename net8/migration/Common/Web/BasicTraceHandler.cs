@@ -9,7 +9,6 @@ namespace Microsoft.Commerce.Payments.Common.Web
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
-    using System.Web.Http.Routing;
     using Microsoft.Commerce.Payments.Common.Tracing;
 
     public class BasicTraceHandler : DelegatingHandler
@@ -87,22 +86,7 @@ namespace Microsoft.Commerce.Payments.Common.Web
                 requestTraceId = new EventTraceActivity(Guid.NewGuid()) { CorrelationVectorV4 = serverTraceId.CorrelationVectorV4 };
             }
 
-            IHttpRouteData data = request.GetRouteData();
-            StringBuilder operationNameBuilder = new StringBuilder();
-            if (data != null)
-            {
-                operationNameBuilder.Append(data.Values["controller"]);
-                operationNameBuilder.Append("-");
-                operationNameBuilder.Append(request.Method.ToString());
-
-                if (data.Values.ContainsKey("action"))
-                {
-                    operationNameBuilder.Append("-");
-                    operationNameBuilder.Append(data.Values["action"]);
-                }
-            }
-
-            string operationName = operationNameBuilder.ToString();
+            string operationName = string.Format("{0}-{1}", request.Method, request.RequestUri.AbsolutePath.Trim('/'));
             request.Properties.Add(PaymentConstants.Web.Properties.OperationName, operationName);
 
             string trackingId = request.GetTrackingId();

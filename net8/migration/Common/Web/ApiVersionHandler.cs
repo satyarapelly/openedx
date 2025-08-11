@@ -11,7 +11,8 @@ namespace Microsoft.Commerce.Payments.Common.Web
     using System.Text.RegularExpressions;
     using System.Threading;
     using System.Threading.Tasks;
-    using System.Web;    
+    using System.Linq;
+    using Microsoft.AspNetCore.WebUtilities;
 
     /// <summary>
     /// Delegating handler which validates that an appropriate api-version is
@@ -107,11 +108,9 @@ namespace Microsoft.Commerce.Payments.Common.Web
 
             if (queryStrings == null)
             {
-                queryStrings = request.GetQueryNameValuePairs();
-                if (queryStrings != null)
-                {
-                    request.Properties.Add(new KeyValuePair<string, object>(PaymentConstants.Web.Properties.QueryParameters, queryStrings));
-                }
+                var parsed = QueryHelpers.ParseQuery(request.RequestUri.Query);
+                queryStrings = parsed.SelectMany(kvp => kvp.Value, (kvp, v) => new KeyValuePair<string, string>(kvp.Key, v));
+                request.Properties.Add(new KeyValuePair<string, object>(PaymentConstants.Web.Properties.QueryParameters, queryStrings));
             }
 
             if (externalVersion == null)
