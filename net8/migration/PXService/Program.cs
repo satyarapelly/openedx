@@ -1,11 +1,9 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Commerce.Payments.PXCommon;
-using Microsoft.Commerce.Payments.PXService;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
-using System.Web.Services.Description;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services

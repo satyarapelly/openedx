@@ -14,30 +14,25 @@
 		<PackageReference Include="CoreWCF.Primitives" />
 		<PackageReference Include="CoreWCF.Http" />
 		<PackageReference Include="CoreWCF.ConfigurationManager" />
-		<PackageReference Include="Swashbuckle.AspNetCore" />
-		<PackageReference Include="Microsoft.AspNetCore.SystemWebAdapters.CoreServices" />
-		<PackageReference Include="System.ServiceModel.Http" />
-		<PackageReference Include="System.ServiceModel.Primitives" />
-		<PackageReference Include="Yarp.ReverseProxy" />
-		<PackageReference Include="Swashbuckle.AspNetCore" />
-		<PackageReference Include="Microsoft.Identity.Web" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" />
-		<PackageReference Include="Microsoft.Commerce.Payments.Authentication" />
+                <PackageReference Include="Swashbuckle.AspNetCore" />
+                <PackageReference Include="Microsoft.AspNetCore.SystemWebAdapters.CoreServices" />
+                <PackageReference Include="System.ServiceModel.Http" />
+                <PackageReference Include="System.ServiceModel.Primitives" />
+                <PackageReference Include="Yarp.ReverseProxy" />
+                <PackageReference Include="Microsoft.Identity.Web" />
+                <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" />
+                <PackageReference Include="Microsoft.Commerce.Payments.Authentication" />
 		<PackageReference Include="Azure.Analytics.Experimentation.AspNetCore" />
 		<PackageReference Include="Azure.Analytics.Experimentation.VariantAssignment" />
 		<PackageReference Include="Azure.Analytics.Experimentation.VariantAssignment.Client" />
-		<PackageReference Include="Azure.Analytics.Experimentation.VariantAssignment.Contract" />
-		<PackageReference Include="Microsoft.AspNetCore.SystemWebAdapters.CoreServices" />
-		<PackageReference Include="Azure.Identity" />
-		<PackageReference Include="Microsoft.Commerce.Payments.Management.CertificateVerificationCore" />
-		<PackageReference Include="Microsoft.Identity.Web" />
-		<PackageReference Include="OpenTelemetry" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" />
-		<PackageReference Include="Newtonsoft.Json" />
-		<PackageReference Include="Microsoft.Commerce.Payments.Authentication" />
-		<PackageReference Include="Azure.Storage.Blobs" />
-		<PackageReference Include="UAParser" />
+                <PackageReference Include="Azure.Analytics.Experimentation.VariantAssignment.Contract" />
+                <PackageReference Include="Azure.Identity" />
+                <PackageReference Include="Microsoft.Commerce.Payments.Management.CertificateVerificationCore" />
+                <PackageReference Include="OpenTelemetry" />
+                <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" />
+                <PackageReference Include="Newtonsoft.Json" />
+                <PackageReference Include="Azure.Storage.Blobs" />
+                <PackageReference Include="UAParser" />
 	</ItemGroup>
 
 	<!-- Bring along the WCF configuration file at build time -->

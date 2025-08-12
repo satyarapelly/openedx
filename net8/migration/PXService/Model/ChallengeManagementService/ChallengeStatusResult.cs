@@ -2,10 +2,6 @@
 
 namespace Microsoft.Commerce.Payments.PXService.Model.ChallengeManagementService
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web;
     using Newtonsoft.Json;
 
     public class ChallengeStatusResult

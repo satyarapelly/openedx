@@ -4,8 +4,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Web;
     using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Commerce.Payments.PartnerSettingsModel;
     using Microsoft.Commerce.Payments.PidlFactory.V7;
