@@ -6,7 +6,6 @@ namespace Microsoft.Commerce.Payments.PXService.Model.ChallengeManagementService
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
-    using System.Web;
 
     public class ChallengeEnumDefinition
     {

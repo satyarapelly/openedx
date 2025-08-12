@@ -2,11 +2,7 @@
 
 namespace Microsoft.Commerce.Payments.PXService.Model.ChallengeManagementService
 {
-    using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using System.Linq;
-    using System.Web;
     using Newtonsoft.Json;
     using static Microsoft.Commerce.Payments.PXService.Model.ChallengeManagementService.ChallengeEnumDefinition;
 
