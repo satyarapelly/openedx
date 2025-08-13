@@ -63,8 +63,8 @@ namespace Microsoft.Commerce.Payments.PXService
                 });
             }
 
-            PXCommon.ClientAction clientAction = null;
-            PimsModel.V4.PaymentInstrument reacquiredPi = null;
+            PXCommon.ClientAction? clientAction = null;
+            PimsModel.V4.PaymentInstrument? reacquiredPi = null;
 
             switch (error.ClientAction)
             {

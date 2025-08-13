@@ -26,14 +26,14 @@ namespace Microsoft.Commerce.Payments.PXService
         /// <returns>Returns the context value or null if not found.</returns>
         public static string TryGetContextValue(Dictionary<string, object> context, string contextPath)
         {
-            string retVal = null;
+            string? retVal = null;
             string[] contextKeys = contextPath.Split(new char[] { '.' });
             if (contextKeys.Length != 2)
             {
                 throw new ArgumentException("Currently, only 2 levels are supported in the context dictionary");
             }
 
-            Dictionary<string, string> contextGroup;
+            Dictionary<string, string>? contextGroup;
             if (context.ContainsKey(contextKeys[0]))
             {
                 contextGroup = context[contextKeys[0]] as Dictionary<string, string>;
@@ -83,7 +83,7 @@ namespace Microsoft.Commerce.Payments.PXService
             }
 
             bool isEncoded = false;
-            IEnumerable<string> encoding = null;
+            IEnumerable<string>? encoding = null;
             if (request.Headers.TryGetValues(GlobalConstants.HeaderValues.ClientContextEncoding, out encoding))
             {
                 string clientContextEncoding = encoding.FirstOrDefault();
@@ -95,8 +95,8 @@ namespace Microsoft.Commerce.Payments.PXService
 
             foreach (string headerName in GlobalConstants.ClientContextGroups.FromHeader.Keys)
             {
-                string headerValue = null;
-                IEnumerable<string> headerValues = null;
+                string? headerValue = null;
+                IEnumerable<string>? headerValues = null;
                 if (request.Headers.TryGetValues(headerName, out headerValues))
                 {
                     headerValue = headerValues.FirstOrDefault();
@@ -108,8 +108,8 @@ namespace Microsoft.Commerce.Payments.PXService
                 }
 
                 string groupName = GlobalConstants.ClientContextGroups.FromHeader[headerName];
-                Dictionary<string, string> contextGroup = null;
-                object result = null;
+                Dictionary<string, string>? contextGroup = null;
+                object? result = null;
                 context.TryGetValue(groupName, out result);
                 contextGroup = result as Dictionary<string, string>;
                 if (contextGroup == null)
@@ -153,7 +153,7 @@ namespace Microsoft.Commerce.Payments.PXService
             }
 
             Dictionary<string, string> contextGroup;
-            object value = null;
+            object? value = null;
             if (context.TryGetValue(PidlFactory.GlobalConstants.ServiceContextGroups.Pifd, out value))
             {
                 contextGroup = value as Dictionary<string, string>;

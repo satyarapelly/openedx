@@ -67,7 +67,7 @@ namespace Microsoft.Commerce.Payments.PXService
             string country = null,
             string language = null,
             string currency = null,
-            HttpRequestMessage request = null,
+            HttpRequestMessage? request = null,
             string piid = null)
         {
             this.Operation = operation;
