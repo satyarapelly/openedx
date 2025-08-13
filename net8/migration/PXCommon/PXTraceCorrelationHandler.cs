@@ -30,8 +30,8 @@ namespace Microsoft.Commerce.Payments.PXCommon
         private const string PaymentInstrumentOperationsController = "PaymentInstrumentOperationsController";
         private const string PaymentInstrumentsController = "PaymentInstrumentsController";
         private const string DefaultLogValue = "<none>";
-        private const int DefaultConnectionLeaseTimeoutInMs = 120 * 1000;
-        private const int DefaultMaxIdleTime = -1;
+        private static readonly TimeSpan DefaultConnectionLeaseTimeout = TimeSpan.FromMinutes(2);
+        private static readonly TimeSpan DefaultMaxIdleTime = Timeout.InfiniteTimeSpan;
         private readonly IHttpContextAccessor httpContextAccessor;
         private bool isDependentServiceRequest;
 
@@ -514,7 +514,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
             }
         }
 
-        private static void SetConnectionLeaseTimeout(HttpRequestMessage request)
+        private void SetConnectionLeaseTimeout(HttpRequestMessage request)
         {
             if (request == null)
             {
@@ -523,48 +523,36 @@ namespace Microsoft.Commerce.Payments.PXCommon
 
             try
             {
-                ServicePoint servicePoint = ServicePointManager.FindServicePoint(request.RequestUri);
-
-                if (servicePoint != null)
+                if (this.InnerHandler is SocketsHttpHandler socketsHandler)
                 {
                     string managerData = string.Format(
-                  "ConnectionLeaseTimeout: {0} | MaxIdleTime: {1} | Hash: {2} | Connections: {3} | ConnectionLimit: {4}",
-                  servicePoint.ConnectionLeaseTimeout,
-                  servicePoint.MaxIdleTime,
-                  servicePoint.GetHashCode(),
-                  servicePoint.CurrentConnections,
-                  servicePoint.ConnectionLimit);
+                        "PooledConnectionLifetime: {0} | PooledConnectionIdleTimeout: {1}",
+                        socketsHandler.PooledConnectionLifetime,
+                        socketsHandler.PooledConnectionIdleTimeout);
 
-                    // Grab these properties before they are checked and potentially reset for logs to verify if they are going back to defaults
-                    request.Properties[PaymentConstants.Web.Properties.ServicePointData] = managerData;
-                }
+                    request.SetProperty(PaymentConstants.Web.Properties.ServicePointData, managerData);
 
-                /*
-                 * We need to periodically check that ConnectionLeaseTimeout is correctly set due to an issue where
-                 * ServicePointManager will occasionally be garbage collected and re-created even when MaxIdleTime is set to -1,
-                 * which resets the ConnectionLeaseTimeout back to it's default.
-                 * This was the reason we still had issues after our initial fix.
-                */
-                if (servicePoint.ConnectionLeaseTimeout != DefaultConnectionLeaseTimeoutInMs)
-                {
-                    servicePoint.MaxIdleTime = DefaultMaxIdleTime;
-                    servicePoint.ConnectionLeaseTimeout = DefaultConnectionLeaseTimeoutInMs;
+                    if (socketsHandler.PooledConnectionLifetime != DefaultConnectionLeaseTimeout)
+                    {
+                        socketsHandler.PooledConnectionIdleTimeout = DefaultMaxIdleTime;
+                        socketsHandler.PooledConnectionLifetime = DefaultConnectionLeaseTimeout;
+                    }
                 }
             }
             catch (Exception ex)
             {
                 if (LoggingConfig.Mode == LoggingMode.Sll)
                 {
-                    SllWebLogger.TracePXServiceException(string.Format("Exception thrown while configuring ConnectionLeaseTimeout of ServicePoint {0}: {1}", request?.RequestUri?.ToString(), ex.ToString()), EventTraceActivity.Empty);
+                    SllWebLogger.TracePXServiceException(string.Format("Exception thrown while configuring connection settings for {0}: {1}", request?.RequestUri?.ToString(), ex.ToString()), EventTraceActivity.Empty);
                 }
                 else if (LoggingConfig.Mode == LoggingMode.OpenTelemetry)
                 {
-                    Logger.Qos.TracePXServiceException(string.Format("Exception thrown while configuring ConnectionLeaseTimeout of ServicePoint {0}: {1}", request?.RequestUri?.ToString(), ex.ToString()), EventTraceActivity.Empty);
+                    Logger.Qos.TracePXServiceException(string.Format("Exception thrown while configuring connection settings for {0}: {1}", request?.RequestUri?.ToString(), ex.ToString()), EventTraceActivity.Empty);
                 }
                 else
                 {
-                    SllWebLogger.TracePXServiceException(string.Format("Exception thrown while configuring ConnectionLeaseTimeout of ServicePoint {0}: {1}", request?.RequestUri?.ToString(), ex.ToString()), EventTraceActivity.Empty);
-                    Logger.Qos.TracePXServiceException(string.Format("Exception thrown while configuring ConnectionLeaseTimeout of ServicePoint {0}: {1}", request?.RequestUri?.ToString(), ex.ToString()), EventTraceActivity.Empty);
+                    SllWebLogger.TracePXServiceException(string.Format("Exception thrown while configuring connection settings for {0}: {1}", request?.RequestUri?.ToString(), ex.ToString()), EventTraceActivity.Empty);
+                    Logger.Qos.TracePXServiceException(string.Format("Exception thrown while configuring connection settings for {0}: {1}", request?.RequestUri?.ToString(), ex.ToString()), EventTraceActivity.Empty);
                 }
             }
         }
@@ -632,40 +620,40 @@ namespace Microsoft.Commerce.Payments.PXCommon
             string startTime = System.DateTime.UtcNow.ToString("o");
 
             string operationName = this.GetOperationName(request);
-            if (!request.Properties.ContainsKey(PaymentConstants.Web.Properties.OperationName))
+            if (!request.ContainsProperty(PaymentConstants.Web.Properties.OperationName))
             {
-                request.Properties.Add(PaymentConstants.Web.Properties.OperationName, operationName);
+                request.AddProperty(PaymentConstants.Web.Properties.OperationName, operationName);
             }
 
             CorrelationVector correlationVector = SllCorrelationVectorManager.SetCorrelationVectorAtRequestEntry(request);
             EventTraceActivity serverTraceId = new EventTraceActivity { CorrelationVectorV4 = correlationVector };
             EventTraceActivity requestTraceId = GetOrCreateCorrelationIdFromHeader(request);
 
-            if (!request.Properties.ContainsKey(PaymentConstants.Web.Properties.TrackingId))
+            if (!request.ContainsProperty(PaymentConstants.Web.Properties.TrackingId))
             {
                 string trackingId = GetOrCreateTrackingIdFromHeader(request);
-                request.Properties.Add(PaymentConstants.Web.Properties.TrackingId, trackingId);
+                request.AddProperty(PaymentConstants.Web.Properties.TrackingId, trackingId);
             }
 
             // Save this for other parts of the pipeline.
-            if (!request.Properties.ContainsKey(PaymentConstants.Web.Properties.ServerTraceId))
+            if (!request.ContainsProperty(PaymentConstants.Web.Properties.ServerTraceId))
             {
-                // If there are multiple requests from client with same correlation id in short span of time, 
+                // If there are multiple requests from client with same correlation id in short span of time,
                 // then the requests overlap.To avoid this we do trace transfer from requestTraceId to ServerTraceId.
                 // All the payments servertraces will be correlated with serverTraceId.
-                request.Properties.Add(PaymentConstants.Web.Properties.ServerTraceId, serverTraceId);
+                request.AddProperty(PaymentConstants.Web.Properties.ServerTraceId, serverTraceId);
             }
             else
             {
                 Debug.Assert(
-                    ((EventTraceActivity)request.Properties[PaymentConstants.Web.Properties.ServerTraceId]).ActivityId == serverTraceId.ActivityId,
+                    ((EventTraceActivity)request.GetProperty(PaymentConstants.Web.Properties.ServerTraceId)).ActivityId == serverTraceId.ActivityId,
                     "Should never hit here, in which case trace IDs should be the same.");
             }
 
-            if (!request.Properties.ContainsKey(PaymentConstants.Web.Properties.ClientTraceId))
+            if (!request.ContainsProperty(PaymentConstants.Web.Properties.ClientTraceId))
             {
                 // Save the clientTraceId for the logging purpose
-                request.Properties.Add(PaymentConstants.Web.Properties.ClientTraceId, requestTraceId);
+                request.AddProperty(PaymentConstants.Web.Properties.ClientTraceId, requestTraceId);
             }
 
             // Need set the request content before processing.
@@ -703,7 +691,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
             EventTraceActivity requestTraceId = null;
 
             object result;
-            if (request.Properties.TryGetValue(PaymentConstants.Web.Properties.ServerTraceId, out result))
+            if (request.TryGetProperty(PaymentConstants.Web.Properties.ServerTraceId, out result))
             {
                 requestTraceId = (EventTraceActivity)result;
             }
@@ -711,13 +699,13 @@ namespace Microsoft.Commerce.Payments.PXCommon
             if (requestTraceId == null)
             {
                 requestTraceId = GetOrCreateCorrelationIdFromHeader(request);
-                request.Properties[PaymentConstants.Web.Properties.ServerTraceId] = requestTraceId;
+                request.SetProperty(PaymentConstants.Web.Properties.ServerTraceId, requestTraceId);
             }
 
-            if (!request.Properties.ContainsKey(PaymentConstants.Web.Properties.TrackingId))
+            if (!request.ContainsProperty(PaymentConstants.Web.Properties.TrackingId))
             {
                 string trackingId = GetOrCreateTrackingIdFromHeader(request);
-                request.Properties.Add(PaymentConstants.Web.Properties.TrackingId, trackingId);
+                request.AddProperty(PaymentConstants.Web.Properties.TrackingId, trackingId);
             }
 
             EventTraceActivity outgoingCorrelationId = new EventTraceActivity();
