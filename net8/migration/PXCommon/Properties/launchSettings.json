@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "PXCommon": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:58358;http://localhost:58359"
+    }
+  }
+}
