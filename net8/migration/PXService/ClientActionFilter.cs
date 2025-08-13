@@ -91,13 +91,13 @@ namespace Microsoft.Commerce.Payments.PXService
             Digitization,
         }
 
-        public string PendingOn { get; private set; }
+        public string? PendingOn { get; private set; }
 
         public bool PendingOnContainedIn { get; private set; }
 
-        public string RequestType { get; private set; }
+        public string? RequestType { get; private set; }
 
-        public string Partner { get; private set; }
+        public string? Partner { get; private set; }
 
         public bool PartnerContainedIn { get; private set; }
 
@@ -146,7 +146,7 @@ namespace Microsoft.Commerce.Payments.PXService
 
         public void UpdateClientAction(ResourceLifecycleStateManager.ClientActionResourceState state)
         {
-            ClientAction clientAction = null;
+            ClientAction? clientAction = null;
 
             switch (this.ClientActionType)
             {
@@ -211,7 +211,7 @@ namespace Microsoft.Commerce.Payments.PXService
                         {
                             if (this.ClearMembers)
                             {
-                                List<PIDLResource> redirectPidl = null;
+                                List<PIDLResource>? redirectPidl = null;
 
                                 if (this.IsStaticRedirect)
                                 {

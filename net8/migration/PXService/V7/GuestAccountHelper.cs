@@ -28,10 +28,10 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         {
             try
             {
-                string customerType;
-                if (request.Properties.ContainsKey(CustomerTypeKey))
+                string? customerType;
+                if (request.ContainsProperty(CustomerTypeKey))
                 {
-                    customerType = request.GetProperty(CustomerTypeKey) as string;
+                    customerType = request.GetProperty<string>(CustomerTypeKey);
                 }
                 else
                 {
@@ -40,7 +40,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                     if (!string.IsNullOrWhiteSpace(customerType))
                     {
                         // Store customer type in request properties so that it can be used without parsing customer header again.
-                        request.Properties[CustomerTypeKey] = customerType;
+                        request.SetProperty(CustomerTypeKey, customerType);
                     }
                 }
 

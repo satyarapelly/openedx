@@ -339,9 +339,9 @@ namespace Microsoft.Commerce.Payments.PXService
             return testContext;
         }
 
-        public static TestContext GetTestHeader(HttpRequestMessage incomingRequest = null)
+        public static TestContext? GetTestHeader(HttpRequestMessage? incomingRequest = null)
         {
-            TestContext testContext = null;
+            TestContext? testContext = null;
             string value = GetRequestHeader(PaymentConstants.PaymentExtendedHttpHeaders.TestHeader);
             if (value != null)
             {
@@ -486,9 +486,9 @@ namespace Microsoft.Commerce.Payments.PXService
             return Has3dsTestScenario(testContext, "px-service-3ds1-show-iframe");
         }
 
-        public static RequestContext GetRequestContext(HttpRequestMessage request, EventTraceActivity traceActivityId)
+        public static RequestContext? GetRequestContext(HttpRequestMessage request, EventTraceActivity traceActivityId)
         {
-            RequestContext requestContext = null;
+            RequestContext? requestContext = null;
             var requestContextHeader = GetRequestHeader(GlobalConstants.HeaderValues.XMsRequestContext, request) ?? GetRequestHeader(GlobalConstants.HeaderValues.RequestContext, request);
             if (requestContextHeader != null)
             {

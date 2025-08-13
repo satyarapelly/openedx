@@ -18,7 +18,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
     {
         private static readonly object syncRoot = new object();
 
-        private static TelemetryClient instance = null;
+        private static TelemetryClient? instance;
 
         internal static TelemetryClient Instance
         {
@@ -65,7 +65,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
             string operationName,
             string serviceName,
             HttpRequestMessage request,
-            HttpResponseMessage response,
+            HttpResponseMessage? response,
             string requestPayload,
             string responsePayload,
             string startTime,
@@ -98,15 +98,15 @@ namespace Microsoft.Commerce.Payments.PXCommon
             string paymentMethodType,
             string country,
             HttpRequestMessage request,
-            HttpResponseMessage response,
+            HttpResponseMessage? response,
             string requestPayload,
             string responsePayload,
             string startTime,
             string requestTraceId,
-            string serverTraceId = null,
-            string message = null,
-            string errorCode = null,
-            string errorMessage = null)
+            string? serverTraceId = null,
+            string? message = null,
+            string? errorCode = null,
+            string? errorMessage = null)
         {
             var properties = new Dictionary<string, string>
             {

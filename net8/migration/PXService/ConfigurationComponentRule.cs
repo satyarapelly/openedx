@@ -9,7 +9,7 @@ namespace Microsoft.Commerce.Payments.PXService
     {
         private static readonly Func<string[], int, bool> SingleRowPredicate = (row, i) => false;
 
-        public ConfigurationComponentRule(Func<string[], int, bool> isRowInRange = null, Func<string[], bool> isRowInList = null, Dictionary<string, ConfigurationComponentRule> subComponentRules = null)
+        public ConfigurationComponentRule(Func<string[], int, bool>? isRowInRange = null, Func<string[], bool>? isRowInList = null, Dictionary<string, ConfigurationComponentRule>? subComponentRules = null)
         {
             this.IsRowInRange = isRowInRange ?? ConfigurationComponentRule.SingleRowPredicate;
             this.IsRowInList = isRowInList;
@@ -19,7 +19,7 @@ namespace Microsoft.Commerce.Payments.PXService
         // Function parameters: next row, relative current row index (0-based) 
         public Func<string[], int, bool> IsRowInRange { get; }
 
-        public Func<string[], bool> IsRowInList { get; }
+        public Func<string[], bool>? IsRowInList { get; }
 
         public bool IsList
         {

@@ -82,7 +82,7 @@ namespace Microsoft.Commerce.Payments.PXService
 
         public EventTraceActivity TraceActivityId { get; set; }
 
-        public HttpRequestMessage Request { get; set; }
+        public HttpRequestMessage? Request { get; set; }
 
         public IList<PimsModel.V4.PaymentInstrument> ActivePaymentInstruments
         {
@@ -246,7 +246,7 @@ namespace Microsoft.Commerce.Payments.PXService
             string country = null,
             string language = null,
             string currency = null,
-            HttpRequestMessage request = null,
+            HttpRequestMessage? request = null,
             string piid = null)
         {
             this.Operation = operation;
@@ -314,9 +314,9 @@ namespace Microsoft.Commerce.Payments.PXService
             string country = null,
             string language = null,
             string currency = null,
-            HttpRequestMessage request = null,
-            CheckoutRequestClientActions checkoutRequestClientActions = null,
-            PaymentRequestClientActions paymentRequestClientActions = null)
+            HttpRequestMessage? request = null,
+            CheckoutRequestClientActions? checkoutRequestClientActions = null,
+            PaymentRequestClientActions? paymentRequestClientActions = null)
         {
             this.Operation = operation;
             this.Partner = partner;

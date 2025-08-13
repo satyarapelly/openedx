@@ -298,7 +298,7 @@ namespace Microsoft.Commerce.Payments.PXService.Handlers
             flightContext.Add(Flighting.ContextKeys.BrowserVer, browserVer);
             flightContext.Add(Flighting.ContextKeys.ReferrerDomain, referrerDomain);
 
-            request.Properties[GlobalConstants.RequestPropertyKeys.FlightContext] = flightContext;
+            request.SetProperty(GlobalConstants.RequestPropertyKeys.FlightContext, flightContext);
 
             // Get feature config from AzureExp
             // TODO: if AzureExp is supporeted and needed in Sovereign clouds, then we shall enable AzureExp
@@ -1016,10 +1016,10 @@ namespace Microsoft.Commerce.Payments.PXService.Handlers
             // Use Partner Setttings Service if flight is enabled
             PartnerSettings partnerSettings = await PartnerSettingsHelper.GetPaymentExperienceSetting(settings, partner, partnerSettingsVersion, traceActivityId, exposableFeatures);
 
-            request.Properties[GlobalConstants.RequestPropertyKeys.PartnerSettings] = partnerSettings;
-            request.Properties[GlobalConstants.RequestPropertyKeys.ExposedFlightFeatures] = exposableFeatures;
-            request.Properties[GlobalConstants.RequestPropertyKeys.FlightAssignmentContext] = featureConfig?.AssignmentContext;
-            request.Properties[GlobalConstants.RequestPropertyKeys.FlightFeatureConfig] = featureConfig;
+            request.SetProperty(GlobalConstants.RequestPropertyKeys.PartnerSettings, partnerSettings);
+            request.SetProperty(GlobalConstants.RequestPropertyKeys.ExposedFlightFeatures, exposableFeatures);
+            request.SetProperty(GlobalConstants.RequestPropertyKeys.FlightAssignmentContext, featureConfig?.AssignmentContext);
+            request.SetProperty(GlobalConstants.RequestPropertyKeys.FlightFeatureConfig, featureConfig);
 
             // When an account has the PXRateLimitPerAccountOnChallengeApis, return BadRequest response.
             // This is different from PXReturn502ForMaliciousRequest as that flight is to prevent sdk retires
@@ -1045,10 +1045,10 @@ namespace Microsoft.Commerce.Payments.PXService.Handlers
                 return responseMessage;
             }
 
-            IEnumerable<KeyValuePair<string, string>> queryStrings = null;
-            if (request.Properties.ContainsKey(PaymentConstants.Web.Properties.QueryParameters))
+            IEnumerable<KeyValuePair<string, string>>? queryStrings = null;
+            if (request.ContainsProperty(PaymentConstants.Web.Properties.QueryParameters))
             {
-                queryStrings = request.Properties[PaymentConstants.Web.Properties.QueryParameters] as IEnumerable<KeyValuePair<string, string>>;
+                queryStrings = request.GetProperty<IEnumerable<KeyValuePair<string, string>>>(PaymentConstants.Web.Properties.QueryParameters);
             }
 
             if (queryStrings == null)
@@ -1056,7 +1056,7 @@ namespace Microsoft.Commerce.Payments.PXService.Handlers
                 queryStrings = request.GetQueryNameValuePairs();
                 if (queryStrings != null)
                 {
-                    request.Properties.Add(new KeyValuePair<string, object>(PaymentConstants.Web.Properties.QueryParameters, queryStrings));
+                    request.AddProperty(PaymentConstants.Web.Properties.QueryParameters, queryStrings);
                 }
             }
 
@@ -1071,13 +1071,13 @@ namespace Microsoft.Commerce.Payments.PXService.Handlers
                 return request.CreateInvalidApiVersionResponse(externalVersion);
             }
 
-            if (request.Properties.ContainsKey(PaymentConstants.Web.Properties.Version))
+            if (request.ContainsProperty(PaymentConstants.Web.Properties.Version))
             {
-                request.Properties[PaymentConstants.Web.Properties.Version] = apiVersion;
+                request.SetProperty(PaymentConstants.Web.Properties.Version, apiVersion);
             }
             else
             {
-                request.Properties.Add(PaymentConstants.Web.Properties.Version, apiVersion);
+                request.AddProperty(PaymentConstants.Web.Properties.Version, apiVersion);
             }
 
             HttpResponseMessage response = await base.SendAsync(request, cancellationToken);

@@ -85,7 +85,7 @@ namespace Microsoft.Commerce.Payments.PXService.Handlers
                                     }
                                     else
                                     {
-                                        request.Properties["InputValidationFailed"] = true;
+                                        request.SetProperty("InputValidationFailed", true);
                                         TraceIntegrationError(request, message);
                                     }
                                 }
@@ -93,7 +93,7 @@ namespace Microsoft.Commerce.Payments.PXService.Handlers
                         }
                         else
                         {
-                            request.Properties["InputValidationFailed"] = true;
+                            request.SetProperty("InputValidationFailed", true);
                             string message = string.Format("The parameter {0} or value {1} is null or invalid in the request URL: {2}.", queryParam.Key, queryParam.Value, request.RequestUri.AbsoluteUri);
                             TraceIntegrationError(request, message);
                         }
@@ -111,9 +111,9 @@ namespace Microsoft.Commerce.Payments.PXService.Handlers
 
         private static bool IsFeatureEnabled(HttpRequestMessage request, string featureName)
         {
-            List<string> exposedFeatureFlight = new List<string>();
-            return request.Properties.TryGetValue(GlobalConstants.RequestPropertyKeys.ExposedFlightFeatures, out exposedFeatureFlight)
-                && exposedFeatureFlight.Contains(featureName);
+            List<string>? exposedFeatureFlight = new List<string>();
+            return request.TryGetProperty(GlobalConstants.RequestPropertyKeys.ExposedFlightFeatures, out exposedFeatureFlight)
+                && exposedFeatureFlight != null && exposedFeatureFlight.Contains(featureName);
         }
     }
 }
