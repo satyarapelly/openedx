@@ -37,6 +37,7 @@ namespace Microsoft.Commerce.Payments.PXService.Handlers
         private string[] versionlessControllers;
         private IDictionary<string, ApiVersion> supportedVersions;
         private PXServiceSettings settings;
+        private readonly RequestDelegate? next;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PXServiceApiVersionHandler"/> class.
@@ -46,10 +47,24 @@ namespace Microsoft.Commerce.Payments.PXService.Handlers
         /// <param name="versionlessControllers">Names of controllers that should be available with no version</param>
         /// <param name="settings">PXServiceSettings instance for the current service.</param>
         public PXServiceApiVersionHandler(IDictionary<string, ApiVersion> supportedVersions, string[] versionlessControllers, PXServiceSettings settings)
+            : this(null, supportedVersions, versionlessControllers, settings)
         {
+        }
+
+        public PXServiceApiVersionHandler(RequestDelegate? next, IDictionary<string, ApiVersion> supportedVersions, string[] versionlessControllers, PXServiceSettings settings)
+        {
+            this.next = next;
             this.supportedVersions = supportedVersions;
             this.versionlessControllers = versionlessControllers ?? new string[0];
             this.settings = settings;
+        }
+
+        public async Task InvokeAsync(HttpContext context)
+        {
+            if (this.next != null)
+            {
+                await this.next(context);
+            }
         }
 
         /// <summary>
