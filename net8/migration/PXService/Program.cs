@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Microsoft.Commerce.Payments.PXService;
 using Microsoft.Commerce.Payments.PXService.Settings;
@@ -37,6 +38,8 @@ var pxSettings = PXServiceSettings.CreateInstance(Environment.Current.Environmen
 builder.Services.AddSingleton(pxSettings);
 
 // Controllers + Newtonsoft.Json (Nulls ignored like WebApiConfig)
+builder.Services.AddScoped<VersionGateFilter>();
+
 builder.Services
     .AddControllers(options =>
     {
@@ -46,6 +49,7 @@ builder.Services
         {
             options.Filters.Add(pxSettings.AuthorizationFilter);
         }
+        options.Filters.Add<VersionGateFilter>();
     })
     .AddNewtonsoftJson(o =>
     {
@@ -56,23 +60,18 @@ builder.Services
 builder.Services.AddHttpClient();
 builder.Services.AddApplicationInsightsTelemetry(); // optional if you rely on your own AI setup
 
-// the guard filter approach, register it:
-builder.Services.AddScoped<VersionGateFilter>();
-builder.Services.AddControllers(o => o.Filters.Add<VersionGateFilter>());
+// Register the resolver and populate it with your mappings (V7, probe, etc.)
+builder.Services.AddSingleton<VersionedControllerResolver>(sp =>
+{
+    var resolverLogger = sp.GetRequiredService<ILogger<VersionedControllerResolver>>();
+    var resolver = new VersionedControllerResolver(resolverLogger);
 
-//// Register the resolver and populate it with your mappings (V7, probe, etc.)
-//builder.Services.AddSingleton<VersionedControllerResolver>(sp =>
-//{
-//    var resolverLogger = sp.GetRequiredService<ILogger<VersionedControllerResolver>>();
-//    var resolver = new VersionedControllerResolver(resolverLogger);
+    // Add versioned and versionless controllers
+    var catalogLogger = sp.GetRequiredService<ILoggerFactory>().CreateLogger("VersionCatalog");
+    VersionCatalog.Register(resolver, catalogLogger);
 
-//    // This method is where you add all your v7 mappings (ported from AddV7Controllers).
-//    // Use the implementation you already created earlier.
-//    var catalogLogger = sp.GetRequiredService<ILoggerFactory>().CreateLogger("VersionCatalog");
-//    VersionCatalog.Register(resolver, catalogLogger);   // <- your method that calls resolver.AddVersion(...), AddVersionless(...)
-
-//    return resolver;
-//});
+    return resolver;
+});
 
 var app = builder.Build();
 
