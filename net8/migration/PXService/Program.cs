@@ -111,12 +111,8 @@ if (pxSettings.ValidateCors)
     app.UseMiddleware<PXServiceCorsHandler>(pxSettings);
 }
 
-// Input and PIDL validation handlers
+// Input validation handler
 app.UseMiddleware<PXServiceInputValidationHandler>();
-if (pxSettings.PIDLDocumentValidationEnabled)
-{
-    app.UseMiddleware<PXServicePIDLValidationHandler>();
-}
 
 app.UseRouting();
 
@@ -138,6 +134,11 @@ app.Use(async (ctx, next) =>
 
     await next();
 });
+
+if (pxSettings.PIDLDocumentValidationEnabled)
+{
+    app.UseMiddleware<PXServicePIDLValidationHandler>();
+}
 
 app.UseEndpoints(endpoints =>
 {
