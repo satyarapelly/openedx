@@ -4,17 +4,22 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-namespace Microsoft.Commerce.Payments.PXCommon
+namespace Microsoft.Commerce.Payments.Common
 {
     using System;
-    using System.Runtime.Remoting.Messaging;
+    using System.Threading;
     using Microsoft.Commerce.Payments.Common.Tracing;
-
     /// <summary>
     /// Push a <see cref="T:EventTraceActivity"/> onto the logical call context and pops it when exiting its scope.
     /// </summary>
     public class TraceCorrelationScope : IDisposable
     {
+        private static readonly AsyncLocal<EventTraceActivity> current = new AsyncLocal<EventTraceActivity>();
+
+        private readonly EventTraceActivity previous;
+
+        public static EventTraceActivity Current => current.Value;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TraceCorrelationScope"/> class.
         /// Pushes the given <see cref="T:EventTraceActivity"/> onto the logical call context.
@@ -23,7 +28,8 @@ namespace Microsoft.Commerce.Payments.PXCommon
         /// <param name="eventTraceActivity">The event trace activity.</param>
         public TraceCorrelationScope(EventTraceActivity eventTraceActivity)
         {
-            CallContext.LogicalSetData(EventTraceActivity.Name, eventTraceActivity);
+            previous = current.Value;
+            current.Value = eventTraceActivity;
         }
 
         /// <summary>
@@ -32,7 +38,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
         public void Dispose()
         {
             GC.SuppressFinalize(this);
-            CallContext.FreeNamedDataSlot(EventTraceActivity.Name);
+            current.Value = previous;
         }
     }
 }

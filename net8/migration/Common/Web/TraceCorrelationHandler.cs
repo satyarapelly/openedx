@@ -1,4 +1,4 @@
-// <copyright file="TraceCorrelationHandler.cs" company="Microsoft Corporation">Copyright (c) Microsoft 2013. All rights reserved.</copyright>
+﻿// <copyright file="TraceCorrelationHandler.cs" company="Microsoft Corporation">Copyright (c) Microsoft 2013. All rights reserved.</copyright>
 
 namespace Microsoft.Commerce.Payments.Common.Web
 {
@@ -9,14 +9,8 @@ namespace Microsoft.Commerce.Payments.Common.Web
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
-    using System.Web.Http.Routing;
     using Microsoft.Commerce.Payments.Common.Tracing;
-    using Microsoft.Commerce.Payments.Common.Tracing.Metris;
-    using Microsoft.Commerce.Payments.Common.Tracing.Metris.Dimensions;
-    using Microsoft.Commerce.Payments.Common.Tracing.Metris.OTel;
-    using Microsoft.Commerce.Tracing;
     using Microsoft.CommonSchema.Services.Logging;
-    using Ms.Qos;
 
     /// <summary>
     /// Delegating handler which performs detailed message tracing.  Informational
@@ -87,27 +81,31 @@ namespace Microsoft.Commerce.Payments.Common.Web
             {
                 isDependentServiceRequest = false;
 
-                // If the operation name does not exist in the request properties, then parse the request data to construct operation name.
-                IHttpRouteData data = request.GetRouteData();
-
+                // If the operation name does not exist in the request properties, then attempt to
+                // construct the operation name from the request URI. This avoids using System.Web
+                // types like IHttpRouteData which are not available in .NET 8.
                 StringBuilder counterNameBuilder = new StringBuilder();
-                if (data != null)
-                {
-                    counterNameBuilder.Append(data.Values["controller"]);
-                    counterNameBuilder.Append("-");
-                    counterNameBuilder.Append(request.Method.ToString());
+                string[] segments = request.RequestUri?.AbsolutePath
+                    .Trim('/')
+                    .Split('/', StringSplitOptions.RemoveEmptyEntries) ?? Array.Empty<string>();
 
-                    if (data.Values.ContainsKey("action"))
+                if (segments.Length > 0)
+                {
+                    counterNameBuilder.Append(segments[0]);
+                    counterNameBuilder.Append("-");
+                    counterNameBuilder.Append(request.Method);
+
+                    if (segments.Length > 1)
                     {
                         counterNameBuilder.Append("-");
-                        counterNameBuilder.Append(data.Values["action"]);
+                        counterNameBuilder.Append(segments[1]);
                     }
                 }
                 else
                 {
-                    // In case there is no request data, get the action name from the request properties
+                    // In case there are no URI segments, get the action name from the request properties
                     string actionName = request.GetActionName();
-                    if (actionName != null)
+                    if (!string.IsNullOrEmpty(actionName))
                     {
                         counterNameBuilder.Append(this.ServiceName);
                         counterNameBuilder.Append("-");
@@ -156,7 +154,6 @@ namespace Microsoft.Commerce.Payments.Common.Web
                 // then the requests overlap.To avoid this we do trace transfer from requestTraceId to ServerTraceId.
                 // All the payments servertraces will be correlated with serverTraceId.
                 request.Properties.Add(PaymentConstants.Web.Properties.ServerTraceId, serverTraceId);
-                PaymentsEventSource.Log.CommonMappingCorrelationId(serverTraceId, new EventTraceActivity(correlationId));
             }
             else
             {
@@ -233,9 +230,7 @@ namespace Microsoft.Commerce.Payments.Common.Web
         /// <returns>A task representing the async work.</returns>
         protected virtual async Task TraceOperation(HttpRequestMessage request, HttpResponseMessage response, string operationName, long latency, string additionalMessage, EventTraceActivity requestTraceId, EventTraceActivity serverTraceId)
         {
-            if (LoggingConfig.Mode == LoggingMode.Sll)
-            {
-                SllWebLogger.TraceServiceLoggingIncoming(
+            SllWebLogger.TraceServiceLoggingIncoming(
                 operationName,
                 request,
                 response,
@@ -245,123 +240,6 @@ namespace Microsoft.Commerce.Payments.Common.Web
                 requestTraceId.ActivityId.ToString(),
                 serverTraceId.ActivityId.ToString(),
                 string.Empty);
-            }
-            else if (LoggingConfig.Mode == LoggingMode.OpenTelemetry)
-            {
-                Logger.Qos.TraceServiceLoggingIncoming(
-                operationName,
-                request,
-                response,
-                await request.GetRequestPayload(),
-                await response.GetResponsePayload(),
-                (int)latency,
-                requestTraceId.ActivityId.ToString(),
-                serverTraceId.ActivityId.ToString(),
-                string.Empty);
-            }
-            else
-            {
-                Logger.Qos.TraceServiceLoggingIncoming(
-                operationName,
-                request,
-                response,
-                await request.GetRequestPayload(),
-                await response.GetResponsePayload(),
-                (int)latency,
-                requestTraceId.ActivityId.ToString(),
-                serverTraceId.ActivityId.ToString(),
-                string.Empty);
-
-                SllWebLogger.TraceServiceLoggingIncoming(
-                operationName,
-                request,
-                response,
-                await request.GetRequestPayload(),
-                await response.GetResponsePayload(),
-                (int)latency,
-                requestTraceId.ActivityId.ToString(),
-                serverTraceId.ActivityId.ToString(),
-                string.Empty);
-            }
-
-            var responseOperationStatus = response.GetResponseOperationStatus();
-
-            var requestDimensions = new RequestDimensions
-            {
-                OperationName = operationName,
-                ResponseStatusCode = Convert.ToInt32(response.StatusCode).ToString(),
-                CallerName = request.GetRequestCallerName(),
-                RequestStatus = Convert.ToInt32(responseOperationStatus).ToString(),
-                Scenario = request.GetRequestScenarioId()
-            };
-
-            var errorSuccessDimensions = new RequestDimensions
-            {
-                OperationName = operationName,
-                ResponseStatusCode = Convert.ToInt32(response.StatusCode).ToString(),
-                CallerName = request.GetRequestCallerName(),
-                RequestStatus = Convert.ToInt32(responseOperationStatus).ToString(),
-                Scenario = request.GetRequestScenarioId(),
-                PaymentMethodFamily = request.GetPaymentMethodFamily(),
-                PaymentMethodType = request.GetPaymentMethodType()
-            };
-
-            var partnerDimensions = new RequestDimensions
-            {
-                OperationName = operationName,
-                ResponseStatusCode = Convert.ToInt32(response.StatusCode).ToString(),
-                CallerName = request.GetRequestCallerName(),
-                RequestStatus = Convert.ToInt32(responseOperationStatus).ToString(),
-                Scenario = request.GetRequestScenarioId(),
-                Partner = request.GetRequestPartner()
-            };
-
-            bool isSuccess = responseOperationStatus != ServiceRequestStatus.TransportError && responseOperationStatus != ServiceRequestStatus.ServiceError;
-
-            MetricPerfCounters.SafeReport<IIncomingRequestMetrics>((counters) =>
-            {
-                counters.IncomingApiRequests.Increment(requestDimensions);
-                counters.IncomingApiReliability.Record(isSuccess ? 100.0 : 0.0, requestDimensions);
-
-                if (isSuccess)
-                {
-                    counters.IncomingApiSuccessLatency.Record(latency, requestDimensions);
-                }
-
-                if ((int)response.StatusCode >= 500 && (int)response.StatusCode < 600)
-                {
-                    counters.IncomingTotalSystemErrors.Increment(errorSuccessDimensions);
-                    if (!string.IsNullOrEmpty(partnerDimensions.Partner))
-                    {
-                        counters.IncomingTotalSystemErrorsWithPartner.Increment(partnerDimensions);
-                    }
-                }
-
-                if ((int)response.StatusCode >= 400 && (int)response.StatusCode < 500)
-                {
-                    counters.IncomingTotalUserErrors.Increment(errorSuccessDimensions);
-                    if (!string.IsNullOrEmpty(partnerDimensions.Partner))
-                    {
-                        counters.IncomingTotalUserErrorsWithPartner.Increment(partnerDimensions);
-                    }
-                }
-
-                if ((int)response.StatusCode >= 200 && (int)response.StatusCode < 300)
-                {
-                    counters.IncomingTotalSuccesses.Increment(errorSuccessDimensions);
-                }
-
-                if (!string.IsNullOrEmpty(partnerDimensions.Partner))
-                {
-                    counters.IncomingApiRequestsWithPartner.Increment(partnerDimensions);
-                    counters.IncomingApiReliabilityWithPartner.Record(isSuccess ? 100.0 : 0.0, partnerDimensions);
-                    if (isSuccess)
-                    {
-                        counters.IncomingApiSuccessLatencyWithPartner.Record(latency, partnerDimensions);
-                        counters.IncomingTotalSuccessesWithPartner.Increment(partnerDimensions);
-                    }
-                }
-            });
         }
     }
 }

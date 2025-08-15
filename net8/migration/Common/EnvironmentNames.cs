@@ -1,4 +1,4 @@
-// <copyright file="EnvironmentNames.cs" company="Microsoft">Copyright (c) Microsoft 2013. All rights reserved.</copyright>
+﻿// <copyright file="EnvironmentNames.cs" company="Microsoft">Copyright (c) Microsoft 2013. All rights reserved.</copyright>
 
 namespace Microsoft.Commerce.Payments.Common.Environments
 {

@@ -1,38 +1,50 @@
-// <copyright file="UnhandledExceptionFilterAttribute.cs" company="Microsoft Corporation">Copyright (c) Microsoft 2014. All rights reserved.</copyright>
+﻿// <copyright file="UnhandledExceptionFilterAttribute.cs" company="Microsoft">
+// Copyright (c) Microsoft 2024. All rights reserved.</copyright>
+
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Commerce.Payments.Common.Tracing;
+using Microsoft.Commerce.Tracing;
+using Microsoft.Diagnostics.Tracing.Etlx;
+using System;
+using System.Net;
 
 namespace Microsoft.Commerce.Payments.Common.Web
 {
-    using System.Net;
-    using System.Net.Http;
-    using System.Web.Http.Filters;
-    using Microsoft.Commerce.Payments.Common.Tracing;
-    
-    public sealed class UnhandledExceptionFilterAttribute : ExceptionFilterAttribute 
+    /// <summary>
+    /// ASP.NET Core exception filter to handle and log unhandled exceptions globally.
+    /// </summary>
+    public sealed class UnhandledExceptionFilterAttribute : ExceptionFilterAttribute
     {
-        public override void OnException(HttpActionExecutedContext actionExecutedContext)
+        public override void OnException(ExceptionContext context)
         {
-            if (actionExecutedContext.Exception is FailedOperationException)
-            {
-                FailedOperationException failedOperationException = (FailedOperationException)actionExecutedContext.Exception;
+            var correlationId = context.HttpContext.Request.Headers.TryGetValue("X-Correlation-ID", out var values)
+                ? values.ToString()
+                : Guid.NewGuid().ToString();
 
-                actionExecutedContext.Response = actionExecutedContext.Request.CreateResponse(
-                                                  HttpStatusCode.InternalServerError,
-                                                    new ErrorResponse
-                                                    {
-                                                        ErrorCode = PaymentConstants.ErrorTypes.FailedOperation,
-                                                        Message = failedOperationException.Message
-                                                    });
+            if (context.Exception is FailedOperationException failedOp)
+            {
+                context.Result = new ObjectResult(new ErrorResponse
+                {
+                    ErrorCode = PaymentConstants.ErrorTypes.FailedOperation,
+                    Message = failedOp.Message
+                })
+                {
+                    StatusCode = (int)HttpStatusCode.InternalServerError
+                };
             }
             else
             {
-                actionExecutedContext.Response = actionExecutedContext.Request.CreateResponse(
-                                                  HttpStatusCode.InternalServerError,
-                                                    new ErrorResponse
-                                                    {
-                                                        ErrorCode = PaymentConstants.ErrorTypes.UnknownFailure,
-                                                        Message = actionExecutedContext.Exception.Message
-                                                    });
+                context.Result = new ObjectResult(new ErrorResponse
+                {
+                    ErrorCode = PaymentConstants.ErrorTypes.UnknownFailure,
+                    Message = context.Exception.Message
+                })
+                {
+                    StatusCode = (int)HttpStatusCode.InternalServerError
+                };
             }
+            context.ExceptionHandled = true;
         }
     }
 }

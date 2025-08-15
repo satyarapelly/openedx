@@ -12,6 +12,7 @@ namespace Microsoft.Commerce.Payments.Common.Web
     using System.Net.Http.Headers;
     using System.Net.Http.Json;
     using System.Threading.Tasks;
+    using System.Web;
 
     public static class HttpResponseMessageExtensions
     {

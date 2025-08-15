@@ -8,7 +8,6 @@ namespace Microsoft.Commerce.Payments.Common.OpenTelemetry
     using System.Text;
     using System.Threading.Tasks;
     using Microsoft.Commerce.Payments.Common.Tracing;
-    using Microsoft.Commerce.Payments.Common.Tracing.Metris.Dimensions;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
 

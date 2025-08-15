@@ -1,124 +1,84 @@
-// <copyright file="BasicTraceHandler.cs" company="Microsoft Corporation">Copyright (c) Microsoft 2013. All rights reserved.</copyright>
+﻿// <copyright file="BasicTraceHandler.cs" company="Microsoft Corporation">Copyright (c) Microsoft 2013. All rights reserved.</copyright>
+
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.Commerce.Tracing;
+using Microsoft.Commerce.Payments.Common.Tracing;
+using Microsoft.AspNetCore.Routing;
+using System;
+using System.Diagnostics;
+using System.Text;
+using System.Threading.Tasks;
+
 
 namespace Microsoft.Commerce.Payments.Common.Web
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Net.Http;
-    using System.Text;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Microsoft.Commerce.Payments.Common.Tracing;
-
-    public class BasicTraceHandler : DelegatingHandler
+    public class BasicTraceHandler
     {
-        public BasicTraceHandler(
-            Action<HttpRequestMessage, string, string, EventTraceActivity, EventTraceActivity> traceRequest,
-            Action<HttpResponseMessage, string, string, long, EventTraceActivity, EventTraceActivity> traceResponse,
-            Func<HttpRequestMessage, HttpResponseMessage, string, long, string, EventTraceActivity, EventTraceActivity, Task> apiDetailTrace)
-        {
-            this.TraceRequest = traceRequest;
-            this.TraceResponse = traceResponse;
-            this.ApiDetailTrace = apiDetailTrace;
-        }
+        private readonly RequestDelegate next;
+        private readonly Action<HttpContext, string, string, EventTraceActivity, EventTraceActivity> traceRequest;
+        private readonly Action<HttpContext, string, string, long, EventTraceActivity, EventTraceActivity> traceResponse;
+        private readonly Func<HttpContext, string, long, string, EventTraceActivity, EventTraceActivity, Task> apiDetailTrace;
 
         public BasicTraceHandler(
-            Action<HttpRequestMessage, string, string, EventTraceActivity, EventTraceActivity> traceRequest,
-            Action<HttpResponseMessage, string, string, long, EventTraceActivity, EventTraceActivity> traceResponse,
-            Func<HttpRequestMessage, HttpResponseMessage, string, long, string, EventTraceActivity, EventTraceActivity, Task> apiDetailTrace,
-            HttpMessageHandler innerHandler)
-            : base(innerHandler)
+            RequestDelegate next,
+            Action<HttpContext, string, string, EventTraceActivity, EventTraceActivity> traceRequest,
+            Action<HttpContext, string, string, long, EventTraceActivity, EventTraceActivity> traceResponse,
+            Func<HttpContext, string, long, string, EventTraceActivity, EventTraceActivity, Task> apiDetailTrace)
         {
-            this.TraceRequest = traceRequest;
-            this.TraceResponse = traceResponse;
-            this.ApiDetailTrace = apiDetailTrace;
+            this.next = next;
+            this.traceRequest = traceRequest;
+            this.traceResponse = traceResponse;
+            this.apiDetailTrace = apiDetailTrace;
         }
 
-        public BasicTraceHandler()
+        public async Task InvokeAsync(HttpContext context)
         {
-        }
-
-        public BasicTraceHandler(HttpMessageHandler innerHandler)
-            : base(innerHandler)
-        {
-        }
-
-        public Action<HttpRequestMessage, string, string, EventTraceActivity, EventTraceActivity> TraceRequest
-        {
-            get;
-            private set;
-        }
-
-        public Action<HttpResponseMessage, string, string, long, EventTraceActivity, EventTraceActivity> TraceResponse
-        {
-            get;
-            private set;
-        }
-
-        public Func<HttpRequestMessage, HttpResponseMessage, string, long, string, EventTraceActivity, EventTraceActivity, Task> ApiDetailTrace
-        {
-            get;
-            private set;
-        }
-
-        protected override sealed async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
-        {
-            EventTraceActivity serverTraceId = null;
-            object result;
-            if (request.Properties.TryGetValue(PaymentConstants.Web.Properties.ServerTraceId, out result))
+            var serverTraceId = new EventTraceActivity(Guid.TryParse(context.TraceIdentifier, out var id) ? id : Guid.NewGuid());
+            var requestTraceId = new EventTraceActivity(Guid.NewGuid())
             {
-                serverTraceId = (EventTraceActivity)result;
-            }
-            else
-            {
-                serverTraceId = request.GetRequestCorrelationId();
-            }
+                CorrelationVectorV4 = serverTraceId.CorrelationVectorV4
+            };
 
-            EventTraceActivity requestTraceId = null;
-            if (request.Properties.TryGetValue(PaymentConstants.Web.Properties.ClientTraceId, out result))
-            {
-                requestTraceId = (EventTraceActivity)result;
-            }
-            else
-            {
-                // should never be here.
-                requestTraceId = new EventTraceActivity(Guid.NewGuid()) { CorrelationVectorV4 = serverTraceId.CorrelationVectorV4 };
-            }
+            string operationName = GetOperationName(context);
+            context.Items["OperationName"] = operationName;
 
-            string operationName = string.Format("{0}-{1}", request.Method, request.RequestUri.AbsolutePath.Trim('/'));
-            request.Properties.Add(PaymentConstants.Web.Properties.OperationName, operationName);
+            string trackingId = context.Request.Headers.TryGetValue("X-TrackingId", out var tId) ? tId.ToString() : string.Empty;
 
-            string trackingId = request.GetTrackingId();
+            var stopwatch = Stopwatch.StartNew();
 
-            // Need set the request content before processing.
-            await request.GetRequestPayload();
+            traceRequest?.Invoke(context, string.Empty, operationName, requestTraceId, serverTraceId);
 
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
+            await next(context);
 
-            if (this.TraceRequest != null)
-            {
-                this.TraceRequest(request, string.Empty, operationName, requestTraceId, serverTraceId);
-            }
-
-            HttpResponseMessage response = await base.SendAsync(request, cancellationToken);
-            response.Headers.Add(PaymentConstants.PaymentExtendedHttpHeaders.CorrelationId, requestTraceId.ActivityId.ToString());
             stopwatch.Stop();
 
-            if (this.TraceResponse != null)
+            traceResponse?.Invoke(context, string.Empty, operationName, stopwatch.ElapsedMilliseconds, requestTraceId, serverTraceId);
+
+            if (apiDetailTrace != null)
             {
-                this.TraceResponse(response, string.Empty, operationName, stopwatch.ElapsedMilliseconds, requestTraceId, serverTraceId);
+                await apiDetailTrace(context, operationName, stopwatch.ElapsedMilliseconds, string.Empty, requestTraceId, serverTraceId);
+            }
+        }
+
+        private string GetOperationName(HttpContext context)
+        {
+            var endpoint = context.GetEndpoint();
+            if (endpoint != null)
+            {
+                var descriptor = endpoint.Metadata.GetMetadata<ControllerActionDescriptor>();
+                var method = context.Request.Method;
+
+                if (descriptor != null)
+                {
+                    var controller = descriptor.ControllerName;
+                    var action = descriptor.ActionName;
+
+                    return $"{controller}-{method}-{action}";
+                }
             }
 
-            if (this.ApiDetailTrace != null)
-            {
-                Stopwatch traceOperationStopwatch = new Stopwatch();
-                await this.ApiDetailTrace(request, response, operationName, stopwatch.ElapsedMilliseconds, string.Empty, requestTraceId, serverTraceId);
-                traceOperationStopwatch.Stop();
-            }
-
-            return response;
+            return $"{context.Request.Method}-{context.Request.Path}";
         }
     }
 }

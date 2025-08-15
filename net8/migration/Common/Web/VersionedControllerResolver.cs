@@ -1,4 +1,4 @@
-﻿// <copyright file="VersionedControllerSelector.cs" company="Microsoft Corporation">Copyright (c) Microsoft 2013. All rights reserved.</copyright>
+﻿// <copyright file="VersionedControllerResolver.cs" company="Microsoft Corporation">
 
 using System;
 using System.Collections.Generic;
@@ -8,13 +8,13 @@ using Microsoft.Extensions.Logging;
 
 namespace Microsoft.Commerce.Payments.Common.Web
 {
-    public class VersionedControllerSelector
+    public class VersionedControllerResolver
     {
-        private readonly ILogger<VersionedControllerSelector> logger;
+        private readonly ILogger<VersionedControllerResolver> logger;
         private readonly Dictionary<string, Dictionary<string, Type>> versionedControllers = new(StringComparer.OrdinalIgnoreCase);
         private readonly Dictionary<string, Type> versionlessControllers = new(StringComparer.OrdinalIgnoreCase);
 
-        public VersionedControllerSelector(ILogger<VersionedControllerSelector> logger) => this.logger = logger;
+        public VersionedControllerResolver(ILogger<VersionedControllerResolver> logger) => this.logger = logger;
 
         public void AddVersion(string version, Dictionary<string, Type> controllerMappings)
         {

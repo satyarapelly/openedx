@@ -3,11 +3,13 @@
 namespace Microsoft.Commerce.Payments.Common.Web
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Tracing;
+    using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Commerce.Tracing.Sll;
     using Microsoft.CommonSchema.Services;
     using Microsoft.CommonSchema.Services.Logging;
@@ -15,6 +17,7 @@ namespace Microsoft.Commerce.Payments.Common.Web
     using Ms.Qos;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
+    using Tracing;
 
     public static class SllWebLogger
     {
@@ -124,18 +127,18 @@ namespace Microsoft.Commerce.Payments.Common.Web
                     targetUri = request.RequestUri.IsAbsoluteUri ? request.RequestUri.AbsoluteUri : request.RequestUri.ToString(),
                 }
             };
-                        
+
             operationDetails.Log(
                 succeeded ? EventLevel.Informational : EventLevel.Error,
                 SllLogger.EnvironmentLogOption,
-                (envelope) => 
+                (envelope) =>
                 {
                     object flightingExperimentId;
                     if (request.Properties.TryGetValue(PaymentConstants.Web.Properties.FlightingExperimentId, out flightingExperimentId))
                     {
                         envelope.SetApp(new Telemetry.Extensions.app { expId = flightingExperimentId.ToString() });
                     }
-                    
+
                     object scenarioId;
                     if (request.Properties.TryGetValue(PaymentConstants.Web.Properties.ScenarioId, out scenarioId) && envelope.tags != null)
                     {

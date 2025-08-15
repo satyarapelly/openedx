@@ -1,11 +1,12 @@
-// <copyright file="SllCorrelationVectorManager.cs" company="Microsoft Corporation">Copyright (c) Microsoft 2013. All rights reserved.</copyright>
+﻿// <copyright file="SllCorrelationVectorManager.cs" company="Microsoft Corporation">Copyright (c) Microsoft 2013. All rights reserved.</copyright>
 
 namespace Microsoft.Commerce.Payments.Common.Web
 {
+    using System.Diagnostics.Tracing;
     using System.Linq;
-    using System.Net;
     using System.Net.Http;
     using System.Text;
+    using System.Web;
     using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.CommonSchema.Services.Logging;
     using Microsoft.Diagnostics.Tracing;
@@ -34,24 +35,12 @@ namespace Microsoft.Commerce.Payments.Common.Web
                 string correlationVectorString = request.Headers.GetValues(CorrelationVector.HeaderName).First();
 
                 // UrlDecode fixes the cases where the CV has characters like '/' and '+'
-                string errorMessage = ValidateCorrelationVector(WebUtility.UrlDecode(correlationVectorString));
+                string errorMessage = ValidateCorrelationVector(HttpUtility.UrlDecode(correlationVectorString, Encoding.UTF8));
 
                 if (errorMessage != null)
                 {
                     // If it's invalid correlation vector, trace down error but proceed anyway.
-                    if (LoggingConfig.Mode == LoggingMode.Sll)
-                    {
-                        SllLogger.TraceMessage(string.Format("Invalid correlation vector: {0}, error: {1}.", correlationVectorString, errorMessage), EventLevel.Error);
-                    }
-                    else if (LoggingConfig.Mode == LoggingMode.OpenTelemetry)
-                    {
-                        Logger.Qos.TraceMessage(string.Format("Invalid correlation vector: {0}, error: {1}.", correlationVectorString, errorMessage), QosEventLevel.Error);
-                    }
-                    else
-                    {
-                        SllLogger.TraceMessage(string.Format("Invalid correlation vector: {0}, error: {1}.", correlationVectorString, errorMessage), EventLevel.Error);
-                        Logger.Qos.TraceMessage(string.Format("Invalid correlation vector: {0}, error: {1}.", correlationVectorString, errorMessage), QosEventLevel.Error);
-                    }              
+                    SllLogger.TraceMessage(string.Format("Invalid correlation vector: {0}, error: {1}.", correlationVectorString, errorMessage), EventLevel.Error);
                 }
                 else
                 {

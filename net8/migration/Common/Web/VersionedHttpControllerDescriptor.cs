@@ -1,29 +1,45 @@
-// <copyright file="VersionedHttpControllerDescriptor.cs" company="Microsoft">Copyright (c) Microsoft 2013. All rights reserved.</copyright>
+﻿// <copyright file="VersionedHttpControllerDescriptor.cs" company="Microsoft">Copyright (c) Microsoft 2013. All rights reserved.</copyright>
+
+using System;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Microsoft.Commerce.Payments.Common.Web
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.Linq;
-    using System.Web.Http;
-    using System.Web.Http.Controllers;
-    using System.Web.Http.Filters;
-
-    internal class VersionedHttpControllerDescriptor : HttpControllerDescriptor
+    /// <summary>
+    /// Represents metadata for a versioned controller, including its type and associated filters.
+    /// </summary>
+    public class VersionedControllerDescriptor
     {
-        private Collection<IFilter> filters;
+        /// <summary>
+        /// Gets the controller name used in routing.
+        /// </summary>
+        public string ControllerName { get; }
 
-        public VersionedHttpControllerDescriptor(HttpConfiguration configuration, string controllerName, Type controllerType, List<IFilter> filters)
-            : base(configuration, controllerName, controllerType)
-        {
-            this.filters = new Collection<IFilter>(filters);
-        }
+        /// <summary>
+        /// Gets the controller <see cref="Type"/>.
+        /// </summary>
+        public Type ControllerType { get; }
 
-        public override Collection<IFilter> GetFilters()
+        /// <summary>
+        /// Gets the filters associated with this controller.
+        /// </summary>
+        public IReadOnlyList<IFilterMetadata> Filters { get; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="VersionedControllerDescriptor"/> class.
+        /// </summary>
+        /// <param name="controllerName">The controller name.</param>
+        /// <param name="controllerType">The controller type.</param>
+        /// <param name="filters">The filters associated with this controller.</param>
+        public VersionedControllerDescriptor(string controllerName, Type controllerType, IList<IFilterMetadata>? filters = null)
         {
-            Collection<IFilter> existingFilters = base.GetFilters();
-            return new Collection<IFilter>(existingFilters.Concat(this.filters).ToList());
+            if (string.IsNullOrWhiteSpace(controllerName))
+                throw new ArgumentException("Controller name cannot be null or empty.", nameof(controllerName));
+
+            ControllerName = controllerName;
+            ControllerType = controllerType ?? throw new ArgumentNullException(nameof(controllerType));
+            Filters = filters is not null ? new List<IFilterMetadata>(filters) : Array.Empty<IFilterMetadata>();
         }
     }
 }

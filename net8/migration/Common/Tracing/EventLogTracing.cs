@@ -5,6 +5,7 @@ namespace Microsoft.Commerce.Payments.Common.Tracing
     using System;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
+    using System.Runtime.Versioning;
 
     /// <summary>
     /// A class for writing warning and error traces to a Windows event log.
@@ -39,17 +40,29 @@ namespace Microsoft.Commerce.Payments.Common.Tracing
 
         public void Information(string message, params object[] args)
         {
+#if WINDOWS
             this.Trace(message, EventLogEntryType.Information, args);
+#else
+            this.Trace(message, 0, args); // 0 is a placeholder, will not be used
+#endif
         }
 
         public void Warning(string message, params object[] args)
         {
+#if WINDOWS
             this.Trace(message, EventLogEntryType.Warning, args);
+#else
+            this.Trace(message, 0, args);
+#endif
         }
 
         public void Error(string message, params object[] args)
         {
+#if WINDOWS
             this.Trace(message, EventLogEntryType.Error, args);
+#else
+            this.Trace(message, 0, args);
+#endif
         }
 
         [SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", Justification = "Ignoring as these are actually used in specific diagnostic flow.")]
@@ -61,7 +74,8 @@ namespace Microsoft.Commerce.Payments.Common.Tracing
             }
         }
 
-        private void Trace(string message, EventLogEntryType eventType, params object[] args)
+        [SupportedOSPlatform("windows")]
+        private void TraceWindows(string message, EventLogEntryType eventType, params object[] args)
         {
             if (this.diagnosticTrace)
             {
@@ -88,6 +102,19 @@ namespace Microsoft.Commerce.Payments.Common.Tracing
             {
                 log.WriteEntry(string.Format(message, args), eventType);
             }
+        }
+
+        private void Trace(string message, int eventType, params object[] args)
+        {
+#if WINDOWS
+            this.TraceWindows(message, (EventLogEntryType)eventType, args);
+#else
+            // Only diagnostic trace on non-Windows
+            if (this.diagnosticTrace)
+            {
+                System.Diagnostics.Trace.WriteLine(string.Format(message, args));
+            }
+#endif
         }
     }
 }

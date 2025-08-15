@@ -9,12 +9,11 @@ namespace Microsoft.Commerce.Payments.Common.Tracing
     public enum LoggingMode
     {
         Sll,
-        OpenTelemetry,
-        Default
+        OpenTelemetry
     }
 
     public static class LoggingConfig
     {
-        public static LoggingMode Mode { get; set; }
+        public static LoggingMode Mode { get; set; } = LoggingMode.Sll;
     }
 }

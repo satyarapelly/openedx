@@ -1,4 +1,4 @@
-// <copyright file="CertificateHelper.cs" company="Microsoft">Copyright (c) Microsoft 2013. All rights reserved.</copyright>
+﻿// <copyright file="CertificateHelper.cs" company="Microsoft">Copyright (c) Microsoft 2013. All rights reserved.</copyright>
 
 namespace Microsoft.Commerce.Payments.Common.Authorization
 {
@@ -126,19 +126,7 @@ namespace Microsoft.Commerce.Payments.Common.Authorization
                 throw TraceCore.TraceException(new CertificateException(message));
             }
 
-            if (LoggingConfig.Mode == LoggingMode.Sll)
-            {
-                SllWebLogger.TracePXServiceException(getCertInfoStringBuilder.ToString(), new EventTraceActivity());
-            }
-            else if (LoggingConfig.Mode == LoggingMode.OpenTelemetry)
-            {
-                Logger.Qos.TracePXServiceException(getCertInfoStringBuilder.ToString(), new EventTraceActivity());
-            }
-            else
-            {
-                SllWebLogger.TracePXServiceException(getCertInfoStringBuilder.ToString(), new EventTraceActivity());
-                Logger.Qos.TracePXServiceException(getCertInfoStringBuilder.ToString(), new EventTraceActivity());
-            }
+            SllWebLogger.TracePXServiceException(getCertInfoStringBuilder.ToString(), new EventTraceActivity());
 
             return foundCert;
         }

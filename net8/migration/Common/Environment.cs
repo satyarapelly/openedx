@@ -1,11 +1,11 @@
-// <copyright file="Environment.cs" company="Microsoft">Copyright (c) Microsoft 2013. All rights reserved.</copyright>
+﻿// <copyright file="Environment.cs" company="Microsoft">Copyright (c) Microsoft 2023. All rights reserved.</copyright>
+
+using System;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Commerce.Payments.Common.Tracing;
 
 namespace Microsoft.Commerce.Payments.Common.Environments
 {
-    using System;
-    using System.Configuration;
-    using Microsoft.Commerce.Payments.Common.Tracing;
-
     /// <summary>
     /// Environment settings for Payments that determines the current Environment.
     /// </summary>
@@ -13,47 +13,45 @@ namespace Microsoft.Commerce.Payments.Common.Environments
     {
         public const string EnvironmentSettingKey = "Environment";
 
-        private static object objectLock = new object();
+        private static readonly object objectLock = new();
         private static volatile Environment currentEnvironment = null;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Environment"/> class.
-        /// </summary>
-        protected Environment()
+        // Replace with your actual tracing ID if required.
+        private static readonly EventTraceActivity environmentEventTracingId = new(new Guid("169DB7AA-EEF1-4A50-A748-4FF842F51A0E"));
+
+        private IConfiguration Configuration { get; }
+
+        private Environment()
         {
+            // Use the standard configuration builder (appsettings.json + env vars, etc.)
+            Configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: true)
+                .AddEnvironmentVariables()
+                .Build();
         }
 
-        /// <summary>
-        /// Gets the singleton instance of the environment.  
-        /// </summary>
         public static Environment Current
         {
             get
             {
-                if (Environment.currentEnvironment == null)
+                if (currentEnvironment == null)
                 {
-                    lock (Environment.objectLock)
+                    lock (objectLock)
                     {
-                        if (Environment.currentEnvironment == null)
+                        if (currentEnvironment == null)
                         {
-                            Environment current = new Environment();
-                            current.Initialize();
-                            Environment.currentEnvironment = current;
+                            var instance = new Environment();
+                            instance.Initialize();
+                            currentEnvironment = instance;
                         }
                     }
                 }
-
-                return Environment.currentEnvironment;
+                return currentEnvironment;
             }
         }
 
-        public static bool IsProdOrPPEEnvironment
-        {
-            get
-            {
-                return Current.EnvironmentType == EnvironmentType.Production || Current.EnvironmentType == EnvironmentType.PPE;
-            }
-        }
+        public static bool IsProdOrPPEEnvironment =>
+            Current.EnvironmentType == EnvironmentType.Production || Current.EnvironmentType == EnvironmentType.PPE;
 
         public EnvironmentType EnvironmentType { get; private set; }
 
@@ -61,61 +59,55 @@ namespace Microsoft.Commerce.Payments.Common.Environments
 
         public string ApplicationInsightInstrumentKey { get; private set; }
 
-        /// <summary>
-        /// Initialize the environment name and type.
-        /// </summary>
-        private void InitializeEnvironment()
-        {
-            string environmentName = ConfigurationManager.AppSettings[EnvironmentSettingKey];
-            this.EnvironmentName = environmentName == null ? EnvironmentNames.OneBox.PaymentOnebox : environmentName.ToUpper();
-            this.ApplicationInsightInstrumentKey = ConfigurationManager.AppSettings["APPINSIGHTS_INSTRUMENTATIONKEY"];
-
-            switch (this.EnvironmentName)
-            {
-                case EnvironmentNames.Production.PXPMEPRODEastUS2:
-                case EnvironmentNames.Production.PXPMEPRODNorthCentralUS:
-                case EnvironmentNames.Production.PXPMEPRODWestCentralUS:
-                case EnvironmentNames.Production.PXPMEPRODWestUS2:
-                case EnvironmentNames.Production.PXPMEPRODWestUS:
-                case EnvironmentNames.Production.PXPMEPRODCentralUS:
-                case EnvironmentNames.Production.PXPMEPRODEastUS:
-                case EnvironmentNames.Production.PXPMEPRODSouthCentralUS:
-                    this.EnvironmentType = EnvironmentType.Production;
-                    break;
-                case EnvironmentNames.PPE.PXPMEPPEEastUS2:
-                case EnvironmentNames.PPE.PXPMEPPENorthCentralUS:
-                case EnvironmentNames.PPE.PXPMEPPEWestCentralUS:
-                case EnvironmentNames.PPE.PXPMEPPEEastUS:
-                case EnvironmentNames.PPE.PXPMEPPEWestUS:
-                    this.EnvironmentType = EnvironmentType.PPE;
-                    break;
-                case EnvironmentNames.Integration.PXPMEIntWestUS:
-                case EnvironmentNames.Integration.PXPMEIntWestUS2:
-                    this.EnvironmentType = EnvironmentType.Integration;
-                    break;
-                case EnvironmentNames.OneBox.PaymentOnebox:
-                    this.EnvironmentType = EnvironmentType.OneBox;
-                    break;
-                case EnvironmentNames.AirCapi.PXAirCapi1:
-                    this.EnvironmentType = EnvironmentType.Aircapi;
-                    break;
-                default:
-                    throw TraceCore.TraceException<InvalidOperationException>(new InvalidOperationException(string.Format("The environment name '{0}' does not map to any known environment type.", this.EnvironmentName)));
-            }
-        }
-
-        /// <summary>
-        /// Initialize the Autopilot Environment
-        /// </summary>
         private void Initialize()
         {
-            this.InitializeEnvironment();
+            InitializeEnvironment();
 
-            // turn real time logging on for PROD only
-            if (this.EnvironmentType == EnvironmentType.Production || this.EnvironmentType == EnvironmentType.PPE)
+            if (EnvironmentType == EnvironmentType.Production || EnvironmentType == EnvironmentType.PPE)
             {
                 SllLogger.SetRealtimeLogging();
             }
+        }
+
+        private void InitializeEnvironment()
+        {
+            var environmentName = Configuration[EnvironmentSettingKey];
+            EnvironmentName = string.IsNullOrWhiteSpace(environmentName) ? EnvironmentNames.OneBox.PaymentOnebox : environmentName.ToUpperInvariant();
+            ApplicationInsightInstrumentKey = Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"];
+
+            EnvironmentType = EnvironmentName switch
+            {
+                // Production
+                EnvironmentNames.Production.PXPMEPRODEastUS2 or
+                EnvironmentNames.Production.PXPMEPRODNorthCentralUS or
+                EnvironmentNames.Production.PXPMEPRODWestCentralUS or
+                EnvironmentNames.Production.PXPMEPRODWestUS2 or
+                EnvironmentNames.Production.PXPMEPRODWestUS or
+                EnvironmentNames.Production.PXPMEPRODCentralUS or
+                EnvironmentNames.Production.PXPMEPRODEastUS or
+                EnvironmentNames.Production.PXPMEPRODSouthCentralUS => EnvironmentType.Production,
+
+                // PPE
+                EnvironmentNames.PPE.PXPMEPPEEastUS2 or
+                EnvironmentNames.PPE.PXPMEPPENorthCentralUS or
+                EnvironmentNames.PPE.PXPMEPPEWestCentralUS or
+                EnvironmentNames.PPE.PXPMEPPEEastUS or
+                EnvironmentNames.PPE.PXPMEPPEWestUS => EnvironmentType.PPE,
+
+                // Integration
+                EnvironmentNames.Integration.PXPMEIntWestUS or
+                EnvironmentNames.Integration.PXPMEIntWestUS2 => EnvironmentType.Integration,
+
+                // OneBox
+                EnvironmentNames.OneBox.PaymentOnebox => EnvironmentType.OneBox,
+
+                // AirCapi
+                EnvironmentNames.AirCapi.PXAirCapi1 => EnvironmentType.Aircapi,
+
+                // Unknown
+                _ => throw TraceCore.TraceException<InvalidOperationException>(
+                        new InvalidOperationException($"The environment name '{EnvironmentName}' does not map to any known environment type."))
+            };
         }
     }
 }

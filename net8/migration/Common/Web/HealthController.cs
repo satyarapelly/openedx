@@ -3,8 +3,6 @@
 using Microsoft.AspNetCore.Mvc;
 namespace Microsoft.Commerce.Payments.Common.Web
 {
-    [ApiController]
-    [Route("api/[controller]")]
     public class HealthController : ControllerBase
     {
         [HttpGet("probe")]

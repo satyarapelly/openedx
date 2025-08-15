@@ -509,7 +509,7 @@ namespace Microsoft.Commerce.Payments.Common.OpenTelemetry
         public static void TracePXServiceException(
            ILogger logger,
            string exceptionMessage,
-           Commerce.Tracing.EventTraceActivity requestTraceId)
+           EventTraceActivity requestTraceId)
         {
             const int LogMaxLength = 3375;
 

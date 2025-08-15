@@ -1,81 +1,63 @@
-// <copyright file="ServiceInstrumentationScopeHandler.cs" company="Microsoft Corporation">Copyright (c) Microsoft 2013. All rights reserved.</copyright>
+﻿// <copyright file="ServiceInstrumentationScopeHandler.cs" company="Microsoft Corporation">Copyright (c) Microsoft 2013. All rights reserved.</copyright>
+
+using System.IO;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Commerce.Payments.Common.Tracing;
 
 namespace Microsoft.Commerce.Payments.Common.Web
 {
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Microsoft.Commerce.Payments.Common.Tracing;
-
-    public class ServiceInstrumentationScopeHandler : DelegatingHandler
+    public class ServiceInstrumentationScopeMiddleware
     {
-        private ServiceInstrumentationCounters counters;
+        private readonly RequestDelegate _next;
+        private readonly ServiceInstrumentationCounters _counters;
 
-        public ServiceInstrumentationScopeHandler(ServiceInstrumentationCounters counters)
+        public ServiceInstrumentationScopeMiddleware(RequestDelegate next, ServiceInstrumentationCounters counters)
         {
-            this.counters = counters;
+            _next = next;
+            _counters = counters;
         }
 
-        public ServiceInstrumentationScopeHandler(ServiceInstrumentationCounters counters, HttpMessageHandler innerHandler)
-            : base(innerHandler)
+        public async Task InvokeAsync(HttpContext context)
         {
-            this.counters = counters;
-        }
+            var request = context.Request;
+            var response = context.Response;
 
-        /// <summary>
-        /// Get the request api version from the request header.
-        /// </summary>
-        /// <param name="request">The request.</param>
-        /// <returns>The api version in string.</returns>
-        protected virtual string GetRequestApiVersion(HttpRequestMessage request)
-        {
-            if (request.Properties.ContainsKey(PaymentConstants.Web.Properties.Version))
-            {
-                return request.GetApiVersion().ExternalVersion;
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        /// Determines the appropriate perf counter to use for this operation and manages the instrumentation scope.
-        /// </summary>
-        /// <param name="request">The inbound request.</param>
-        /// <param name="cancellationToken">A token which may be used to listen for cancellation.</param>
-        /// <returns>The outbound response.</returns>
-        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
-        {
             string operationName = request.GetOperationName();
-            string apiVersion = this.GetRequestApiVersion(request);
-            string instanceName = string.IsNullOrEmpty(apiVersion) ? operationName : operationName + "_" + apiVersion;
+            string externalVersion = request.GetApiVersion();
+            string instanceName = string.IsNullOrEmpty(externalVersion) ? operationName : $"{operationName}_{externalVersion}";
 
-            using (ServiceInstrumentationScope scope = new ServiceInstrumentationScope(
-                this.counters, 
-                request.GetRequestCorrelationId(), 
-                null, 
-                null,
-                instanceName))
+            var traceId = request.GetRequestCorrelationId();
+
+            using (var scope = new ServiceInstrumentationScope(_counters, traceId, null, null, instanceName))
             {
-                HttpResponseMessage response = await base.SendAsync(request, cancellationToken);
+                // Buffer the response to capture status code
+                var originalBody = response.Body;
+                using var memoryStream = new MemoryStream();
+                response.Body = memoryStream;
+
+                await _next(context); // invoke next middleware
+
+                response.Body = originalBody;
+                memoryStream.Seek(0, SeekOrigin.Begin);
+                await memoryStream.CopyToAsync(originalBody);
+
+                var statusCode = context.Response.StatusCode;
 
                 if (scope != null)
                 {
-                    if (response.StatusCode.IsSuccessStatus() 
-                        || response.DoesReponseIndicateIdempotentTransaction()
-                        || response.StatusCode == System.Net.HttpStatusCode.GatewayTimeout)
+                    if (statusCode >= 200 && statusCode < 300 ||
+                        context.Response.DoesReponseIndicateIdempotentTransaction() ||
+                        statusCode == StatusCodes.Status504GatewayTimeout)
                     {
                         scope.Success();
                     }
 
-                    if (response.StatusCode.IsClientError())
+                    if (statusCode >= 400 && statusCode < 500)
                     {
                         scope.UserError();
                     }
                 }
-
-                return response;
             }
         }
     }
