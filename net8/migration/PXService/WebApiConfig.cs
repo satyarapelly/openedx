@@ -49,12 +49,8 @@ namespace Microsoft.Commerce.Payments.PXService
                 config.MessageHandlers.Add(new PXServiceCorsHandler(settings));
             }
 
-            config.MessageHandlers.Add(new PXServiceInputValidationHandler());
-
-            if (settings.PIDLDocumentValidationEnabled)
-            {
-                config.MessageHandlers.Add(new PXServicePIDLValidationHandler());
-            }
+            // Legacy message handlers for input and PIDL validation have been
+            // migrated to ASP.NET Core middleware and are no longer registered here.
 
             config.Properties[PXSettingsType] = settings;
             config.Filters.Add(new PXServiceExceptionFilter());
