@@ -14,6 +14,7 @@ using Microsoft.Diagnostics.Tracing;
 using Microsoft.Commerce.Payments.Common.Web;
 using Microsoft.Commerce.Payments.Common.Environments;
 using System.Diagnostics.Tracing;
+using Microsoft.Commerce.Payments.PXService.Handlers;
 using Environment = Microsoft.Commerce.Payments.Common.Environments.Environment;
 
 // If your custom handlers were ported to middleware, import their namespaces too:
@@ -36,6 +37,13 @@ string envName = builder.Configuration["PXService:EnvironmentName"]
 var pxSettings = PXServiceSettings.CreateInstance(Environment.Current.EnvironmentType, Environment.Current.EnvironmentName);
 
 builder.Services.AddSingleton(pxSettings);
+
+// Define supported API versions and controllers allowed without an explicit version
+var supportedVersions = new Dictionary<string, ApiVersion>(StringComparer.OrdinalIgnoreCase)
+{
+    { "v7.0", new ApiVersion("v7.0", new Version(7, 0)) }
+};
+string[] versionlessControllers = { GlobalConstants.ControllerNames.ProbeController };
 
 // Controllers + Newtonsoft.Json (Nulls ignored like WebApiConfig)
 builder.Services.AddScoped<VersionGateFilter>();
@@ -83,6 +91,9 @@ if (pxSettings.ValidateCors)
 {
      app.UseMiddleware<PXServiceCorsHandler>(pxSettings);
 }
+
+// Ensure requests include a supported api-version and block unsupported ones
+app.UseMiddleware<PXServiceApiVersionHandler>(supportedVersions, versionlessControllers, pxSettings);
 
 app.UseRouting();
 
