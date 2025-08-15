@@ -1,4 +1,6 @@
+using System;
 using System.Net;
+using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Routing;
@@ -47,10 +49,9 @@ ApplicationInsightsProvider.SetupAppInsightsConfiguration(pxSettings.Application
 EnsureSllInitialized();
 
 // Define supported API versions and controllers allowed without an explicit version
-var supportedVersions = new Dictionary<string, ApiVersion>(StringComparer.OrdinalIgnoreCase)
-{
-    { "v7.0", new ApiVersion("v7.0", new Version(7, 0)) }
-};
+var supportedVersions = VersionCatalog.Supported.ToDictionary(
+    kvp => kvp.Key,
+    kvp => new ApiVersion(kvp.Key, new Version(kvp.Value)));
 string[] versionlessControllers = { GlobalConstants.ControllerNames.ProbeController };
 
 // Controllers + Newtonsoft.Json (Nulls ignored like WebApiConfig)
