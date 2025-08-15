@@ -3,6 +3,7 @@
 namespace Microsoft.Commerce.Payments.PXCommon
 {
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Http.Extensions;
     using Microsoft.AspNetCore.Routing;
     using Microsoft.Commerce.Payments.Common;
     using Microsoft.Commerce.Payments.Common.Tracing;
@@ -10,6 +11,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Linq;
     using System.Net;
     using System.Net.Http;
     using System.Text;
@@ -33,6 +35,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
         private const int DefaultConnectionLeaseTimeoutInMs = 120 * 1000;
         private const int DefaultMaxIdleTime = -1;
         private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly RequestDelegate _next;
         private bool isDependentServiceRequest;
 
         public PXTraceCorrelationHandler(string serviceName, HttpMessageHandler innerHandler, bool isDependentServiceRequest, Action<string, EventTraceActivity> logError = null, IHttpContextAccessor httpContextAccessor = null)
@@ -41,6 +44,8 @@ namespace Microsoft.Commerce.Payments.PXCommon
             this.ServiceName = serviceName;
             this.isDependentServiceRequest = isDependentServiceRequest;
             this.httpContextAccessor = httpContextAccessor;
+            this.LogError = logError;
+            this._next = _ => Task.CompletedTask;
         }
 
         public PXTraceCorrelationHandler(
@@ -52,6 +57,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
             this.isDependentServiceRequest = false;
             this.LogIncomingRequestToAppInsight = logIncomingRequestToAppInsight;
             this.httpContextAccessor = httpContextAccessor;
+            this._next = _ => Task.CompletedTask;
         }
 
         public PXTraceCorrelationHandler(
@@ -66,6 +72,18 @@ namespace Microsoft.Commerce.Payments.PXCommon
             this.isDependentServiceRequest = isDependentServiceRequest;
             this.LogToApplicationInsight = logOutgoingToAppInsight;
             this.httpContextAccessor = httpContextAccessor;
+            this._next = _ => Task.CompletedTask;
+        }
+
+        public PXTraceCorrelationHandler(
+            RequestDelegate next,
+            string serviceName,
+            bool isDependentServiceRequest = false,
+            Action<string, EventTraceActivity> logError = null,
+            IHttpContextAccessor httpContextAccessor = null)
+            : this(serviceName, (HttpMessageHandler)null, isDependentServiceRequest, logError, httpContextAccessor)
+        {
+            this._next = next;
         }
 
         private Action<string, string, HttpRequestMessage, HttpResponseMessage, string, string, string, string> LogToApplicationInsight { get; set; }
@@ -132,6 +150,103 @@ namespace Microsoft.Commerce.Payments.PXCommon
             else
             {
                 return this.SendAsyncIncoming(request, cancellationToken);
+            }
+        }
+
+        public async Task InvokeAsync(HttpContext context)
+        {
+            if (this.isDependentServiceRequest)
+            {
+                await this._next(context);
+                return;
+            }
+
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            string startTime = DateTime.UtcNow.ToString("o");
+
+            var request = context.Request;
+            var requestMessage = request.ToHttpRequestMessage();
+
+            var routeValues = context.GetRouteData()?.Values;
+            if (routeValues != null)
+            {
+                requestMessage.SetRouteData(new RouteValueDictionary(routeValues));
+            }
+
+            void CopyItemsToOptions()
+            {
+                foreach (var item in context.Items)
+                {
+                    if (item.Key is string key)
+                    {
+                        requestMessage.Options.Set(new HttpRequestOptionsKey<object>(key), item.Value);
+                    }
+                }
+            }
+
+            CopyItemsToOptions();
+
+            string operationName = this.GetOperationName(requestMessage);
+            if (!context.Items.ContainsKey(PaymentConstants.Web.Properties.OperationName))
+            {
+                context.Items[PaymentConstants.Web.Properties.OperationName] = operationName;
+                requestMessage.Options.Set(new HttpRequestOptionsKey<object>(PaymentConstants.Web.Properties.OperationName), operationName);
+            }
+
+            CorrelationVector correlationVector = SllCorrelationVectorManager.SetCorrelationVectorAtRequestEntry(requestMessage);
+            EventTraceActivity serverTraceId = new EventTraceActivity { CorrelationVectorV4 = correlationVector };
+            EventTraceActivity requestTraceId = GetOrCreateCorrelationIdFromHeader(requestMessage);
+
+            if (!context.Items.ContainsKey(PaymentConstants.Web.Properties.TrackingId))
+            {
+                string trackingId = GetOrCreateTrackingIdFromHeader(requestMessage);
+                context.Items[PaymentConstants.Web.Properties.TrackingId] = trackingId;
+                requestMessage.Options.Set(new HttpRequestOptionsKey<object>(PaymentConstants.Web.Properties.TrackingId), trackingId);
+            }
+
+            if (!context.Items.ContainsKey(PaymentConstants.Web.Properties.ServerTraceId))
+            {
+                context.Items[PaymentConstants.Web.Properties.ServerTraceId] = serverTraceId;
+            }
+
+            if (!context.Items.ContainsKey(PaymentConstants.Web.Properties.ClientTraceId))
+            {
+                context.Items[PaymentConstants.Web.Properties.ClientTraceId] = requestTraceId;
+            }
+
+            string reqPayload = await request.GetRequestPayload();
+            requestMessage.Content = new StringContent(reqPayload ?? string.Empty, Encoding.UTF8, request.ContentType);
+
+            try
+            {
+                await this._next(context);
+
+                CopyItemsToOptions();
+
+                context.Response.Headers.Add("x-info", "px-azure");
+                context.Response.Headers.Add(PaymentConstants.PaymentExtendedHttpHeaders.CorrelationId, requestTraceId.ActivityId.ToString());
+                foreach (DependenciesCertInfo dependencyNameUsingCert in Enum.GetValues(typeof(DependenciesCertInfo)))
+                {
+                    this.RemoveRequestContextItem(dependencyNameUsingCert.ToString());
+                }
+
+                var responsePayload = await context.Response.GetResponsePayloadAsync();
+                var responseMessage = new HttpResponseMessage((HttpStatusCode)context.Response.StatusCode)
+                {
+                    Content = new StringContent(responsePayload ?? string.Empty, Encoding.UTF8, context.Response.ContentType)
+                };
+
+                foreach (var header in context.Response.Headers)
+                {
+                    responseMessage.Headers.TryAddWithoutValidation(header.Key, header.Value.ToArray());
+                }
+
+                await this.TraceOperation(requestMessage, responseMessage, request.GetOperationNameWithPendingOnInfo(), startTime, stopwatch, string.Empty, requestTraceId, serverTraceId);
+            }
+            finally
+            {
+                stopwatch.Stop();
             }
         }
 
