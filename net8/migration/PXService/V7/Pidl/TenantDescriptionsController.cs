@@ -10,8 +10,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using Microsoft.Commerce.Payments.PidlFactory.V7;
     using Microsoft.Commerce.Payments.PidlModel.V7;
 
-    [ApiController]
-    [Route("api/[controller]")]
     public class TenantDescriptionsController : ControllerBase
     {
         /// <summary>
@@ -29,7 +27,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>A list of PIDLResource object</returns>
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpGet]
-        [Route("[action]")]
         public List<PIDLResource> Get(string accountId, string type, string country, string language = null, string partner = Constants.ServiceDefaults.DefaultPartnerName)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();

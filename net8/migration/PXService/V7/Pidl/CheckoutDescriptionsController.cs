@@ -18,8 +18,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using Microsoft.Commerce.Payments.PXCommon;
     using Microsoft.Commerce.Payments.PXService.Model.PaymentThirdPartyService;
 
-    [ApiController]
-    [Route("api/[controller]")]
     public class CheckoutDescriptionsController : ProxyController
     {
         /// <summary>
@@ -39,7 +37,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <param name="scenario" required="false" cref="string" in="query">Scenario name</param>
         /// <returns>A list of PIDLResource</returns>
         [HttpGet]
-        [Route("[action]")]
         public async Task<object> GetCheckoutDescriptions(
             string checkoutId,
             string paymentProviderId,
@@ -124,7 +121,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
 
                     var backButton = pidl.GetDisplayHintById("backButton") as ButtonDisplayHint;
                     if (!string.Equals(scenario, Constants.ScenarioNames.PidlClientAction, StringComparison.OrdinalIgnoreCase))
-                    {   
+                    {
                         if (backButton != null)
                         {
                             backButton.IsHidden = true;
@@ -221,11 +218,11 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 if (string.Equals(scenario, Constants.ScenarioNames.PidlContext, StringComparison.OrdinalIgnoreCase))
                 {
                     PidlDocInfo info = new PidlDocInfo();
-                    Dictionary<string, string> parameters = new Dictionary<string, string>() 
-                    { 
+                    Dictionary<string, string> parameters = new Dictionary<string, string>()
+                    {
                       { "checkoutId", checkoutId }, { "language", language }, { "redirectUrl", redirectUrl },
                       { "paymentProviderId", paymentProviderId }, { "partner", partner }, { "operation", "RenderPidlPage" }, { "family", family },
-                      { "type", type }, { "scenario", Constants.ScenarioNames.PidlClientAction }, { "country", country } 
+                      { "type", type }, { "scenario", Constants.ScenarioNames.PidlClientAction }, { "country", country }
                     };
 
                     info.SetParameters(parameters);

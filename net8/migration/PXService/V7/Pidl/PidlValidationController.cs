@@ -8,8 +8,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using Microsoft.Commerce.Payments.PidlFactory.V7;
     using Microsoft.Commerce.Payments.PidlModel.V7;
 
-    [ApiController]
-    [Route("api/[controller]")]
     public class PidlValidationController : ControllerBase
     {
         /// <summary>
@@ -23,7 +21,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A payment instrument object</response>
         /// <returns>A PidlExecutionResult object</returns>
         [HttpPost]
-        [Route("[action]")]
         public PidlExecutionResult Post([FromBody] PidlValidationParameter validationParameter, string language = null)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();

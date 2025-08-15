@@ -12,8 +12,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentClient
     using Microsoft.Commerce.Payments.PXService.Model.PaymentOrchestratorService;
     using static Microsoft.Commerce.Payments.PXService.V7.Constants;
 
-    [ApiController]
-    [Route("api/[controller]")]
     public class PaymentRequestsExController : ProxyController
     {
         /// <summary>
@@ -27,7 +25,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentClient
         /// <response code="200">PaymentRequest object</response>
         /// <returns>PaymentRequest object</returns>
         [HttpPost]
-        [Route("[action]")]
         public async Task<HttpResponseMessage> AttachChallengeData(
             [FromBody] PIDLData paymentInstrument,
             string paymentRequestId)
@@ -70,7 +67,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentClient
         /// <response code="200">PaymentRequest object</response>
         /// <returns>PaymentRequest object</returns>
         [HttpPost]
-        [Route("[action]")]
         public async Task<HttpResponseMessage> RemoveEligiblePaymentmethods(
             [FromBody] PIDLData paymentInstrument,
             string paymentRequestId)

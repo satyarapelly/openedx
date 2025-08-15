@@ -19,8 +19,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using Microsoft.Commerce.Payments.PXService.V7.Contexts;
     using Newtonsoft.Json;
 
-    [ApiController]
-    [Route("api/[controller]")]
     public class InitializationController : ProxyController
     {
         /// <summary>
@@ -33,7 +31,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">An Initialize object</response>
         /// <returns>A Initialize result include all payment client component props</returns>
         [HttpPost]
-        [Route("[action]")]
         public async Task<HttpResponseMessage> Initialize(
             [FromBody] PIDLData initializeData)
         {
@@ -220,7 +217,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
 
                 if (this.ExposedFlightFeatures?.Contains(PXCommon.Flighting.Features.PXEnableCachedPrefetcherData, StringComparer.OrdinalIgnoreCase) ?? false
                     && componentType.Key.Equals(V7.Constants.Component.Payment))
-                {                    
+                {
                     foreach (var pidlDesc in descriptions)
                     {
                         if (pidlDesc?.PIDLInstanceContexts != null)
@@ -274,7 +271,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                     }
                 }
             }
-        }        
+        }
 
         private async Task<List<PIDLResource>> GetDescriptionsForEeligibleComponents(string partner, string operation, string component, string scenario, string family, string type, RequestContext requestContext, EventTraceActivity traceActivityId, CheckoutRequestClientActions checkoutRequestClientActions, PaymentRequestClientActions paymentRequestClientActions)
         {
@@ -326,6 +323,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             }
 
             return null;
-        }        
+        }
     }
 }

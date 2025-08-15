@@ -21,8 +21,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using Tracing;
     using static Microsoft.Commerce.Payments.PXService.V7.Constants;
 
-    [ApiController]
-    [Route("api/[controller]")]
     public class WalletsController : ProxyController
     {
         /// <summary>
@@ -36,7 +34,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A json configuration</response>
         /// <returns>Json configuration</returns>
         [HttpGet]
-        [Route("[action]")]
         public async Task<HttpResponseMessage> GetWalletConfig(
             string partner = null,
             string client = null)
@@ -99,7 +96,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">Returns the wallet session object</response>
         /// <returns>Returns wallet session object</returns>
         [HttpPost]
-        [Route("[action]")]
         public async Task<string> SetupWalletProviderSession(
             [FromBody] SetupProviderSessionIncomingPayload payload)
         {
@@ -121,7 +117,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">Returns the session id</response>
         /// <returns>Returns session id</returns>
         [HttpPost]
-        [Route("[action]")]
         public async Task<HttpResponseMessage> ProvisionWalletToken(
             string accountId,
             [FromBody] ProvisionWalletTokenIncomingPayload payload)

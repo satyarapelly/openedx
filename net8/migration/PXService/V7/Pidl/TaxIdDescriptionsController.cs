@@ -14,8 +14,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using Microsoft.Commerce.Payments.PidlModel.V7;
     using Microsoft.Commerce.Payments.PXCommon;
 
-    [ApiController]
-    [Route("api/[controller]")]
     public class TaxIdDescriptionsController : ProxyController
     {
         /// <summary>
@@ -33,7 +31,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>A list of PIDLResource object</returns>
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpGet]
-        [Route("[action]")]
         public List<PIDLResource> Get(string accountId, string country, string language = null, string partner = Constants.ServiceDefaults.DefaultPartnerName, string type = null)
         {
             // Use Partner Settings if enabled for the partner
@@ -70,7 +67,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             this.EnableFlightingsInPartnerSetting(setting, country);
 
             if (string.Equals(partner, Constants.PartnerName.CommercialStores, StringComparison.OrdinalIgnoreCase)
-                || PartnerHelper.IsAzurePartner(partner) 
+                || PartnerHelper.IsAzurePartner(partner)
                 || (TemplateHelper.IsTemplateBasedPIDLIncludingDefaultTemplate(TemplateHelper.GetSettingTemplate(partner, setting, null, null))
                     && string.Equals(type, Constants.TaxIdTypes.Commercial, StringComparison.OrdinalIgnoreCase)))
             {
@@ -135,13 +132,13 @@ namespace Microsoft.Commerce.Payments.PXService.V7
 
                         // if flight or feature is enabled for add operation then only one call is made to save the PanID if the GST field is empty.
                         if ((this.ExposedFlightFeatures.Contains(Flighting.Features.PXEnabledNoSubmitIfGSTIDEmpty)
-                                || PartnerSettingsHelper.IsFeatureEnabledUsingPartnerSettings(PartnerSettingsHelper.Features.NoSubmitIfGSTIDEmpty, Constants.CommercialTaxIdCountryRegionCodes.India, setting)) 
+                                || PartnerSettingsHelper.IsFeatureEnabledUsingPartnerSettings(PartnerSettingsHelper.Features.NoSubmitIfGSTIDEmpty, Constants.CommercialTaxIdCountryRegionCodes.India, setting))
                             && string.Equals(operation, Constants.Operations.Add, StringComparison.OrdinalIgnoreCase))
                         {
                             // Update 'clientData' and 'IsOptional' properties of 'data_description' members except 'taxId'
                             foreach (var dataDescription in currentIndiaStateGstPidl.DataDescription)
                             {
-                                if (dataDescription.Key != null && !string.Equals(dataDescription.Key, Constants.TaxIdPropertyDescriptionName.TaxId, StringComparison.OrdinalIgnoreCase)) 
+                                if (dataDescription.Key != null && !string.Equals(dataDescription.Key, Constants.TaxIdPropertyDescriptionName.TaxId, StringComparison.OrdinalIgnoreCase))
                                 {
                                     currentIndiaStateGstPidl.UpdateIsOptionalProperty(dataDescription.Key, true);
                                     currentIndiaStateGstPidl.UpdatePropertyType(dataDescription.Key, "clientData");
@@ -241,7 +238,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             {
                 // Fall back to the previous GET function
                 var taxIdPidls = PIDLResourceFactory.Instance.GetTaxIdDescriptions(country, type, language, partner, setting: setting);
-                
+
                 FeatureContext featureContext = new FeatureContext(
                     country,
                     GetSettingTemplate(partner, setting, Constants.DescriptionTypes.TaxIdDescription),

@@ -32,8 +32,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentClient
     using ClientActionType = PXCommon.ClientActionType;
     using PayerAuth = PXService.Model.PayerAuthService;
 
-    [ApiController]
-    [Route("api/[controller]")]
     public class CheckoutRequestsExController : ProxyController
     {
         /// <summary>
@@ -50,7 +48,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentClient
         /// <response code="200">CheckoutRequest object</response>
         /// <returns>CheckoutRequest object</returns>
         [HttpPost]
-        [Route("[action]")]
         public async Task<HttpResponseMessage> AttachAddress(
             [FromBody] PIDLData address,
             string checkoutRequestId,
@@ -106,7 +103,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentClient
         /// <response code="200">CheckoutRequest object</response>
         /// <returns>CheckoutRequest object</returns>
         [HttpPost]
-        [Route("[action]")]
         public async Task<HttpResponseMessage> AttachProfile(
             [FromBody] PIDLData profile,
             string checkoutRequestId,
@@ -149,7 +145,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentClient
         /// <response code="200">CheckoutRequest object</response>
         /// <returns>CheckoutRequest object</returns>
         [HttpPost]
-        [Route("[action]")]
         public async Task<HttpResponseMessage> Confirm(
             [FromBody] PIDLData confirmPayload,
             string checkoutRequestId,
@@ -293,7 +288,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentClient
         /// <response code="200">CheckoutRequest object</response>
         /// <returns>CheckoutRequest object</returns>
         [HttpPost]
-        [Route("[action]")]
         public async Task<HttpResponseMessage> AttachPaymentInstrument(
             [FromBody] PIDLData paymentInstrument,
             string checkoutRequestId,

@@ -3,13 +3,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
-namespace Microsoft.Commerce.Payments.PXService.Controllers
+namespace Microsoft.Commerce.Payments.PXService
 {
     /// <summary>
     /// Probe Controller for health status
     /// </summary>
-    [ApiController]
-    [Route("api/[controller]")]
     public class ProbeController : ControllerBase
     {
         private const string BuildVersionKey = "BuildVersion";
@@ -25,7 +23,6 @@ namespace Microsoft.Commerce.Payments.PXService.Controllers
         /// </summary>
         /// <returns>Probe status</returns>
         [HttpGet]
-        [Route("[action]")]
         public ActionResult<ServiceStatus> Get()
         {
             string buildVersion = this.configuration[BuildVersionKey] ?? "unknown";

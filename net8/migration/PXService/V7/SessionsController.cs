@@ -16,8 +16,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using Microsoft.Commerce.Payments.PXService.Model.SessionService;
     using Microsoft.Commerce.Payments.PXService.Model.ThreeDSExternalService;
 
-    [ApiController]
-    [Route("api/[controller]")]
     public class SessionsController : ProxyController
     {
         /// <summary>
@@ -31,7 +29,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>A session object</returns>
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpGet]
-        [Route("[action]")]
         public async Task<SecondScreenSessionData> GetBySessionId(string sessionId)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
@@ -60,7 +57,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>A session object</returns>
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpPost]
-        [Route("[action]")]
         public string PostBySessionId(string sessionId)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
@@ -78,12 +74,11 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">The created session resource</response>
         /// <returns>The created session resource</returns>
         [HttpPost]
-        [Route("[action]")]
-        public async Task<SessionResponse> PostSession([FromBody]SessionRequest sessionTokenInfo)
+        public async Task<SessionResponse> PostSession([FromBody] SessionRequest sessionTokenInfo)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
 
-            if (sessionTokenInfo.ShopperId == "8e22c40d-9011-411c-a09c-c64921959f15") 
+            if (sessionTokenInfo.ShopperId == "8e22c40d-9011-411c-a09c-c64921959f15")
             {
                 var sessionData = new PaymentSessionData();
                 sessionData.PaymentInstrumentAccountId = sessionTokenInfo.ShopperId;

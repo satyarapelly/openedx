@@ -38,8 +38,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentTransaction
     /// Catalog API Reference:
     /// <![CDATA[https://microsoft.sharepoint.com/teams/CatalogPurchaseUseTeam/_layouts/15/Doc.aspx?sourcedoc={6e345ceb-676d-41f5-b3af-312cb33a35a0}&action=edit&wd=target%28Catalog%2F03.%20DCatFD%20APIs%2FV8%20API.one%7C93c343c6-3420-454f-8cde-f857398ba70e%2FDomain%20Data%20API%7C3def0b0c-0c5e-4045-ad62-601dd7436b3c%2F%29]]>
     /// </summary>
-    [ApiController]
-    [Route("api/[controller]")]
     public class PaymentTransactionsController : ProxyController
     {
         // M$'s GET /v7.0/users/{userId}/orders supports pagination.  This is the nuber of orders we want to get
@@ -87,7 +85,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentTransaction
         /// indicating if the associated PI should be blocked from deletion (e.g. a hardware order which has not yet
         /// shipped and hence funds have been authorized but not captured yet.)</returns>
         [HttpGet]
-        [Route("[action]")]
         public async Task<PaymentTransactions> ListTransactions(
             string accountId,
             string continuationToken = null,
@@ -115,7 +112,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentTransaction
         /// indicating if the associated PI should be blocked from deletion (e.g. a hardware order which has not yet
         /// shipped and hence funds have been authorized but not captured yet.)</returns>
         [HttpPost]
-        [Route("[action]")]
         public async Task<HttpResponseMessage> ListTransactions(string accountId, string country, string language, string partner, [FromBody] PIDLData requestData)
         {
             // NOTE Add traces and logs

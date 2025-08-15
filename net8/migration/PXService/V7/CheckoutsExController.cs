@@ -21,8 +21,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7.Checkouts
     using Newtonsoft.Json;
     using Constants = Constants;
 
-    [ApiController]
-    [Route("api/[controller]")]
     public class CheckoutsExController : ProxyController
     {
         private const string PostMessageHtmlTemplate = "<html><script>window.parent.postMessage(\"{0}\", \"*\");</script><body/></html>";
@@ -42,7 +40,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7.Checkouts
         /// <response code="200">Returns the HttpResponse to iFrame that posts message to parent window to redirect the page</response>
         /// <returns>Returns the HttpResponse to iFrame that posts message to parent window to redirect the page</returns>
         [HttpGet]
-        [Route("[action]")]
         public HttpResponseMessage Completed(
             string redirectUrl,
             string checkoutId,
@@ -96,7 +93,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7.Checkouts
         /// <response code="200">Returns the pidl redirect</response>
         /// <returns>Returns the pidl redirect</returns>
         [HttpPost]
-        [Route("[action]")]
         public async Task<HttpResponseMessage> Charge(
             string paymentProviderId,
             string checkoutId,
@@ -218,7 +214,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7.Checkouts
         /// <response code="200">Returns the status pidl</response>
         /// <returns>Returns the status pidl</returns>
         [HttpGet]
-        [Route("[action]")]
         public async Task<HttpResponseMessage> Status(
             string paymentProviderId,
             string checkoutId)

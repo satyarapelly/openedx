@@ -31,8 +31,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using PXCommonConstants = Microsoft.Commerce.Payments.PXCommon.Constants;
     using ActionContext = Microsoft.Commerce.Payments.PidlModel.V7.ActionContext;
 
-    [ApiController]
-    [Route("api/[controller]")]
     public class PaymentMethodDescriptionsController : ProxyController
     {
         private static class AccountV3Headers
@@ -72,7 +70,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         //// Anonymous Add or Update
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpGet]
-        [Route("[action]")]
         public async Task<List<PIDLResource>> GetAnonymousPidl(
             string family,
             string type = null,
@@ -246,7 +243,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         //// If the family is specified, operation must be add or update
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpGet]
-        [Route("[action]")]
         public async Task<List<PIDLResource>> GetByFamilyAndType(
             string accountId,
             string family,
@@ -650,7 +646,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         //// If the family is not specified, operation must be select, selectInstance, selectSingleInstance or validateInstance
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpGet]
-        [Route("[action]")]
         public async Task<List<PIDLResource>> SelectPaymentResource(
             string accountId,
             string country = null,
@@ -950,7 +945,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>A list of PIDLResource</returns>
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpGet]
-        [Route("[action]")]
         public async Task<List<PIDLResource>> GetByFamilyAndTypeWithCompletePrerequisitesOption(
             string accountId,
             string country,

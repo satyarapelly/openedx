@@ -17,8 +17,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using Microsoft.Commerce.Payments.PimsModel.V4;
     using Microsoft.Commerce.Payments.PXCommon;
 
-    [ApiController]
-    [Route("api/[controller]")]
     public class ProfileDescriptionsController : ProxyController
     {
         /// <summary>
@@ -38,7 +36,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>A list of PIDLResource object</returns>
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpGet]
-        [Route("[action]")]
         public async Task<List<PIDLResource>> GetByCountry(string accountId, string country, string type, string operation = Constants.Operations.Add, string language = null, string partner = Constants.ServiceDefaults.DefaultPartnerName, string scenario = null)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
@@ -100,7 +97,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             // Enable the template partner check for the PXEmployeeProfileUpdateToHapi flighting to use the inline feature UseEmployeeProfileUpdateToHapi, utilized for the profile.
             if (string.Equals(operation, Constants.Operations.Update, StringComparison.OrdinalIgnoreCase)
                 && string.Equals(type, GlobalConstants.ProfileTypes.Employee, StringComparison.OrdinalIgnoreCase)
-                && (this.ExposedFlightFeatures.Contains(Flighting.Features.PXEmployeeProfileUpdateToHapi, StringComparer.OrdinalIgnoreCase) 
+                && (this.ExposedFlightFeatures.Contains(Flighting.Features.PXEmployeeProfileUpdateToHapi, StringComparer.OrdinalIgnoreCase)
                 || PartnerSettingsHelper.IsFeatureEnabledUsingPartnerSettings(PartnerSettingsHelper.Features.UseEmployeeProfileUpdateToHapi, country, setting)))
             {
                 internalProfileOperation += "_partial";
@@ -154,8 +151,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             // Enable the template partner check for the PXProfileUpdateToHapi flighting to use the inline feature UseProfileUpdateToHapi, utilized for the profile.
             if (string.Equals(operation, Constants.Operations.Update, StringComparison.OrdinalIgnoreCase)
                 && string.Equals(type, GlobalConstants.ProfileTypes.Organization, StringComparison.OrdinalIgnoreCase)
-                && (this.ExposedFlightFeatures.Contains(Flighting.Features.PXProfileUpdateToHapi, StringComparer.OrdinalIgnoreCase) 
-                || PartnerSettingsHelper.IsFeatureEnabledUsingPartnerSettings(PartnerSettingsHelper.Features.UseProfileUpdateToHapi, country, setting) 
+                && (this.ExposedFlightFeatures.Contains(Flighting.Features.PXProfileUpdateToHapi, StringComparer.OrdinalIgnoreCase)
+                || PartnerSettingsHelper.IsFeatureEnabledUsingPartnerSettings(PartnerSettingsHelper.Features.UseProfileUpdateToHapi, country, setting)
                 || string.Equals(scenario, Constants.ScenarioNames.TwoColumns, StringComparison.OrdinalIgnoreCase)))
             {
                 foreach (PIDLResource pidlResource in retVal)
@@ -168,7 +165,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             // Enable the template partner check for the PXEmployeeProfileUpdateToHapi flighting to use the inline feature UseEmployeeProfileUpdateToHapi, utilized for the profile.
             if (string.Equals(operation, Constants.Operations.Update, StringComparison.OrdinalIgnoreCase)
                 && string.Equals(type, GlobalConstants.ProfileTypes.Employee, StringComparison.OrdinalIgnoreCase)
-                && (this.ExposedFlightFeatures.Contains(Flighting.Features.PXEmployeeProfileUpdateToHapi, StringComparer.OrdinalIgnoreCase) 
+                && (this.ExposedFlightFeatures.Contains(Flighting.Features.PXEmployeeProfileUpdateToHapi, StringComparer.OrdinalIgnoreCase)
                 || PartnerSettingsHelper.IsFeatureEnabledUsingPartnerSettings(PartnerSettingsHelper.Features.UseEmployeeProfileUpdateToHapi, country, setting)))
             {
                 foreach (PIDLResource pidlResource in retVal)
@@ -205,10 +202,10 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 && !string.Equals(type, GlobalConstants.ProfileTypes.Legal, StringComparison.OrdinalIgnoreCase)
                 && !string.Equals(type, GlobalConstants.ProfileTypes.Consumer, StringComparison.OrdinalIgnoreCase)
                 && !string.Equals(operation, Constants.Operations.Show, StringComparison.OrdinalIgnoreCase)
-                && !((this.ExposedFlightFeatures.Contains(Flighting.Features.PXProfileUpdateToHapi, StringComparer.OrdinalIgnoreCase) 
-                || PartnerSettingsHelper.IsFeatureEnabledUsingPartnerSettings(PartnerSettingsHelper.Features.UseProfileUpdateToHapi, country, setting)) 
+                && !((this.ExposedFlightFeatures.Contains(Flighting.Features.PXProfileUpdateToHapi, StringComparer.OrdinalIgnoreCase)
+                || PartnerSettingsHelper.IsFeatureEnabledUsingPartnerSettings(PartnerSettingsHelper.Features.UseProfileUpdateToHapi, country, setting))
                 && string.Equals(type, GlobalConstants.ProfileTypes.Organization, StringComparison.OrdinalIgnoreCase))
-                && !((this.ExposedFlightFeatures.Contains(Flighting.Features.PXEmployeeProfileUpdateToHapi, StringComparer.OrdinalIgnoreCase) 
+                && !((this.ExposedFlightFeatures.Contains(Flighting.Features.PXEmployeeProfileUpdateToHapi, StringComparer.OrdinalIgnoreCase)
                 || PartnerSettingsHelper.IsFeatureEnabledUsingPartnerSettings(PartnerSettingsHelper.Features.UseEmployeeProfileUpdateToHapi, country, setting))
                 && string.Equals(type, GlobalConstants.ProfileTypes.Employee, StringComparison.OrdinalIgnoreCase))
                 && !string.Equals(scenario, Constants.ScenarioNames.TwoColumns, StringComparison.OrdinalIgnoreCase))
@@ -353,7 +350,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             bool isEmployeeProfile = string.Equals(profileType, GlobalConstants.ProfileTypes.Employee, StringComparison.OrdinalIgnoreCase);
             bool isEmployeeProfileUpdateToHapiFlightEnabled = exposedFlightFeatures.Contains(Flighting.Features.PXEmployeeProfileUpdateToHapi, StringComparer.OrdinalIgnoreCase);
             bool isEmployeeProfileHapiEnabled = PartnerSettingsHelper.IsFeatureEnabledUsingPartnerSettings(PartnerSettingsHelper.Features.UseEmployeeProfileUpdateToHapi, country, setting);
-          
+
             return isConsumerProfile
                 || (isOrganizationProfile && (isProfileUpdateToHapiFlightEnabled || isProfileHapiEnabled || isTwoColumnsScenario))
                 || (isEmployeeProfile && (isEmployeeProfileUpdateToHapiFlightEnabled || isEmployeeProfileHapiEnabled));
@@ -366,7 +363,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             // Enable the template partner check for the PXProfileUpdateToHapi flighting to use the inline feature UseProfileUpdateToHapi, utilized for the profile.
             if ((string.Equals(profileType, GlobalConstants.ProfileTypes.Legal, StringComparison.OrdinalIgnoreCase)
                 || (string.Equals(profileType, GlobalConstants.ProfileTypes.Organization, StringComparison.OrdinalIgnoreCase)
-                && (this.ExposedFlightFeatures.Contains(Flighting.Features.PXProfileUpdateToHapi, StringComparer.OrdinalIgnoreCase) 
+                && (this.ExposedFlightFeatures.Contains(Flighting.Features.PXProfileUpdateToHapi, StringComparer.OrdinalIgnoreCase)
                 || PartnerSettingsHelper.IsFeatureEnabledUsingPartnerSettings(PartnerSettingsHelper.Features.UseProfileUpdateToHapi, country, setting)
                 || string.Equals(scenario, Constants.ScenarioNames.TwoColumns, StringComparison.OrdinalIgnoreCase))))
                 && string.Equals(operation, Constants.Operations.Update, StringComparison.OrdinalIgnoreCase))

@@ -19,8 +19,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using PXCommon;
     using PXService.Model.AccountService.AddressValidation;
 
-    [ApiController]
-    [Route("api/[controller]")]
     public class AddressesController : ProxyController
     {
         /// <summary>
@@ -34,8 +32,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A validation result</response>
         /// <returns>A validation result</returns>
         [HttpPost]
-        [Route("[action]")]
-        public async Task<HttpResponseMessage> LegacyValidate([FromBody]PIDLData address, string type = null)
+        public async Task<HttpResponseMessage> LegacyValidate([FromBody] PIDLData address, string type = null)
         {
             const string ValidAddressResponse = "Valid";
             const string VerifiedAddressStatus = "Verified";
@@ -93,8 +90,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A validation result</response>
         /// <returns>A validation result</returns>
         [HttpPost]
-        [ApiExplorerSettings(IgnoreApi = true)]
-        public async Task<HttpResponseMessage> ModernValidate([FromBody]PIDLData address)
+        public async Task<HttpResponseMessage> ModernValidate([FromBody] PIDLData address)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
 
@@ -131,7 +127,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         }
 
         /// <summary>
-        /// Modern Validate address by type.
+        /// Modern Validate address ("/ModernValidateByType" is not in the real path, just as a workaround to show multiple APIs with the same path and http verb but with different params in open API doc)
         /// </summary>
         /// <group>Addresses</group>
         /// <verb>POST</verb>
@@ -145,7 +141,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A validation result</response>
         /// <returns>A validation result</returns>
         [HttpPost]
-        [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<HttpResponseMessage> ModernValidate(
             [FromBody] PIDLData address,
             string partner,
@@ -298,7 +293,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             var avsAccessor = this.Settings.AddressEnrichmentServiceAccessor;
 
             List<PIDLResource> pidls = new List<PIDLResource>();
-           
+
             pidls = await AddressesExHelper.SuggestAddressTradeAvsPidl(
                 userEnteredAddress,
                 language,
@@ -389,7 +384,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                     }
                 }
             }
-                
+
             ClientAction clientAction = new ClientAction(actionType, pidls);
 
             PIDLResource suggestedAddressPidl = new PIDLResource();

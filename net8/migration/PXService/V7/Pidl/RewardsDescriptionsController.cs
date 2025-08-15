@@ -20,8 +20,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using Microsoft.Commerce.Payments.PXService.Model.RewardsService;
     using Newtonsoft.Json;
 
-    [ApiController]
-    [Route("api/[controller]")]
     public class RewardsDescriptionsController : ProxyController
     {
         /// <summary>
@@ -41,7 +39,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>Returns a rewards PIDL for the given rewardscontext</returns>
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpGet]
-        [Route("[action]")]
         public async Task<List<PIDLResource>> Get(
             string accountId,
             string type,
@@ -82,7 +79,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 // Select the highest amount Microsoft Gift Card SKU that is less than or equal to the order amount
                 UserFacingCatalogItem selectedCatalogItem = null;
                 decimal skuAmount = 0;
-                
+
                 long variableAmountPoints = 0;
                 foreach (var catalogItem in catalogItems)
                 {

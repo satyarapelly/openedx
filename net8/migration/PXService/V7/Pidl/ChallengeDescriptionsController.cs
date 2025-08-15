@@ -25,8 +25,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using PaymentChallenge.Model;
     using PayerAuth = PXService.Model.PayerAuthService;
 
-    [ApiController]
-    [Route("api/[controller]")]
     public class ChallengeDescriptionsController : ProxyController
     {
         private readonly HashSet<string> upiPaymentMethodSet = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase)
@@ -52,7 +50,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>Returns challenge PIDL for the given type</returns>
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpGet]
-        [Route("[action]")]
         public async Task<List<PIDLResource>> GetById(
             string accountId,
             string type,
@@ -108,7 +105,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>Returns challenge PIDL for the given type and specfic to the given piid</returns>
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpGet]
-        [Route("[action]")]
         public async Task<ActionResult<List<PIDLResource>>> GetByTypePiidAndSessionId(
             string accountId,
             string piid,
@@ -179,7 +175,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>Returns challenge PIDL for the given type and specfic to the given piid</returns>
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpGet]
-        [Route("[action]")]
         public async Task<ActionResult<List<PIDLResource>>> GetByTypeAndPiid(
             string accountId,
             string piid,
@@ -244,7 +239,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">List&lt;PIDLResource&gt;</response>
         /// <returns>Returns challenge PIDL for the given type and specfic to the given piid</returns>
         [HttpGet]
-        [Route("[action]")]
         public async Task<HttpResponseMessage> GetPaymentChallenge(
             string accountId,
             string paymentSessionOrData,
@@ -577,7 +571,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <throws>HttpResponseException if the payment instrument cannot be found</throws>
         /// <returns>Returns a PIDL representing the next action that needs to be taken</returns>
         [HttpGet]
-        [Route("[action]")]
         public async Task<ActionResult<List<PIDLResource>>> GetByPiidAndSessionId(
                 string accountId, string piid, string sessionId,
                 string partner = null, string language = null, string orderId = null)
@@ -680,7 +673,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>Returns a challenge PIDL</returns>
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpGet]
-        [Route("[action]")]
         public async Task<ActionResult<List<PIDLResource>>> GetByAccountIdAndPiid(
             string accountId,
             string piid,

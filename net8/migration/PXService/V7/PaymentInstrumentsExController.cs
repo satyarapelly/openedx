@@ -48,8 +48,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using PIMSModel = Microsoft.Commerce.Payments.PimsModel.V4;
     using Purchase = PXService.Model.PurchaseService;
 
-    [ApiController]
-    [Route("api/[controller]")]
     public class PaymentInstrumentsExController : ProxyController
     {
         private const string PostMessageHtmlTemplate = "<html><script>window.parent.postMessage(\"{0}\", \"*\");</script><body/></html>";
@@ -70,7 +68,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">Html post message for anonymous resume pending operation</response>
         /// <returns>Html post message</returns>
         [HttpGet]
-        [Route("[action]")]
         public HttpResponseMessage AnonymousResumePendingOperation(
             string piid,
             bool isSuccessful = false,
@@ -128,7 +125,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A payment instrument object</response>
         /// <returns>A payment instrument object</returns>
         [HttpPost]
-        [Route("[action]")]
         public async Task<HttpResponseMessage> CreateModernPI(
             [FromBody] PIDLData pi,
             string sessionId = null,
@@ -189,7 +185,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A list of payment instrument</response>
         /// <returns>A list of payment instrument or IPidlPayload object</returns>
         [HttpGet]
-        [Route("[action]")]
         public async Task<HttpResponseMessage> ListModernPIs(
             string accountId,
             string[] status = null,
@@ -330,7 +325,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A payment instrument object</response>
         /// <returns>A payment instrument object</returns>
         [HttpGet]
-        [Route("[action]")]
         public async Task<PaymentInstrument> GetModernPI(
             string accountId,
             string piid,
@@ -541,7 +535,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A payment instrument object</response>
         /// <returns>A payment instrument object</returns>
         [HttpPost]
-        [Route("[action]")]
         public async Task<HttpResponseMessage> PostModernPI(
             string accountId,
             [FromBody] PIDLData pi,
@@ -586,7 +579,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A payment instrument object</response>
         /// <returns>A payment instrument object</returns>
         [HttpPost]
-        [Route("[action]")]
         public async Task<HttpResponseMessage> UpdateModernPI(
             string accountId,
             string piid,
@@ -754,7 +746,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A payment instrument object</response>
         /// <returns>A payment instrument object</returns>
         [HttpPost]
-        [Route("[action]")]
         public async Task<HttpResponseMessage> ReplaceModernPI(
             string accountId,
             string piid,
@@ -884,7 +875,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A payment instrument object</response>
         /// <returns>A PIDLResource object</returns>
         [HttpPost]
-        [Route("[action]")]
         public async Task<PIDLResource> RedeemModernPI(
             string accountId,
             string piid,
@@ -941,7 +931,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A payment instrument object</response>
         /// <returns>A payment instrument object</returns>
         [HttpGet]
-        [Route("[action]")]
         public async Task<object> RedeemModernPI(
             string accountId,
             string piid,
@@ -992,7 +981,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A payment instrument object</response>
         /// <returns>A payment instrument object</returns>
         [HttpPost]
-        [Route("[action]")]
         public async Task<HttpResponseMessage> RemoveModernPI(
             string accountId,
             string piid,
@@ -1107,7 +1095,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A payment instrument object</response>
         /// <returns>A payment instrument object</returns>
         [HttpPost]
-        [Route("[action]")]
         public async Task<HttpResponseMessage> ResumePendingOperation(
             string accountId,
             string piid,
@@ -1352,7 +1339,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A card profeil object</response>
         /// <returns>A payment instrument object</returns>
         [HttpGet]
-        [Route("[action]")]
         public async Task<object> GetCardProfile(string accountId, string piid, ulong deviceId)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
@@ -1373,7 +1359,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A card profeil object</response>
         /// <returns>A payment instrument object</returns>
         [HttpGet]
-        [Route("[action]")]
         public async Task<object> GetSeCardPersos(string accountId, string piid, ulong deviceId)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
@@ -1395,7 +1380,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A payment instrument object</response>
         /// <returns>A object</returns>
         [HttpPost]
-        [Route("[action]")]
         public async Task<object> PostReplenishTransactionCredentials(string accountId, string piid, ulong deviceId, [FromBody] object requestData)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
@@ -1417,7 +1401,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A payment instrument object</response>
         /// <returns>A object</returns>
         [HttpPost]
-        [Route("[action]")]
         public async Task<object> AcquireLUKs(string accountId, string piid, ulong deviceId, [FromBody] object requestData)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
@@ -1438,7 +1421,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A payment instrument object</response>
         /// <returns>A object</returns>
         [HttpPost]
-        [Route("[action]")]
         public async Task<object> ConfirmLUKs(string accountId, ulong deviceId, string piid)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
@@ -1460,7 +1442,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A payment instrument object</response>
         /// <returns>A object</returns>
         [HttpPost]
-        [Route("[action]")]
         public async Task<object> ValidateCvv(string accountId, string piid, string language, [FromBody] object requestData)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
@@ -1520,7 +1501,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <param name="sessionId">Optional sessionId to be used for the apply flow. If this is not provided, initializeData is used to create a sessionId</param>
         /// <returns>Message from IssuerService API</returns>
         [HttpPost]
-        [Route("[action]")]
         public async Task<HttpResponseMessage> Apply(
             string partner,
             string operation,
@@ -1608,7 +1588,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A list of payment instrument</response>
         /// <returns>Response message with populated ChallengeContext object</returns>
         [HttpGet]
-        [Route("[action]")]
         [ActionName("GetChallengeContext")]
         public async Task<HttpResponseMessage> GetChallengeContext(
             string accountId,

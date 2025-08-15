@@ -39,8 +39,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
     using PXConstants = Microsoft.Commerce.Payments.PXService.V7.Constants;
     using System.Diagnostics.Tracing;
 
-    [ApiController]
-    [Route("api/[controller]")]
     public class PaymentSessionsController : ProxyController
     {
         private const string PostMessageHtmlTemplate = "<html><script>window.parent.postMessage(\"{0}\", \"*\");</script><body/></html>";
@@ -52,7 +50,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
         /// <param name="accountId">Pi Account Id</param>
         /// <returns>Returns the created PaymentSession</returns>
         [HttpPost]
-        [Route("[action]")]
         [ActionName("PostPaymentSession")]
         public async Task<PaymentSession> Post(string accountId)
         {
@@ -103,7 +100,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
         /// <param name="sessionId">Session Id</param>
         /// <returns>Returns queried PaymentSession that matches the session and account id</returns>
         [HttpGet]
-        [Route("[action]")]
         public async Task<HttpResponseMessage> GetPaymentSession(string accountId, string sessionId)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
@@ -242,7 +238,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
         /// <param name="sessionId">Session Id</param>
         /// <returns>Returns payment instrument or payment instrument status used for polling</returns>
         [HttpGet]
-        [Route("[action]")]
         [ActionName("qrCodeStatus")]
         public async Task<Microsoft.Commerce.Payments.PimsModel.V4.PaymentInstrument> GetQRCodePaymentSession(string accountId, string sessionId)
         {
@@ -341,7 +336,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
         /// <param name="sessionId">Session Id</param>
         /// <returns>Returns AuthenticationResponse</returns>
         [HttpPost]
-        [Route("[action]")]
         public async Task<AuthenticationResponse> Authenticate(string accountId, string sessionId)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
@@ -378,7 +372,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
         /// <param name="accountId">Pi Account Id</param>
         /// <returns>Returns the created PaymentSession</returns>
         [HttpPost]
-        [Route("[action]")]
         [ActionName("CreateAndAuthenticate")]
         public async Task<CreateAndAuthenticateResponse> CreateAndAuthenticate(string accountId)
         {
@@ -1056,7 +1049,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
         /// <param name="cvvChallengePayload">Payload containing tokenized CVV</param>
         /// <returns>Returns RDS URL</returns>
         [HttpPost]
-        [Route("[action]")]
         [ActionName("AuthenticateIndiaThreeDS")]
         public async Task<HttpResponseMessage> AuthenticateIndiaThreeDS(string accountId, string sessionId, [FromBody] PIDLData cvvChallengePayload)
         {
@@ -1154,7 +1146,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
         /// <returns>Returns an object with the property Verified=true when the challenge has been verified or is not applicable.
         /// False if the challenge was failed or its status is unknown.</returns>
         [HttpGet]
-        [Route("[action]")]
         [ActionName("AuthenticationStatus")]
         public async Task<HttpResponseMessage> AuthenticationStatus(string accountId, string sessionId, string piId, string paymentContext = null)
         {

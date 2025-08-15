@@ -21,8 +21,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using PimsModel.V4;
     using PXCommon;
 
-    [ApiController]
-    [Route("api/[controller]")]
     public class AddressesExController : ProxyController
     {
         /// <summary>
@@ -36,7 +34,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">An address object</response>
         /// <returns>An address object</returns>
         [HttpGet]
-        [Route("[action]")]
         public async Task<HttpResponseMessage> GetAddressById(string accountId, string addressId)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
@@ -61,12 +58,11 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">An address object</response>
         /// <returns>An address object</returns>
         [HttpPost]
-        [Route("[action]")]
         public async Task<HttpResponseMessage> Post(
-            [FromBody]PIDLData address, 
-            string accountId, 
-            string partner, 
-            string language, 
+            [FromBody] PIDLData address,
+            string accountId,
+            string partner,
+            string language,
             bool avsSuggest,
             string scenario = null)
         {
@@ -130,17 +126,16 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">An address object</response>
         /// <returns>An address object</returns>
         [HttpPatch]
-        [Route("[action]")]
         public async Task<HttpResponseMessage> Patch(
-            [FromBody] PIDLData address, 
-            string accountId, 
-            string addressId, 
+            [FromBody] PIDLData address,
+            string accountId,
+            string addressId,
             string partner,
             string scenario = null)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
             this.Request.AddPartnerProperty(partner?.ToLower());
-            
+
             // Todo: Add Scenario to Log and all the controllers
             this.Request.AddScenarioProperty(scenario?.ToLower());
 
@@ -181,7 +176,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         }
 
         private static bool ShouldCreateLegacyAccountAndSync(string partner, string scenario)
-        {         
+        {
             return string.Equals(partner, Constants.PartnerName.AmcWeb, StringComparison.OrdinalIgnoreCase)
                    && string.Equals(scenario, Constants.ScenarioNames.ProfileAddress, StringComparison.OrdinalIgnoreCase);
         }
@@ -210,11 +205,11 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         }
 
         private async Task<HttpResponseMessage> Suggest(
-            string accountId, 
-            PXAddressV3Info userEnteredAddress, 
-            string partner, 
-            string language, 
-            EventTraceActivity traceActivityId, 
+            string accountId,
+            PXAddressV3Info userEnteredAddress,
+            string partner,
+            string language,
+            EventTraceActivity traceActivityId,
             string addressType = Constants.AddressTypes.PXV3,
             string scenario = null,
             PaymentExperienceSetting setting = null)
@@ -237,7 +232,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
 
             userEnteredAddress.Id = PidlFactory.GlobalConstants.SuggestedAddressesIds.UserEntered;
 
-           setting = this.GetPaymentExperienceSetting(operation);
+            setting = this.GetPaymentExperienceSetting(operation);
 
             List<PIDLResource> pidls = new List<PIDLResource>();
 

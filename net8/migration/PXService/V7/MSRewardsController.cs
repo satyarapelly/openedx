@@ -16,8 +16,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using Microsoft.Commerce.Payments.PXService.Accessors.MSRewardsService.DataModel;
     using Microsoft.Commerce.Payments.PXService.Model.RewardsService;
 
-    [ApiController]
-    [Route("api/[controller]")]
     public class MSRewardsController : ProxyController
     {
         /// <summary>
@@ -34,7 +32,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">Redeem Response object</response>
         /// <returns>Redeem Response object</returns>
         [HttpPost]
-        [Route("[action]")]
         public async Task<PIDLResource> PostRedeemRequest(
             [FromBody] MSRewardsRedeemRequest redeemData,
             string accountId,

@@ -14,8 +14,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using Microsoft.Commerce.Payments.PimsModel.V4;
     using PaymentInstrument = PimsModel.V4.PaymentInstrument;
 
-    [ApiController]
-    [Route("api/[controller]")]
     public class ExpressCheckoutController : ProxyController
     {
         /// <summary>
@@ -30,7 +28,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">ExpressCheckoutResult object</response>
         /// <returns>ExpressCheckoutResult object</returns>
         [HttpPost]
-        [Route("[action]")]
         public async Task<ActionResult<ExpressCheckoutResult>> Confirm(
             string accountId,
             [FromBody] PIDLData confirmPayload,

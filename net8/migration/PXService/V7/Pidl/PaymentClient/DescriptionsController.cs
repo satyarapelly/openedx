@@ -18,8 +18,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using System.Net.Http;
     using System.Threading.Tasks;
 
-    [ApiController]
-    [Route("api/[controller]")]
     public class DescriptionsController : ProxyController
     {
         /// <summary>
@@ -39,7 +37,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>Returns a PIDL for the given component</returns>
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpGet]
-        [Route("[action]")]
         public async Task<HttpResponseMessage> Get(
             string component,
             string partner = V7.Constants.TemplateName.DefaultTemplate,
@@ -67,7 +64,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             ComponentDescription componentInstance = null;
 
             // Create instance of the component
-            if (this.UsePaymentRequestApiEnabled()) 
+            if (this.UsePaymentRequestApiEnabled())
             {
                 componentInstance = ComponentDescriptionFactory.CreateInstance(component, requestContext, setting, this.Generate3DS2ChallengePIDLResource);
             }
