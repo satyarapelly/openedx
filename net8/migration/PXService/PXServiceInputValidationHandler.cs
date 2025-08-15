@@ -5,18 +5,23 @@ namespace Microsoft.Commerce.Payments.PXService.Handlers
     using System;
     using System.Collections.Generic;
     using System.Net;
-    using System.Net.Http;
-    using System.Threading;
     using System.Threading.Tasks;
     using CommonSchema.Services.Logging;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Http.Extensions;
     using Microsoft.Commerce.Payments.Common.Helper;
     using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Commerce.Payments.Common.Web;
     using PXCommon;
 
-    public class PXServiceInputValidationHandler : DelegatingHandler
+    /// <summary>
+    /// Middleware that validates query string parameters for PXService requests.
+    /// </summary>
+    public class PXServiceInputValidationHandler
     {
-        private static Dictionary<string, List<IParameterValidator>> parameterValidators = new Dictionary<string, List<IParameterValidator>>(StringComparer.OrdinalIgnoreCase)
+        private readonly RequestDelegate next;
+
+        private static readonly Dictionary<string, List<IParameterValidator>> parameterValidators = new(StringComparer.OrdinalIgnoreCase)
         {
             { "allowedPaymentMethods",  new List<IParameterValidator>() { new ParameterRegexValidator("^.{1,1500}$"), new ParameterJsonValidator() } },
             { "billableAccountId", new List<IParameterValidator>() { new ParameterRegexValidator("^.{1,100}$") } },
@@ -43,77 +48,81 @@ namespace Microsoft.Commerce.Payments.PXService.Handlers
             { "timezoneOffset", new List<IParameterValidator>() { new ParameterRegexValidator(@"^[-\d]{1,6}$") } },
             { "type", new List<IParameterValidator>() { new ParameterRegexValidator(@"^[-\w,\s]{1,100}$") } }
         };
-        
-        public static void TraceIntegrationError(HttpRequestMessage request, string message)
+
+        public PXServiceInputValidationHandler(RequestDelegate next)
         {
-            string serviceName = request.GetServiceName();
-            IntegrationErrorCode integrationErrorCode = IntegrationErrorCode.InvalidRequestParameterFormat;
-            EventTraceActivity requestTraceId = PXTraceCorrelationHandler.GetOrCreateCorrelationIdFromHeader(request);
-            CorrelationVector correlationVector = SllCorrelationVectorManager.SetCorrelationVectorAtRequestEntry(request);
-            EventTraceActivity serverTraceId = new EventTraceActivity { CorrelationVectorV4 = correlationVector };
-            SllWebLogger.TracePXServiceIntegrationError(serviceName, integrationErrorCode, message, requestTraceId.ActivityId.ToString(), serverTraceId.ActivityId.ToString(), correlationVector.ToString());
+            this.next = next ?? throw new ArgumentNullException(nameof(next));
         }
 
-        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        public async Task InvokeAsync(HttpContext context)
         {
+            var request = context.Request;
             try
             {
-                bool isPXEnableThrowInvalidUrlParameterExceptionEanbled = IsFeatureEnabled(request, Flighting.Features.PXEnableThrowInvalidUrlParameterException);
-                var queryParams = request.GetQueryNameValuePairs();
-                if (queryParams != null)
+                bool throwOnInvalid = IsFeatureEnabled(request, Flighting.Features.PXEnableThrowInvalidUrlParameterException);
+                foreach (var queryParam in request.Query)
                 {
-                    foreach (var queryParam in queryParams)
+                    if (parameterValidators.TryGetValue(queryParam.Key, out var validators))
                     {
-                        if (parameterValidators.ContainsKey(queryParam.Key))
+                        foreach (var validator in validators)
                         {
-                            var paramValidators = parameterValidators[queryParam.Key];
-                            foreach (var paramValidator in paramValidators)
+                            if (!validator.Validate(queryParam.Value))
                             {
-                                if (!paramValidator.Validate(queryParam.Value))
+                                string message = string.Format("The parameter {0} value {1} is invalid in the request URL: {2}.", queryParam.Key, queryParam.Value, request.GetDisplayUrl());
+
+                                if (throwOnInvalid)
                                 {
-                                    string message = string.Format("The parameter {0} value {1} is invalid in the request URL: {2}.", queryParam.Key, queryParam.Value, request.RequestUri.AbsoluteUri);
-
-                                    if (isPXEnableThrowInvalidUrlParameterExceptionEanbled)
-                                    {
-                                        var traceActivityId = request.GetRequestCorrelationId();
-                                        var innerError = new ServiceErrorResponse(ErrorCode.InvalidParameter.ToString(), message);
-                                        var error = new ServiceErrorResponse(traceActivityId.ActivityId.ToString(), GlobalConstants.ServiceName, innerError);
-                                        var response = await request.CreateJsonResponseAsync(HttpStatusCode.BadRequest, error);
-
-                                        // Return the response with 400 Bad Request
-                                        return response;
-                                    }
-                                    else
-                                    {
-                                        request.SetProperty("InputValidationFailed", true);
-                                        TraceIntegrationError(request, message);
-                                    }
+                                    var traceActivityId = request.GetRequestCorrelationId();
+                                    var innerError = new ServiceErrorResponse(ErrorCode.InvalidParameter.ToString(), message);
+                                    var error = new ServiceErrorResponse(traceActivityId.ActivityId.ToString(), GlobalConstants.ServiceName, innerError);
+                                    context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                                    await context.Response.WriteAsJsonAsync(error);
+                                    return;
+                                }
+                                else
+                                {
+                                    context.Items["InputValidationFailed"] = true;
+                                    TraceIntegrationError(request, message);
                                 }
                             }
                         }
-                        else
-                        {
-                            request.SetProperty("InputValidationFailed", true);
-                            string message = string.Format("The parameter {0} or value {1} is null or invalid in the request URL: {2}.", queryParam.Key, queryParam.Value, request.RequestUri.AbsoluteUri);
-                            TraceIntegrationError(request, message);
-                        }
+                    }
+                    else
+                    {
+                        context.Items["InputValidationFailed"] = true;
+                        string message = string.Format("The parameter {0} or value {1} is null or invalid in the request URL: {2}.", queryParam.Key, queryParam.Value, request.GetDisplayUrl());
+                        TraceIntegrationError(request, message);
                     }
                 }
             }
             catch
             {
-                string message = string.Format("An error has occurred, exception was thrown, with this URL: {0}", request.RequestUri.AbsoluteUri);
+                string message = string.Format("An error has occurred, exception was thrown, with this URL: {0}", request.GetDisplayUrl());
                 TraceIntegrationError(request, message);
             }
 
-            return await base.SendAsync(request, cancellationToken);
+            await this.next(context);
         }
 
-        private static bool IsFeatureEnabled(HttpRequestMessage request, string featureName)
+        public static void TraceIntegrationError(HttpRequest request, string message)
         {
-            List<string>? exposedFeatureFlight = new List<string>();
-            return request.TryGetProperty(GlobalConstants.RequestPropertyKeys.ExposedFlightFeatures, out exposedFeatureFlight)
-                && exposedFeatureFlight != null && exposedFeatureFlight.Contains(featureName);
+            string serviceName = request.GetServiceName();
+            IntegrationErrorCode integrationErrorCode = IntegrationErrorCode.InvalidRequestParameterFormat;
+            EventTraceActivity requestTraceId = request.GetRequestCorrelationId();
+            CorrelationVector correlationVector = request.GetCorrelationVector();
+            EventTraceActivity serverTraceId = new EventTraceActivity { CorrelationVectorV4 = correlationVector };
+            SllWebLogger.TracePXServiceIntegrationError(serviceName, integrationErrorCode, message, requestTraceId.ActivityId.ToString(), serverTraceId.ActivityId.ToString(), correlationVector.ToString());
+        }
+
+        private static bool IsFeatureEnabled(HttpRequest request, string featureName)
+        {
+            if (request.HttpContext.Items.TryGetValue(GlobalConstants.RequestPropertyKeys.ExposedFlightFeatures, out var exposedFeatureFlight) && exposedFeatureFlight is List<string> features)
+            {
+                return features.Contains(featureName);
+            }
+
+            return false;
         }
     }
 }
+
