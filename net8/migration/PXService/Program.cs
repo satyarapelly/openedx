@@ -1,4 +1,6 @@
+using System;
 using System.Net;
+using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Routing;
@@ -15,12 +17,20 @@ using Microsoft.Commerce.Payments.Common.Web;
 using Microsoft.Commerce.Payments.Common.Environments;
 using System.Diagnostics.Tracing;
 using Microsoft.Commerce.Payments.PXService.Handlers;
+using Microsoft.CommonSchema.Services.Listeners;
 using Environment = Microsoft.Commerce.Payments.Common.Environments.Environment;
 
 // If your custom handlers were ported to middleware, import their namespaces too:
 // using Microsoft.Commerce.Payments.PXService.Middleware;  // e.g., PXTraceCorrelationMiddleware, etc.
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Mirror Global.asax security protocol initialization
+ServicePointManager.SecurityProtocol &= ~(SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11);
+if (ServicePointManager.SecurityProtocol == 0)
+{
+    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+}
 
 // Create and register PX settings (mirrors Global.asax Application_Start)
 builder.Configuration
@@ -29,20 +39,19 @@ builder.Configuration
     .AddJsonFile("local.settings.json", optional: true)
     .AddEnvironmentVariables();
 
-string envTypeRaw = builder.Configuration["PXService:EnvironmentType"] ?? "Production";
-string envName = builder.Configuration["PXService:EnvironmentName"]
-                    ?? builder.Environment.EnvironmentName
-                    ?? "Production";
-
 var pxSettings = PXServiceSettings.CreateInstance(Environment.Current.EnvironmentType, Environment.Current.EnvironmentName);
 
 builder.Services.AddSingleton(pxSettings);
 
+// WebApiConfig settings
+ServicePointManager.CheckCertificateRevocationList = true;
+ApplicationInsightsProvider.SetupAppInsightsConfiguration(pxSettings.ApplicationInsightInstrumentKey, pxSettings.ApplicationInsightMode);
+EnsureSllInitialized();
+
 // Define supported API versions and controllers allowed without an explicit version
-var supportedVersions = new Dictionary<string, ApiVersion>(StringComparer.OrdinalIgnoreCase)
-{
-    { "v7.0", new ApiVersion("v7.0", new Version(7, 0)) }
-};
+var supportedVersions = VersionCatalog.Supported.ToDictionary(
+    kvp => kvp.Key,
+    kvp => new ApiVersion(kvp.Key, new Version(kvp.Value)));
 string[] versionlessControllers = { GlobalConstants.ControllerNames.ProbeController };
 
 // Controllers + Newtonsoft.Json (Nulls ignored like WebApiConfig)
@@ -87,17 +96,31 @@ app.MapGet("/routes", (EndpointDataSource ds) =>
     Results.Text(string.Join(System.Environment.NewLine,
         ds.Endpoints.OfType<RouteEndpoint>().Select(e => e.RoutePattern.RawText))));
 
-if (pxSettings.ValidateCors)
+// Trace correlation (mirrors WebApiConfig)
+if (!WebHostingUtility.IsApplicationSelfHosted())
 {
-     app.UseMiddleware<PXServiceCorsHandler>(pxSettings);
+    app.UseMiddleware<PXTraceCorrelationHandler>(Constants.ServiceNames.PXService, ApplicationInsightsProvider.LogIncomingOperation);
 }
 
-// Ensure requests include a supported api-version and block unsupported ones
+// API version handler
 app.UseMiddleware<PXServiceApiVersionHandler>(supportedVersions, versionlessControllers, pxSettings);
+
+// CORS
+if (pxSettings.ValidateCors)
+{
+    app.UseMiddleware<PXServiceCorsHandler>(pxSettings);
+}
+
+// Input and PIDL validation handlers
+app.UseMiddleware<PXServiceInputValidationHandler>();
+if (pxSettings.PIDLDocumentValidationEnabled)
+{
+    app.UseMiddleware<PXServicePIDLValidationHandler>();
+}
 
 app.UseRouting();
 
-// 2) Gate requests using the resolver: if no controller is registered for (version, controller) -> 404
+// Gate requests using the resolver: if no controller is registered for (version, controller) -> 404
 app.Use(async (ctx, next) =>
 {
     var routeData = ctx.GetRouteData();
@@ -133,6 +156,12 @@ app.Lifetime.ApplicationStopping.Register(() =>
 app.Run();
 
 // ----------------- helpers -----------------
+static void EnsureSllInitialized()
+{
+    SllLogger.TraceMessage("Initialize SllLogger and Sll static dependencies.", EventLevel.Informational);
+    AuditLogger.Instantiate();
+}
+
 static void MapV7Routes(IEndpointRouteBuilder endpoints)
 {
     // Probe
