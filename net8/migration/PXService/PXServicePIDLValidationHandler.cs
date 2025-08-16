@@ -78,7 +78,7 @@ namespace Microsoft.Commerce.Payments.PXService.Handlers
                 RouteData? routeData = context.GetRouteData();
                 object? controller;
 
-                bool validationRequired = HttpMethods.IsGet(request.Method)
+                bool validationRequired = AspNetCore.Http.HttpMethods.IsGet(request.Method)
                     && routeData != null
                     && routeData.Values.TryGetValue("controller", out controller)
                     && controller != null
