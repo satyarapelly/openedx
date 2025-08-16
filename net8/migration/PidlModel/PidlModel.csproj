@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), build.root))\msbuild\Environment.props" />
+  <Import Project="..\..\Payments.targets" />
+  <PropertyGroup>
+    <ProjectGuid>{9C61837A-7118-42B5-BA50-480493CC190D}</ProjectGuid>
+    <TargetFramework>net8.0</TargetFramework>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Microsoft.Commerce.Payments.PidlModel</RootNamespace>
+    <AssemblyName>Microsoft.Commerce.Payments.PidlModel</AssemblyName>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference  Include="Newtonsoft.Json" />
+	  <PackageReference Include="Microsoft.AspNetCore.Http" />
+
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LocalizationRepository\LocalizationRepository.csproj" />
+    <ProjectReference Include="..\PimsModel\PimsModel.csproj" />
+    <ProjectReference Include="..\PXCommon\PXCommon.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+</Project>
