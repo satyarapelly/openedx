@@ -11,16 +11,14 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference  Include="Newtonsoft.Json" />
-	  <PackageReference Include="Microsoft.AspNetCore.Http" />
-
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LocalizationRepository\LocalizationRepository.csproj" />
     <ProjectReference Include="..\PimsModel\PimsModel.csproj" />
     <ProjectReference Include="..\PXCommon\PXCommon.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
   </ItemGroup>
 </Project>
