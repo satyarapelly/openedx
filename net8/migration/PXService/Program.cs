@@ -143,7 +143,7 @@ app.Use(async (ctx, next) =>
         return;
     }
 
-    // No endpoint matched (RouteData is null/empty) — try to parse and fail fast with a clearer 404
+    // No endpoint matched (RouteData is null/empty)  try to parse and fail fast with a clearer 404
     // Expected path like: /v7.0/Account001/AddressDescriptions
     var segments = ctx.Request.Path.Value?.Trim('/').Split('/', StringSplitOptions.RemoveEmptyEntries) ?? Array.Empty<string>();
     if (segments.Length >= 3 && segments[0].StartsWith("v", StringComparison.OrdinalIgnoreCase))
@@ -274,12 +274,20 @@ static void AddUrlVersionedRoutes(IEndpointRouteBuilder endpoints)
     endpoints.MapControllerRoute(
         name: GlobalConstants.V7RouteNames.GetSettings,
         pattern: GlobalConstants.EndPointNames.V7GetSettings,
-        defaults: new { controller = GlobalConstants.ControllerNames.SettingsController });
+        defaults: new
+        {
+            controller = GlobalConstants.ControllerNames.SettingsController.Replace("Controller", string.Empty),
+            action = "GetSettings"
+        });
 
     endpoints.MapControllerRoute(
         name: GlobalConstants.V7RouteNames.GetSettingsInPost,
         pattern: GlobalConstants.EndPointNames.V7GetSettingsInPost,
-        defaults: new { controller = GlobalConstants.ControllerNames.SettingsController, action = "GetSettingsInPost" });
+        defaults: new
+        {
+            controller = GlobalConstants.ControllerNames.SettingsController.Replace("Controller", string.Empty),
+            action = "GetSettingsInPost"
+        });
 
     endpoints.MapControllerRoute(
         name: GlobalConstants.V7RouteNames.PaymentSessionApi,
