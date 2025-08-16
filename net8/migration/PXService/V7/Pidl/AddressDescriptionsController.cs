@@ -43,15 +43,15 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         [HttpGet]
         public async Task<ActionResult<List<PIDLResource>>> GetById(
             [FromRoute] string accountId,
-            [FromQuery] string country,
-            [FromQuery] string type,
-            [FromQuery] string? language = null,
-            [FromQuery] string partner = Constants.ServiceDefaults.DefaultPartnerName,
-            [FromQuery] string? scenario = null,
-            [FromQuery] string? operation = null,
-            [FromQuery] string? addressId = null,
-            [FromQuery] bool avsSuggest = false,
-            [FromQuery] bool setAsDefaultBilling = false)
+            string country,
+            string type,
+            string? language = null,
+            string partner = Constants.ServiceDefaults.DefaultPartnerName,
+            string? scenario = null,
+            string? operation = null,
+            string? addressId = null,
+            bool avsSuggest = false,
+            bool setAsDefaultBilling = false)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
 
@@ -374,10 +374,10 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         [HttpGet]
         public async Task<ActionResult<List<PIDLResource>>> GetAddressGroupsById(
             [FromRoute] string accountId,
-            [FromQuery] string country,
-            [FromQuery] string operation = Constants.Operations.SelectInstance,
-            [FromQuery] string? language = null,
-            [FromQuery] string partner = Constants.ServiceDefaults.DefaultPartnerName)
+            string country,
+            string operation = Constants.Operations.SelectInstance,
+            string? language = null,
+            string partner = Constants.ServiceDefaults.DefaultPartnerName)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
             this.Request.AddPartnerProperty(partner?.ToLower());

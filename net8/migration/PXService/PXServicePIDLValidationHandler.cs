@@ -4,10 +4,9 @@ namespace Microsoft.Commerce.Payments.PXService.Handlers
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
-    using System.Net.Http;
-    using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Routing;
@@ -19,14 +18,17 @@ namespace Microsoft.Commerce.Payments.PXService.Handlers
     using static Microsoft.Commerce.Payments.Common.PaymentConstants;
 
     /// <summary>
-    /// Delegating handler which validates DisplayDescription with DataDescription in PIDL document at response
+    /// Middleware which validates DisplayDescription with DataDescription in PIDL document at response
     /// </summary>
-    public class PXServicePIDLValidationHandler : DelegatingHandler
+    public class PXServicePIDLValidationHandler
     {
         private static readonly string[] ValidationAllowedControllers = { "AddressDescriptionsController", "PaymentMethodDescriptionsController", "ProfileDescriptionsController", "ChallengeDescriptionsController", "TaxIdDescriptionsController" };
 
-        public PXServicePIDLValidationHandler()
+        private readonly RequestDelegate next;
+
+        public PXServicePIDLValidationHandler(RequestDelegate next)
         {
+            this.next = next ?? throw new ArgumentNullException(nameof(next));
         }
 
         public static bool ValidatePIDLDocument(string pidlDocument, EventTraceActivity requestCorrelationId)
@@ -55,29 +57,38 @@ namespace Microsoft.Commerce.Payments.PXService.Handlers
             return validationSucceeded;
         }
 
-        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        public async Task InvokeAsync(HttpContext context)
         {
-            HttpResponseMessage response = await base.SendAsync(request, cancellationToken);
+            var request = context.Request;
+            var originalBody = context.Response.Body;
+
+            using var buffer = new MemoryStream();
+            context.Response.Body = buffer;
+
+            await this.next(context);
+
+            buffer.Seek(0, SeekOrigin.Begin);
+            string responseBody = await new StreamReader(buffer).ReadToEndAsync();
+            buffer.Seek(0, SeekOrigin.Begin);
+            await buffer.CopyToAsync(originalBody);
+            context.Response.Body = originalBody;
 
             try
             {
-                RouteData? routeData = request.GetHttpContext()?.GetRouteData();
+                RouteData? routeData = context.GetRouteData();
+                object? controller;
 
-                object controller;
-                HttpContent content = response.Content;
-
-                bool validationRequired = request.Method == HttpMethod.Get
+                bool validationRequired = AspNetCore.Http.HttpMethods.IsGet(request.Method)
                     && routeData != null
                     && routeData.Values.TryGetValue("controller", out controller)
                     && controller != null
                     && ValidationAllowedControllers.Contains(controller.ToString() ?? string.Empty, StringComparer.OrdinalIgnoreCase)
-                    && response.StatusCode == HttpStatusCode.OK
-                    && content?.Headers?.ContentType?.MediaType == HttpMimeTypes.JsonContentType;
+                    && context.Response.StatusCode == (int)HttpStatusCode.OK
+                    && context.Response.ContentType?.StartsWith(HttpMimeTypes.JsonContentType, StringComparison.OrdinalIgnoreCase) == true;
 
                 if (validationRequired)
                 {
-                    string pidldocument = await content.ReadAsStringAsync();
-                    ValidatePIDLDocument(pidldocument, request.GetRequestCorrelationId());
+                    ValidatePIDLDocument(responseBody, request.GetRequestCorrelationId());
                 }
             }
             catch (Exception ex)
@@ -86,8 +97,6 @@ namespace Microsoft.Commerce.Payments.PXService.Handlers
                     $"PXServicePIDLValidationHandler had unexpected failure: {ex.Message}\n{ex.StackTrace}",
                     request.GetRequestCorrelationId());
             }
-
-            return response;
         }
 
         private static bool TryParseJArray(string s, out JArray jarray)

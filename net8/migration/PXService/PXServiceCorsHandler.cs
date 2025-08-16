@@ -7,19 +7,28 @@ namespace Microsoft.Commerce.Payments.PXService
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.Commerce.Payments.Common.Web;
     using Microsoft.Commerce.Payments.PXService.Settings;
 
     /// <summary>
     /// Delegating handler which validates that any CORS request is coming from an allowed origin
     /// </summary>
-    public class PXServiceCorsHandler : DelegatingHandler 
+    public class PXServiceCorsHandler : DelegatingHandler
     {
         private static List<string> corsAllowedOrigins;
+        private readonly RequestDelegate _next;
 
         public PXServiceCorsHandler(PXServiceSettings settings)
         {
             corsAllowedOrigins = settings.CorsAllowedOrigins ?? new List<string>();
+            _next = _ => Task.CompletedTask;
+        }
+
+        public PXServiceCorsHandler(RequestDelegate next, PXServiceSettings settings)
+            : this(settings)
+        {
+            _next = next;
         }
 
         /// <summary>
@@ -56,6 +65,38 @@ namespace Microsoft.Commerce.Payments.PXService
             response.Headers.Add("Access-Control-Allow-Origin", origin);
 
             return response;
+        }
+
+        public async Task InvokeAsync(HttpContext context)
+        {
+            string origin = context.Request.GetRequestHeader("Origin");
+            bool isCorsRequest = !string.IsNullOrEmpty(origin);
+
+            if (!isCorsRequest)
+            {
+                await _next(context);
+                return;
+            }
+
+            string allowedOrigin = corsAllowedOrigins.Find(x => x.ToLower() == origin.ToLower());
+
+            if (string.IsNullOrEmpty(allowedOrigin))
+            {
+                SllWebLogger.TracePXServiceException($"CORS request from domain not in allowed list: {origin}", context.Request.GetRequestCorrelationId());
+                context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+                return;
+            }
+
+            if (context.Request.Method == HttpMethods.Options)
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.OK;
+            }
+            else
+            {
+                await _next(context);
+            }
+
+            context.Response.Headers.Add("Access-Control-Allow-Origin", origin);
         }
     }
 }

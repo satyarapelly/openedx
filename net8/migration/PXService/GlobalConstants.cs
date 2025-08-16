@@ -151,6 +151,10 @@ namespace Microsoft.Commerce.Payments.PXService
             public const string PostReplenishTransactionCredentialsEx = "V6PostReplenishTransactionCredentialsEx";
             public const string GetSettings = "V6GetSettings";
         }
+        public static class MediaType
+        {
+            public const string JsonApplicationType = "application/json";
+        }
 
         public static class V7RouteNames
         {
@@ -467,7 +471,7 @@ namespace Microsoft.Commerce.Payments.PXService
             public const string V7ConfirmPaymentRequestsEx = "{version}/paymentClient/paymentRequestsEx/{paymentRequestId}/confirm";
             public const string V7AttachChallengeDataPaymentRequestsEx = "{version}/paymentClient/paymentRequestsEx/{paymentRequestId}/attachChallengeData";
             public const string V7RemoveEligiblePaymentmethodsPaymentRequestsEx = "{version}/paymentClient/paymentRequestsEx/{paymentRequestId}/removeEligiblePaymentmethods";
-
+            
             // Anonymous Endpoints
             public const string V7Transformation = "{version}/transformation/";
             public const string V7Validation = "{version}/validation/";

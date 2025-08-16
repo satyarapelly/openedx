@@ -312,7 +312,7 @@ namespace Microsoft.Commerce.Payments.PXService.Settings
 
             this.AuthorizationFilter.CertificateAuthenticator = new Management.CertificateVerificationCore.UserDirectory(
                 users: uberUserDirectory.CertificateVerificationRules,
-                online: true,
+                online: false,
                 issuerFetcher: null,
                 verifyRootCA: false,
                 verifyOfflineRevocation: false,
