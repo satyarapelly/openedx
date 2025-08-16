@@ -39,6 +39,26 @@ namespace Microsoft.Commerce.Payments.PXCommon
             return propertyValue;
         }
 
+        public static bool ContainsProperty(this HttpRequestMessage request, string propertyName)
+        {
+            return request.TryGetOption(propertyName, out _);
+        }
+
+        public static bool TryGetProperty(this HttpRequestMessage request, string propertyName, out object value)
+        {
+            return request.TryGetOption(propertyName, out value);
+        }
+
+        public static void AddProperty(this HttpRequestMessage request, string propertyName, object value)
+        {
+            request.SetOption(propertyName, value);
+        }
+
+        public static void SetProperty(this HttpRequestMessage request, string propertyName, object value)
+        {
+            request.SetOption(propertyName, value);
+        }
+
         public static async Task<string> GetRequestPayload(this HttpRequestMessage request)
         {
             string requestPayload;
