@@ -1,7 +1,6 @@
 ﻿// <copyright file="Context.cs" company="Microsoft">Copyright (c) Microsoft 2015. All rights reserved.</copyright>
 namespace Microsoft.Commerce.Payments.PidlModel
 {
-    using PXCommon;
     using System;
     using System.Collections;
     using System.Collections.Generic;
@@ -9,7 +8,7 @@ namespace Microsoft.Commerce.Payments.PidlModel
     using System.IO;
     using System.Resources;
     using System.Threading;
-    using System.Web;
+    using Microsoft.AspNetCore.Http;
     using PXCommon;
 
     /// <summary>
@@ -26,8 +25,10 @@ namespace Microsoft.Commerce.Payments.PidlModel
 
         //// AsyncLocal<T> variables are only being used when running in selfhost mode.
         //// Only PXService.CITs and DiffTest use these.
+        public static IHttpContextAccessor HttpContextAccessor { get; set; }
+
         private static AsyncLocal<CultureInfo> culture = new AsyncLocal<CultureInfo>();
-        
+
         private static AsyncLocal<string> emailAddress = new AsyncLocal<string>();
 
         private static AsyncLocal<string> country = new AsyncLocal<string>();
@@ -38,9 +39,10 @@ namespace Microsoft.Commerce.Payments.PidlModel
         {
             get
             {
-                if (HttpContext.Current != null && HttpContext.Current.Items != null)
+                var context = HttpContextAccessor?.HttpContext;
+                if (context?.Items != null)
                 {
-                    return HttpContext.Current.Items[COUNTRY] as string;
+                    return context.Items[COUNTRY] as string;
                 }
 
                 if (WebHostingUtility.IsApplicationSelfHosted())
@@ -53,9 +55,10 @@ namespace Microsoft.Commerce.Payments.PidlModel
 
             set
             {
-                if (HttpContext.Current != null && HttpContext.Current.Items != null)
+                var context = HttpContextAccessor?.HttpContext;
+                if (context?.Items != null)
                 {
-                    HttpContext.Current.Items[COUNTRY] = value;
+                    context.Items[COUNTRY] = value;
                 }
 
                 if (WebHostingUtility.IsApplicationSelfHosted())
@@ -69,9 +72,10 @@ namespace Microsoft.Commerce.Payments.PidlModel
         {
             get
             {
-                if (HttpContext.Current != null && HttpContext.Current.Items != null)
+                var context = HttpContextAccessor?.HttpContext;
+                if (context?.Items != null)
                 {
-                    return HttpContext.Current.Items[PARTNERNAME] as string;
+                    return context.Items[PARTNERNAME] as string;
                 }
 
                 if (WebHostingUtility.IsApplicationSelfHosted())
@@ -84,9 +88,10 @@ namespace Microsoft.Commerce.Payments.PidlModel
 
             set
             {
-                if (HttpContext.Current != null && HttpContext.Current.Items != null)
+                var context = HttpContextAccessor?.HttpContext;
+                if (context?.Items != null)
                 {
-                    HttpContext.Current.Items[PARTNERNAME] = value;
+                    context.Items[PARTNERNAME] = value;
                 }
 
                 if (WebHostingUtility.IsApplicationSelfHosted())
@@ -100,9 +105,10 @@ namespace Microsoft.Commerce.Payments.PidlModel
         {
             get
             {
-                if (HttpContext.Current != null && HttpContext.Current.Items != null)
+                var context = HttpContextAccessor?.HttpContext;
+                if (context?.Items != null)
                 {
-                    return HttpContext.Current.Items[EMAIL] as string;
+                    return context.Items[EMAIL] as string;
                 }
 
                 if (WebHostingUtility.IsApplicationSelfHosted())
@@ -115,9 +121,10 @@ namespace Microsoft.Commerce.Payments.PidlModel
 
             set
             {
-                if (HttpContext.Current != null && HttpContext.Current.Items != null)
+                var context = HttpContextAccessor?.HttpContext;
+                if (context?.Items != null)
                 {
-                    HttpContext.Current.Items[EMAIL] = value;
+                    context.Items[EMAIL] = value;
                 }
 
                 if (WebHostingUtility.IsApplicationSelfHosted())
@@ -131,9 +138,10 @@ namespace Microsoft.Commerce.Payments.PidlModel
         {
             get
             {
-                if (HttpContext.Current != null && HttpContext.Current.Items != null)
+                var context = HttpContextAccessor?.HttpContext;
+                if (context?.Items != null)
                 {
-                    return HttpContext.Current.Items[CULTURE] as CultureInfo;
+                    return context.Items[CULTURE] as CultureInfo;
                 }
 
                 if (WebHostingUtility.IsApplicationSelfHosted())
@@ -146,9 +154,10 @@ namespace Microsoft.Commerce.Payments.PidlModel
 
             set
             {
-                if (HttpContext.Current != null && HttpContext.Current.Items != null)
+                var context = HttpContextAccessor?.HttpContext;
+                if (context?.Items != null)
                 {
-                    HttpContext.Current.Items[CULTURE] = value;
+                    context.Items[CULTURE] = value;
                 }
 
                 if (WebHostingUtility.IsApplicationSelfHosted())
