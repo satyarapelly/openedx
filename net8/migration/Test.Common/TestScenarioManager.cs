@@ -9,7 +9,6 @@ namespace Test.Common
     using System.Net;
     using System.Net.Http;
     using System.Text;
-    using System.Web.Http;
     using Microsoft.Commerce.Payments.Common.Transaction;
     using Newtonsoft.Json;
 
@@ -42,6 +41,20 @@ namespace Test.Common
 
         public HttpResponseMessage GetResponse(string apiName, TestContext testContext)
         {
+            var result = this.GetResponseContent(apiName, testContext);
+
+            var message = new HttpResponseMessage((HttpStatusCode)result.StatusCode);
+
+            if (!string.IsNullOrEmpty(result.Content))
+            {
+                message.Content = new StringContent(result.Content, Encoding.UTF8, result.ContentType ?? Constants.HeaderValues.JsonContent);
+            }
+
+            return message;
+        }
+
+        public HttpResponseData GetResponseContent(string apiName, TestContext testContext)
+        {
             // Test header validation
             List<string> matchedTestScenarios = testContext.ScenarioList.Where(s => this.testScenarios.ContainsKey(s)).ToList();
 
@@ -49,65 +62,48 @@ namespace Test.Common
             {
                 if (string.IsNullOrWhiteSpace(this.defaultTestScenario))
                 {
-                    throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.BadRequest)
+                    return new HttpResponseData
                     {
-                        Content = new StringContent(string.Format("There is no matched scenario. Test header: [{0}]", testContext.Scenarios))
-                    });
+                        StatusCode = (int)HttpStatusCode.BadRequest,
+                        Content = string.Format("There is no matched scenario. Test header: [{0}]", testContext.Scenarios),
+                        ContentType = Constants.HeaderValues.JsonContent,
+                    };
                 }
                 else
                 {
-                    // Add default header implictly 
+                    // Add default header implictly
                     matchedTestScenarios.Add(this.defaultTestScenario);
                 }
             }
 
             if (matchedTestScenarios.Count > 1)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.BadRequest)
+                return new HttpResponseData
                 {
-                    Content = new StringContent(string.Format("There are more than one matched scenario. Test header: [{0}]", testContext.Scenarios))
-                });
+                    StatusCode = (int)HttpStatusCode.BadRequest,
+                    Content = string.Format("There are more than one matched scenario. Test header: [{0}]", testContext.Scenarios),
+                    ContentType = Constants.HeaderValues.JsonContent,
+                };
             }
 
             // Create Response
             string testScenarioName = matchedTestScenarios[0];
-            ApiResponse response = null;
             TestScenario ts = this.testScenarios[testScenarioName];
-            if (ts.ResponsesPerApiCall.ContainsKey(apiName))
-            {
-                response = ts.ResponsesPerApiCall[apiName];
-            }
 
-            if (response.StatusCode == HttpStatusCode.BadRequest 
-                || response.StatusCode == HttpStatusCode.InternalServerError)
+            if (!ts.ResponsesPerApiCall.TryGetValue(apiName, out ApiResponse response))
             {
-                throw new HttpResponseException(new HttpResponseMessage(response.StatusCode)
+                return new HttpResponseData
                 {
-                    Content = new StringContent(response.Content.ToString(), Encoding.UTF8, Constants.HeaderValues.JsonContent)
-                });
-            }
-
-            if (response.StatusCode.Equals(HttpStatusCode.NotFound))
-            {
-                return new HttpResponseMessage(HttpStatusCode.NotFound)
-                {
-                    Content = new StringContent(response.Content.ToString(), Encoding.UTF8, Constants.HeaderValues.JsonContent)
+                    StatusCode = (int)HttpStatusCode.NotFound,
+                    ContentType = Constants.HeaderValues.JsonContent,
                 };
             }
 
-            if (response.StatusCode.Equals(HttpStatusCode.NoContent))
+            return new HttpResponseData
             {
-                return new HttpResponseMessage(HttpStatusCode.NoContent);
-            }
-
-            if (response.StatusCode.Equals(HttpStatusCode.ServiceUnavailable))
-            {
-                return new HttpResponseMessage(HttpStatusCode.ServiceUnavailable);
-            }
-
-            return new HttpResponseMessage(HttpStatusCode.OK)
-            {
-                Content = new StringContent(response.Content.ToString(), Encoding.UTF8, Constants.HeaderValues.JsonContent)
+                StatusCode = (int)response.StatusCode,
+                Content = response.Content?.ToString(),
+                ContentType = Constants.HeaderValues.JsonContent,
             };
         }
     }
