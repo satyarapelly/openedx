@@ -235,6 +235,10 @@
                   "usePSSForPXFeatureFlighting": true
                 }
               ]
+            },
+            "removeZeroBalanceCsv": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": null
             }
           }
         }

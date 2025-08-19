@@ -4,8 +4,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
 {
     using System.Diagnostics.CodeAnalysis;
     using System.Net.Http;
-    using Microsoft.AspNetCore.Mvc;
-using FromUri = Microsoft.AspNetCore.Mvc.FromQueryAttribute;
+    using System.Web.Http;
     using Constants = Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Constants;
 
     public class AccountProfilesController : EmulatorBaseController

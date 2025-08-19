@@ -124,21 +124,21 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Mock
             var trimmedSegments = request.RequestUri.Segments.Select(s => s.Trim(new char[] { '/' })).ToArray();
             if (string.Equals("paymentMethods", trimmedSegments[2], StringComparison.OrdinalIgnoreCase))
             {
-                var queryKvc = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(request.RequestUri.Query);
+                var queryKvc = System.Web.HttpUtility.ParseQueryString(request.RequestUri.Query);
                 var filteredPms = GetPaymentMethods(
-                    country: queryKvc.TryGetValue("country", out var country) ? country.FirstOrDefault() : null,
-                    family: queryKvc.TryGetValue("family", out var family) ? family.FirstOrDefault() : null,
-                    type: queryKvc.TryGetValue("type", out var type) ? type.FirstOrDefault() : null).ToArray();
+                    country: queryKvc["country"],
+                    family: queryKvc["family"],
+                    type: queryKvc["type"]).ToArray();
 
                 responseContent = JsonConvert.SerializeObject(filteredPms);
             }
             else if (string.Equals("thirdPartyPayments", trimmedSegments[2], StringComparison.OrdinalIgnoreCase))
             {
-                var queryKvc = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(request.RequestUri.Query);
+                var queryKvc = System.Web.HttpUtility.ParseQueryString(request.RequestUri.Query);
                 var filteredPms = GetThirdPartyPaymentMethods(
-                    provider: queryKvc.TryGetValue("provider", out var provider) ? provider.FirstOrDefault() : null,
-                    sellerCountry: queryKvc.TryGetValue("sellerCountry", out var sellerCountry) ? sellerCountry.FirstOrDefault() : null,
-                    buyerCountry: queryKvc.TryGetValue("buyerCountry", out var buyerCountry) ? buyerCountry.FirstOrDefault() : null).ToArray();
+                    provider: queryKvc["provider"],
+                    sellerCountry: queryKvc["sellerCountry"],
+                    buyerCountry: queryKvc["buyerCountry"]).ToArray();
 
                 responseContent = JsonConvert.SerializeObject(filteredPms);
             }
@@ -181,8 +181,8 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Mock
                 else
                 {
                     // List PI
-                    var queryKvc = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(request.RequestUri.Query);
-                    var billableAccountId = queryKvc.TryGetValue("billableAccountId", out var billableAccount) ? billableAccount.FirstOrDefault() : null;
+                    var queryKvc = System.Web.HttpUtility.ParseQueryString(request.RequestUri.Query);
+                    var billableAccountId = queryKvc["billableAccountId"];
                     if (billableAccountId != null)
                     {
                         this.IsBillingAccountIdSet = true;

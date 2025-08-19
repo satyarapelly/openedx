@@ -7,13 +7,11 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
     using System.Net.Http;
     using System.Text;
     using System.Threading;
-    using Microsoft.AspNetCore.Mvc;
-using FromUri = Microsoft.AspNetCore.Mvc.FromQueryAttribute;
+    using System.Web.Http;
     using Common.Transaction;
     using Common.Web;
     using Test.Common;
     using Constants = Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Constants;
-    using Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Extensions;
 
     public class PurchaseController : EmulatorBaseController
     {

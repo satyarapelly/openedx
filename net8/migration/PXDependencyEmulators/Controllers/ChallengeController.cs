@@ -3,8 +3,7 @@
 namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Controllers
 {
     using System.Net.Http;
-    using Microsoft.AspNetCore.Mvc;
-using FromUri = Microsoft.AspNetCore.Mvc.FromQueryAttribute;
+    using System.Web.Http;
     using Microsoft.Commerce.Payments.PXService.Model.ChallengeManagementService;
     using Constants = Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Constants;
 

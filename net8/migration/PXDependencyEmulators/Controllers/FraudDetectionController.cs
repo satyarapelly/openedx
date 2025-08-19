@@ -4,21 +4,19 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
 {
     using System.Diagnostics.CodeAnalysis;
     using System.Net.Http;
-    using Microsoft.AspNetCore.Mvc;
-using FromUri = Microsoft.AspNetCore.Mvc.FromQueryAttribute;
+    using System.Web.Http;
     using Common.Web;
     using Microsoft.Commerce.Payments.Common.Transaction;
     using Test.Common;
     using Constants = Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Constants;
-    using Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Extensions;
 
-    public class FraudDetectionController : ControllerBase
+    public class FraudDetectionController : ApiController
     {
-        private IScenarioManager TestScenarioManager
+        private TestScenarioManager TestScenarioManager
         {
             get
             {
-                return this.HttpContext.RequestServices.GetTestScenarioManager(Constants.TestScenarioManagers.FraudDetection);
+                return this.Configuration.GetTestScenarioManager(Constants.TestScenarioManagers.FraudDetection);
             }
         }
 

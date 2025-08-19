@@ -3,14 +3,11 @@
 namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Controllers
 {
     using System.Net.Http;
-    using Microsoft.AspNetCore.Mvc;
-using FromUri = Microsoft.AspNetCore.Mvc.FromQueryAttribute;
+    using System.Web.Http;
     using Common.Transaction;
     using Common.Web;
     using Test.Common;
-    using Microsoft.Commerce.Payments.Common.Testing;
     using Constants = Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Constants;
-    using Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Extensions;
 
     public class PimsPaymentMethodsController : EmulatorBaseController
     {
@@ -40,7 +37,7 @@ using FromUri = Microsoft.AspNetCore.Mvc.FromQueryAttribute;
                 }
             }
 
-            return this.TestScenarioManager.GetResponse(apiName, testContext);
+            return TestScenarioManager.GetResponse(apiName, testContext);
         }
     }
 }

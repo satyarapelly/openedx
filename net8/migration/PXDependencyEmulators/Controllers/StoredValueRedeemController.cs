@@ -3,11 +3,10 @@
 namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Controllers
 {
     using System.Diagnostics.CodeAnalysis;
-    using Microsoft.AspNetCore.Mvc;
-using FromUri = Microsoft.AspNetCore.Mvc.FromQueryAttribute;
+    using System.Web.Http;
     using Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Mocks;
 
-    public class StoredValueRedeemController : ControllerBase
+    public class StoredValueRedeemController : ApiController
     {
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "This needs to be instance methods for web app to work.")]
         [HttpPost]
