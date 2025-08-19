@@ -1,82 +1,114 @@
-﻿// <copyright file="TestScenarioManager.cs" company="Microsoft">Copyright (c) Microsoft 2017. All rights reserved.</copyright>
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Newtonsoft.Json;
-using Microsoft.Commerce.Payments.Common.Transaction;
+// <copyright file="TestScenarioManager.cs" company="Microsoft">Copyright (c) Microsoft 2017. All rights reserved.</copyright>
 
 namespace Test.Common
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Text;
+    using System.Web.Http;
+    using Microsoft.Commerce.Payments.Common.Transaction;
+    using Newtonsoft.Json;
+
+    /// <summary>
+    /// TestScenarioManager manages all the supported test scenarios
+    /// The name of the test scenarios follows the rule px.pi_type.expected_result_of_the_test_scenario
+    /// eg:"px.pims.nsm.resume.error.invalidchallengecode" means add a nonsimmobi pi and the add pi flow fails at resume with server error code "invalidchallengecode"
+    /// A test scenario object stores the responses of all api calls in one test scenario. 
+    /// eg: nsm add flow may includes add, get, resume pi call responses, while credit card add flow may only contains add pi call response.
+    /// more details can be refered to the files in TestScenarios folder. Each file matches to a test scenario.
+    /// </summary>
     public class TestScenarioManager
     {
-        private readonly Dictionary<string, TestScenario> testScenarios;
-        private readonly string defaultTestScenario;
+        // The key is the name of test scenario
+        private readonly Dictionary<string, TestScenario> testScenarios = new Dictionary<string, TestScenario>(StringComparer.OrdinalIgnoreCase);
+
+        private string defaultTestScenario;
 
         public TestScenarioManager(string scenariosPath, string defaultTestScenario)
         {
             this.defaultTestScenario = defaultTestScenario;
 
-            this.testScenarios = Directory
-                .EnumerateFiles(scenariosPath)
-                .Select(File.ReadAllText)
-                .Select(content => JsonConvert.DeserializeObject<TestScenario>(content)!)
-                .ToDictionary(ts => ts.Name, StringComparer.OrdinalIgnoreCase);
+            DirectoryInfo dir = new DirectoryInfo(scenariosPath);
+            IEnumerable<FileInfo> files = dir.GetFiles();
+            this.testScenarios = Directory.EnumerateFiles(scenariosPath)
+                .Select(f => File.ReadAllText(f))
+                .Select(content => JsonConvert.DeserializeObject<TestScenario>(content))
+                .ToDictionary(ts => ts.Name);
         }
 
-        public HttpResponseData GetResponseContent(string apiName, TestContext testContext)
+        public HttpResponseMessage GetResponse(string apiName, TestContext testContext)
         {
-            var matchedScenarios = testContext.ScenarioList
-                .Where(s => testScenarios.ContainsKey(s))
-                .ToList();
+            // Test header validation
+            List<string> matchedTestScenarios = testContext.ScenarioList.Where(s => this.testScenarios.ContainsKey(s)).ToList();
 
-            if (matchedScenarios.Count == 0)
+            if (matchedTestScenarios.Count == 0)
             {
-                if (string.IsNullOrWhiteSpace(defaultTestScenario))
+                if (string.IsNullOrWhiteSpace(this.defaultTestScenario))
                 {
-                    return new HttpResponseData
+                    throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.BadRequest)
                     {
-                        StatusCode = 400,
-                        Content = $"No matching scenario found. Provided: [{testContext.Scenarios}]"
-                    };
+                        Content = new StringContent(string.Format("There is no matched scenario. Test header: [{0}]", testContext.Scenarios))
+                    });
                 }
-
-                matchedScenarios.Add(defaultTestScenario);
+                else
+                {
+                    // Add default header implictly 
+                    matchedTestScenarios.Add(this.defaultTestScenario);
+                }
             }
 
-            if (matchedScenarios.Count > 1)
+            if (matchedTestScenarios.Count > 1)
             {
-                return new HttpResponseData
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.BadRequest)
                 {
-                    StatusCode = 400,
-                    Content = $"Multiple matching scenarios found. Provided: [{testContext.Scenarios}]"
+                    Content = new StringContent(string.Format("There are more than one matched scenario. Test header: [{0}]", testContext.Scenarios))
+                });
+            }
+
+            // Create Response
+            string testScenarioName = matchedTestScenarios[0];
+            ApiResponse response = null;
+            TestScenario ts = this.testScenarios[testScenarioName];
+            if (ts.ResponsesPerApiCall.ContainsKey(apiName))
+            {
+                response = ts.ResponsesPerApiCall[apiName];
+            }
+
+            if (response.StatusCode == HttpStatusCode.BadRequest 
+                || response.StatusCode == HttpStatusCode.InternalServerError)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(response.StatusCode)
+                {
+                    Content = new StringContent(response.Content.ToString(), Encoding.UTF8, Constants.HeaderValues.JsonContent)
+                });
+            }
+
+            if (response.StatusCode.Equals(HttpStatusCode.NotFound))
+            {
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    Content = new StringContent(response.Content.ToString(), Encoding.UTF8, Constants.HeaderValues.JsonContent)
                 };
             }
 
-            var scenarioName = matchedScenarios[0];
-            if (!testScenarios.TryGetValue(scenarioName, out var scenario) ||
-                !scenario.ResponsesPerApiCall.TryGetValue(apiName, out var response))
+            if (response.StatusCode.Equals(HttpStatusCode.NoContent))
             {
-                return new HttpResponseData
-                {
-                    StatusCode = 404,
-                    Content = $"No response found for API '{apiName}' in scenario '{scenarioName}'."
-                };
+                return new HttpResponseMessage(HttpStatusCode.NoContent);
             }
 
-            return new HttpResponseData
+            if (response.StatusCode.Equals(HttpStatusCode.ServiceUnavailable))
             {
-                StatusCode = (int)response.StatusCode,
-                Content = response.Content?.ToString(),
-                ContentType = "application/json"
+                return new HttpResponseMessage(HttpStatusCode.ServiceUnavailable);
+            }
+
+            return new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent(response.Content.ToString(), Encoding.UTF8, Constants.HeaderValues.JsonContent)
             };
         }
-    }
-
-    public class HttpResponseData
-    {
-        public int StatusCode { get; set; }
-        public string? Content { get; set; }
-        public string? ContentType { get; set; } = "application/json";
     }
 }
