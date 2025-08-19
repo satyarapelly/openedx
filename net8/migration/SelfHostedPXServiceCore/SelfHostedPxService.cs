@@ -74,14 +74,14 @@ namespace SelfHostedPXServiceCore
 
                 try
                 {
-                    dependencyEmulatorService = new HostableService(configAction, null, "http");
+                    dependencyEmulatorService = new HostableService(configAction, null, "http", Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.WebApiConfig.ConfigureRoutes);
                 }
                 catch
                 {
                     try
                     {
                         // Retry once again if failed for first time
-                        dependencyEmulatorService = new HostableService(configAction, null, "http");
+                        dependencyEmulatorService = new HostableService(configAction, null, "http", Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.WebApiConfig.ConfigureRoutes);
                     }
                     catch (Exception ex)
                     {
