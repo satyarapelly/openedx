@@ -5,8 +5,11 @@
     using System.Linq;
     using System.Net.Http;
     using System.Net.NetworkInformation;
-    using System.Web.Http.SelfHost;
     using Castle.Components.DictionaryAdapter;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
 
     public class HostableService : IDisposable
     {
@@ -16,9 +19,7 @@
 
         public Uri BaseUri { get; private set; }
 
-        public HttpSelfHostConfiguration SelfHostConfiguration { get; private set; }
-
-        public HttpSelfHostServer SelfHostServer { get; private set; }
+        public WebApplication SelfHostServer { get; private set; }
 
         public HttpClient HttpSelfHttpClient { get; private set; }
 
@@ -27,7 +28,7 @@
             PreRegisteredPorts = new EditableList<int>();
         }
 
-        public HostableService(Action<HttpSelfHostConfiguration> registerConfig, string fullBaseUrl, string protocol)
+        public HostableService(Action<WebApplicationBuilder> registerConfig, string? fullBaseUrl, string? protocol)
         {
             if (string.IsNullOrEmpty(fullBaseUrl))
             {
@@ -45,19 +46,25 @@
                 BaseUri = new Uri(fullBaseUrl);
             }
 
-            SelfHostConfiguration = new HttpSelfHostConfiguration(BaseUri.AbsoluteUri);
-            registerConfig(SelfHostConfiguration);
+            var builder = WebApplication.CreateBuilder();
+            builder.WebHost.UseUrls(BaseUri.AbsoluteUri);
+            builder.Services.AddControllers();
+            registerConfig(builder);
 
-            SelfHostServer = new HttpSelfHostServer(SelfHostConfiguration);
-            SelfHostServer.OpenAsync().Wait();
+            SelfHostServer = builder.Build();
+            SelfHostServer.MapControllers();
+            SelfHostServer.StartAsync().Wait();
 
-            HttpSelfHttpClient = new HttpClient(SelfHostServer);
-            HttpSelfHttpClient.BaseAddress = BaseUri;
+            HttpSelfHttpClient = new HttpClient
+            {
+                BaseAddress = BaseUri,
+            };
         }
 
         public void Dispose()
         {
-            SelfHostServer.CloseAsync().Wait();
+            SelfHostServer.StopAsync().Wait();
+            SelfHostServer.Dispose();
         }
 
         private static string GetAvailablePort()

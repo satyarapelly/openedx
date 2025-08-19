@@ -9,7 +9,7 @@ namespace SelfHostedPXServiceCore
     using System.Net.Http;
     using System.Net.Http.Headers;
     using System.Threading.Tasks;
-    using System.Web.Http.SelfHost;
+    using Microsoft.AspNetCore.Builder;
     using Microsoft.Commerce.Payments.PXService;
     using Microsoft.Commerce.Payments.PXService.Accessors.IssuerService;
     using Microsoft.Commerce.Payments.PXService.Accessors.MSRewardsService;
@@ -69,7 +69,7 @@ namespace SelfHostedPXServiceCore
                 }
 
                 // Create a single shared configuration action
-                Action<HttpSelfHostConfiguration> configAction = c => Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.WebApiConfig.Register(c, useArrangedResponses);
+                Action<WebApplicationBuilder> configAction = b => Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.WebApiConfig.Register(b, useArrangedResponses);
                 HostableService dependencyEmulatorService = null;
 
                 try
@@ -100,19 +100,19 @@ namespace SelfHostedPXServiceCore
 
             PXSettings = new PXServiceSettings(SelfHostedDependencies, useArrangedResponses);
             PxHostableService = new HostableService(
-                configuration =>
+                builder =>
                 {
-                    WebApiConfig.Register(configuration, PXSettings);
+                    WebApiConfig.Register(builder, PXSettings);
                     PXFlightHandler = new PXServiceFlightHandler();
-                    configuration.MessageHandlers.Add(PXFlightHandler);
+                    builder.Services.AddSingleton(PXFlightHandler);
 
                     // The PXCorsHandler instance here is for testing purposes.
                     // It needs to be added after WebApiConfig.Register runs otherwise the flight needed for testing will be overwritten.
                     PXCorsHandler = new PXServiceCorsHandler(new PXServiceSettings());
-                    configuration.MessageHandlers.Add(PXCorsHandler);
+                    builder.Services.AddSingleton(PXCorsHandler);
 
                     PXHandler = new PXServiceHandler();
-                    configuration.MessageHandlers.Add(PXHandler);
+                    builder.Services.AddSingleton(PXHandler);
                 },
                 fullBaseUrl,
                 "http");
@@ -140,7 +140,7 @@ namespace SelfHostedPXServiceCore
 
         public void Dispose()
         {
-            PxHostableService.SelfHostServer.CloseAsync().Wait();
+            PxHostableService.SelfHostServer.StopAsync().Wait();
         }
 
         public static string GetPXServiceUrl(string relativePath)
