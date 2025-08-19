@@ -8,6 +8,7 @@
     using Castle.Components.DictionaryAdapter;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Routing;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
 
@@ -28,7 +29,7 @@
             PreRegisteredPorts = new EditableList<int>();
         }
 
-        public HostableService(Action<WebApplicationBuilder> registerConfig, string? fullBaseUrl, string? protocol)
+        public HostableService(Action<WebApplicationBuilder> registerConfig, string? fullBaseUrl, string? protocol, Action<IEndpointRouteBuilder>? configureRoutes = null)
         {
             if (string.IsNullOrEmpty(fullBaseUrl))
             {
@@ -53,6 +54,7 @@
 
             SelfHostServer = builder.Build();
             SelfHostServer.MapControllers();
+            configureRoutes?.Invoke(SelfHostServer);
             SelfHostServer.StartAsync().Wait();
 
             HttpSelfHttpClient = new HttpClient

@@ -115,7 +115,8 @@ namespace SelfHostedPXServiceCore
                     builder.Services.AddSingleton(PXHandler);
                 },
                 fullBaseUrl,
-                "http");
+                "http",
+                WebApiConfig.AddUrlVersionedRoutes);
         }
 
         public void ResetDependencies()
