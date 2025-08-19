@@ -1,238 +1,37 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project Sdk="Microsoft.NET.Sdk.Web">
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), build.root))\msbuild\Environment.props" />
-  <Import Project="$(INETROOT)\private\Payments\Payments.targets" />
+  <Import Project="$(INETROOT)\private\Payments\tests\Test.targets" />
+
   <PropertyGroup>
-    <ProjectGuid>{885DE277-B844-4676-86A1-A3BB48B19981}</ProjectGuid>
-    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators</RootNamespace>
-    <AssemblyName>Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <WebProjectOutputPath>$(DropRoot)\$(MSBuildProjectName)\</WebProjectOutputPath>
-    <UseIISExpress>false</UseIISExpress>
-    <UseIISExpress>true</UseIISExpress>
-    <IISExpressSSLPort>44304</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication />
-    <IISExpressWindowsAuthentication />
-    <IISExpressUseClassicPipelineMode />
-    <UseGlobalApplicationHostFile />
-    <Use64BitIISExpress />
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
   </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\NugetPackages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Swashbuckle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cd1bb07a5ac7c7bc, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\NugetPackages\Swashbuckle.Core.5.6.0\lib\net40\Swashbuckle.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Net.Http.Formatting, Version=5.2.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\NugetPackages\Microsoft.AspNet.WebApi.Client.5.2.4\lib\net45\System.Net.Http.Formatting.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\NugetPackages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Web.Http.WebHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\NugetPackages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Xml" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.WebApiCompatShim" Version="8.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
+
   <ItemGroup>
-    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
-      <HintPath>..\..\..\..\..\..\NugetPackages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\PXCommon\PXCommon.csproj" />
+    <ProjectReference Include="..\PXService\PXService.csproj" />
   </ItemGroup>
+
   <ItemGroup>
-    <Content Include="Global.asax" />
-    <Content Include="Web.config" />
+    <None Include="TestScenarios\**\*.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="Mocks\**\*.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="AddHeaderParameterOperationFilter.cs" />
-    <Compile Include="Constants.cs" />
-    <Compile Include="Controllers\EmulatorBaseController.cs" />
-    <Compile Include="Controllers\FraudDetectionController.cs" />
-    <Compile Include="Controllers\AccountAddressesController.cs" />
-    <Compile Include="Controllers\CatalogController.cs" />
-    <Compile Include="Controllers\AccountCustomersController.cs" />
-    <Compile Include="Controllers\ChallengeController.cs" />
-    <Compile Include="Controllers\PayerAuthController.cs" />
-    <Compile Include="Controllers\PaymentOchestratorCheckoutRequestsController.cs" />
-    <Compile Include="Controllers\StoredValueRedeemController.cs" />
-    <Compile Include="Controllers\StoredValueGiftCatalogController.cs" />
-    <Compile Include="Controllers\PaymentThirdPartyCheckoutChargeController.cs" />
-    <Compile Include="Controllers\PaymentThirdPartyPaymentAndCheckoutsController.cs" />
-    <Compile Include="Controllers\IssuerServiceController.cs" />
-    <Compile Include="Controllers\MSRewardsGetUserInfoController.cs" />
-    <Compile Include="Controllers\PartnerSettingsController.cs" />
-    <Compile Include="Controllers\PimsPaymentInstrumentsController.cs" />
-    <Compile Include="Controllers\PimsPaymentMethodsController.cs" />
-    <Compile Include="Controllers\AccountProfilesController.cs" />
-    <Compile Include="Controllers\PurchaseController.cs" />
-    <Compile Include="Controllers\RedeemRewardsController.cs" />
-    <Compile Include="Controllers\ChallengeManagementSessionController.cs" />
-    <Compile Include="Controllers\RiskController.cs" />
-    <Compile Include="Controllers\SellersController.cs" />
-    <Compile Include="Controllers\TokenPolicyDescriptionController.cs" />
-    <Compile Include="Controllers\TransactionServiceController.cs" />
-    <Compile Include="EmulatorsRouteExtensions.cs" />
-    <Compile Include="Global.asax.cs">
-      <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
-    <Compile Include="Mocks\Account\AccountServiceMockResponseProvider.cs" />
-    <Compile Include="Mocks\Catalog\CatalogServiceMockResponseProvider.cs" />
-    <Compile Include="Mocks\ChallengeManagement\ChallengeManagementServiceMockResponseProvider.cs" />
-    <Compile Include="Mocks\FraudDetection\FraudDetectionMockResponseProvider.cs" />
-    <Compile Include="Mocks\IssuerService\IssuerServiceMockResponseProvider.cs" />
-    <Compile Include="Mocks\MSRewards\MSRewardsServiceMockResponseProvider.cs" />
-    <Compile Include="Mocks\PartnerSettings\PartnerSettingsServiceMockResponseProvider.cs" />
-    <Compile Include="Mocks\PayerAuth\PayerAuthServiceMockResponseProvider.cs" />
-    <Compile Include="Mocks\PayerAuth\ThreeDSServerAreq.cs" />
-    <Compile Include="Mocks\PayerAuth\ThreeDSServerAuthenticationResponse.cs" />
-    <Compile Include="Mocks\PaymentOchestrator\PaymentOrchestratorServiceMockResponseProvider.cs" />
-    <Compile Include="Mocks\PaymentThirdParty\PaymentThirdPartyServiceMockResponseProvider.cs" />
-    <Compile Include="Mocks\PIMS\PimsMockResponseProvider.cs" />
-    <Compile Include="Mocks\PIMS\PimsMockResponseProviderAugmented.cs" />
-    <Compile Include="Mocks\PIMS\PimsServiceDelegatingHandler.cs" />
-    <Compile Include="Mocks\Purchase\MockCheckPiResult.cs" />
-    <Compile Include="Mocks\Purchase\PurchaseServiceMockResponseProvider.cs" />
-    <Compile Include="Mocks\Risk\RiskServiceMockResponseProvider.cs" />
-    <Compile Include="Mocks\SellerMarketPlace\SellerMarketPlaceServiceMockResponseProvider.cs" />
-    <Compile Include="Mocks\StoredValue\StoredValueServiceMockResponseProvider.cs" />
-    <Compile Include="Mocks\TokenPolicy\TokenPolicyServiceMockResponseProvider.cs" />
-    <Compile Include="Mocks\StoredValue\FundStoredValuePayload.cs" />
-    <Compile Include="Mocks\StoredValue\FundStoredValueTransaction.cs" />
-    <Compile Include="Mocks\StoredValue\RESTProperty.cs" />
-    <Compile Include="Mocks\StoredValue\StoredValueFundingCatalog.cs" />
-    <Compile Include="Mocks\TransactionData\TransactionDataServiceMockResponseProvider.cs" />
-    <Compile Include="Mocks\TransactionService\TransactionServiceMockResponseProvider.cs" />
-    <Compile Include="Mocks\Wallet\WalletServiceMockResponseProvider.cs" />
-    <Compile Include="SwaggerConfig.cs" />
-    <Compile Include="WebApiConfig.cs" />
+    <Compile Remove="AddHeaderParameterOperationFilter.cs" />
+    <Compile Remove="SwaggerConfig.cs" />
+    <None Remove="Global.asax" />
+    <None Remove="Web.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="TestScenarios\**\*.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mocks\PartnerSettings\PartnerSettingsByPartner.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mocks\PartnerSettings\PSSTestSettingsById.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mocks\PIMS\PaymentInstruments.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mocks\PIMS\PaymentMethodsByCountry.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mocks\PIMS\PaymentMethodsByCountryAugmented.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mocks\PIMS\PaymentMethodsByProvider.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mocks\MSRewards\MSRewardsByOperation.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mocks\Account\AddressesV2ByAccountId.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mocks\Account\AddressesV3ByAccountId.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mocks\Account\CustomersV3ByAccountId.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mocks\Account\ProfilesV2ByAccountId.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mocks\Account\ProfilesV3ByAccountId.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mocks\ChallengeManagement\ArkoseChallenge.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mocks\Purchase\CheckPiResults.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mocks\Purchase\Orders.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mocks\Purchase\Subscriptions.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Common\Common.csproj">
-      <Project>{717e55e4-ccc7-4eea-b138-15ca4d7911bf}</Project>
-      <Name>Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Pidl\PXCommon\PXCommon.csproj">
-      <Project>{bf723e85-a62e-4c9e-a251-16b89a037e2b}</Project>
-      <Name>PXCommon</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\PXService\PXService.csproj">
-      <Project>{C8617C71-9458-4571-B7E5-3DDA7A0341C2}</Project>
-      <Name>PXService</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Test.Common\Test.Common.csproj">
-      <Project>{d6784baf-4b15-4852-8238-94e8074d87f1}</Project>
-      <Name>Test.Common</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
-  <PropertyGroup>
-    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
-    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>..\..\..\..\..\msbuild\OCPKey.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
-  <Import Project="$(ExtendedTargetsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" />
-  <ProjectExtensions>
-    <VisualStudio>
-      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
-        <WebProjectProperties>
-          <UseIIS>False</UseIIS>
-          <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>58974</DevelopmentServerPort>
-          <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:58974/</IISUrl>
-          <NTLMAuthentication>False</NTLMAuthentication>
-          <UseCustomServer>True</UseCustomServer>
-          <CustomServerUrl>http://localhost/PXDependencyEmulators</CustomServerUrl>
-          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
-        </WebProjectProperties>
-      </FlavorProperties>
-    </VisualStudio>
-  </ProjectExtensions>
-  <PropertyGroup>
-    <PostBuildEvent Condition="'$(BuildingInsideVisualStudio)'=='true'">powershell.exe -ExecutionPolicy ByPass -NoProfile -NonInteractive -File $(MSBuildThisFileDirectory)..\..\..\LocalDeploymentChanges.ps1 -src "$(WebProjectOutputPath)\web.config"</PostBuildEvent>
-  </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>
+
