@@ -1,4 +1,4 @@
-// <copyright company="Microsoft Corporation">Copyright (c) Microsoft 2018. All rights reserved.</copyright>
+﻿// <copyright company="Microsoft Corporation">Copyright (c) Microsoft 2018. All rights reserved.</copyright>
 
 namespace SelfHostedPXServiceCore
 {
@@ -9,15 +9,13 @@ namespace SelfHostedPXServiceCore
     using System.Net.Http;
     using System.Net.Http.Headers;
     using System.Threading.Tasks;
-    using Microsoft.AspNetCore.Builder;
-    using Microsoft.AspNetCore.TestHost;
+    using System.Web.Http.SelfHost;
     using Microsoft.Commerce.Payments.PXService;
     using Microsoft.Commerce.Payments.PXService.Accessors.IssuerService;
     using Microsoft.Commerce.Payments.PXService.Accessors.MSRewardsService;
     using Microsoft.Commerce.Payments.PXService.Accessors.PartnerSettingsService;
     using Microsoft.Commerce.Payments.PXService.Accessors.TokenPolicyService;
     using Microsoft.Commerce.Payments.PXService.RiskService.V7;
-    using Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators;
     using Mocks;
 
     public class SelfHostedPxService : IDisposable
@@ -64,30 +62,14 @@ namespace SelfHostedPXServiceCore
                 if (!string.IsNullOrEmpty(fullBaseUrl))
                 {
                     var uri = new Uri(fullBaseUrl);
+
+                    // Dependencies need to selfhost before px, we need to reserve px
+                    // port so other dependencies don't take it.
                     HostableService.PreRegisteredPorts.Add(uri.Port);
                 }
 
-                Action<WebApplication> configAction = app =>
-                {
-                    app.MapControllers();
-                    app.MapPartnerSettingsRoutes();
-                    app.MapPIMSRoutes();
-                    app.MapMSRewardsRoutes();
-                    app.MapCatalogRoutes();
-                    app.MapAccountRoutes();
-                    app.MapIssuerServiceRoutes();
-                    app.MapChallengeManagementRoutes();
-                    app.MapPaymentThirdPartyRoutes();
-                    app.MapPurchaseRoutes();
-                    app.MapRiskRoutes();
-                    app.MapSellerMarketPlaceRoutes();
-                    app.MapTokenPolicyRoutes();
-                    app.MapStoredValueRoutes();
-                    app.MapTransactionServiceRoutes();
-                    app.MapPaymentOchestratorRoutes();
-                    app.MapPayerAuthRoutes();
-                    app.MapFraudDetectionRoutes();
-                };
+                // Create a single shared configuration action
+                Action<HttpSelfHostConfiguration> configAction = c => Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.WebApiConfig.Register(c, useArrangedResponses);
                 HostableService dependencyEmulatorService = null;
 
                 try
@@ -98,6 +80,7 @@ namespace SelfHostedPXServiceCore
                 {
                     try
                     {
+                        // Retry once again if failed for first time
                         dependencyEmulatorService = new HostableService(configAction, null, "http");
                     }
                     catch (Exception ex)
@@ -109,6 +92,7 @@ namespace SelfHostedPXServiceCore
                 foreach (var selfhostService in selfhostServices)
                 {
                     var serviceName = GetServiceName(selfhostService.FullName);
+
                     Console.WriteLine($"{serviceName} initialized as self hosted emulator service on {dependencyEmulatorService.BaseUri}");
                     SelfHostedDependencies.Add(selfhostService, dependencyEmulatorService);
                 }
@@ -116,41 +100,47 @@ namespace SelfHostedPXServiceCore
 
             PXSettings = new PXServiceSettings(SelfHostedDependencies, useArrangedResponses);
             PxHostableService = new HostableService(
-                app =>
+                configuration =>
                 {
-                    app.MapControllers();
+                    WebApiConfig.Register(configuration, PXSettings);
+                    PXFlightHandler = new PXServiceFlightHandler();
+                    configuration.MessageHandlers.Add(PXFlightHandler);
+
+                    // The PXCorsHandler instance here is for testing purposes.
+                    // It needs to be added after WebApiConfig.Register runs otherwise the flight needed for testing will be overwritten.
+                    PXCorsHandler = new PXServiceCorsHandler(new PXServiceSettings());
+                    configuration.MessageHandlers.Add(PXCorsHandler);
+
+                    PXHandler = new PXServiceHandler();
+                    configuration.MessageHandlers.Add(PXHandler);
                 },
                 fullBaseUrl,
-                "http",
-                builder =>
-                {
-                    builder.Services.AddSingleton(PXSettings);
-                });
-
-            var server = PxHostableService.WebApp.GetTestServer();
-            PXFlightHandler = new PXServiceFlightHandler();
-            PXCorsHandler = new PXServiceCorsHandler(new PXServiceSettings());
-            PXHandler = new PXServiceHandler();
-
-            PXFlightHandler.InnerHandler = PXCorsHandler;
-            PXCorsHandler.InnerHandler = PXHandler;
-            PXHandler.InnerHandler = server.CreateHandler();
-
-            PxHostableService.HttpSelfHttpClient = new HttpClient(PXFlightHandler)
-            {
-                BaseAddress = PxHostableService.BaseUri
-            };
+                "http");
         }
 
         public void ResetDependencies()
         {
             PXHandler.ResetToDefault();
             PXFlightHandler.ResetToDefault();
+            PXSettings.PartnerSettingsService.ResetToDefaults();
+            PXSettings.AccountsService.ResetToDefaults();
+            PXSettings.PayerAuthService.ResetToDefaults();
+            PXSettings.PimsService.ResetToDefaults();
+            PXSettings.SessionService.ResetToDefaults();
+            PXSettings.RiskService.ResetToDefaults();
+            PXSettings.TaxIdService.ResetToDefaults();
+            PXSettings.OrchestrationService.ResetToDefaults();
+            PXSettings.HIPService.ResetToDefaults();
+            PXSettings.WalletService.ResetToDefaults();
+            PXSettings.TransactionService.ResetToDefaults();
+            PXSettings.MSRewardsService.ResetToDefaults();
+            PXSettings.TokenPolicyService.ResetToDefaults();
+            PXSettings.TokenizationService.ResetToDefaults();
         }
 
         public void Dispose()
         {
-            PxHostableService.Dispose();
+            PxHostableService.SelfHostServer.CloseAsync().Wait();
         }
 
         public static string GetPXServiceUrl(string relativePath)

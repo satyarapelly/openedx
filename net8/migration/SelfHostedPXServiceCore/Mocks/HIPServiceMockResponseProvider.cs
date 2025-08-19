@@ -1,11 +1,12 @@
 ﻿namespace SelfHostedPXServiceCore.Mocks
 {
-    using System.Drawing;
-    using System.Drawing.Imaging;
+    using System;
     using System.IO;
     using System.Net;
     using System.Net.Http;
     using System.Net.Http.Headers;
+    using System.Reflection;
+    using System.Runtime.Versioning;
     using System.Threading.Tasks;
     using Microsoft.Commerce.Payments.PXService.Accessors.Captcha;
     using Microsoft.Commerce.Payments.PXService.Model.HIPService;
@@ -22,95 +23,119 @@
         {
             if (httpRequestMessage.Method == HttpMethod.Get)
             {
-                HttpResponseMessage response;
-                string url = httpRequestMessage.RequestUri.ToString();
-                if (url.Contains("audio"))
+                var url = httpRequestMessage.RequestUri!.ToString();
+
+                if (url.Contains("audio", StringComparison.OrdinalIgnoreCase))
                 {
-                    // generate a sample audio wav file
-                    // HIP service actually sends an mp3 file but to genrate a sample mp3 file some external library is needed, so I am generating a wav file instead
-                    int sampleRate = 44100;
-                    int numChannels = 1;
-                    int bitDepth = 16;
-                    int durationSeconds = 1;
-                    int numSamples = sampleRate * numChannels * bitDepth / 8 * durationSeconds;
-
-                    byte[] data = new byte[numSamples];
-
-                    using (var stream = new MemoryStream())
+                    // 1 second of silent WAV (44.1kHz, mono, 16-bit) – cross-platform
+                    var wavBytes = CreateSilentWav(seconds: 1, sampleRate: 44100, channels: 1, bitDepth: 16);
+                    var audio = new HttpResponseMessage(HttpStatusCode.OK)
                     {
-                        using (var writer = new BinaryWriter(stream))
-                        {
-                            // Write WAV header
-                            writer.Write(new char[] { 'R', 'I', 'F', 'F' });
-                            writer.Write(36 + numSamples);
-                            writer.Write(new char[] { 'W', 'A', 'V', 'E' });
-                            writer.Write(new char[] { 'f', 'm', 't', ' ' });
-                            writer.Write(16);
-                            writer.Write((short)1); // PCM format
-                            writer.Write((short)numChannels);
-                            writer.Write(sampleRate);
-                            writer.Write(sampleRate * numChannels * bitDepth / 8);
-                            writer.Write((short)(numChannels * bitDepth / 8));
-                            writer.Write((short)bitDepth);
-                            writer.Write(new char[] { 'd', 'a', 't', 'a' });
-                            writer.Write(numSamples);
-
-                            // Write data
-                            writer.Write(data);
-                        }
-
-                        response = new HttpResponseMessage(HttpStatusCode.OK);
-                        response.Content = new ByteArrayContent(stream.ToArray());
-                        response.Content.Headers.ContentType = new MediaTypeHeaderValue("audio/wav");
-                        response.Headers.Add("challenge-id", "85c7a465-884a-348a-a6c5-fef4fc52742b");
-                        response.Headers.Add("azureregion", "EastUS2");
-                    }
+                        Content = new ByteArrayContent(wavBytes)
+                    };
+                    audio.Content.Headers.ContentType = new MediaTypeHeaderValue("audio/wav");
+                    audio.Headers.Add("challenge-id", "85c7a465-884a-348a-a6c5-fef4fc52742b");
+                    audio.Headers.Add("azureregion", "EastUS2");
+                    return audio;
                 }
                 else
                 {
-                    Bitmap emptyBitmap = new Bitmap(1, 1);
-                    emptyBitmap.SetPixel(0, 0, Color.White);
-                    Bitmap fakeBitmap = new Bitmap(emptyBitmap, 1024, 1024);
-                    MemoryStream memoryStream = new MemoryStream();
-                    Image image = fakeBitmap;
-                    image.Save(memoryStream, ImageFormat.Jpeg);
-                    response = new HttpResponseMessage(HttpStatusCode.OK);
-                    response.Content = new ByteArrayContent(memoryStream.ToArray());
-                    response.Content.Headers.ContentType = new MediaTypeHeaderValue("image/jpeg");
-                    response.Headers.Add("challenge-id", "96c7a465-995a-459a-a6c5-fef4fc52743d");
-                    response.Headers.Add("azureregion", "EastUS2");
-                }
+                    // Image response: Windows uses System.Drawing; others use embedded JPEG
+                    byte[] jpeg = OperatingSystem.IsWindows()
+                        ? CreateWhiteJpeg1024_Windows()
+                        : LoadEmbeddedJpeg("SelfHostedPXServiceCore.Mocks.Images.blank1024.jpg");
 
-                return await Task.FromResult(response);
+                    var img = new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        Content = new ByteArrayContent(jpeg)
+                    };
+                    img.Content.Headers.ContentType = new MediaTypeHeaderValue("image/jpeg");
+                    img.Headers.Add("challenge-id", "96c7a465-995a-459a-a6c5-fef4fc52743d");
+                    img.Headers.Add("azureregion", "EastUS2");
+                    return img;
+                }
             }
             else if (httpRequestMessage.Method == HttpMethod.Post)
             {
-                string requestMessage = await httpRequestMessage.Content.ReadAsStringAsync();
-                HIPCaptchaUserInput hipCaptchaPayload = JsonConvert.DeserializeObject<HIPCaptchaUserInput>(requestMessage);
+                var requestMessage = await httpRequestMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
+                var hipCaptchaPayload = JsonConvert.DeserializeObject<HIPCaptchaUserInput>(requestMessage)!;
 
-                HIPCaptchaValidationResults response = new HIPCaptchaValidationResults()
+                var responsePayload = new HIPCaptchaValidationResults
                 {
                     ChallengeId = hipCaptchaPayload.ChallengeId,
                     Solved = "True",
                     Reason = string.Empty
                 };
 
-                return await Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)
+                return new HttpResponseMessage(HttpStatusCode.OK)
                 {
                     Content = new StringContent(
-                    JsonConvert.SerializeObject(response),
-                    System.Text.Encoding.UTF8,
-                    "application/json")
-                });
+                        JsonConvert.SerializeObject(responsePayload),
+                        System.Text.Encoding.UTF8,
+                        "application/json")
+                };
             }
 
-            return await Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadRequest)
+            return new HttpResponseMessage(HttpStatusCode.BadRequest)
             {
-                Content = new StringContent(
-                    string.Empty,
-                    System.Text.Encoding.UTF8,
-                    "application/octet-stream")
-            });
+                Content = new StringContent(string.Empty, System.Text.Encoding.UTF8, "application/octet-stream")
+            };
         }
+
+        private static byte[] CreateSilentWav(int seconds, int sampleRate, int channels, int bitDepth)
+        {
+            int dataBytes = sampleRate * channels * (bitDepth / 8) * seconds;
+            using var stream = new MemoryStream();
+            using (var writer = new BinaryWriter(stream, System.Text.Encoding.ASCII, leaveOpen: true))
+            {
+                // RIFF header
+                writer.Write(new[] { 'R', 'I', 'F', 'F' });
+                writer.Write(36 + dataBytes);
+                writer.Write(new[] { 'W', 'A', 'V', 'E' });
+
+                // fmt  chunk
+                writer.Write(new[] { 'f', 'm', 't', ' ' });
+                writer.Write(16);
+                writer.Write((short)1); // PCM
+                writer.Write((short)channels);
+                writer.Write(sampleRate);
+                writer.Write(sampleRate * channels * (bitDepth / 8));
+                writer.Write((short)(channels * (bitDepth / 8)));
+                writer.Write((short)bitDepth);
+
+                // data chunk
+                writer.Write(new[] { 'd', 'a', 't', 'a' });
+                writer.Write(dataBytes);
+                writer.Write(new byte[dataBytes]); // silence
+            }
+            return stream.ToArray();
+        }
+
+        private static byte[] LoadEmbeddedJpeg(string resourceName)
+        {
+            var asm = Assembly.GetExecutingAssembly();
+            using var s = asm.GetManifestResourceStream(resourceName)
+                ?? throw new InvalidOperationException($"Embedded resource not found: {resourceName}");
+            using var ms = new MemoryStream();
+            s.CopyTo(ms);
+            return ms.ToArray();
+        }
+
+#if WINDOWS
+        // Mark explicit Windows-only. Called only when OperatingSystem.IsWindows() is true.
+        [SupportedOSPlatform("windows")]
+        private static byte[] CreateWhiteJpeg1024_Windows()
+        {
+            using var bmp1 = new System.Drawing.Bitmap(1, 1);
+            bmp1.SetPixel(0, 0, System.Drawing.Color.White);
+            using var bmp = new System.Drawing.Bitmap(bmp1, 1024, 1024);
+            using var ms = new MemoryStream();
+            bmp.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+            return ms.ToArray();
+        }
+#else
+        private static byte[] CreateWhiteJpeg1024_Windows()
+            => throw new PlatformNotSupportedException("Windows-only method was invoked on a non-Windows build.");
+#endif
     }
 }

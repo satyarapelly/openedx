@@ -2,8 +2,8 @@
 
 namespace SelfHostedPXServiceCore.Mocks
 {
-    using Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Mocks;
     using Test.Common;
+    using Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Mocks;
 
     public class D365Service : MockServiceWebRequestHandler
     {

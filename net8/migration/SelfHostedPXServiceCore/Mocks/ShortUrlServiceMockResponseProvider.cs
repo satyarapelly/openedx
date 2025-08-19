@@ -6,6 +6,7 @@ namespace SelfHostedPXServiceCore.Mocks
     using System.Net;
     using System.Net.Http;
     using System.Threading.Tasks;
+    using Microsoft.Commerce.Payments.PXService;
     using Microsoft.Commerce.Payments.PXService.Model.ShortURLService;
     using Newtonsoft.Json;
     using Test.Common;

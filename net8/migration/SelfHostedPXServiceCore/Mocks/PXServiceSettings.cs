@@ -91,7 +91,7 @@ namespace SelfHostedPXServiceCore.Mocks
 
         private readonly Dictionary<Type, HostableService> selfHostedDependencies;
 
-        public PXServiceSettings(Dictionary<Type, HostableService>? selfHostedDependencies = null, bool useArrangedResponses = true)
+        public PXServiceSettings(Dictionary<Type, HostableService> selfHostedDependencies = null, bool useArrangedResponses = true)
         {
             this.selfHostedDependencies = selfHostedDependencies ?? new Dictionary<Type, HostableService>();
             AccountsService = new Mocks.AccountService(new AccountServiceMockResponseProvider(), useArrangedResponses);
@@ -169,7 +169,7 @@ namespace SelfHostedPXServiceCore.Mocks
                     emulatorBaseUrl: accessor.BaseUri.ToString(),
                     servicePPEBaseUrl: accessor.BaseUri.ToString(),
                     apiVersion: "TestApiVersion",
-                    messageHandler: new WebRequestHandler());
+                    messageHandler: new HttpClientHandler());
             }
             else
             {
@@ -188,7 +188,7 @@ namespace SelfHostedPXServiceCore.Mocks
                     serviceBaseUrl: accessor.BaseUri.ToString(),
                     emulatorBaseUrl: accessor.BaseUri.ToString(),
                     apiVersion: "TestApiVersion",
-                    messageHandler: new WebRequestHandler());
+                    messageHandler: new HttpClientHandler());
             }
             else
             {
@@ -205,7 +205,7 @@ namespace SelfHostedPXServiceCore.Mocks
                 this.AccountServiceAccessor = new AccountServiceAccessor(
                     serviceBaseUrl: accessor.BaseUri.ToString(),
                     emulatorBaseUrl: accessor.BaseUri.ToString(),
-                    messageHandler: new WebRequestHandler());
+                    messageHandler: new HttpClientHandler());
             }
             else
             {
@@ -222,7 +222,7 @@ namespace SelfHostedPXServiceCore.Mocks
                     serviceBaseUrl: accessor.BaseUri.ToString(),
                     emulatorBaseUrl: accessor.BaseUri.ToString(),
                     apiVersion: "testApiVersion",
-                    messageHandler: new WebRequestHandler());
+                    messageHandler: new HttpClientHandler());
             }
             else
             {
@@ -240,7 +240,7 @@ namespace SelfHostedPXServiceCore.Mocks
                     serviceBaseUrl: accessor.BaseUri.ToString(),
                     emulatorBaseUrl: null,
                     apiVersion: this.PurchaseServiceApiVersion,
-                    messageHandler: new WebRequestHandler());
+                    messageHandler: new HttpClientHandler());
             }
             else
             {
@@ -258,7 +258,7 @@ namespace SelfHostedPXServiceCore.Mocks
                     serviceBaseUrl: accessor.BaseUri.ToString(),
                     emulatorBaseUrl: null,
                     apiVersion: this.CatalogServiceApiVersion,
-                    messageHandler: new WebRequestHandler());
+                    messageHandler: new HttpClientHandler());
             }
             else
             {
@@ -275,7 +275,7 @@ namespace SelfHostedPXServiceCore.Mocks
                 this.SessionServiceAccessor = new SessionServiceAccessor(
                     baseUrl: accessor.BaseUri.ToString(),
                     apiVersion: "2015-09-23",
-                    requestHandler: new WebRequestHandler());
+                    requestHandler: new HttpClientHandler());
             }
             else
             {
@@ -292,7 +292,7 @@ namespace SelfHostedPXServiceCore.Mocks
                     apiVersion: "2014-10-10",
                     serviceBaseUrl: accessor.BaseUri.ToString(),
                     emulatorBaseUrl: accessor.BaseUri.ToString(),
-                    messageHandler: new WebRequestHandler());
+                    messageHandler: new HttpClientHandler());
             }
             else
             {
@@ -310,7 +310,7 @@ namespace SelfHostedPXServiceCore.Mocks
                     serviceBaseUrl: accessor.BaseUri.ToString(),
                     emulatorBaseUrl: accessor.BaseUri.ToString(),
                     apiVersion: "2015-09-23",
-                    messageHandler: new WebRequestHandler());
+                    messageHandler: new HttpClientHandler());
             }
             else
             {
@@ -326,7 +326,7 @@ namespace SelfHostedPXServiceCore.Mocks
                 var accessor = this.selfHostedDependencies[typeof(TaxIdServiceAccessor)];
                 this.TaxIdServiceAccessor = new TaxIdServiceAccessor(
                     serviceBaseUrl: accessor.BaseUri.ToString(),
-                    messageHandler: new WebRequestHandler());
+                    messageHandler: new HttpClientHandler());
             }
             else
             {
@@ -341,7 +341,7 @@ namespace SelfHostedPXServiceCore.Mocks
                 this.AddressEnrichmentServiceAccessor = new AddressEnrichmentServiceAccessor(
                     serviceBaseUrl: accessor.BaseUri.ToString(),
                     emulatorBaseUrl: string.Empty,
-                    messageHandler: new WebRequestHandler());
+                    messageHandler: new HttpClientHandler());
             }
             else
             {
@@ -358,7 +358,7 @@ namespace SelfHostedPXServiceCore.Mocks
                     serviceBaseUrl: accessor.BaseUri.ToString(),
                     emulatorBaseUrl: accessor.BaseUri.ToString(),
                     apiVersion: "2018-05-07",
-                    messageHandler: new WebRequestHandler());
+                    messageHandler: new HttpClientHandler());
             }
             else
             {
@@ -376,7 +376,7 @@ namespace SelfHostedPXServiceCore.Mocks
                 this.SellerMarketPlaceServiceAccessor = new SellerMarketPlaceServiceAccessor(
                     serviceBaseUrl: accessor.BaseUri.ToString(),
                     emulatorBaseUrl: accessor.BaseUri.ToString(),
-                    messageHandler: new WebRequestHandler());
+                    messageHandler: new HttpClientHandler());
             }
             else
             {
@@ -394,7 +394,7 @@ namespace SelfHostedPXServiceCore.Mocks
                     serviceBaseUrl: accessor.BaseUri.ToString(),
                     emulatorBaseUrl: accessor.BaseUri.ToString(),
                     apiVersion: "2022-02-09",
-                    messageHandler: new WebRequestHandler());
+                    messageHandler: new HttpClientHandler());
             }
             else
             {
@@ -412,7 +412,7 @@ namespace SelfHostedPXServiceCore.Mocks
                 this.AzureExPAccessor = new AzureExPAccessor(
                     expBlobUrl: accessor.BaseUri.ToString(),
                     tokenLoader: new Mocks.AuthTokenGetter(),
-                    messageHandler: new WebRequestHandler(),
+                    messageHandler: new HttpClientHandler(),
                     enableTestHook: true);
             }
             else
@@ -431,7 +431,7 @@ namespace SelfHostedPXServiceCore.Mocks
                     serviceBaseUrl: accessor.BaseUri.ToString(),
                     servicePPEBaseUrl: accessor.BaseUri.ToString(),
                     emulatorBaseUrl: accessor.BaseUri.ToString(),
-                    messageHandler: new WebRequestHandler());
+                    messageHandler: new HttpClientHandler());
             }
             else
             {
@@ -451,7 +451,7 @@ namespace SelfHostedPXServiceCore.Mocks
                     serviceBaseUrl: accessor.BaseUri.ToString(),
                     emulatorBaseUrl: accessor.BaseUri.ToString(),
                     apiVersion: this.IssuerServiceApiVersion,
-                    messageHandler: new WebRequestHandler());
+                    messageHandler: new HttpClientHandler());
             }
             else
             {
@@ -468,7 +468,7 @@ namespace SelfHostedPXServiceCore.Mocks
                 this.ChallengeManagementServiceAccessor = new ChallengeManagementServiceAccessor(
                     serviceBaseUrl: accessor.BaseUri.ToString(),
                     emulatorBaseUrl: accessor.BaseUri.ToString(),
-                    messageHandler: new WebRequestHandler());
+                    messageHandler: new HttpClientHandler());
             }
             else
             {
@@ -484,7 +484,7 @@ namespace SelfHostedPXServiceCore.Mocks
                 this.WalletServiceAccessor = new WalletServiceAccessor(
                     serviceBaseUrl: accessor.BaseUri.ToString(),
                     apiVersion: "2023-1-1",
-                    messageHandler: new WebRequestHandler());
+                    messageHandler: new HttpClientHandler());
             }
             else
             {
@@ -500,7 +500,7 @@ namespace SelfHostedPXServiceCore.Mocks
                 this.TransactionDataServiceAccessor = new TransactionDataServiceAccessor(
                     serviceBaseUrl: accessor.BaseUri.ToString(),
                     apiVersion: "2023-1-1",
-                    messageHandler: new WebRequestHandler());
+                    messageHandler: new HttpClientHandler());
             }
             else
             {
@@ -516,7 +516,7 @@ namespace SelfHostedPXServiceCore.Mocks
                 this.MSRewardsServiceAccessor = new MSRewardsServiceAccessor(
                     serviceBaseUrl: accessor.BaseUri.ToString(),
                     emulatorBaseUrl: accessor.BaseUri.ToString(),
-                    messageHandler: new WebRequestHandler());
+                    messageHandler: new HttpClientHandler());
             }
             else
             {
@@ -532,7 +532,7 @@ namespace SelfHostedPXServiceCore.Mocks
                 this.TokenPolicyServiceAccessor = new TokenPolicyServiceAccessor(
                     serviceBaseUrl: accessor.BaseUri.ToString(),
                     emulatorBaseUrl: accessor.BaseUri.ToString(),
-                    messageHandler: new WebRequestHandler());
+                    messageHandler: new HttpClientHandler());
             }
             else
             {
@@ -550,7 +550,7 @@ namespace SelfHostedPXServiceCore.Mocks
                     emulatorBaseUrl: accessor.BaseUri.ToString(),
                     tokenizationGetTokenURL: accessor.BaseUri.ToString(),
                     tokenizationGetTokenFromEncryptedValueURL: accessor.BaseUri.ToString(),    
-                    messageHandler: new WebRequestHandler());
+                    messageHandler: new HttpClientHandler());
             }
             else
             {
@@ -569,7 +569,7 @@ namespace SelfHostedPXServiceCore.Mocks
                     serviceBaseUrl: accessor.BaseUri.ToString(),
                     emulatorBaseUrl: accessor.BaseUri.ToString(),
                     apiVersion: "1.1",
-                    messageHandler: new WebRequestHandler());
+                    messageHandler: new HttpClientHandler());
             }
             else
             {
@@ -586,7 +586,7 @@ namespace SelfHostedPXServiceCore.Mocks
                 this.FraudDetectionServiceAccessor = new FraudDetectionServiceAccessor(
                     serviceBaseUrl: accessor.BaseUri.ToString(),
                     emulatorBaseUrl: accessor.BaseUri.ToString(),
-                    messageHandler: new WebRequestHandler());
+                    messageHandler: new HttpClientHandler());
             }
             else
             {
@@ -611,6 +611,7 @@ namespace SelfHostedPXServiceCore.Mocks
                 
             this.NetworkTokenizationServiceAccessor = new NetworkTokenizationServiceAccessor(
                 serviceBaseUrl: "https://mockNetworkTokenizationService",
+                intServiceBaseUrl: "https://mockNetworkTokenizationService",
                 emulatorBaseUrl: string.Empty,
                 apiVersion: "1.0",
                 messageHandler: NetworkTokenizationService);

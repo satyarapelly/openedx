@@ -2,6 +2,7 @@
 
 namespace SelfHostedPXServiceCore.Mocks
 {
+    using Microsoft.Commerce.Payments.PXService;
     using System;
     using System.IO;
     using System.Net;
@@ -48,10 +49,14 @@ namespace SelfHostedPXServiceCore.Mocks
             {
                 response = string.Empty;
             }
+            else if (request.Method == HttpMethod.Put && request.RequestUri.ToString().Contains("/mandates"))
+            {
+                response = string.Empty;
+            }
             else if (request.Method == HttpMethod.Post && request.RequestUri.ToString().Contains("/tokens"))
             {
                 response = "{\"networkTokenId\":\"af24631b-967d-498c-9171-128c1a5261c6\",\"networkTokenUsage\":\"ecomMerchant\",\"externalCardReference\":\"visaAccount002-Pi001-Visa-AgenticPayment\",\"externalCardReferenceType\":\"paymentInstrumentId\",\"tokenInfo\":{\"tokenStatus\":\"active\",\"lastFourDigits\":\"0673\",\"expirationDate\":{\"year\":2030,\"month\":12}},\"clientDeviceInfo\":{\"bindingRequired\":true,\"deviceEnrolled\":false,\"bindingStatus\":\"unknown\"},\"cardMetadata\":null,\"srcFlowId\":null}";
-            }
+            }            
 
             return await Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)
             {
