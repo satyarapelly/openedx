@@ -2,22 +2,30 @@
 
 namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Controllers
 {
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Commerce.Payments.Common.Transaction;
+    using Microsoft.Commerce.Payments.Common.Web;
+    using Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Extensions;
     using System;
     using System.Collections.Generic;
-    using System.Net.Http;
-    using System.Web.Http;
-    using Common.Transaction;
-    using Common.Web;
+    using System.Text;
+    using System.Threading.Tasks;
     using Test.Common;
+    using Test.Common.Extensions;
     using Constants = Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Constants;
 
-    public class EmulatorBaseController : ApiController
+    public class EmulatorBaseController : ControllerBase
     {
+        private readonly TestScenarioManager testScenarioManager;
         private readonly string testScenarioManagerName;
-        private readonly string defaultTestScenario;
+        private readonly string? defaultTestScenario;
 
-        public EmulatorBaseController(string testScenarioManagerName, string defaultTestScenario = null)
+        public EmulatorBaseController(
+            TestScenarioManager testScenarioManager,
+            string testScenarioManagerName,
+            string? defaultTestScenario = null)
         {
+            this.testScenarioManager = testScenarioManager;
             this.testScenarioManagerName = testScenarioManagerName;
             this.defaultTestScenario = defaultTestScenario;
             this.PlaceholderReplacements = new Dictionary<string, string>()
@@ -48,7 +56,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
             {
                 // Return response from default scenario
                 testContext = new TestContext($"DependencyEmulator.{this.testScenarioManagerName}", DateTime.UtcNow, this.defaultTestScenario);
-                
+
                 return TestScenarioManager.GetResponse(apiName, testContext);
             }
             else
@@ -59,13 +67,42 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
             }
         }
 
-        protected HttpResponseMessage ReplacePlaceholders(HttpResponseMessage response)
+        protected async Task<IActionResult> GetResponseAsync(string apiName)
         {
-            var responseContent = response?.Content?.ReadAsStringAsync().Result;
+            if (!HttpContext.TryGetTestContext(out var testContext))
+            {
+                if (!string.IsNullOrEmpty(this.defaultTestScenario))
+                {
+                    testContext = new TestContext(
+                        $"DependencyEmulator.{this.testScenarioManagerName}",
+                        DateTime.UtcNow,
+                        this.defaultTestScenario);
+                }
+                else
+                {
+                    return BadRequest("TestContext not found.");
+                }
+            }
 
+            var result = this.testScenarioManager.GetResponseContent(apiName, testContext);
+            var responseContent = ReplacePlaceholders(result.Content);
+
+            HttpContext.Response.StatusCode = result.StatusCode;
+            HttpContext.Response.ContentType = result.ContentType ?? "application/json";
+
+            if (!string.IsNullOrEmpty(responseContent))
+            {
+                await HttpContext.Response.Body.WriteAsync(Encoding.UTF8.GetBytes(responseContent));
+            }
+
+            return new EmptyResult();
+        }
+
+        protected string ReplacePlaceholders(string? responseContent)
+        {
             if (string.IsNullOrEmpty(responseContent))
             {
-                return response;
+                return responseContent ?? string.Empty;
             }
 
             foreach (var kvp in this.PlaceholderReplacements)
@@ -73,9 +110,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
                 responseContent = responseContent.Replace(kvp.Key, kvp.Value ?? string.Empty);
             }
 
-            response.Content = new StringContent(responseContent, System.Text.Encoding.UTF8, Test.Common.Constants.HeaderValues.JsonContent); // lgtm[cs/web/xss] Suppressing Semmle warning
-
-            return response;
+            return responseContent;
         }
     }
 }

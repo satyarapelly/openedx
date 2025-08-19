@@ -7,11 +7,13 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
     using System.Net.Http;
     using System.Text;
     using System.Threading;
-    using System.Web.Http;
+    using Microsoft.AspNetCore.Mvc;
+    using FromUri = Microsoft.AspNetCore.Mvc.FromQueryAttribute;
     using Common.Transaction;
     using Common.Web;
     using Test.Common;
     using Constants = Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Constants;
+    using Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Extensions;
 
     public class PurchaseController : EmulatorBaseController
     {
@@ -22,21 +24,21 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
         }
 
         [HttpGet]
-        public HttpResponseMessage ListSub([FromUri]string userId)
+        public HttpResponseMessage ListSub([FromUri] string userId)
         {
             return this.GetResponse(Constants.PurchaseApiName.ListSub);
         }
 
         [HttpGet]
         [HttpPost]
-        public HttpResponseMessage ListOrder([FromUri]string userId)
+        public HttpResponseMessage ListOrder([FromUri] string userId)
         {
             return this.GetResponse(Constants.PurchaseApiName.ListOrder);
         }
 
         [HttpGet]
         [HttpPut]
-        public HttpResponseMessage GetOrder([FromUri]string userId, [FromUri]string orderId)
+        public HttpResponseMessage GetOrder([FromUri] string userId, [FromUri] string orderId)
         {
             var response = this.GetResponse(Constants.PurchaseApiName.GetOrder);
             this.PlaceholderReplacements[Constants.Placeholders.ShipToAddressId] = orderId;
@@ -45,7 +47,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
         }
 
         [HttpGet]
-        public HttpResponseMessage GetSub([FromUri]string userId, [FromUri]string recurrenceId)
+        public HttpResponseMessage GetSub([FromUri] string userId, [FromUri] string recurrenceId)
         {
             var response = this.GetResponse(Constants.PurchaseApiName.GetSub);
             this.PlaceholderReplacements[Constants.Placeholders.Id] = recurrenceId;
@@ -54,7 +56,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
         }
 
         [HttpGet]
-        public HttpResponseMessage CheckPi([FromUri]string userId, [FromUri]string paymentinstrumentid)
+        public HttpResponseMessage CheckPi([FromUri] string userId, [FromUri] string paymentinstrumentid)
         {
             return this.GetResponse(Constants.PurchaseApiName.CheckPi);
         }

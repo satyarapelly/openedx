@@ -6,7 +6,9 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Net.Http;
-    using System.Web.Http;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
+    using FromUri = Microsoft.AspNetCore.Mvc.FromQueryAttribute;
     using Constants = Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Constants;
 
     public class AccountAddressesController : EmulatorBaseController
@@ -17,7 +19,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
 
         [SuppressMessage("Microsoft.Performance", "CA1801", Justification = "Extra params needed for routing")]
         [HttpGet]
-        public HttpResponseMessage GetAddresses([FromUri]string accountId)
+        public HttpResponseMessage GetAddresses([FromUri] string accountId)
         {
             return this.GetResponse(Constants.AccountApiName.GetAddresses);
         }
@@ -37,13 +39,13 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
         public HttpResponseMessage LegacyValidateAddress()
         {
             var resp = this.GetResponse(Constants.AccountApiName.LegacyValidateAddress);
-            
+
             return resp;
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1801", Justification = "Extra params needed for routing")]
         [HttpGet]
-        public HttpResponseMessage GetAddress([FromUri]string accountId, [FromUri]string addressId)
+        public HttpResponseMessage GetAddress([FromUri] string accountId, [FromUri] string addressId)
         {
             this.PlaceholderReplacements[Constants.Placeholders.AccountId] = accountId;
             this.PlaceholderReplacements[Constants.Placeholders.AddressId] = addressId;
@@ -54,7 +56,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
 
         [SuppressMessage("Microsoft.Performance", "CA1801", Justification = "Extra params needed for routing")]
         [HttpPost]
-        public HttpResponseMessage PostAddressValidate([FromBody]object addressInfo)
+        public HttpResponseMessage PostAddressValidate([FromBody] object addressInfo)
         {
             // Both AVS and Accounts service shares the same route for address validation, addresses/validate
             // Due this it not possible to create separate endpoint in webapiconfig.cs of account emulator 
@@ -75,18 +77,17 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
         {
             this.PlaceholderReplacements[Constants.Placeholders.AccountId] = accountId;
             this.PlaceholderReplacements[Constants.Placeholders.AddressId] = addressId;
-            
+
             var resp = this.GetResponse(Constants.AccountApiName.PatchAddress);
 
             return this.ReplacePlaceholders(resp);
         }
 
-        private static bool IsValidateAddressWithAVSFlightExposed(HttpRequestMessage request)
+        private static bool IsValidateAddressWithAVSFlightExposed(HttpRequest request)
         {
-            IEnumerable<string> headerValues;
-            if (request.Headers.TryGetValues(Test.Common.Constants.HeaderValues.ExtendedFlightName, out headerValues))
+            if (request.Headers.TryGetValue(Test.Common.Constants.HeaderValues.ExtendedFlightName, out var headerValues))
             {
-                string xMSFlightValue = headerValues.FirstOrDefault();
+                var xMSFlightValue = headerValues.FirstOrDefault();
                 return xMSFlightValue != null && xMSFlightValue.Contains(Test.Common.Constants.FlightValues.AccountEmulatorValidateAddressWithAVS);
             }
 

@@ -4,11 +4,13 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
 {
     using System.Diagnostics.CodeAnalysis;
     using System.Net.Http;
-    using System.Web.Http;
+    using Microsoft.AspNetCore.Mvc;
+    using FromUri = Microsoft.AspNetCore.Mvc.FromQueryAttribute;
     using Common.Transaction;
     using Common.Web;
     using Test.Common;
     using Constants = Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Constants;
+    using Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Extensions;
 
     public class PimsPaymentInstrumentsController : EmulatorBaseController
     {
@@ -18,35 +20,35 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
 
         [SuppressMessage("Microsoft.Performance", "CA1801", Justification = "Extra params needed for routing")]
         [HttpGet]
-        public HttpResponseMessage GetPI([FromUri]string accountId, [FromUri]string piid)
+        public HttpResponseMessage GetPI([FromUri] string accountId, [FromUri] string piid)
         {
             return this.GetResponse(Constants.PIMSApiName.GetPI);
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1801", Justification = "Extra params needed for routing")]
         [HttpGet]
-        public HttpResponseMessage GetPIExtendedView([FromUri]string piid, [FromUri] string accountId = null)
+        public HttpResponseMessage GetPIExtendedView([FromUri] string piid, [FromUri] string accountId = null)
         {
             return this.GetResponse(Constants.PIMSApiName.GetPIExtendedView);
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1801", Justification = "Extra params needed for routing")]
         [HttpGet]
-        public HttpResponseMessage GetSeCardPersos([FromUri]string accountId, [FromUri]string piid, [FromUri]string deviceId)
+        public HttpResponseMessage GetSeCardPersos([FromUri] string accountId, [FromUri] string piid, [FromUri] string deviceId)
         {
             return this.GetResponse(Constants.PIMSApiName.GetSeCardPersos);
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1801", Justification = "Extra params needed for routing")]
         [HttpGet]
-        public HttpResponseMessage GetSessionDetails([FromUri]string accountId, [FromUri]string sessionId)
+        public HttpResponseMessage GetSessionDetails([FromUri] string accountId, [FromUri] string sessionId)
         {
             return this.GetResponse(Constants.PIMSApiName.GetSessionDetails);
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1801", Justification = "Extra params needed for routing")]
         [HttpGet]
-        public HttpResponseMessage ListPI([FromUri]string accountId)
+        public HttpResponseMessage ListPI([FromUri] string accountId)
         {
             return this.GetResponse(Constants.PIMSApiName.ListPI);
         }
@@ -60,7 +62,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
 
         [SuppressMessage("Microsoft.Performance", "CA1801", Justification = "Extra params needed for routing")]
         [HttpPost]
-        public HttpResponseMessage AddPI([FromUri]string accountId)
+        public HttpResponseMessage AddPI([FromUri] string accountId)
         {
             return this.GetResponse(Constants.PIMSApiName.AddPI);
         }
@@ -74,42 +76,42 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
 
         [SuppressMessage("Microsoft.Performance", "CA1801", Justification = "Extra params needed for routing")]
         [HttpPost]
-        public HttpResponseMessage ResumeAddPI([FromUri]string accountId, [FromUri]string piid)
+        public HttpResponseMessage ResumeAddPI([FromUri] string accountId, [FromUri] string piid)
         {
             return this.GetResponse(Constants.PIMSApiName.ResumeAddPI);
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1801", Justification = "Extra params needed for routing")]
         [HttpPost]
-        public HttpResponseMessage UpdatePI([FromUri]string accountId, [FromUri]string piid)
+        public HttpResponseMessage UpdatePI([FromUri] string accountId, [FromUri] string piid)
         {
             return this.GetResponse(Constants.PIMSApiName.UpdatePI);
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1801", Justification = "Extra params needed for routing")]
         [HttpPost]
-        public HttpResponseMessage ReplacePI([FromUri]string accountId, [FromUri]string piid)
+        public HttpResponseMessage ReplacePI([FromUri] string accountId, [FromUri] string piid)
         {
             return this.GetResponse(Constants.PIMSApiName.ReplacePI);
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1801", Justification = "Extra params needed for routing")]
         [HttpPost]
-        public HttpResponseMessage ValidateCvv([FromUri]string accountId, [FromUri]string piid, [FromBody]object requestData)
+        public HttpResponseMessage ValidateCvv([FromUri] string accountId, [FromUri] string piid, [FromBody] object requestData)
         {
             return this.GetResponse(Constants.PIMSApiName.ValidateCvv);
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1801", Justification = "Extra params needed for routing")]
         [HttpPost]
-        public HttpResponseMessage Validate([FromUri]string accountId, [FromUri]string piid, [FromBody]object requestData)
+        public HttpResponseMessage Validate([FromUri] string accountId, [FromUri] string piid, [FromBody] object requestData)
         {
             return this.GetResponse(Constants.PIMSApiName.Validate);
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1801", Justification = "Extra params needed for routing")]
         [HttpPost]
-        public HttpResponseMessage LinkTransaction([FromUri]string accountId, [FromUri]string piid, [FromBody]object requestData)
+        public HttpResponseMessage LinkTransaction([FromUri] string accountId, [FromUri] string piid, [FromBody] object requestData)
         {
             return this.GetResponse(Constants.PIMSApiName.LinkTransaction);
         }
