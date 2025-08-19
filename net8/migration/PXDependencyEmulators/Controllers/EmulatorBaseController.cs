@@ -1,15 +1,13 @@
-﻿// <copyright file="EmulatorBaseController.cs" company="Microsoft">Copyright (c) Microsoft 2017. All rights reserved.</copyright>
+// <copyright file="EmulatorBaseController.cs" company="Microsoft">Copyright (c) Microsoft 2017. All rights reserved.</copyright>
 
 namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Controllers
 {
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Commerce.Payments.Common.Transaction;
-    using Microsoft.Commerce.Payments.Common.Web;
-    using Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Extensions;
     using System;
     using System.Collections.Generic;
     using System.Text;
     using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Commerce.Payments.Common.Transaction;
     using Test.Common;
     using Test.Common.Extensions;
     using Constants = Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Constants;
@@ -35,37 +33,6 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
         }
 
         protected Dictionary<string, string> PlaceholderReplacements { get; }
-
-        protected TestScenarioManager TestScenarioManager
-        {
-            get
-            {
-                return this.Configuration.GetTestScenarioManager(this.testScenarioManagerName);
-            }
-        }
-
-        protected virtual HttpResponseMessage GetResponse(string apiName)
-        {
-            TestContext testContext = null;
-
-            if (this.Request.TryGetTestContext(out testContext))
-            {
-                return TestScenarioManager.GetResponse(apiName, testContext);
-            }
-            else if (!string.IsNullOrEmpty(this.defaultTestScenario))
-            {
-                // Return response from default scenario
-                testContext = new TestContext($"DependencyEmulator.{this.testScenarioManagerName}", DateTime.UtcNow, this.defaultTestScenario);
-
-                return TestScenarioManager.GetResponse(apiName, testContext);
-            }
-            else
-            {
-                // If the flow entering else that means the test context is not available and default test scenario is not provided
-                // and might return error from TestScenarioManager class, needs to be handled from devloper
-                return TestScenarioManager.GetResponse(apiName, testContext);
-            }
-        }
 
         protected async Task<IActionResult> GetResponseAsync(string apiName)
         {
