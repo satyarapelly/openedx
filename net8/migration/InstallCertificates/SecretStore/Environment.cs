@@ -6,7 +6,6 @@ namespace Microsoft.Commerce.Payments.Tools.InstallCertificates
     using System.Configuration;
     using System.IO;
     using System.Runtime.CompilerServices;
-    using System.Web.Hosting;
     using Microsoft.Commerce.Payments.Common;
     using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Search.Autopilot;
@@ -111,18 +110,16 @@ namespace Microsoft.Commerce.Payments.Tools.InstallCertificates
                 return;
             }
 
-            string applicationPath = HostingEnvironment.ApplicationPhysicalPath;
-            if (applicationPath == null)
+            string applicationPath = AppContext.BaseDirectory;
+            if (string.IsNullOrEmpty(applicationPath))
             {
                 applicationPath = ".";
             }
-            else 
-            {
-                // APRuntime.Initialize and w3wp dump report generation relies on 
-                // setting the working directory.
-                Directory.SetCurrentDirectory(applicationPath);
-                System.Environment.SetEnvironmentVariable("approot", new DirectoryInfo(applicationPath).Parent.FullName);
-            }
+
+            // APRuntime.Initialize and w3wp dump report generation relies on
+            // setting the working directory.
+            Directory.SetCurrentDirectory(applicationPath);
+            System.Environment.SetEnvironmentVariable("approot", new DirectoryInfo(applicationPath).Parent.FullName);
 
             APRuntime.Initialize(applicationPath + "\\Monitoring.ini");
 
