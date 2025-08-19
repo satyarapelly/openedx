@@ -4,32 +4,39 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
 {
     using System;
     using System.Collections.Generic;
+    using System.Net;
+    using System.Net.Http;
     using System.Text;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Commerce.Payments.Common.Transaction;
+    using Microsoft.Extensions.DependencyInjection;
     using Test.Common;
     using Test.Common.Extensions;
     using Constants = Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Constants;
 
     public class EmulatorBaseController : ControllerBase
     {
-        private readonly TestScenarioManager testScenarioManager;
         private readonly string testScenarioManagerName;
         private readonly string? defaultTestScenario;
 
-        public EmulatorBaseController(
-            TestScenarioManager testScenarioManager,
-            string testScenarioManagerName,
-            string? defaultTestScenario = null)
+        public EmulatorBaseController(string testScenarioManagerName, string? defaultTestScenario = null)
         {
-            this.testScenarioManager = testScenarioManager;
             this.testScenarioManagerName = testScenarioManagerName;
             this.defaultTestScenario = defaultTestScenario;
             this.PlaceholderReplacements = new Dictionary<string, string>()
             {
                 { Constants.Placeholders.AddressId, Guid.NewGuid().ToString() }
             };
+        }
+
+        private TestScenarioManager TestScenarioManager
+        {
+            get
+            {
+                var managers = HttpContext.RequestServices.GetRequiredService<Dictionary<string, TestScenarioManager>>();
+                return managers[this.testScenarioManagerName];
+            }
         }
 
         protected Dictionary<string, string> PlaceholderReplacements { get; }
@@ -51,7 +58,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
                 }
             }
 
-            var result = this.testScenarioManager.GetResponseContent(apiName, testContext);
+            var result = this.TestScenarioManager.GetResponseContent(apiName, testContext);
             var responseContent = ReplacePlaceholders(result.Content);
 
             HttpContext.Response.StatusCode = result.StatusCode;
@@ -63,6 +70,38 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
             }
 
             return new EmptyResult();
+        }
+
+        protected HttpResponseMessage GetResponse(string apiName)
+        {
+            if (!HttpContext.TryGetTestContext(out var testContext))
+            {
+                if (!string.IsNullOrEmpty(this.defaultTestScenario))
+                {
+                    testContext = new TestContext(
+                        $"DependencyEmulator.{this.testScenarioManagerName}",
+                        DateTime.UtcNow,
+                        this.defaultTestScenario);
+                }
+                else
+                {
+                    return new HttpResponseMessage(HttpStatusCode.BadRequest)
+                    {
+                        Content = new StringContent("TestContext not found.")
+                    };
+                }
+            }
+
+            var result = this.TestScenarioManager.GetResponseContent(apiName, testContext);
+            var responseContent = ReplacePlaceholders(result.Content);
+
+            var message = new HttpResponseMessage((HttpStatusCode)result.StatusCode);
+            if (!string.IsNullOrEmpty(responseContent))
+            {
+                message.Content = new StringContent(responseContent, Encoding.UTF8, result.ContentType ?? "application/json");
+            }
+
+            return message;
         }
 
         protected string ReplacePlaceholders(string? responseContent)
@@ -78,6 +117,19 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
             }
 
             return responseContent;
+        }
+
+        protected HttpResponseMessage ReplacePlaceholders(HttpResponseMessage response)
+        {
+            if (response?.Content == null)
+            {
+                return response;
+            }
+
+            var content = response.Content.ReadAsStringAsync().Result;
+            content = ReplacePlaceholders(content);
+            response.Content = new StringContent(content, Encoding.UTF8, response.Content.Headers.ContentType?.MediaType ?? "application/json");
+            return response;
         }
     }
 }
