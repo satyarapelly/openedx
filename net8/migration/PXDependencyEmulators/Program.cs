@@ -4,9 +4,8 @@ using Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllers()
-    .AddNewtonsoftJson(); // Use Newtonsoft.Json for compatibility
+// Register services and scenario managers
+WebApiConfig.Register(builder);
 
 // Add Swagger services
 builder.Services.AddEndpointsApiExplorer();
@@ -34,24 +33,8 @@ if (app.Environment.IsDevelopment() || true)
     });
 }
 
-app.MapControllers();
-app.MapPartnerSettingsRoutes();
-app.MapPIMSRoutes();
-app.MapMSRewardsRoutes();
-app.MapCatalogRoutes();
-app.MapAccountRoutes();
-app.MapIssuerServiceRoutes();
-app.MapChallengeManagementRoutes();
-app.MapPaymentThirdPartyRoutes();
-app.MapPurchaseRoutes();
-app.MapRiskRoutes();
-app.MapSellerMarketPlaceRoutes();
-app.MapTokenPolicyRoutes();
-app.MapStoredValueRoutes();
-app.MapTransactionServiceRoutes();
-app.MapPaymentOchestratorRoutes();
-app.MapPayerAuthRoutes();
-app.MapFraudDetectionRoutes();
+// Map emulator routes
+WebApiConfig.MapRoutes(app);
 
 Console.WriteLine("PXDependencyEmulators is starting...");
 Console.WriteLine($"Application running on .NET {Environment.Version}");
