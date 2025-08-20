@@ -574,9 +574,10 @@ namespace Microsoft.Commerce.Payments.Common.Web
         public static bool TryGetQueryParameterValue(this HttpRequestMessage request, string parameterName, out string parameterValue, string objectNamePattern = null)
         {
             IEnumerable<KeyValuePair<string, string>> queryStrings = null;
-            if (request.Properties.ContainsKey(PaymentConstants.Web.Properties.QueryParameters))
+            if (request.TryGetOption(PaymentConstants.Web.Properties.QueryParameters, out var cached) &&
+                cached is IEnumerable<KeyValuePair<string, string>> cachedQueries)
             {
-                queryStrings = request.Properties[PaymentConstants.Web.Properties.QueryParameters] as IEnumerable<KeyValuePair<string, string>>;
+                queryStrings = cachedQueries;
             }
 
             if (queryStrings == null)
@@ -584,7 +585,7 @@ namespace Microsoft.Commerce.Payments.Common.Web
                 queryStrings = request.GetQueryNameValuePairs();
                 if (queryStrings != null)
                 {
-                    request.Properties.Add(new KeyValuePair<string, object>(PaymentConstants.Web.Properties.QueryParameters, queryStrings));
+                    request.SetOption(PaymentConstants.Web.Properties.QueryParameters, queryStrings);
                 }
             }
 
@@ -703,7 +704,7 @@ namespace Microsoft.Commerce.Payments.Common.Web
 
         public static HttpContext? GetHttpContext(this HttpRequestMessage request)
         {
-            if (request.Properties.TryGetValue("MS_HttpContext", out var context) && context is HttpContext httpContext)
+            if (request.TryGetOption("MS_HttpContext", out var context) && context is HttpContext httpContext)
             {
                 return httpContext;
             }

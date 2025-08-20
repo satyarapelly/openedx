@@ -55,16 +55,14 @@ namespace Microsoft.Commerce.Payments.Common.Web
         {
             // Not all the APIs have version.
             string apiExternalVersion = string.Empty;
-            if (request.Properties.ContainsKey(PaymentConstants.Web.Properties.Version))
+            if (request.Options.TryGetValue(new HttpRequestOptionsKey<object>(PaymentConstants.Web.Properties.Version), out _))
             {
                 apiExternalVersion = request.GetApiVersion().ExternalVersion;
             }
 
-            object callerObject;
-            request.Properties.TryGetValue(PaymentConstants.Web.Properties.CallerName, out callerObject);
+            request.Options.TryGetValue(new HttpRequestOptionsKey<object>(PaymentConstants.Web.Properties.CallerName), out var callerObject);
 
-            object callerThumbprintObject;
-            request.Properties.TryGetValue(PaymentConstants.Web.Properties.CallerThumbprint, out callerThumbprintObject);
+            request.Options.TryGetValue(new HttpRequestOptionsKey<object>(PaymentConstants.Web.Properties.CallerThumbprint), out var callerThumbprintObject);
 
             Ms.Qos.ServiceRequestStatus operationStatus = Ms.Qos.ServiceRequestStatus.Undefined;
 
@@ -133,14 +131,12 @@ namespace Microsoft.Commerce.Payments.Common.Web
                 SllLogger.EnvironmentLogOption,
                 (envelope) =>
                 {
-                    object flightingExperimentId;
-                    if (request.Properties.TryGetValue(PaymentConstants.Web.Properties.FlightingExperimentId, out flightingExperimentId))
+                    if (request.Options.TryGetValue(new HttpRequestOptionsKey<object>(PaymentConstants.Web.Properties.FlightingExperimentId), out var flightingExperimentId))
                     {
                         envelope.SetApp(new Telemetry.Extensions.app { expId = flightingExperimentId.ToString() });
                     }
 
-                    object scenarioId;
-                    if (request.Properties.TryGetValue(PaymentConstants.Web.Properties.ScenarioId, out scenarioId) && envelope.tags != null)
+                    if (request.Options.TryGetValue(new HttpRequestOptionsKey<object>(PaymentConstants.Web.Properties.ScenarioId), out var scenarioId) && envelope.tags != null)
                     {
                         envelope.tags["scenarioId"] = scenarioId.ToString();
                     }
@@ -201,13 +197,12 @@ namespace Microsoft.Commerce.Payments.Common.Web
         {
             // Not all the APIs have version.
             string apiExternalVersion = string.Empty;
-            if (request.Properties.ContainsKey(PaymentConstants.Web.Properties.Version))
+            if (request.Options.TryGetValue(new HttpRequestOptionsKey<object>(PaymentConstants.Web.Properties.Version), out _))
             {
                 apiExternalVersion = request.GetApiVersion().ExternalVersion;
             }
 
-            object callerObject;
-            request.Properties.TryGetValue(PaymentConstants.Web.Properties.CallerName, out callerObject);
+            request.Options.TryGetValue(new HttpRequestOptionsKey<object>(PaymentConstants.Web.Properties.CallerName), out var callerObject);
 
             ServiceRequestStatus operationStatus = ServiceRequestStatus.Undefined;
 
@@ -332,7 +327,7 @@ namespace Microsoft.Commerce.Payments.Common.Web
         {
             // Not all the APIs have version.
             object apiVersion = null;
-            request.Properties.TryGetValue(PaymentConstants.Web.Properties.Version, out apiVersion);
+            request.Options.TryGetValue(new HttpRequestOptionsKey<object>(PaymentConstants.Web.Properties.Version), out apiVersion);
 
             Ms.Qos.ServiceRequestStatus operationStatus = Ms.Qos.ServiceRequestStatus.Undefined;
 
