@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 public sealed class VersionGateFilter : IAsyncActionFilter
 {
-    private readonly VersionedControllerResolver _selector;
+    private readonly VersionedControllerSelector _selector;
 
-    public VersionGateFilter(VersionedControllerResolver selector) => _selector = selector;
+    public VersionGateFilter(VersionedControllerSelector selector) => _selector = selector;
 
     public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
