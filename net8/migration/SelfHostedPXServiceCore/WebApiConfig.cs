@@ -45,9 +45,11 @@ namespace Microsoft.Commerce.Payments.PXService
         public static void AddUrlVersionedRoutes(IEndpointRouteBuilder routes)
         {
             // V7 Routes
+            // Include the API version as an explicit path segment for the
+            // probe endpoint so calls like /v7.0/probe are routed correctly.
             routes.MapControllerRoute(
                 name: GlobalConstants.V7RouteNames.Probe,
-                pattern: GlobalConstants.EndPointNames.V7Probe,
+                pattern: "{version}/" + GlobalConstants.EndPointNames.V7Probe,
                 defaults: new { controller = GlobalConstants.ControllerNames.ProbeController, action = "Get" });
 
             routes.MapControllerRoute(
