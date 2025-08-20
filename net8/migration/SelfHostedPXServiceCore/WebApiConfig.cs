@@ -1,391 +1,93 @@
-using System;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Commerce.Payments.PXService.Settings;
-using Newtonsoft.Json;
+// <copyright file="WebApiConfig.cs" company="Microsoft">Copyright (c) Microsoft. All rights reserved.</copyright>
 
-namespace Microsoft.Commerce.Payments.PXService
+namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators
 {
-    /// <summary>
-    /// Simplified Web API configuration for ASP.NET Core.
-    /// </summary>
-    public static class WebApiConfig
+    using System.Web.Http;
+    using Microsoft.Commerce.Payments.PXCommon;
+    using Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Mocks;
+    using Test.Common;
+
+    public class WebApiConfig
     {
-        public static readonly Type PXSettingsType = typeof(PXServiceSettings);
-
-        /// <summary>
-        /// Registers services required for the PX service.
-        /// </summary>
-        /// <param name="builder">The web application builder.</param>
-        /// <param name="settings">PX service settings instance.</param>
-        public static void Register(WebApplicationBuilder builder, PXServiceSettings settings)
+        public static void Register(HttpConfiguration config, bool useArrangedResponses = false)
         {
-            builder.Services.AddSingleton(settings);
-            builder.Services.AddControllers()
-                .AddNewtonsoftJson(options =>
-                {
-                    options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
-                });
-        }
-
-        /// <summary>
-        /// Adds conventional routes that include the API version in the URL.
-        /// </summary>
-        /// <param name="routes">Endpoint route builder for the application.</param>
-        public static void AddUrlVersionedRoutes(IEndpointRouteBuilder routes)
-        {
-            // V7 Routes
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.Probe,
-                pattern: GlobalConstants.EndPointNames.V7Probe,
-                defaults: new { controller = GlobalConstants.ControllerNames.ProbeController, action = "Get" });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.GetPaymentInstrumentEx,
-                pattern: GlobalConstants.EndPointNames.V7GetPaymentInstrumentEx,
-                defaults: new { controller = GlobalConstants.ControllerNames.PaymentInstrumentsExController, action = "GetModernPI" });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.ListPaymentInstrumentEx,
-                pattern: GlobalConstants.EndPointNames.V7ListPaymentInstrumentEx,
-                defaults: new { controller = GlobalConstants.ControllerNames.PaymentInstrumentsExController });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.GetChallengeContextPaymentInstrumentEx,
-                pattern: GlobalConstants.EndPointNames.V7GetChallengeContextPaymentInstrumentEx,
-                defaults: new { controller = GlobalConstants.ControllerNames.PaymentInstrumentsExController, action = "GetChallengeContext" });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.ReplacePaymentInstrumentEx,
-                pattern: GlobalConstants.EndPointNames.V7ReplacePaymentInstrumentEx,
-                defaults: new { controller = GlobalConstants.ControllerNames.PaymentInstrumentsExController, action = "ReplaceModernPI" });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.RedeemPaymentInstrumentEx,
-                pattern: GlobalConstants.EndPointNames.V7RedeemPaymentInstrumentEx,
-                defaults: new { controller = GlobalConstants.ControllerNames.PaymentInstrumentsExController, action = "RedeemModernPI" });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.RemovePaymentInstrumentEx,
-                pattern: GlobalConstants.EndPointNames.V7RemovePaymentInstrumentEx,
-                defaults: new { controller = GlobalConstants.ControllerNames.PaymentInstrumentsExController, action = "RemoveModernPI" });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.UpdatePaymentInstrumentEx,
-                pattern: GlobalConstants.EndPointNames.V7UpdatePaymentInstrumentEx,
-                defaults: new { controller = GlobalConstants.ControllerNames.PaymentInstrumentsExController, action = "UpdateModernPI" });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.ResumePendingOperationEx,
-                pattern: GlobalConstants.EndPointNames.V7ResumePendingOperationEx,
-                defaults: new { controller = GlobalConstants.ControllerNames.PaymentInstrumentsExController, action = "ResumePendingOperation" });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.AnonymousResumePendingOperationEx,
-                pattern: GlobalConstants.EndPointNames.V7AnonymousResumePendingOperationEx,
-                defaults: new { controller = GlobalConstants.ControllerNames.PaymentInstrumentsExController, action = "AnonymousResumePendingOperation" });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.GetCardProfileEx,
-                pattern: GlobalConstants.EndPointNames.V7GetCardProfileEx,
-                defaults: new { controller = GlobalConstants.ControllerNames.PaymentInstrumentsExController, action = "GetCardProfile" });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.GetSeCardPersos,
-                pattern: GlobalConstants.EndPointNames.V7GetSeCardPersosEx,
-                defaults: new { controller = GlobalConstants.ControllerNames.PaymentInstrumentsExController, action = "GetSeCardPersos" });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.PostPaymentInstrumentEx,
-                pattern: GlobalConstants.EndPointNames.V7PostReplenishTransactionCredentialsEx,
-                defaults: new { controller = GlobalConstants.ControllerNames.PaymentInstrumentsExController, action = "PostReplenishTransactionCredentials" });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.AcquireLUKsEx,
-                pattern: GlobalConstants.EndPointNames.V7AcquireLuksEx,
-                defaults: new { controller = GlobalConstants.ControllerNames.PaymentInstrumentsExController, action = "AcquireLUKs" });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.ConfirmLUKsEx,
-                pattern: GlobalConstants.EndPointNames.V7ConfirmLuksEx,
-                defaults: new { controller = GlobalConstants.ControllerNames.PaymentInstrumentsExController, action = "ConfirmLUKs" });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.ValidateCvvEx,
-                pattern: GlobalConstants.EndPointNames.V7ValidateCvvEx,
-                defaults: new { controller = GlobalConstants.ControllerNames.PaymentInstrumentsExController, action = "ValidateCvv" });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.GetSettings,
-                pattern: GlobalConstants.EndPointNames.V7GetSettings,
-                defaults: new { controller = GlobalConstants.ControllerNames.SettingsController });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.GetSettingsInPost,
-                pattern: GlobalConstants.EndPointNames.V7GetSettingsInPost,
-                defaults: new { controller = GlobalConstants.ControllerNames.SettingsController, action = "GetSettingsInPost" });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.PaymentSessionApi,
-                pattern: GlobalConstants.EndPointNames.V7PaymentSessions,
-                defaults: new { controller = GlobalConstants.ControllerNames.PaymentSessionsController, action = "PostPaymentSession" });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.PaymentSessionGetApi,
-                pattern: GlobalConstants.EndPointNames.V7PaymentSessionsGet,
-                defaults: new { controller = GlobalConstants.ControllerNames.PaymentSessionsController, action = "GetPaymentSession" });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.QRCodePaymentSessionGetApi,
-                pattern: GlobalConstants.EndPointNames.V7QrCodePaymentSessionsGet,
-                defaults: new { controller = GlobalConstants.ControllerNames.PaymentSessionsController, action = "qrCodeStatus" });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.PaymentSessionCreateAndAuthenticateApi,
-                pattern: GlobalConstants.EndPointNames.V7PaymentSessionsCreateAndAuthenticate,
-                defaults: new { controller = GlobalConstants.ControllerNames.PaymentSessionsController, action = "CreateAndAuthenticate" });
-
-            routes.MapControllerRoute(
-               name: GlobalConstants.V7RouteNames.PaymentSessionAuthenticateApi,
-               pattern: GlobalConstants.EndPointNames.V7PaymentSessionsAuthenticate,
-               defaults: new { controller = GlobalConstants.ControllerNames.PaymentSessionsController, action = "Authenticate" });
-
-            routes.MapControllerRoute(
-               name: GlobalConstants.V7RouteNames.PaymentSessionNotifyThreeDSChallengeCompletedApi,
-               pattern: GlobalConstants.EndPointNames.V7PaymentSessionsNotifyThreeDSChallengeCompleted,
-               defaults: new { controller = GlobalConstants.ControllerNames.PaymentSessionsController, action = "NotifyThreeDSChallengeCompleted" });
-
-            routes.MapControllerRoute(
-               name: GlobalConstants.V7RouteNames.BrowserFlowPaymentSessionsAuthenticateApi,
-               pattern: GlobalConstants.EndPointNames.V7BrowserFlowAuthenticate,
-               defaults: new { controller = GlobalConstants.ControllerNames.PaymentSessionsController, action = "BrowserAuthenticate" });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.BrowserFlowPaymentSessionsNotifyThreeDSChallengeCompletedApi,
-                pattern: GlobalConstants.EndPointNames.V7BrowserFlowPaymentSessionsNotifyChallengeCompleted,
-                defaults: new { controller = GlobalConstants.ControllerNames.PaymentSessionsController, action = "BrowserNotifyThreeDSChallengeCompleted" });
-
-            routes.MapControllerRoute(
-               name: GlobalConstants.V7RouteNames.PaymentSessionBrowserAuthenticateThreeDSOneApi,
-               pattern: GlobalConstants.EndPointNames.V7PaymentSessionsBrowserAuthenticateThreeDSOne,
-               defaults: new { controller = GlobalConstants.ControllerNames.PaymentSessionsController, action = "BrowserAuthenticateThreeDSOne" });
-
-            routes.MapControllerRoute(
-               name: GlobalConstants.V7RouteNames.PaymentSessionBrowserAuthenticateRedirectionThreeDSOneApi,
-               pattern: GlobalConstants.EndPointNames.V7PaymentSessionsBrowserAuthenticateRedirectionThreeDSOne,
-               defaults: new { controller = GlobalConstants.ControllerNames.PaymentSessionsController, action = "BrowserAuthenticateRedirectionThreeDSOne" });
-
-            routes.MapControllerRoute(
-               name: GlobalConstants.V7RouteNames.PaymentSessionBrowserNotifyThreeDSOneChallengeCompletedOneApi,
-               pattern: GlobalConstants.EndPointNames.V7PaymentSessionsBrowserNotifyThreeDSOneChallengeCompleted,
-               defaults: new { controller = GlobalConstants.ControllerNames.PaymentSessionsController, action = "BrowserNotifyThreeDSOneChallengeCompleted" });
-
-            routes.MapControllerRoute(
-               name: GlobalConstants.V7RouteNames.PaymentSessionAuthenticateIndiaThreeDSApi,
-               pattern: GlobalConstants.EndPointNames.V7PaymentSessionsAuthenticateIndiaThreeDS,
-               defaults: new { controller = GlobalConstants.ControllerNames.PaymentSessionsController, action = "AuthenticateIndiaThreeDS" });
-
-            routes.MapControllerRoute(
-                      name: GlobalConstants.V7RouteNames.PaymentTransactionApi,
-                      pattern: GlobalConstants.EndPointNames.V7PaymentTransactions,
-                      defaults: new { controller = GlobalConstants.ControllerNames.PaymentTransactionsController });
-
-            routes.MapControllerRoute(
-               name: GlobalConstants.V7RouteNames.MSRewardsApi,
-               pattern: GlobalConstants.EndPointNames.V7MSRewards,
-               defaults: new { controller = GlobalConstants.ControllerNames.MSRewardsController });
-
-            routes.MapControllerRoute(
-              name: GlobalConstants.V7RouteNames.PaymentSessionAuthenticationStatusApi,
-              pattern: GlobalConstants.EndPointNames.V7PaymentSessionsAuthenticationStatus,
-              defaults: new { controller = GlobalConstants.ControllerNames.PaymentSessionsController, action = "AuthenticationStatus" });
-
-            routes.MapControllerRoute(
-               name: GlobalConstants.V7RouteNames.AttachAddressCheckoutRequestExApi,
-               pattern: GlobalConstants.EndPointNames.V7AttachAddressCheckoutRequestsEx,
-               defaults: new { controller = GlobalConstants.ControllerNames.CheckoutRequestsExController, action = "AttachAddress" });
-
-            routes.MapControllerRoute(
-               name: GlobalConstants.V7RouteNames.AttachProfileCheckoutRequestExApi,
-               pattern: GlobalConstants.EndPointNames.V7AttachProfileCheckoutRequestsEx,
-               defaults: new { controller = GlobalConstants.ControllerNames.CheckoutRequestsExController, action = "AttachProfile" });
-
-            routes.MapControllerRoute(
-               name: GlobalConstants.V7RouteNames.ConfirmCheckoutRequestExApi,
-               pattern: GlobalConstants.EndPointNames.V7ConfirmCheckoutRequestsEx,
-               defaults: new { controller = GlobalConstants.ControllerNames.CheckoutRequestsExController, action = "Confirm" });
-
-            routes.MapControllerRoute(
-               name: GlobalConstants.V7RouteNames.ExpressCheckoutConfirmApi,
-               pattern: GlobalConstants.EndPointNames.V7ExpressCheckoutConfirm,
-               defaults: new { controller = GlobalConstants.ControllerNames.ExpressCheckoutController, action = "Confirm" });
-
-            routes.MapControllerRoute(
-               name: GlobalConstants.V7RouteNames.TokensExApi,
-               pattern: GlobalConstants.EndPointNames.V7TokensEx,
-               defaults: new { controller = GlobalConstants.ControllerNames.TokensExController, action = "Tokens" });
-
-            routes.MapControllerRoute(
-               name: GlobalConstants.V7RouteNames.TokensExChallengeApi,
-               pattern: GlobalConstants.EndPointNames.V7TokensExChallenge,
-               defaults: new { controller = GlobalConstants.ControllerNames.TokensExController, action = "PostChallenge" });
-
-            routes.MapControllerRoute(
-               name: GlobalConstants.V7RouteNames.TokensExValidateChallengeApi,
-               pattern: GlobalConstants.EndPointNames.V7TokensExValidateChallenge,
-               defaults: new { controller = GlobalConstants.ControllerNames.TokensExController, action = "ValidateChallenge" });
-
-            routes.MapControllerRoute(
-               name: GlobalConstants.V7RouteNames.TokensExMandatesApi,
-               pattern: GlobalConstants.EndPointNames.V7TokensExMandate,
-               defaults: new { controller = GlobalConstants.ControllerNames.TokensExController, action = "Mandates" });
-
-            routes.MapControllerRoute(
-               name: GlobalConstants.V7RouteNames.GetAgenticTokenDescriptionsApi,
-               pattern: GlobalConstants.EndPointNames.V7AgenticTokenDescriptions,
-               defaults: new { controller = GlobalConstants.ControllerNames.AgenticTokenDescriptionsController });
-
-            routes.MapControllerRoute(
-               name: GlobalConstants.V7RouteNames.AttachPaymentInstrumentExApi,
-               pattern: GlobalConstants.EndPointNames.V7AttachPaymentInstrumentCheckoutRequestsEx,
-               defaults: new { controller = GlobalConstants.ControllerNames.CheckoutRequestsExController, action = "AttachPaymentInstrument" });
-
-            // V7 PIDL Routes
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.GetPaymentMethodDescriptionsApi,
-                pattern: GlobalConstants.EndPointNames.V7PaymentMethodDescriptions + "{id}",
-                defaults: new { controller = GlobalConstants.ControllerNames.PaymentMethodDescriptionsController });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.GetPaymentMethodDescriptionsApiNoId,
-                pattern: GlobalConstants.EndPointNames.V7PaymentMethodDescriptions,
-                defaults: new { controller = GlobalConstants.ControllerNames.PaymentMethodDescriptionsController });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.GetAddressDescriptionsApi,
-                pattern: GlobalConstants.EndPointNames.V7AddressDescriptions + "{id}",
-                defaults: new { controller = GlobalConstants.ControllerNames.AddressDescriptionsController });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.GetAddressDescriptionsApiNoId,
-                pattern: GlobalConstants.EndPointNames.V7AddressDescriptions,
-                defaults: new { controller = GlobalConstants.ControllerNames.AddressDescriptionsController });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.AddressesExApi,
-                pattern: GlobalConstants.EndPointNames.V7AddressesEx,
-                defaults: new { controller = GlobalConstants.ControllerNames.AddressesExController });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.AddressesExApiWithId,
-                pattern: GlobalConstants.EndPointNames.V7AddressesExWithId,
-                defaults: new { controller = GlobalConstants.ControllerNames.AddressesExController });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.GetChallengeDescriptionsApi,
-                pattern: GlobalConstants.EndPointNames.V7ChallengeDescriptions + "{id}",
-                defaults: new { controller = GlobalConstants.ControllerNames.ChallengeDescriptionsController });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.GetChallengeDescriptionsApiNoId,
-                pattern: GlobalConstants.EndPointNames.V7ChallengeDescriptions,
-                defaults: new { controller = GlobalConstants.ControllerNames.ChallengeDescriptionsController });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.GetProfileDescriptionsApiNoId,
-                pattern: GlobalConstants.EndPointNames.V7ProfileDescriptions,
-                defaults: new { controller = GlobalConstants.ControllerNames.ProfileDescriptionsController });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.GetBillingGroupDescriptionsApiNoId,
-                pattern: GlobalConstants.EndPointNames.V7BillingGroupDescriptions,
-                defaults: new { controller = GlobalConstants.ControllerNames.BillingGroupDescriptionsController });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.GetTenantDescriptionsApiNoId,
-                pattern: GlobalConstants.EndPointNames.V7TenantDescriptions,
-                defaults: new { controller = GlobalConstants.ControllerNames.TenantDescriptionsController });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.GetTaxIdDescriptionsApiNoId,
-                pattern: GlobalConstants.EndPointNames.V7TaxIdDescriptions,
-                defaults: new { controller = GlobalConstants.ControllerNames.TaxIdDescriptionsController });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.PidlTransformation,
-                pattern: GlobalConstants.EndPointNames.V7PidlTransformation,
-                defaults: new { controller = GlobalConstants.ControllerNames.PidlTransformationController });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.PidlValidation,
-                pattern: GlobalConstants.EndPointNames.V7PidlValidation,
-                defaults: new { controller = GlobalConstants.ControllerNames.PidlValidationController });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.SessionsApi,
-                pattern: GlobalConstants.EndPointNames.V7Sessions,
-                defaults: new { controller = GlobalConstants.ControllerNames.SessionsController });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.AddressesApi,
-                pattern: GlobalConstants.EndPointNames.V7Addresses,
-                defaults: new { controller = GlobalConstants.ControllerNames.AddressesController });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.PaymentSessionDescriptionsApi,
-                pattern: GlobalConstants.EndPointNames.V7PaymentSessionDescriptions,
-                defaults: new { controller = GlobalConstants.ControllerNames.PaymentSessionDescriptionsController });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.RdsSessionApi,
-                pattern: GlobalConstants.EndPointNames.V7RdsSessions,
-                defaults: new { controller = GlobalConstants.ControllerNames.RDSSessionController });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.CheckoutDescriptionsApi,
-                pattern: GlobalConstants.EndPointNames.V7CheckoutDescriptions,
-                defaults: new { controller = GlobalConstants.ControllerNames.CheckoutDescriptionsController });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.CheckoutsExApi,
-                pattern: GlobalConstants.EndPointNames.V7CheckoutsEx,
-                defaults: new { controller = GlobalConstants.ControllerNames.CheckoutsExController });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.WalletsApi,
-                pattern: GlobalConstants.EndPointNames.V7Wallets,
-                defaults: new { controller = GlobalConstants.ControllerNames.WalletsController });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.RewardsDescriptionsApi,
-                pattern: GlobalConstants.EndPointNames.V7RewardsDescriptions,
-                defaults: new { controller = GlobalConstants.ControllerNames.RewardsDescriptionsController });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.Initialization,
-                pattern: GlobalConstants.EndPointNames.V7Initialization,
-                defaults: new { controller = GlobalConstants.ControllerNames.InitializationController });
-
-            routes.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.DescriptionsApi,
-                pattern: GlobalConstants.EndPointNames.V7Descriptions,
-                defaults: new { controller = GlobalConstants.ControllerNames.DescriptionsController });
-
-            routes.MapControllerRoute(
-               name: GlobalConstants.V7RouteNames.ConfirmPaymentRequestExApi,
-               pattern: GlobalConstants.EndPointNames.V7ConfirmPaymentRequestsEx,
-               defaults: new { controller = GlobalConstants.ControllerNames.PaymentRequestsExController, action = "Confirm" });
-
-            routes.MapControllerRoute(
-               name: GlobalConstants.V7RouteNames.AttachChallengeDataPaymentRequestExApi,
-               pattern: GlobalConstants.EndPointNames.V7AttachChallengeDataPaymentRequestsEx,
-               defaults: new { controller = GlobalConstants.ControllerNames.PaymentRequestsExController, action = "AttachChallengeData" });
-
-            routes.MapControllerRoute(
-               name: GlobalConstants.V7RouteNames.RemoveEligiblePaymentmethodsPaymentRequestExApi,
-               pattern: GlobalConstants.EndPointNames.V7RemoveEligiblePaymentmethodsPaymentRequestsEx,
-               defaults: new { controller = GlobalConstants.ControllerNames.PaymentRequestsExController, action = "RemoveEligiblePaymentmethods" });
+            config.MessageHandlers.Add(new MockServiceDelegatingHandlerV2(new PartnerSettingsServiceMockResponseProvider(), useArrangedResponses));
+            config.MessageHandlers.Add(new MockServiceDelegatingHandlerV2(new AccountServiceMockResponseProvider(), useArrangedResponses));
+            config.MessageHandlers.Add(new MockServiceDelegatingHandlerV2(new PimsMockResponseProviderAugmented(), useArrangedResponses));
+            config.MessageHandlers.Add(new MockServiceDelegatingHandlerV2(new MSRewardsServiceMockResponseProvider(), useArrangedResponses));
+            config.MessageHandlers.Add(new MockServiceDelegatingHandlerV2(new CatalogServiceMockResponseProvider(), useArrangedResponses));
+            config.MessageHandlers.Add(new MockServiceDelegatingHandlerV2(new IssuerServiceMockResponseProvider(), useArrangedResponses));
+            config.MessageHandlers.Add(new MockServiceDelegatingHandlerV2(new ChallengeManagementServiceMockResponseProvider(), useArrangedResponses));
+            config.MessageHandlers.Add(new MockServiceDelegatingHandlerV2(new PurchaseServiceMockResponseProvider(), useArrangedResponses));
+            config.MessageHandlers.Add(new MockServiceDelegatingHandlerV2(new RiskServiceMockResponseProvider(), useArrangedResponses));
+            config.MessageHandlers.Add(new MockServiceDelegatingHandlerV2(new TokenPolicyServiceMockResponseProvider(), useArrangedResponses));
+            config.MessageHandlers.Add(new MockServiceDelegatingHandlerV2(new StoredValueServiceMockResponseProvider(), useArrangedResponses));
+            config.MessageHandlers.Add(new MockServiceDelegatingHandlerV2(new WalletServiceMockResponseProvider(), useArrangedResponses));
+            config.MessageHandlers.Add(new MockServiceDelegatingHandlerV2(new TransactionDataServiceMockResponseProvider(), useArrangedResponses));
+            config.MessageHandlers.Add(new MockServiceDelegatingHandlerV2(new TransactionServiceMockResponseProvider(), useArrangedResponses));
+            config.MessageHandlers.Add(new MockServiceDelegatingHandlerV2(new PaymentOrchestratorServiceMockResponseProvider(), useArrangedResponses));
+            config.MessageHandlers.Add(new MockServiceDelegatingHandlerV2(new PayerAuthServiceMockResponseProvider(), useArrangedResponses));
+            config.MessageHandlers.Add(new MockServiceDelegatingHandlerV2(new FraudDetectionMockResponseProvider(), useArrangedResponses));
+
+            // In Selfhost env, httpContext is not available due to which HttpContext.Current?.Server?.MapPath("~/TestScenarios")
+            // will return null. In such cases, we need to navigate to the TestScenarios folder from the current assembly path.
+            if (WebHostingUtility.IsApplicationSelfHosted())
+            {
+                config.RegisterScenarioManager(Constants.TestScenarioManagers.PartnerSettings, "PXDependencyEmulators\\TestScenarios\\PartnerSettings", string.Empty);
+                config.RegisterScenarioManager(Constants.TestScenarioManagers.Account, "PXDependencyEmulators\\TestScenarios\\Account", Constants.DefaultTestScenarios.AccountEmulator);
+                config.RegisterScenarioManager(Constants.TestScenarioManagers.PIMS, "PXDependencyEmulators\\TestScenarios\\PIMS", string.Empty);
+                config.RegisterScenarioManager(Constants.TestScenarioManagers.MSRewards, "PXDependencyEmulators\\TestScenarios\\MSRewards", string.Empty);
+                config.RegisterScenarioManager(Constants.TestScenarioManagers.Catalog, "PXDependencyEmulators\\TestScenarios\\Catalog", string.Empty);
+                config.RegisterScenarioManager(Constants.TestScenarioManagers.IssuerService, "PXDependencyEmulators\\TestScenarios\\IssuerService", Constants.DefaultTestScenarios.IssuerServiceEmulator);
+                config.RegisterScenarioManager(Constants.TestScenarioManagers.ChallengeManagement, "PXDependencyEmulators\\TestScenarios\\ChallengeManagement", Constants.DefaultTestScenarios.ChallengeManagementServiceEmulator);
+                config.RegisterScenarioManager(Constants.TestScenarioManagers.PaymentThirdParty, "PXDependencyEmulators\\TestScenarios\\PaymentThirdParty", string.Empty);
+                config.RegisterScenarioManager(Constants.TestScenarioManagers.Purchase, "PXDependencyEmulators\\TestScenarios\\Purchase", string.Empty);
+                config.RegisterScenarioManager(Constants.TestScenarioManagers.Risk, "PXDependencyEmulators\\TestScenarios\\Risk", string.Empty);
+                config.RegisterScenarioManager(Constants.TestScenarioManagers.SellerMarketPlace, "PXDependencyEmulators\\TestScenarios\\SellerMarketPlace", string.Empty);
+                config.RegisterScenarioManager(Constants.TestScenarioManagers.TokenPolicy, "PXDependencyEmulators\\TestScenarios\\TokenPolicy", string.Empty);
+                config.RegisterScenarioManager(Constants.TestScenarioManagers.TransactionService, "PXDependencyEmulators\\TestScenarios\\TransactionService", string.Empty);
+                config.RegisterScenarioManager(Constants.TestScenarioManagers.PaymentOchestrator, "PXDependencyEmulators\\TestScenarios\\PaymentOchestrator", string.Empty);
+                config.RegisterScenarioManager(Constants.TestScenarioManagers.FraudDetection, "PXDependencyEmulators\\TestScenarios\\FraudDetection", Constants.DefaultTestScenarios.FraudDetectionEmulator);
+            }
+            else
+            {
+                config.RegisterScenarioManager(Constants.TestScenarioManagers.Account, "~/TestScenarios/Account", Constants.DefaultTestScenarios.AccountEmulator);
+                config.RegisterScenarioManager(Constants.TestScenarioManagers.PartnerSettings, "~/TestScenarios/PartnerSettings", string.Empty);
+                config.RegisterScenarioManager(Constants.TestScenarioManagers.PIMS, "~/TestScenarios/PIMS", string.Empty);
+                config.RegisterScenarioManager(Constants.TestScenarioManagers.MSRewards, "~/TestScenarios/MSRewards", string.Empty);
+                config.RegisterScenarioManager(Constants.TestScenarioManagers.Catalog, "~/TestScenarios/Catalog", string.Empty);
+                config.RegisterScenarioManager(Constants.TestScenarioManagers.IssuerService, "~/TestScenarios/IssuerService", Constants.DefaultTestScenarios.IssuerServiceEmulator);
+                config.RegisterScenarioManager(Constants.TestScenarioManagers.ChallengeManagement, "~/TestScenarios/ChallengeManagement", Constants.DefaultTestScenarios.ChallengeManagementServiceEmulator);
+                config.RegisterScenarioManager(Constants.TestScenarioManagers.PaymentThirdParty, "~/TestScenarios/PaymentThirdParty", string.Empty);
+                config.RegisterScenarioManager(Constants.TestScenarioManagers.Purchase, "~/TestScenarios/Purchase", string.Empty);
+                config.RegisterScenarioManager(Constants.TestScenarioManagers.Risk, "~/TestScenarios/Risk", string.Empty);
+                config.RegisterScenarioManager(Constants.TestScenarioManagers.SellerMarketPlace, "~/TestScenarios/SellerMarketPlace", string.Empty);
+                config.RegisterScenarioManager(Constants.TestScenarioManagers.TokenPolicy, "~/TestScenarios/TokenPolicy", string.Empty);
+                config.RegisterScenarioManager(Constants.TestScenarioManagers.TransactionService, "~/TestScenarios/TransactionService", string.Empty);
+                config.RegisterScenarioManager(Constants.TestScenarioManagers.PaymentOchestrator, "~/TestScenarios/PaymentOchestrator", string.Empty);
+                config.RegisterScenarioManager(Constants.TestScenarioManagers.FraudDetection, "~/TestScenarios/FraudDetection", Constants.DefaultTestScenarios.FraudDetectionEmulator);
+            }
+
+            // Map routes for different emulators
+            config.Routes.MapAccountRoutes();
+            config.Routes.MapPartnerSettingsRoutes();
+            config.Routes.MapPIMSRoutes();
+            config.Routes.MapMSRewardsRoutes();
+            config.Routes.MapCatalogRoutes();
+
+            config.Routes.MapIssuerServiceRoutes();
+
+            config.Routes.MapChallengeManagementRoutes();
+            config.Routes.MapPaymentThirdPartyRoutes();
+            config.Routes.MapPurchaseRoutes();
+            config.Routes.MapRiskRoutes();
+            config.Routes.MapSellerMarketPlaceRoutes();
+            config.Routes.MapTokenPolicyRoutes();
+            config.Routes.MapStoredValueRoutes();
+            config.Routes.MapTransactionServiceRoutes();
+            config.Routes.MapPaymentOchestratorRoutes();
+            config.Routes.MapPayerAuthRoutes();
+            config.Routes.MapFraudDetectionRoutes();
         }
     }
 }
