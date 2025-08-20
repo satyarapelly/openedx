@@ -34,7 +34,6 @@ var pxSettings = PXServiceSettings.CreateInstance(Environment.Current.Environmen
 builder.Services.AddSingleton(pxSettings);
 
 // WebApiConfig settings
-ServicePointManager.CheckCertificateRevocationList = true;
 ApplicationInsightsProvider.SetupAppInsightsConfiguration(pxSettings.ApplicationInsightInstrumentKey, pxSettings.ApplicationInsightMode);
 EnsureSllInitialized();
 
@@ -173,7 +172,6 @@ app.UseEndpoints(endpoints =>
 });
 
 
-
 // Graceful shutdown hook (replaces Global.asax Application_End)
 app.Lifetime.ApplicationStopping.Register(() =>
 {
@@ -274,12 +272,20 @@ static void AddUrlVersionedRoutes(IEndpointRouteBuilder endpoints)
     endpoints.MapControllerRoute(
         name: GlobalConstants.V7RouteNames.GetSettings,
         pattern: GlobalConstants.EndPointNames.V7GetSettings,
-        defaults: new { controller = GlobalConstants.ControllerNames.SettingsController });
+        defaults: new
+        {
+            controller = GlobalConstants.ControllerNames.SettingsController.Replace("Controller", string.Empty),
+            action = "GetSettings"
+        });
 
     endpoints.MapControllerRoute(
         name: GlobalConstants.V7RouteNames.GetSettingsInPost,
         pattern: GlobalConstants.EndPointNames.V7GetSettingsInPost,
-        defaults: new { controller = GlobalConstants.ControllerNames.SettingsController, action = "GetSettingsInPost" });
+        defaults: new
+        {
+            controller = GlobalConstants.ControllerNames.SettingsController.Replace("Controller", string.Empty),
+            action = "GetSettingsInPost"
+        });
 
     endpoints.MapControllerRoute(
         name: GlobalConstants.V7RouteNames.PaymentSessionApi,
@@ -409,7 +415,7 @@ static void AddUrlVersionedRoutes(IEndpointRouteBuilder endpoints)
     endpoints.MapControllerRoute(
         name: GlobalConstants.V7RouteNames.GetPaymentMethodDescriptionsApi,
         pattern: GlobalConstants.EndPointNames.V7PaymentMethodDescriptions + "{id}",
-        defaults: new { controller = GlobalConstants.ControllerNames.PaymentMethodDescriptionsController, action = "Get" });
+        defaults: new { controller = GlobalConstants.ControllerNames.PaymentMethodDescriptionsController, action = "GetByFamilyAndType" });
 
     endpoints.MapControllerRoute(
         name: GlobalConstants.V7RouteNames.GetPaymentMethodDescriptionsApiNoId,
@@ -419,12 +425,12 @@ static void AddUrlVersionedRoutes(IEndpointRouteBuilder endpoints)
     endpoints.MapControllerRoute(
         name: GlobalConstants.V7RouteNames.GetAddressDescriptionsApi,
         pattern: GlobalConstants.EndPointNames.V7AddressDescriptions + "{id}",
-        defaults: new { controller = GlobalConstants.ControllerNames.AddressDescriptionsController, action = "Get" });
+        defaults: new { controller = GlobalConstants.ControllerNames.AddressDescriptionsController, action = "GetById" });
 
     endpoints.MapControllerRoute(
         name: GlobalConstants.V7RouteNames.GetAddressDescriptionsApiNoId,
         pattern: GlobalConstants.EndPointNames.V7AddressDescriptions,
-        defaults: new { controller = GlobalConstants.ControllerNames.AddressDescriptionsController, action = "List" });
+        defaults: new { controller = GlobalConstants.ControllerNames.AddressDescriptionsController, action = "GetAddressGroupsById" });
 
     endpoints.MapControllerRoute(
         name: GlobalConstants.V7RouteNames.AddressesExApi,
@@ -514,7 +520,7 @@ static void AddUrlVersionedRoutes(IEndpointRouteBuilder endpoints)
     endpoints.MapControllerRoute(
         name: GlobalConstants.V7RouteNames.AnonymousGetPaymentMethodDescriptionsApi,
         pattern: GlobalConstants.EndPointNames.V7AnonymousPaymentMethodDescriptions,
-        defaults: new { controller = GlobalConstants.ControllerNames.PaymentMethodDescriptionsController, action = "AnonymousList" });
+        defaults: new { controller = GlobalConstants.ControllerNames.PaymentMethodDescriptionsController, action = "GetAnonymousPidl" });
 
     endpoints.MapControllerRoute(
         name: GlobalConstants.V7RouteNames.AnonymousGetPaymentMethodDescriptionsSessionIdApi,
@@ -564,7 +570,7 @@ static void AddUrlVersionedRoutes(IEndpointRouteBuilder endpoints)
     endpoints.MapControllerRoute(
         name: GlobalConstants.V7RouteNames.WalletsGetConfigApi,
         pattern: GlobalConstants.EndPointNames.V7AnonymousGetWalletConfig,
-        defaults: new { controller = GlobalConstants.ControllerNames.WalletsController, action = "GetConfig" });
+        defaults: new { controller = GlobalConstants.ControllerNames.WalletsController, action = "GetWalletConfig" });
 
     endpoints.MapControllerRoute(
         name: GlobalConstants.V7RouteNames.WalletsSetupProviderSessionApi,

@@ -43,7 +43,7 @@ namespace Microsoft.Commerce.Payments.PXService
                         SllWebLogger.TracePXServiceException($"AzureExPFlighting Exception: {exception?.ToString()}. Details: {formatter(state, exception)}", EventTraceActivity.Empty);
                     }
                 }
-                catch (Exception ex)
+                catch(Exception ex)
                 {
                     SllWebLogger.TracePXServiceException($"AzureExPFlighting Exception: {ex?.ToString()}", EventTraceActivity.Empty);
                 }
@@ -56,48 +56,33 @@ namespace Microsoft.Commerce.Payments.PXService
         }
 
         public AzureExPAccessor(
-    string expBlobUrl,
-    IAzureActiveDirectoryTokenLoader tokenLoader,
-    HttpMessageHandler messageHandler,
-    bool enableTestHook = false)
+            string expBlobUrl,
+            IAzureActiveDirectoryTokenLoader tokenLoader,
+            HttpMessageHandler messageHandler,
+            bool enableTestHook = false)
         {
             try
             {
                 this.enableTestHook = enableTestHook;
                 if (!string.IsNullOrWhiteSpace(expBlobUrl))
                 {
-                    // Create AuthorizationHeaderHandler chain
-                    AuthorizationHeaderHandler authenticationHandler = new AuthorizationHeaderHandler(
-                        async (r, c) =>
-                        {
-                            string token = await tokenLoader.GetTokenStringAsync(null, c).ConfigureAwait(false);
-                            return ("Bearer", token);
-                        })
-                    {
-                        InnerHandler = messageHandler
-                    };
+                    //// Stylecop is throwing an error with code 'SA0102' on this line and we couldn't suppress it. So, disabled the stylecop for the entire file.
+                    AuthorizationHeaderHandler authenticationHandler = new AuthorizationHeaderHandler((r, c) => tokenLoader.GetTokenStringAsync(null, default).ContinueWith<(string, string)>(t => ("Bearer", t.Result)))
+                    { InnerHandler = messageHandler };
 
-                    // HttpClient is also an HttpMessageInvoker (used by VariantAssignmentHttpPollingProvider)
-                    var httpClient = new HttpClient(authenticationHandler);
-                    httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(PaymentConstants.HttpMimeTypes.JsonContentType));
-                    httpClient.DefaultRequestHeaders.Add(PaymentConstants.HttpHeaders.Connection, PaymentConstants.HttpHeaders.KeepAlive);
-                    httpClient.DefaultRequestHeaders.Add(PaymentConstants.HttpHeaders.KeepAlive, string.Format(PaymentConstants.HttpHeaders.KeepAliveParameter, 60));
 
-                    // Use this httpClient directly
+                    var azureExPPollingClient = new PXTracingHttpClient(PXCommon.Constants.ServiceNames.AzureExPService, authenticationHandler);
+                    azureExPPollingClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(PaymentConstants.HttpMimeTypes.JsonContentType));
+                    azureExPPollingClient.DefaultRequestHeaders.Add(PaymentConstants.HttpHeaders.Connection, PaymentConstants.HttpHeaders.KeepAlive);
+                    azureExPPollingClient.DefaultRequestHeaders.Add(PaymentConstants.HttpHeaders.KeepAlive, string.Format(PaymentConstants.HttpHeaders.KeepAliveParameter, 60));
+
                     var pollingInterval = TimeSpan.FromSeconds(60);
                     var pollingUrl = new Uri(expBlobUrl);
                     ILogger logger = new AzureExPLogger();
 
-                    // ✅ Use HttpClient as HttpMessageInvoker here
-                    this.variantAssignmentProvider = new VariantAssignmentHttpPollingProvider(
-                        httpClient,         // HttpClient passed directly as HttpMessageInvoker
-                        pollingUrl,
-                        pollingInterval,
-                        logger
-                    )
-                    {
-                        ThrowUntilInitialized = false
-                    };
+                    //Initialize Variant Assignment provider and set not to throw error if not initialized. Make sure to not start the provider here, as it may cause longer for app initialization time.
+                    var httpClient = new HttpClient(authenticationHandler);
+                    this.variantAssignmentProvider = new VariantAssignmentHttpPollingProvider(azureExPPollingClient, pollingUrl, pollingInterval, logger) { ThrowUntilInitialized = false };
                 }
                 else
                 {
@@ -122,12 +107,12 @@ namespace Microsoft.Commerce.Payments.PXService
                     {
                         if (Interlocked.Exchange(ref this.vaInitCheckCounter, 1) == 0)
                         {
-                            //SllWebLogger.TraceServerMessage(
-                            //    "AzureExPVAProvider",
-                            //    traceActivityId.ToString(),
-                            //    null,
-                            //    "Starting VAProvider",
-                            //    QosEventLevel.Warning);
+                            SllWebLogger.TraceServerMessage(
+                                "AzureExPVAProvider",
+                                traceActivityId.ToString(),
+                                null,
+                                "Starting VAProvider",
+                                EventLevel.Warning);
 
                             // start VAProvider
                             this.variantAssignmentProvider.Start();

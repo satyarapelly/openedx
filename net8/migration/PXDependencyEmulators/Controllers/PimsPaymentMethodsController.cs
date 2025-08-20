@@ -5,11 +5,11 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
     using Common.Transaction;
     using Common.Web;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Extensions;
+    using Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators;
     using System.Net.Http;
     using Test.Common;
     using Constants = Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Constants;
-using FromUri = Microsoft.AspNetCore.Mvc.FromQueryAttribute;
+    using FromUri = Microsoft.AspNetCore.Mvc.FromQueryAttribute;
 
     public class PimsPaymentMethodsController : EmulatorBaseController
     {

@@ -17,5 +17,11 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.RiskService
 
         [JsonProperty(PropertyName = "objectid")]
         public string ObjectId { get; set; }
+
+        [JsonProperty(PropertyName = "account_id")]
+        public string AccountId { get; set; }
+
+        [JsonProperty(PropertyName = "external_user_id")]
+        public string ExternalUserId { get; set; }
     }
 }

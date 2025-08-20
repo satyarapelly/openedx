@@ -1,4 +1,4 @@
-// <copyright file="EmulatorBaseController.cs" company="Microsoft">Copyright (c) Microsoft 2017. All rights reserved.</copyright>
+﻿// <copyright file="EmulatorBaseController.cs" company="Microsoft">Copyright (c) Microsoft 2017. All rights reserved.</copyright>
 
 namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Controllers
 {
@@ -30,7 +30,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
             };
         }
 
-        private TestScenarioManager TestScenarioManager
+        public TestScenarioManager TestScenarioManager
         {
             get
             {
@@ -72,7 +72,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
             return new EmptyResult();
         }
 
-        protected HttpResponseMessage GetResponse(string apiName)
+        protected virtual HttpResponseMessage GetResponse(string apiName)
         {
             if (!HttpContext.TryGetTestContext(out var testContext))
             {

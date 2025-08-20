@@ -10,15 +10,15 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
     using Microsoft.Commerce.Payments.Common.Transaction;
     using Test.Common;
     using Constants = Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Constants;
-    using Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Extensions;
 
     public class FraudDetectionController : ControllerBase
     {
-        private TestScenarioManager TestScenarioManager
+        public TestScenarioManager TestScenarioManager
         {
             get
             {
-                return this.HttpContext.RequestServices.GetTestScenarioManager(Constants.TestScenarioManagers.FraudDetection);
+                var managers = HttpContext.RequestServices.GetRequiredService<Dictionary<string, TestScenarioManager>>();
+                return managers[Constants.TestScenarioManagers.FraudDetection];
             }
         }
 

@@ -4,11 +4,13 @@ namespace SelfHostedPXService
 {
     using System;
     using System.Net.Http;
+    using System.Threading;
     using System.Threading.Tasks;
+    using System.Xml;
     using Newtonsoft.Json;
     using SelfHostedPXServiceCore;
 
-    public class Program
+    internal static class Program
     {
         /// <summary>
         /// Application start method
@@ -22,77 +24,76 @@ namespace SelfHostedPXService
         /// <returns>The exit code of the test run.</returns>
         public static async Task Main(string[] args)
         {
-            string baseUrl = null;
-            if (args.Length > 0)
+            // optional base URL from args, e.g. http://localhost:49152
+            string? baseUrl = args.Length > 0 ? args[0] : "http://localhost:49152";
+            Console.WriteLine(baseUrl is null
+                ? "Initializing server..."
+                : $"Initializing server on {baseUrl}...");
+
+            // Start the self-host
+            var host = new SelfHostedPxService(baseUrl, true, false);
+                var cts = new CancellationTokenSource();
+            Console.CancelKeyPress += (_, e) => { e.Cancel = true; cts.Cancel(); };
+
+            Console.WriteLine("Server initialized.");
+
+            // Do one warmup call; don't crash app if it fails
+            try
             {
-                baseUrl = args[0];
-                Console.WriteLine("Initializing server on " + baseUrl);
+                Console.WriteLine("Warming up server...");
+                var url = "v7.0/bc81f231-268a-4b9f-897a-43b7397302cc/paymentMethodDescriptions?type=amex%2Cvisa%2Cmc%2Cdiscover%2Cjcb&partner=commercialstores&operation=Add&country=US&language=en-US&family=credit_card&currency=USD";
+
+                var response = await GetPidlFromPXService(url);
+                var text = await response.Content.ReadAsStringAsync();
+
+                Console.WriteLine($"Warmup status: {(int)response.StatusCode} {response.ReasonPhrase}");
+                if (!response.IsSuccessStatusCode)
+                {
+                    Console.WriteLine(FormatJsonSafe(text));
+                }
             }
-            else
+            catch (Exception ex)
             {
-                Console.WriteLine("Initializing server");
+                Console.WriteLine("Warmup failed (continuing to run):");
+                Console.WriteLine(ex);
             }
-            
-            using (var host = new SelfHostedPxService(baseUrl, true, false))
+
+            Console.WriteLine("Listening... Press Ctrl+C to stop.");
+            try
             {
-                Console.WriteLine("Server initialized");
-
-                try
-                {
-                    Console.WriteLine("Testing server");
-
-                    // Testing server on /paymentMethodDescriptions so PX service does a full warm up, instead of calling /probe which doesn't warm up the pidl configurations
-                    var relativeUrl = "users/me/paymentMethodDescriptions?country=tr&family=credit_card&type=mc&language=en-US&partner=storify&operation=add";
-                    var url = string.Format("/v7.0/{0}", relativeUrl);
-                    
-                    var response = await GetPidlFromPXService(url);
-                    var content = FormatJson(await response.Content.ReadAsStringAsync());
-
-                    if (response.IsSuccessStatusCode)
-                    {
-                        Console.WriteLine("Server successfully tested");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Server successfully tested but returned: " + response.StatusCode);
-                        Console.WriteLine("Response content: " + content);
-                    }
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                    throw;
-                }
-                
-                while (true)
-                {
-                    Console.Write("Listening...");
-                    await Task.Delay(1000);
-                }
+                await Task.Delay(Timeout.Infinite, cts.Token);
+            }
+            catch (OperationCanceledException) { /* Ctrl+C */ }
+            finally
+            {
+                host.Dispose();
+                Console.WriteLine("Server stopped.");
             }
         }
 
-        public static async Task<HttpResponseMessage> GetPidlFromPXService(string url)
+        private static async Task<HttpResponseMessage> GetPidlFromPXService(string url)
         {
             var fullUrl = SelfHostedPxService.GetPXServiceUrl(url);
-            if (fullUrl.Contains("completePrerequisites=true"))
-            {
-                fullUrl = fullUrl.Replace("users/me", "EmpAccountNoAddress");
-            }
-            else
-            {
-                fullUrl = fullUrl.Replace("users/me", "DiffTestUser");
-            }
+            fullUrl = fullUrl.Contains("completePrerequisites=true", StringComparison.OrdinalIgnoreCase)
+                ? fullUrl.Replace("users/me", "EmpAccountNoAddress", StringComparison.Ordinal)
+                : fullUrl.Replace("users/me", "DiffTestUser", StringComparison.Ordinal);
 
-            fullUrl = fullUrl.Replace("users/my-org", "DiffOrgUser");
+            fullUrl = fullUrl.Replace("users/my-org", "DiffOrgUser", StringComparison.Ordinal);
 
             return await SelfHostedPxService.PxHostableService.HttpSelfHttpClient.GetAsync(fullUrl);
         }
 
-        private static string FormatJson(string json)
+        private static string FormatJsonSafe(string json)
         {
-            dynamic parsedJson = JsonConvert.DeserializeObject(json);
-            return JsonConvert.SerializeObject(parsedJson, Formatting.Indented);
+            try
+            {
+                var parsed = JsonConvert.DeserializeObject(json);
+                return JsonConvert.SerializeObject(parsed, Newtonsoft.Json.Formatting.Indented);
+            }
+            catch
+            {
+                return json;
+            }
         }
     }
 }

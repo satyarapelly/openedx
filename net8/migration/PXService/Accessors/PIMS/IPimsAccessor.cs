@@ -45,6 +45,8 @@ namespace Microsoft.Commerce.Payments.PXService
 
         Task<PaymentInstrument> UpdatePaymentInstrument(string accountId, string piid, object updatePiData, EventTraceActivity traceActivityId, string partner = null, List<string> exposedFlightFeatures = null, IEnumerable<KeyValuePair<string, string>> queryParams = null);
 
+        Task<PaymentInstrument> UpdatePaymentInstrument(string piid, object updatePiData, EventTraceActivity traceActivityId, string partner = null, List<string> exposedFlightFeatures = null, IEnumerable<KeyValuePair<string, string>> queryParams = null);
+
         Task<object> ValidateCvv(string accountId, string piid, object requestData, EventTraceActivity traceActivityId);
 
         Task LinkSession(string accountId, string piid, LinkSession payload, EventTraceActivity traceActivityId, IEnumerable<KeyValuePair<string, string>> queryParams = null);

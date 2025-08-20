@@ -10,7 +10,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
     using Common.Web;
     using Test.Common;
     using Constants = Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Constants;
-    using Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Extensions;
+    using Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators;
 
     public class PimsPaymentInstrumentsController : EmulatorBaseController
     {

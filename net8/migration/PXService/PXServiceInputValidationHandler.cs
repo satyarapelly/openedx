@@ -1,6 +1,6 @@
 ﻿// <copyright file="PXServiceInputValidationHandler.cs" company="Microsoft Corporation">Copyright (c) Microsoft 2020. All rights reserved.</copyright>
 
-namespace Microsoft.Commerce.Payments.PXService.Handlers
+namespace Microsoft.Commerce.Payments.PXService
 {
     using System;
     using System.Collections.Generic;

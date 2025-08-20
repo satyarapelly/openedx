@@ -19,7 +19,8 @@ public static class WebApiConfig
     /// <param name="builder">The application builder.</param>
     public static void Register(WebApplicationBuilder builder)
     {
-        builder.Services.AddControllers();
+        builder.Services.AddControllers()
+            .AddNewtonsoftJson(); 
 
         var env = builder.Environment;
 
@@ -41,6 +42,18 @@ public static class WebApiConfig
             [Constants.TestScenarioManagers.PaymentOchestrator] = new TestScenarioManager(Path.Combine(env.ContentRootPath, "TestScenarios", "PaymentOchestrator"), Constants.DefaultTestScenarios.POEmulator),
             [Constants.TestScenarioManagers.FraudDetection] = new TestScenarioManager(Path.Combine(env.ContentRootPath, "TestScenarios", "FraudDetection"), Constants.DefaultTestScenarios.FraudDetectionEmulator),
         };
+
+        // Add Swagger services
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen(c =>
+        {
+            c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+            {
+                Title = "PXDependencyEmulators",
+                Version = "v1",
+                Description = "Payment X Dependency Emulators (.NET 8.0)"
+            });
+        });
 
         builder.Services.AddSingleton(managers);
     }
@@ -72,4 +85,3 @@ public static class WebApiConfig
         routes.MapFraudDetectionRoutes();
     }
 }
-

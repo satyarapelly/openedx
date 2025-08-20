@@ -2,7 +2,12 @@
 
 namespace Microsoft.Commerce.Payments.PXService
 {
-    using MerchantCapabilitiesService.V7;
+    using System;
+    using System.Linq;
+    using System.Net;
+    using System.Text;
+    using System.Threading.Tasks;
+	using MerchantCapabilitiesService.V7;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Filters;
@@ -12,11 +17,6 @@ namespace Microsoft.Commerce.Payments.PXService
     using Microsoft.Commerce.Payments.PidlFactory;
     using Microsoft.Commerce.Payments.PXCommon;
     using Newtonsoft.Json;
-    using System;
-    using System.Linq;
-    using System.Net;
-    using System.Text;
-    using System.Threading.Tasks;
     using static Microsoft.Commerce.Payments.Common.PaymentConstants.Web;
 
     public class PXServiceExceptionFilter : IExceptionFilter
@@ -68,6 +68,7 @@ namespace Microsoft.Commerce.Payments.PXService
             }
             else if (exception is PIDLException && exception.Data.Values.OfType<string>().Contains(GlobalConstants.ErrorCodes.PIDLInvalidFilters, StringComparer.Ordinal))
             {
+                // This error occurs due to invalid query parameters. Therefore, we want to return a BadRequest status and throw the exception instead of an InternalServerError.
                 errorResponse = new ServiceErrorResponse(exception.Data[GlobalConstants.ExceptionDataKeys.PIDLErrorCode].ToString(), exception.Message);
             }
             else if (exception is PIDLConfigException)
@@ -106,6 +107,10 @@ namespace Microsoft.Commerce.Payments.PXService
             }
             else if (exception is TypeInitializationException)
             {
+                //// PX throwed TypeInitializationException, when Azure app service has monthly storage upgrade.
+                //// During upgrade, app service restarted our apps, restart fails to initialize PidlFactory due to not loading part of .csv files during
+                //// [Incident 244674370](https://portal.microsofticm.com/imp/v3/incidents/details/244674370/home) 
+                //// more details can be found in autoheal.md
                 statusCode = HttpStatusCode.ServiceUnavailable;
                 errorResponse = new ServiceErrorResponse(ErrorConstants.ErrorCodes.ServiceUnavailable, exception.Message);
             }
@@ -114,6 +119,11 @@ namespace Microsoft.Commerce.Payments.PXService
                 if (exception is ServiceErrorResponseException serviceErrorException &&
                     serviceErrorException.HandlingType == ExceptionHandlingPolicy.ByPass)
                 {
+                    //// PX returns 503 ONLY when PX service itself is unavailable and a restart is needed
+                    //// If dependency  service is service unavailable, 
+                    //// We return BadGateway to client
+                    //// A 502 error means that a website server that is serving as a reverse proxy for the website origin server 
+                    //// did not receive a valid response from the origin server.
                     statusCode = serviceErrorException.Response.StatusCode == HttpStatusCode.ServiceUnavailable
                             ? HttpStatusCode.BadGateway
                             : serviceErrorException.Response.StatusCode;

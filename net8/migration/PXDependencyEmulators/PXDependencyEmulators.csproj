@@ -1,37 +1,80 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
-  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), build.root))\msbuild\Environment.props" />
-  <Import Project="$(INETROOT)\private\Payments\tests\Test.targets" />
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <RootNamespace>Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators</RootNamespace>
+    <AssemblyName>Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators</AssemblyName>
+	  <OutputType>Exe</OutputType>
+	  <EnableDefaultContentItems>false</EnableDefaultContentItems>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.WebApiCompatShim" Version="8.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" />
+    <PackageReference Include="Swashbuckle.AspNetCore" />
+    <PackageReference Include="Newtonsoft.Json" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj" />
-    <ProjectReference Include="..\PXCommon\PXCommon.csproj" />
-    <ProjectReference Include="..\PXService\PXService.csproj" />
+    <ProjectReference Include="..\..\..\Common\Common.csproj" />
+    <ProjectReference Include="..\..\..\Pidl\PXCommon\PXCommon.csproj" />
+    <ProjectReference Include="..\..\..\PXService\PXService.csproj" />
+    <ProjectReference Include="..\..\Test.Common\Test.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="TestScenarios\**\*.json" CopyToOutputDirectory="PreserveNewest" />
-    <None Include="Mocks\**\*.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="TestScenarios\**\*.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mocks\PartnerSettings\PartnerSettingsByPartner.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mocks\PartnerSettings\PSSTestSettingsById.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mocks\PIMS\PaymentInstruments.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mocks\PIMS\PaymentMethodsByCountry.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mocks\PIMS\PaymentMethodsByCountryAugmented.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mocks\PIMS\PaymentMethodsByProvider.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mocks\MSRewards\MSRewardsByOperation.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mocks\Account\AddressesV2ByAccountId.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mocks\Account\AddressesV3ByAccountId.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mocks\Account\CustomersV3ByAccountId.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mocks\Account\ProfilesV2ByAccountId.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mocks\Account\ProfilesV3ByAccountId.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mocks\ChallengeManagement\ArkoseChallenge.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mocks\Purchase\CheckPiResults.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mocks\Purchase\Orders.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mocks\Purchase\Subscriptions.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="AddHeaderParameterOperationFilter.cs" />
-    <Compile Remove="SwaggerConfig.cs" />
-    <None Remove="Global.asax" />
-    <None Remove="Web.config" />
-  </ItemGroup>
-
+ 
 </Project>
-

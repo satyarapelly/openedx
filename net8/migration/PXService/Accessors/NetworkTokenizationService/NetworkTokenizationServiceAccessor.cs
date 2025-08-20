@@ -5,6 +5,7 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.NetworkTokenizationSer
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.Tracing;
+    using System.Linq;
     using System.Net.Http;
     using System.Net.Http.Headers;
     using System.Text;
@@ -22,17 +23,20 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.NetworkTokenizationSer
     public class NetworkTokenizationServiceAccessor : INetworkTokenizationServiceAccessor
     {
         private string serviceBaseUrl;
+        private string intServiceBaseUrl;
         private string emulatorBaseUrl;
         private string apiVersion;
         private HttpClient httpClient;
 
         public NetworkTokenizationServiceAccessor(
             string serviceBaseUrl,
+            string intServiceBaseUrl,
             string emulatorBaseUrl,
             string apiVersion,
             HttpMessageHandler messageHandler)
         {
             this.serviceBaseUrl = serviceBaseUrl;
+            this.intServiceBaseUrl = intServiceBaseUrl;
             this.emulatorBaseUrl = emulatorBaseUrl;
             this.apiVersion = apiVersion;
 
@@ -66,7 +70,8 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.NetworkTokenizationSer
                 deviceId,
                 "GetNetworkTokens",
                 traceActivityId,
-                GenerateCustomerHeader($"{{\"puid\": \"{puid}\"}}"));
+                GenerateCustomerHeader($"{{\"puid\": \"{puid}\"}}"),
+                exposedFlightFeatures);
 
             return networkTokens;
         }
@@ -84,7 +89,8 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.NetworkTokenizationSer
                     $"{{\"customerType\": \"MSA\", \"puid\": \"{puid}\"}}",
                     $"{{\"email\":\"{email}\"}}",
                     "X509",
-                    "1.0"));
+                    "1.0"),
+                exposedFlightFeatures);
 
             return networkTokens;
         }
@@ -124,7 +130,8 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.NetworkTokenizationSer
                     $"{{\"customerType\": \"MSA\", \"puid\": \"{puid}\"}}",
                     $"{{\"email\":\"{email}\"}}",
                     "X509",
-                    "1.0"));
+                    "1.0"),
+                exposedFlightFeatures);
 
             return networkTokens;
         }
@@ -144,7 +151,8 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.NetworkTokenizationSer
                     $"{{\"customerType\": \"MSA\", \"puid\": \"{puid}\"}}",
                     $"{{\"email\":\"{email}\"}}",
                     "X509",
-                    "1.0"));
+                    "1.0"),
+                exposedFlightFeatures);
 
             return networkTokens;
         }
@@ -174,7 +182,8 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.NetworkTokenizationSer
                     $"{{\"customerType\": \"MSA\", \"puid\": \"{puid}\"}}",
                     $"{{\"email\":\"{email}\"}}",
                     "X509",
-                    "1.0"));
+                    "1.0"),
+                exposedFlightFeatures);
 
             return networkTokens;
         }
@@ -201,7 +210,8 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.NetworkTokenizationSer
                     $"{{\"customerType\": \"MSA\", \"puid\": \"{puid}\"}}",
                     $"{{\"email\":\"{email}\"}}",
                     "X509",
-                    "1.0"));
+                    "1.0"),
+                exposedFlightFeatures);
 
             return requestDeviceBindingResponse;
         }
@@ -226,7 +236,8 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.NetworkTokenizationSer
                     $"{{\"customerType\": \"MSA\", \"puid\": \"{puid}\"}}",
                     $"{{\"email\":\"{email}\"}}",
                     "X509",
-                    "1.0"));
+                    "1.0"),
+                exposedFlightFeatures);
 
             return requestChallengeResponse;
         }
@@ -252,10 +263,11 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.NetworkTokenizationSer
                     $"{{\"customerType\": \"MSA\", \"puid\": \"{puid}\"}}",
                     $"{{\"email\":\"{email}\"}}",
                     "X509",
-                    "1.0"));
+                    "1.0"),
+                exposedFlightFeatures);
         }
 
-        public async Task<PasskeyOperationResponse> PasskeyAuthenticate(string ntid, int authenticationAmount, string currencyCode, string puid, string deviceId, EventTraceActivity traceActivityId, List<string> exposedFlightFeatures, object sessionContext, object browserData, string applicationUrl, string merchantName)
+        public async Task<PasskeyOperationResponse> PasskeyAuthenticate(string ntid, int authenticationAmount, string currencyCode, string puid, string deviceId, EventTraceActivity traceActivityId, List<string> exposedFlightFeatures, object sessionContext, object browserData, string applicationUrl, string merchantName, string email)
         {
             string requestUrl = string.Format(V7.Constants.UriTemplate.PasskeyAuthenticate, ntid);
 
@@ -277,12 +289,17 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.NetworkTokenizationSer
                 "PasskeyAuthenticate",
                 traceActivityId,
                 requestChallengeRequest,
-                GenerateCustomerHeader($"{{\"customerType\": \"MSA\", \"puid\": \"{puid}\"}}"));
+                GenerateCustomerHeader(
+                    $"{{\"customerType\": \"MSA\", \"puid\": \"{puid}\"}}",
+                    $"{{\"email\":\"{email}\"}}",
+                    "X509",
+                    "1.0"),
+                exposedFlightFeatures);
 
             return requestChallengeResponse;
         }
 
-        public async Task<PasskeyOperationResponse> PasskeySetup(string ntid, int authenticationAmount, string currencyCode, string puid, string deviceId, EventTraceActivity traceActivityId, List<string> exposedFlightFeatures, object sessionContext, object browserData, string applicationUrl, string merchantName)
+        public async Task<PasskeyOperationResponse> PasskeySetup(string ntid, int authenticationAmount, string currencyCode, string puid, string deviceId, EventTraceActivity traceActivityId, List<string> exposedFlightFeatures, object sessionContext, object browserData, string applicationUrl, string merchantName, string email)
         {
             string requestUrl = string.Format(V7.Constants.UriTemplate.PasskeySetup, ntid);
 
@@ -304,12 +321,17 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.NetworkTokenizationSer
                 "PasskeySetup",
                 traceActivityId,
                 requestChallengeRequest,
-                GenerateCustomerHeader($"{{\"customerType\": \"MSA\", \"puid\": \"{puid}\"}}"));
+                GenerateCustomerHeader(
+                    $"{{\"customerType\": \"MSA\", \"puid\": \"{puid}\"}}",
+                    $"{{\"email\":\"{email}\"}}",
+                    "X509",
+                    "1.0"),
+                exposedFlightFeatures);
 
             return requestChallengeResponse;
         }
 
-        public async Task<PasskeyMandateResponse> SetMandates(string ntid, string puid, string deviceId, EventTraceActivity traceActivityId, List<string> exposedFlightFeatures, object appInstance, object assuranceData, List<Mandate> mandates)
+        public async Task<PasskeyMandateResponse> SetMandates(string ntid, string puid, EventTraceActivity traceActivityId, List<string> exposedFlightFeatures, object appInstance, AssuranceData assuranceData, List<Mandate> mandates, string dfSessionId, string email)
         {
             string requestUrl = string.Format(V7.Constants.UriTemplate.SetMandates, ntid);
 
@@ -318,7 +340,8 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.NetworkTokenizationSer
             {
                 AppInstance = appInstance,
                 AssuranceData = assuranceData,
-                Mandates = mandates
+                Mandates = mandates,
+                DfpSessionId = dfSessionId
             };
 
             PasskeyMandateResponse passkeyMandateResponse = await this.SendPostRequest<PasskeyMandateResponse>(
@@ -326,7 +349,12 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.NetworkTokenizationSer
                 "SetMandates",
                 traceActivityId,
                 requestChallengeRequest,
-                GenerateCustomerHeader($"{{\"customerType\": \"MSA\", \"puid\": \"{puid}\"}}"));
+                GenerateCustomerHeader(
+                    $"{{\"customerType\": \"MSA\", \"puid\": \"{puid}\"}}",
+                    $"{{\"email\":\"{email}\"}}",
+                    "X509",
+                    "1.0"),
+                exposedFlightFeatures);
 
             return passkeyMandateResponse;
         }
@@ -367,9 +395,15 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.NetworkTokenizationSer
             return $"{encodedHeader}.{encodedPayload}.";
         }
 
-        private async Task<T> SendGetRequest<T>(string requestUrl, string deviceId, string actionName, EventTraceActivity traceActivityId, string customerHeader, IList<KeyValuePair<string, string>> additionalHeaders = null, List<string> exposedFlightFeatures = null)
+        private async Task<T> SendGetRequest<T>(string requestUrl, string deviceId, string actionName, EventTraceActivity traceActivityId, string customerHeader, List<string> exposedFlightFeatures, IList<KeyValuePair<string, string>> additionalHeaders = null)
         {
             string fullRequestUrl = string.Format("{0}/{1}", this.BaseUrl, requestUrl);
+
+            if (exposedFlightFeatures?.Contains(Flighting.Features.PXUseNTSIntUrl, StringComparer.OrdinalIgnoreCase) ?? false)
+            {
+                fullRequestUrl = string.Format("{0}/{1}", this.intServiceBaseUrl, requestUrl);
+            }
+
             using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, fullRequestUrl))
             {
                 request.IncrementCorrelationVector(traceActivityId);
@@ -378,6 +412,7 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.NetworkTokenizationSer
                 request.Headers.Add(GlobalConstants.HeaderValues.CustomerHeader, customerHeader);
                 request.Headers.Add(GlobalConstants.HeaderValues.DeviceInfoHeader, deviceId);
 
+                request.AddOrReplaceActionName(actionName);
                 using (HttpResponseMessage response = await this.httpClient.SendAsync(request))
                 {
                     return await this.HandleResponse<T>(response, traceActivityId);
@@ -385,9 +420,15 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.NetworkTokenizationSer
             }
         }
 
-        private async Task<T> SendPostRequest<T>(string url, string actionName, EventTraceActivity traceActivityId, object request, string customerHeader, IList<KeyValuePair<string, string>> additionalHeaders = null)
+        private async Task<T> SendPostRequest<T>(string url, string actionName, EventTraceActivity traceActivityId, object request, string customerHeader, List<string> exposedFlightFeatures, IList<KeyValuePair<string, string>> additionalHeaders = null)
         {
             string fullRequestUrl = string.Format("{0}/{1}", this.BaseUrl, url);
+
+            if (exposedFlightFeatures?.Contains(Flighting.Features.PXUseNTSIntUrl, StringComparer.OrdinalIgnoreCase) ?? false)
+            {
+                fullRequestUrl = string.Format("{0}/{1}", this.intServiceBaseUrl, url);
+            }
+
             using (HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Post, fullRequestUrl))
             {
                 requestMessage.IncrementCorrelationVector(traceActivityId);
@@ -413,7 +454,6 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.NetworkTokenizationSer
             string responseMessage = await response.Content.ReadAsStringAsync();
 
             SllWebLogger.TraceServerMessage($"SendGetRequest_NetworkTokenizationServiceAccessor", traceActivityId.ToString(), null, JsonConvert.DeserializeObject(responseMessage)?.ToString(), EventLevel.Informational);
-            SllWebLogger.TraceServerMessage($"SendGetRequest_NetworkTokenizationServiceAccessor", traceActivityId.ToString(), null, response.IsSuccessStatusCode ? JsonConvert.DeserializeObject<T>(responseMessage)?.ToString() : JsonConvert.DeserializeObject(responseMessage)?.ToString(), EventLevel.Informational);
 
             if (response.IsSuccessStatusCode)
             {

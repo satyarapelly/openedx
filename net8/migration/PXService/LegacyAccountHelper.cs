@@ -15,6 +15,7 @@ namespace Microsoft.Commerce.Payments.PXService
     using Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.DataModel;
     using Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.Messages;
     using Microsoft.Commerce.Payments.PXService.Settings;
+    using Microsoft.Commerce.Payments.PXService.V7;
     using Pidl.Localization;
 
     public class LegacyAccountHelper

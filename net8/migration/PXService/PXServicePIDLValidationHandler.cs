@@ -1,6 +1,6 @@
 ﻿// <copyright file="PXServicePIDLValidationHandler.cs" company="Microsoft Corporation">Copyright (c) Microsoft. All rights reserved.</copyright>
 
-namespace Microsoft.Commerce.Payments.PXService.Handlers
+namespace Microsoft.Commerce.Payments.PXService
 {
     using System;
     using System.Collections.Generic;

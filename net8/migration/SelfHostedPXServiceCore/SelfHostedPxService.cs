@@ -2,6 +2,16 @@
 
 namespace SelfHostedPXServiceCore
 {
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.Commerce.Payments.Common.Web;
+    using Microsoft.Commerce.Payments.PXService;
+    using Microsoft.Commerce.Payments.PXService.Accessors.IssuerService;
+    using Microsoft.Commerce.Payments.PXService.Accessors.MSRewardsService;
+    using Microsoft.Commerce.Payments.PXService.Accessors.PartnerSettingsService;
+    using Microsoft.Commerce.Payments.PXService.Accessors.TokenPolicyService;
+    using Microsoft.Commerce.Payments.PXService.RiskService.V7;
+    using Microsoft.Extensions.Options;
+    using Mocks;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -9,14 +19,6 @@ namespace SelfHostedPXServiceCore
     using System.Net.Http;
     using System.Net.Http.Headers;
     using System.Threading.Tasks;
-    using Microsoft.AspNetCore.Builder;
-    using Microsoft.Commerce.Payments.PXService;
-    using Microsoft.Commerce.Payments.PXService.Accessors.IssuerService;
-    using Microsoft.Commerce.Payments.PXService.Accessors.MSRewardsService;
-    using Microsoft.Commerce.Payments.PXService.Accessors.PartnerSettingsService;
-    using Microsoft.Commerce.Payments.PXService.Accessors.TokenPolicyService;
-    using Microsoft.Commerce.Payments.PXService.RiskService.V7;
-    using Mocks;
 
     public class SelfHostedPxService : IDisposable
     {
@@ -31,6 +33,9 @@ namespace SelfHostedPXServiceCore
         public static PXServiceCorsHandler PXCorsHandler { get; private set; }
 
         public static PXServiceFlightHandler PXFlightHandler { get; private set; }
+
+        public static PXServiceApiVersionHandler PXApiVersionHandler { get; private set; }
+
 
         public SelfHostedPxService(string fullBaseUrl, bool useSelfHostedDependencies, bool useArrangedResponses)
         {
@@ -69,7 +74,7 @@ namespace SelfHostedPXServiceCore
                 }
 
                 // Create a single shared configuration action
-                Action<WebApplicationBuilder> configAction = b => Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.WebApiConfig.Register(b, useArrangedResponses);
+                Action<WebApplicationBuilder> configAction = b => Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.WebApiConfig.Register(b);
                 HostableService dependencyEmulatorService = null;
 
                 try
@@ -99,17 +104,26 @@ namespace SelfHostedPXServiceCore
             }
 
             PXSettings = new PXServiceSettings(SelfHostedDependencies, useArrangedResponses);
+            // Define supported API versions and controllers allowed without an explicit version
+            var supportedVersions = new Dictionary<string, ApiVersion>(StringComparer.OrdinalIgnoreCase)
+            {
+                { "v7.0", new ApiVersion("v7.0", new Version(7, 0)) }
+            };
+            string[] versionlessControllers = { GlobalConstants.ControllerNames.ProbeController };
+
             PxHostableService = new HostableService(
                 builder =>
                 {
                     WebApiConfig.Register(builder, PXSettings);
                     PXFlightHandler = new PXServiceFlightHandler();
                     builder.Services.AddSingleton(PXFlightHandler);
-
+                  
                     // The PXCorsHandler instance here is for testing purposes.
                     // It needs to be added after WebApiConfig.Register runs otherwise the flight needed for testing will be overwritten.
                     PXCorsHandler = new PXServiceCorsHandler(new PXServiceSettings());
+                    PXApiVersionHandler = new PXServiceApiVersionHandler(supportedVersions, versionlessControllers, PXSettings);
                     builder.Services.AddSingleton(PXCorsHandler);
+                    builder.Services.AddSingleton(PXApiVersionHandler);
 
                     PXHandler = new PXServiceHandler();
                     builder.Services.AddSingleton(PXHandler);
@@ -158,7 +172,7 @@ namespace SelfHostedPXServiceCore
             responseVerification(response.StatusCode, await response.Content.ReadAsStringAsync(), response.Headers);
         }
 
-        private string GetServiceName(string serviceFullName)
+        public static string GetServiceName(string serviceFullName)
         {
             return serviceFullName
                 .Split('.')
