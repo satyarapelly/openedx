@@ -34,10 +34,10 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         [HttpPost]
         public async Task<PIDLResource> PostRedeemRequest(
             [FromBody] MSRewardsRedeemRequest redeemData,
-            string accountId,
-            string country = null,
-            string language = null,
-            string partner = Constants.ServiceDefaults.DefaultPartnerName)
+            [FromQuery] string accountId,
+            [FromQuery] string country = null,
+            [FromQuery] string language = null,
+            [FromQuery] string partner = Constants.ServiceDefaults.DefaultPartnerName)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
             this.Request.AddTracingProperties(accountId, null, null, null);
@@ -104,14 +104,26 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 hasAnyStoredPI = await PIHelper.HasAnyStoredPI(this.Settings, accountId, partner, country, language, traceActivityId, exposedFlightFeatures: this.ExposedFlightFeatures);
             }
 
+            if (this.ExposedFlightFeatures?.Contains(Flighting.Features.PXOverrideHasAnyPIToTrue, StringComparer.OrdinalIgnoreCase) ?? false)
+            {
+                // set this to true if the override flight is enabled
+                hasAnyStoredPI = true;
+            }
+
             // Call the MS Rewards service to redeem the rewards
             RedemptionResult redemptionResult = await this.Settings.MSRewardsServiceAccessor.RedeemRewards(userId, country, partner, hasAnyStoredPI, redemptionRequest, traceActivityId);
 
             PIDLResource retVal = new PIDLResource();
-            ClientAction clientAction;
 
             if (redemptionResult != null)
             {
+                // Show the failure code as it is returned from the service as default
+                // this will be overwritten based on the redemption result code
+                ClientAction clientAction = new ClientAction(ClientActionType.Failure)
+                {
+                    Context = new { errorCode = redemptionResult.Code, errorCodeName = redemptionResult.Code.ToString(), errorMessage = redemptionResult.ResultMessage }
+                };
+
                 // Extract the order details from the redemption result
                 string orderId = redemptionResult.Order?.OrderId;
                 string sku = redemptionResult.Order?.OrderSKU;
@@ -129,6 +141,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                     redeemPoints = redemptionResult.Order?.Price;
                 }
 
+                bool showErrorPageOnChallenge = false;
                 switch (redemptionResult.Code)
                 {
                     case RewardsErrorCode.Success:
@@ -141,6 +154,12 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                         };
                         break;
                     case RewardsErrorCode.E_CHALLENGE_FIRST:
+                        if (this.ExposedFlightFeatures?.Contains(Flighting.Features.PXShowRewardsErrorPageOnChallenge, StringComparer.OrdinalIgnoreCase) ?? false)
+                        {
+                            showErrorPageOnChallenge = true;
+                            break;
+                        }
+
                         string phoneNumber = redemptionResult.MsaPhoneNumber;
                         clientAction = new ClientAction(ClientActionType.Pidl);
                         List<PIDLResource> retList;
@@ -159,6 +178,12 @@ namespace Microsoft.Commerce.Payments.PXService.V7
 
                         break;
                     case RewardsErrorCode.E_SOLVE_FIRST:
+                        if (this.ExposedFlightFeatures?.Contains(Flighting.Features.PXShowRewardsErrorPageOnChallenge, StringComparer.OrdinalIgnoreCase) ?? false)
+                        {
+                            showErrorPageOnChallenge = true;
+                            break;
+                        }
+
                         // Show the client action with type as "PIDL" and context as challenge screen PIDL asking user to enter the solve code
                         string challengeToken = redemptionResult.ResultMessage;
                         List<PIDLResource> solveCodePIDL = PIDLResourceFactory.Instance.GetRewardsDescriptions("MSRewards", "submitChallengeCode", country, language, partner);
@@ -168,6 +193,12 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                         };
                         break;
                     case RewardsErrorCode.E_RISK_REVIEW:
+                        if (this.ExposedFlightFeatures?.Contains(Flighting.Features.PXShowRewardsErrorPageOnChallenge, StringComparer.OrdinalIgnoreCase) ?? false)
+                        {
+                            showErrorPageOnChallenge = true;
+                            break;
+                        }
+
                         // Show the client action with type as "ReturnContext" and context as "status" : "PendingRiskReview"
                         clientAction = new ClientAction(ClientActionType.ReturnContext)
                         {
@@ -175,12 +206,21 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                         };
                         break;
                     default:
-                        // Show the failure code as it is returned from the service
-                        clientAction = new ClientAction(ClientActionType.Failure)
+                        if (this.ExposedFlightFeatures?.Contains(Flighting.Features.PXShowRewardsErrorPageOnChallenge, StringComparer.OrdinalIgnoreCase) ?? false)
                         {
-                            Context = new { errorCode = redemptionResult.Code, errorCodeName = redemptionResult.Code.ToString(), errorMessage = redemptionResult.ResultMessage }
-                        };
+                            showErrorPageOnChallenge = true;
+                        }
+
                         break;
+                }
+
+                if (showErrorPageOnChallenge)
+                {
+                    List<PIDLResource> errorPidl = PIDLResourceFactory.Instance.GetRewardsDescriptions("MSRewards", "error", country, language, partner);
+                    clientAction = new ClientAction(ClientActionType.Pidl)
+                    {
+                        Context = ProcessErrorPIDL(errorPidl, redemptionResult.Code, redemptionResult.ResultMessage)
+                    };
                 }
 
                 retVal.ClientAction = clientAction;
@@ -330,6 +370,36 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             }
 
             return new DisplayHintAction(actionType, false, resendCodeActionContext, null);
+        }
+
+        private static List<PIDLResource> ProcessErrorPIDL(List<PIDLResource> pidlResources, RewardsErrorCode code, string errorMessage)
+        {
+            PidlModel.V7.ActionContext actionContext = new PidlModel.V7.ActionContext();
+            actionContext.Instance = new
+            {
+                errorCode = code.ToString(),
+                errorMessage,
+                status = "Failed"
+            };
+
+            DisplayHintAction action = new DisplayHintAction("success", true, actionContext, null);
+            foreach (var pidlResource in pidlResources)
+            {
+                TextDisplayHint errorBadgeText = pidlResource.GetDisplayHintById(Constants.DisplayHintIds.ErrorBadgeText) as TextDisplayHint;
+                if (errorBadgeText != null)
+                {
+                    errorBadgeText.DisplayContent = Constants.FontIcons.ErrorBadge;
+                }
+
+                // Add a PidlAction to the submit button
+                var gotItButton = pidlResource.GetDisplayHintById(Constants.DisplayHintIds.GotItButton) as ButtonDisplayHint;
+                if (gotItButton != null)
+                {
+                    gotItButton.Action = action;
+                }
+            }
+
+            return pidlResources;
         }
     }
 }

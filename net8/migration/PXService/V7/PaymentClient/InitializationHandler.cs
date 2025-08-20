@@ -6,6 +6,7 @@ namespace Microsoft.Commerce.Payments.PXService
     using System.Collections.Generic;
     using System.Linq;
     using Microsoft.Commerce.Payments.PartnerSettingsModel;
+    using Microsoft.Commerce.Payments.PidlFactory.V7;
     using Microsoft.Commerce.Payments.PidlModel.V7;
     using Microsoft.Commerce.Payments.PXCommon;
     using Microsoft.Commerce.Payments.PXService.Model.PaymentOrchestratorService;
@@ -14,33 +15,39 @@ namespace Microsoft.Commerce.Payments.PXService
 
     public class InitializationHandler
     {
-        public static List<PIDLResource> GetDescription(string requestId, CheckoutRequestClientActions checkoutRequestClientActions, string partnerName, PaymentExperienceSetting setting = null, List<string> exposedFlightFeatures = null)
+        public static List<PIDLResource> GetDescription(string requestId, CheckoutRequestClientActions checkoutRequestClientActions, string partnerName, PaymentExperienceSetting setting = null, List<string> exposedFlightFeatures = null, PIDLData initializeData = null)
         {
+            // Extract challengeWindowSize from initializeData
+            string challengeWindowSize = initializeData?.TryGetPropertyValue(V7.Constants.PIDLDataPropertyNames.ComponentsDataConfirmWindowSize);
+
             PIDLResource pidlResource = new PIDLResource();
             if (requestId != null)
             {
                 if (RequestContext.GetRequestType(requestId) == V7.Constants.RequestContextType.Checkout)
                 {
-                    pidlResource = GetCheckoutRequestInitialize(checkoutRequestClientActions, partnerName, setting, exposedFlightFeatures);
+                    pidlResource = GetCheckoutRequestInitialize(checkoutRequestClientActions, partnerName, setting, exposedFlightFeatures, challengeWindowSize: challengeWindowSize);
                 }
                 else if (RequestContext.GetRequestType(requestId) == V7.Constants.RequestContextType.Payment)
                 {
-                    pidlResource = GetPaymentRequestInitialize(partnerName);
+                    pidlResource = GetPaymentRequestInitialize(partnerName, challengeWindowSize: challengeWindowSize);
                 }
             }
 
             return new List<PIDLResource>() { pidlResource };
         }
 
-        public static List<PIDLResource> GetDescription(string requestId, PaymentRequestClientActions paymentRequestClientActions, string partnerName, PaymentExperienceSetting setting, List<string> exposedFlightFeatures)
+        public static List<PIDLResource> GetDescription(string requestId, PaymentRequestClientActions paymentRequestClientActions, string partnerName, PaymentExperienceSetting setting, List<string> exposedFlightFeatures, PIDLData initializeData = null)
         {
+            // Extract challengeWindowSize from initializeData
+            string challengeWindowSize = initializeData?.TryGetPropertyValue(V7.Constants.PIDLDataPropertyNames.ComponentsDataConfirmWindowSize);
+            
             PIDLResource pidlResource = new PIDLResource();
-            pidlResource = GetPaymentRequestInitialize(partnerName, setting, paymentRequestClientActions, exposedFlightFeatures);
+            pidlResource = GetPaymentRequestInitialize(partnerName, setting, paymentRequestClientActions, exposedFlightFeatures, challengeWindowSize: challengeWindowSize);
 
             return new List<PIDLResource>() { pidlResource };
         }
 
-        private static PIDLResource GetCheckoutRequestInitialize(CheckoutRequestClientActions checkoutRequestClientActions, string partnerName, PaymentExperienceSetting setting, List<string> exposedFlightFeatures)
+        private static PIDLResource GetCheckoutRequestInitialize(CheckoutRequestClientActions checkoutRequestClientActions, string partnerName, PaymentExperienceSetting setting, List<string> exposedFlightFeatures, string challengeWindowSize = null)
         {
             PIDLResource pidlResource = new PIDLResource();
 
@@ -96,7 +103,7 @@ namespace Microsoft.Commerce.Payments.PXService
                 { V7.Constants.Component.OrderSummaryProps, GetPidlDocInfo(V7.Constants.DescriptionTypes.Checkout, V7.Constants.Component.OrderSummary, partnerName) },
                 { V7.Constants.Component.AddressProps, GetPidlDocInfo(V7.Constants.DescriptionTypes.AddressDescription, V7.Constants.Component.Address, partnerName, V7.Constants.AddressTypes.Billing, scenario) },
                 { V7.Constants.Component.ProfileProps, GetPidlDocInfo(V7.Constants.DescriptionTypes.ProfileDescription, V7.Constants.Component.Profile, partnerName, type: V7.Constants.ProfileType.Checkout) },
-                { V7.Constants.Component.ConfirmProps, GetPidlDocInfo(V7.Constants.DescriptionTypes.ConfirmDescription, V7.Constants.Component.Confirm, partnerName) }
+                { V7.Constants.Component.ConfirmProps, GetPidlDocInfo(V7.Constants.DescriptionTypes.ConfirmDescription, V7.Constants.Component.Confirm, partnerName, challengeWindowSize: challengeWindowSize) }
             };
 
             // Add pidl overrides and component props if any quick payment allowed payment types
@@ -128,7 +135,7 @@ namespace Microsoft.Commerce.Payments.PXService
             return pidlResource;
         }
 
-        private static PIDLResource GetPaymentRequestInitialize(string partnerName, PaymentExperienceSetting setting = null, PaymentRequestClientActions paymentRequestClientActions = null, List<string> exposedFlightFeatures = null)
+        private static PIDLResource GetPaymentRequestInitialize(string partnerName, PaymentExperienceSetting setting = null, PaymentRequestClientActions paymentRequestClientActions = null, List<string> exposedFlightFeatures = null, string challengeWindowSize = null)
         {
             PIDLResource pidlResource = new PIDLResource();
 
@@ -147,7 +154,7 @@ namespace Microsoft.Commerce.Payments.PXService
             // Building components property which include all the param will be passed to paymentClient/description API
             Dictionary<string, PidlDocInfo> componentProps = new Dictionary<string, PidlDocInfo>()
             {
-                { V7.Constants.Component.ConfirmProps, GetPidlDocInfo(V7.Constants.DescriptionTypes.ConfirmDescription, V7.Constants.Component.Confirm, partnerName) }
+                { V7.Constants.Component.ConfirmProps, GetPidlDocInfo(V7.Constants.DescriptionTypes.ConfirmDescription, V7.Constants.Component.Confirm, partnerName, challengeWindowSize: challengeWindowSize) }
             };
 
             // If ComponentSetting feature is enabled, dynamically add based on its components
@@ -159,7 +166,8 @@ namespace Microsoft.Commerce.Payments.PXService
                     partnerName,
                     pidlOverride,
                     submissionOrders,
-                    componentProps);
+                    componentProps,
+                    challengeWindowSize);
             }
 
             // if calculateTax is not true then the partner will handle showing order summary
@@ -185,7 +193,8 @@ namespace Microsoft.Commerce.Payments.PXService
             string partnerName,
             Dictionary<string, PidlDocOverrides> pidlOverride,
             List<SubmissionOrder> submissionOrders,
-            Dictionary<string, PidlDocInfo> componentProps)
+            Dictionary<string, PidlDocInfo> componentProps,
+            string challengeWindowSize = null)
         {
             var featureConfig = setting?.Features != null && setting.Features.ContainsKey(PidlFactory.V7.PartnerSettingsHelper.Features.ComponentSetting)
                 ? setting.Features[PidlFactory.V7.PartnerSettingsHelper.Features.ComponentSetting]
@@ -229,9 +238,7 @@ namespace Microsoft.Commerce.Payments.PXService
                         case V7.Constants.Component.Payment:
                             // Check payment methods has any other types except quick payment types.
                             var filteredPMs = PaymentDescription.GetFilteredPaymentMethods(paymentRequestClientActions?.PaymentMethodResults?.PaymentMethods);
-                            var pmByFamily = filteredPMs?
-                                .GroupBy(pm => pm.PaymentMethodFamily)?
-                                .ToDictionary(group => group.Key, group => group.ToList());
+                            var pmByFamily = filteredPMs?.GroupBy(pm => pm.PaymentMethodFamily)?.ToDictionary(group => group.Key, group => group.ToList());
 
                             if (pmByFamily != null)
                             {
@@ -250,17 +257,8 @@ namespace Microsoft.Commerce.Payments.PXService
 
                             if (filteredPMs?.Count > 0)
                             {
-                                pidlOverride[V7.Constants.DescriptionTypes.PaymentInstrumentDescription] = new PidlDocOverrides()
-                                {
-                                    Template = V7.Constants.UriTemplate.GetPaymentClientDescription
-                                };
-
-                                componentProps[V7.Constants.Component.PaymentProps] = GetPidlDocInfo(
-                                    V7.Constants.DescriptionTypes.PaymentInstrumentDescription,
-                                    V7.Constants.Component.Payment,
-                                    partnerName,
-                                    scenario: scenario
-                                );
+                                pidlOverride[V7.Constants.DescriptionTypes.PaymentInstrumentDescription] = new PidlDocOverrides() { Template = V7.Constants.UriTemplate.GetPaymentClientDescription };
+                                componentProps[V7.Constants.Component.PaymentProps] = GetPidlDocInfo(V7.Constants.DescriptionTypes.PaymentInstrumentDescription, V7.Constants.Component.Payment, partnerName, scenario: scenario);
                             }
 
                             break;
@@ -277,7 +275,7 @@ namespace Microsoft.Commerce.Payments.PXService
                             break;
                         case V7.Constants.Component.Confirm:
                             pidlOverride[V7.Constants.DescriptionTypes.ConfirmDescription] = new PidlDocOverrides() { Template = V7.Constants.UriTemplate.GetPaymentClientDescription };
-                            componentProps[V7.Constants.Component.ConfirmProps] = GetPidlDocInfo(V7.Constants.DescriptionTypes.ConfirmDescription, V7.Constants.Component.Confirm, partnerName);
+                            componentProps[V7.Constants.Component.ConfirmProps] = GetPidlDocInfo(V7.Constants.DescriptionTypes.ConfirmDescription, V7.Constants.Component.Confirm, partnerName, challengeWindowSize: challengeWindowSize);
                             submissionOrders.Add(GetSubmissionOrder(V7.Constants.Component.Confirm));
                             break;
                     }
@@ -285,18 +283,18 @@ namespace Microsoft.Commerce.Payments.PXService
             }
         }
 
-        private static PidlDocInfo GetPidlDocInfo(string resourceType, string component, string partner, string type = null, string scenario = null)
+        private static PidlDocInfo GetPidlDocInfo(string resourceType, string component, string partner, string type = null, string scenario = null, string challengeWindowSize = null)
         {
             PidlDocInfo pidlDocInfo = new PidlDocInfo()
             {
                 ResourceType = resourceType,
             };
-            pidlDocInfo.SetParameters(GetParameters(component, partner, type, scenario));
+            pidlDocInfo.SetParameters(GetParameters(component, partner, type, scenario, challengeWindowSize));
 
             return pidlDocInfo;
         }
 
-        private static Dictionary<string, string> GetParameters(string component, string partner, string type = null, string scenario = null)
+        private static Dictionary<string, string> GetParameters(string component, string partner, string type = null, string scenario = null, string challengeWindowSize = null)
         {
             Dictionary<string, string> parameters = new Dictionary<string, string>()
             {
@@ -312,6 +310,11 @@ namespace Microsoft.Commerce.Payments.PXService
             if (!string.IsNullOrWhiteSpace(scenario))
             {
                 parameters.Add(V7.Constants.QueryParameterName.Scenario, scenario);
+            }
+
+            if (!string.IsNullOrWhiteSpace(challengeWindowSize))
+            {
+                parameters.Add(V7.Constants.QueryParameterName.WindowSize, challengeWindowSize);
             }
 
             return parameters;

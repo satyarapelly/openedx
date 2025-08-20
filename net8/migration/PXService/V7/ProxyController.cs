@@ -20,7 +20,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using Microsoft.Commerce.Payments.PXCommon;
     using Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.DataModel;
     using Microsoft.Commerce.Payments.PXService.Model.PaymentOrchestratorService;
-    using Microsoft.Commerce.Payments.PXService.Model.ThreeDSExternalService;
     using Microsoft.Commerce.Payments.PXService.Settings;
     using Microsoft.Commerce.Payments.PXService.V7.Contexts;
     using Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge.Model;
@@ -497,6 +496,18 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             };
 
             return pi;
+        }
+
+        protected List<string> GetBillingAccountContext()
+        {
+            // If the partner send x-ms-billing-account-id header, then we should not skip complete prerequisites
+            string flightValueString = Request.GetRequestHeader(GlobalConstants.HeaderValues.XMsBillingAccountId);
+            if (flightValueString != null)
+            {
+                return flightValueString.Split(':').ToList();
+            }
+
+            return null;
         }
 
         // PaymentSessionsHandlerV2 is refactored from PaymentSessionsHandler.  We want to use V2

@@ -100,13 +100,13 @@ namespace Microsoft.Commerce.Payments.PXService.Settings
                 serviceBaseUrl: "https://taxidmanagement.cp.microsoft-int.com",
                 messageHandler: taxIdWebRequestHandler);
 
-            //this.CommerceAccountDataServiceAccessor = new CommerceAccountDataAccessor(
-            //    baseUrl: "https://sps.msn-int.com/Commerce/Account/AccountWebService.svc",
-            //    authCert: null);
+            this.CommerceAccountDataServiceAccessor = new CommerceAccountDataAccessor(
+                baseUrl: "https://sps.msn-int.com/Commerce/Account/AccountWebService.svc",
+                authCert: null);
 
-            //this.CtpCommerceDataServiceAccessor = new CTPCommerceDataAccessor(
-            //    baseUrl: "https://sps.msn-int.com/CTPCommerce/CommerceAPI.svc",
-            //    authCert: null);
+            this.CtpCommerceDataServiceAccessor = new CTPCommerceDataAccessor(
+                baseUrl: "https://sps.msn-int.com/CTPCommerce/CommerceAPI.svc",
+                authCert: null);
 
             this.MerchantCapabilitiesUri = "https://merchant.pay.microsoft-ppe.com";
             this.MerchantCapabilitiesApiVersion = "v1";
@@ -227,6 +227,7 @@ namespace Microsoft.Commerce.Payments.PXService.Settings
             var networkTokenizationServiceRequestHandler = new HttpClientHandler();
             this.NetworkTokenizationServiceAccessor = new NetworkTokenizationServiceAccessor(
                 serviceBaseUrl: "https://nts.cp.microsoft-int.com",
+                intServiceBaseUrl: "https://nts.cp.microsoft-int.com",
                 emulatorBaseUrl: string.Empty,
                 apiVersion: "1.0",
                 messageHandler: networkTokenizationServiceRequestHandler);
@@ -312,7 +313,7 @@ namespace Microsoft.Commerce.Payments.PXService.Settings
 
             this.AuthorizationFilter.CertificateAuthenticator = new Management.CertificateVerificationCore.UserDirectory(
                 users: uberUserDirectory.CertificateVerificationRules,
-                online: false,
+                online: true,
                 issuerFetcher: null,
                 verifyRootCA: false,
                 verifyOfflineRevocation: false,

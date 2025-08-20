@@ -1,6 +1,7 @@
 ﻿// <copyright file="ApplicationInsightsProvider.cs" company="Microsoft">Copyright (c) Microsoft 2015. All rights reserved.</copyright>
 
-namespace Microsoft.Commerce.Payments.PXCommon
+namespace Microsoft.Commerce.Payments.PXService.Telemetry
+
 {
     using System;
     using System.Collections.Generic;

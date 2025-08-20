@@ -34,7 +34,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">An address object</response>
         /// <returns>An address object</returns>
         [HttpGet]
-        public async Task<HttpResponseMessage> GetAddressById(string accountId, string addressId)
+        public async Task<HttpResponseMessage> GetAddressById([FromQuery] string accountId, string addressId)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
 
@@ -59,10 +59,10 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>An address object</returns>
         [HttpPost]
         public async Task<HttpResponseMessage> Post(
-            [FromBody] PIDLData address,
-            string accountId,
-            string partner,
-            string language,
+            [FromBody]PIDLData address, 
+            [FromQuery]string accountId, 
+            string partner, 
+            string language, 
             bool avsSuggest,
             string scenario = null)
         {
@@ -127,9 +127,9 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>An address object</returns>
         [HttpPatch]
         public async Task<HttpResponseMessage> Patch(
-            [FromBody] PIDLData address,
-            string accountId,
-            string addressId,
+            [FromBody] PIDLData address, 
+            [FromQuery] string accountId, 
+            [FromQuery]string addressId, 
             string partner,
             string scenario = null)
         {
@@ -205,11 +205,11 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         }
 
         private async Task<HttpResponseMessage> Suggest(
-            string accountId,
-            PXAddressV3Info userEnteredAddress,
-            string partner,
-            string language,
-            EventTraceActivity traceActivityId,
+            string accountId, 
+            PXAddressV3Info userEnteredAddress, 
+            string partner, 
+            string language, 
+            EventTraceActivity traceActivityId, 
             string addressType = Constants.AddressTypes.PXV3,
             string scenario = null,
             PaymentExperienceSetting setting = null)

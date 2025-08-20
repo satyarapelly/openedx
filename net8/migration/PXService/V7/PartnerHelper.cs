@@ -8,103 +8,103 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using Microsoft.Commerce.Payments.PartnerSettingsModel;
     using Microsoft.Commerce.Payments.PXCommon;
 
-    public static class PartnerHelper
+    internal static class PartnerHelper
     {
-        public static bool IsAzurePartner(string partnerName)
+        internal static bool IsAzurePartner(string partnerName)
         {
             return string.Equals(partnerName, Constants.PartnerName.Azure, StringComparison.InvariantCultureIgnoreCase)
                 || string.Equals(partnerName, Constants.PartnerName.AzureSignup, StringComparison.InvariantCultureIgnoreCase)
                 || string.Equals(partnerName, Constants.PartnerName.AzureIbiza, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        public static bool IsAzureBasedPartner(string partnerName)
+        internal static bool IsAzureBasedPartner(string partnerName)
         {
             return IsAzurePartner(partnerName)
                 || string.Equals(partnerName, Constants.PartnerName.AppSource, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        public static bool IsCommercialStoresPartner(string partnerName)
+        internal static bool IsCommercialStoresPartner(string partnerName)
         {
             return string.Equals(partnerName, Constants.PartnerName.CommercialStores, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        public static bool IsMarketPlacePartner(string partnerName)
+        internal static bool IsMarketPlacePartner(string partnerName)
         {
             return string.Equals(partnerName, Constants.PartnerName.MarketPlace, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        public static bool IsGGPDEDSPartner(string partnerName)
+        internal static bool IsGGPDEDSPartner(string partnerName)
         {
             return string.Equals(partnerName, Constants.PartnerName.GGPDEDS, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        public static bool IsOneDrivePartner(string partnerName)
+        internal static bool IsOneDrivePartner(string partnerName)
         {
             return string.Equals(partnerName, Constants.PartnerName.OneDrive, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        public static bool IsBingPartner(string partnerName)
+        internal static bool IsBingPartner(string partnerName)
         {
             return string.Equals(partnerName, Constants.PartnerName.Bing, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        public static bool IsPayinPartner(string partnerName)
+        internal static bool IsPayinPartner(string partnerName)
         {
             return string.Equals(partnerName, Constants.PartnerName.Payin, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        public static bool IsSetupOfficePartner(string partnerName)
+        internal static bool IsSetupOfficePartner(string partnerName)
         {
             return string.Equals(partnerName, Constants.PartnerName.SetupOffice, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        public static bool IsStoreOfficePartner(string partnerName)
+        internal static bool IsStoreOfficePartner(string partnerName)
         {
             return string.Equals(partnerName, Constants.PartnerName.StoreOffice, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        public static bool IsNorthStarWebPartner(string partnerName)
+        internal static bool IsNorthStarWebPartner(string partnerName)
         {
             return string.Equals(partnerName, Constants.PartnerName.NorthStarWeb, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        public static bool IsOfficeOobePartner(string partnerName)
+        internal static bool IsOfficeOobePartner(string partnerName)
         {
             return string.Equals(partnerName, Constants.PartnerName.OfficeOobe, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        public static bool IsOXOOobePartner(string partnerName)
+        internal static bool IsOXOOobePartner(string partnerName)
         {
             return string.Equals(partnerName, Constants.PartnerName.OXOOobe, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        public static bool IsSmbOobePartner(string partnerName)
+        internal static bool IsSmbOobePartner(string partnerName)
         {
             return string.Equals(partnerName, Constants.PartnerName.SmbOobe, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        public static bool IsCartPartner(string partnerName)
+        internal static bool IsCartPartner(string partnerName)
         {
             return string.Equals(partnerName, Constants.PartnerName.Cart, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        public static bool IsOXOWebDirectPartner(string partnerName)
+        internal static bool IsOXOWebDirectPartner(string partnerName)
         {
             return string.Equals(partnerName, Constants.PartnerName.OXOWebDirect, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        public static bool IsIndiaThreeDSCommercialPartner(string partnerName)
+        internal static bool IsIndiaThreeDSCommercialPartner(string partnerName)
         {
             return string.Equals(partnerName, V7.Constants.PartnerName.Azure, StringComparison.InvariantCultureIgnoreCase) ||
                 string.Equals(partnerName, V7.Constants.PartnerName.CommercialStores, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        public static bool IsWindowsStorePartner(string partnerName)
+        internal static bool IsWindowsStorePartner(string partnerName)
         {
             return string.Equals(partnerName, Constants.PartnerName.WindowsStore, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        public static bool IsThreeDSOneQrCodeBasedPurchasePartner(string partnerName, PaymentExperienceSetting setting = null)
+        internal static bool IsThreeDSOneQrCodeBasedPurchasePartner(string partnerName, PaymentExperienceSetting setting = null)
         {
             if (setting != null && setting.RedirectionPattern != null)
             {
@@ -119,7 +119,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 string.Equals(partnerName, V7.Constants.PartnerName.Xbet, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        public static bool IsThreeDSOneIframeBasedPartner(string partnerName, PaymentExperienceSetting setting = null)
+        internal static bool IsThreeDSOneIframeBasedPartner(string partnerName, PaymentExperienceSetting setting = null)
         {
             if (setting != null && setting.RedirectionPattern != null)
             {
@@ -136,7 +136,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 string.Equals(partnerName, V7.Constants.PartnerName.SetupOfficeSdx, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        public static bool IsIndiaThreeDSAddPIRedirectionInNewPagePartner(string partnerName, PaymentExperienceSetting setting = null)
+        internal static bool IsIndiaThreeDSAddPIRedirectionInNewPagePartner(string partnerName, PaymentExperienceSetting setting = null)
         {
             if (setting != null && setting.RedirectionPattern != null)
             {
@@ -146,14 +146,14 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             return PartnerHelper.IsCartPartner(partnerName) || PartnerHelper.IsOXOWebDirectPartner(partnerName);
         }
 
-        public static bool IsPaypayQrCodeBasedAddPIPartner(string partnerName)
+        internal static bool IsPaypayQrCodeBasedAddPIPartner(string partnerName)
         {
             return string.Equals(partnerName, Constants.PartnerName.Xbox, StringComparison.OrdinalIgnoreCase) ||
                 string.Equals(partnerName, Constants.PartnerName.AmcXbox, StringComparison.OrdinalIgnoreCase) ||
                 PXCommon.Constants.PartnerGroups.IsXboxNativePartner(partnerName);
         }
 
-        public static bool IsIndiaThreeDSFlightedInlinePartner(string partnerName, PaymentExperienceSetting setting = null)
+        internal static bool IsIndiaThreeDSFlightedInlinePartner(string partnerName, PaymentExperienceSetting setting = null)
         {
             if (setting != null && setting.RedirectionPattern != null)
             {
@@ -166,7 +166,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 string.Equals(partnerName, V7.Constants.PartnerName.AmcWeb, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        public static bool IsClientSideListPIPrefillRequired(string partner)
+        internal static bool IsClientSideListPIPrefillRequired(string partner)
         {
             return PartnerHelper.IsCommercialStoresPartner(partner)
                 || PartnerHelper.IsMarketPlacePartner(partner)
@@ -180,7 +180,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 || PartnerHelper.IsWindowsStorePartner(partner);
         }
 
-        public static bool IsValidatePIOnAttachEnabled(string partner, List<string> exposedFlightFeatures = null)
+        internal static bool IsValidatePIOnAttachEnabled(string partner, List<string> exposedFlightFeatures = null)
         {
             // Remove the ValidatePIOnAttachEnabledPartners conditions once the flight is fully deployed or the migration of partners under ValidatePIOnAttachEnabledPartners is completed.
             return V7.Constants.ValidatePIOnAttachEnabledPartners.Any(p => string.Equals(p, partner, StringComparison.OrdinalIgnoreCase))

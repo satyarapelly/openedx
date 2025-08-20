@@ -6,7 +6,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
-    using System.Net;
     using System.Net.Http;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Http.Extensions;
@@ -22,7 +21,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using Microsoft.Commerce.Payments.PidlModel.V7;
     using Microsoft.Commerce.Payments.PimsModel.V4;
     using Microsoft.Commerce.Payments.PXCommon;
-    using Microsoft.Commerce.Payments.PXService.Model.HIPService;
     using Microsoft.Commerce.Payments.PXService.Model.PXInternal;
     using Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge;
     using Newtonsoft.Json;
@@ -30,6 +28,9 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using PaymentCommonInstruments = Microsoft.Commerce.Payments.Common.Instruments;
     using PXCommonConstants = Microsoft.Commerce.Payments.PXCommon.Constants;
     using ActionContext = Microsoft.Commerce.Payments.PidlModel.V7.ActionContext;
+
+    [ApiController]
+    [Route("{version}")]
 
     public class PaymentMethodDescriptionsController : ProxyController
     {
@@ -69,7 +70,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>A list of PIDLResource</returns>
         //// Anonymous Add or Update
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
-        [HttpGet]
+        [Route("paymentMethodDescriptions")]
+        [HttpGet("GetAnonymousPidl")]
         public async Task<List<PIDLResource>> GetAnonymousPidl(
             string family,
             string type = null,
@@ -242,7 +244,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>A list of PIDLResource</returns>
         //// If the family is specified, operation must be add or update
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
-        [HttpGet]
+        [Route("{accountId}/paymentMethodDescriptions")]
+        [HttpGet("GetByFamilyAndType")]
         public async Task<List<PIDLResource>> GetByFamilyAndType(
             string accountId,
             string family,
@@ -453,7 +456,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 string updatedPartner = string.Empty;
 
                 // Risk Eligibility Check
-                if (await this.IsRiskEligible(family, type, language, partner, operation) == false)
+                if (await this.IsRiskEligible(family, type, language, partner, operation, this.GetBillingAccountContext()) == false)
                 {
                     return GetRiskEligibilityRejectedClientAction(language);
                 }
@@ -1128,6 +1131,19 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 accountId: accountId,
                 xmsFlightHeader: this.GetPartnerXMSFlightExposed());
 
+            // If the partner send x-ms-billing-account-id header, then we should skip complete prerequisites            
+            bool isMyBaUser = false;
+            List<string> billingAccountContext = GetBillingAccountContext();
+            if (billingAccountContext != null)
+            {
+                // This flag is used down the flow to get payment methods from PIMS instead static values.
+                isMyBaUser = true;
+
+                // If the partner sends x-ms-billing-account-id header for SEPA, then we should skip complete prerequisites
+                // This is temporary fix to avoid the issue from profile creation flow.
+                completePrerequisites = false;
+            }
+
             if (completePrerequisites)
             {
                 // Pass ShowMiddleName to PidlFactory
@@ -1713,11 +1729,11 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             {
                 if (PartnerHelper.IsAzurePartner(partner))
                 {
-                    retVal = await this.GetPaymentMethodDescriptionsFromFactory(traceActivityId, accountId, country, family, type, language, partner, operation, classicProduct, billableAccountId, false, null, scenario, setting: setting);
+                    retVal = await this.GetPaymentMethodDescriptionsFromFactory(traceActivityId, accountId, country, family, type, language, partner, operation, classicProduct, billableAccountId, false, null, scenario, setting: setting, isMyBaUser: isMyBaUser);
                 }
                 else
                 {
-                    retVal = await this.GetPaymentMethodDescriptionsFromFactory(traceActivityId, accountId, country, family, type, language, partner, operation, null, null, false, null, scenario, orderId, setting: setting);
+                    retVal = await this.GetPaymentMethodDescriptionsFromFactory(traceActivityId, accountId, country, family, type, language, partner, operation, null, null, false, null, scenario, orderId, setting: setting, isMyBaUser: isMyBaUser);
                 }
             }
 
@@ -1770,7 +1786,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             }
 
             // Risk Eligibility Check
-            if (await this.IsRiskEligible(family, type, language, partner, operation) == false)
+            if (await this.IsRiskEligible(family, type, language, partner, operation, billingAccountContext) == false)
             {
                 return GetRiskEligibilityRejectedClientAction(language);
             }
@@ -2860,7 +2876,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             string referrerId = null,
             string sessionId = null,
             List<string> exposedFlightFeatures = null,
-            PaymentExperienceSetting setting = null)
+            PaymentExperienceSetting setting = null,
+            bool isMyBaUser = false)
         {
             IEnumerable<string> allowedPaymentMethodTypes = GetAllowedPaymentMethodTypes(ref type);
             string deviceClass = await this.GetDeviceClass();
@@ -2913,13 +2930,20 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 string.Equals(family, Constants.PaymentMethodFamily.direct_debit.ToString(), StringComparison.OrdinalIgnoreCase) &&
                 string.Equals(type, Constants.PaymentMethodType.Sepa, StringComparison.OrdinalIgnoreCase))
             {
-                PaymentMethod pm = new PaymentMethod()
+                if (isMyBaUser)
                 {
-                    PaymentMethodId = "StaticIdPlaceholder",
-                    PaymentMethodFamily = V7.Constants.PaymentMethodFamily.direct_debit.ToString(),
-                    PaymentMethodType = V7.Constants.PaymentMethodType.Sepa
-                };
-                paymentMethods = new List<PaymentMethod>() { pm };
+                    paymentMethods = await this.Settings.PIMSAccessor.GetPaymentMethods(country, family, type, language, traceActivityId, additionalHeaders, partner, this.ExposedFlightFeatures, operation, setting: setting);
+                }
+                else
+                {
+                    PaymentMethod pm = new PaymentMethod()
+                    {
+                        PaymentMethodId = "StaticIdPlaceholder",
+                        PaymentMethodFamily = V7.Constants.PaymentMethodFamily.direct_debit.ToString(),
+                        PaymentMethodType = V7.Constants.PaymentMethodType.Sepa
+                    };
+                    paymentMethods = new List<PaymentMethod>() { pm };
+                }
             }
             else
             {
@@ -3842,7 +3866,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             return null;
         }
 
-        private async Task<bool> IsRiskEligible(string family, string type, string language, string partner, string operation)
+        private async Task<bool> IsRiskEligible(string family, string type, string language, string partner, string operation, List<string> billingAccountContext = null)
         {
             if (this.ExposedFlightFeatures?.Contains(V7.Constants.PartnerFlightValues.PxEnableRiskEligibilityCheck, StringComparer.OrdinalIgnoreCase) ?? false)
             {
@@ -3852,7 +3876,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 {
                     string puid = await this.TryGetClientContext(GlobalConstants.ClientContextKeys.MsaProfile.Puid);
                     string tid = await this.TryGetClientContext(GlobalConstants.ClientContextKeys.AadInfo.Tid);
-                    string oid = await this.TryGetClientContext(GlobalConstants.ClientContextKeys.AadInfo.Oid);
+                    string oid = await this.TryGetClientContext(GlobalConstants.ClientContextKeys.AadInfo.Oid);                   
 
                     var browserInfo = await this.CollectBrowserInfo();
                     string deviceType = browserInfo.BrowserUserAgent;
@@ -3866,7 +3890,22 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                         new PaymentMethod { PaymentMethodType = type, PaymentMethodFamily = family }
                     };
 
-                    var paymentMethodsfromRisk = await this.Settings.RiskServiceAccessor.FilterBasedOnRiskEvaluation(partner, puid, tid, oid, paymentMethods, ipAddress, locale, deviceType, traceActivityId);
+                    string commerceRootId = null;
+                    string organizationId = null;
+                    string idNameSpace = string.Empty;
+                    IList<PaymentMethod> paymentMethodsfromRisk = new List<PaymentMethod>();
+                    if (billingAccountContext != null)
+                    {
+                        idNameSpace = "MCAPI";
+                        commerceRootId = billingAccountContext.FirstOrDefault();
+                        organizationId = billingAccountContext.LastOrDefault();
+
+                        paymentMethodsfromRisk = await this.Settings.RiskServiceAccessor.FilterBasedOnRiskEvaluation(partner, puid, tid, oid, idNameSpace, commerceRootId, organizationId, paymentMethods, ipAddress, locale, deviceType, traceActivityId);
+                    }
+                    else
+                    {
+                        paymentMethodsfromRisk = await this.Settings.RiskServiceAccessor.FilterBasedOnRiskEvaluation(partner, puid, tid, oid, paymentMethods, ipAddress, locale, deviceType, traceActivityId);
+                    }
 
                     if (paymentMethodsfromRisk.Count == 0)
                     {

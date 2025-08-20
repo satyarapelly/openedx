@@ -2,6 +2,14 @@
 
 namespace Microsoft.Commerce.Payments.PXService.V7
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading.Tasks;
+    using System.Web;
+    using System.Web.Http;
     using Common.Web;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Commerce.Payments.Common.Tracing;
@@ -12,15 +20,11 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using Microsoft.Commerce.Payments.PXService.Model.WalletService;
     using Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge.Model;
     using Newtonsoft.Json;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading.Tasks;
     using Tracing;
     using static Microsoft.Commerce.Payments.PXService.V7.Constants;
 
+    [ApiController]
+    [Route("{version}")]
     public class WalletsController : ProxyController
     {
         /// <summary>
@@ -33,7 +37,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <param name="client" required="false" cref="string" in="query">Stringified object of client data</param>
         /// <response code="200">A json configuration</response>
         /// <returns>Json configuration</returns>
-        [HttpGet]
+        [HttpGet("GetWalletConfig")]
         public async Task<HttpResponseMessage> GetWalletConfig(
             string partner = null,
             string client = null)
@@ -118,7 +122,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>Returns session id</returns>
         [HttpPost]
         public async Task<HttpResponseMessage> ProvisionWalletToken(
-            string accountId,
+            [FromRoute] string accountId,
             [FromBody] ProvisionWalletTokenIncomingPayload payload)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();

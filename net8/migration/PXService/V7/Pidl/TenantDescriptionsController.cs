@@ -27,7 +27,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>A list of PIDLResource object</returns>
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpGet]
-        public List<PIDLResource> Get(string accountId, string type, string country, string language = null, string partner = Constants.ServiceDefaults.DefaultPartnerName)
+        public List<PIDLResource> Get([FromRoute] string accountId, [FromQuery] string type, [FromQuery] string country, [FromQuery] string language = null, [FromQuery] string partner = Constants.ServiceDefaults.DefaultPartnerName)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
             accountId = accountId + string.Empty;

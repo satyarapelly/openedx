@@ -56,46 +56,64 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             List<PIDLResource> retVal = null;
             string requestType = V7.Contexts.RequestContext.GetRequestType(requestContext);
 
+            string paymentRequestClientActionsString = initializeData?.TryGetPropertyValueFromPIDLData(V7.Constants.PIDLDataPropertyNames.PaymentRequestClientActions);
+
             if (this.UsePaymentRequestApiEnabled() && PartnerSettingsHelper.IsFeatureEnabledUsingPartnerSettings(PartnerSettingsHelper.Features.PaymentClientHandlePaymentCollection, null, setting))
             {
-                paymentRequestClientActions = await this.Settings.PaymentOrchestratorServiceAccessor.GetClientActionForPaymentRequest(traceActivityId, requestContext?.RequestId);
+                if (string.IsNullOrEmpty(paymentRequestClientActionsString))
+                {
+                    paymentRequestClientActions = await this.Settings.PaymentOrchestratorServiceAccessor.GetClientActionForPaymentRequest(traceActivityId, requestContext?.RequestId);
+                }
+                else
+                {
+                    try
+                    {
+                        paymentRequestClientActions = JsonConvert.DeserializeObject<PaymentRequestClientActions>(paymentRequestClientActionsString);
+                    }
+                    catch (JsonException ex)
+                    {
+                        throw new InvalidOperationException($"Failed to deserialize PaymentRequestClientActions from PIDLData: {paymentRequestClientActionsString}", ex);
+                    }
+                }
 
                 // Component description Generation
-                retVal = InitializationHandler.GetDescription(requestContext?.RequestId, paymentRequestClientActions, partner, setting, this.ExposedFlightFeatures);
+                retVal = InitializationHandler.GetDescription(requestContext?.RequestId, paymentRequestClientActions, partner, setting, this.ExposedFlightFeatures, initializeData: initializeData);
             }
             else if (requestType == V7.Constants.RequestContextType.Checkout)
             {
                 checkoutRequestClientActions = await this.Settings.PaymentOrchestratorServiceAccessor.GetClientAction(traceActivityId, requestContext?.RequestId);
 
                 // Component description Generation
-                retVal = InitializationHandler.GetDescription(requestContext?.RequestId, checkoutRequestClientActions, partner, setting, this.ExposedFlightFeatures);
+                retVal = InitializationHandler.GetDescription(requestContext?.RequestId, checkoutRequestClientActions, partner, setting, this.ExposedFlightFeatures, initializeData: initializeData);
             }
             else
             {
-                retVal = InitializationHandler.GetDescription(requestContext?.RequestId, checkoutRequestClientActions, partner, setting, this.ExposedFlightFeatures);
+                retVal = InitializationHandler.GetDescription(requestContext?.RequestId, checkoutRequestClientActions, partner, setting, this.ExposedFlightFeatures, initializeData: initializeData);
             }
 
             if (this.ExposedFlightFeatures?.Contains(PXCommon.Flighting.Features.PXEnableAllComponentDescriptions, StringComparer.OrdinalIgnoreCase) ?? false)
             {
+                string challengeWindowSize = initializeData?.TryGetPropertyValue(V7.Constants.PIDLDataPropertyNames.ComponentsDataConfirmWindowSize);
+
                 if (this.UsePaymentRequestApiEnabled() && PartnerSettingsHelper.IsFeatureEnabledUsingPartnerSettings(PartnerSettingsHelper.Features.PaymentClientHandlePaymentCollection, null, setting))
                 {
                     // If payment request API is enabled, we need to get the payment request client actions
-                    await this.GetEligibleComponentDescriptions(retVal, partner, requestContext, traceActivityId, setting, checkoutRequestClientActions, paymentRequestClientActions);
+                    await this.GetEligibleComponentDescriptions(retVal, partner, requestContext, traceActivityId, setting, checkoutRequestClientActions, paymentRequestClientActions, challengeWindowSize: challengeWindowSize);
                 }
                 else if ((this.UsePaymentRequestApiEnabled() && !PartnerSettingsHelper.IsFeatureEnabledUsingPartnerSettings(PartnerSettingsHelper.Features.PaymentClientHandlePaymentCollection, null, setting))
                     || requestType == V7.Constants.RequestContextType.Payment)
                 {
                     // For current battle next flow, we need to do confirm instead of get client actions
                     // If payment request API is enabled but the PaymentClientHandlePaymentCollection feature is not enabled, we need to do follow the same logic of the current battle net flow
-                    // We will remove "requestType == V7.Constants.RequestContextType.Payment" logic once cr and pr is merged. Then whether to do confirm or not will be controlled by the feature flag. 
+                    // We will remove "requestType == V7.Constants.RequestContextType.Payment" logic once cr and pr is merged. Then whether to do confirm or not will be controlled by the feature flag.
                     paymentRequestClientActions = await this.Settings.PaymentOrchestratorServiceAccessor.PaymentRequestConfirm(requestContext?.RequestId, traceActivityId);
 
-                    await this.GetEligibleComponentDescriptions(retVal, partner, requestContext, traceActivityId, setting, checkoutRequestClientActions, paymentRequestClientActions);
+                    await this.GetEligibleComponentDescriptions(retVal, partner, requestContext, traceActivityId, setting, checkoutRequestClientActions, paymentRequestClientActions, challengeWindowSize: challengeWindowSize);
                 }
                 else
                 {
                     // For the currrent candy crush flow, we don't need to make the confirm call
-                    await this.GetEligibleComponentDescriptions(retVal, partner, requestContext, traceActivityId, setting, checkoutRequestClientActions, paymentRequestClientActions);
+                    await this.GetEligibleComponentDescriptions(retVal, partner, requestContext, traceActivityId, setting, checkoutRequestClientActions, paymentRequestClientActions, challengeWindowSize: challengeWindowSize);
                 }
             }
 
@@ -117,7 +135,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
 
         /// <summary>
         /// Gets component descriptions for all available components
-        /// </summary>        
+        /// </summary>
         /// <param name="retVal">Current PIDL description</param>
         /// <param name="partner">partner name</param>
         /// <param name="requestContext">Request context</param>
@@ -125,6 +143,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <param name="setting">Payment Experience Setting</param>
         /// <param name="checkoutRequestClientActions">Checkout request client action object</param>
         /// <param name="paymentRequestClientActions">Payment request client action object</param>
+        /// <param name="challengeWindowSize">Window size value</param>
         /// <returns>Task no actual values</returns>
         private async Task GetEligibleComponentDescriptions(
         List<PIDLResource> retVal,
@@ -133,7 +152,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         EventTraceActivity traceActivityId,
         PaymentExperienceSetting setting,
         CheckoutRequestClientActions checkoutRequestClientActions = null,
-        PaymentRequestClientActions paymentRequestClientActions = null)
+        PaymentRequestClientActions paymentRequestClientActions = null,
+        string challengeWindowSize = null)
         {
             if (checkoutRequestClientActions == null && paymentRequestClientActions == null)
             {
@@ -200,7 +220,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                     requestContext,
                     traceActivityId,
                     checkoutRequestClientActions,
-                    paymentRequestClientActions);
+                    paymentRequestClientActions,
+                    challengeWindowSize);
 
                 if (descriptions != null)
                 {
@@ -252,7 +273,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                                     requestContext,
                                     traceActivityId,
                                     checkoutRequestClientActions,
-                                    paymentRequestClientActions);
+                                    paymentRequestClientActions,
+                                    challengeWindowSize);
 
                                 if (pidldesc != null)
                                 {
@@ -273,7 +295,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             }
         }
 
-        private async Task<List<PIDLResource>> GetDescriptionsForEeligibleComponents(string partner, string operation, string component, string scenario, string family, string type, RequestContext requestContext, EventTraceActivity traceActivityId, CheckoutRequestClientActions checkoutRequestClientActions, PaymentRequestClientActions paymentRequestClientActions)
+        private async Task<List<PIDLResource>> GetDescriptionsForEeligibleComponents(string partner, string operation, string component, string scenario, string family, string type, RequestContext requestContext, EventTraceActivity traceActivityId, CheckoutRequestClientActions checkoutRequestClientActions, PaymentRequestClientActions paymentRequestClientActions, string challengeWindowSize = null)
         {
             ComponentDescription componentInstance = null;
             PaymentExperienceSetting setting = this.GetPaymentExperienceSetting(operation);
@@ -291,7 +313,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             if (componentInstance != null)
             {
                 // Load component description properties
-                componentInstance.LoadComponentsData(requestContext?.RequestId, this.Settings, traceActivityId, setting, this.ExposedFlightFeatures, operation: operation, partner: partner, family: family, type: type, scenario: scenario, request: this.Request.ToHttpRequestMessage(), checkoutRequestClientActions: checkoutRequestClientActions, paymentRequestClientActions: paymentRequestClientActions);
+                componentInstance.LoadComponentsData(requestContext?.RequestId, this.Settings, traceActivityId, setting, this.ExposedFlightFeatures, operation: operation, partner: partner, family: family, type: type, scenario: scenario, request: this.Request.ToHttpRequestMessage(), checkoutRequestClientActions: checkoutRequestClientActions, paymentRequestClientActions: paymentRequestClientActions, challengeWindowSize: challengeWindowSize);
                 this.EnableFlightingsInPartnerSetting(componentInstance.PSSSetting, componentInstance.Country);
 
                 // Component description Generation

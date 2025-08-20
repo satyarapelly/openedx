@@ -153,6 +153,14 @@ namespace Microsoft.Commerce.Payments.PXService.Settings
                 serviceBaseUrl: "https://taxidmanagement.cp.microsoft.com",
                 messageHandler: taxIdWebRequestHandler);
 
+            this.CommerceAccountDataServiceAccessor = new CommerceAccountDataAccessor(
+                baseUrl: "https://sps.msn.com/Commerce/Account/AccountWebService.svc",
+                authCert: this.CtpCertificate);
+
+            this.CtpCommerceDataServiceAccessor = new CTPCommerceDataAccessor(
+                baseUrl: "https://sps.msn.com/CTPCommerce/CommerceAPI.svc",
+                authCert: this.CtpCertificate);
+
             this.MerchantCapabilitiesUri = "https://merchant.pay.microsoft.com";
             this.MerchantCapabilitiesApiVersion = "v1";
             this.MerchantCapabilitiesAccessor = new MerchantCapabilitiesAccessor(this);
@@ -218,6 +226,7 @@ namespace Microsoft.Commerce.Payments.PXService.Settings
             this.NetworkTokenizationServiceRequestHandler = PXServiceSettings.GetAADRequestHandler(PXCommon.Constants.ServiceNames.NetworkTokenizationService, this.AzureActiveDirectoryTokenLoaderFactory);
             this.NetworkTokenizationServiceAccessor = new NetworkTokenizationServiceAccessor(
                 serviceBaseUrl: "https://nts.cp.microsoft.com",
+                intServiceBaseUrl: "https://nts.cp.microsoft-int.com",
                 emulatorBaseUrl: string.Empty,
                 apiVersion: "1.0",
                 messageHandler: this.NetworkTokenizationServiceRequestHandler);
@@ -338,6 +347,12 @@ namespace Microsoft.Commerce.Payments.PXService.Settings
                     Role = GlobalConstants.ClientRoles.Admin,
                     PartnerName = Partner.Name.PIFDServicePPE.ToString(),
                     ApplicationId = "765f46b4-d50c-4a5c-a59d-1767c2ce1039" // Application name: mi-pifd-ppe-gbl-aad-wu2, tenant id (PME) : 975f013f-7f24-47e8-a7d3-abc4752bf346
+                },
+                new UserInformation()
+                {
+                    Role = GlobalConstants.ClientRoles.Admin,
+                    PartnerName = Partner.Name.PaymentOrchestrator.ToString(),
+                    ApplicationId = "4ee094d4-c5b9-482d-ba03-a862e5592543" // Application name: PaymentsAPI-MSDP-PROD, tenant id (PME) : 975f013f-7f24-47e8-a7d3-abc4752bf346
                 }
             };
 
