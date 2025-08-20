@@ -48,6 +48,10 @@ namespace Microsoft.Commerce.Payments.Common.Web
                     version = "v" + seg;
                 }
             }
+            else if (!version.StartsWith("v", StringComparison.OrdinalIgnoreCase))
+            {
+                version = "v" + version;
+            }
 
             logger.LogDebug("Resolving controller '{Controller}' for version '{Version}'", controllerName, version);
 

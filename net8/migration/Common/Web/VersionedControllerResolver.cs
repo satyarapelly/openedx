@@ -45,8 +45,12 @@ namespace Microsoft.Commerce.Payments.Common.Web
                 if (path.StartsWith("/v", StringComparison.OrdinalIgnoreCase))
                 {
                     var seg = path.AsSpan(2).ToString().Split('/', 2)[0]; // "7.0"
-                    version = seg;
+                    version = "v" + seg;
                 }
+            }
+            else if (!version.StartsWith("v", StringComparison.OrdinalIgnoreCase))
+            {
+                version = "v" + version;
             }
 
             logger.LogDebug("Resolving controller '{Controller}' for version '{Version}'", controllerName, version);
