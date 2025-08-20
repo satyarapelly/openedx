@@ -37,6 +37,11 @@ namespace Microsoft.Commerce.Payments.Common.Web
             var controllerName = controllerValue?.ToString();
             if (string.IsNullOrEmpty(controllerName)) return null;
 
+            if (!controllerName.EndsWith("Controller", StringComparison.OrdinalIgnoreCase))
+            {
+                controllerName += "Controller";
+            }
+
             // Prefer header, else try path like /v7.0/...
             var version = context.Request.Headers["api-version"].ToString();
             if (string.IsNullOrWhiteSpace(version))
