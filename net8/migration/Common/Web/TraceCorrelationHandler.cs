@@ -124,7 +124,7 @@ namespace Microsoft.Commerce.Payments.Common.Web
                 }
 
                 operationName = counterNameBuilder.ToString();
-                request.Properties.Add(PaymentConstants.Web.Properties.OperationName, operationName);
+                request.Options.Set(new HttpRequestOptionsKey<object>(PaymentConstants.Web.Properties.OperationName), operationName);
             }
 
             EventTraceActivity requestTraceId;
@@ -148,24 +148,25 @@ namespace Microsoft.Commerce.Payments.Common.Web
             }
 
             // Save this for other parts of the pipeline.
-            if (!request.Properties.ContainsKey(PaymentConstants.Web.Properties.ServerTraceId))
+            if (!request.Options.TryGetValue(new HttpRequestOptionsKey<object>(PaymentConstants.Web.Properties.ServerTraceId), out _))
             {
-                // If there are multiple requests from client with same correlation id in short span of time, 
+                // If there are multiple requests from client with same correlation id in short span of time,
                 // then the requests overlap.To avoid this we do trace transfer from requestTraceId to ServerTraceId.
                 // All the payments servertraces will be correlated with serverTraceId.
-                request.Properties.Add(PaymentConstants.Web.Properties.ServerTraceId, serverTraceId);
+                request.Options.Set(new HttpRequestOptionsKey<object>(PaymentConstants.Web.Properties.ServerTraceId), serverTraceId);
             }
-            else
+            else if (request.Options.TryGetValue(new HttpRequestOptionsKey<object>(PaymentConstants.Web.Properties.ServerTraceId), out var existingServerTrace) &&
+                     existingServerTrace is EventTraceActivity existingServerTraceId)
             {
                 Debug.Assert(
-                    ((EventTraceActivity)request.Properties[PaymentConstants.Web.Properties.ServerTraceId]).ActivityId == serverTraceId.ActivityId,
+                    existingServerTraceId.ActivityId == serverTraceId.ActivityId,
                     "Should never hit here, in which case trace IDs should be the same.");
             }
 
-            if (!request.Properties.ContainsKey(PaymentConstants.Web.Properties.ClientTraceId) && !isDependentServiceRequest)
+            if (!request.Options.TryGetValue(new HttpRequestOptionsKey<object>(PaymentConstants.Web.Properties.ClientTraceId), out _) && !isDependentServiceRequest)
             {
                 // Save the clientTraceId for the logging purpose
-                request.Properties.Add(PaymentConstants.Web.Properties.ClientTraceId, requestTraceId);
+                request.Options.Set(new HttpRequestOptionsKey<object>(PaymentConstants.Web.Properties.ClientTraceId), requestTraceId);
             }
 
             string trackingId = null;
@@ -187,9 +188,9 @@ namespace Microsoft.Commerce.Payments.Common.Web
                 trackingId = Guid.Empty.ToString();
             }
 
-            if (!request.Properties.ContainsKey(PaymentConstants.Web.Properties.TrackingId))
+            if (!request.Options.TryGetValue(new HttpRequestOptionsKey<object>(PaymentConstants.Web.Properties.TrackingId), out _))
             {
-                request.Properties.Add(PaymentConstants.Web.Properties.TrackingId, trackingId);
+                request.Options.Set(new HttpRequestOptionsKey<object>(PaymentConstants.Web.Properties.TrackingId), trackingId);
             }
 
             // Need set the request content before processing.
