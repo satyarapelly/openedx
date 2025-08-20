@@ -7,7 +7,6 @@ using Microsoft.Commerce.Payments.Common.Tracing;
 using Microsoft.Commerce.Payments.Common.Web;
 using Microsoft.Commerce.Payments.PXCommon;
 using Microsoft.Commerce.Payments.PXService;
-using Microsoft.Commerce.Payments.PXService.Handlers;
 using Microsoft.Commerce.Payments.PXService.Settings;
 using Microsoft.Diagnostics.Tracing;
 using Microsoft.Extensions.DependencyInjection;
@@ -54,10 +53,11 @@ builder.Services
     {
         // Global filters (was: config.Filters.Add(...))
         options.Filters.Add(new PXServiceExceptionFilter());
-        if (pxSettings.AuthorizationFilter is not null)
-        {
-            options.Filters.Add(pxSettings.AuthorizationFilter);
-        }
+        // TODO: HACK for local testing.
+        //if (pxSettings.AuthorizationFilter is not null)
+        //{
+        //    options.Filters.Add(pxSettings.AuthorizationFilter);
+        //}
         options.Filters.Add<VersionGateFilter>();
     })
     .AddNewtonsoftJson(o =>
@@ -70,10 +70,10 @@ builder.Services.AddHttpClient();
 builder.Services.AddApplicationInsightsTelemetry(); // optional if you rely on your own AI setup
 
 // Register the resolver and populate it with your mappings (V7, probe, etc.)
-builder.Services.AddSingleton<VersionedControllerResolver>(sp =>
+builder.Services.AddSingleton<VersionedControllerSelector>(sp =>
 {
-    var resolverLogger = sp.GetRequiredService<ILogger<VersionedControllerResolver>>();
-    var resolver = new VersionedControllerResolver(resolverLogger);
+    var resolverLogger = sp.GetRequiredService<ILogger<VersionedControllerSelector>>();
+    var resolver = new VersionedControllerSelector(resolverLogger);
 
     // Add versioned and versionless controllers
     var catalogLogger = sp.GetRequiredService<ILoggerFactory>().CreateLogger("VersionCatalog");
@@ -128,7 +128,7 @@ app.Use(async (ctx, next) =>
     // If we have a selected controller, consult the resolver
     if (!string.IsNullOrEmpty(controllerName))
     {
-        var resolver = ctx.RequestServices.GetRequiredService<VersionedControllerResolver>();
+        var resolver = ctx.RequestServices.GetRequiredService<VersionedControllerSelector>();
         var allowedType = resolver.ResolveAllowedController(ctx); // your existing helper
 
         if (allowedType is null)
@@ -150,7 +150,7 @@ app.Use(async (ctx, next) =>
     {
         var parsedVersion = segments[0][1..];         // "7.0"
         var parsedController = segments[2];           // "AddressDescriptions"
-        var resolver = ctx.RequestServices.GetRequiredService<VersionedControllerResolver>();
+        var resolver = ctx.RequestServices.GetRequiredService<VersionedControllerSelector>();
 
         // Fake the route values just for checking
         ctx.Request.RouteValues["controller"] = parsedController;
@@ -274,20 +274,12 @@ static void AddUrlVersionedRoutes(IEndpointRouteBuilder endpoints)
     endpoints.MapControllerRoute(
         name: GlobalConstants.V7RouteNames.GetSettings,
         pattern: GlobalConstants.EndPointNames.V7GetSettings,
-        defaults: new
-        {
-            controller = GlobalConstants.ControllerNames.SettingsController.Replace("Controller", string.Empty),
-            action = "GetSettings"
-        });
+        defaults: new { controller = GlobalConstants.ControllerNames.SettingsController });
 
     endpoints.MapControllerRoute(
         name: GlobalConstants.V7RouteNames.GetSettingsInPost,
         pattern: GlobalConstants.EndPointNames.V7GetSettingsInPost,
-        defaults: new
-        {
-            controller = GlobalConstants.ControllerNames.SettingsController.Replace("Controller", string.Empty),
-            action = "GetSettingsInPost"
-        });
+        defaults: new { controller = GlobalConstants.ControllerNames.SettingsController, action = "GetSettingsInPost" });
 
     endpoints.MapControllerRoute(
         name: GlobalConstants.V7RouteNames.PaymentSessionApi,
