@@ -16,17 +16,28 @@ namespace Microsoft.Commerce.Payments.Common.Web
 
         public VersionedControllerResolver(ILogger<VersionedControllerResolver> logger) => this.logger = logger;
 
+        private static string Normalize(string name)
+            => name.EndsWith("Controller", StringComparison.OrdinalIgnoreCase)
+                ? name[..^"Controller".Length]
+                : name;
+
         public void AddVersion(string version, Dictionary<string, Type> controllerMappings)
         {
-            if (!versionedControllers.TryAdd(version, controllerMappings))
+            var normalized = new Dictionary<string, Type>(StringComparer.OrdinalIgnoreCase);
+            foreach (var pair in controllerMappings)
+            {
+                normalized[Normalize(pair.Key)] = pair.Value;
+            }
+
+            if (!versionedControllers.TryAdd(version, normalized))
             {
                 logger.LogWarning("Controller version {Version} already registered. Overwriting.", version);
-                versionedControllers[version] = controllerMappings;
+                versionedControllers[version] = normalized;
             }
         }
 
         public void AddVersionless(string controllerName, Type controllerType)
-            => versionlessControllers[controllerName] = controllerType;
+            => versionlessControllers[Normalize(controllerName)] = controllerType;
 
         public Type? ResolveAllowedController(HttpContext context)
         {
@@ -34,13 +45,8 @@ namespace Microsoft.Commerce.Payments.Common.Web
             if (routeValues is null) return null;
 
             routeValues.TryGetValue("controller", out var controllerValue);
-            var controllerName = controllerValue?.ToString();
+            var controllerName = Normalize(controllerValue?.ToString() ?? string.Empty);
             if (string.IsNullOrEmpty(controllerName)) return null;
-
-            if (!controllerName.EndsWith("Controller", StringComparison.OrdinalIgnoreCase))
-            {
-                controllerName += "Controller";
-            }
 
             // Prefer header, else try path like /v7.0/...
             var version = context.Request.Headers["api-version"].ToString();
