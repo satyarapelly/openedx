@@ -60,9 +60,33 @@ namespace Microsoft.Commerce.Payments.PXService
 
         public async Task InvokeAsync(HttpContext context)
         {
-            if (this.next != null)
+            var requestMessage = context.Request.ToHttpRequestMessage();
+
+            context.Request.EnableBuffering();
+            context.Request.Body.Position = 0;
+            requestMessage.Content = new StreamContent(context.Request.Body);
+
+            requestMessage.Options.Set(new HttpRequestOptionsKey<HttpContext>("HttpContext"), context);
+
+            var responseMessage = await this.SendAsync(requestMessage, context.RequestAborted);
+
+            if (!context.Response.HasStarted)
             {
-                await this.next(context);
+                context.Response.StatusCode = (int)responseMessage.StatusCode;
+                foreach (var header in responseMessage.Headers)
+                {
+                    context.Response.Headers[header.Key] = header.Value.ToArray();
+                }
+
+                if (responseMessage.Content != null)
+                {
+                    foreach (var header in responseMessage.Content.Headers)
+                    {
+                        context.Response.Headers[header.Key] = header.Value.ToArray();
+                    }
+
+                    await responseMessage.Content.CopyToAsync(context.Response.Body);
+                }
             }
         }
 
@@ -87,7 +111,19 @@ namespace Microsoft.Commerce.Payments.PXService
 
             if (allowedVersionlessRequest)
             {
-                return await base.SendAsync(request, cancellationToken);
+                var httpContext = request.GetHttpContext();
+                if (this.next != null && httpContext != null)
+                {
+                    if (httpContext.Request.Body.CanSeek)
+                    {
+                        httpContext.Request.Body.Position = 0;
+                    }
+
+                    await this.next(httpContext);
+                    return new HttpResponseMessage((HttpStatusCode)httpContext.Response.StatusCode);
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.OK);
             }
 
             // Extract version and accountId from the RequestUri.
@@ -1087,40 +1123,42 @@ namespace Microsoft.Commerce.Payments.PXService
                 request.AddProperty(PaymentConstants.Web.Properties.Version, apiVersion);
             }
 
-            HttpResponseMessage response = await base.SendAsync(request, cancellationToken);
-
-            // Add the version selected for this request to the response header.  This will be used
-            // by the PIDLSDK when logging client side telemetry events.  UX health (e.g. Add-PI funnel)
-            // can then be compared between different versions of the service.
-            response.Headers.Add(OperationVersionHeader, apiVersion.ExternalVersion);
-
-            // Add a comma separated list of features flights that are exposable to the current request/user
-            // to the response header for logging.
-            // A feature being exposable to the request/user doesn't guarantee that the feature is applied.
-            if (exposableFeatures != null && exposableFeatures.Count != 0)
+            var httpContext = request.GetHttpContext();
+            if (this.next != null && httpContext != null)
             {
-                response.Headers.Add(ExposableFlightsHeader, string.Join(",", exposableFeatures));
+                if (httpContext.Request.Body.CanSeek)
+                {
+                    httpContext.Request.Body.Position = 0;
+                }
+
+                await this.next(httpContext);
+
+                httpContext.Response.Headers.Add(OperationVersionHeader, apiVersion.ExternalVersion);
+
+                if (exposableFeatures != null && exposableFeatures.Count != 0)
+                {
+                    httpContext.Response.Headers.Add(ExposableFlightsHeader, string.Join(",", exposableFeatures));
+                }
+
+                if (!string.IsNullOrWhiteSpace(featureConfig?.AssignmentContext))
+                {
+                    httpContext.Response.Headers.Add(PXFlightAssignmentContextHeader, featureConfig?.AssignmentContext);
+                }
+
+                if (exposableFeatures != null && exposableFeatures.Contains(Flighting.Features.PXSendContentTypeOptionsHeader, StringComparer.OrdinalIgnoreCase))
+                {
+                    httpContext.Response.Headers.Add(ContentTypeOptionsHeader, NoSniff);
+                }
+
+                if (exposableFeatures != null && exposableFeatures.Contains(Flighting.Features.PXSendNoRetryOnServerErrorHeader, StringComparer.OrdinalIgnoreCase))
+                {
+                    httpContext.Response.Headers.Add(RetryOnServerErrorHeader, "false");
+                }
+
+                return new HttpResponseMessage((HttpStatusCode)httpContext.Response.StatusCode);
             }
 
-            // Set PX Feature flight assigment context response header
-            if (!string.IsNullOrWhiteSpace(featureConfig?.AssignmentContext))
-            {
-                response.Headers.Add(PXFlightAssignmentContextHeader, featureConfig?.AssignmentContext);
-            }
-
-            // Once the flight goes to 100%, then we can add the header in Web.config of PX
-            if (exposableFeatures != null && exposableFeatures.Contains(Flighting.Features.PXSendContentTypeOptionsHeader, StringComparer.OrdinalIgnoreCase))
-            {
-                response.Headers.Add(ContentTypeOptionsHeader, NoSniff);
-            }
-
-            // When the flight is on, set retry on server error header to false
-            if (exposableFeatures != null && exposableFeatures.Contains(Flighting.Features.PXSendNoRetryOnServerErrorHeader, StringComparer.OrdinalIgnoreCase))
-            {
-                response.Headers.Add(RetryOnServerErrorHeader, "false");
-            }
-
-            return response;
+            return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
         /// <summary>
