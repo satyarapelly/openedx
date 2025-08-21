@@ -33,7 +33,6 @@ namespace Microsoft.Commerce.Payments.PXService
                 {
                     options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
                 });
-
             builder.Services.AddSingleton<VersionedControllerSelector>(sp =>
             {
                 var selectorLogger = sp.GetRequiredService<ILogger<VersionedControllerSelector>>();
@@ -41,12 +40,15 @@ namespace Microsoft.Commerce.Payments.PXService
                 InitVersionSelector();
                 return selector;
             });
+        }
 
-            //builder.Services.AddSingleton<PXServiceApiVersionHandler>(sp =>
-            //{
-            //    var selector = sp.GetRequiredService<VersionedControllerSelector>();
-            //    return new PXServiceApiVersionHandler(selector.SupportedVersions, versionlessControllers, settings);
-            //});
+        /// <summary>
+        /// Configures the conventional routes for the service.
+        /// </summary>
+        /// <param name="endpoints">Endpoint route builder for the application.</param>
+        public static void ConfigureRoutes(IEndpointRouteBuilder endpoints)
+        {
+            AddUrlVersionedRoutes(endpoints);
         }
 
         /// <summary>
