@@ -10,7 +10,6 @@ namespace SelfHostedPXServiceCore
     using Microsoft.Commerce.Payments.PXService.Accessors.PartnerSettingsService;
     using Microsoft.Commerce.Payments.PXService.Accessors.TokenPolicyService;
     using Microsoft.Commerce.Payments.PXService.RiskService.V7;
-    using Microsoft.Extensions.Options;
     using Mocks;
     using System;
     using System.Collections.Generic;
@@ -33,8 +32,6 @@ namespace SelfHostedPXServiceCore
         public static PXServiceCorsHandler PXCorsHandler { get; private set; }
 
         public static PXServiceFlightHandler PXFlightHandler { get; private set; }
-
-        public static PXServiceApiVersionHandler PXApiVersionHandler { get; private set; }
 
 
         public SelfHostedPxService(string fullBaseUrl, bool useSelfHostedDependencies, bool useArrangedResponses)
@@ -104,12 +101,6 @@ namespace SelfHostedPXServiceCore
             }
 
             PXSettings = new PXServiceSettings(SelfHostedDependencies, useArrangedResponses);
-            // Define supported API versions and controllers allowed without an explicit version
-            var supportedVersions = new Dictionary<string, ApiVersion>(StringComparer.OrdinalIgnoreCase)
-            {
-                { "v7.0", new ApiVersion("v7.0", new Version(7, 0)) }
-            };
-            string[] versionlessControllers = { GlobalConstants.ControllerNames.ProbeController };
 
             PxHostableService = new HostableService(
                 builder =>
@@ -121,9 +112,7 @@ namespace SelfHostedPXServiceCore
                     // The PXCorsHandler instance here is for testing purposes.
                     // It needs to be added after WebApiConfig.Register runs otherwise the flight needed for testing will be overwritten.
                     PXCorsHandler = new PXServiceCorsHandler(new PXServiceSettings());
-                    PXApiVersionHandler = new PXServiceApiVersionHandler(supportedVersions, versionlessControllers, PXSettings);
                     builder.Services.AddSingleton(PXCorsHandler);
-                    builder.Services.AddSingleton(PXApiVersionHandler);
 
                     PXHandler = new PXServiceHandler();
                     builder.Services.AddSingleton(PXHandler);
