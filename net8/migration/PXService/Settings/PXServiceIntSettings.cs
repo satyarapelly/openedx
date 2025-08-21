@@ -37,7 +37,7 @@ namespace Microsoft.Commerce.Payments.PXService.Settings
 
             this.ManagedIdentityId = "bd11e518-82c4-438f-898b-585a8cc3da0d";
 
-            this.LoadCertificate(false, "https://px-kv-int.vault.azure.net/", this.ManagedIdentityId); // PXService-INT MI ClientID
+            this.LoadCertificate(false, "https://kv-px-int-wus-1.vault.azure.net/", this.ManagedIdentityId); // PXService-INT MI ClientID
 
             this.LocalFeatureConfigs = PXServiceSettings.FetchStaticFeatureConfigs(
                 "Settings\\FeatureConfig\\featureconfigs.json",
@@ -93,6 +93,10 @@ namespace Microsoft.Commerce.Payments.PXService.Settings
                 BuildAADTokenLoaderOption(PXCommon.Constants.ServiceNames.FraudDetectionService, this.ManagedIdentityId, "api://f1bca360-a368-45d3-92f1-24287e23a870", true),
             };
 
+            var authenticationLogger = new TokenGenerationLogger();
+            var azureActiveDirectoryTokenClientFactory = new AzureActiveDirectoryTokenClientFactory(azureActiveDirectoryTokenClientOptions, authenticationLogger);
+            this.AzureActiveDirectoryTokenLoaderFactory = new AzureActiveDirectoryTokenLoaderFactory(azureActiveDirectoryTokenLoaderOptions, azureActiveDirectoryTokenClientFactory, authenticationLogger);
+
             var azureExpMessageHandler = GetAADRequestHandler(PXCommon.Constants.ServiceNames.AzureExPService, this.AzureActiveDirectoryTokenLoaderFactory);
             this.AzureExPAccessor = new AzureExPAccessor(
                 expBlobUrl: "https://default.exp-tas.com/exptas9/6efb2a85-0548-45d7-9c66-3201f7dfcd7b-paymentexpint/api/v1/experimentationblob",
@@ -120,6 +124,14 @@ namespace Microsoft.Commerce.Payments.PXService.Settings
             this.TaxIdServiceAccessor = new TaxIdServiceAccessor(
                 serviceBaseUrl: "https://taxidmanagement.cp.microsoft-int.com",
                 messageHandler: taxIdWebRequestHandler);
+
+            this.CommerceAccountDataServiceAccessor = new CommerceAccountDataAccessor(
+                baseUrl: "https://sps.msn-int.com/Commerce/Account/AccountWebService.svc",
+                authCert: this.CtpCertificate);
+
+            this.CtpCommerceDataServiceAccessor = new CTPCommerceDataAccessor(
+                baseUrl: "https://sps.msn-int.com/CTPCommerce/CommerceAPI.svc",
+                authCert: this.CtpCertificate);
 
             this.MerchantCapabilitiesUri = "https://merchant.pay.microsoft-ppe.com";
             this.MerchantCapabilitiesApiVersion = "v1";
@@ -157,6 +169,7 @@ namespace Microsoft.Commerce.Payments.PXService.Settings
             var networkTokenizationServiceRequestHandler = GetAADRequestHandler(PXCommon.Constants.ServiceNames.NetworkTokenizationService, this.AzureActiveDirectoryTokenLoaderFactory);
             this.NetworkTokenizationServiceAccessor = new NetworkTokenizationServiceAccessor(
                 serviceBaseUrl: "https://nts.cp.microsoft-int.com",
+                intServiceBaseUrl: "https://nts.cp.microsoft-int.com",
                 emulatorBaseUrl: string.Empty,
                 apiVersion: "1.0",
                 messageHandler: networkTokenizationServiceRequestHandler);
@@ -212,6 +225,12 @@ namespace Microsoft.Commerce.Payments.PXService.Settings
                             Management.CertificateVerificationCore.IssuerGroup.AME
                         }),
                     ApplicationId = "20ef9c38-bec0-4c7a-922b-b33cc638592b" // Application name: mi-pifd-int-gbl-aad-wu2, tenant id (PME) : 975f013f-7f24-47e8-a7d3-abc4752bf346
+                },
+                new UserInformation()
+                {
+                    Role = GlobalConstants.ClientRoles.Admin,
+                    PartnerName = Partner.Name.PaymentOrchestrator.ToString(),
+                    ApplicationId = "4f1510c7-3540-4d26-a2b7-87dc55a996b6" // Application name: PaymentsAPI-MSDP-INT, tenant id (PME) : 975f013f-7f24-47e8-a7d3-abc4752bf346
                 }
             };
 

@@ -149,7 +149,7 @@ namespace Microsoft.Commerce.Payments.PXService.Settings
         public IChallengeManagementServiceAccessor ChallengeManagementServiceAccessor { get; protected set; }
 
         public INetworkTokenizationServiceAccessor NetworkTokenizationServiceAccessor { get; protected set; }
-
+        
         public ITokenizationServiceAccessor TokenizationServiceAccessor { get; protected set; }
 
         public string ManagedIdentityId { get; protected set; }

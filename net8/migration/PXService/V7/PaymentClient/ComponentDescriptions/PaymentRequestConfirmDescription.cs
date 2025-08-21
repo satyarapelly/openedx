@@ -53,7 +53,7 @@ namespace Microsoft.Commerce.Payments.PXService
             }
         }
 
-        public override async Task LoadComponentDescription(
+        public virtual async Task LoadComponentDescription(
             string requestId,
             PXServiceSettings pxSettings,
             EventTraceActivity traceActivityId,
@@ -67,8 +67,9 @@ namespace Microsoft.Commerce.Payments.PXService
             string country = null,
             string language = null,
             string currency = null,
-            HttpRequestMessage? request = null,
-            string piid = null)
+            HttpRequestMessage request = null,
+            string piid = null,
+            string challengeWindowSize = null)
         {
             this.Operation = operation;
             this.Partner = partner;
@@ -81,6 +82,7 @@ namespace Microsoft.Commerce.Payments.PXService
             this.PXSettings = pxSettings;
             this.RequestId = requestId;
             this.activityId = traceActivityId;
+            this.ChallengeWindowSize = challengeWindowSize;
 
             if (this.UsePaymentRequestApiEnabled()
                 && PidlFactory.V7.PartnerSettingsHelper.IsFeatureEnabledUsingPartnerSettings(PidlFactory.V7.PartnerSettingsHelper.Features.PaymentClientHandlePaymentCollection, country, setting))
@@ -162,8 +164,7 @@ namespace Microsoft.Commerce.Payments.PXService
 
             return new List<PIDLResource>() { returnContextPidl };
         }
-
-        private static PaymentSessionData GetPaymentSessionData(string partner, PaymentRequestClientActions paymentRequestClientActions)
+        private static PaymentSessionData GetPaymentSessionData(string partner, PaymentRequestClientActions paymentRequestClientActions, string challengeWindowSize = null, PaymentExperienceSetting setting = null)
         {
             var clientAction = paymentRequestClientActions.ClientActions?.FirstOrDefault();
             PaymentSessionData paymentSessionData = new PaymentSessionData()
@@ -175,7 +176,7 @@ namespace Microsoft.Commerce.Payments.PXService
                 Country = paymentRequestClientActions.Country,
                 Language = paymentRequestClientActions.Language,
                 ChallengeScenario = ChallengeScenario.PaymentTransaction,
-                ChallengeWindowSize = ChallengeWindowSize.Five,
+                ChallengeWindowSize = ComponentDescription.ParseChallengeWindowSize(challengeWindowSize, setting),
                 HasPreOrder = paymentRequestClientActions.PreOrder ?? false,
             };
 

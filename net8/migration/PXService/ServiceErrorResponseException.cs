@@ -5,7 +5,7 @@ namespace Microsoft.Commerce.Payments.PXService
     using System;
     using System.Net.Http;
     using System.Runtime.Serialization;
-
+    
     public enum ExceptionHandlingPolicy
     {
         Default,
@@ -41,7 +41,7 @@ namespace Microsoft.Commerce.Payments.PXService
             if (this.Error != null)
             {
                 info.AddValue(
-                    ServiceErrorCodeName,
+                    ServiceErrorCodeName, 
                     string.Format("ErrorCode: {0} Message: {1} Source: {2}", this.Error.ErrorCode, this.Error.Message, this.Error.Source ?? string.Empty));
             }
             else

@@ -8,8 +8,9 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using Microsoft.Commerce.Payments.Pidl.Localization;
     using Microsoft.Commerce.Payments.PidlModel.V7;
     using Microsoft.Commerce.Payments.PXCommon;
+    using static Microsoft.Commerce.Payments.PXService.V7.Constants;
 
-    public static class DescriptionHelper
+    internal static class DescriptionHelper
     {
         public static void RemoveUpdateAddresEnabled(string family, string scenario, List<PIDLResource> retVal, List<string> exposedFlightFeatures)
         {
@@ -40,7 +41,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                     HintId = "dfpIframe",
                     DisplayContent = displayContent,
                     Width = "0px",
-                    Height = "0px"
+                    Height = "0px",
+                    DisplayTags = new Dictionary<string, string> { { "accessibilityName", "dfpIframe" } },
                 };
 
                 resource.DisplayPages[0].Members.Add(dfpIFrame);

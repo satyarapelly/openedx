@@ -1,6 +1,6 @@
 ﻿// <copyright file="PXServiceApiVersionHandler.cs" company="Microsoft Corporation">Copyright (c) Microsoft. All rights reserved.</copyright>
 
-namespace Microsoft.Commerce.Payments.PXService.Handlers
+namespace Microsoft.Commerce.Payments.PXService
 {
     using System;
     using System.Collections.Generic;
@@ -16,7 +16,6 @@ namespace Microsoft.Commerce.Payments.PXService.Handlers
     using Microsoft.Commerce.Payments.Common.Web;
     using Microsoft.Commerce.Payments.PartnerSettingsModel;
     using Microsoft.Commerce.Payments.PXCommon;
-    using Microsoft.Commerce.Payments.PXService;
     using Microsoft.Commerce.Payments.PXService.Model;
     using Microsoft.Commerce.Payments.PXService.Settings;
     using Microsoft.Commerce.Payments.PXService.Settings.FeatureConfig;
@@ -285,6 +284,7 @@ namespace Microsoft.Commerce.Payments.PXService.Handlers
                 if (!PartnerSettingsHelper.TenantIdPartnerNameMapper.TryGetValue(requestContext.TenantId, out partner))
                 {
                     partner = requestContext.TenantId;
+                    accountId = requestContext.PaymentAccountId;
                 }
             }
 
@@ -578,15 +578,6 @@ namespace Microsoft.Commerce.Payments.PXService.Handlers
             {
                 exposableFeatures.Add(V7.Constants.PartnerFlightValues.PxEnableUpi);
                 RemovePartnerFlight(request, pxEnableUpi);
-            }
-
-            // flight cleanup task - 56373987
-            string enableSepaJpmc = GetPartnerFlight(request, V7.Constants.PartnerFlightValues.EnableSepaJpmc);
-            if (!string.IsNullOrEmpty(enableSepaJpmc))
-            {
-                // if flight is on, we add this flight to exposableFeatures to use this to fetch the latest changes from csv and to add the userAgent and channel to the pi object
-                exposableFeatures.Add(V7.Constants.PartnerFlightValues.EnableSepaJpmc);
-                RemovePartnerFlight(request, enableSepaJpmc);
             }
 
             // flight cleanup task - 57811922
@@ -953,6 +944,7 @@ namespace Microsoft.Commerce.Payments.PXService.Handlers
             ExtractAndRemovePartnerFlight(request, exposableFeatures, Flighting.Features.PXUseNTSIntUrl);
             ExtractAndRemovePartnerFlight(request, exposableFeatures, Flighting.Features.PXDisableGetWalletConfigCache);
             ExtractAndRemovePartnerFlight(request, exposableFeatures, Flighting.Features.PXPaasAddCCDfpIframeForCommerceRisk);
+            ExtractAndRemovePartnerFlight(request, exposableFeatures, Flighting.Features.PXCombineExpiryMonthYearToDateTextBox);
 
             string pXEnableSearchTransactionParallelRequest = GetPartnerFlight(request, Flighting.Features.PXEnableSearchTransactionParallelRequest);
             if (!string.IsNullOrEmpty(pXEnableSearchTransactionParallelRequest))

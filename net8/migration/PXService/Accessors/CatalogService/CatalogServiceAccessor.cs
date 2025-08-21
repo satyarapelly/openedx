@@ -103,7 +103,7 @@ namespace Microsoft.Commerce.Payments.PXService
                     SllWebLogger.TracePXServiceException(ex.ToString(), traceActivityId);
                 }
             }
-
+            
             return this.euDirective == null ? null : this.euDirective.GetMarkets();
         }
 

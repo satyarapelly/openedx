@@ -4,7 +4,7 @@ namespace Microsoft.Commerce.Payments.PXService.Model.PaymentThirdPartyService
 {
     using Newtonsoft.Json;
 
-    public class CheckoutStatusResponse
+    public class CheckoutStatusResponse1
     {
         [JsonProperty(PropertyName = "checkoutStatus")]
         public string CheckoutStatus { get; set; }

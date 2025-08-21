@@ -5,13 +5,11 @@ namespace Microsoft.Commerce.Payments.PXService
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.Tracing;
-    using System.IdentityModel.Tokens.Jwt;
     using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
     using System.Net.Http.Headers;
-    using System.Security.Claims;
     using System.Text;
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
@@ -41,7 +39,8 @@ namespace Microsoft.Commerce.Payments.PXService
             GlobalConstants.HeaderValues.CustomerHeader,
             GlobalConstants.HeaderValues.DeviceInfoHeader,
             GlobalConstants.HeaderValues.RiskInfoHeader,
-            GlobalConstants.HeaderValues.XMsRequestContext
+            GlobalConstants.HeaderValues.XMsRequestContext,
+            GlobalConstants.HeaderValues.XMsBillingAccountId
         };
 
         private readonly Dictionary<string, string> partnerNamesMappingForPimsRequests = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
@@ -71,10 +70,7 @@ namespace Microsoft.Commerce.Payments.PXService
             this.servicePPEBaseUrl = servicePPEBaseUrl;
             this.apiVersion = apiVersion;
 
-            this.pimsHttpClient = new PXTracingHttpClient(
-               PXCommon.Constants.ServiceNames.InstrumentManagementService,
-               messageHandler,
-               logOutgoingRequestToApplicationInsight: ApplicationInsightsProvider.LogOutgoingOperation);
+            this.pimsHttpClient = new PXTracingHttpClient(PXCommon.Constants.ServiceNames.InstrumentManagementService, messageHandler, ApplicationInsightsProvider.LogOutgoingOperation);
             this.pimsHttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(PaymentConstants.HttpMimeTypes.JsonContentType));
             this.pimsHttpClient.DefaultRequestHeaders.Add(PaymentConstants.HttpHeaders.Connection, PaymentConstants.HttpHeaders.KeepAlive);
             this.pimsHttpClient.DefaultRequestHeaders.Add(PaymentConstants.HttpHeaders.KeepAlive, string.Format(PaymentConstants.HttpHeaders.KeepAliveParameter, 60));
@@ -304,6 +300,26 @@ namespace Microsoft.Commerce.Payments.PXService
             IEnumerable<KeyValuePair<string, string>> queryParams = null)
         {
             string requestUrl = string.Format(V7.Constants.UriTemplate.UpdatePI, accountId, piid);
+            requestUrl = AppendQueryParams(requestUrl, queryParams);
+            var pi = await this.SendPostRequest<PaymentInstrument>(
+                requestUrl,
+                updatePiData,
+                "UpdatePaymentInstrument",
+                traceActivityId,
+                exposedFlightFeatures: exposedFlightFeatures);
+            PIHelper.AddDefaultDisplayName(pi, partner, traceActivityId);
+            return pi;
+        }
+
+        public async Task<PaymentInstrument> UpdatePaymentInstrument(
+            string piid,
+            object updatePiData,
+            EventTraceActivity traceActivityId,
+            string partner = null,
+            List<string> exposedFlightFeatures = null,
+            IEnumerable<KeyValuePair<string, string>> queryParams = null)
+        {
+            string requestUrl = string.Format(V7.Constants.UriTemplate.UpdatePIWithoutAccountId, piid);
             requestUrl = AppendQueryParams(requestUrl, queryParams);
             var pi = await this.SendPostRequest<PaymentInstrument>(
                 requestUrl,
@@ -1011,6 +1027,7 @@ namespace Microsoft.Commerce.Payments.PXService
                         SllWebLogger.TracePXServiceException(string.Format("API:{0},ReadException:{1}", actionName, ex), traceActivityId);
                     }
                 }
+
 
                 using (HttpResponseMessage response = await this.pimsHttpClient.SendAsync(request))
                 {

@@ -5,6 +5,7 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.ChallengeManagementSer
     using System.Threading.Tasks;
     using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Commerce.Payments.PXService.Model.ChallengeManagementService;
+    using static Microsoft.Commerce.Payments.PXService.Model.ChallengeManagementService.SessionEnumDefinition;
 
     public interface IChallengeManagementServiceAccessor
     {

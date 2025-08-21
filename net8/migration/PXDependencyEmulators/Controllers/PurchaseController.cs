@@ -13,7 +13,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
     using Common.Web;
     using Test.Common;
     using Constants = Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Constants;
-    using Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Extensions;
+    using Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators;
 
     public class PurchaseController : EmulatorBaseController
     {
@@ -69,7 +69,7 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Cont
                 if (testContext != null &&
                     testContext.ScenariosContain(Constants.TestScenarios.PXPurchasefdRedeemcsvSuccess))
                 {
-                    return TestScenarioManager.GetResponse(apiName, testContext);
+                    return this.TestScenarioManager.GetResponse(apiName, testContext);
                 }
 
                 if (testContext != null &&

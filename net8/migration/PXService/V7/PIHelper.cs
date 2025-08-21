@@ -15,82 +15,84 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using Microsoft.Commerce.Payments.PimsModel.V4;
     using Microsoft.Commerce.Payments.PXService.Model.PXInternal;
     using Microsoft.Commerce.Payments.PXService.Settings;
+    using Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge;
+    using Microsoft.Commerce.Tracing;
 
-    public static class PIHelper
+    internal static class PIHelper
     {
-        public static bool IsPayPal(this PaymentInstrument pi)
+        internal static bool IsPayPal(this PaymentInstrument pi)
         {
             return pi != null
                 && pi.PaymentMethod != null
                 && IsPayPal(pi.PaymentMethod.PaymentMethodFamily, pi.PaymentMethod.PaymentMethodType);
         }
 
-        public static bool IsPayPal(string paymentMethodFamily, string paymentMethodType)
+        internal static bool IsPayPal(string paymentMethodFamily, string paymentMethodType)
         {
             return string.Equals(paymentMethodFamily, Constants.PaymentMethodFamily.ewallet.ToString(), StringComparison.OrdinalIgnoreCase)
                 && string.Equals(paymentMethodType, Constants.PaymentMethodType.PayPal, StringComparison.OrdinalIgnoreCase);
         }
 
-        public static bool IsVenmo(this PaymentInstrument pi)
+        internal static bool IsVenmo(this PaymentInstrument pi)
         {
             return pi != null
                 && pi.PaymentMethod != null
                 && IsVenmo(pi.PaymentMethod.PaymentMethodFamily, pi.PaymentMethod.PaymentMethodType);
         }
 
-        public static bool IsSepa(this PaymentInstrument pi)
+        internal static bool IsSepa(this PaymentInstrument pi)
         {
             return pi != null
                 && pi.PaymentMethod != null
                 && IsSepa(pi.PaymentMethod.PaymentMethodFamily, pi.PaymentMethod.PaymentMethodType);
         }
 
-        public static bool IsPaymentMethodType(this PaymentInstrument pi, object paymentMethodFamily, string paymentMethodType)
+        internal static bool IsPaymentMethodType(this PaymentInstrument pi, object paymentMethodFamily, string paymentMethodType)
         {
             return pi != null
                 && pi.PaymentMethod != null
                 && pi.PaymentMethod.IsPaymentMethodType(Convert.ToString(paymentMethodFamily), paymentMethodType);
         }
 
-        public static bool IsVenmo(string paymentMethodFamily, string paymentMethodType)
+        internal static bool IsVenmo(string paymentMethodFamily, string paymentMethodType)
         {
             return string.Equals(paymentMethodFamily, Constants.PaymentMethodFamily.ewallet.ToString(), StringComparison.OrdinalIgnoreCase)
                 && string.Equals(paymentMethodType, Constants.PaymentMethodType.Venmo, StringComparison.OrdinalIgnoreCase);
         }
 
-        public static bool IsSepa(string paymentMethodFamily, string paymentMethodType)
+        internal static bool IsSepa(string paymentMethodFamily, string paymentMethodType)
         {
             return string.Equals(paymentMethodFamily, Constants.PaymentMethodFamily.direct_debit.ToString(), StringComparison.OrdinalIgnoreCase)
                 && string.Equals(paymentMethodType, Constants.PaymentMethodType.Sepa, StringComparison.OrdinalIgnoreCase);
         }
 
-        public static bool IsUpi(string paymentMethodFamily, string paymentMethodType)
+        internal static bool IsUpi(string paymentMethodFamily, string paymentMethodType)
         {
             return string.Equals(paymentMethodFamily, Constants.PaymentMethodFamily.real_time_payments.ToString(), StringComparison.OrdinalIgnoreCase)
                 && string.Equals(paymentMethodType, Constants.PaymentMethodType.UPI, StringComparison.OrdinalIgnoreCase);
         }
 
-        public static bool IsUpiCommercial(string paymentMethodFamily, string paymentMethodType)
+        internal static bool IsUpiCommercial(string paymentMethodFamily, string paymentMethodType)
         {
             return string.Equals(paymentMethodFamily, Constants.PaymentMethodFamily.real_time_payments.ToString(), StringComparison.OrdinalIgnoreCase)
                 && string.Equals(paymentMethodType, Constants.PaymentMethodType.UPICommercial, StringComparison.OrdinalIgnoreCase);
         }
 
-        public static bool IsUpiQr(this PaymentInstrument pi)
+        internal static bool IsUpiQr(this PaymentInstrument pi)
         {
             return pi != null
                 && pi.PaymentMethod != null
                 && IsUpiQr(pi?.PaymentMethod);
         }
 
-        public static bool IsGooglePay(this PaymentInstrument pi)
+        internal static bool IsGooglePay(this PaymentInstrument pi)
         {
             return pi != null
                 && pi.PaymentMethod != null
                 && IsGooglePay(pi?.PaymentMethod);
         }
 
-        public static bool IsGooglePayInstancePI(this PaymentInstrument pi)
+        internal static bool IsGooglePayInstancePI(this PaymentInstrument pi)
         {
             return pi != null
                 && pi.PaymentMethod != null
@@ -98,33 +100,33 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 && pi.PaymentInstrumentId.StartsWith(Constants.WalletServiceConstants.GooglePayPiidPrefix);
         }
 
-        public static bool IsApplePay(this PaymentInstrument pi)
+        internal static bool IsApplePay(this PaymentInstrument pi)
         {
             return pi != null
                 && pi.PaymentMethod != null
                 && IsApplePay(pi?.PaymentMethod);
         }
 
-        public static bool IsCSV(this PaymentInstrument pi)
+        internal static bool IsCSV(this PaymentInstrument pi)
         {
             return pi != null
                 && pi.PaymentMethod != null
                 && IsCSV(pi?.PaymentMethod);
         }
 
-        public static bool IsCreditCard(this PaymentInstrument pi)
+        internal static bool IsCreditCard(this PaymentInstrument pi)
         {
             return pi != null
                 && pi.PaymentMethod != null
                 && IsCreditCard(pi.PaymentMethod.PaymentMethodFamily);
         }
 
-        public static bool IsCreditCard(string paymentMethodFamily)
+        internal static bool IsCreditCard(string paymentMethodFamily)
         {
             return string.Equals(paymentMethodFamily, Constants.PaymentMethodFamily.credit_card.ToString(), StringComparison.OrdinalIgnoreCase);
         }
 
-        public static bool IsLegacyBilldeskPayment(this PaymentInstrument pi)
+        internal static bool IsLegacyBilldeskPayment(this PaymentInstrument pi)
         {
             return pi != null
                 && pi.PaymentMethod != null
@@ -132,18 +134,18 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 && string.Equals(pi.PaymentMethod.PaymentMethodType, Constants.PaymentMethodType.LegacyBilldeskPayment.ToString(), StringComparison.OrdinalIgnoreCase);
         }
 
-        public static bool IsVirtualLegacyInvoice(this PaymentMethod pm)
+        internal static bool IsVirtualLegacyInvoice(this PaymentMethod pm)
         {
             return IsVirtualLegacyInvoice(pm.PaymentMethodFamily, pm.PaymentMethodType);
         }
 
-        public static bool IsVirtualLegacyInvoice(string paymentMethodFamily, string paymentMethodType)
+        internal static bool IsVirtualLegacyInvoice(string paymentMethodFamily, string paymentMethodType)
         {
             return string.Equals(paymentMethodFamily, Constants.PaymentMethodFamily.@virtual.ToString(), StringComparison.OrdinalIgnoreCase)
                 && string.Equals(paymentMethodType, Constants.PaymentMethodType.LegacyInvoice, StringComparison.OrdinalIgnoreCase);
         }
 
-        public static void SetPendingIfPayPalMIB(PaymentInstrument pi, string partner)
+        internal static void SetPendingIfPayPalMIB(PaymentInstrument pi, string partner)
         {
             bool isPayPalMIB = pi.IsPayPal()
                 && pi.Status.Equals(PaymentInstrumentStatus.Active)
@@ -157,49 +159,49 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             }
         }
 
-        public static bool IsCreditCardAmex(this PaymentMethod pm)
+        internal static bool IsCreditCardAmex(this PaymentMethod pm)
         {
             return string.Equals(pm.PaymentMethodFamily, Constants.PaymentMethodFamily.credit_card.ToString(), StringComparison.OrdinalIgnoreCase)
                     && string.Equals(pm.PaymentMethodType, Constants.PaymentMethodType.CreditCardAmericanExpress, StringComparison.OrdinalIgnoreCase);
         }
 
-        public static bool IsCreditCardVisa(this PaymentMethod pm)
+        internal static bool IsCreditCardVisa(this PaymentMethod pm)
         {
             return string.Equals(pm.PaymentMethodFamily, Constants.PaymentMethodFamily.credit_card.ToString(), StringComparison.OrdinalIgnoreCase)
                     && string.Equals(pm.PaymentMethodType, Constants.PaymentMethodType.CreditCardVisa, StringComparison.OrdinalIgnoreCase);
         }
 
-        public static bool IsCreditCardMasterCard(this PaymentMethod pm)
+        internal static bool IsCreditCardMasterCard(this PaymentMethod pm)
         {
             return string.Equals(pm.PaymentMethodFamily, Constants.PaymentMethodFamily.credit_card.ToString(), StringComparison.OrdinalIgnoreCase)
                     && string.Equals(pm.PaymentMethodType, Constants.PaymentMethodType.CreditCardMasterCard, StringComparison.OrdinalIgnoreCase);
         }
 
-        public static bool IsDirectDebitSepa(this PaymentMethod pm)
+        internal static bool IsDirectDebitSepa(this PaymentMethod pm)
         {
             return string.Equals(pm.PaymentMethodFamily, Constants.PaymentMethodFamily.direct_debit.ToString(), StringComparison.OrdinalIgnoreCase)
                 && string.Equals(pm.PaymentMethodType, Constants.PaymentMethodType.Sepa, StringComparison.OrdinalIgnoreCase);
         }
 
-        public static bool IsOnlineBankTransferPaySafe(this PaymentMethod pm)
+        internal static bool IsOnlineBankTransferPaySafe(this PaymentMethod pm)
         {
             return string.Equals(pm.PaymentMethodFamily, Constants.PaymentMethodFamily.online_bank_transfer.ToString(), StringComparison.OrdinalIgnoreCase)
                 && string.Equals(pm.PaymentMethodType, Constants.PaymentMethodType.Paysafecard, StringComparison.OrdinalIgnoreCase);
         }
 
-        public static bool IsInvoiceCreditKlarna(this PaymentMethod pm)
+        internal static bool IsInvoiceCreditKlarna(this PaymentMethod pm)
         {
             return string.Equals(pm.PaymentMethodFamily, Constants.PaymentMethodFamily.invoice_credit.ToString(), StringComparison.OrdinalIgnoreCase)
                 && string.Equals(pm.PaymentMethodType, Constants.PaymentMethodType.Klarna, StringComparison.OrdinalIgnoreCase);
         }
 
-        public static bool IsAch(this PaymentMethod pm)
+        internal static bool IsAch(this PaymentMethod pm)
         {
             return string.Equals(pm.PaymentMethodFamily, Constants.PaymentMethodFamily.direct_debit.ToString(), StringComparison.OrdinalIgnoreCase)
                 && string.Equals(pm.PaymentMethodType, Constants.PaymentMethodType.Ach, StringComparison.OrdinalIgnoreCase);
         }
 
-        public static bool IsChinaUnionPay(string paymentMethodFamily, string paymentMethodType)
+        internal static bool IsChinaUnionPay(string paymentMethodFamily, string paymentMethodType)
         {
             bool isCardFamily = string.Equals(paymentMethodFamily, Constants.PaymentMethodFamily.credit_card.ToString(), StringComparison.OrdinalIgnoreCase);
             bool isCUPCreditType = string.Equals(paymentMethodType, Constants.PaymentMethodType.UnionPayCreditCard.ToString(), StringComparison.OrdinalIgnoreCase);
@@ -207,73 +209,73 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             return isCardFamily && (isCUPCreditType || isCUPDebitType);
         }
 
-        public static bool IsPaymentMethodType(this PaymentMethod pm, string paymentMethodFamily, string paymentMethodType)
+        internal static bool IsPaymentMethodType(this PaymentMethod pm, string paymentMethodFamily, string paymentMethodType)
         {
             return string.Equals(pm.PaymentMethodFamily, paymentMethodFamily, StringComparison.OrdinalIgnoreCase)
                     && string.Equals(pm.PaymentMethodType, paymentMethodType, StringComparison.OrdinalIgnoreCase);
         }
 
-        public static bool IsCheck(this PaymentMethod pm)
+        internal static bool IsCheck(this PaymentMethod pm)
         {
             return string.Equals(pm.PaymentMethodFamily, Constants.PaymentMethodFamily.offline_bank_transfer.ToString(), StringComparison.OrdinalIgnoreCase)
                     && string.Equals(pm.PaymentMethodType, Constants.PaymentMethodType.Check, StringComparison.OrdinalIgnoreCase);
         }
 
-        public static bool IsVenmo(this PaymentMethod pm)
+        internal static bool IsVenmo(this PaymentMethod pm)
         {
             return string.Equals(pm.PaymentMethodFamily, Constants.PaymentMethodFamily.ewallet.ToString(), StringComparison.OrdinalIgnoreCase)
                     && string.Equals(pm.PaymentMethodType, Constants.PaymentMethodType.Venmo, StringComparison.OrdinalIgnoreCase);
         }
 
-        public static bool IsUpi(this PaymentMethod pm)
+        internal static bool IsUpi(this PaymentMethod pm)
         {
             return string.Equals(pm.PaymentMethodFamily, Constants.PaymentMethodFamily.real_time_payments.ToString(), StringComparison.OrdinalIgnoreCase)
                     && string.Equals(pm.PaymentMethodType, Constants.PaymentMethodType.UPI, StringComparison.OrdinalIgnoreCase);
         }
 
-        public static bool IsUpiQr(this PaymentMethod pm)
+        internal static bool IsUpiQr(this PaymentMethod pm)
         {
             return string.Equals(pm.PaymentMethodFamily, Constants.PaymentMethodFamily.real_time_payments.ToString(), StringComparison.OrdinalIgnoreCase)
                     && string.Equals(pm.PaymentMethodType, Constants.PaymentMethodType.UPIQr, StringComparison.OrdinalIgnoreCase);
         }
 
-        public static bool IsGooglePay(this PaymentMethod pm)
+        internal static bool IsGooglePay(this PaymentMethod pm)
         {
             return string.Equals(pm.PaymentMethodFamily, Constants.PaymentMethodFamily.ewallet.ToString(), StringComparison.OrdinalIgnoreCase)
                     && string.Equals(pm.PaymentMethodType, Constants.PaymentMethodType.GooglePay, StringComparison.OrdinalIgnoreCase);
         }
 
-        public static bool IsApplePay(this PaymentMethod pm)
+        internal static bool IsApplePay(this PaymentMethod pm)
         {
             return string.Equals(pm.PaymentMethodFamily, Constants.PaymentMethodFamily.ewallet.ToString(), StringComparison.OrdinalIgnoreCase)
                     && string.Equals(pm.PaymentMethodType, Constants.PaymentMethodType.ApplePay, StringComparison.OrdinalIgnoreCase);
         }
 
-        public static bool IsUpiQrCommercial(this PaymentMethod pm)
+        internal static bool IsUpiQrCommercial(this PaymentMethod pm)
         {
             return string.Equals(pm.PaymentMethodFamily, Constants.PaymentMethodFamily.real_time_payments.ToString(), StringComparison.OrdinalIgnoreCase)
                     && string.Equals(pm.PaymentMethodType, Constants.PaymentMethodType.UPIQrCommercial, StringComparison.OrdinalIgnoreCase);
         }
 
-        public static bool IsUpiCommercial(this PaymentMethod pm)
+        internal static bool IsUpiCommercial(this PaymentMethod pm)
         {
             return string.Equals(pm.PaymentMethodFamily, Constants.PaymentMethodFamily.real_time_payments.ToString(), StringComparison.OrdinalIgnoreCase)
                     && string.Equals(pm.PaymentMethodType, Constants.PaymentMethodType.UPICommercial, StringComparison.OrdinalIgnoreCase);
         }
 
-        public static bool IsCreditCardRupay(this PaymentMethod pm)
+        internal static bool IsCreditCardRupay(this PaymentMethod pm)
         {
             return string.Equals(pm.PaymentMethodFamily, Constants.PaymentMethodFamily.credit_card.ToString(), StringComparison.OrdinalIgnoreCase)
                     && string.Equals(pm.PaymentMethodType, Constants.PaymentMethodType.CreditCardRupay, StringComparison.OrdinalIgnoreCase);
         }
 
-        public static bool IsCSV(this PaymentMethod pm)
+        internal static bool IsCSV(this PaymentMethod pm)
         {
             return string.Equals(pm.PaymentMethodFamily, Constants.PaymentMethodFamily.ewallet.ToString(), StringComparison.OrdinalIgnoreCase)
                     && string.Equals(pm.PaymentMethodType, Constants.EwalletType.stored_value.ToString(), StringComparison.OrdinalIgnoreCase);
         }
 
-        public static bool IsQrCodeValidSession(QRCodeSecondScreenSession qrCodePaymentSessionData)
+        internal static bool IsQrCodeValidSession(QRCodeSecondScreenSession qrCodePaymentSessionData)
         {
             if (qrCodePaymentSessionData != null
                 && PXCommon.Constants.PartnerGroups.IsXboxNativePartner(qrCodePaymentSessionData.Partner)
@@ -297,7 +299,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             return false;
         }
 
-        public static void AddDefaultDisplayName(this PaymentInstrument pi, string partner, EventTraceActivity traceActivityId, string country = null, List<string> flightNames = null)
+        internal static void AddDefaultDisplayName(this PaymentInstrument pi, string partner, EventTraceActivity traceActivityId, string country = null, List<string> flightNames = null)
         {
             try
             {
@@ -314,7 +316,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             }
         }
 
-        public static void OverridePMDisplayName(PaymentMethod pm, string partner, string language, string country = null, PaymentExperienceSetting setting = null)
+        internal static void OverridePMDisplayName(PaymentMethod pm, string partner, string language, string country = null, PaymentExperienceSetting setting = null)
         {
             if (pm == null || partner == null)
             {
@@ -331,7 +333,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             }
         }
 
-        public static async Task<bool> HasAnyStoredPI(PXServiceSettings pxSettings, string accountId, string partner, string country, string language, EventTraceActivity traceActivityId, List<string> exposedFlightFeatures)
+        internal static async Task<bool> HasAnyStoredPI(PXServiceSettings pxSettings, string accountId, string partner, string country, string language, EventTraceActivity traceActivityId, List<string> exposedFlightFeatures)
         {
             // Get user's PIs
             PaymentInstrument[] paymentInstruments = await GetUserPaymentInstruments(pxSettings, accountId, partner, country, language, traceActivityId, exposedFlightFeatures: exposedFlightFeatures);
@@ -342,7 +344,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             return hasAnyStoredPI;
         }
 
-        public static async Task<PaymentInstrument> GetCSVPI(PXServiceSettings pxSettings, string accountId, string partner, string country, string language, EventTraceActivity traceActivityId, List<string> exposedFlightFeatures)
+        internal static async Task<PaymentInstrument> GetCSVPI(PXServiceSettings pxSettings, string accountId, string partner, string country, string language, EventTraceActivity traceActivityId, List<string> exposedFlightFeatures)
         {
             // Get user's PIs
             PaymentInstrument[] paymentInstruments = await GetUserPaymentInstruments(pxSettings, accountId, partner, country, language, traceActivityId, exposedFlightFeatures: exposedFlightFeatures);

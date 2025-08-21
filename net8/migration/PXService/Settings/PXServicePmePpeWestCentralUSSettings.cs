@@ -33,7 +33,7 @@ namespace Microsoft.Commerce.Payments.PXService.Settings
             this.PIMSAccessor = new PIMSAccessor(
                 serviceBaseUrl: this.PimsBaseUrl,
                 emulatorBaseUrl: "https://px-pxdependencyemulators-ppe-westcentralus.azurewebsites.net",
-                servicePPEBaseUrl: "https://st-pims-prod-pi-scu.azurewebsites.net/InstrumentManagementService",
+                servicePPEBaseUrl: "https://app-pims-pims-prod-eus2-1.azurewebsites.net/InstrumentManagementService",
                 apiVersion: this.PimsApiVersion,
                 messageHandler: this.PimsRequestHandler);
 

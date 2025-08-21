@@ -1,10 +1,10 @@
 ﻿// <copyright file="ProbeController.cs" company="Microsoft">Copyright (c) Microsoft. All rights reserved.</copyright>
 
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-
 namespace Microsoft.Commerce.Payments.PXService
 {
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Configuration;
+
     /// <summary>
     /// Probe Controller for health status
     /// </summary>

@@ -12,7 +12,8 @@ namespace Microsoft.Commerce.Payments.PXService.Model.Authentication
             PIFDService,
             PIFDServicePPE,
             PXCOT,
-            PXFirstParty
+            PXFirstParty,
+            PaymentOrchestrator
         }
     }
 }

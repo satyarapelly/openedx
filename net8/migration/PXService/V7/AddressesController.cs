@@ -32,7 +32,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A validation result</response>
         /// <returns>A validation result</returns>
         [HttpPost]
-        public async Task<HttpResponseMessage> LegacyValidate([FromBody] PIDLData address, string type = null)
+        public async Task<HttpResponseMessage> LegacyValidate([FromBody]PIDLData address, string type = null)
         {
             const string ValidAddressResponse = "Valid";
             const string VerifiedAddressStatus = "Verified";
@@ -90,7 +90,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A validation result</response>
         /// <returns>A validation result</returns>
         [HttpPost]
-        public async Task<HttpResponseMessage> ModernValidate([FromBody] PIDLData address)
+        public async Task<HttpResponseMessage> ModernValidate([FromBody]PIDLData address)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
 

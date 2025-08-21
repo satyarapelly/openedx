@@ -266,7 +266,13 @@ namespace Microsoft.Commerce.Payments.Common.Tracing
 
             // Payment Orchestrator data
             { "ChallengeValue", DelegateMaskAll },
-            { "dataValue", DelegateMaskAll }
+            { "dataValue", DelegateMaskAll },
+
+            // Juspay vpa formats
+            { "vpa", DelegateMaskEmail },
+            { "upi_vpa", DelegateMaskEmail },
+            { "payer_vpa", DelegateMaskEmail },
+            { "merchant_vpa", DelegateMaskEmail }
         };
 
         private static readonly Dictionary<string, Func<JToken, JToken>> HeaderMaskFunctions = new Dictionary<string, Func<JToken, JToken>>()

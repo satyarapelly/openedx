@@ -11,7 +11,7 @@ namespace Microsoft.Commerce.Payments.PXService
     /// </summary>
     public static class GlobalConstants
     {
-        public const string ServiceName = "PXService";
+        internal const string ServiceName = "PXService";
 
         private static List<string> threeDSTestAccountIds = new List<string>()
         {
@@ -100,7 +100,7 @@ namespace Microsoft.Commerce.Payments.PXService
             { "PostalCode", AddressAVSValidationStatus.InvalidCityRegionPostalCode }
         };
 
-        public static Dictionary<string, string[]> PrefillMapping
+        internal static Dictionary<string, string[]> PrefillMapping
         {
             get
             {
@@ -108,7 +108,7 @@ namespace Microsoft.Commerce.Payments.PXService
             }
         }
 
-        public static List<string> ThreeDSTestAccountIds
+        internal static List<string> ThreeDSTestAccountIds
         {
             get
             {
@@ -116,7 +116,7 @@ namespace Microsoft.Commerce.Payments.PXService
             }
         }
 
-        public static Dictionary<string, AddressAVSValidationStatus> AvsErrorMessages
+        internal static Dictionary<string, AddressAVSValidationStatus> AvsErrorMessages
         {
             get
             {
@@ -124,7 +124,7 @@ namespace Microsoft.Commerce.Payments.PXService
             }
         }
 
-        public static class RouteNames
+        internal static class RouteNames
         {
             public const string DefaultWebApi = "DefaultWebApi";
             public const string ProbeApi = "ProbeApi";
@@ -139,7 +139,7 @@ namespace Microsoft.Commerce.Payments.PXService
             public const string GetProfileDescriptionsApiNoId = "GetProfileDescriptionsAPINoId";
         }
 
-        public static class V6RouteNames
+        internal static class V6RouteNames
         {
             public const string Probe = "V6Probe";
             public const string GetPaymentInstrumentEx = "V6GetPaymentInstrumentExAPI";
@@ -150,10 +150,6 @@ namespace Microsoft.Commerce.Payments.PXService
             public const string GetCardProfileEx = "V6GetCardProfileEx";
             public const string PostReplenishTransactionCredentialsEx = "V6PostReplenishTransactionCredentialsEx";
             public const string GetSettings = "V6GetSettings";
-        }
-        public static class MediaType
-        {
-            public const string JsonApplicationType = "application/json";
         }
 
         public static class V7RouteNames
@@ -249,7 +245,7 @@ namespace Microsoft.Commerce.Payments.PXService
             public const string RemoveEligiblePaymentmethodsPaymentRequestExApi = "V7RemoveEligiblePaymentmethodsPaymentRequestExApi";
         }
 
-        public static class APINames
+        internal static class APINames
         {
             public const string ApplyPaymentInstrumentEx = "ApplyPaymentInstrumentEx";
             public const string GetPaymentInstrumentEx = "GetPaymentInstrumentEx";
@@ -374,12 +370,12 @@ namespace Microsoft.Commerce.Payments.PXService
             public const string PaymentRequestsExController = "PaymentRequestsExController";
         }
 
-        public static class ExceptionDataKeys
+        internal static class ExceptionDataKeys
         {
             public const string PIDLErrorCode = "Microsoft.Commerce.Payments.PidlFactory.PidlErrorCodes";
         }
 
-        public static class Defaults
+        internal static class Defaults
         {
             public const string Locale = "en-us";
             public const string Language = "en";
@@ -390,7 +386,7 @@ namespace Microsoft.Commerce.Payments.PXService
             public const string Country = "us";
         }
 
-        public static class ClientNames
+        internal static class ClientNames
         {
             public const string Risk = "Risk";
             public const string Oms = "Oms";
@@ -409,6 +405,10 @@ namespace Microsoft.Commerce.Payments.PXService
             public const string PaymentExperience = "PaymentExperience";
             public const string AnonymousCaller = "AnonymousCaller";
             public const string Unknown = "UnknownCaller";
+        }
+        public static class MediaType
+        {
+            public const string JsonApplicationType = "application/json";
         }
 
         public static class EndPointNames
@@ -471,7 +471,7 @@ namespace Microsoft.Commerce.Payments.PXService
             public const string V7ConfirmPaymentRequestsEx = "{version}/paymentClient/paymentRequestsEx/{paymentRequestId}/confirm";
             public const string V7AttachChallengeDataPaymentRequestsEx = "{version}/paymentClient/paymentRequestsEx/{paymentRequestId}/attachChallengeData";
             public const string V7RemoveEligiblePaymentmethodsPaymentRequestsEx = "{version}/paymentClient/paymentRequestsEx/{paymentRequestId}/removeEligiblePaymentmethods";
-            
+
             // Anonymous Endpoints
             public const string V7Transformation = "{version}/transformation/";
             public const string V7Validation = "{version}/validation/";
@@ -506,29 +506,28 @@ namespace Microsoft.Commerce.Payments.PXService
             public const string V7Descriptions = "{version}/paymentClient/descriptions";
         }
 
-        public static class HTTPVerbs
+        internal static class HTTPVerbs
         {
             public const string GET = "GET";
             public const string POST = "POST";
             public const string GETPOST = "GET,POST";
             public const string PATCH = "PATCH";
-            public const string PUT = "PUT";
         }
 
-        public static class ClientRoles
+        internal static class ClientRoles
         {
             public const string Admin = "Admin";
             public const string Test = "User";
         }
 
-        public static class HttpMethods
+        internal static class HttpMethods
         {
             public const string Get = "GET";
             public const string Post = "POST";
             public const string Delete = "DELETE";
         }
 
-        public static class HeaderValues
+        internal static class HeaderValues
         {
             public const string JsonContent = "application/json";
             public const string TextContent = "text/plain";
@@ -552,23 +551,24 @@ namespace Microsoft.Commerce.Payments.PXService
             public const string RequestContext = "request-context";
             public const string XMsRequestContext = "x-ms-request-context";
             public const string CorrelationContext = "Correlation-Context";
+            public const string XMsBillingAccountId = "x-ms-billingAccountId";
         }
 
-        public static class ClientContextGroups
+        internal static class ClientContextGroups
         {
-            public const string MsaProfile = "MsaProfile";
-            public const string CMProfile = "CMProfile";
-            public const string CMProfileV3 = "CMProfileV3";
-            public const string CMProfileAddress = "CMProfileAddress";
-            public const string CMProfileAddressV3 = "CMProfileAddressV3";
-            public const string LegacyBillableAccountAddress = "LegacyBillableAccountAddress";
-            public const string TaxData = "TaxData";
-            public const string DeviceInfo = "DeviceInfo";
-            public const string AuthInfo = "AuthInfo";
-            public const string AadInfo = "AadInfo";
-            public const string RetailServerInfo = "RetailServerInfo";
-            public const string CMLegalEntityProfile = "CMLegalEntityProfile";
-            public const string XboxProfile = "XboxProfile";
+            internal const string MsaProfile = "MsaProfile";
+            internal const string CMProfile = "CMProfile";
+            internal const string CMProfileV3 = "CMProfileV3";
+            internal const string CMProfileAddress = "CMProfileAddress";
+            internal const string CMProfileAddressV3 = "CMProfileAddressV3";
+            internal const string LegacyBillableAccountAddress = "LegacyBillableAccountAddress";
+            internal const string TaxData = "TaxData";
+            internal const string DeviceInfo = "DeviceInfo";
+            internal const string AuthInfo = "AuthInfo";
+            internal const string AadInfo = "AadInfo";
+            internal const string RetailServerInfo = "RetailServerInfo";
+            internal const string CMLegalEntityProfile = "CMLegalEntityProfile";
+            internal const string XboxProfile = "XboxProfile";
 
             private static Dictionary<string, string> headerMapping = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
@@ -586,367 +586,367 @@ namespace Microsoft.Commerce.Payments.PXService
             }
         }
 
-        public static class ClientActionContract
+        internal static class ClientActionContract
         {
-            public const string NoMessage = "[]";
+            internal const string NoMessage = "[]";
         }
 
-        public static class CMProfileFields
+        internal static class CMProfileFields
         {
-            public const string FirstName = "firstName";
-            public const string LastName = "lastName";
-            public const string EmailAddress = "emailAddress";
-            public const string ProfileId = "id";
-            public const string CompanyName = "company_name";
-            public const string Culture = "culture";
-            public const string DefaultAddressId = "default_address_id";
-            public const string ProfileType = "type";
-            public const string Nationality = "nationality";
-            public const string BirthDate = "birth_date";
+            internal const string FirstName = "firstName";
+            internal const string LastName = "lastName";
+            internal const string EmailAddress = "emailAddress";
+            internal const string ProfileId = "id";
+            internal const string CompanyName = "company_name";
+            internal const string Culture = "culture";
+            internal const string DefaultAddressId = "default_address_id";
+            internal const string ProfileType = "type";
+            internal const string Nationality = "nationality";
+            internal const string BirthDate = "birth_date";
         }
 
-        public static class CMProfileV3Fields
+        internal static class CMProfileV3Fields
         {
-            public const string ProfileId = "id";
-            public const string Etag = "etag";
-            public const string CustomerId = "customer_id";
-            public const string DefaultAddressId = "default_address_id";
-            public const string Country = "country";
-            public const string Culture = "culture";
-            public const string SnapshotId = "snapshot_id";
-            public const string Links = "links";
-            public const string ObjectType = "object_type";
-            public const string ResourceStatus = "resource_status";
-            public const string ProfileType = "type";
-            public const string FirstName = "first_name";
-            public const string LastName = "last_name";
-            public const string CompanyName = "company_name";
-            public const string Language = "language";
-            public const string LoveCode = "love_code";
-            public const string MobileBarcode = "mobile_barcode";
-            public const string Name = "name";
-            public const string Email = "email";
-            public const string EmailAddress = "email_address";
-            public const string LocaleId = "locale_id";
-            public const string BirthDate = "birth_date";
-            public const string Nationality = "nationality";
-            public const string Hcti = "hcti";
+            internal const string ProfileId = "id";
+            internal const string Etag = "etag";
+            internal const string CustomerId = "customer_id";
+            internal const string DefaultAddressId = "default_address_id";
+            internal const string Country = "country";
+            internal const string Culture = "culture";
+            internal const string SnapshotId = "snapshot_id";
+            internal const string Links = "links";
+            internal const string ObjectType = "object_type";
+            internal const string ResourceStatus = "resource_status";
+            internal const string ProfileType = "type";
+            internal const string FirstName = "first_name";
+            internal const string LastName = "last_name";
+            internal const string CompanyName = "company_name";
+            internal const string Language = "language";
+            internal const string LoveCode = "love_code";
+            internal const string MobileBarcode = "mobile_barcode";
+            internal const string Name = "name";
+            internal const string Email = "email";
+            internal const string EmailAddress = "email_address";
+            internal const string LocaleId = "locale_id";
+            internal const string BirthDate = "birth_date";
+            internal const string Nationality = "nationality";
+            internal const string Hcti = "hcti";
         }
 
-        public static class LegalEntityProfileFields
+        internal static class LegalEntityProfileFields
         {
-            public const string ProfileId = "id";
-            public const string Etag = "etag";
-            public const string CustomerId = "customer_id";
-            public const string AddressLine1 = "address_line1";
-            public const string AddressLine2 = "address_line2";
-            public const string AddressLine3 = "address_line3";
-            public const string City = "city";
-            public const string Region = "region";
-            public const string PostalCode = "postal_code";
-            public const string District = "district";
-            public const string Country = "country";
-            public const string PhoneNumber = "phone_number";
-            public const string DefaultAddressId = "default_address_id";
-            public const string Culture = "culture";
-            public const string SnapshotId = "snapshot_id";
-            public const string Links = "links";
-            public const string ObjectType = "object_type";
-            public const string ResourceStatus = "resource_status";
-            public const string ProfileType = "type";
-            public const string FirstName = "first_name";
-            public const string LastName = "last_name";
-            public const string MiddleName = "middle_name";
-            public const string CompanyName = "company_name";
-            public const string Language = "language";
-            public const string EmailAddress = "email_address";
+            internal const string ProfileId = "id";
+            internal const string Etag = "etag";
+            internal const string CustomerId = "customer_id";
+            internal const string AddressLine1 = "address_line1";
+            internal const string AddressLine2 = "address_line2";
+            internal const string AddressLine3 = "address_line3";
+            internal const string City = "city";
+            internal const string Region = "region";
+            internal const string PostalCode = "postal_code";
+            internal const string District = "district";
+            internal const string Country = "country";
+            internal const string PhoneNumber = "phone_number";
+            internal const string DefaultAddressId = "default_address_id";
+            internal const string Culture = "culture";
+            internal const string SnapshotId = "snapshot_id";
+            internal const string Links = "links";
+            internal const string ObjectType = "object_type";
+            internal const string ResourceStatus = "resource_status";
+            internal const string ProfileType = "type";
+            internal const string FirstName = "first_name";
+            internal const string LastName = "last_name";
+            internal const string MiddleName = "middle_name";
+            internal const string CompanyName = "company_name";
+            internal const string Language = "language";
+            internal const string EmailAddress = "email_address";
         }
 
-        public static class CMAddressFields
+        internal static class CMAddressFields
         {
-            public const string AddressLine1 = "address_line1";
-            public const string AddressLine2 = "address_line2";
-            public const string AddressLine3 = "address_line3";
-            public const string City = "city";
-            public const string Region = "region";
-            public const string PostalCode = "postal_code";
-            public const string Country = "country";
+            internal const string AddressLine1 = "address_line1";
+            internal const string AddressLine2 = "address_line2";
+            internal const string AddressLine3 = "address_line3";
+            internal const string City = "city";
+            internal const string Region = "region";
+            internal const string PostalCode = "postal_code";
+            internal const string Country = "country";
         }
 
-        public static class CMAddressV3Fields
+        internal static class CMAddressV3Fields
         {
-            public const string CustomerId = "customer_id";
-            public const string Country = "country";
-            public const string Region = "region";
-            public const string District = "district";
-            public const string City = "city";
-            public const string AddressLine1 = "address_line1";
-            public const string AddressLine2 = "address_line2";
-            public const string AddressLine3 = "address_line3";
-            public const string PostalCode = "postal_code";
-            public const string FirstName = "first_name";
-            public const string FirstNamePronunciation = "first_name_pronunciation";
-            public const string LastName = "last_name";
-            public const string LastNamePronunciation = "last_name_pronunciation";
-            public const string MiddleName = "middle_name";
-            public const string CorrespondenceName = "correspondence_name";
-            public const string PhoneNumber = "phone_number";
-            public const string Mobile = "mobile";
-            public const string Fax = "fax";
-            public const string Telex = "telex";
-            public const string EmailAddress = "email_address";
-            public const string WebSiteUrl = "web_site_url";
-            public const string StreetSupplement = "street_supplement";
-            public const string IsWithinCityLimits = "is_within_city_limits";
-            public const string FormOfAddress = "form_of_address";
-            public const string AddressNotes = "address_notes";
-            public const string TimeZone = "time_zone";
-            public const string Latitude = "latitude";
-            public const string Longitude = "longitude";
-            public const string IsAvsValidated = "is_avs_validated";
-            public const string Validate = "validate";
-            public const string ValidationStamp = "validation_stamp";
-            public const string Links = "links";
-            public const string ObjectType = "object_type";
-            public const string ContractVersion = "contract_version";
-            public const string ResourceStatus = "resource_status";
-            public const string IsUserConsented = "is_customer_consented";
+            internal const string CustomerId = "customer_id";
+            internal const string Country = "country";
+            internal const string Region = "region";
+            internal const string District = "district";
+            internal const string City = "city";
+            internal const string AddressLine1 = "address_line1";
+            internal const string AddressLine2 = "address_line2";
+            internal const string AddressLine3 = "address_line3";
+            internal const string PostalCode = "postal_code";
+            internal const string FirstName = "first_name";
+            internal const string FirstNamePronunciation = "first_name_pronunciation";
+            internal const string LastName = "last_name";
+            internal const string LastNamePronunciation = "last_name_pronunciation";
+            internal const string MiddleName = "middle_name";
+            internal const string CorrespondenceName = "correspondence_name";
+            internal const string PhoneNumber = "phone_number";
+            internal const string Mobile = "mobile";
+            internal const string Fax = "fax";
+            internal const string Telex = "telex";
+            internal const string EmailAddress = "email_address";
+            internal const string WebSiteUrl = "web_site_url";
+            internal const string StreetSupplement = "street_supplement";
+            internal const string IsWithinCityLimits = "is_within_city_limits";
+            internal const string FormOfAddress = "form_of_address";
+            internal const string AddressNotes = "address_notes";
+            internal const string TimeZone = "time_zone";
+            internal const string Latitude = "latitude";
+            internal const string Longitude = "longitude";
+            internal const string IsAvsValidated = "is_avs_validated";
+            internal const string Validate = "validate";
+            internal const string ValidationStamp = "validation_stamp";
+            internal const string Links = "links";
+            internal const string ObjectType = "object_type";
+            internal const string ContractVersion = "contract_version";
+            internal const string ResourceStatus = "resource_status";
+            internal const string IsUserConsented = "is_customer_consented";
         }
 
-        public static class LegacyBillableAccountAddressFields
+        internal static class LegacyBillableAccountAddressFields
         {
-            public const string Region = "region";
-            public const string District = "district";
-            public const string City = "city";
-            public const string AddressLine1 = "address_line1";
-            public const string AddressLine2 = "address_line2";
-            public const string AddressLine3 = "address_line3";
-            public const string PostalCode = "postal_code";
+            internal const string Region = "region";
+            internal const string District = "district";
+            internal const string City = "city";
+            internal const string AddressLine1 = "address_line1";
+            internal const string AddressLine2 = "address_line2";
+            internal const string AddressLine3 = "address_line3";
+            internal const string PostalCode = "postal_code";
         }
 
-        public static class TaxDataFields
+        internal static class TaxDataFields
         {
-            public const string Value = "value";
+            internal const string Value = "value";
         }
 
-        public static class CommercialZipPlusFourPropertyNames
+        internal static class CommercialZipPlusFourPropertyNames
         {
-            public const string IsUserConsented = "is_customer_consented";
-            public const string IsAvsFullValidationSucceeded = "is_avs_full_validation_succeeded";
+            internal const string IsUserConsented = "is_customer_consented";
+            internal const string IsAvsFullValidationSucceeded = "is_avs_full_validation_succeeded";
         }
 
         // TODO Bug 1682888:[PX AP] Make address prefilling selective by country
-        public static class ClientContextKeys
+        internal static class ClientContextKeys
         {
-            public const string Format = "{0}.{1}";
+            internal const string Format = "{0}.{1}";
 
-            public static class MsaProfile
+            internal static class MsaProfile
             {
-                public static readonly string FirstName = string.Format(Format, ClientContextGroups.MsaProfile, "firstName");
-                public static readonly string LastName = string.Format(Format, ClientContextGroups.MsaProfile, "lastName");
-                public static readonly string EmailAddress = string.Format(Format, ClientContextGroups.MsaProfile, "emailAddress");
-                public static readonly string Puid = string.Format(Format, ClientContextGroups.MsaProfile, "PUID");
+                internal static readonly string FirstName = string.Format(Format, ClientContextGroups.MsaProfile, "firstName");
+                internal static readonly string LastName = string.Format(Format, ClientContextGroups.MsaProfile, "lastName");
+                internal static readonly string EmailAddress = string.Format(Format, ClientContextGroups.MsaProfile, "emailAddress");
+                internal static readonly string Puid = string.Format(Format, ClientContextGroups.MsaProfile, "PUID");
             }
 
-            public static class RetailServerInfo
+            internal static class RetailServerInfo
             {
-                public static readonly string MerchantId = string.Format(Format, ClientContextGroups.RetailServerInfo, RetailServerInfoNames.MarketId);
+                internal static readonly string MerchantId = string.Format(Format, ClientContextGroups.RetailServerInfo, RetailServerInfoNames.MarketId);
             }
 
-            public static class CMProfile
+            internal static class CMProfile
             {
-                public static readonly string FirstName = string.Format(Format, ClientContextGroups.CMProfile, CMProfileFields.FirstName);
-                public static readonly string LastName = string.Format(Format, ClientContextGroups.CMProfile, CMProfileFields.LastName);
-                public static readonly string EmailAddress = string.Format(Format, ClientContextGroups.CMProfile, CMProfileFields.EmailAddress);
-                public static readonly string DefaultAddressId = string.Format(Format, ClientContextGroups.CMProfile, CMProfileFields.DefaultAddressId);
-                public static readonly string Culture = string.Format(Format, ClientContextGroups.CMProfile, CMProfileFields.Culture);
-                public static readonly string CompanyName = string.Format(Format, ClientContextGroups.CMProfile, CMProfileFields.CompanyName);
-                public static readonly string Nationality = string.Format(Format, ClientContextGroups.CMProfile, CMProfileFields.Nationality);
-                public static readonly string ProfileId = string.Format(Format, ClientContextGroups.CMProfile, CMProfileFields.ProfileId);
-                public static readonly string ProfileType = string.Format(Format, ClientContextGroups.CMProfile, CMProfileFields.ProfileType);
-                public static readonly string BirthDate = string.Format(Format, ClientContextGroups.CMProfile, CMProfileFields.BirthDate);
+                internal static readonly string FirstName = string.Format(Format, ClientContextGroups.CMProfile, CMProfileFields.FirstName);
+                internal static readonly string LastName = string.Format(Format, ClientContextGroups.CMProfile, CMProfileFields.LastName);
+                internal static readonly string EmailAddress = string.Format(Format, ClientContextGroups.CMProfile, CMProfileFields.EmailAddress);
+                internal static readonly string DefaultAddressId = string.Format(Format, ClientContextGroups.CMProfile, CMProfileFields.DefaultAddressId);
+                internal static readonly string Culture = string.Format(Format, ClientContextGroups.CMProfile, CMProfileFields.Culture);
+                internal static readonly string CompanyName = string.Format(Format, ClientContextGroups.CMProfile, CMProfileFields.CompanyName);
+                internal static readonly string Nationality = string.Format(Format, ClientContextGroups.CMProfile, CMProfileFields.Nationality);
+                internal static readonly string ProfileId = string.Format(Format, ClientContextGroups.CMProfile, CMProfileFields.ProfileId);
+                internal static readonly string ProfileType = string.Format(Format, ClientContextGroups.CMProfile, CMProfileFields.ProfileType);
+                internal static readonly string BirthDate = string.Format(Format, ClientContextGroups.CMProfile, CMProfileFields.BirthDate);
             }
 
-            public static class CMProfileV3
+            internal static class CMProfileV3
             {
-                public static readonly string ProfileId = string.Format(Format, ClientContextGroups.CMProfileV3, CMProfileV3Fields.ProfileId);
-                public static readonly string Etag = string.Format(Format, ClientContextGroups.CMProfileV3, CMProfileV3Fields.Etag);
-                public static readonly string CustomerId = string.Format(Format, ClientContextGroups.CMProfileV3, CMProfileV3Fields.CustomerId);
-                public static readonly string DefaultAddressId = string.Format(Format, ClientContextGroups.CMProfileV3, CMProfileV3Fields.DefaultAddressId);
-                public static readonly string Country = string.Format(Format, ClientContextGroups.CMProfileV3, CMProfileV3Fields.Country);
-                public static readonly string Culture = string.Format(Format, ClientContextGroups.CMProfileV3, CMProfileV3Fields.Culture);
-                public static readonly string SnapshotId = string.Format(Format, ClientContextGroups.CMProfileV3, CMProfileV3Fields.SnapshotId);
-                public static readonly string Links = string.Format(Format, ClientContextGroups.CMProfileV3, CMProfileV3Fields.Links);
-                public static readonly string ObjectType = string.Format(Format, ClientContextGroups.CMProfileV3, CMProfileV3Fields.ObjectType);
-                public static readonly string ResourceStatus = string.Format(Format, ClientContextGroups.CMProfileV3, CMProfileV3Fields.ResourceStatus);
-                public static readonly string ProfileType = string.Format(Format, ClientContextGroups.CMProfileV3, CMProfileV3Fields.ProfileType);
-                public static readonly string FirstName = string.Format(Format, ClientContextGroups.CMProfileV3, CMProfileV3Fields.FirstName);
-                public static readonly string LastName = string.Format(Format, ClientContextGroups.CMProfileV3, CMProfileV3Fields.LastName);
-                public static readonly string CompanyName = string.Format(Format, ClientContextGroups.CMProfileV3, CMProfileV3Fields.CompanyName);
-                public static readonly string Language = string.Format(Format, ClientContextGroups.CMProfileV3, CMProfileV3Fields.Language);
-                public static readonly string LoveCode = string.Format(Format, ClientContextGroups.CMProfileV3, CMProfileV3Fields.LoveCode);
-                public static readonly string MobileBarcode = string.Format(Format, ClientContextGroups.CMProfileV3, CMProfileV3Fields.MobileBarcode);
-                public static readonly string Name = string.Format(Format, ClientContextGroups.CMProfileV3, CMProfileV3Fields.Name);
-                public static readonly string Email = string.Format(Format, ClientContextGroups.CMProfileV3, CMProfileV3Fields.Email);
-                public static readonly string EmailAddress = string.Format(Format, ClientContextGroups.CMProfileV3, CMProfileV3Fields.EmailAddress);
+                internal static readonly string ProfileId = string.Format(Format, ClientContextGroups.CMProfileV3, CMProfileV3Fields.ProfileId);
+                internal static readonly string Etag = string.Format(Format, ClientContextGroups.CMProfileV3, CMProfileV3Fields.Etag);
+                internal static readonly string CustomerId = string.Format(Format, ClientContextGroups.CMProfileV3, CMProfileV3Fields.CustomerId);
+                internal static readonly string DefaultAddressId = string.Format(Format, ClientContextGroups.CMProfileV3, CMProfileV3Fields.DefaultAddressId);
+                internal static readonly string Country = string.Format(Format, ClientContextGroups.CMProfileV3, CMProfileV3Fields.Country);
+                internal static readonly string Culture = string.Format(Format, ClientContextGroups.CMProfileV3, CMProfileV3Fields.Culture);
+                internal static readonly string SnapshotId = string.Format(Format, ClientContextGroups.CMProfileV3, CMProfileV3Fields.SnapshotId);
+                internal static readonly string Links = string.Format(Format, ClientContextGroups.CMProfileV3, CMProfileV3Fields.Links);
+                internal static readonly string ObjectType = string.Format(Format, ClientContextGroups.CMProfileV3, CMProfileV3Fields.ObjectType);
+                internal static readonly string ResourceStatus = string.Format(Format, ClientContextGroups.CMProfileV3, CMProfileV3Fields.ResourceStatus);
+                internal static readonly string ProfileType = string.Format(Format, ClientContextGroups.CMProfileV3, CMProfileV3Fields.ProfileType);
+                internal static readonly string FirstName = string.Format(Format, ClientContextGroups.CMProfileV3, CMProfileV3Fields.FirstName);
+                internal static readonly string LastName = string.Format(Format, ClientContextGroups.CMProfileV3, CMProfileV3Fields.LastName);
+                internal static readonly string CompanyName = string.Format(Format, ClientContextGroups.CMProfileV3, CMProfileV3Fields.CompanyName);
+                internal static readonly string Language = string.Format(Format, ClientContextGroups.CMProfileV3, CMProfileV3Fields.Language);
+                internal static readonly string LoveCode = string.Format(Format, ClientContextGroups.CMProfileV3, CMProfileV3Fields.LoveCode);
+                internal static readonly string MobileBarcode = string.Format(Format, ClientContextGroups.CMProfileV3, CMProfileV3Fields.MobileBarcode);
+                internal static readonly string Name = string.Format(Format, ClientContextGroups.CMProfileV3, CMProfileV3Fields.Name);
+                internal static readonly string Email = string.Format(Format, ClientContextGroups.CMProfileV3, CMProfileV3Fields.Email);
+                internal static readonly string EmailAddress = string.Format(Format, ClientContextGroups.CMProfileV3, CMProfileV3Fields.EmailAddress);
             }
 
-            public static class CMProfileAddress
+            internal static class CMProfileAddress
             {
-                public static readonly string AddressLine1 = string.Format(Format, ClientContextGroups.CMProfileAddress, CMAddressFields.AddressLine1);
-                public static readonly string AddressLine2 = string.Format(Format, ClientContextGroups.CMProfileAddress, CMAddressFields.AddressLine2);
-                public static readonly string AddressLine3 = string.Format(Format, ClientContextGroups.CMProfileAddress, CMAddressFields.AddressLine3);
-                public static readonly string City = string.Format(Format, ClientContextGroups.CMProfileAddress, CMAddressFields.City);
-                public static readonly string Region = string.Format(Format, ClientContextGroups.CMProfileAddress, CMAddressFields.Region);
-                public static readonly string PostalCode = string.Format(Format, ClientContextGroups.CMProfileAddress, CMAddressFields.PostalCode);
-                public static readonly string Country = string.Format(Format, ClientContextGroups.CMProfileAddress, CMAddressFields.Country);
+                internal static readonly string AddressLine1 = string.Format(Format, ClientContextGroups.CMProfileAddress, CMAddressFields.AddressLine1);
+                internal static readonly string AddressLine2 = string.Format(Format, ClientContextGroups.CMProfileAddress, CMAddressFields.AddressLine2);
+                internal static readonly string AddressLine3 = string.Format(Format, ClientContextGroups.CMProfileAddress, CMAddressFields.AddressLine3);
+                internal static readonly string City = string.Format(Format, ClientContextGroups.CMProfileAddress, CMAddressFields.City);
+                internal static readonly string Region = string.Format(Format, ClientContextGroups.CMProfileAddress, CMAddressFields.Region);
+                internal static readonly string PostalCode = string.Format(Format, ClientContextGroups.CMProfileAddress, CMAddressFields.PostalCode);
+                internal static readonly string Country = string.Format(Format, ClientContextGroups.CMProfileAddress, CMAddressFields.Country);
             }
 
-            public static class CMProfileAddressV3
+            internal static class CMProfileAddressV3
             {
-                public static readonly string CustomerId = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.CustomerId);
-                public static readonly string Country = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.Country);
-                public static readonly string Region = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.Region);
-                public static readonly string District = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.District);
-                public static readonly string City = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.City);
-                public static readonly string AddressLine1 = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.AddressLine1);
-                public static readonly string AddressLine2 = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.AddressLine2);
-                public static readonly string AddressLine3 = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.AddressLine3);
-                public static readonly string PostalCode = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.PostalCode);
-                public static readonly string FirstName = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.FirstName);
-                public static readonly string FirstNamePronunciation = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.FirstNamePronunciation);
-                public static readonly string LastName = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.LastName);
-                public static readonly string LastNamePronunciation = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.LastNamePronunciation);
-                public static readonly string MiddleName = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.MiddleName);
-                public static readonly string CorrespondenceName = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.CorrespondenceName);
-                public static readonly string PhoneNumber = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.PhoneNumber);
-                public static readonly string Mobile = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.Mobile);
-                public static readonly string Fax = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.Fax);
-                public static readonly string Telex = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.Telex);
-                public static readonly string EmailAddress = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.EmailAddress);
-                public static readonly string WebSiteUrl = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.WebSiteUrl);
-                public static readonly string StreetSupplement = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.StreetSupplement);
-                public static readonly string IsWithinCityLimits = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.IsWithinCityLimits);
-                public static readonly string FormOfAddress = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.FormOfAddress);
-                public static readonly string AddressNotes = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.AddressNotes);
-                public static readonly string TimeZone = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.TimeZone);
-                public static readonly string Latitude = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.Latitude);
-                public static readonly string Longitude = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.Longitude);
-                public static readonly string IsAvsValidated = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.IsAvsValidated);
-                public static readonly string Validate = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.Validate);
-                public static readonly string ValidationStamp = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.ValidationStamp);
-                public static readonly string Links = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.Links);
-                public static readonly string ObjectType = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.ObjectType);
-                public static readonly string ContractVersion = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.ContractVersion);
-                public static readonly string ResourceStatus = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.ResourceStatus);
+                internal static readonly string CustomerId = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.CustomerId);
+                internal static readonly string Country = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.Country);
+                internal static readonly string Region = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.Region);
+                internal static readonly string District = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.District);
+                internal static readonly string City = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.City);
+                internal static readonly string AddressLine1 = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.AddressLine1);
+                internal static readonly string AddressLine2 = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.AddressLine2);
+                internal static readonly string AddressLine3 = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.AddressLine3);
+                internal static readonly string PostalCode = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.PostalCode);
+                internal static readonly string FirstName = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.FirstName);
+                internal static readonly string FirstNamePronunciation = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.FirstNamePronunciation);
+                internal static readonly string LastName = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.LastName);
+                internal static readonly string LastNamePronunciation = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.LastNamePronunciation);
+                internal static readonly string MiddleName = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.MiddleName);
+                internal static readonly string CorrespondenceName = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.CorrespondenceName);
+                internal static readonly string PhoneNumber = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.PhoneNumber);
+                internal static readonly string Mobile = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.Mobile);
+                internal static readonly string Fax = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.Fax);
+                internal static readonly string Telex = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.Telex);
+                internal static readonly string EmailAddress = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.EmailAddress);
+                internal static readonly string WebSiteUrl = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.WebSiteUrl);
+                internal static readonly string StreetSupplement = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.StreetSupplement);
+                internal static readonly string IsWithinCityLimits = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.IsWithinCityLimits);
+                internal static readonly string FormOfAddress = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.FormOfAddress);
+                internal static readonly string AddressNotes = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.AddressNotes);
+                internal static readonly string TimeZone = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.TimeZone);
+                internal static readonly string Latitude = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.Latitude);
+                internal static readonly string Longitude = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.Longitude);
+                internal static readonly string IsAvsValidated = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.IsAvsValidated);
+                internal static readonly string Validate = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.Validate);
+                internal static readonly string ValidationStamp = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.ValidationStamp);
+                internal static readonly string Links = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.Links);
+                internal static readonly string ObjectType = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.ObjectType);
+                internal static readonly string ContractVersion = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.ContractVersion);
+                internal static readonly string ResourceStatus = string.Format(Format, ClientContextGroups.CMProfileAddressV3, CMAddressV3Fields.ResourceStatus);
             }
 
-            public static class LegacyBillableAccountAddress
+            internal static class LegacyBillableAccountAddress
             {
-                public static readonly string Region = string.Format(Format, ClientContextGroups.LegacyBillableAccountAddress, LegacyBillableAccountAddressFields.Region);
-                public static readonly string District = string.Format(Format, ClientContextGroups.LegacyBillableAccountAddress, LegacyBillableAccountAddressFields.District);
-                public static readonly string City = string.Format(Format, ClientContextGroups.LegacyBillableAccountAddress, LegacyBillableAccountAddressFields.City);
-                public static readonly string AddressLine1 = string.Format(Format, ClientContextGroups.LegacyBillableAccountAddress, LegacyBillableAccountAddressFields.AddressLine1);
-                public static readonly string AddressLine2 = string.Format(Format, ClientContextGroups.LegacyBillableAccountAddress, LegacyBillableAccountAddressFields.AddressLine2);
-                public static readonly string AddressLine3 = string.Format(Format, ClientContextGroups.LegacyBillableAccountAddress, LegacyBillableAccountAddressFields.AddressLine3);
-                public static readonly string PostalCode = string.Format(Format, ClientContextGroups.LegacyBillableAccountAddress, LegacyBillableAccountAddressFields.PostalCode);
+                internal static readonly string Region = string.Format(Format, ClientContextGroups.LegacyBillableAccountAddress, LegacyBillableAccountAddressFields.Region);
+                internal static readonly string District = string.Format(Format, ClientContextGroups.LegacyBillableAccountAddress, LegacyBillableAccountAddressFields.District);
+                internal static readonly string City = string.Format(Format, ClientContextGroups.LegacyBillableAccountAddress, LegacyBillableAccountAddressFields.City);
+                internal static readonly string AddressLine1 = string.Format(Format, ClientContextGroups.LegacyBillableAccountAddress, LegacyBillableAccountAddressFields.AddressLine1);
+                internal static readonly string AddressLine2 = string.Format(Format, ClientContextGroups.LegacyBillableAccountAddress, LegacyBillableAccountAddressFields.AddressLine2);
+                internal static readonly string AddressLine3 = string.Format(Format, ClientContextGroups.LegacyBillableAccountAddress, LegacyBillableAccountAddressFields.AddressLine3);
+                internal static readonly string PostalCode = string.Format(Format, ClientContextGroups.LegacyBillableAccountAddress, LegacyBillableAccountAddressFields.PostalCode);
             }
 
-            public static class TaxData
+            internal static class TaxData
             {
-                public static readonly string TaxId = string.Format(Format, ClientContextGroups.TaxData, TaxDataFields.Value);
+                internal static readonly string TaxId = string.Format(Format, ClientContextGroups.TaxData, TaxDataFields.Value);
             }
 
-            public static class DeviceInfo
+            internal static class DeviceInfo
             {
-                public static readonly string XboxLiveDeviceId = string.Format(Format, ClientContextGroups.DeviceInfo, "xboxLiveDeviceId");
-                public static readonly string IPAddress = string.Format(Format, ClientContextGroups.DeviceInfo, "ipAddress");
-                public static readonly string UserAgent = string.Format(Format, ClientContextGroups.DeviceInfo, "userAgent");
-                public static readonly string DeviceId = string.Format(Format, ClientContextGroups.DeviceInfo, "deviceId");
+                internal static readonly string XboxLiveDeviceId = string.Format(Format, ClientContextGroups.DeviceInfo, "xboxLiveDeviceId");
+                internal static readonly string IPAddress = string.Format(Format, ClientContextGroups.DeviceInfo, "ipAddress");
+                internal static readonly string UserAgent = string.Format(Format, ClientContextGroups.DeviceInfo, "userAgent");
+                internal static readonly string DeviceId = string.Format(Format, ClientContextGroups.DeviceInfo, "deviceId");
             }            
 
-            public static class CMLegalEntityProfile
+            internal static class CMLegalEntityProfile
             {
-                public static readonly string FirstName = string.Format(Format, ClientContextGroups.CMLegalEntityProfile, LegalEntityProfileFields.FirstName);
-                public static readonly string MiddleName = string.Format(Format, ClientContextGroups.CMLegalEntityProfile, LegalEntityProfileFields.MiddleName);
-                public static readonly string LastName = string.Format(Format, ClientContextGroups.CMLegalEntityProfile, LegalEntityProfileFields.LastName);
-                public static readonly string AddressLine1 = string.Format(Format, ClientContextGroups.CMLegalEntityProfile, LegalEntityProfileFields.AddressLine1);
-                public static readonly string AddressLine2 = string.Format(Format, ClientContextGroups.CMLegalEntityProfile, LegalEntityProfileFields.AddressLine2);
-                public static readonly string AddressLine3 = string.Format(Format, ClientContextGroups.CMLegalEntityProfile, LegalEntityProfileFields.AddressLine3);
-                public static readonly string City = string.Format(Format, ClientContextGroups.CMLegalEntityProfile, LegalEntityProfileFields.City);
-                public static readonly string Region = string.Format(Format, ClientContextGroups.CMLegalEntityProfile, LegalEntityProfileFields.Region);
-                public static readonly string District = string.Format(Format, ClientContextGroups.CMLegalEntityProfile, LegalEntityProfileFields.District);
-                public static readonly string PostalCode = string.Format(Format, ClientContextGroups.CMLegalEntityProfile, LegalEntityProfileFields.PostalCode);
-                public static readonly string EmailAddress = string.Format(Format, ClientContextGroups.CMLegalEntityProfile, LegalEntityProfileFields.EmailAddress);
-                public static readonly string PhoneNumber = string.Format(Format, ClientContextGroups.CMLegalEntityProfile, LegalEntityProfileFields.PhoneNumber);
-                public static readonly string CompanyName = string.Format(Format, ClientContextGroups.CMLegalEntityProfile, LegalEntityProfileFields.CompanyName);
-                public static readonly string Culture = string.Format(Format, ClientContextGroups.CMLegalEntityProfile, LegalEntityProfileFields.Culture);
-                public static readonly string Language = string.Format(Format, ClientContextGroups.CMLegalEntityProfile, LegalEntityProfileFields.Language);
+                internal static readonly string FirstName = string.Format(Format, ClientContextGroups.CMLegalEntityProfile, LegalEntityProfileFields.FirstName);
+                internal static readonly string MiddleName = string.Format(Format, ClientContextGroups.CMLegalEntityProfile, LegalEntityProfileFields.MiddleName);
+                internal static readonly string LastName = string.Format(Format, ClientContextGroups.CMLegalEntityProfile, LegalEntityProfileFields.LastName);
+                internal static readonly string AddressLine1 = string.Format(Format, ClientContextGroups.CMLegalEntityProfile, LegalEntityProfileFields.AddressLine1);
+                internal static readonly string AddressLine2 = string.Format(Format, ClientContextGroups.CMLegalEntityProfile, LegalEntityProfileFields.AddressLine2);
+                internal static readonly string AddressLine3 = string.Format(Format, ClientContextGroups.CMLegalEntityProfile, LegalEntityProfileFields.AddressLine3);
+                internal static readonly string City = string.Format(Format, ClientContextGroups.CMLegalEntityProfile, LegalEntityProfileFields.City);
+                internal static readonly string Region = string.Format(Format, ClientContextGroups.CMLegalEntityProfile, LegalEntityProfileFields.Region);
+                internal static readonly string District = string.Format(Format, ClientContextGroups.CMLegalEntityProfile, LegalEntityProfileFields.District);
+                internal static readonly string PostalCode = string.Format(Format, ClientContextGroups.CMLegalEntityProfile, LegalEntityProfileFields.PostalCode);
+                internal static readonly string EmailAddress = string.Format(Format, ClientContextGroups.CMLegalEntityProfile, LegalEntityProfileFields.EmailAddress);
+                internal static readonly string PhoneNumber = string.Format(Format, ClientContextGroups.CMLegalEntityProfile, LegalEntityProfileFields.PhoneNumber);
+                internal static readonly string CompanyName = string.Format(Format, ClientContextGroups.CMLegalEntityProfile, LegalEntityProfileFields.CompanyName);
+                internal static readonly string Culture = string.Format(Format, ClientContextGroups.CMLegalEntityProfile, LegalEntityProfileFields.Culture);
+                internal static readonly string Language = string.Format(Format, ClientContextGroups.CMLegalEntityProfile, LegalEntityProfileFields.Language);
             }
 
-            public static class AadInfo
+            internal static class AadInfo
             {
-                public static readonly string AltSecId = string.Format(Format, ClientContextGroups.AadInfo, "altSecId");
-                public static readonly string OrgPuid = string.Format(Format, ClientContextGroups.AadInfo, "orgPuid");
-                public static readonly string Tid = string.Format(Format, ClientContextGroups.AadInfo, "tid");
-                public static readonly string Oid = string.Format(Format, ClientContextGroups.AadInfo, "oid");
+                internal static readonly string AltSecId = string.Format(Format, ClientContextGroups.AadInfo, "altSecId");
+                internal static readonly string OrgPuid = string.Format(Format, ClientContextGroups.AadInfo, "orgPuid");
+                internal static readonly string Tid = string.Format(Format, ClientContextGroups.AadInfo, "tid");
+                internal static readonly string Oid = string.Format(Format, ClientContextGroups.AadInfo, "oid");
             }
 
-            public static class XboxProfile
+            internal static class XboxProfile
             {
-                public static readonly string Gamertag = string.Format(Format, ClientContextGroups.XboxProfile, "gamertag");
+                internal static readonly string Gamertag = string.Format(Format, ClientContextGroups.XboxProfile, "gamertag");
             }
         }
 
-        public static class DeviceClass
+        internal static class DeviceClass
         {
-            public const string Web = "Web";
-            public const string Mobile = "MobileApp";
-            public const string Console = "GameConsole";
+            internal const string Web = "Web";
+            internal const string Mobile = "MobileApp";
+            internal const string Console = "GameConsole";
         }
 
-        public static class OperatingSystem
+        internal static class OperatingSystem
         {
-            public const string Windows = "windows";
-            public const string Android = "android";
-            public const string IOS = "ios";
+            internal const string Windows = "windows";
+            internal const string Android = "android";
+            internal const string IOS = "ios";
         }
 
-        public static class DeviceIdNames
+        internal static class DeviceIdNames
         {
             public const string DeviceId = "deviceId";
             public const string XboxLiveDeviceId = "xboxLiveDeviceId";
         }
 
-        public static class AuthInfoNames
+        internal static class AuthInfoNames
         {
             public const string Type = "type";
             public const string Context = "context";
         }
 
-        public static class RetailServerInfoNames
+        internal static class RetailServerInfoNames
         {
             public const string MarketId = "merchantId";
             public const string ShopperId = "shopperId";
         }
 
-        public static class AccountServiceApiVersion
+        internal static class AccountServiceApiVersion
         {
             public const string V2 = "2014-09-01";
             public const string V3 = "2015-03-31";
         }
 
-        public static class PartnerGuids
+        internal static class PartnerGuids
         {
             public const string Azure = "fbf178a5-144e-46d1-aa81-612c2d3f97f4";
         }
 
-        public static class Namespaces
+        internal static class Namespaces
         {
             public const string Risk = "RISK";
         }
 
-        public static class ProfileTypes
+        internal static class ProfileTypes
         {
             public const string Consumer = "consumer";
             public const string ConsumerV3 = "consumerV3";
@@ -956,7 +956,7 @@ namespace Microsoft.Commerce.Payments.PXService
             public const string Legal = "legalentity";
         }
 
-        public static class AccountTypes
+        internal static class AccountTypes
         {
             public const string Consumer = "msa";
             public const string Organization = "org";
@@ -964,7 +964,7 @@ namespace Microsoft.Commerce.Payments.PXService
             public const string Bing = "bing";
         }
 
-        public static class ErrorCodes
+        internal static class ErrorCodes
         {
             public const string JsonDeserializationError = "JsonDeserializationError";
             public const string NetworkError = "NetworkError";
@@ -973,53 +973,53 @@ namespace Microsoft.Commerce.Payments.PXService
             public const string PIDLInvalidFilters = "FiltersIsInvalid";
         }
 
-        public static class PXServiceErrorCodes
+        internal static class PXServiceErrorCodes
         {
-            public const string LegacyBillableAccountUpdateFailed = "LegacyBillableAccountUpdateFailed";
-            public const string LegacyAccountServiceFailed = "LegacyAccountServiceFailed";
-            public const string CTPCommerceServiceFailed = "CTPCommerceServiceFailed";
+            internal const string LegacyBillableAccountUpdateFailed = "LegacyBillableAccountUpdateFailed";
+            internal const string LegacyAccountServiceFailed = "LegacyAccountServiceFailed";
+            internal const string CTPCommerceServiceFailed = "CTPCommerceServiceFailed";
         }
 
-        public static class LegacyAccountErrorCodes
+        internal static class LegacyAccountErrorCodes
         {
-            public const string InvalidAddress = "InvalidAddress";
-            public const string InvalidCity = "InvalidCity";
-            public const string InvalidState = "InvalidState";
-            public const string InvalidZipCode = "InvalidZipCode";
+            internal const string InvalidAddress = "InvalidAddress";
+            internal const string InvalidCity = "InvalidCity";
+            internal const string InvalidState = "InvalidState";
+            internal const string InvalidZipCode = "InvalidZipCode";
         }
 
-        public static class PostAddressErrorCodes
+        internal static class PostAddressErrorCodes
         {
-            public const string InvalidStreet = "InvalidStreet";
-            public const string InvalidCity = "InvalidCity";
-            public const string InvalidPostalCode = "InvalidPostalCode";
-            public const string InvalidRegion = "InvalidRegion";
-            public const string InvalidAddressFieldsCombination = "InvalidAddressFieldsCombination";
-            public const string InvalidParameter = "InvalidParameter";
-            public const string JarvisAddressFieldCombination = "invalid_address_fields_combination";
+            internal const string InvalidStreet = "InvalidStreet";
+            internal const string InvalidCity = "InvalidCity";
+            internal const string InvalidPostalCode = "InvalidPostalCode";
+            internal const string InvalidRegion = "InvalidRegion";
+            internal const string InvalidAddressFieldsCombination = "InvalidAddressFieldsCombination";
+            internal const string InvalidParameter = "InvalidParameter";
+            internal const string JarvisAddressFieldCombination = "invalid_address_fields_combination";
         }
 
-        public static class LegacyAccountErrorMessages
+        internal static class LegacyAccountErrorMessages
         {
-            public const string InvalidAddress = "Check your address. There appears to be an error in it.";
-            public const string InvalidAddressRequiredFieldMissing = "Check your address. A required field is missing.";
-            public const string InvalidCity = "Check the city in your address. There appears to be an error in it.";
-            public const string InvalidCountry = "Choose your country or region again. There appears to be an error in it.";
-            public const string InvalidState = "Check the state in your address. There appears to be an error in it.";
-            public const string InvalidZipCode = "Check the Zip or Postal code in your address. There appears to be an error in it.";
+            internal const string InvalidAddress = "Check your address. There appears to be an error in it.";
+            internal const string InvalidAddressRequiredFieldMissing = "Check your address. A required field is missing.";
+            internal const string InvalidCity = "Check the city in your address. There appears to be an error in it.";
+            internal const string InvalidCountry = "Choose your country or region again. There appears to be an error in it.";
+            internal const string InvalidState = "Check the state in your address. There appears to be an error in it.";
+            internal const string InvalidZipCode = "Check the Zip or Postal code in your address. There appears to be an error in it.";
         }
 
-        public static class AddressErrorTargets
+        internal static class AddressErrorTargets
         {
-            public const string AddressLine1 = "address_line1";
-            public const string AddressLine2 = "address_line2";
-            public const string AddressLine3 = "address_line3";
-            public const string City = "city";
-            public const string State = "region";
-            public const string PostalCode = "postal_code";
+            internal const string AddressLine1 = "address_line1";
+            internal const string AddressLine2 = "address_line2";
+            internal const string AddressLine3 = "address_line3";
+            internal const string City = "city";
+            internal const string State = "region";
+            internal const string PostalCode = "postal_code";
         }
 
-        public static class StoredProcParameters
+        internal static class StoredProcParameters
         {
             public static class InsertRegistration
             {
@@ -1032,7 +1032,7 @@ namespace Microsoft.Commerce.Payments.PXService
             }
         }
 
-        public static class OAuthData
+        internal static class OAuthData
         {
             public const string ContentFormat = "grant_type=client_credentials&client_id={0}&client_secret={1}&scope=notify.windows.com";
             public const string ContentTypeHeaderValue = "application/x-www-form-urlencoded";
@@ -1040,7 +1040,7 @@ namespace Microsoft.Commerce.Payments.PXService
             public const string DefaultScopeName = ".default";
         }
 
-        public static class RequestPropertyKeys
+        internal static class RequestPropertyKeys
         {
             public const string FlightContext = "PX.FlightContext";
             public const string ExposedFlightFeatures = "PX.ExposedFlightFeatures";
@@ -1049,20 +1049,20 @@ namespace Microsoft.Commerce.Payments.PXService
             public const string PartnerSettings = "PX.PartnerSettings";
         }
 
-        public static class ScenarioNames
+        internal static class ScenarioNames
         {
             public const string Commercialhardware = "commercialhardware";
             public const string GuestCheckoutPrepaidMeeting = "prepaidmeeting";
         }
 
-        public static class PaymentRequestContext
+        internal static class PaymentRequestContext
         {
             // Refer teams contract with Teams. 
             // https://microsoft.sharepoint.com/:w:/t/ExtensibilityandFundamentals/EWbi75-vg_RNoZXU9JsquvwB93qW096N79_LBOqFfTdBow?e=GhaxNd&CID=80398A44-1BA7-489B-BA5E-CA1A7C550856&wdLOR=c089CEA99-883A-4BD8-B990-3C80089A33FC
             public const string PrePaidMeeting = "prepaidmeeting";
         }
 
-        public static class QueryParamNames
+        internal static class QueryParamNames
         {
             public const string BillableAccountId = "billableAccountId";
             public const string ClassicProduct = "classicProduct";
@@ -1070,40 +1070,40 @@ namespace Microsoft.Commerce.Payments.PXService
             public const string Country = "country";
         }
 
-        public static class PayerAuthApiVersions
+        internal static class PayerAuthApiVersions
         {
             public const string V2 = "2018-10-03";
             public const string V3 = "2019-04-16";
         }
 
-        public static class PurchaseApiVersions
+        internal static class PurchaseApiVersions
         {
             public const string V6 = "v6.0";
             public const string V7 = "v7.0";
             public const string V8 = "v8.0";
         }
 
-        public static class D365ServiceApiVersions
+        internal static class D365ServiceApiVersions
         {
             public const string V1 = "v1.0";
         }
 
-        public static class CatalogApiVersions
+        internal static class CatalogApiVersions
         {
             public const string V8 = "v8.0";
         }
 
-        public static class IssuerServiceApiVersions
+        internal static class IssuerServiceApiVersions
         {
             public const string V1 = "v1.0";
         }
 
-        public static class TokenPolicyServiceApiVersions
+        internal static class TokenPolicyServiceApiVersions
         {
             public const string V1 = "v1.0";
         }
 
-        public static class CountryCodes
+        internal static class CountryCodes
         {
             public const string AT = "AT";
             public const string CN = "CN";
@@ -1116,29 +1116,29 @@ namespace Microsoft.Commerce.Payments.PXService
             public const string US = "US";
         }
 
-        public static class PaymentErrorMessages
+        internal static class PaymentErrorMessages
         {
-            public const string CountryNotSupported = "The country is not supported.";
+            internal const string CountryNotSupported = "The country is not supported.";
         }
 
-        public static class AuthResult
+        internal static class AuthResult
         {
             public const string ByPass = "ByPass";
             public const string Succeed = "Succeed";
             public const string Failed = "Failed";
         }
 
-        public static class AbnormalDetection
+        internal static class AbnormalDetection
         {
             public const string LogMsgWhenCaughtByPX = "Caught and rejected by PXService";
         }
 
-        public static class Value
+        internal static class Value
         {
             public const string True = "true";
         }
 
-        public static class PSD2Constants
+        internal static class PSD2Constants
         {
             public const string DefaultBrowserRequestMessageVersion = "2.2.0";
             public const string FallbackMessageVersion = "2.1.0";

@@ -1,423 +1,429 @@
 ﻿// <copyright file="EmulatorsRouteExtensions.cs" company="Microsoft">Copyright (c) Microsoft. All rights reserved.</copyright>
 
-namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators;
-
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Routing;
-
-public static class EmulatorsRouteExtensions
+namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators
 {
-    internal static void MapPartnerSettingsRoutes(this IEndpointRouteBuilder routes)
-    {
-        routes.MapControllerRoute(
-            name: Constants.PartnerSettingsApiName.GetPartnerSettings,
-            pattern: "partnersettings/{partnerName}",
-            defaults: new { controller = "PartnerSettings", action = Constants.PartnerSettingsApiName.GetPartnerSettings });
-    }
+    using System.Net.Http;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Routing;
 
-    internal static void MapPIMSRoutes(this IEndpointRouteBuilder routes)
+    public static class EmulatorsRouteExtensions
     {
-        // PIMS
-        routes.MapControllerRoute(
+        private static void MapHttpRoute(this IEndpointRouteBuilder routes, string name, string routeTemplate, object defaults, object? constraints = null)
+        {
+            routes.MapControllerRoute(name, routeTemplate, defaults);
+        }
+        public static void MapPartnerSettingsRoutes(this IEndpointRouteBuilder routes)
+        {
+            routes.MapHttpRoute(
+                name: Constants.PartnerSettingsApiName.GetPartnerSettings,
+                routeTemplate: "partnersettings/{partnerName}",
+                defaults: new { controller = "PartnerSettings", action = Constants.PartnerSettingsApiName.GetPartnerSettings });
+        }
+
+        public static void MapPIMSRoutes(this IEndpointRouteBuilder routes)
+        {
+            // PIMS
+            routes.MapHttpRoute(
                 name: Constants.PIMSApiName.GetPI,
-                pattern: "{version}/{accountId}/paymentInstruments/{piid}",
+                routeTemplate: "{version}/{accountId}/paymentInstruments/{piid}",
                 defaults: new { controller = "PimsPaymentInstruments", action = Constants.PIMSApiName.GetPI });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.PIMSApiName.GetChallengeContext,
-                pattern: "{version}/{accountId}/paymentInstruments/{piid}/GetChallengeContext",
+                routeTemplate: "{version}/{accountId}/paymentInstruments/{piid}/GetChallengeContext",
                 defaults: new { controller = "PimsPaymentInstruments", action = Constants.PIMSApiName.GetChallengeContext });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.PIMSApiName.AddPI,
-                pattern: "{version}/{accountId}/paymentInstruments",
+                routeTemplate: "{version}/{accountId}/paymentInstruments",
                 defaults: new { controller = "PimsPaymentInstruments" });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.PIMSApiName.AddPIWithoutJarvisAccount,
-                pattern: "{version}/paymentInstruments",
+                routeTemplate: "{version}/paymentInstruments",
                 defaults: new { controller = "PimsPaymentInstruments", action = Constants.PIMSApiName.AddPI });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.PIMSApiName.ResumeAddPI,
-                pattern: "{version}/{accountId}/paymentInstruments/{piid}/resume",
+                routeTemplate: "{version}/{accountId}/paymentInstruments/{piid}/resume",
                 defaults: new { controller = "PimsPaymentInstruments", action = Constants.PIMSApiName.ResumeAddPI });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.PIMSApiName.UpdatePI,
-                pattern: "{version}/{accountId}/paymentInstruments/{piid}/update",
+                routeTemplate: "{version}/{accountId}/paymentInstruments/{piid}/update",
                 defaults: new { controller = "PimsPaymentInstruments", action = Constants.PIMSApiName.UpdatePI });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.PIMSApiName.ReplacePI,
-                pattern: "{version}/{accountId}/paymentInstruments/{piid}/replace",
+                routeTemplate: "{version}/{accountId}/paymentInstruments/{piid}/replace",
                 defaults: new { controller = "PimsPaymentInstruments", action = Constants.PIMSApiName.ReplacePI });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.PIMSApiName.ValidateCvv,
-                pattern: "{version}/{accountId}/paymentInstruments/{piid}/validateCvv",
+                routeTemplate: "{version}/{accountId}/paymentInstruments/{piid}/validateCvv",
                 defaults: new { controller = "PimsPaymentInstruments", action = Constants.PIMSApiName.ValidateCvv });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.PIMSApiName.GetPM,
-                pattern: "{version}/paymentMethods",
+                routeTemplate: "{version}/paymentMethods",
                 defaults: new { controller = "PimsPaymentMethods", action = Constants.PIMSApiName.GetPM });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.PIMSApiName.GetSeCardPersos,
-                pattern: "{version}/{accountId}/paymentInstruments/{piid}/seCardPersos",
+                routeTemplate: "{version}/{accountId}/paymentInstruments/{piid}/seCardPersos",
                 defaults: new { controller = "PimsPaymentInstruments", action = Constants.PIMSApiName.GetSeCardPersos });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.PIMSApiName.GetPIExtendedView,
-                pattern: "{version}/paymentInstruments/{piid}/extendedView",
+                routeTemplate: "{version}/paymentInstruments/{piid}/extendedView",
                 defaults: new { controller = "PimsPaymentInstruments", action = Constants.PIMSApiName.GetPIExtendedView });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.PIMSApiName.Validate,
-                pattern: "{version}/{accountId}/paymentInstruments/{piid}/Validate",
+                routeTemplate: "{version}/{accountId}/paymentInstruments/{piid}/Validate",
                 defaults: new { controller = "PimsPaymentInstruments", action = Constants.PIMSApiName.Validate });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.PIMSApiName.LinkTransaction,
-                pattern: "{version}/{accountId}/paymentInstruments/{piid}/LinkTransaction",
+                routeTemplate: "{version}/{accountId}/paymentInstruments/{piid}/LinkTransaction",
                 defaults: new { controller = "PimsPaymentInstruments", action = Constants.PIMSApiName.LinkTransaction });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                name: Constants.PIMSApiName.SearchByAccountNumber,
-               pattern: "{version}/paymentInstruments/searchByAccountNumber",
+               routeTemplate: "{version}/paymentInstruments/searchByAccountNumber",
                defaults: new { controller = "PimsPaymentInstruments", action = Constants.PIMSApiName.SearchByAccountNumber });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                name: Constants.PIMSApiName.ListEmpOrgPI,
-               pattern: "{version}/emporg/paymentInstruments",
+               routeTemplate: "{version}/emporg/paymentInstruments",
                defaults: new { controller = "PimsPaymentInstruments", action = Constants.PIMSApiName.ListEmpOrgPI });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.PIMSApiName.GetSessionDetails,
-                pattern: "{version}/{accountId}/sessions/{sessionId}/",
+                routeTemplate: "{version}/{accountId}/sessions/{sessionId}/",
                 defaults: new { controller = "PimsPaymentInstruments", action = Constants.PIMSApiName.GetSessionDetails });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.PIMSApiName.GetEligiblePaymentMethods,
-                pattern: "{version}/thirdPartyPayments/eligiblePaymentMethods",
+                routeTemplate: "{version}/thirdPartyPayments/eligiblePaymentMethods",
                 defaults: new { controller = "PimsPaymentMethods", action = Constants.PIMSApiName.GetPM });
         }
 
-        internal static void MapMSRewardsRoutes(this IEndpointRouteBuilder routes)
+        public static void MapMSRewardsRoutes(this IEndpointRouteBuilder routes)
         {
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.MSRewardsApiName.GetUserInfo,
-                pattern: "api/users({userId})",
+                routeTemplate: "api/users({userId})",
                 defaults: new { controller = "MSRewardsGetUserInfo", action = Constants.MSRewardsApiName.GetUserInfo });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.MSRewardsApiName.GetUserInfoUserIdEmpty,
-                pattern: "api/users()",
+                routeTemplate: "api/users()",
                 defaults: new { controller = "MSRewardsGetUserInfo", action = Constants.MSRewardsApiName.GetUserInfoUserIdEmpty });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.MSRewardsApiName.RedeemRewards,
-                pattern: "api/users({userId})/orders",
+                routeTemplate: "api/users({userId})/orders",
                 defaults: new { controller = "RedeemRewards", action = Constants.MSRewardsApiName.RedeemRewards });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.MSRewardsApiName.RedeemRewardsUserIdEmpty,
-                pattern: "api/users()/orders",
+                routeTemplate: "api/users()/orders",
                 defaults: new { controller = "RedeemRewards", action = Constants.MSRewardsApiName.RedeemRewards });
         }
-        
-        internal static void MapCatalogRoutes(this IEndpointRouteBuilder routes)
+
+        public static void MapCatalogRoutes(this IEndpointRouteBuilder routes)
         {
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.CatalogApiName.GetProducts,
-                pattern: "V8.0/products",
+                routeTemplate: "V8.0/products",
                 defaults: new { controller = "Catalog", action = Constants.CatalogApiName.GetProducts });
         }
 
-        internal static void MapAccountRoutes(this IEndpointRouteBuilder routes)
+        public static void MapAccountRoutes(this IEndpointRouteBuilder routes)
         {
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.AccountApiName.GetProfiles,
-                pattern: "{accountId}/profiles",
+                routeTemplate: "{accountId}/profiles",
                 defaults: new { controller = "AccountProfiles", action = Constants.AccountApiName.GetProfiles });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.AccountApiName.PutProfile,
-                pattern: "{accountId}/profiles/{profileId}",
-                defaults: new { controller = "AccountProfiles", action = Constants.AccountApiName.PutProfile };
+                routeTemplate: "{accountId}/profiles/{profileId}",
+                defaults: new { controller = "AccountProfiles", action = Constants.AccountApiName.PutProfile });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.AccountApiName.PatchProfile,
-                pattern: "{accountId}/profiles/{profileId}",
-                defaults: new { controller = "AccountProfiles", action = Constants.AccountApiName.PatchProfile };
+                routeTemplate: "{accountId}/profiles/{profileId}",
+                defaults: new { controller = "AccountProfiles", action = Constants.AccountApiName.PatchProfile });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.AccountApiName.GetCustomers,
-                pattern: "customers/{accountId}",
+                routeTemplate: "customers/{accountId}",
                 defaults: new { controller = "AccountCustomers", action = Constants.AccountApiName.GetCustomers });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.AccountApiName.PostAddress,
-                pattern: "{accountId}/addresses",
-                defaults: new { controller = "AccountAddresses", action = Constants.AccountApiName.PostAddress };
+                routeTemplate: "{accountId}/addresses",
+                defaults: new { controller = "AccountAddresses", action = Constants.AccountApiName.PostAddress });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.AccountApiName.GetAddresses,
-                pattern: "{accountId}/addresses",
-                defaults: new { controller = "AccountAddresses", action = Constants.AccountApiName.GetAddresses };
+                routeTemplate: "{accountId}/addresses",
+                defaults: new { controller = "AccountAddresses", action = Constants.AccountApiName.GetAddresses });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                name: Constants.AccountApiName.GetAddress,
-               pattern: "{accountId}/addresses/{addressId}",
+               routeTemplate: "{accountId}/addresses/{addressId}",
                defaults: new { controller = "AccountAddresses" });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.AccountApiName.PostAddressValidate,
-                pattern: "addresses/validate",
+                routeTemplate: "addresses/validate",
                 defaults: new { controller = "AccountAddresses", action = Constants.AccountApiName.PostAddressValidate });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.AccountApiName.LegacyValidateAddress,
-                pattern: "addresses",
+                routeTemplate: "addresses",
                 defaults: new { controller = "AccountAddresses", action = Constants.AccountApiName.LegacyValidateAddress });
         }
 
-        internal static void MapIssuerServiceRoutes(this IEndpointRouteBuilder routes)
+        public static void MapIssuerServiceRoutes(this IEndpointRouteBuilder routes)
         {
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.IssuerServiceApiName.Initialize,
-                pattern: "applications/session",
+                routeTemplate: "applications/session",
                 defaults: new { controller = "IssuerService", action = Constants.IssuerServiceApiName.Initialize });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.IssuerServiceApiName.Apply,
-                pattern: "applications/{customerPuid}",
+                routeTemplate: "applications/{customerPuid}",
                 defaults: new { controller = "IssuerService", action = Constants.IssuerServiceApiName.Apply });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.IssuerServiceApiName.Eligibility,
-                pattern: "applications/{customerPuid}/eligibility",
+                routeTemplate: "applications/{customerPuid}/eligibility",
                 defaults: new { controller = "IssuerService", action = Constants.IssuerServiceApiName.Eligibility });
         }
-        
-        internal static void MapChallengeManagementRoutes(this IEndpointRouteBuilder routes)
+
+        public static void MapChallengeManagementRoutes(this IEndpointRouteBuilder routes)
         {
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.ChallengeManagementApiName.CreateChallenge,
-                pattern: "challenge/create",
+                routeTemplate: "challenge/create",
                 defaults: new { controller = "Challenge", action = Constants.ChallengeManagementApiName.CreateChallenge });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.ChallengeManagementApiName.GetChallengeStatus,
-                pattern: "challenge/status/{sessionId}",
+                routeTemplate: "challenge/status/{sessionId}",
                 defaults: new { controller = "Challenge", action = Constants.ChallengeManagementApiName.GetChallengeStatus });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.ChallengeManagementApiName.CreateChallengeSession,
-                pattern: "challengesession/create",
+                routeTemplate: "challengesession/create",
                 defaults: new { controller = "ChallengeManagementSession", action = Constants.ChallengeManagementApiName.CreateChallengeSession });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.ChallengeManagementApiName.GetChallengeSessionData,
-                pattern: "challengesession/get/{sessionId}",
+                routeTemplate: "challengesession/get/{sessionId}",
                 defaults: new { controller = "ChallengeManagementSession", action = Constants.ChallengeManagementApiName.GetChallengeSessionData });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.ChallengeManagementApiName.UpdateChallengeSession,
-                pattern: "challengesession/update",
+                routeTemplate: "challengesession/update",
                 defaults: new { controller = "ChallengeManagementSession", action = Constants.ChallengeManagementApiName.UpdateChallengeSession });
         }
-        
-        internal static void MapPaymentThirdPartyRoutes(this IEndpointRouteBuilder routes)
+
+        public static void MapPaymentThirdPartyRoutes(this IEndpointRouteBuilder routes)
         {
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.PaymentThirdPartyApiName.GetCheckout,
-                pattern: "payment-providers/{paymentProviderId}/api/checkouts/{checkoutId}",
+                routeTemplate: "payment-providers/{paymentProviderId}/api/checkouts/{checkoutId}",
                 defaults: new { controller = "PaymentThirdPartyPaymentAndCheckouts", action = Constants.PaymentThirdPartyApiName.GetCheckout });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.PaymentThirdPartyApiName.Charge,
-                pattern: "payment-providers/{paymentProviderId}/api/checkouts/{checkoutId}/charge",
+                routeTemplate: "payment-providers/{paymentProviderId}/api/checkouts/{checkoutId}/charge",
                 defaults: new { controller = "PaymentThirdPartyCheckoutCharge", action = Constants.PaymentThirdPartyApiName.Charge });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.PaymentThirdPartyApiName.GetPaymentRequest,
-                pattern: "payment-providers/{paymentProviderId}/api/payment-requests/{paymentRequestId}",
+                routeTemplate: "payment-providers/{paymentProviderId}/api/payment-requests/{paymentRequestId}",
                 defaults: new { controller = "PaymentThirdPartyPaymentAndCheckouts", action = Constants.PaymentThirdPartyApiName.GetPaymentRequest });
         }
 
-        internal static void MapPurchaseRoutes(this IEndpointRouteBuilder routes)
+        public static void MapPurchaseRoutes(this IEndpointRouteBuilder routes)
         {
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.PurchaseApiName.ListOrder,
-                pattern: "v7.0/users/{userId}/orders",
+                routeTemplate: "v7.0/users/{userId}/orders",
                 defaults: new { controller = "Purchase", action = Constants.PurchaseApiName.ListOrder });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.PurchaseApiName.GetOrder,
-                pattern: "v7.0/users/{userId}/orders/{orderId}",
+                routeTemplate: "v7.0/users/{userId}/orders/{orderId}",
                 defaults: new { controller = "Purchase", action = Constants.PurchaseApiName.GetOrder });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.PurchaseApiName.GetSub,
-                pattern: "v8.0/users/{userId}/recurrences/{recurrenceId}",
+                routeTemplate: "v8.0/users/{userId}/recurrences/{recurrenceId}",
                 defaults: new { controller = "Purchase", action = Constants.PurchaseApiName.GetSub });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.PurchaseApiName.ListSub,
-                pattern: "v8.0/users/{userId}/recurrences",
+                routeTemplate: "v8.0/users/{userId}/recurrences",
                 defaults: new { controller = "Purchase", action = Constants.PurchaseApiName.ListSub });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.PurchaseApiName.CheckPi,
-                pattern: "v7.0/users/{userId}/paymentinstruments/{paymentinstrumentid}/check",
+                routeTemplate: "v7.0/users/{userId}/paymentinstruments/{paymentinstrumentid}/check",
                 defaults: new { controller = "Purchase", action = Constants.PurchaseApiName.CheckPi });
         }
 
-        internal static void MapRiskRoutes(this IEndpointRouteBuilder routes)
+        public static void MapRiskRoutes(this IEndpointRouteBuilder routes)
         {
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.RiskApiName.RiskEvaluation,
-                pattern: "risk/risk-evaluation",
+                routeTemplate: "risk/risk-evaluation",
                 defaults: new { controller = "Risk", action = Constants.RiskApiName.RiskEvaluation });
         }
 
-        internal static void MapSellerMarketPlaceRoutes(this IEndpointRouteBuilder routes)
+        public static void MapSellerMarketPlaceRoutes(this IEndpointRouteBuilder routes)
         {
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.SellerMarketPlaceApiName.GetSeller,
-                pattern: "v1/payment-providers/{paymentProviderId}/sellers/{sellerId}",
+                routeTemplate: "v1/payment-providers/{paymentProviderId}/sellers/{sellerId}",
                 defaults: new { controller = "Sellers", action = Constants.SellerMarketPlaceApiName.GetSeller });
         }
 
-        internal static void MapTokenPolicyRoutes(this IEndpointRouteBuilder routes)
+        public static void MapTokenPolicyRoutes(this IEndpointRouteBuilder routes)
         {
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.TokenPolicyApiName.GetTokenPolicyDescription,
-                pattern: "{version}/users/{userid}/tokenDescriptionRequests",
+                routeTemplate: "{version}/users/{userid}/tokenDescriptionRequests",
                 defaults: new { controller = "TokenPolicyDescription", action = Constants.TokenPolicyApiName.GetTokenPolicyDescription });
         }
 
-        internal static void MapStoredValueRoutes(this IEndpointRouteBuilder routes)
+        public static void MapStoredValueRoutes(this IEndpointRouteBuilder routes)
         {
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.StoredValueApiName.GetGiftCatalog,
-                pattern: "gift-catalog",
+                routeTemplate: "gift-catalog",
                 defaults: new { controller = "StoredValueGiftCatalog", action = Constants.StoredValueApiName.GetGiftCatalog });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.StoredValueApiName.PostFunding,
-                pattern: "{legacyAccountId}/funds",
+                routeTemplate: "{legacyAccountId}/funds",
                 defaults: new { controller = "StoredValueRedeem", action = Constants.StoredValueApiName.PostFunding });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                name: Constants.StoredValueApiName.GetFundingStatus,
-               pattern: "{legacyAccountId}/funds/{referenceId}",
+               routeTemplate: "{legacyAccountId}/funds/{referenceId}",
                defaults: new { controller = "StoredValueRedeem", action = Constants.StoredValueApiName.GetFundingStatus });
         }
 
-        internal static void MapTransactionServiceRoutes(this IEndpointRouteBuilder routes)
+        public static void MapTransactionServiceRoutes(this IEndpointRouteBuilder routes)
         {
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.TransactionServiceApiName.Payments,
-                pattern: "{accountId}/payments",
+                routeTemplate: "{accountId}/payments",
                 defaults: new { controller = "TransactionService", action = Constants.TransactionServiceApiName.Payments });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.TransactionServiceApiName.TransactionValidate,
-                pattern: "{accountId}/payments/{paymentId}/validate",
+                routeTemplate: "{accountId}/payments/{paymentId}/validate",
                 defaults: new { controller = "TransactionService", action = Constants.TransactionServiceApiName.TransactionValidate });
         }
 
-        internal static void MapPaymentOchestratorRoutes(this IEndpointRouteBuilder routes)
+        public static void MapPaymentOchestratorRoutes(this IEndpointRouteBuilder routes)
         {
             // Checkout requests routes mapping
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.PaymentOchestratorApiName.AttachAddress,
-                pattern: "checkoutRequests/{checkoutId}/attachaddress",
+                routeTemplate: "checkoutRequests/{checkoutId}/attachaddress",
                 defaults: new { controller = "PaymentOchestratorCheckoutRequests", action = Constants.PaymentOchestratorApiName.AttachAddress });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.PaymentOchestratorApiName.AttachProfile,
-                pattern: "checkoutRequests/{checkoutId}/attachprofile",
+                routeTemplate: "checkoutRequests/{checkoutId}/attachprofile",
                 defaults: new { controller = "PaymentOchestratorCheckoutRequests", action = Constants.PaymentOchestratorApiName.AttachProfile });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.PaymentOchestratorApiName.AttachPaymentInstruments,
-                pattern: "checkoutRequests/{checkoutId}/attachpaymentinstruments",
+                routeTemplate: "checkoutRequests/{checkoutId}/attachpaymentinstruments",
                 defaults: new { controller = "PaymentOchestratorCheckoutRequests", action = Constants.PaymentOchestratorApiName.AttachPaymentInstruments });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.PaymentOchestratorApiName.Confirm,
-                pattern: "checkoutRequests/{checkoutId}/confirm",
+                routeTemplate: "checkoutRequests/{checkoutId}/confirm",
                 defaults: new { controller = "PaymentOchestratorCheckoutRequests", action = Constants.PaymentOchestratorApiName.Confirm });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.PaymentOchestratorApiName.GetClientAction,
-                pattern: "checkoutRequests/{checkoutId}/clientaction",
+                routeTemplate: "checkoutRequests/{checkoutId}/clientaction",
                 defaults: new { controller = "PaymentOchestratorCheckoutRequests", action = Constants.PaymentOchestratorApiName.GetClientAction });
 
             // Payment requests routes mapping
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.PaymentOchestratorApiName.GetClientActions,
-                pattern: "paymentRequests/{paymentRequestId}/clientactions",
+                routeTemplate: "paymentRequests/{paymentRequestId}/clientactions",
                 defaults: new { controller = "PaymentOchestratorCheckoutRequests", action = Constants.PaymentOchestratorApiName.GetClientActions });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.PaymentOchestratorApiName.PRAttachAddress,
-                pattern: "paymentRequests/{paymentRequestId}/attachaddress",
+                routeTemplate: "paymentRequests/{paymentRequestId}/attachaddress",
                 defaults: new { controller = "PaymentOchestratorCheckoutRequests", action = Constants.PaymentOchestratorApiName.PRAttachAddress });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.PaymentOchestratorApiName.PRAttachProfile,
-                pattern: "paymentRequests/{paymentRequestId}/attachprofile",
+                routeTemplate: "paymentRequests/{paymentRequestId}/attachprofile",
                 defaults: new { controller = "PaymentOchestratorCheckoutRequests", action = Constants.PaymentOchestratorApiName.PRAttachProfile });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.PaymentOchestratorApiName.PRAttachPaymentInstruments,
-                pattern: "paymentRequests/{paymentRequestId}/attachpaymentinstruments",
+                routeTemplate: "paymentRequests/{paymentRequestId}/attachpaymentinstruments",
                 defaults: new { controller = "PaymentOchestratorCheckoutRequests", action = Constants.PaymentOchestratorApiName.PRAttachPaymentInstruments });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                 name: Constants.PaymentOchestratorApiName.PRConfirm,
-                pattern: "paymentRequests/{paymentRequestId}/confirm",
+                routeTemplate: "paymentRequests/{paymentRequestId}/confirm",
                 defaults: new { controller = "PaymentOchestratorCheckoutRequests", action = Constants.PaymentOchestratorApiName.PRConfirm });
         }
 
-        internal static void MapPayerAuthRoutes(this IEndpointRouteBuilder routes)
+        public static void MapPayerAuthRoutes(this IEndpointRouteBuilder routes)
         {
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                name: Constants.PayerAuthApiName.CreatePaymentSessionId,
-               pattern: "CreatePaymentSessionId",
+               routeTemplate: "CreatePaymentSessionId",
                defaults: new { controller = "PayerAuth", action = Constants.PayerAuthApiName.CreatePaymentSessionId });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                name: Constants.PayerAuthApiName.Get3DSMethodUrl,
-               pattern: "getThreeDSMethodURL",
+               routeTemplate: "getThreeDSMethodURL",
                defaults: new { controller = "PayerAuth", action = Constants.PayerAuthApiName.Get3DSMethodUrl });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                name: Constants.PayerAuthApiName.Authenticate,
-               pattern: "authenticate",
+               routeTemplate: "authenticate",
                defaults: new { controller = "PayerAuth", action = Constants.PayerAuthApiName.Authenticate });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                name: Constants.PayerAuthApiName.Result,
-               pattern: "result",
+               routeTemplate: "result",
                defaults: new { controller = "PayerAuth", action = Constants.PayerAuthApiName.Result });
 
-            routes.MapControllerRoute(
+            routes.MapHttpRoute(
                name: Constants.PayerAuthApiName.CompleteChallenge,
-               pattern: "CompleteChallenge",
+               routeTemplate: "CompleteChallenge",
                defaults: new { controller = "PayerAuth", action = Constants.PayerAuthApiName.CompleteChallenge });
         }
-        
-    internal static void MapFraudDetectionRoutes(this IEndpointRouteBuilder routes)
-    {
-        routes.MapControllerRoute(
-           name: Constants.FraudDetectionApiName.BotCheck,
-           pattern: "api/v1/botcheck",
-           defaults: new { controller = "FraudDetection", action = Constants.FraudDetectionApiName.BotCheck });
+
+        public static void MapFraudDetectionRoutes(this IEndpointRouteBuilder routes)
+        {
+            routes.MapHttpRoute(
+               name: Constants.FraudDetectionApiName.BotCheck,
+               routeTemplate: "api/v1/botcheck",
+               defaults: new { controller = "FraudDetection", action = Constants.FraudDetectionApiName.BotCheck });
+        }
     }
 }

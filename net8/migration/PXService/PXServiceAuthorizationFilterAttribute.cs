@@ -1,35 +1,35 @@
-﻿// Migrated PXServiceAuthorizationFilterAttribute to .NET 8.0 (ASP.NET Core)
-// - Removed System.Web.Http
-// - Converted HttpActionContext usage to HttpContext
-// - Updated attributes and response handling
-
-using System;
-using System.Diagnostics;
-using System.Linq;
-using System.Net;
-using System.Security.Cryptography.X509Certificates;
-using System.Security.Principal;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.ApplicationInsights.AspNetCore.Extensions;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Commerce.Payments.Common.Authorization;
-using Microsoft.Commerce.Payments.PXCommon;
-using Microsoft.Extensions.Primitives;
+﻿// <copyright file="PXServiceAuthorizationFilterAttribute.cs" company="Microsoft">Copyright (c) Microsoft. All rights reserved.</copyright>
 
 namespace Microsoft.Commerce.Payments.PXService
 {
+	using System;
+	using System.Diagnostics;
+	using System.Linq;
+	using System.Net;
+	using System.Security.Cryptography.X509Certificates;
+	using System.Security.Principal;
+	using System.Threading;
+	using System.Threading.Tasks;
+	using Microsoft.ApplicationInsights.AspNetCore.Extensions;
+	using Microsoft.AspNetCore.Authorization;
+	using Microsoft.AspNetCore.Http;
+	using Microsoft.AspNetCore.Mvc.Filters;
+	using Microsoft.Commerce.Payments.Common.Authorization;
+	using Microsoft.Commerce.Payments.PXCommon;
+	using Microsoft.Extensions.Primitives;
+
     public sealed class PXServiceAuthorizationFilterAttribute : Attribute, IAsyncAuthorizationFilter
     {
         private static readonly IIdentity NullIdentity = new GenericIdentity("NULL", "NULL");
 
         public bool AllowUnauthenticatedHttpCalls { get; set; }
+
         public bool AllowUnauthenticatedHttpsCalls { get; set; }
 
         public Management.CertificateVerificationCore.UserDirectory CertificateAuthenticator { get; set; }
+
         public UberUserDirectory UberUserDirectory { get; set; }
+
         public TokenMiseValidator TokenMiseValidator { get; set; }
 
         public async Task OnAuthorizationAsync(AuthorizationFilterContext context)

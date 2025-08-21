@@ -823,10 +823,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             // PX flighting to return 3ds Auth not supported error to storefronts.
             internal const string PXDisplay3dsNotEnabledErrorInline = "PXDisplay3dsNotEnabledErrorInline";
 
-            // PX flighting to enable sepa jpmc account validation for the storefronts
-            // flight cleanup task - 56373987
-            internal const string EnableSepaJpmc = "EnableSepaJpmc";
-
             // PX flighting to enable new logo for sepa
             // flight cleanup task - 57811922
             internal const string EnableNewLogoSepa = "EnableNewLogoSepa";
@@ -1216,6 +1212,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             internal const string GetSessionDetails = PimsVersion + "/{0}/{1}";
             internal const string AccountlessGetExtendedPI = PimsVersion + "/paymentInstruments/{0}/extendedView";
             internal const string UpdatePI = PimsVersion + "/{0}/paymentInstruments/{1}/update";
+            internal const string UpdatePIWithoutAccountId = PimsVersion + "/paymentInstruments/{1}/update";
             internal const string CardProfile = PimsVersion + "/{0}/paymentInstruments/{1}/cardProfile?deviceId={2}";
             internal const string SeCardPersos = PimsVersion + "/{0}/paymentInstruments/{1}/seCardPersos?deviceId={2}";
             internal const string ReplenishTransactionCredentials = PimsVersion + "/{0}/paymentInstruments/{1}/replenishTransactionCredentials?deviceId={2}";
@@ -1371,7 +1368,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             internal const string FraudDetectionBotDetectionUrl = "api/v1/botcheck";
         }
 
-        internal static class Versions
+        public static class Versions
         {
             public const string ApiVersion = "v7.0";
             public const string Alpha = "alpha";

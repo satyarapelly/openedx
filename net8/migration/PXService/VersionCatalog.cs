@@ -17,7 +17,7 @@ namespace Microsoft.Commerce.Payments.Common.Web
         private static readonly Dictionary<string, string> supported =
             new(StringComparer.OrdinalIgnoreCase) { { "v7.0", "v7.0" } };
 
-        public static void Register(VersionedControllerResolver resolver, ILogger logger)
+        public static void Register(VersionedControllerSelector resolver, ILogger logger)
         {
             static string Key(string name) =>
                 name.EndsWith("Controller", StringComparison.OrdinalIgnoreCase)

@@ -186,7 +186,7 @@ namespace Microsoft.Commerce.Payments.PXService
         }
 
         public async Task UpdateProfileV3(string accountId, AccountProfileV3 profile, string type, EventTraceActivity traceActivityId, List<string> exposedFlightFeatures, bool syncLegacyAddress = true, bool useJarvisPatchForConsumerProfile = false)
-        {
+        {   
             string requestUrl = string.Format(V7.Constants.UriTemplate.UpdateProfilesById, accountId, profile.Id);
 
             if (!syncLegacyAddress && exposedFlightFeatures.Contains(Flighting.Features.PXJarvisProfileCallSyncLegacyAddressFalse))

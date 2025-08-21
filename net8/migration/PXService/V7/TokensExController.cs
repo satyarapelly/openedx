@@ -37,6 +37,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <param name="language" required="false" cref="string" in="query">Language code</param>
         /// <response code="200">A list of PIDLResource</response>
         /// <returns>A list of PIDLResource object</returns>
+        [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpPost]
         public async Task<HttpResponseMessage> Tokens([FromBody] PIDLData payload, string accountId, string partner, string piid, string country, string language)
         {
@@ -151,11 +152,51 @@ namespace Microsoft.Commerce.Payments.PXService.V7
 
             string challengeMethodId = payload.TryGetPropertyValueFromPIDLData(AgenticPaymentRequestData.ChallengeMethodId);
             this.ValiateRequestData(challengeMethodId, AgenticPaymentRequestData.ChallengeMethodId);
+            string challengeMethodsJsonString = payload.TryGetPropertyValueFromPIDLData(AgenticPaymentRequestData.ChallengeMethodsJsonString);
+            this.ValiateRequestData(challengeMethodsJsonString, AgenticPaymentRequestData.ChallengeMethodsJsonString);
+            List<ChallengeMethod> challengeMethods = null;
+            if (!string.IsNullOrEmpty(challengeMethodsJsonString))
+            {
+                try
+                {
+                    challengeMethods = JsonConvert.DeserializeObject<List<ChallengeMethod>>(challengeMethodsJsonString);
+                }
+                catch (JsonException ex)
+                {
+                    throw new InvalidOperationException("Failed to deserialize challengeMethodsJsonString from PIDLData.", ex);
+                }
+            }
+
+            // Find the ChallengeValue that matches the challengeMethodId
+            string challengeValue = null;
+            if (challengeMethods != null && !string.IsNullOrEmpty(challengeMethodId))
+            {
+                foreach (ChallengeMethod challengeMethod in challengeMethods)
+                {
+                    if (challengeMethod.ChallengeMethodId == challengeMethodId)
+                    {
+                        challengeValue = challengeMethod.ChallengeValue;
+                        break;
+                    }
+                }
+            }
 
             // requestChallengeResponse will be used in another PR to set the MaxValidationAttempts the user could try in the PIDL
             RequestChallengeResponse requestChallengeResponse = await this.Settings.NetworkTokenizationServiceAccessor.RequestChallenge(ntid, challengeId, challengeMethodId, puid, traceActivityId, this.ExposedFlightFeatures, emailAddress);
 
             List<PIDLResource> pidlResources = PIDLResourceFactory.Instance.GetSmsChallengeDescriptionForDeviceBinding(ntid, language, challengeId, challengeMethodId, partner, country, setting, this.ExposedFlightFeatures);
+
+            if (!string.IsNullOrEmpty(challengeValue))
+            {
+                foreach (PIDLResource pidlResource in pidlResources)
+                {
+                    TextDisplayHint challengeMethodPlaceholderdisplayHint = pidlResource.GetDisplayHintById(Constants.DisplayHintIds.EnterChallengeCodeText) as TextDisplayHint;
+                    if (challengeMethodPlaceholderdisplayHint != null && !string.IsNullOrEmpty(challengeMethodPlaceholderdisplayHint.DisplayContent))
+                    {
+                        challengeMethodPlaceholderdisplayHint.DisplayContent = challengeMethodPlaceholderdisplayHint.DisplayContent.Replace(Constants.StringPlaceholders.ChallengeMethodPlaceholder, challengeValue);
+                    }
+                }
+            }
 
             // Updates default values for PropertyDescriptions in pidlResources based on matching keys in payload
             AgenticPaymentHelper.UpdateDefaultValuesFromPayload(pidlResources, payload);
@@ -253,13 +294,27 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             string assuranceData = payload.TryGetPropertyValueFromPIDLData(AgenticPaymentRequestData.FIDOResponse);
             this.ValiateRequestData(assuranceData, AgenticPaymentRequestData.FIDOResponse);
 
+            AssuranceData adObj = JsonConvert.DeserializeObject<AssuranceData>(assuranceData);
+
             var mandatesAndMerchantName = TokensExController.ExtractMandatesAndMerchantName(payload);
+            string dfSessionId = payload.TryGetPropertyValueFromPIDLData(AgenticPaymentRequestData.DfpSessionID);
             var mandates = mandatesAndMerchantName.Item1;
             var merchantName = mandatesAndMerchantName.Item2;
 
-            PasskeyMandateResponse response = await this.Settings.NetworkTokenizationServiceAccessor.SetMandates(ntid, puid, deviceId, traceActivityId, this.ExposedFlightFeatures, appInstance, assuranceData, mandates);
-            return this.Request.CreateResponse(response);
-        }
+            if (string.IsNullOrWhiteSpace(emailAddress))
+            {
+                emailAddress = await this.TryGetClientContext(GlobalConstants.ClientContextKeys.MsaProfile.EmailAddress);
+            }
+
+            PasskeyMandateResponse response = await this.Settings.NetworkTokenizationServiceAccessor.SetMandates(ntid, puid, traceActivityId, this.ExposedFlightFeatures, appInstance, adObj, mandates, dfSessionId, emailAddress);
+
+            PIDLResource mandatePidlResource = new PIDLResource()
+            {
+                ClientAction = new PXCommon.ClientAction(PXCommon.ClientActionType.ReturnContext, response)
+            };
+
+            return this.Request.CreateResponse(mandatePidlResource);
+        }             
 
         /// <summary>
         /// Extracts mandates from payload and returns the merchant name from the first mandate
@@ -273,7 +328,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
 
             if (payload != null)
             {
-                string mandatesJson = payload.TryGetPropertyValueFromPIDLData("mandates");
+                string mandatesJson = payload.TryGetPropertyValueFromPIDLData(AgenticPaymentRequestData.MandateJsonString);
                 if (!string.IsNullOrEmpty(mandatesJson))
                 {
                     try
@@ -314,10 +369,13 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 },
                 NextAction = new PXCommon.ClientAction(PXCommon.ClientActionType.InvokePidlAction)
                 {
-                    Context = new RestLink()
+                    Context = new DisplayHintAction(DisplayHintActionType.submit.ToString())
                     {
-                        Method = "POST",
-                        Href = $"https://{{pifd-endpoint}}/users/{{userId}}/tokensEx/{token.NetworkTokenId}/mandates"
+                        Context = new RestLink()
+                        {
+                            Method = "POST",
+                            Href = $"https://{{pifd-endpoint}}/users/{{userId}}/tokensEx/{token.NetworkTokenId}/mandates"
+                        }
                     }
                 }
             };
@@ -387,7 +445,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 sessionContext,
                 browserData,
                 applicationUrl,
-                merchantName);
+                merchantName,
+                emailAddress);
 
             if (passkeyAuthenticateResponse.Action == PasskeyAction.REGISTER_DEVICE_BINDING)
             {
@@ -430,6 +489,12 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                                 }
                             };
                         }
+
+                        PropertyDescription challengeMethods = pidlResource.GetPropertyDescriptionByPropertyName(AgenticPaymentRequestData.ChallengeMethodsJsonString);
+                        if (challengeMethods != null)
+                        {
+                            challengeMethods.DefaultValue = JsonConvert.SerializeObject(deviceBindingResponse.ChallengeMethods);
+                        }
                     }
 
                     // Updates default values for PropertyDescriptions in challengeMethodTypesPidl based on matching keys in payload
@@ -453,7 +518,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                         sessionContext,
                         browserData,
                         applicationUrl,
-                        merchantName);
+                        merchantName,
+                        emailAddress);
 
                     pidlClientAction = CreatePasskeySetupClientAction(token, passkeySetupResponse);
                 }

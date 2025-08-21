@@ -41,7 +41,16 @@ namespace Microsoft.Commerce.Payments.PXService
                 if (PartnerShouldUsePartnerSettingsService(partner, exposableFeatures))
                 {
                     partnerSettingsVersion = partnerSettingsVersion ?? GetPartnerSettingsVersion(exposableFeatures);
-                    return new PartnerSettings { PaymentExperienceSettings = await pxSettings.PartnerSettingsServiceAccessor.GetPaymentExperienceSettings(partner, partnerSettingsVersion, traceActivityId, exposableFeatures) };
+                    var paymentExperienceSettings = await pxSettings.PartnerSettingsServiceAccessor.GetPaymentExperienceSettings(partner, partnerSettingsVersion, traceActivityId, exposableFeatures);
+
+                    if (exposableFeatures?.Contains(PXCommon.Flighting.Features.PXEnablePartnerSettingsDeepCopy, StringComparer.OrdinalIgnoreCase) ?? false)
+                    {
+                        return new PartnerSettings(paymentExperienceSettings);
+                    }
+                    else
+                    {
+                        return new PartnerSettings { PaymentExperienceSettings = paymentExperienceSettings };
+                    }
                 }
             }
             catch (Exception ex)
@@ -64,12 +73,12 @@ namespace Microsoft.Commerce.Payments.PXService
 
         private static bool PartnerShouldUsePartnerSettingsService(string partner, List<string> exposableFeatures)
         {
-            if (string.Equals(partner, PXCommon.Constants.PartnerNames.DefaultPartnerName, StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(partner, Constants.PartnerNames.DefaultPartnerName, StringComparison.OrdinalIgnoreCase))
             {
                 return false;
             }
 
-            if (TemplateHelper.IsTemplateBasedPIDLIncludingDefaultTemplate(partner) || PXCommon.Constants.PartnerGroups.IsTestPartner(partner) || PXCommon.Constants.PartnerGroups.IsNoConfigPartner(partner))
+            if (TemplateHelper.IsTemplateBasedPIDLIncludingDefaultTemplate(partner) || Constants.PartnerGroups.IsTestPartner(partner) || Constants.PartnerGroups.IsNoConfigPartner(partner))
             {
                 return false;
             }

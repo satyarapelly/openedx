@@ -16,6 +16,7 @@ namespace Microsoft.Commerce.Payments.PXService
     using Microsoft.Commerce.Payments.PXCommon;
     using Microsoft.Commerce.Payments.PXService.Model.PaymentOrchestratorService;
     using Microsoft.Commerce.Payments.PXService.Model.PXInternal;
+    using Microsoft.Commerce.Payments.PXService.Model.ThreeDSExternalService;
     using Microsoft.Commerce.Payments.PXService.Model.WalletService;
     using Microsoft.Commerce.Payments.PXService.Settings;
     using Microsoft.Commerce.Payments.PXService.V7;
@@ -82,7 +83,9 @@ namespace Microsoft.Commerce.Payments.PXService
 
         public EventTraceActivity TraceActivityId { get; set; }
 
-        public HttpRequestMessage? Request { get; set; }
+        public HttpRequestMessage Request { get; set; }
+
+        public string ChallengeWindowSize { get; set; }
 
         public IList<PimsModel.V4.PaymentInstrument> ActivePaymentInstruments
         {
@@ -111,6 +114,30 @@ namespace Microsoft.Commerce.Payments.PXService
             return id.Equals(V7.Constants.PropertyDescriptionIds.CartTax)
                 || id.Equals(V7.Constants.PropertyDescriptionIds.CartSubtotal)
                 || id.Equals(V7.Constants.PropertyDescriptionIds.CartTotal);
+        }
+
+        /// <summary>
+        /// Parses the challenge window size with fallback logic.
+        /// </summary>
+        /// <param name="challengeWindowSize">The challenge window size string to parse.</param>
+        /// <param name="setting">The payment experience setting containing fallback window size.</param>
+        /// <returns>The parsed ChallengeWindowSize or default value.</returns>
+        public static ChallengeWindowSize ParseChallengeWindowSize(string challengeWindowSize, PaymentExperienceSetting setting = null)
+        {
+            // Try to parse the provided challengeWindowSize first
+            if (!string.IsNullOrEmpty(challengeWindowSize) && Enum.TryParse<ChallengeWindowSize>(challengeWindowSize, out var parsedWindowSize))
+            {
+                return parsedWindowSize;
+            }
+
+            // Try to parse from setting if available
+            if (setting != null && Enum.TryParse<ChallengeWindowSize>(setting.ChallengeWindowSize, out var windowSizeFromPSS))
+            {
+                return windowSizeFromPSS;
+            }
+
+            // Default fallback
+            return Microsoft.Commerce.Payments.PXService.Model.ThreeDSExternalService.ChallengeWindowSize.Five;
         }
 
         /// <summary>
@@ -246,8 +273,9 @@ namespace Microsoft.Commerce.Payments.PXService
             string country = null,
             string language = null,
             string currency = null,
-            HttpRequestMessage? request = null,
-            string piid = null)
+            HttpRequestMessage request = null,
+            string piid = null,
+            string challengeWindowSize = null)
         {
             this.Operation = operation;
             this.Partner = partner;
@@ -266,6 +294,7 @@ namespace Microsoft.Commerce.Payments.PXService
             this.TraceActivityId = traceActivityId;
             this.Request = request;
             this.PiId = piid;
+            this.ChallengeWindowSize = challengeWindowSize;
 
             if (this.UsePaymentRequestApiEnabled()
                 && PidlFactory.V7.PartnerSettingsHelper.IsFeatureEnabledUsingPartnerSettings(PidlFactory.V7.PartnerSettingsHelper.Features.PaymentClientHandlePaymentCollection, country, setting))
@@ -314,9 +343,10 @@ namespace Microsoft.Commerce.Payments.PXService
             string country = null,
             string language = null,
             string currency = null,
-            HttpRequestMessage? request = null,
-            CheckoutRequestClientActions? checkoutRequestClientActions = null,
-            PaymentRequestClientActions? paymentRequestClientActions = null)
+            HttpRequestMessage request = null,
+            CheckoutRequestClientActions checkoutRequestClientActions = null,
+            PaymentRequestClientActions paymentRequestClientActions = null,
+            string challengeWindowSize = null)
         {
             this.Operation = operation;
             this.Partner = partner;
@@ -334,6 +364,7 @@ namespace Microsoft.Commerce.Payments.PXService
             this.PaymentMethodType = type;
             this.TraceActivityId = traceActivityId;
             this.Request = request;
+            this.ChallengeWindowSize = challengeWindowSize;
 
             if (this.UsePaymentRequestApiEnabled())
             {

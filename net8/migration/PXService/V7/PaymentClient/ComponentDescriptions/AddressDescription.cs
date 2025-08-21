@@ -211,14 +211,14 @@ namespace Microsoft.Commerce.Payments.PXService
                     }
 
                     // Hide billing summary display description except the summary property.
-                    if (pidl.Identity[V7.Constants.PidlIdentityFields.ResourceId] == V7.Constants.AddressTypes.BillingSummary &&
-                        (addressDisplayHint.DisplayHintType == HintType.Button.ToString().ToLower() ||
-                         addressDisplayHint.DisplayHintType == HintType.Property.ToString().ToLower()))
+                    if (pidl.Identity[V7.Constants.PidlIdentityFields.ResourceId] == V7.Constants.AddressTypes.BillingSummary
+                        && (addressDisplayHint.DisplayHintType == HintType.Button.ToString().ToLower()
+                        || addressDisplayHint.DisplayHintType == HintType.Property.ToString().ToLower()))
                     {
                         addressDisplayHint.IsHidden = true;
-                    }
-                    else if (pidl.Identity[V7.Constants.PidlIdentityFields.ResourceId] == V7.Constants.AddressTypes.BillingForm &&
-                             addressDisplayHint.HintId == V7.Constants.DisplayHintIds.BillingAddressTitle)
+                    }                    
+                    else if (pidl.Identity[V7.Constants.PidlIdentityFields.ResourceId] == V7.Constants.AddressTypes.BillingForm
+                        && addressDisplayHint.HintId == V7.Constants.DisplayHintIds.BillingAddressTitle)
                     {
                         addressDisplayHint.IsHidden = true;
                     }

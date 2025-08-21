@@ -20,12 +20,17 @@ namespace Microsoft.Commerce.Payments.PXService.Model.NetworkTokenizationService
         /// <summary>
         /// Gets or sets the assurance data.
         /// </summary>
-        public object AssuranceData { get; set; }
+        public AssuranceData AssuranceData { get; set; }
 
         /// <summary>
         /// Gets or sets the list of mandates.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227", Justification = "Needed to be set.")]
         public List<Mandate> Mandates { get; set; } = new List<Mandate>();
+
+        /// <summary>
+        /// Gets or sets the DFP session identifier.
+        /// </summary>
+        public string DfpSessionId { get; set; }
     }
 }

@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace Microsoft.Commerce.Payments.PXService.V7
 {
-    public class CheckoutStatusResponse1
+    public class CheckoutStatusResponse
     {
         [JsonProperty(PropertyName = "checkoutStatus")]
         public string CheckoutStatus { get; set; }

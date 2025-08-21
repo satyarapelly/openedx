@@ -9,6 +9,7 @@ namespace Microsoft.Commerce.Payments.PXService
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Commerce.Payments.Common.Web;
+    using Microsoft.Commerce.Payments.PXCommon;
     using Microsoft.Commerce.Payments.PXService.Settings;
 
     /// <summary>

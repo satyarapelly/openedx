@@ -268,8 +268,9 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
                 this.storedSession.MethodData = methodData;
 
                 // 4. If fingerprinting was skipped by ACS, call PayerAuth.Authenticate
-                bool skipFingerprint = exposedFlightFeatures != null && exposedFlightFeatures.Contains(Flighting.Features.PXPSD2SkipFingerprint, StringComparer.OrdinalIgnoreCase);
-                if (string.IsNullOrEmpty(methodData.ThreeDSMethodURL) || skipFingerprint)
+                bool skipFingerprint = ShouldSkipFingerprintStep(exposedFlightFeatures, methodData.ThreeDSMethodURL);
+
+                if (skipFingerprint)
                 {
                     return await this.Authenticate(
                         threeDSMethodCompletionIndicator: (skipFingerprint && !string.IsNullOrEmpty(methodData.ThreeDSMethodURL)) ? PayerAuth.ThreeDSMethodCompletionIndicator.N : PayerAuth.ThreeDSMethodCompletionIndicator.U,
@@ -628,9 +629,41 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
                     payerAuthRequest.RiskChallengIndicator = PayerAuth.RiskChallengeIndicator.ChallengeRequestedPreference;
                 }
 
-                payerAuthResponse = await this.PayerAuthServiceAccessor.Authenticate(
+                if (exposedFlightFeatures?.Contains(Flighting.Features.PXPSD2SafetyNetAuthenticate) ?? false)
+                {
+                    if (await CallSafetyNetOperation(
+                        async () =>
+                        {
+                            payerAuthResponse = await this.PayerAuthServiceAccessor.Authenticate(
                                 authRequest: payerAuthRequest,
                                 traceActivityId: traceActivityId);
+                        },
+                        traceActivityId,
+                        exposedFeatures: this.storedSession.ExposedFlightFeatures,
+                        excludeErrorFeatureFormat: "PSD2SafetyNet-AppAuthN-{0}-{1}",
+                        errorHandlingFlightName: Flighting.Features.PXPSD2BankErrorEnforcementAuthenticate + "-" + this.storedSession?.DeviceChannel,
+                        errorOperation: () =>
+                        {
+                            payerAuthResponse = new PayerAuth.AuthenticationResponse()
+                            {
+                                TransactionStatus = PayerAuth.TransactionStatus.R,
+                                TransactionStatusReason = PayerAuth.TransactionStatusReason.TSR11,
+                            };
+                        }))
+                    {
+                        this.storedSession.IsSystemError = true;
+                        this.storedSession.ChallengeStatus = PaymentChallengeStatus.Succeeded;
+
+                        return GetSafetyNetAuthenticationResponse();
+                    }
+                }
+                else
+                {
+                    payerAuthResponse = await this.PayerAuthServiceAccessor.Authenticate(
+                        authRequest: payerAuthRequest,
+                        traceActivityId: traceActivityId);
+                }
+
                 this.storedSession.TransactionStatus = payerAuthResponse.TransactionStatus;
                 this.storedSession.TransactionStatusReason = payerAuthResponse.TransactionStatusReason;
 
@@ -762,7 +795,17 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
                         },
                         traceActivityId,
                         exposedFeatures: this.storedSession.ExposedFlightFeatures,
-                        excludeErrorFeatureFormat: "PSD2SafetyNet-Completion-{0}-{1}"))
+                        excludeErrorFeatureFormat: "PSD2SafetyNet-Completion-{0}-{1}-" + this.storedSession?.DeviceChannel,
+                        errorHandlingFlightName: Flighting.Features.PXPSD2BankErrorEnforcementCompleteChallenge + "-" + this.storedSession?.DeviceChannel,
+                        errorOperation: () =>
+                        {
+                            completionResponse = new PayerAuth.CompletionResponse()
+                            {
+                                TransactionStatus = PayerAuth.TransactionStatus.R,
+                                TransactionStatusReason = PayerAuth.TransactionStatusReason.TSR11,
+                                ChallengeCompletionIndicator = PayerAuth.ChallengeCompletionIndicator.N
+                            };
+                        }))
                 {
                     this.storedSession.IsSystemError = true;
                     completionResponse = GetSafetyNetCompletionResponse();
@@ -771,6 +814,12 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
                 // 4. Convert PayerAuth's PaymentSession object to a PX PaymentSession
                 var paymentSession = new PXService.V7.PaymentChallenge.Model.PaymentSession(this.storedSession);
                 paymentSession.Signature = paymentSession.GenerateSignature();
+
+                if (exposedFlightFeatures != null &&
+                    exposedFlightFeatures.Contains(Flighting.Features.PSD2NTSR19FailCardType + this.storedSession.PaymentMethodType))
+                {
+                    exposedFlightFeatures.Add("PXPSD2Comp-N-TSR19-_-Failed");
+                }
 
                 // 5. Update PaymentSession object and return
                 var mappedStatusString = GetMappedStatusString(
@@ -1331,8 +1380,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
         private static bool IsTokenCollected(PaymentInstrument paymentInstrument)
         {
             string walletType = paymentInstrument?.PaymentInstrumentDetails?.WalletType;
-            return string.Equals(walletType, PXCommon.Constants.WalletTypeValues.GooglePay, StringComparison.OrdinalIgnoreCase) ||
-                   string.Equals(walletType, PXCommon.Constants.WalletTypeValues.ApplePay, StringComparison.OrdinalIgnoreCase);
+            return string.Equals(walletType, Constants.WalletTypeValues.GooglePay, StringComparison.OrdinalIgnoreCase) ||
+                   string.Equals(walletType, Constants.WalletTypeValues.ApplePay, StringComparison.OrdinalIgnoreCase);
         }
 
         private static bool PaymentMethodNotRequiresPaymentChallenge(PaymentInstrument piDetails, List<string> exposedFlightFeatures)
@@ -1358,7 +1407,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
             }
 
             PartnerSettingsModel.FeatureConfig featureConfig;
-            return setting.Features.TryGetValue(PXCommon.Constants.FeatureNames.PSD2, out featureConfig);
+            return setting.Features.TryGetValue(Constants.FeatureNames.PSD2, out featureConfig);
         }
 
         // VerifyAuthorization functions is called at the time of session creation. For all subsequent calls,
@@ -1415,6 +1464,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
         /// <param name="traceActivity">The event trace activity</param>
         /// <param name="exposedFeatures">Features exposes for the current request (per flight configuration on carbon)</param>
         /// <param name="excludeErrorFeatureFormat">Format of a carbon feature name that that has two place holders. 1. Http Status code 2. ErrorCode.</param>
+        /// <param name="errorHandlingFlightName">Umbrella flight used for error handling, should pass failing CompleteChallengeResponse</param>
+        /// <param name="errorOperation">Error Operation</param>
         /// <returns>
         /// True if an exception was caught. This can be used by the caller to take remedial actions.
         /// </returns>
@@ -1422,7 +1473,9 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
             Func<Task> operation,
             EventTraceActivity traceActivity,
             List<string> exposedFeatures = null,
-            string excludeErrorFeatureFormat = null)
+            string excludeErrorFeatureFormat = null,
+            string errorHandlingFlightName = null,
+            Action errorOperation = null)
         {
             try
             {
@@ -1430,7 +1483,12 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
             }
             catch (ServiceErrorResponseException ex)
             {
-                if (exposedFeatures == null || excludeErrorFeatureFormat == null || !exposedFeatures.Contains(
+                if (exposedFeatures != null && exposedFeatures.Contains(errorHandlingFlightName) && errorOperation != null)
+                {
+                    SllWebLogger.TracePXServiceException($"ServiceErrorResponseException, Containing error handling flight, executing errorOperation : {ex}, {ex.Error}, {ex.Error?.ErrorCode}, {ex.Response?.StatusCode}", traceActivity);
+                    errorOperation();
+                }
+                else if (exposedFeatures == null || excludeErrorFeatureFormat == null || !exposedFeatures.Contains(
                         string.Format(excludeErrorFeatureFormat, ex.Response?.StatusCode.ToString(), ex.Error?.ErrorCode)))
                 {
                     SllWebLogger.TracePXServiceException($"SafetyNet caught ServiceErrorResponseException: {ex}", traceActivity);
@@ -1729,6 +1787,57 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
             return isMOTO && (exposedFlightFeatures == null || !exposedFlightFeatures.Contains(Flighting.Features.PXEnableChallengesForMOTO));
         }
 
+        private static string GetRootDomain(string url)
+        {
+            Uri uri;
+            if (Uri.TryCreate(url, UriKind.Absolute, out uri))
+            {
+                var host = uri.Host;
+
+                // Return the host with only alphanumeric characters
+                return new string(host.Where(c => char.IsLetterOrDigit(c)).ToArray());
+            }
+            else
+            {
+                // URL is invalid, return original input
+                return url;
+            }
+        }
+
+        private static bool ShouldSkipFingerprintStep(List<string> exposedFlightFeatures, string threeDSMethodURL)
+        {
+            // If threeDSMethodURL is null or empty, we skip the fingerprint step
+            if (string.IsNullOrEmpty(threeDSMethodURL))
+            {
+                return true;
+            }
+
+            if (exposedFlightFeatures == null)
+            {
+                return false;
+            }
+
+            // This is the uber level skip fingerprint flight.  If this is enabled we skip for all urls
+            if (exposedFlightFeatures.Contains(Flighting.Features.PXPSD2SkipFingerprint, StringComparer.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            // If this is enabled, we've enabled the capability to skip fingerprint by URL.  Then the flight list is parsed for specific urls to skip
+            // which are defined by PXPSD2SkipUrl_<uri-host-joined-with-non-alphanumeric-characters-removed>.  ex. acs.test.com => PXPSD2SkipUrl_acstestcom
+            if (exposedFlightFeatures.Contains(Flighting.Features.PXPSD2SkipFingerprintByUrl, StringComparer.OrdinalIgnoreCase))
+            {
+                var rootDomain = GetRootDomain(threeDSMethodURL)?.ToLowerInvariant();
+                var skipDomain = $"PXPSD2SkipUrl_{rootDomain}";
+                if (exposedFlightFeatures.Contains(skipDomain, StringComparer.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         private async Task UpdateSessionOnFinally(string sessionId, string accountId, bool authenticationVerified, EventTraceActivity traceActivityId)
         {
             if (this.storedSession != null)
@@ -1808,7 +1917,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
 
                 // 0. GetExtendedPI from PIMS to see if PI is creditcard or not. We are using this API instead of GetPI to bypass Authorization checks on the PI
                 if ((exposedFlightFeatures != null && V7.Constants.PSD2IgnorePIAuthorizationPartners.Contains(paymentSessionData.Partner, StringComparer.OrdinalIgnoreCase))
-                    || PartnerSettingsHelper.IsFeatureEnabledUsingPartnerSettings(PartnerSettingsHelper.Features.PSD2, session.Country, setting, PXCommon.Constants.DisplayCustomizationDetail.Psd2IgnorePIAuthorization))
+                    || PartnerSettingsHelper.IsFeatureEnabledUsingPartnerSettings(PartnerSettingsHelper.Features.PSD2, session.Country, setting, Constants.DisplayCustomizationDetail.Psd2IgnorePIAuthorization))
                 {
                     // The check for commercialstores should be done before accountId, piid ownership check. It is because commercial stores has my-org scenario
                     // to do purchase against SEPA or ACH. To avoid failure for SEPA and ACH, return "NotApplicable" before we do ownership check.
@@ -1898,7 +2007,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
 
                         // For India flows, check another flight. This will be removed later.
                         piIsIssuedIn3ds1RequiredCountry = challengeList != null && challengeList.Contains("3ds")
-                            && ((exposedFlightFeatures != null && exposedFlightFeatures.Contains(Flighting.Features.India3dsEnableForBilldesk, StringComparer.OrdinalIgnoreCase)) || PartnerSettingsHelper.IsFeatureEnabledUsingPartnerSettings(PartnerSettingsHelper.Features.ThreeDSOne, session.Country, setting, PXCommon.Constants.DisplayCustomizationDetail.India3dsEnableForBilldesk));
+                            && ((exposedFlightFeatures != null && exposedFlightFeatures.Contains(Flighting.Features.India3dsEnableForBilldesk, StringComparer.OrdinalIgnoreCase)) || PartnerSettingsHelper.IsFeatureEnabledUsingPartnerSettings(PartnerSettingsHelper.Features.ThreeDSOne, session.Country, setting, Constants.DisplayCustomizationDetail.India3dsEnableForBilldesk));
 
                         piRequires3ds1Authentication = piIsIssuedIn3ds1RequiredCountry
                                                         && string.Equals(session.Country, "IN", StringComparison.OrdinalIgnoreCase)
@@ -1940,7 +2049,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
                 // Once Amex is enabled through billdesk, we need to enable 2FA for Amex. Created task 38121719 to track this.
                 if (piRequires3ds1Authentication
                     && paymentInstrument.IsCreditCard()
-                    && ((!((exposedFlightFeatures != null && exposedFlightFeatures.Contains(Flighting.Features.PXEnableIndia3DS1Challenge, StringComparer.OrdinalIgnoreCase)) || PartnerSettingsHelper.IsFeatureEnabledUsingPartnerSettings(PartnerSettingsHelper.Features.ThreeDSOne, session.Country, setting, PXCommon.Constants.DisplayCustomizationDetail.PXEnableIndia3DS1Challenge)))
+                    && ((!((exposedFlightFeatures != null && exposedFlightFeatures.Contains(Flighting.Features.PXEnableIndia3DS1Challenge, StringComparer.OrdinalIgnoreCase)) || PartnerSettingsHelper.IsFeatureEnabledUsingPartnerSettings(PartnerSettingsHelper.Features.ThreeDSOne, session.Country, setting, Constants.DisplayCustomizationDetail.PXEnableIndia3DS1Challenge)))
                         || (paymentInstrument.PaymentMethod.IsCreditCardAmex()
                         && string.Equals(session.Country, "IN", StringComparison.OrdinalIgnoreCase))))
                 {
@@ -1965,7 +2074,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
 
                     // Because 3ds1 and PSD2 share the same PSD2 test header, when the PSD2 test header passed together with "EnableThreeDSOne" partner flight, both 3ds1 and PSD2 are enabled, which is not expected
                     // Therefore, set piRequires3ds2Authentication to be false when both PSD2 test header and "EnableThreeDSOne" partner flight are sent from partner
-                    if ((exposedFlightFeatures.Contains(Flighting.Features.PXEnableIndia3DS1Challenge, StringComparer.OrdinalIgnoreCase) || PartnerSettingsHelper.IsFeatureEnabledUsingPartnerSettings(PartnerSettingsHelper.Features.ThreeDSOne, session.Country, setting, PXCommon.Constants.DisplayCustomizationDetail.PXEnableIndia3DS1Challenge)) && string.Equals(session.Country, "IN", StringComparison.OrdinalIgnoreCase))
+                    if ((exposedFlightFeatures.Contains(Flighting.Features.PXEnableIndia3DS1Challenge, StringComparer.OrdinalIgnoreCase) || PartnerSettingsHelper.IsFeatureEnabledUsingPartnerSettings(PartnerSettingsHelper.Features.ThreeDSOne, session.Country, setting, Constants.DisplayCustomizationDetail.PXEnableIndia3DS1Challenge)) && string.Equals(session.Country, "IN", StringComparison.OrdinalIgnoreCase))
                     {
                         piRequires3ds2Authentication = false;
                     }
@@ -1980,7 +2089,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
                     piRequires3ds2Authentication = false;
 
                     if ((PartnerHelper.IsIndiaThreeDSCommercialPartner(paymentSessionData.Partner)
-                        || PartnerSettingsHelper.IsFeatureEnabledUsingPartnerSettings(PartnerSettingsHelper.Features.ThreeDSOne, session.Country, setting, PXCommon.Constants.DisplayCustomizationDetail.EnableIndia3dsForNonZeroPaymentTransaction))
+                        || PartnerSettingsHelper.IsFeatureEnabledUsingPartnerSettings(PartnerSettingsHelper.Features.ThreeDSOne, session.Country, setting, Constants.DisplayCustomizationDetail.EnableIndia3dsForNonZeroPaymentTransaction))
                         && ((session.ChallengeScenario == ChallengeScenario.PaymentTransaction
                         && session.Amount == 0)
                         || session.ChallengeScenario == ChallengeScenario.RecurringTransaction)
@@ -1996,7 +2105,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
                 if (exposedFlightFeatures != null
                     && exposedFlightFeatures.Contains(Flighting.Features.PXSkipChallengeForZeroAmountIndiaAuth, StringComparer.OrdinalIgnoreCase)
                     && string.Equals(paymentSessionData.Country, "IN", StringComparison.OrdinalIgnoreCase)
-                    && string.Equals(paymentSessionData.Partner, PXCommon.Constants.PartnerNames.Webblends, StringComparison.OrdinalIgnoreCase)
+                    && string.Equals(paymentSessionData.Partner, Constants.PartnerNames.Webblends, StringComparison.OrdinalIgnoreCase)
                     && paymentSessionData.Amount == 0)
                 {
                     piRequires3ds1Authentication = false;
@@ -2130,7 +2239,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
                     session.ChallengeType = V7.Constants.ChallengeTypes.UPIChallenge;
                 }
                 else if (((PartnerHelper.IsIndiaThreeDSCommercialPartner(paymentSessionData.Partner)
-                    || PartnerSettingsHelper.IsFeatureEnabledUsingPartnerSettings(PartnerSettingsHelper.Features.ThreeDSOne, session.Country, setting, PXCommon.Constants.DisplayCustomizationDetail.EnableIndia3dsForNonZeroPaymentTransaction))
+                    || PartnerSettingsHelper.IsFeatureEnabledUsingPartnerSettings(PartnerSettingsHelper.Features.ThreeDSOne, session.Country, setting, Constants.DisplayCustomizationDetail.EnableIndia3dsForNonZeroPaymentTransaction))
                     && session.ChallengeScenario == ChallengeScenario.PaymentTransaction
                     && session.Amount != 0
                     && string.Equals(session.Country, "IN", StringComparison.OrdinalIgnoreCase))
@@ -2426,7 +2535,42 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
                 };
 
                 // 2. Call PayerAuth.Authenticate
-                var authResponse = await this.PayerAuthServiceAccessor.Authenticate(authRequest, traceActivityId);
+                PayerAuth.AuthenticationResponse authResponse = null;
+                if (exposedFlightFeatures?.Contains(Flighting.Features.PXPSD2SafetyNetAuthenticate) ?? false)
+                {
+                    if (await CallSafetyNetOperation(
+                        async () =>
+                        {
+                            authResponse = await this.PayerAuthServiceAccessor.Authenticate(
+                                authRequest: authRequest,
+                                traceActivityId: traceActivityId);
+                        },
+                        traceActivityId,
+                        exposedFeatures: this.storedSession.ExposedFlightFeatures,
+                        excludeErrorFeatureFormat: "PSD2SafetyNet-BrowserAuthN-{0}-{1}",
+                        errorHandlingFlightName: Flighting.Features.PXPSD2BankErrorEnforcementAuthenticate + "-" + this.storedSession?.DeviceChannel,  
+                        errorOperation: () =>
+                        {
+                            authResponse = new PayerAuth.AuthenticationResponse()
+                            {
+                                TransactionStatus = PayerAuth.TransactionStatus.R,
+                                TransactionStatusReason = PayerAuth.TransactionStatusReason.TSR11,
+                            };
+                        }))
+                    {
+                        this.storedSession.IsSystemError = true;
+                        this.storedSession.ChallengeStatus = PaymentChallengeStatus.Succeeded;
+
+                        return GetSafetyNetBrowserFlowContext(GetSafetyNetPaymentSession(this.storedSession.Id));
+                    }
+                }
+                else
+                {
+                    authResponse = await this.PayerAuthServiceAccessor.Authenticate(
+                        authRequest: authRequest,
+                        traceActivityId: traceActivityId);
+                }
+
                 this.storedSession.TransactionStatus = authResponse.TransactionStatus;
                 this.storedSession.TransactionStatusReason = authResponse.TransactionStatusReason;
 

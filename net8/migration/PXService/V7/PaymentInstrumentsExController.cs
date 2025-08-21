@@ -1,5 +1,4 @@
 ﻿// <copyright file="PaymentInstrumentsExController.cs" company="Microsoft">Copyright (c) Microsoft. All rights reserved.</copyright>
-
 namespace Microsoft.Commerce.Payments.PXService.V7
 {
     using Microsoft.AspNetCore.Http.Extensions;
@@ -140,6 +139,10 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
 
             var requestContext = this.GetRequestContext(traceActivityId);
+
+            // Split the combined ExpiryDate to expiry month and year if it exists in pi data
+            SplitPIExpiryDateToMonthAndYear(pi);
+
             if (requestContext != null && !string.IsNullOrWhiteSpace(requestContext.RequestId))
             {
                 return await this.AddPaymentInstrumentToPaymentAccount(
@@ -550,6 +553,9 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
             this.Request.AddPartnerProperty(partner?.ToLower());
 
+            // Split the combined ExpiryDate to expiry month and year if it exists in pi data
+            SplitPIExpiryDateToMonthAndYear(pi);
+
             return await this.AddNewPI(
             traceActivityId: traceActivityId,
             accountId: accountId,
@@ -600,6 +606,9 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             // Enable flighting based on setting partner
             this.EnableFlightingsInPartnerSetting(setting, string.Empty);
 
+            // Split the combined ExpiryDate to expiry month and year if it exists in pi data
+            SplitPIExpiryDateToMonthAndYear(pi);
+
             // Add ip address to pi payload and pass it to PIMS
             if (this.ExposedFlightFeatures.Contains(Flighting.Features.PXPassIpAddressToPIMSForAddUpdatePI, StringComparer.OrdinalIgnoreCase))
             {
@@ -645,7 +654,14 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             ServiceErrorResponseException ex = null;
             try
             {
-                updatedPI = await this.Settings.PIMSAccessor.UpdatePaymentInstrument(accountId, piid, pi, traceActivityId, partner, this.ExposedFlightFeatures);
+                if (this.GetBillingAccountContext() != null)
+                {
+                    updatedPI = await this.Settings.PIMSAccessor.UpdatePaymentInstrument(piid, pi, traceActivityId, partner, this.ExposedFlightFeatures);
+                }
+                else
+                {
+                    updatedPI = await this.Settings.PIMSAccessor.UpdatePaymentInstrument(accountId, piid, pi, traceActivityId, partner, this.ExposedFlightFeatures);
+                }
             }
             catch (ServiceErrorResponseException exception)
             {
@@ -765,6 +781,9 @@ namespace Microsoft.Commerce.Payments.PXService.V7
 
             HttpResponseMessage responseMessage = new HttpResponseMessage(HttpStatusCode.OK);
             PaymentInstrument newPI = null;
+
+            // Split the combined ExpiryDate to expiry month and year if it exists in pi data
+            SplitPIExpiryDateToMonthAndYear(pi);
 
             // Get paymentSessionId if exists
             if (pi.ContainsKey("paymentSessionId"))
@@ -1692,6 +1711,26 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             response.Content = new StringContent(responseContent);
             response.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("text/html; charset=utf-8");
             return response;
+        }
+
+        private static void SplitPIExpiryDateToMonthAndYear(PIDLData pi)
+        {
+            string expiryDateData = pi?.TryGetPropertyValue("details.expiryDate");
+            if (expiryDateData != null)
+            {
+                var expiryDateParts = expiryDateData.Split('/');
+                if (expiryDateParts.Length == 2)
+                {
+                    pi.TrySetProperty("details.expiryMonth", expiryDateParts[0]);
+
+                    string expiryYear = expiryDateParts[1];
+                    expiryYear = expiryYear.Length == 2 ? $"20{expiryYear}" : expiryYear; // Ensure year is in YYYY format
+                    pi.TrySetProperty("details.expiryYear", expiryYear);
+
+                    // Remove the combined expiry date property from pi data
+                    pi.TryRemoveProperty("details.expiryDate");
+                }
+            }
         }
 
         private static void TranslateUnicodes(List<PIDLResource> pidl)
@@ -3120,15 +3159,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 await this.AddParameterToPIRiskData(pi, Constants.DeviceInfoProperty.IPAddress, GlobalConstants.ClientContextKeys.DeviceInfo.IPAddress, partner, paymentMethodType, operation: Constants.Operations.Add, country);
             }
 
-            if (this.ExposedFlightFeatures.Contains(Flighting.Features.PXPassUserAgentToPIMSForAddUpdatePI, StringComparer.OrdinalIgnoreCase))
+            if (this.ExposedFlightFeatures.Contains(Flighting.Features.PXPassUserAgentToPIMSForAddUpdatePI, StringComparer.OrdinalIgnoreCase) || IsSepa(paymentMethodFamily, paymentMethodType))
             {
-                await this.AddParameterToPIRiskData(pi, Constants.DeviceInfoProperty.UserAgent, GlobalConstants.ClientContextKeys.DeviceInfo.UserAgent, partner, paymentMethodType, operation: Constants.Operations.Add, country);
-            }
-
-            // flight cleanup task - 56373987
-            if (IsSepa(paymentMethodFamily, paymentMethodType) && this.ExposedFlightFeatures.Contains(Constants.PartnerFlightValues.EnableSepaJpmc, StringComparer.OrdinalIgnoreCase))
-            {
-                headers.Add(new KeyValuePair<string, string>(GlobalConstants.HeaderValues.ExtendedFlightName, Constants.PartnerFlightValues.EnableSepaJpmc));
                 await this.AddParameterToPIRiskData(pi, Constants.DeviceInfoProperty.UserAgent, GlobalConstants.ClientContextKeys.DeviceInfo.UserAgent, partner, paymentMethodType, operation: Constants.Operations.Add, country);
             }
 
@@ -3338,6 +3370,10 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                             await this.Settings.PaymentOrchestratorServiceAccessor.AttachAddress(CheckoutRequestsExHandler.ConvertPIAddressToPOAddress(pi), Constants.AddressTypes.Billing, traceActivityId, requestId);
                         }
                     }
+                }
+                else if (this.GetBillingAccountContext() != null)
+                {
+                    newPI = await this.Settings.PIMSAccessor.PostPaymentInstrument(pi, traceActivityId, queryparams, headers, partner, this.ExposedFlightFeatures);
                 }
                 else
                 {

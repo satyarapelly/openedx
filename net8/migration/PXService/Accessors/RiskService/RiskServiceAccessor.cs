@@ -108,7 +108,14 @@ namespace Microsoft.Commerce.Payments.PXService.RiskService.V7
         public async Task<IList<PaymentMethod>> FilterBasedOnRiskEvaluation(string client, string puid, string tid, string oid, IList<PaymentMethod> paymentMethods, string ipAddress, string locale, string deviceType, EventTraceActivity traceActivityId)
         {
             IDictionary<string, PaymentMethod> originalPaymentMethods = paymentMethods.ToDictionary(pm => GetIdentifier(pm));
-            RiskEligibilityRequest request = new RiskEligibilityRequest(client, puid, tid, oid, ipAddress, locale, deviceType, paymentMethods);
+            RiskEligibilityRequest request = new RiskEligibilityRequest(client, puid, tid, oid, ipAddress, locale, deviceType, paymentMethods);            
+            return await this.PerformRiskEvaluation(request, originalPaymentMethods, traceActivityId);
+        }
+
+        public async Task<IList<PaymentMethod>> FilterBasedOnRiskEvaluation(string client, string puid, string tid, string oid, string idNameSpace, string commerceRootId, string orgId, IList<PaymentMethod> paymentMethods, string ipAddress, string locale, string deviceType, EventTraceActivity traceActivityId)
+        {
+            IDictionary<string, PaymentMethod> originalPaymentMethods = paymentMethods.ToDictionary(pm => GetIdentifier(pm));            
+            RiskEligibilityRequest request = new RiskEligibilityRequest(client, puid, tid, oid, idNameSpace, commerceRootId, orgId, ipAddress, locale, deviceType, paymentMethods);
             return await this.PerformRiskEvaluation(request, originalPaymentMethods, traceActivityId);
         }
 
