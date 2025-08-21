@@ -11,6 +11,7 @@ namespace Microsoft.Commerce.Payments.PXService
     using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Http.Extensions;
     using Microsoft.AspNetCore.Routing;
     using Microsoft.Commerce.Payments.Common;
     using Microsoft.Commerce.Payments.Common.Web;
@@ -66,7 +67,7 @@ namespace Microsoft.Commerce.Payments.PXService
             context.Request.Body.Position = 0;
             requestMessage.Content = new StreamContent(context.Request.Body);
 
-            requestMessage.Options.Set(new HttpRequestOptionsKey<HttpContext>("HttpContext"), context);
+            requestMessage.SetHttpContext(context);
 
             var responseMessage = await this.SendAsync(requestMessage, context.RequestAborted);
 
