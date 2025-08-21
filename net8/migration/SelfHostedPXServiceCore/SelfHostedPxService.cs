@@ -117,7 +117,7 @@ namespace SelfHostedPXServiceCore
                     WebApiConfig.Register(builder, PXSettings);
                     PXFlightHandler = new PXServiceFlightHandler();
                     builder.Services.AddSingleton(PXFlightHandler);
-                  
+
                     // The PXCorsHandler instance here is for testing purposes.
                     // It needs to be added after WebApiConfig.Register runs otherwise the flight needed for testing will be overwritten.
                     PXCorsHandler = new PXServiceCorsHandler(new PXServiceSettings());
@@ -130,7 +130,7 @@ namespace SelfHostedPXServiceCore
                 },
                 fullBaseUrl,
                 "http",
-                WebApiConfig.AddUrlVersionedRoutes);
+                configureRoutes: WebApiConfig.AddUrlVersionedRoutes);
         }
 
         public void ResetDependencies()

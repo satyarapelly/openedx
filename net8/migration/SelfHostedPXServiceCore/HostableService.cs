@@ -58,6 +58,14 @@
 
             SelfHostServer = builder.Build();
 
+            // Map conventional routes before attribute routes so that
+            // versioned URL patterns registered via MapControllerRoute are
+            // evaluated ahead of any attribute based routes on the
+            // controllers.  This mirrors the precedence Web API 2 provided
+            // and prevents attributes like [Route("{version}")] from
+            // unintentionally shadowing the conventional mappings.
+            configureRoutes?.Invoke(SelfHostServer);
+
             SelfHostServer.MapControllers();
 
             SelfHostServer.MapGet("/routes", (EndpointDataSource ds) =>
@@ -123,7 +131,6 @@
                 await next();
             });
 
-            configureRoutes?.Invoke(SelfHostServer);
             SelfHostServer.StartAsync().Wait();
 
             HttpSelfHttpClient = new HttpClient
