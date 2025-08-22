@@ -45,10 +45,15 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>
-	<ItemGroup>
-		<TestDependency Include="$(INETROOT)\private\Payments\Tests\Payments.Common.Config">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-			<Link>Payments.Common.Config</Link>
-		</TestDependency>
-	</ItemGroup>
+        <ItemGroup>
+                <TestDependency Include="$(INETROOT)\private\Payments\Tests\Payments.Common.Config">
+                        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+                        <Link>Payments.Common.Config</Link>
+                </TestDependency>
+        </ItemGroup>
+       <ItemGroup>
+               <Compile Include="..\\PXService\\WebApiConfig.cs">
+                       <Link>WebApiConfig.cs</Link>
+               </Compile>
+       </ItemGroup>
 </Project>

@@ -130,7 +130,7 @@ namespace SelfHostedPXServiceCore
                 },
                 fullBaseUrl,
                 "http",
-                WebApiConfig.ConfigureRoutes);
+                WebApiConfig.AddUrlVersionedRoutes);
         }
 
         public void ResetDependencies()
