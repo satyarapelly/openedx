@@ -45,12 +45,8 @@ namespace Microsoft.Commerce.Payments.PXService
                 return selector;
             });
 
-            builder.Services.AddSingleton<PXServiceApiVersionHandler>(sp =>
-            {
-                var selector = sp.GetRequiredService<VersionedControllerSelector>();
-                string[] versionlessControllers = { GlobalConstants.ControllerNames.ProbeController };
-                return new PXServiceApiVersionHandler(selector.SupportedVersions, versionlessControllers, settings);
-            });
+            string[] versionlessControllers = { GlobalConstants.ControllerNames.ProbeController };
+            builder.Services.AddSingleton(versionlessControllers);
 
             //if (settings.ValidateCors)
             //{

@@ -1,48 +1,74 @@
-// <copyright file="PXServicePIDLValidationHandler.cs" company="Microsoft Corporation">Copyright (c) Microsoft. All rights reserved.</copyright>
+using Microsoft.AspNetCore.Http;
+using Microsoft.Commerce.Payments.Common.Web;
+using Microsoft.Commerce.Payments.PXCommon;
+using Microsoft.Commerce.Tracing;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using static Microsoft.Commerce.Payments.Common.PaymentConstants;
 
 namespace Microsoft.Commerce.Payments.PXService
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using System.Web.Http.Routing;
-    using Microsoft.Commerce.Payments.Common.Web;
-    using Microsoft.Commerce.Payments.PXCommon;
-    using Microsoft.Commerce.Tracing;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
-    using static Microsoft.Commerce.Payments.Common.PaymentConstants;
-
     /// <summary>
-    /// Delegating handler which validates DisplayDescription with DataDescription in PIDL document at response
+    /// Middleware that validates PIDL documents in responses.
     /// </summary>
-    public class PXServicePIDLValidationHandler : DelegatingHandler 
+    public class PXServicePIDLValidationHandler
     {
-        private static readonly string[] ValidationAllowedControllers = { "AddressDescriptionsController", "PaymentMethodDescriptionsController", "ProfileDescriptionsController", "ChallengeDescriptionsController", "TaxIdDescriptionsController" };
-        
-        public PXServicePIDLValidationHandler()
+        private static readonly string[] ValidationAllowedControllers =
+            { "AddressDescriptionsController", "PaymentMethodDescriptionsController", "ProfileDescriptionsController", "ChallengeDescriptionsController", "TaxIdDescriptionsController" };
+
+        private readonly RequestDelegate _next;
+
+        public PXServicePIDLValidationHandler(RequestDelegate next)
         {
+            _next = next ?? throw new ArgumentNullException(nameof(next));
+        }
+
+        public async Task InvokeAsync(HttpContext context)
+        {
+            var originalBody = context.Response.Body;
+            await using var memory = new MemoryStream();
+            context.Response.Body = memory;
+
+            await _next(context);
+
+            memory.Seek(0, SeekOrigin.Begin);
+            var controller = context.Request.RouteValues["controller"]?.ToString();
+            var shouldValidate = context.Request.Method == HttpMethods.Get
+                && controller != null
+                && ValidationAllowedControllers.Contains(controller, StringComparer.OrdinalIgnoreCase)
+                && context.Response.StatusCode == (int)HttpStatusCode.OK
+                && context.Response.ContentType != null
+                && context.Response.ContentType.StartsWith(HttpMimeTypes.JsonContentType, StringComparison.OrdinalIgnoreCase);
+
+            if (shouldValidate)
+            {
+                var body = await new StreamReader(memory).ReadToEndAsync();
+                memory.Seek(0, SeekOrigin.Begin);
+                ValidatePIDLDocument(body, context.Request.GetRequestCorrelationId());
+            }
+
+            await memory.CopyToAsync(originalBody);
+            context.Response.Body = originalBody;
         }
 
         public static bool ValidatePIDLDocument(string pidlDocument, EventTraceActivity requestCorrelationId)
         {
             bool validationSucceeded = true;
-            JArray pidlJArray = new JArray();
-            bool parseSucceeded = TryParseJArray(pidlDocument, out pidlJArray);
-
-            if (parseSucceeded)
+            if (TryParseJArray(pidlDocument, out var pidlJArray))
             {
                 foreach (var pidl in pidlJArray)
                 {
-                    var dataMissingForProperties = ValidatePIDL(pidl);
-                    if (dataMissingForProperties.Count > 0)
+                    var dataMissing = ValidatePIDL(pidl);
+                    if (dataMissing.Count > 0)
                     {
                         validationSucceeded = false;
-                        SllWebLogger.TracePXServiceException($"PXServicePIDLValidationHandler found no data in DataDescription for display properties: {dataMissingForProperties}", requestCorrelationId);
+                        SllWebLogger.TracePXServiceException($"PXServicePIDLValidationHandler found no data in DataDescription for display properties: {dataMissing}", requestCorrelationId);
                     }
                 }
             }
@@ -54,50 +80,6 @@ namespace Microsoft.Commerce.Payments.PXService
             return validationSucceeded;
         }
 
-        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
-        {
-            HttpResponseMessage response = await base.SendAsync(request, cancellationToken);
-
-            try
-            {
-                IHttpRouteData routeData;
-
-                if (!WebHostingUtility.IsApplicationSelfHosted())
-                {
-                    routeData = request.GetRouteData();
-                }
-                else
-                {
-                    // We get the route data differently for selfhosted environment
-                    routeData = request.GetConfiguration().Routes.GetRouteData(request);
-                }
-
-                object controller;
-                HttpContent content = response.Content;
-
-                bool validationRequired = request.Method == HttpMethod.Get
-                    && routeData != null
-                    && routeData.Values.TryGetValue("controller", out controller)
-                    && controller != null
-                    && ValidationAllowedControllers.Contains(controller.ToString(), StringComparer.OrdinalIgnoreCase)
-                    && response.StatusCode == HttpStatusCode.OK
-                    && content != null
-                    && content.Headers.ContentType.MediaType == HttpMimeTypes.JsonContentType;
-
-                if (validationRequired)
-                {
-                    string pidldocument = await content.ReadAsStringAsync();
-                    ValidatePIDLDocument(pidldocument, request.GetRequestCorrelationId());
-                }
-            }
-            catch (Exception ex)
-            {
-                SllWebLogger.TracePXServiceException("PXServicePIDLValidationHandler had unexpected failure" + ex.ToString(), request.GetRequestCorrelationId());
-            }
-
-            return response;
-        }
-
         private static bool TryParseJArray(string s, out JArray jarray)
         {
             jarray = null;
@@ -107,8 +89,7 @@ namespace Microsoft.Commerce.Payments.PXService
                 return false;
             }
 
-            // This validation helps improve performance by not trying to parse if the first char is incorrect
-            if (!s.Trim()[0].Equals('['))
+            if (!s.TrimStart().StartsWith("["))
             {
                 return false;
             }
@@ -127,41 +108,28 @@ namespace Microsoft.Commerce.Payments.PXService
         private static bool IsTokenFoundInSourceToken(JToken sourceJToken, string tokenName)
         {
             var searchResults = sourceJToken.SelectTokens("$.." + tokenName).ToList();
-
-            if (searchResults.Count > 0)
-            {
-                return true;
-            }
-
-            return false;
+            return searchResults.Count > 0;
         }
 
         private static List<string> ValidatePIDL(JToken pidl)
         {
-            List<string> dataMissingForProperties = new List<string>();
+            List<string> missing = new();
             JToken dataDescription = pidl?["data_description"];
             JToken displayDescription = pidl?["displayDescription"];
 
             if (displayDescription != null && dataDescription != null)
             {
-                // Select all tokens which have propertyName in displayDescription
-                List<string> displayDescriptionProperties = displayDescription.SelectTokens("$..propertyName").Select(t => t.Value<string>()).ToList();
-
-                foreach (string displayProperty in displayDescriptionProperties)
+                var displayProps = displayDescription.SelectTokens("$..propertyName").Select(t => t.Value<string>()).ToList();
+                foreach (var prop in displayProps)
                 {
-                    if (!string.IsNullOrWhiteSpace(displayProperty))
+                    if (!string.IsNullOrWhiteSpace(prop) && !IsTokenFoundInSourceToken(dataDescription, prop))
                     {
-                        // Check whether the data for property exists in data description or not
-                        bool propertyDataFound = IsTokenFoundInSourceToken(dataDescription, displayProperty);
-                        if (!propertyDataFound)
-                        {
-                            dataMissingForProperties.Add(displayProperty);
-                        }
+                        missing.Add(prop);
                     }
                 }
             }
 
-            return dataMissingForProperties;
+            return missing;
         }
     }
 }
