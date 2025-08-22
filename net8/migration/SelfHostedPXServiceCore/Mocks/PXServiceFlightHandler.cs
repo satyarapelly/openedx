@@ -6,6 +6,7 @@ namespace SelfHostedPXServiceCore.Mocks
     using System.Collections.Generic;
     using System.Linq;
     using System.Net.Http;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Maintains a collection of flight names that can be applied to outbound requests.
@@ -31,7 +32,9 @@ namespace SelfHostedPXServiceCore.Mocks
                     .Select(f => f.Trim()));
         }
 
-        public void ApplyFlights(HttpRequestMessage request)
+        public Task<HttpResponseMessage> InvokeAsync(
+            HttpRequestMessage request,
+            Func<HttpRequestMessage, Task<HttpResponseMessage>> next)
         {
             if (EnabledFlights.Count > 0)
             {
@@ -51,6 +54,10 @@ namespace SelfHostedPXServiceCore.Mocks
 
                 request.Options.Set(optionsKey, EnabledFlights);
             }
+
+            return next != null
+                ? next(request)
+                : Task.FromResult<HttpResponseMessage>(null);
         }
     }
 }
