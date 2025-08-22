@@ -1,16 +1,10 @@
-﻿// <copyright file="PXServiceApiVersionHandler.cs" company="Microsoft Corporation">Copyright (c) Microsoft. All rights reserved.</copyright>
+// <copyright file="PXServiceApiVersionHandler.cs" company="Microsoft Corporation">Copyright (c) Microsoft. All rights reserved.</copyright>
 
 namespace Microsoft.Commerce.Payments.PXService
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Text.RegularExpressions;
-    using System.Threading;
-    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Components;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc.Controllers;
     using Microsoft.AspNetCore.Routing;
     using Microsoft.Commerce.Payments.Common;
     using Microsoft.Commerce.Payments.Common.Web;
@@ -19,6 +13,13 @@ namespace Microsoft.Commerce.Payments.PXService
     using Microsoft.Commerce.Payments.PXService.Model;
     using Microsoft.Commerce.Payments.PXService.Settings;
     using Microsoft.Commerce.Payments.PXService.Settings.FeatureConfig;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Text.RegularExpressions;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Delegating handler which validates that an appropriate api-version is
@@ -58,11 +59,91 @@ namespace Microsoft.Commerce.Payments.PXService
             this.settings = settings;
         }
 
-        public async Task InvokeAsync(HttpContext context)
+        public async Task InvokeAsync(AspNetCore.Http.HttpContext httpContext)
         {
-            if (this.next != null)
+            var allowedVersionlessRequest = false;
+            var endpoint = httpContext.GetEndpoint();
+            var cad = endpoint?.Metadata.GetMetadata<ControllerActionDescriptor>();
+            var controllerName = cad?.ControllerName; // short name (no "Controller")
+
+            // Fallback: from route values (works for conventional routes)
+            controllerName ??= httpContext.Request.RouteValues.TryGetValue("controller", out var c)
+                ? Convert.ToString(c)
+                : null;
+
+            if (!string.IsNullOrEmpty(controllerName))
             {
-                await this.next(context);
+                var resolver = httpContext.RequestServices.GetRequiredService<VersionedControllerSelector>();
+                var allowedType = resolver.ResolveAllowedController(httpContext); // returns Type? or null per your Core helper
+                if (allowedType is null)
+                {
+                    var version = httpContext.Request.Headers["api-version"].ToString();
+                    httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
+                    await httpContext.Response.WriteAsync($"No controller mapped for version '{(string.IsNullOrWhiteSpace(version) ? "(none)" : version)}'.");
+                    return;
+                }
+
+                allowedVersionlessRequest = true;
+            }
+
+            // No endpoint matched (RouteData is null/empty)  try to parse and fail fast with a clearer 404
+            // Expected path like: /v7.0/Account001/AddressDescriptions
+            var segments = httpContext.Request.Path.Value?.Trim('/').Split('/', StringSplitOptions.RemoveEmptyEntries) ?? Array.Empty<string>();
+            if (segments.Length >= 3 && segments[0].StartsWith("v", StringComparison.OrdinalIgnoreCase))
+            {
+                var parsedVersion = segments[0][1..];         // "7.0"
+                var parsedController = segments[2];           // "AddressDescriptions"
+                var resolver = httpContext.RequestServices.GetRequiredService<VersionedControllerSelector>();
+
+                // Fake the route values just for checking
+                httpContext.Request.RouteValues["controller"] = parsedController;
+                if (resolver.ResolveAllowedController(httpContext) is null)
+                {
+                    httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
+                    await httpContext.Response.WriteAsync($"No controller mapped for version '{parsedVersion}'.");
+                    return;
+                }
+
+                allowedVersionlessRequest = true;
+            }
+
+            if (allowedVersionlessRequest)
+            {
+                if (this.next != null)
+                {
+                    // If we have a next handler, call it
+                    await this.next(httpContext);
+                }
+                return;
+            }
+
+            var requestMessage = httpContext.Request.ToHttpRequestMessage();
+
+            httpContext.Request.EnableBuffering();
+            httpContext.Request.Body.Position = 0;
+            requestMessage.Content = new StreamContent(httpContext.Request.Body);
+
+            requestMessage.Options.Set(new HttpRequestOptionsKey<HttpContext>("HttpContext"), httpContext);
+
+            var responseMessage = await this.SendAsync(requestMessage, httpContext.RequestAborted);
+
+            if (!httpContext.Response.HasStarted)
+            {
+                httpContext.Response.StatusCode = (int)responseMessage.StatusCode;
+                foreach (var header in responseMessage.Headers)
+                {
+                    httpContext.Response.Headers[header.Key] = header.Value.ToArray();
+                }
+
+                if (responseMessage.Content != null)
+                {
+                    foreach (var header in responseMessage.Content.Headers)
+                    {
+                        httpContext.Response.Headers[header.Key] = header.Value.ToArray();
+                    }
+
+                    await responseMessage.Content.CopyToAsync(httpContext.Response.Body);
+                }
             }
         }
 
@@ -76,20 +157,6 @@ namespace Microsoft.Commerce.Payments.PXService
         /// <returns>The outbound response.</returns>
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            RouteData? routeData = request.GetHttpContext()?.GetRouteData();
-
-            object controller;
-            bool allowedVersionlessRequest =
-                routeData != null
-                && routeData.Values.TryGetValue("controller", out controller)
-                && controller != null
-                && versionlessControllers.Contains(controller.ToString(), StringComparer.OrdinalIgnoreCase);
-
-            if (allowedVersionlessRequest)
-            {
-                return await base.SendAsync(request, cancellationToken);
-            }
-
             // Extract version and accountId from the RequestUri.
             // As can be seen from sample PX RequestUris below, version ("v7.0" in the example below) is part of the url.  Also,
             // if the commerce account id exists ("f2ac3e1d-e724-4820-baa0-0098584c6dcc" in the example below), it appears in the 
@@ -1067,7 +1134,7 @@ namespace Microsoft.Commerce.Payments.PXService
                 }
             }
 
-            if (externalVersion == null)
+            if (string.IsNullOrEmpty(externalVersion))
             {
                 return request.CreateNoApiVersionResponse();
             }
@@ -1087,40 +1154,42 @@ namespace Microsoft.Commerce.Payments.PXService
                 request.AddProperty(PaymentConstants.Web.Properties.Version, apiVersion);
             }
 
-            HttpResponseMessage response = await base.SendAsync(request, cancellationToken);
-
-            // Add the version selected for this request to the response header.  This will be used
-            // by the PIDLSDK when logging client side telemetry events.  UX health (e.g. Add-PI funnel)
-            // can then be compared between different versions of the service.
-            response.Headers.Add(OperationVersionHeader, apiVersion.ExternalVersion);
-
-            // Add a comma separated list of features flights that are exposable to the current request/user
-            // to the response header for logging.
-            // A feature being exposable to the request/user doesn't guarantee that the feature is applied.
-            if (exposableFeatures != null && exposableFeatures.Count != 0)
+            var httpContext = request.GetHttpContext();
+            if (this.next != null && httpContext != null)
             {
-                response.Headers.Add(ExposableFlightsHeader, string.Join(",", exposableFeatures));
+                if (httpContext.Request.Body.CanSeek)
+                {
+                    httpContext.Request.Body.Position = 0;
+                }
+
+                await this.next(httpContext);
+
+                httpContext.Response.Headers.Add(OperationVersionHeader, apiVersion.ExternalVersion);
+
+                if (exposableFeatures != null && exposableFeatures.Count != 0)
+                {
+                    httpContext.Response.Headers.Add(ExposableFlightsHeader, string.Join(",", exposableFeatures));
+                }
+
+                if (!string.IsNullOrWhiteSpace(featureConfig?.AssignmentContext))
+                {
+                    httpContext.Response.Headers.Add(PXFlightAssignmentContextHeader, featureConfig?.AssignmentContext);
+                }
+
+                if (exposableFeatures != null && exposableFeatures.Contains(Flighting.Features.PXSendContentTypeOptionsHeader, StringComparer.OrdinalIgnoreCase))
+                {
+                    httpContext.Response.Headers.Add(ContentTypeOptionsHeader, NoSniff);
+                }
+
+                if (exposableFeatures != null && exposableFeatures.Contains(Flighting.Features.PXSendNoRetryOnServerErrorHeader, StringComparer.OrdinalIgnoreCase))
+                {
+                    httpContext.Response.Headers.Add(RetryOnServerErrorHeader, "false");
+                }
+
+                return new HttpResponseMessage((HttpStatusCode)httpContext.Response.StatusCode);
             }
 
-            // Set PX Feature flight assigment context response header
-            if (!string.IsNullOrWhiteSpace(featureConfig?.AssignmentContext))
-            {
-                response.Headers.Add(PXFlightAssignmentContextHeader, featureConfig?.AssignmentContext);
-            }
-
-            // Once the flight goes to 100%, then we can add the header in Web.config of PX
-            if (exposableFeatures != null && exposableFeatures.Contains(Flighting.Features.PXSendContentTypeOptionsHeader, StringComparer.OrdinalIgnoreCase))
-            {
-                response.Headers.Add(ContentTypeOptionsHeader, NoSniff);
-            }
-
-            // When the flight is on, set retry on server error header to false
-            if (exposableFeatures != null && exposableFeatures.Contains(Flighting.Features.PXSendNoRetryOnServerErrorHeader, StringComparer.OrdinalIgnoreCase))
-            {
-                response.Headers.Add(RetryOnServerErrorHeader, "false");
-            }
-
-            return response;
+            return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
         /// <summary>
