@@ -1,13 +1,16 @@
-using System;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Commerce.Payments.Common.Web;
+using Microsoft.Commerce.Payments.PXService.Settings;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Commerce.Payments.Common.Web;
-using Microsoft.Commerce.Payments.PXService.Settings;
+using Microsoft.IdentityModel.Protocol.Handlers;
 using Newtonsoft.Json;
+using SelfHostedPXServiceCore.Mocks;
+using System;
+using System.Collections.Generic;
+using PXServiceSettings = Microsoft.Commerce.Payments.PXService.Settings.PXServiceSettings;
 
 namespace Microsoft.Commerce.Payments.PXService
 {
@@ -42,11 +45,21 @@ namespace Microsoft.Commerce.Payments.PXService
                 return selector;
             });
 
-            //builder.Services.AddSingleton<PXServiceApiVersionHandler>(sp =>
+            builder.Services.AddSingleton<PXServiceApiVersionHandler>(sp =>
+            {
+                var selector = sp.GetRequiredService<VersionedControllerSelector>();
+                string[] versionlessControllers = { GlobalConstants.ControllerNames.ProbeController };
+                return new PXServiceApiVersionHandler(selector.SupportedVersions, versionlessControllers, settings);
+            });
+
+            //if (settings.ValidateCors)
             //{
-            //    var selector = sp.GetRequiredService<VersionedControllerSelector>();
-            //    return new PXServiceApiVersionHandler(selector.SupportedVersions, versionlessControllers, settings);
-            //});
+            //    builder.Services.AddSingleton<PXServiceCorsHandler>(new PXServiceCorsHandler(settings));
+            //}
+
+            //builder.Services.AddSingleton<PXServiceHandler>();     // your migrated state (used by PXServiceHandler middleware)
+            //builder.Services.AddSingleton<PXServiceFlightHandler>(); // state used by flighting middleware
+            //builder.Services.AddSingleton<PXServicePIDLValidationHandler>(); // state used by pidl validation middleware
         }
 
         /// <summary>
@@ -485,50 +498,54 @@ namespace Microsoft.Commerce.Payments.PXService
             AddV7Controllers(selector);
         }
 
+        private static string Key(string name) =>
+               name.EndsWith("Controller", StringComparison.OrdinalIgnoreCase)
+                   ? name[..^"Controller".Length]
+                   : name;
+
         private static void AddV7Controllers(VersionedControllerSelector selector)
         {
-            selector.AddVersionless(GlobalConstants.ControllerNames.ProbeController, typeof(ProbeController));
+            // Versionless (probe)
+            selector.AddVersionless(
+                Key(GlobalConstants.ControllerNames.ProbeController),
+                typeof(ProbeController));
 
-            var v7Controllers = new Dictionary<string, Type>
+            // --- V7 controllers (ported 1:1 from your WebApiConfig.AddV7Controllers) ---
+            var v7 = new Dictionary<string, Type>(StringComparer.OrdinalIgnoreCase)
             {
-                { GlobalConstants.ControllerNames.PaymentInstrumentsExController, typeof(V7.PaymentInstrumentsExController) },
-                { GlobalConstants.ControllerNames.SettingsController, typeof(V7.SettingsController) },
-                { GlobalConstants.ControllerNames.PaymentMethodDescriptionsController, typeof(V7.PaymentMethodDescriptionsController) },
-                { GlobalConstants.ControllerNames.AddressDescriptionsController, typeof(V7.AddressDescriptionsController) },
-                { GlobalConstants.ControllerNames.ChallengeDescriptionsController, typeof(V7.ChallengeDescriptionsController) },
-                { GlobalConstants.ControllerNames.ProfileDescriptionsController, typeof(V7.ProfileDescriptionsController) },
-                { GlobalConstants.ControllerNames.BillingGroupDescriptionsController, typeof(V7.BillingGroupDescriptionsController) },
-                { GlobalConstants.ControllerNames.TenantDescriptionsController, typeof(V7.TenantDescriptionsController) },
-                { GlobalConstants.ControllerNames.TaxIdDescriptionsController, typeof(V7.TaxIdDescriptionsController) },
-                { GlobalConstants.ControllerNames.PidlTransformationController, typeof(V7.PidlTransformationController) },
-                { GlobalConstants.ControllerNames.PidlValidationController, typeof(V7.PidlValidationController) },
-                { GlobalConstants.ControllerNames.SessionsController, typeof(V7.SessionsController) },
-                { GlobalConstants.ControllerNames.AddressesController, typeof(V7.AddressesController) },
-                { GlobalConstants.ControllerNames.AddressesExController, typeof(V7.AddressesExController) },
-                { GlobalConstants.ControllerNames.PaymentSessionDescriptionsController, typeof(V7.PaymentSessionDescriptionsController) },
-                { GlobalConstants.ControllerNames.PaymentSessionsController, typeof(V7.PaymentChallenge.PaymentSessionsController) },
-                { GlobalConstants.ControllerNames.PaymentTransactionsController, typeof(V7.PaymentTransaction.PaymentTransactionsController) },
-                { GlobalConstants.ControllerNames.RDSSessionController, typeof(V7.RDSSessionController) },
-                { GlobalConstants.ControllerNames.CheckoutDescriptionsController, typeof(V7.CheckoutDescriptionsController) },
-                { GlobalConstants.ControllerNames.CheckoutsExController, typeof(V7.Checkouts.CheckoutsExController) },
-                { GlobalConstants.ControllerNames.WalletsController, typeof(V7.WalletsController) },
-                { GlobalConstants.ControllerNames.RewardsDescriptionsController, typeof(V7.RewardsDescriptionsController) },
-                { GlobalConstants.ControllerNames.MSRewardsController, typeof(V7.MSRewardsController) },
-                { GlobalConstants.ControllerNames.InitializationController, typeof(V7.InitializationController) },
-                { GlobalConstants.ControllerNames.DescriptionsController, typeof(V7.DescriptionsController) },
-                { GlobalConstants.ControllerNames.CheckoutRequestsExController, typeof(V7.PaymentClient.CheckoutRequestsExController) },
-                { GlobalConstants.ControllerNames.ExpressCheckoutController, typeof(V7.ExpressCheckoutController) },
-                { GlobalConstants.ControllerNames.PaymentRequestsExController, typeof(V7.PaymentClient.PaymentRequestsExController) },
-                { GlobalConstants.ControllerNames.AgenticTokenDescriptionsController, typeof(V7.AgenticTokenDesctipionsController) },
-                { GlobalConstants.ControllerNames.TokensExController, typeof(V7.TokensExController) }
+                { Key(GlobalConstants.ControllerNames.PaymentInstrumentsExController),   typeof(V7.PaymentInstrumentsExController) },
+                { Key(GlobalConstants.ControllerNames.SettingsController),                typeof(V7.SettingsController) },
+                { Key(GlobalConstants.ControllerNames.PaymentMethodDescriptionsController), typeof(V7.PaymentMethodDescriptionsController) },
+                { Key(GlobalConstants.ControllerNames.AddressDescriptionsController),     typeof(V7.AddressDescriptionsController) },
+                { Key(GlobalConstants.ControllerNames.ChallengeDescriptionsController),   typeof(V7.ChallengeDescriptionsController) },
+                { Key(GlobalConstants.ControllerNames.ProfileDescriptionsController),     typeof(V7.ProfileDescriptionsController) },
+                { Key(GlobalConstants.ControllerNames.BillingGroupDescriptionsController),typeof(V7.BillingGroupDescriptionsController) },
+                { Key(GlobalConstants.ControllerNames.TenantDescriptionsController),      typeof(V7.TenantDescriptionsController) },
+                { Key(GlobalConstants.ControllerNames.TaxIdDescriptionsController),       typeof(V7.TaxIdDescriptionsController) },
+                { Key(GlobalConstants.ControllerNames.PidlTransformationController),      typeof(V7.PidlTransformationController) },
+                { Key(GlobalConstants.ControllerNames.PidlValidationController),          typeof(V7.PidlValidationController) },
+                { Key(GlobalConstants.ControllerNames.SessionsController),                typeof(V7.SessionsController) },
+                { Key(GlobalConstants.ControllerNames.AddressesController),               typeof(V7.AddressesController) },
+                { Key(GlobalConstants.ControllerNames.AddressesExController),             typeof(V7.AddressesExController) },
+                { Key(GlobalConstants.ControllerNames.PaymentSessionDescriptionsController), typeof(V7.PaymentSessionDescriptionsController) },
+                { Key(GlobalConstants.ControllerNames.PaymentSessionsController),         typeof(V7.PaymentChallenge.PaymentSessionsController) },
+                { Key(GlobalConstants.ControllerNames.PaymentTransactionsController),     typeof(V7.PaymentTransaction.PaymentTransactionsController) },
+                { Key(GlobalConstants.ControllerNames.RDSSessionController),              typeof(V7.RDSSessionController) },
+                { Key(GlobalConstants.ControllerNames.CheckoutDescriptionsController),    typeof(V7.CheckoutDescriptionsController) },
+                { Key(GlobalConstants.ControllerNames.CheckoutsExController),             typeof(V7.Checkouts.CheckoutsExController) },
+                { Key(GlobalConstants.ControllerNames.WalletsController),                 typeof(V7.WalletsController) },
+                { Key(GlobalConstants.ControllerNames.RewardsDescriptionsController),     typeof(V7.RewardsDescriptionsController) },
+                { Key(GlobalConstants.ControllerNames.MSRewardsController),               typeof(V7.MSRewardsController) },
+                { Key(GlobalConstants.ControllerNames.InitializationController),          typeof(V7.InitializationController) },
+                { Key(GlobalConstants.ControllerNames.DescriptionsController),            typeof(V7.DescriptionsController) },
+                { Key(GlobalConstants.ControllerNames.CheckoutRequestsExController),      typeof(V7.PaymentClient.CheckoutRequestsExController) },
+                { Key(GlobalConstants.ControllerNames.ExpressCheckoutController),         typeof(V7.ExpressCheckoutController) },
+                { Key(GlobalConstants.ControllerNames.PaymentRequestsExController),       typeof(V7.PaymentClient.PaymentRequestsExController) },
+                { Key(GlobalConstants.ControllerNames.AgenticTokenDescriptionsController),typeof(V7.AgenticTokenDesctipionsController) },
+                { Key(GlobalConstants.ControllerNames.TokensExController),                typeof(V7.TokensExController) },
             };
 
-            var v7Version = V7.Constants.Versions.ApiVersion;
-            selector.AddVersion(v7Version, v7Controllers);
-            if (v7Version.StartsWith("v", StringComparison.OrdinalIgnoreCase))
-            {
-                selector.AddVersion(v7Version[1..], v7Controllers);
-            }
+            selector.AddVersion("v7.0", v7);
         }
 
         static string C(string name) =>
