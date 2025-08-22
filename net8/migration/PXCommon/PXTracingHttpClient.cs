@@ -3,7 +3,6 @@
 namespace Microsoft.Commerce.Payments.PXCommon
 {
     using System;
-    using System.Diagnostics;
     using System.Net.Http;
     using Microsoft.Commerce.Payments.Common.Web;
     using Microsoft.Commerce.Tracing;
