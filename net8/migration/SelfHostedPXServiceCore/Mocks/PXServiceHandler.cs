@@ -1,4 +1,4 @@
-﻿// <copyright company="Microsoft Corporation">Copyright (c) Microsoft 2018. All rights reserved.</copyright>
+// <copyright company="Microsoft Corporation">Copyright (c) Microsoft 2018. All rights reserved.</copyright>
 
 namespace SelfHostedPXServiceCore.Mocks
 {
@@ -6,7 +6,6 @@ namespace SelfHostedPXServiceCore.Mocks
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
-    using Microsoft.AspNetCore.Http;
 
     /// <summary>
     /// This is a delegating handler that allows callers to configure its behavior by setting custom actions
@@ -16,8 +15,6 @@ namespace SelfHostedPXServiceCore.Mocks
     /// </summary>
     public class PXServiceHandler : DelegatingHandler
     {
-        private readonly RequestDelegate _next;
-
         /// <summary>
         /// This action is called before sending the request to the next in the pipeline.
         /// </summary>
@@ -37,20 +34,6 @@ namespace SelfHostedPXServiceCore.Mocks
         public PXServiceHandler()
         {
             ResetToDefault();
-        }
-
-        public PXServiceHandler(RequestDelegate next)
-            : this()
-        {
-            _next = next;
-        }
-
-        public async Task InvokeAsync(HttpContext context)
-        {
-            if (_next != null)
-            {
-                await _next(context);
-            }
         }
 
         public void ResetToDefault()

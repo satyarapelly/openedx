@@ -1,17 +1,20 @@
-﻿// <copyright company="Microsoft Corporation">Copyright (c) Microsoft 2018. All rights reserved.</copyright>
+// <copyright company="Microsoft Corporation">Copyright (c) Microsoft 2018. All rights reserved.</copyright>
 
 namespace SelfHostedPXServiceCore
 {
     using Microsoft.AspNetCore.Builder;
     using Microsoft.Commerce.Payments.Common.Web;
+    using Microsoft.Commerce.Payments.PXCommon;
     using Microsoft.Commerce.Payments.PXService;
     using Microsoft.Commerce.Payments.PXService.Accessors.IssuerService;
     using Microsoft.Commerce.Payments.PXService.Accessors.MSRewardsService;
     using Microsoft.Commerce.Payments.PXService.Accessors.PartnerSettingsService;
     using Microsoft.Commerce.Payments.PXService.Accessors.TokenPolicyService;
     using Microsoft.Commerce.Payments.PXService.RiskService.V7;
-    using Microsoft.Extensions.Options;
+    using Microsoft.Commerce.Payments.PXService.V7;
+    using Microsoft.Extensions.DependencyInjection;
     using Mocks;
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -20,24 +23,19 @@ namespace SelfHostedPXServiceCore
     using System.Net.Http.Headers;
     using System.Threading.Tasks;
 
-    public class SelfHostedPxService : IDisposable
+    public sealed class SelfHostedPxService : IDisposable
     {
-        public static HostableService PxHostableService { get; private set; }
+        public static HostableService PxHostableService { get; private set; } = default!;
+        public static Dictionary<Type, HostableService> SelfHostedDependencies { get; private set; } = default!;
+        public static PXServiceSettings PXSettings { get; private set; } = default!;
 
-        public static Dictionary<Type, HostableService> SelfHostedDependencies { get; private set; }
+        // If you migrated these handlers to “state” singletons used by middlewares,
+        // keep references here so tests can ResetToDefault() like before.
+        public static PXServiceHandler? PXHandler { get; private set; }
+        public static PXServiceCorsHandler? PXCorsHandler { get; private set; }
+        public static PXServiceFlightHandler? PXFlightHandler { get; private set; }
 
-        public static PXServiceSettings PXSettings { get; private set; }
-
-        public static PXServiceHandler PXHandler { get; private set; }
-
-        public static PXServiceCorsHandler PXCorsHandler { get; private set; }
-
-        public static PXServiceFlightHandler PXFlightHandler { get; private set; }
-
-        public static PXServiceApiVersionHandler PXApiVersionHandler { get; private set; }
-
-
-        public SelfHostedPxService(string fullBaseUrl, bool useSelfHostedDependencies, bool useArrangedResponses)
+        public SelfHostedPxService(string? fullBaseUrl, bool useSelfHostedDependencies, bool useArrangedResponses)
         {
             var selfhostServices = new[]
             {
@@ -62,48 +60,52 @@ namespace SelfHostedPXServiceCore
 
             SelfHostedDependencies = new Dictionary<Type, HostableService>();
 
+            // Ensure PX port is “reserved” if you pass a fixed URL
+            if (useSelfHostedDependencies && !string.IsNullOrWhiteSpace(fullBaseUrl))
+            {
+                var uri = new Uri(fullBaseUrl);
+                HostableService.PreRegisteredPorts.Add(uri.Port);
+            }
+
+            // Spin up dependency emulator host (one host shared by all deps)
             if (useSelfHostedDependencies)
             {
-                if (!string.IsNullOrEmpty(fullBaseUrl))
-                {
-                    var uri = new Uri(fullBaseUrl);
-
-                    // Dependencies need to selfhost before px, we need to reserve px
-                    // port so other dependencies don't take it.
-                    HostableService.PreRegisteredPorts.Add(uri.Port);
-                }
+                HostableService? dependencyEmulatorService = null;
 
                 // Create a single shared configuration action
                 Action<WebApplicationBuilder> configAction = b => Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.WebApiConfig.Register(b);
-                HostableService dependencyEmulatorService = null;
 
                 try
                 {
-                    dependencyEmulatorService = new HostableService(configAction, null, "http", Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.WebApiConfig.ConfigureRoutes);
+                    dependencyEmulatorService = new HostableService(configAction, Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.WebApiConfig.ConfigureRoutes, null, "http");
                 }
                 catch
                 {
+                    // Retry once just like the old code did
                     try
                     {
-                        // Retry once again if failed for first time
-                        dependencyEmulatorService = new HostableService(configAction, null, "http", Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.WebApiConfig.ConfigureRoutes);
+                        dependencyEmulatorService = new HostableService(configAction, Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.WebApiConfig.ConfigureRoutes, null, "http");
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine($"Failed to initialize DependencyEmulators. Error:{ex}");
+                        Console.WriteLine($"Failed to initialize DependencyEmulators. Error: {ex}");
                     }
                 }
 
-                foreach (var selfhostService in selfhostServices)
+                if (dependencyEmulatorService != null)
                 {
-                    var serviceName = GetServiceName(selfhostService.FullName);
-
-                    Console.WriteLine($"{serviceName} initialized as self hosted emulator service on {dependencyEmulatorService.BaseUri}");
-                    SelfHostedDependencies.Add(selfhostService, dependencyEmulatorService);
+                    foreach (var selfhostService in selfhostServices)
+                    {
+                        var serviceName = GetServiceName(selfhostService.FullName!);
+                        Console.WriteLine($"{serviceName} initialized as self hosted emulator service on {dependencyEmulatorService.BaseUri}");
+                        SelfHostedDependencies[selfhostService] = dependencyEmulatorService;
+                    }
                 }
             }
 
+            // Create PX settings (consumes dependency hosts)
             PXSettings = new PXServiceSettings(SelfHostedDependencies, useArrangedResponses);
+
             // Define supported API versions and controllers allowed without an explicit version
             var supportedVersions = new Dictionary<string, ApiVersion>(StringComparer.OrdinalIgnoreCase)
             {
@@ -111,32 +113,54 @@ namespace SelfHostedPXServiceCore
             };
             string[] versionlessControllers = { GlobalConstants.ControllerNames.ProbeController };
 
+            // Spin up the PX host
             PxHostableService = new HostableService(
-                builder =>
+                configureServices: builder =>
                 {
                     WebApiConfig.Register(builder, PXSettings);
-                    PXFlightHandler = new PXServiceFlightHandler();
-                    builder.Services.AddSingleton(PXFlightHandler);
-                  
-                    // The PXCorsHandler instance here is for testing purposes.
-                    // It needs to be added after WebApiConfig.Register runs otherwise the flight needed for testing will be overwritten.
-                    PXCorsHandler = new PXServiceCorsHandler(new PXServiceSettings());
-                    PXApiVersionHandler = new PXServiceApiVersionHandler(supportedVersions, versionlessControllers, PXSettings);
-                    builder.Services.AddSingleton(PXCorsHandler);
-                    builder.Services.AddSingleton(PXApiVersionHandler);
-
-                    PXHandler = new PXServiceHandler();
-                    builder.Services.AddSingleton(PXHandler);
+                    builder.Services.AddSingleton<PXServiceHandler>();     // your migrated state (used by PXServiceHandler middleware)
+                    builder.Services.AddSingleton<PXServiceFlightHandler>(); // state used by flighting middleware
                 },
-                fullBaseUrl,
-                "http",
-                WebApiConfig.AddUrlVersionedRoutes);
+                configureApp: app =>
+                {
+                    // App routing + controllers
+                    app.UseRouting();
+
+                    // Pull singletons for test access
+                    if (!WebHostingUtility.IsApplicationSelfHosted())
+                    {
+                        app.UseMiddleware<PXTraceCorrelationHandler>(); 
+                    }
+
+                    app.Use(async (HttpContext ctx, RequestDelegate next) =>
+                    {
+                        var handler = ctx.RequestServices.GetRequiredService<PXServiceApiVersionHandler>();
+                        await handler.InvokeAsync(ctx);
+                    });
+
+                    if (PXSettings.PIDLDocumentValidationEnabled)
+                    {
+                        app.UseMiddleware<PXServicePIDLValidationHandler>();
+                    }
+
+                   
+                    app.UseMiddleware<PXServiceHandler>();
+                    app.UseMiddleware<PXServiceFlightHandler>();
+
+                    app.MapControllers();
+                 
+                },
+                fullBaseUrl: fullBaseUrl,
+                protocol: "http");
         }
 
         public void ResetDependencies()
         {
-            PXHandler.ResetToDefault();
-            PXFlightHandler.ResetToDefault();
+            // Reset stateful testing hooks (if registered)
+            PXHandler?.ResetToDefault();
+            PXFlightHandler?.ResetToDefault();
+
+            // Reset dependency accessors
             PXSettings.PartnerSettingsService.ResetToDefaults();
             PXSettings.AccountsService.ResetToDefaults();
             PXSettings.PayerAuthService.ResetToDefaults();
@@ -155,24 +179,29 @@ namespace SelfHostedPXServiceCore
 
         public void Dispose()
         {
-            PxHostableService.SelfHostServer.StopAsync().Wait();
+            PxHostableService?.Dispose();
+            // Note: dependency emulator HostableService lives in SelfHostedDependencies values;
+            // they share a single instance—disposal is handled when test process ends, or you can dispose here if you track it.
         }
 
         public static string GetPXServiceUrl(string relativePath)
         {
-            Uri fullUri = new Uri(PxHostableService.BaseUri, relativePath);
+            var fullUri = new Uri(PxHostableService.BaseUri, relativePath);
             return fullUri.AbsoluteUri;
         }
 
-        public static async Task GetRequest(string url, Dictionary<string, string> requestHeaders, Action<HttpStatusCode, string, HttpResponseHeaders> responseVerification)
+        public static async Task GetRequest(
+            string url,
+            Dictionary<string, string>? requestHeaders,
+            Action<HttpStatusCode, string, HttpResponseHeaders> responseVerification)
         {
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, GetPXServiceUrl(url));
-            requestHeaders?.ToList().ForEach(header => request.Headers.Add(header.Key, header.Value));
+            var request = new HttpRequestMessage(HttpMethod.Get, GetPXServiceUrl(url));
+            requestHeaders?.ToList().ForEach(h => request.Headers.Add(h.Key, h.Value));
             var response = await PxHostableService.HttpSelfHttpClient.SendAsync(request);
             responseVerification(response.StatusCode, await response.Content.ReadAsStringAsync(), response.Headers);
         }
 
-        public static string GetServiceName(string serviceFullName)
+        private static string GetServiceName(string serviceFullName)
         {
             return serviceFullName
                 .Split('.')
