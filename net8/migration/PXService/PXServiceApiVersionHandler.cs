@@ -17,6 +17,7 @@ namespace Microsoft.Commerce.Payments.PXService
     using System.Collections.Generic;
     using System.Linq;
     using System.Net;
+    using System.Net.Http;
     using System.Text.RegularExpressions;
     using System.Threading;
     using System.Threading.Tasks;
@@ -59,7 +60,7 @@ namespace Microsoft.Commerce.Payments.PXService
             this.settings = settings;
         }
 
-        public async Task InvokeAsync(AspNetCore.Http.HttpContext httpContext)
+        public async Task InvokeAsync(HttpContext httpContext)
         {
             var allowedVersionlessRequest = false;
             var endpoint = httpContext.GetEndpoint();
