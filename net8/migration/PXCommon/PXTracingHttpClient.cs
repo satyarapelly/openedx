@@ -1,12 +1,12 @@
-﻿// <copyright file="PXTracingHttpClient.cs" company="Microsoft">Copyright (c) Microsoft 2015. All rights reserved.</copyright>
+// <copyright file="PXTracingHttpClient.cs" company="Microsoft">Copyright (c) Microsoft 2015. All rights reserved.</copyright>
 
 namespace Microsoft.Commerce.Payments.PXCommon
 {
     using System;
     using System.Diagnostics;
     using System.Net.Http;
-    using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Commerce.Payments.Common.Web;
+    using Microsoft.Commerce.Tracing;
 
     /// <summary>
     /// This client class wraps a typical HttpClient into a tracing handler
@@ -26,13 +26,13 @@ namespace Microsoft.Commerce.Payments.PXCommon
             Action<string, string, EventTraceActivity> logRequest = null,
             Action<string, EventTraceActivity> logResponse = null)
             : base(new PXTraceCorrelationHandler(
-                serviceName: serviceName,
+                serviceName: serviceName, 
                 innerHandler: new PXTracingHandler(
-                    serviceName: serviceName,
-                    httpMessageHandler: new HttpClientHandler(),
-                    logError: logError,
-                    logRequest: logRequest,
-                    logResponse: logResponse),
+                    serviceName: serviceName, 
+                    httpMessageHandler: new HttpClientHandler(), 
+                    logError: logError, 
+                    logRequest: logRequest, 
+                    logResponse: logResponse), 
                 isDependentServiceRequest: true))
         {
         }
@@ -52,13 +52,13 @@ namespace Microsoft.Commerce.Payments.PXCommon
             Action<string, string, EventTraceActivity> logRequest = null,
             Action<string, EventTraceActivity> logResponse = null) :
             base(new PXTraceCorrelationHandler(
-                serviceName: serviceName,
+                serviceName: serviceName, 
                 innerHandler: new PXTracingHandler(
-                    serviceName: serviceName,
-                    httpMessageHandler: httpMessageHandler,
-                    logError: logError,
-                    logRequest: logRequest,
-                    logResponse: logResponse),
+                    serviceName: serviceName, 
+                    httpMessageHandler: httpMessageHandler, 
+                    logError: logError, 
+                    logRequest: logRequest, 
+                    logResponse: logResponse), 
                 isDependentServiceRequest: true))
         {
         }
