@@ -1,239 +1,104 @@
-// <copyright file="VersionedControllerSelector.cs" company="Microsoft Corporation">Copyright (c) Microsoft 2013. All rights reserved.</copyright>
+// Copyright (c) Microsoft Corporation.
+
+using System;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Logging;
+using Microsoft.Commerce.Payments.Common;
 
 namespace Microsoft.Commerce.Payments.Common.Web
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.Diagnostics;
-    using System.Net.Http;
-    using System.Web.Http;
-    using System.Web.Http.Controllers;
-    using System.Web.Http.Dispatcher;
-    using System.Web.Http.Filters;
-    using System.Web.Http.Routing;
-
     /// <summary>
-    /// Implements a controller selector that takes api-version into account.
+    /// Simplified controller selector for ASP.NET Core that routes requests
+    /// to versioned controllers based on the resolved <see cref="ApiVersion"/>.
     /// </summary>
-    public class VersionedControllerSelector : IHttpControllerSelector
+    public class VersionedControllerSelector
     {
-        private const string ControllerProperty = "controller";
+        private readonly ILogger<VersionedControllerSelector> _logger;
 
-        // NOTE: We use this as temp storage before Initialize is called.  When this
-        // is non-null it indicates that we have not been initialized.
-        private Dictionary<ApiVersion, Tuple<Dictionary<string, Type>, List<IFilter>>> tempControllerVersions;
-        private Dictionary<string, Type> tempVersionlessControllers;
+        // Map of external version string (e.g. "v7.0") to controller mappings.
+        private readonly Dictionary<string, Dictionary<string, Type>> _versionedControllers = new(StringComparer.OrdinalIgnoreCase);
 
-        private Dictionary<Version, Dictionary<string, HttpControllerDescriptor>> versionedDescriptors;
-        private Dictionary<string, HttpControllerDescriptor> versionlessDescriptors;
+        // Controllers that do not require a version (probe etc.).
+        private readonly Dictionary<string, Type> _versionlessControllers = new(StringComparer.OrdinalIgnoreCase);
 
-        private ReadOnlyDictionary<string, ApiVersion> supportedVersions;
+        // Supported API versions exposed to callers (external -> ApiVersion).
+        private readonly Dictionary<string, ApiVersion> _supportedVersions = new(StringComparer.OrdinalIgnoreCase);
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="VersionedControllerSelector"/> class.
-        /// </summary>
-        public VersionedControllerSelector()
-        {
-            this.tempControllerVersions = new Dictionary<ApiVersion, Tuple<Dictionary<string, Type>, List<IFilter>>>();
-            this.tempVersionlessControllers = new Dictionary<string, Type>();
-        }
+        public VersionedControllerSelector(ILogger<VersionedControllerSelector> logger) => _logger = logger;
 
         /// <summary>
-        /// Gets the dictionary of api-version to internal version for all supported versions.
+        /// Gets the set of supported API versions.
         /// </summary>
-        public IDictionary<string, ApiVersion> SupportedVersions
+        public IDictionary<string, ApiVersion> SupportedVersions => _supportedVersions;
+
+        /// <summary>
+        /// Registers controllers that are bound to a specific API version.
+        /// </summary>
+        /// <param name="version">External version string (for example "v7.0").</param>
+        /// <param name="controllers">Controller name to type mappings.</param>
+        public void AddVersion(string version, Dictionary<string, Type> controllers)
         {
-            get
+            if (string.IsNullOrWhiteSpace(version))
             {
-                this.ThrowIfNotInitialized();
-                return this.supportedVersions;
+                throw new ArgumentNullException(nameof(version));
             }
+
+            if (controllers is null || controllers.Count == 0)
+            {
+                throw new ArgumentException("At least one controller type must be specified", nameof(controllers));
+            }
+
+            if (!Version.TryParse(version.TrimStart('v', 'V'), out var internalVersion))
+            {
+                internalVersion = new Version(1, 0);
+            }
+
+            _supportedVersions[version] = new ApiVersion(version, internalVersion);
+            _versionedControllers[version] = controllers;
         }
 
-        public void Add(ApiVersion version, Dictionary<string, Type> controllers)
-        {
-            this.Add(version, controllers, new List<IFilter>());
-        }
-
+        /// <summary>
+        /// Registers a controller that can be invoked without specifying an API version.
+        /// </summary>
         public void AddVersionless(string controllerName, Type controllerType)
         {
-            Debug.Assert(controllerName != null, "controllerName cannot be null");
-            Debug.Assert(controllerType != null, "controllerType cannot be null");
-            this.tempVersionlessControllers.Add(controllerName, controllerType);
+            if (controllerName is null) throw new ArgumentNullException(nameof(controllerName));
+            if (controllerType is null) throw new ArgumentNullException(nameof(controllerType));
+
+            _versionlessControllers[controllerName] = controllerType;
         }
 
         /// <summary>
-        /// Add a new supported version to the controller selector.
+        /// Resolves the controller type allowed for the current request.
+        /// Returns <c>null</c> when no matching controller exists.
         /// </summary>
-        /// <param name="version">The api version definition.</param>
-        /// <param name="controllers">The dictionary from controller name (controller parameter on the route) to the controller type.</param>
-        /// <param name="filters"> list of filters to be used with the version</param>
-        public void Add(ApiVersion version, Dictionary<string, Type> controllers, List<IFilter> filters)
+        public Type? ResolveAllowedController(HttpContext context)
         {
-            this.ThrowIfInitialized();
+            var routeValues = context.GetRouteData()?.Values;
+            if (routeValues is null) return null;
 
-            Debug.Assert(version != null, "Version cannot be null");
-            Debug.Assert(controllers != null, "Controllers cannot be null");
-            Debug.Assert(controllers.Count > 0, "At least one controller type must be specified");
+            routeValues.TryGetValue("controller", out var controllerValue);
+            var controllerName = controllerValue?.ToString();
+            if (string.IsNullOrEmpty(controllerName)) return null;
 
-            this.tempControllerVersions.Add(version, new Tuple<Dictionary<string, Type>, List<IFilter>>(controllers, filters));
-        }
-
-        /// <summary>
-        /// Initialize the VersionedControllerSelector.  This builds the internal data structures
-        /// necessary to select the correct controller at runtime.
-        /// </summary>
-        /// <param name="sharedConfiguration">The HTTP configuration to be shared across all of
-        /// the controllers.</param>
-        /// <param name="initVersionHandler">whether initial the handler</param>
-        public void Initialize(HttpConfiguration sharedConfiguration, bool initVersionHandler = true)
-        {
-            this.ThrowIfInitialized();
-
-            Debug.Assert(sharedConfiguration != null, "The http configuration is null");
-            Debug.Assert(this.tempControllerVersions.Count > 0, "Cannot initialize a VersionedControllerSelector which has not had any supported versions added through the Add method.");
-
-            Dictionary<string, ApiVersion> tempSupportedVersions = new Dictionary<string, ApiVersion>(this.tempControllerVersions.Count);
-            this.versionedDescriptors = new Dictionary<Version, Dictionary<string, HttpControllerDescriptor>>(this.tempControllerVersions.Count);
-
-            foreach (KeyValuePair<ApiVersion, Tuple<Dictionary<string, Type>, List<IFilter>>> controllerVersion in this.tempControllerVersions)
+            if (context.Items.TryGetValue(PaymentConstants.Web.Properties.Version, out var versionObj)
+                && versionObj is ApiVersion apiVersion
+                && _versionedControllers.TryGetValue(apiVersion.ExternalVersion, out var versionMap)
+                && versionMap.TryGetValue(controllerName, out var controllerType))
             {
-                // Add to the supported versions dictionary
-                tempSupportedVersions.Add(controllerVersion.Key.ExternalVersion, controllerVersion.Key);
-
-                // We're doing two important things in this loop:
-                // * Switching from controller types to controller descriptors. It was recommended that we cache
-                //   controller descriptors to avoid unnecessary processing.
-                // * Making sure the dictionary uses an OrdinalIgnoreCase comparer to avoid casing mismatch issues.
-                Dictionary<string, HttpControllerDescriptor> descriptors = new Dictionary<string, HttpControllerDescriptor>(controllerVersion.Value.Item1.Count, StringComparer.OrdinalIgnoreCase);
-                foreach (KeyValuePair<string, Type> controller in controllerVersion.Value.Item1)
-                {
-                    VersionedHttpControllerDescriptor descriptor = new VersionedHttpControllerDescriptor(sharedConfiguration, controller.Key, controller.Value, controllerVersion.Value.Item2);
-                    descriptors.Add(controller.Key, descriptor);
-                }
-
-                this.versionedDescriptors.Add(controllerVersion.Key.InternalVersion, descriptors);
+                return controllerType;
             }
 
-            this.supportedVersions = new ReadOnlyDictionary<string, ApiVersion>(tempSupportedVersions);
-
-            this.versionlessDescriptors = new Dictionary<string, HttpControllerDescriptor>(this.tempVersionlessControllers.Count);
-            foreach (KeyValuePair<string, Type> versionlessController in this.tempVersionlessControllers)
+            if (_versionlessControllers.TryGetValue(controllerName, out var versionlessType))
             {
-                HttpControllerDescriptor descriptor = new HttpControllerDescriptor(sharedConfiguration, versionlessController.Key, versionlessController.Value);
-                this.versionlessDescriptors.Add(versionlessController.Key, descriptor);
+                return versionlessType;
             }
 
-            // We use our own controller selector so that
-            // we can route based on api-version.
-            sharedConfiguration.Services.Replace(typeof(IHttpControllerSelector), this);
-
-            if (initVersionHandler)
-            {
-                // hook up the api version handler
-                sharedConfiguration.MessageHandlers.Add(new ApiVersionHandler(this.supportedVersions));
-            }
-
-            this.MarkInitialized();
-        }
-
-        /// <summary>
-        /// Gets a static mapping of controller names to controller descriptors.
-        /// Returns null since the Versioned controller will may have multiple
-        /// controllers for the same name leading to misleading Help pages.
-        /// </summary>
-        /// <returns>Always returns null.</returns>
-        public IDictionary<string, HttpControllerDescriptor> GetControllerMapping()
-        {
+            _logger.LogDebug("No controller found for '{Controller}'", controllerName);
             return null;
-        }
-
-        /// <summary>
-        /// Selects the appropriate controller based on api-version information
-        /// extracted from the request.
-        /// </summary>
-        /// <param name="request">The HTTP request.</param>
-        /// <returns>A descriptor for the controller to use for the provided
-        /// message.</returns>
-        public virtual HttpControllerDescriptor SelectController(HttpRequestMessage request)
-        {
-            this.ThrowIfNotInitialized();
-
-            // The version was stamped by the ApiVersionHandler.
-            ApiVersion apiVersion = null;
-            object versionObject;
-            if (request.Properties.TryGetValue(PaymentConstants.Web.Properties.Version, out versionObject))
-            {
-                apiVersion = (ApiVersion)versionObject;
-            }
-
-            string controllerName = string.Empty;
-
-            // Get the controller name from the routing information.
-            IHttpRouteData routeData = request.GetRouteData();
-            object controllerProperty;
-            if (routeData.Values.TryGetValue(ControllerProperty, out controllerProperty))
-            {
-                controllerName = controllerProperty as string;
-            }
-
-            if (apiVersion != null)
-            {
-                Debug.Assert(this.versionedDescriptors.ContainsKey(apiVersion.InternalVersion), "The ApiVersionHandler should have thrown if the version wasn't supported.");
-                Dictionary<string, HttpControllerDescriptor> descriptors = this.versionedDescriptors[apiVersion.InternalVersion];
-
-                HttpControllerDescriptor result;
-                if (descriptors.TryGetValue(controllerName, out result))
-                {
-                    return result;
-                }
-            }
-            else
-            {
-                HttpControllerDescriptor result;
-                if (this.versionlessDescriptors.TryGetValue(controllerName, out result))
-                {
-                    return result;
-                }
-            }
-
-            // Returning null here results in a 404.  This is the behavior we want
-            // when the requested controller (IE - user provided URL) references a
-            // controller that doesn't exist.
-            return null;
-        }
-
-        /// <summary>
-        /// Mark the selector as being initialized.  Separated out into a separate method
-        /// so that it is easy to maintain this and the two Throw*Initialized methods.
-        /// </summary>
-        private void MarkInitialized()
-        {
-            this.tempControllerVersions = null;
-            this.tempVersionlessControllers = null;
-        }
-
-        /// <summary>
-        /// Throw an InvalidOperation is we're already initialized.
-        /// </summary>
-        private void ThrowIfInitialized()
-        {
-            if (this.tempControllerVersions == null)
-            {
-                throw new InvalidOperationException("The selector is already initialized.");
-            }
-        }
-
-        /// <summary>
-        /// Throw an InvalidOperation is we're not already initialized.
-        /// </summary>
-        private void ThrowIfNotInitialized()
-        {
-            if (this.tempControllerVersions != null)
-            {
-                throw new InvalidOperationException("The selector has not been initialized.");
-            }
         }
     }
 }
+
