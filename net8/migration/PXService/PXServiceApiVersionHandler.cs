@@ -17,15 +17,16 @@ namespace Microsoft.Commerce.Payments.PXService
     using System.Collections.Generic;
     using System.Linq;
     using System.Net;
+    using System.Net.Http;
     using System.Text.RegularExpressions;
     using System.Threading;
     using System.Threading.Tasks;
 
     /// <summary>
-    /// Delegating handler which validates that an appropriate api-version is
+    /// Middleware which validates that an appropriate api-version is
     /// passed with the request.
     /// </summary>
-    public class PXServiceApiVersionHandler : DelegatingHandler
+    public class PXServiceApiVersionHandler
     {
         private const string OperationVersionHeader = "x-ms-operation-version";
         private const string ExposableFlightsHeader = "x-ms-flight";
@@ -34,32 +35,28 @@ namespace Microsoft.Commerce.Payments.PXService
         private const string PXFlightAssignmentContextHeader = "x-ms-px-flight-assignmentcontext";
         private const string NoSniff = "nosniff";
 
-        private string[] versionlessControllers;
-        private IDictionary<string, ApiVersion> supportedVersions;
-        private PXServiceSettings settings;
-        private readonly RequestDelegate? next;
+        private readonly string[] versionlessControllers;
+        private readonly IDictionary<string, ApiVersion> supportedVersions;
+        private readonly PXServiceSettings settings;
+        private readonly RequestDelegate next;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PXServiceApiVersionHandler"/> class.
         /// </summary>
+        /// <param name="next">The next middleware in the pipeline.</param>
         /// <param name="supportedVersions">A dictionary from api-version string to internal
         /// version number which represents the set of supported versions.</param>
-        /// <param name="versionlessControllers">Names of controllers that should be available with no version</param>
+        /// <param name="versionlessControllers">Names of controllers that should be available with no version.</param>
         /// <param name="settings">PXServiceSettings instance for the current service.</param>
-        public PXServiceApiVersionHandler(IDictionary<string, ApiVersion> supportedVersions, string[] versionlessControllers, PXServiceSettings settings)
-            : this(null, supportedVersions, versionlessControllers, settings)
-        {
-        }
-
-        public PXServiceApiVersionHandler(RequestDelegate? next, IDictionary<string, ApiVersion> supportedVersions, string[] versionlessControllers, PXServiceSettings settings)
+        public PXServiceApiVersionHandler(RequestDelegate next, IDictionary<string, ApiVersion> supportedVersions, string[] versionlessControllers, PXServiceSettings settings)
         {
             this.next = next;
             this.supportedVersions = supportedVersions;
-            this.versionlessControllers = versionlessControllers ?? new string[0];
+            this.versionlessControllers = versionlessControllers ?? Array.Empty<string>();
             this.settings = settings;
         }
 
-        public async Task InvokeAsync(AspNetCore.Http.HttpContext httpContext)
+        public async Task InvokeAsync(HttpContext httpContext)
         {
             var allowedVersionlessRequest = false;
             var endpoint = httpContext.GetEndpoint();
@@ -109,11 +106,8 @@ namespace Microsoft.Commerce.Payments.PXService
 
             if (allowedVersionlessRequest)
             {
-                if (this.next != null)
-                {
-                    // If we have a next handler, call it
-                    await this.next(httpContext);
-                }
+                // If we have a next handler, call it
+                await this.next(httpContext);
                 return;
             }
 
@@ -155,7 +149,7 @@ namespace Microsoft.Commerce.Payments.PXService
         /// <param name="cancellationToken">A token which may be used to listen
         /// for cancellation.</param>
         /// <returns>The outbound response.</returns>
-        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        private async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             // Extract version and accountId from the RequestUri.
             // As can be seen from sample PX RequestUris below, version ("v7.0" in the example below) is part of the url.  Also,
