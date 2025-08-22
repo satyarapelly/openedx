@@ -4,33 +4,32 @@ namespace SelfHostedPXServiceCore.Mocks
 {
     using System;
     using System.Net.Http;
-    using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Http;
 
     /// <summary>
-    /// This is a delegating handler that allows callers to configure its behavior by setting custom actions
-    /// to be executed before and after calling the next handler.  It also allows callers to determine if 
-    /// the next hander should be called at all or if a configurable default response should be returned thus
-    /// short-circuiting the pipeline.
+    /// Provides hooks for pre- and post-processing around an optional inner handler
+    /// without relying on <see cref="DelegatingHandler"/>. Callers can set custom
+    /// actions to inspect or modify requests and responses, and choose whether to
+    /// invoke the inner handler at all.
     /// </summary>
-    public class PXServiceHandler : DelegatingHandler
+    public class PXServiceHandler
     {
         private readonly RequestDelegate _next;
 
         /// <summary>
-        /// This action is called before sending the request to the next in the pipeline.
+        /// Action invoked before the request is sent to the inner handler.
         /// </summary>
         public Action<HttpRequestMessage> PreProcess { get; set; }
 
         /// <summary>
-        /// Determines if the request should be sent to the next in the pipeline.
+        /// Indicates whether the inner handler should be called.
         /// </summary>
         public bool CallInnerHandler { get; set; }
 
         /// <summary>
-        /// This action is performed after the the pipeline returns the response. It is
-        /// only performed if ProcessRemaining is set to true.
+        /// Action invoked after the inner handler returns a response. The returned
+        /// <see cref="HttpResponseMessage"/> replaces the inner handler response.
         /// </summary>
         public Func<HttpRequestMessage, HttpResponseMessage, HttpResponseMessage> PostProcess { get; set; }
 
@@ -45,14 +44,14 @@ namespace SelfHostedPXServiceCore.Mocks
             _next = next;
         }
 
-        public async Task InvokeAsync(HttpContext context)
+        public Task InvokeAsync(HttpContext context)
         {
-            if (_next != null)
-            {
-                await _next(context);
-            }
+            return _next != null ? _next(context) : Task.CompletedTask;
         }
 
+        /// <summary>
+        /// Resets the handler to its default state.
+        /// </summary>
         public void ResetToDefault()
         {
             CallInnerHandler = true;
@@ -60,17 +59,19 @@ namespace SelfHostedPXServiceCore.Mocks
             PostProcess = null;
         }
 
-        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        /// <summary>
+        /// Processes the request using the configured actions and optional inner handler.
+        /// </summary>
+        public async Task<HttpResponseMessage> SendAsync(
+            HttpRequestMessage request,
+            Func<HttpRequestMessage, Task<HttpResponseMessage>> sendAsync)
         {
-            if (PreProcess != null)
-            {
-                PreProcess(request);
-            }
+            PreProcess?.Invoke(request);
 
             HttpResponseMessage response = null;
-            if (CallInnerHandler)
+            if (CallInnerHandler && sendAsync != null)
             {
-                response = await base.SendAsync(request, cancellationToken);
+                response = await sendAsync(request);
             }
 
             if (PostProcess != null)
@@ -82,3 +83,4 @@ namespace SelfHostedPXServiceCore.Mocks
         }
     }
 }
+
