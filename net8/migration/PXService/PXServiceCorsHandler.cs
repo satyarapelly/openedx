@@ -1,77 +1,33 @@
-﻿// <copyright file="PXServiceCorsHandler.cs" company="Microsoft Corporation">Copyright (c) Microsoft. All rights reserved.</copyright>
+using Microsoft.AspNetCore.Http;
+using Microsoft.Commerce.Payments.Common.Web;
+using Microsoft.Commerce.Payments.PXCommon;
+using Microsoft.Commerce.Payments.PXService.Settings;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace Microsoft.Commerce.Payments.PXService
 {
-    using System.Collections.Generic;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.Commerce.Payments.Common.Web;
-    using Microsoft.Commerce.Payments.PXCommon;
-    using Microsoft.Commerce.Payments.PXService.Settings;
-
     /// <summary>
-    /// Delegating handler which validates that any CORS request is coming from an allowed origin
+    /// Middleware that validates CORS requests for PX service.
     /// </summary>
-    public class PXServiceCorsHandler : DelegatingHandler
+    public class PXServiceCorsHandler
     {
-        private static List<string> corsAllowedOrigins;
         private readonly RequestDelegate _next;
-
-        public PXServiceCorsHandler(PXServiceSettings settings)
-        {
-            corsAllowedOrigins = settings.CorsAllowedOrigins ?? new List<string>();
-            _next = _ => Task.CompletedTask;
-        }
+        private readonly IList<string> _allowedOrigins;
 
         public PXServiceCorsHandler(RequestDelegate next, PXServiceSettings settings)
-            : this(settings)
         {
-            _next = next;
-        }
-
-        /// <summary>
-        /// Handles Cors Origin validation for multiple Origins
-        /// </summary>
-        /// <param name="request">The inbound request.</param>
-        /// <param name="cancellationToken">A token which may be used to listen for cancellation.</param>
-        /// <returns>The outbound response.</returns>
-        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
-        {
-            string origin = request.GetRequestHeader("Origin");
-            bool isCorsRequest = !string.IsNullOrEmpty(origin);
-
-            if (!isCorsRequest)
-            {
-                return await base.SendAsync(request, cancellationToken);
-            }
-
-            string allowedOrigin = corsAllowedOrigins.Find(x => x.ToLower() == origin.ToLower());
-
-            if (string.IsNullOrEmpty(allowedOrigin))
-            {
-                SllWebLogger.TracePXServiceException($"CORS request from domain not in allowed list: {origin}", request.GetRequestCorrelationId());
-
-                return new HttpResponseMessage(HttpStatusCode.Forbidden);
-            }
-
-            // The controllers don't handle OPTIONS requests, and once the origin has been verified there is no need to do anything else but send a response
-            // There is the possibliity of a simpler GET request coming through, and that will run the normal route with base.SendAsync()
-            HttpResponseMessage response = request.Method == HttpMethod.Options
-               ? new HttpResponseMessage(HttpStatusCode.OK)
-               : await base.SendAsync(request, cancellationToken);
-
-            response.Headers.Add("Access-Control-Allow-Origin", origin);
-
-            return response;
+            _next = next ?? throw new ArgumentNullException(nameof(next));
+            _allowedOrigins = settings?.CorsAllowedOrigins ?? new List<string>();
         }
 
         public async Task InvokeAsync(HttpContext context)
         {
-            string origin = context.Request.GetRequestHeader("Origin");
-            bool isCorsRequest = !string.IsNullOrEmpty(origin);
+            var origin = context.Request.GetRequestHeader("Origin");
+            var isCorsRequest = !string.IsNullOrEmpty(origin);
 
             if (!isCorsRequest)
             {
@@ -79,16 +35,15 @@ namespace Microsoft.Commerce.Payments.PXService
                 return;
             }
 
-            string allowedOrigin = corsAllowedOrigins.Find(x => x.ToLower() == origin.ToLower());
-
-            if (string.IsNullOrEmpty(allowedOrigin))
+            var allowedOrigin = _allowedOrigins.FirstOrDefault(o => string.Equals(o, origin, StringComparison.OrdinalIgnoreCase));
+            if (allowedOrigin == null)
             {
                 SllWebLogger.TracePXServiceException($"CORS request from domain not in allowed list: {origin}", context.Request.GetRequestCorrelationId());
                 context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
                 return;
             }
 
-            if (context.Request.Method == HttpMethods.Options)
+            if (HttpMethods.Options.Equals(context.Request.Method, StringComparison.OrdinalIgnoreCase))
             {
                 context.Response.StatusCode = (int)HttpStatusCode.OK;
             }

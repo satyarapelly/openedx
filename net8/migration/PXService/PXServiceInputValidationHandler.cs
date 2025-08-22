@@ -19,7 +19,7 @@ namespace Microsoft.Commerce.Payments.PXService
     /// </summary>
     public class PXServiceInputValidationHandler
     {
-        private readonly RequestDelegate next;
+        private readonly RequestDelegate _next;
 
         private static readonly Dictionary<string, List<IParameterValidator>> parameterValidators = new(StringComparer.OrdinalIgnoreCase)
         {
@@ -51,7 +51,7 @@ namespace Microsoft.Commerce.Payments.PXService
 
         public PXServiceInputValidationHandler(RequestDelegate next)
         {
-            this.next = next ?? throw new ArgumentNullException(nameof(next));
+            _next = next ?? throw new ArgumentNullException(nameof(next));
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -101,7 +101,7 @@ namespace Microsoft.Commerce.Payments.PXService
                 TraceIntegrationError(request, message);
             }
 
-            await this.next(context);
+            await _next(context);
         }
 
         public static void TraceIntegrationError(HttpRequest request, string message)
