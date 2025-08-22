@@ -1,15 +1,17 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.Commerce.Payments.Common.Environments;
 using Microsoft.Commerce.Payments.Common.Tracing;
 using Microsoft.Commerce.Payments.Common.Web; // VersionedControllerResolver (Core helper)
 using Microsoft.Commerce.Payments.PXCommon;
 using Microsoft.Commerce.Payments.PXService;
 using Microsoft.Commerce.Payments.PXService.Settings;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System.Diagnostics.Tracing;
 using Environment = Microsoft.Commerce.Payments.Common.Environments.Environment;
@@ -34,25 +36,42 @@ var supportedVersions = new Dictionary<string, ApiVersion>(StringComparer.Ordina
 string[] versionlessControllers = { C(GlobalConstants.ControllerNames.ProbeController) };
 
 // controllers + Newtonsoft.Json (ignore nulls)
-builder.Services.AddControllers(o =>
+builder.Services.AddControllers(option =>
 {
-    o.Filters.Add(new PXServiceExceptionFilter());
+    option.Filters.Add(new PXServiceExceptionFilter());
+    if (pxSettings.AuthorizationFilter is not null)
+    {
+        option.Filters.Add(pxSettings.AuthorizationFilter);
+    }
 })
-.AddNewtonsoftJson(o => o.SerializerSettings.NullValueHandling = NullValueHandling.Ignore);
+.AddNewtonsoftJson(option => option.SerializerSettings.NullValueHandling = NullValueHandling.Ignore);
 
 // optional – if you rely on your own AI setup it’s fine to leave this
 builder.Services.AddApplicationInsightsTelemetry();
+builder.Services.AddSingleton<VersionedControllerSelector>(sp =>
+{
+    var resolverLogger = sp.GetRequiredService<ILogger<VersionedControllerSelector>>();
+    var resolver = new VersionedControllerSelector(resolverLogger);
+
+    // Add versioned and versionless controllers
+    var catalogLogger = sp.GetRequiredService<ILoggerFactory>().CreateLogger("VersionCatalog");
+    VersionCatalog.Register(resolver, catalogLogger);
+
+    return resolver;
+});
 
 var app = builder.Build();
 
 ApplicationInsightsProvider.SetupAppInsightsConfiguration(pxSettings.ApplicationInsightInstrumentKey, pxSettings.ApplicationInsightMode);
 EnsureSllInitialized();
 
+// Replicate <rewrite> rule: /px/(.*) -> /$1  (internal rewrite)
+var rewrite = new RewriteOptions()
+    .AddRewrite(@"^px/(.*)$", "$1", skipRemainingRules: true);
+app.UseRewriter(rewrite);
+
 app.UseHttpsRedirection();
 
-// Optional endpoint to debug routes
-app.MapGet("/routes", (EndpointDataSource ds) =>
-    Results.Text(string.Join(System.Environment.NewLine, ds.Endpoints.OfType<RouteEndpoint>().Select(e => e.RoutePattern.RawText))));
 // Trace correlation (mirrors WebApiConfig)
 if (!WebHostingUtility.IsApplicationSelfHosted())
 {
@@ -74,51 +93,8 @@ if (pxSettings.PIDLDocumentValidationEnabled)
 {
     app.UseMiddleware<PXServicePIDLValidationHandler>();
 }
+
 app.UseRouting();
-
-// Version gate: after routing, before controllers
-app.Use(async (ctx, next) =>
-{
-    var endpoint = ctx.GetEndpoint();
-    var cad = endpoint?.Metadata.GetMetadata<ControllerActionDescriptor>();
-    var controllerName = cad?.ControllerName; // short name (no "Controller")
-    if (!string.IsNullOrEmpty(controllerName))
-    {
-        var resolver = ctx.RequestServices.GetRequiredService<VersionedControllerSelector>();
-        var allowedType = resolver.ResolveAllowedController(ctx); // returns Type? or null per your Core helper
-        if (allowedType is null)
-        {
-            var version = ctx.Request.Headers["api-version"].ToString();
-            ctx.Response.StatusCode = StatusCodes.Status404NotFound;
-            await ctx.Response.WriteAsync($"No controller mapped for version '{(string.IsNullOrWhiteSpace(version) ? "(none)" : version)}'.");
-            return;
-        }
-
-        // ok, let it flow
-        await next();
-        return;
-    }
-
-    // No endpoint matched (RouteData is null/empty)  try to parse and fail fast with a clearer 404
-    // Expected path like: /v7.0/Account001/AddressDescriptions
-    var segments = ctx.Request.Path.Value?.Trim('/').Split('/', StringSplitOptions.RemoveEmptyEntries) ?? Array.Empty<string>();
-    if (segments.Length >= 3 && segments[0].StartsWith("v", StringComparison.OrdinalIgnoreCase))
-    {
-        var parsedVersion = segments[0][1..];         // "7.0"
-        var parsedController = segments[2];           // "AddressDescriptions"
-        var resolver = ctx.RequestServices.GetRequiredService<VersionedControllerSelector>();
-
-        // Fake the route values just for checking
-        ctx.Request.RouteValues["controller"] = parsedController;
-        if (resolver.ResolveAllowedController(ctx) is null)
-        {
-            ctx.Response.StatusCode = StatusCodes.Status404NotFound;
-            await ctx.Response.WriteAsync($"No controller mapped for version '{parsedVersion}'.");
-            return;
-        }
-    }
-    await next();
-});
 
 // Conventional maps that mimic your old WebApiConfig
 AddUrlVersionedRoutes(app);
@@ -142,9 +118,13 @@ static string C(string name) =>
 
 static void AddUrlVersionedRoutes(IEndpointRouteBuilder endpoints)
 {
+    endpoints.MapGet("v7.0/routes", (EndpointDataSource ds) =>
+    Results.Text(string.Join(System.Environment.NewLine,
+        ds.Endpoints.OfType<RouteEndpoint>().Select(e => e.RoutePattern.RawText))));
+
     endpoints.MapControllerRoute(
         name: GlobalConstants.V7RouteNames.Probe,
-        pattern: GlobalConstants.EndPointNames.V7Probe,
+        pattern: "{version}/" + GlobalConstants.EndPointNames.V7Probe,
         defaults: new { controller = C(GlobalConstants.ControllerNames.ProbeController), action = "Get" });
 
     endpoints.MapControllerRoute(
@@ -423,7 +403,7 @@ static void AddUrlVersionedRoutes(IEndpointRouteBuilder endpoints)
     endpoints.MapControllerRoute(
         name: GlobalConstants.V7RouteNames.GetTenantDescriptionsApi,
         pattern: GlobalConstants.EndPointNames.V7TenantDescriptions,
-        defaults: new { controller = C(GlobalConstants.ControllerNames.TenantDescriptionsController), action = "List" });
+        defaults: new { controller = C(GlobalConstants.ControllerNames.TenantDescriptionsController), action = "Get" });
 
     endpoints.MapControllerRoute(
         name: GlobalConstants.V7RouteNames.GetPaymentSessionDescriptionsApi,
