@@ -60,18 +60,18 @@ namespace SelfHostedPXServiceCore.Mocks
         }
 
         /// <summary>
-        /// Processes the request using the configured actions and optional inner handler.
+        /// Processes the request using the configured actions and optional next delegate.
         /// </summary>
-        public async Task<HttpResponseMessage> SendAsync(
+        public async Task<HttpResponseMessage> InvokeAsync(
             HttpRequestMessage request,
-            Func<HttpRequestMessage, Task<HttpResponseMessage>> sendAsync)
+            Func<HttpRequestMessage, Task<HttpResponseMessage>> next)
         {
             PreProcess?.Invoke(request);
 
             HttpResponseMessage response = null;
-            if (CallInnerHandler && sendAsync != null)
+            if (CallInnerHandler && next != null)
             {
-                response = await sendAsync(request);
+                response = await next(request);
             }
 
             if (PostProcess != null)
