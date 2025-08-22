@@ -17,6 +17,12 @@ namespace Microsoft.Commerce.Payments.PXCommon
 
     public class PXTracingHandler : DelegatingHandler
     {
+        private static readonly HttpRequestOptionsKey<EventTraceActivity> TraceActivityKey = new("PXTraceActivity");
+
+        private readonly Action<string, string, EventTraceActivity> logRequest;
+        private readonly Action<string, EventTraceActivity> logResponse;
+        private readonly Action<string, EventTraceActivity> logError;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PXTracingHandler" /> class.
         /// </summary>
@@ -32,9 +38,9 @@ namespace Microsoft.Commerce.Payments.PXCommon
             : base()
         {
             this.ServiceName = serviceName;
-            this.LogError = logError ?? ((m, t) => PaymentsEventSource.Log.TracingHandlerTraceError(m, t));
-            this.LogRequest = logRequest ?? ((a, m, t) => { });
-            this.LogResponse = logResponse ?? ((m, t) => { });
+            this.logError = logError ?? ((m, t) => PaymentsEventSource.Log.TracingHandlerTraceError(m, t));
+            this.logRequest = logRequest ?? ((a, m, t) => { });
+            this.logResponse = logResponse ?? ((m, t) => { });
         }
 
         /// <summary>
@@ -54,22 +60,20 @@ namespace Microsoft.Commerce.Payments.PXCommon
             : base(httpMessageHandler)
         {
             this.ServiceName = serviceName;
-            this.LogError = logError ?? ((m, t) => PaymentsEventSource.Log.TracingHandlerTraceError(m, t));
-            this.LogRequest = logRequest ?? ((a, m, t) => { });
-            this.LogResponse = logResponse ?? ((m, t) => { });
+            this.logError = logError ?? ((m, t) => PaymentsEventSource.Log.TracingHandlerTraceError(m, t));
+            this.logRequest = logRequest ?? ((a, m, t) => { });
+            this.logResponse = logResponse ?? ((m, t) => { });
         }
 
-        public string ServiceName { get; set; }
-
-        public Action<string, string, EventTraceActivity> LogRequest { get; set; }
-
-        public Action<string, EventTraceActivity> LogResponse { get; set; }
-
-        public Action<string, EventTraceActivity> LogError { get; set; }
+        public string ServiceName { get; }
 
         protected sealed override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            EventTraceActivity serverTraceActivity = request.GetRequestCorrelationId();
+            if (!request.Options.TryGetValue(TraceActivityKey, out var serverTraceActivity))
+            {
+                serverTraceActivity = request.GetRequestCorrelationId();
+                request.Options.Set(TraceActivityKey, serverTraceActivity);
+            }
 
             using (new TraceCorrelationScope(serverTraceActivity))
             {
@@ -92,11 +96,11 @@ namespace Microsoft.Commerce.Payments.PXCommon
             try
             {
                 string requestPayload = await request.GetRequestPayload().ConfigureAwait(false);
-                this.LogRequest(request.GetOperationName(), string.Format(CultureInfo.InvariantCulture, "Url:{0}, Payload:{1}", request.RequestUri.ToString(), requestPayload), traceId);
+                this.logRequest(request.GetOperationName(), string.Format(CultureInfo.InvariantCulture, "Url:{0}, Payload:{1}", request.RequestUri.ToString(), requestPayload), traceId);
             }
             catch (Exception ex)
             {
-                this.LogError(string.Format("Exception happened in presendaction. {0}", ex.Message), traceId);
+                this.logError(string.Format("Exception happened in presendaction. {0}", ex.Message), traceId);
             }
         }
 
@@ -124,11 +128,11 @@ namespace Microsoft.Commerce.Payments.PXCommon
                 string callerName = request.GetRequestCallerName();
                 sb.AppendFormat("Caller: {0}", callerName ?? Constants.ClientNames.Unknown);
 
-                this.LogResponse(sb.ToString(), traceId);
+                this.logResponse(sb.ToString(), traceId);
             }
             catch (Exception ex)
             {
-                this.LogError(string.Format("Exception happened in postsendaction. {0}", ex.Message), traceId);
+                this.logError(string.Format("Exception happened in postsendaction. {0}", ex.Message), traceId);
             }
         }
     }
