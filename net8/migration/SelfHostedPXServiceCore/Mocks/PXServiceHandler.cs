@@ -1,52 +1,35 @@
-﻿// <copyright company="Microsoft Corporation">Copyright (c) Microsoft 2018. All rights reserved.</copyright>
+// <copyright company="Microsoft Corporation">Copyright (c) Microsoft 2018. All rights reserved.</copyright>
 
 namespace SelfHostedPXServiceCore.Mocks
 {
     using System;
-    using System.Net.Http;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Http;
 
     /// <summary>
-    /// Provides hooks for pre- and post-processing around an optional inner handler
-    /// without relying on <see cref="DelegatingHandler"/>. Callers can set custom
-    /// actions to inspect or modify requests and responses, and choose whether to
-    /// invoke the inner handler at all.
+    /// Provides hooks for pre- and post-processing around the request pipeline
+    /// without relying on <see cref="DelegatingHandler"/>.
     /// </summary>
-    public class PXServiceHandler
+    public class PXServiceHandler : IMiddleware
     {
-        private readonly RequestDelegate _next;
-
         /// <summary>
-        /// Action invoked before the request is sent to the inner handler.
+        /// Action invoked before the request is sent to the next middleware.
         /// </summary>
-        public Action<HttpRequestMessage> PreProcess { get; set; }
+        public Action<HttpContext> PreProcess { get; set; }
 
         /// <summary>
-        /// Indicates whether the inner handler should be called.
+        /// Indicates whether the next middleware should be executed.
         /// </summary>
         public bool CallInnerHandler { get; set; }
 
         /// <summary>
-        /// Action invoked after the inner handler returns a response. The returned
-        /// <see cref="HttpResponseMessage"/> replaces the inner handler response.
+        /// Action invoked after the next middleware completes.
         /// </summary>
-        public Func<HttpRequestMessage, HttpResponseMessage, HttpResponseMessage> PostProcess { get; set; }
+        public Func<HttpContext, Task> PostProcess { get; set; }
 
         public PXServiceHandler()
         {
             ResetToDefault();
-        }
-
-        public PXServiceHandler(RequestDelegate next)
-            : this()
-        {
-            _next = next;
-        }
-
-        public Task InvokeAsync(HttpContext context)
-        {
-            return _next != null ? _next(context) : Task.CompletedTask;
         }
 
         /// <summary>
@@ -60,26 +43,21 @@ namespace SelfHostedPXServiceCore.Mocks
         }
 
         /// <summary>
-        /// Processes the request using the configured actions and optional next delegate.
+        /// Middleware entry point used by ASP.NET Core.
         /// </summary>
-        public async Task<HttpResponseMessage> InvokeAsync(
-            HttpRequestMessage request,
-            Func<HttpRequestMessage, Task<HttpResponseMessage>> next)
+        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
-            PreProcess?.Invoke(request);
+            PreProcess?.Invoke(context);
 
-            HttpResponseMessage response = null;
             if (CallInnerHandler && next != null)
             {
-                response = await next(request);
+                await next(context);
             }
 
             if (PostProcess != null)
             {
-                response = PostProcess(request, response);
+                await PostProcess(context);
             }
-
-            return response;
         }
     }
 }

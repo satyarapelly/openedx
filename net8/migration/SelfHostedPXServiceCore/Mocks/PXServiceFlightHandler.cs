@@ -1,18 +1,24 @@
-﻿// <copyright company="Microsoft Corporation">Copyright (c) Microsoft 2018. All rights reserved.</copyright>
+// <copyright company="Microsoft Corporation">Copyright (c) Microsoft 2018. All rights reserved.</copyright>
 
 namespace SelfHostedPXServiceCore.Mocks
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Net.Http;
     using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.Commerce.Payments.PXService;
 
     /// <summary>
-    /// Maintains a collection of flight names that can be applied to outbound requests.
+    /// Maintains a collection of flight names that can be applied to inbound requests.
     /// </summary>
-    public class PXServiceFlightHandler
+    public class PXServiceFlightHandler : IMiddleware
     {
+        private const string FlightContextKey = GlobalConstants.RequestPropertyKeys.ExposedFlightFeatures;
+
+        /// <summary>
+        /// Gets the list of flights that should be exposed on each request.
+        /// </summary>
         public List<string> EnabledFlights { get; }
 
         public PXServiceFlightHandler()
@@ -20,11 +26,17 @@ namespace SelfHostedPXServiceCore.Mocks
             EnabledFlights = new List<string>();
         }
 
+        /// <summary>
+        /// Clears all configured flights.
+        /// </summary>
         public void ResetToDefault()
         {
             EnabledFlights.Clear();
         }
 
+        /// <summary>
+        /// Adds the comma separated flight names to the list of enabled flights.
+        /// </summary>
         public void AddToEnabledFlights(string flightsToAdd)
         {
             EnabledFlights.AddRange(
@@ -32,14 +44,16 @@ namespace SelfHostedPXServiceCore.Mocks
                     .Select(f => f.Trim()));
         }
 
-        public Task<HttpResponseMessage> InvokeAsync(
-            HttpRequestMessage request,
-            Func<HttpRequestMessage, Task<HttpResponseMessage>> next)
+        /// <summary>
+        /// Middleware entry point used by ASP.NET Core to stamp enabled flights
+        /// onto the current <see cref="HttpContext"/>.
+        /// </summary>
+        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
             if (EnabledFlights.Count > 0)
             {
-                var optionsKey = new HttpRequestOptionsKey<List<string>>("PX.ExposedFlightFeatures");
-                if (request.Options.TryGetValue(optionsKey, out var exposableFeatures))
+                if (context.Items.TryGetValue(FlightContextKey, out var existing) &&
+                    existing is List<string> exposableFeatures)
                 {
                     if (exposableFeatures.Contains("PXEnableIndia3DS1Challenge"))
                     {
@@ -52,12 +66,14 @@ namespace SelfHostedPXServiceCore.Mocks
                     }
                 }
 
-                request.Options.Set(optionsKey, EnabledFlights);
+                context.Items[FlightContextKey] = EnabledFlights;
             }
 
-            return next != null
-                ? next(request)
-                : Task.FromResult<HttpResponseMessage>(null);
+            if (next != null)
+            {
+                await next(context);
+            }
         }
     }
 }
+

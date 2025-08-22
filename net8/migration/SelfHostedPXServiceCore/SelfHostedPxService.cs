@@ -3,6 +3,7 @@
 namespace SelfHostedPXServiceCore
 {
     using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
     using Microsoft.Commerce.Payments.Common.Web;
     using Microsoft.Commerce.Payments.PXService;
     using Microsoft.Commerce.Payments.PXService.Accessors.IssuerService;
@@ -115,18 +116,19 @@ namespace SelfHostedPXServiceCore
                 builder =>
                 {
                     WebApiConfig.Register(builder, PXSettings);
+
                     PXFlightHandler = new PXServiceFlightHandler();
-                    builder.Services.AddSingleton(PXFlightHandler);
-                  
-                    // The PXCorsHandler instance here is for testing purposes.
-                    // It needs to be added after WebApiConfig.Register runs otherwise the flight needed for testing will be overwritten.
+                    PXHandler = new PXServiceHandler();
                     PXCorsHandler = new PXServiceCorsHandler(new PXServiceSettings());
                     PXApiVersionHandler = new PXServiceApiVersionHandler(supportedVersions, versionlessControllers, PXSettings);
+
+                    builder.Services.AddSingleton(PXFlightHandler);
+                    builder.Services.AddSingleton(PXHandler);
                     builder.Services.AddSingleton(PXCorsHandler);
                     builder.Services.AddSingleton(PXApiVersionHandler);
 
-                    PXHandler = new PXServiceHandler();
-                    builder.Services.AddSingleton(PXHandler);
+                    // Ensure the handlers participate in the ASP.NET Core request pipeline.
+                    builder.Services.AddSingleton<IStartupFilter, PXServicePipelineFilter>();
                 },
                 fullBaseUrl,
                 "http",
@@ -179,6 +181,25 @@ namespace SelfHostedPXServiceCore
                 .Last()
                 .Replace("Accessor", "Service")
                 .Replace("ServiceService", "Service");
+        }
+    }
+
+    /// <summary>
+    /// Configures the ASP.NET Core middleware pipeline for the self-hosted PX service.
+    /// </summary>
+    internal sealed class PXServicePipelineFilter : IStartupFilter
+    {
+        public Action<IApplicationBuilder> Configure(Action<IApplicationBuilder> next)
+        {
+            return app =>
+            {
+                app.UseMiddleware<PXServiceFlightHandler>();
+                app.UseMiddleware<PXServiceCorsHandler>();
+                app.UseMiddleware<PXServiceApiVersionHandler>();
+                app.UseMiddleware<PXServiceHandler>();
+
+                next(app);
+            };
         }
     }
 }
