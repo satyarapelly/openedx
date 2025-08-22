@@ -35,8 +35,6 @@ namespace SelfHostedPXServiceCore
 
         public static PXServiceFlightHandler PXFlightHandler { get; private set; }
 
-        public static PXServiceApiVersionHandler PXApiVersionHandler { get; private set; }
-
 
         public SelfHostedPxService(string fullBaseUrl, bool useSelfHostedDependencies, bool useArrangedResponses)
         {
@@ -119,13 +117,11 @@ namespace SelfHostedPXServiceCore
 
                     PXFlightHandler = new PXServiceFlightHandler();
                     PXHandler = new PXServiceHandler();
-                    PXCorsHandler = new PXServiceCorsHandler(new PXServiceSettings());
-                    PXApiVersionHandler = new PXServiceApiVersionHandler(supportedVersions, versionlessControllers, PXSettings);
 
                     builder.Services.AddSingleton(PXFlightHandler);
                     builder.Services.AddSingleton(PXHandler);
-                    builder.Services.AddSingleton(PXCorsHandler);
-                    builder.Services.AddSingleton(PXApiVersionHandler);
+                    builder.Services.AddSingleton<IDictionary<string, ApiVersion>>(supportedVersions);
+                    builder.Services.AddSingleton(versionlessControllers);
 
                     // Ensure the handlers participate in the ASP.NET Core request pipeline.
                     builder.Services.AddSingleton<IStartupFilter, PXServicePipelineFilter>();
