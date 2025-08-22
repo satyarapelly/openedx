@@ -4,7 +4,6 @@ using Microsoft.Commerce.Payments.Common.Web;
 using Microsoft.Commerce.Payments.PXService.Settings;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.IdentityModel.Protocol.Handlers;
 using Newtonsoft.Json;
 using SelfHostedPXServiceCore.Mocks;
@@ -20,8 +19,6 @@ namespace Microsoft.Commerce.Payments.PXService
     public static class WebApiConfig
     {
         public static readonly Type PXSettingsType = typeof(PXServiceSettings);
-
-        private static VersionedControllerSelector selector;
 
         /// <summary>
         /// Registers services required for the PX service.
@@ -40,8 +37,8 @@ namespace Microsoft.Commerce.Payments.PXService
             builder.Services.AddSingleton<VersionedControllerSelector>(sp =>
             {
                 var selectorLogger = sp.GetRequiredService<ILogger<VersionedControllerSelector>>();
-                selector = new VersionedControllerSelector(selectorLogger);
-                InitVersionSelector();
+                var selector = new VersionedControllerSelector(selectorLogger);
+                InitVersionSelector(selector);
                 return selector;
             });
 
@@ -488,9 +485,8 @@ namespace Microsoft.Commerce.Payments.PXService
                 defaults: new { controller = C(GlobalConstants.ControllerNames.PaymentRequestsExController), action = "RemoveEligiblePaymentMethods" });
         }
 
-        private static void InitVersionSelector()
+        private static void InitVersionSelector(VersionedControllerSelector selector)
         {
-            selector = new VersionedControllerSelector(NullLogger<VersionedControllerSelector>.Instance);
             AddV7Controllers(selector);
         }
 
