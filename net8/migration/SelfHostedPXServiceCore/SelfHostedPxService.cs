@@ -140,8 +140,6 @@ namespace SelfHostedPXServiceCore
 
                     app.UseMiddleware<PXServiceFlightHandler>();
 
-                    app.MapControllers();
-                 
                 },
                 fullBaseUrl: fullBaseUrl,
                 protocol: "https");
