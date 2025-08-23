@@ -23,16 +23,16 @@ namespace SelfHostedPXService
         /// <param name="args">Console arguments for configuring tests</param>
         /// <returns>The exit code of the test run.</returns>
         public static async Task Main(string[] args)
-         {
-            // optional base URL from args, e.g. http://localhost:49152
-            string? baseUrl = args.Length > 0 ? args[0] : "http://localhost:49152";
+        {
+            // optional base URL from args, e.g. http://localhost:7151
+            string? baseUrl = args.Length > 0 ? args[0] : "https://localhost:7151";
             Console.WriteLine(baseUrl is null
                 ? "Initializing server..."
                 : $"Initializing server on {baseUrl}...");
 
             // Start the self-host
             var host = new SelfHostedPxService(baseUrl, true, false);
-                var cts = new CancellationTokenSource();
+            var cts = new CancellationTokenSource();
             Console.CancelKeyPress += (_, e) => { e.Cancel = true; cts.Cancel(); };
 
             Console.WriteLine("Server initialized.");
@@ -54,9 +54,9 @@ namespace SelfHostedPXService
 
                 // Additional request to verify that endpoint resolution is functioning. The diagnostic
                 // middleware in SelfHostedPxService will print the resolved controller name for this
-                // call to the console.
-                Console.WriteLine("Verifying endpoint resolution via /v7.0/probe...");
-                var verifyResp = await GetPidlFromPXService("v7.0/probe");
+                // call to the console. The probe endpoint is versionless, so we call /probe.
+                Console.WriteLine("Verifying endpoint resolution via /probe...");
+                var verifyResp = await GetPidlFromPXService("probe");
                 Console.WriteLine($"Verification status: {(int)verifyResp.StatusCode} {verifyResp.ReasonPhrase}");
             }
             catch (Exception ex)

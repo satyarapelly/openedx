@@ -131,11 +131,11 @@ namespace SelfHostedPXServiceCore
                     // PXServiceApiVersionHandler.
                     app.Use(async (context, next) =>
                     {
+                        await next();
                         var endpoint = context.GetEndpoint();
                         var cad = endpoint?.Metadata.GetMetadata<ControllerActionDescriptor>();
                         var controllerName = cad?.ControllerName ?? "<null>";
-                        Console.WriteLine($"[Endpoint] Resolved controller: {controllerName}");
-                        await next();
+                        Console.WriteLine($"[Endpoint] Path: {context.Request.Path}, Resolved controller: {controllerName}");
                     });
 
                     // Pull singletons for test access
