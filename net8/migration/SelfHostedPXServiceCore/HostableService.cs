@@ -4,15 +4,16 @@
 
 namespace SelfHostedPXServiceCore
 {
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.Commerce.Payments.PXCommon;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Net.Http;
     using System.Net.NetworkInformation;
-    using Microsoft.AspNetCore.Builder;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Hosting;
-    using Newtonsoft.Json;
 
     /// <summary>
     /// Lightweight self-host wrapper for ASP.NET Core used by tests/emulators.
@@ -85,8 +86,11 @@ namespace SelfHostedPXServiceCore
             App.Urls.Clear();
             App.Urls.Add(BaseUri.ToString());
 
-            // Baseline pipeline
-            App.UseRouting();
+            // Conditionally redirect HTTP to HTTPS only when not self-hosted
+            if (!WebHostingUtility.IsApplicationSelfHosted())
+            {
+                App.UseHttpsRedirection();
+            }
 
             // Callers can add middlewares, filters, etc.
             configureApp?.Invoke(App);
