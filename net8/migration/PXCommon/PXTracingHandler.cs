@@ -17,6 +17,12 @@ namespace Microsoft.Commerce.Payments.PXCommon
 
     public class PXTracingHandler : DelegatingHandler
     {
+        private static readonly HttpRequestOptionsKey<EventTraceActivity> TraceActivityKey = new("PXTraceActivity");
+
+        private readonly Action<string, string, EventTraceActivity> logRequest;
+        private readonly Action<string, EventTraceActivity> logResponse;
+        private readonly Action<string, EventTraceActivity> logError;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PXTracingHandler" /> class.
         /// </summary>
@@ -32,9 +38,9 @@ namespace Microsoft.Commerce.Payments.PXCommon
             : base()
         {
             this.ServiceName = serviceName;
-            this.LogError = logError ?? ((m, t) => PaymentsEventSource.Log.TracingHandlerTraceError(m, t));
-            this.LogRequest = logRequest ?? ((a, m, t) => { });
-            this.LogResponse = logResponse ?? ((m, t) => { });
+            this.logError = logError ?? ((m, t) => PaymentsEventSource.Log.TracingHandlerTraceError(m, t));
+            this.logRequest = logRequest ?? ((a, m, t) => { });
+            this.logResponse = logResponse ?? ((m, t) => { });
         }
 
         /// <summary>
@@ -54,29 +60,26 @@ namespace Microsoft.Commerce.Payments.PXCommon
             : base(httpMessageHandler)
         {
             this.ServiceName = serviceName;
-            this.LogError = logError ?? ((m, t) => PaymentsEventSource.Log.TracingHandlerTraceError(m, t));
-            this.LogRequest = logRequest ?? ((a, m, t) => { });
-            this.LogResponse = logResponse ?? ((m, t) => { });
+            this.logError = logError ?? ((m, t) => PaymentsEventSource.Log.TracingHandlerTraceError(m, t));
+            this.logRequest = logRequest ?? ((a, m, t) => { });
+            this.logResponse = logResponse ?? ((m, t) => { });
         }
 
-        public string ServiceName { get; set; }
+        public string ServiceName { get; }
 
-        public Action<string, string, EventTraceActivity> LogRequest { get; set; }
-
-        public Action<string, EventTraceActivity> LogResponse { get; set; }
-
-        public Action<string, EventTraceActivity> LogError { get; set; }
-
-        protected override sealed async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        protected sealed override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            DateTime startTime = DateTime.UtcNow;
-            EventTraceActivity serverTraceActivity = request.GetRequestCorrelationId();
+            if (!request.Options.TryGetValue(TraceActivityKey, out var serverTraceActivity))
+            {
+                serverTraceActivity = request.GetRequestCorrelationId();
+                request.Options.Set(TraceActivityKey, serverTraceActivity);
+            }
 
             using (new TraceCorrelationScope(serverTraceActivity))
             {
-                this.PreSendOperation(request, serverTraceActivity);
-                HttpResponseMessage response = await base.SendAsync(request, cancellationToken);
-                this.PostSendOperation(request, response, startTime, serverTraceActivity);
+                await this.PreSendOperation(request, serverTraceActivity).ConfigureAwait(false);
+                HttpResponseMessage response = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
+                await this.PostSendOperation(request, response, serverTraceActivity).ConfigureAwait(false);
 
                 // Ensure activity on logical call context is as expected.
                 var serverTraceActivity2 = EventTraceActivity.Current;
@@ -88,20 +91,20 @@ namespace Microsoft.Commerce.Payments.PXCommon
             }
         }
 
-        private void PreSendOperation(HttpRequestMessage request, EventTraceActivity traceId)
+        private async Task PreSendOperation(HttpRequestMessage request, EventTraceActivity traceId)
         {
             try
             {
-                string requestPayload = request.GetRequestPayload().Result;
-                this.LogRequest(request.GetOperationName(), string.Format("Url:{0}, Payload:{1}", request.RequestUri.ToString(), requestPayload), traceId);
+                string requestPayload = await request.GetRequestPayload().ConfigureAwait(false);
+                this.logRequest(request.GetOperationName(), string.Format(CultureInfo.InvariantCulture, "Url:{0}, Payload:{1}", request.RequestUri.ToString(), requestPayload), traceId);
             }
             catch (Exception ex)
             {
-                this.LogError(string.Format("Exception happened in presendaction. {0}", ex.Message), traceId);
+                this.logError(string.Format("Exception happened in presendaction. {0}", ex.Message), traceId);
             }
         }
 
-        private void PostSendOperation(HttpRequestMessage request, HttpResponseMessage response, DateTime startTime, EventTraceActivity traceId)
+        private async Task PostSendOperation(HttpRequestMessage request, HttpResponseMessage response, EventTraceActivity traceId)
         {
             try
             {
@@ -109,37 +112,27 @@ namespace Microsoft.Commerce.Payments.PXCommon
                 sb.AppendLine("Response details:");
                 sb.AppendLine("Status Code: " + response.StatusCode);
 
-                if (response.Content != null)
+                if (response.Content != null && response.Content.Headers != null)
                 {
-                    if (response.Content.Headers != null)
+                    foreach (var header in response.Content.Headers)
                     {
-                        foreach (var header in response.Content.Headers)
-                        {
-                            sb.AppendLine(string.Format(CultureInfo.InvariantCulture, "{0}: {1}", header.Key, header.GetSanitizeValueForLogging()));
-                        }
+                        sb.AppendLine(string.Format(CultureInfo.InvariantCulture, "{0}: {1}", header.Key, header.GetSanitizeValueForLogging()));
+                    }
 
-                        if (response.Content.Headers.ContentLength != 0)
-                        {
-                            sb.AppendLine(response.Content.ReadAsStringAsync().Result);
-                        }
+                    if (response.Content.Headers.ContentLength != 0)
+                    {
+                        sb.AppendLine(await response.Content.ReadAsStringAsync().ConfigureAwait(false));
                     }
                 }
 
-                // get operation name
-                string operationName = request.GetOperationNameWithPendingOnInfo();
-                string version = request.GetVersion();
-                
-                if (request.Properties != null)
-                {
-                    string callerName = request.GetRequestCallerName();
-                    sb.AppendFormat("Caller: {0}", callerName ?? Constants.ClientNames.Unknown);
-                }
+                string callerName = request.GetRequestCallerName();
+                sb.AppendFormat("Caller: {0}", callerName ?? Constants.ClientNames.Unknown);
 
-                this.LogResponse(sb.ToString(), traceId);
+                this.logResponse(sb.ToString(), traceId);
             }
             catch (Exception ex)
             {
-                this.LogError(string.Format("Exception happened in postsendaction. {0}", ex.Message), traceId);
+                this.logError(string.Format("Exception happened in postsendaction. {0}", ex.Message), traceId);
             }
         }
     }
