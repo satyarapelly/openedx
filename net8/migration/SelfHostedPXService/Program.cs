@@ -52,12 +52,7 @@ namespace SelfHostedPXService
                     Console.WriteLine(FormatJsonSafe(text));
                 }
 
-                // Additional request to verify that endpoint resolution is functioning. The diagnostic
-                // middleware in SelfHostedPxService will print the resolved controller name for this
-                // call to the console. The probe endpoint is versionless, so we call /probe.
-                Console.WriteLine("Verifying endpoint resolution via /probe...");
-                var verifyResp = await GetPidlFromPXService("probe");
-                Console.WriteLine($"Verification status: {(int)verifyResp.StatusCode} {verifyResp.ReasonPhrase}");
+                await VerifyEndpointResolutionAsync();
             }
             catch (Exception ex)
             {
@@ -88,6 +83,16 @@ namespace SelfHostedPXService
             fullUrl = fullUrl.Replace("users/my-org", "DiffOrgUser", StringComparison.Ordinal);
 
             return await SelfHostedPxService.PxHostableService.HttpSelfHttpClient.GetAsync(fullUrl);
+        }
+
+        private static async Task VerifyEndpointResolutionAsync()
+        {
+            // The diagnostic middleware in SelfHostedPxService prints the resolved controller name
+            // for every request. Calling the versionless /probe endpoint exercises routing and
+            // confirms that HttpContext.GetEndpoint() is populated.
+            Console.WriteLine("Verifying endpoint resolution via /probe...");
+            var verifyResp = await GetPidlFromPXService("probe");
+            Console.WriteLine($"Verification status: {(int)verifyResp.StatusCode} {verifyResp.ReasonPhrase}");
         }
 
         private static string FormatJsonSafe(string json)
