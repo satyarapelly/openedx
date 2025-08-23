@@ -92,11 +92,14 @@ namespace SelfHostedPXServiceCore
                 App.UseHttpsRedirection();
             }
 
+            // Enable routing so later middlewares can inspect endpoints
+            App.UseRouting();
+
             // Callers can add middlewares, filters, etc.
             configureApp?.Invoke(App);
 
-            // Ensure controllers are mapped (safe to call once)
-            App.MapControllers();
+            // Ensure controllers are mapped after custom middlewares
+            App.UseEndpoints(e => e.MapControllers());
 
             // Start server
             App.Start();
