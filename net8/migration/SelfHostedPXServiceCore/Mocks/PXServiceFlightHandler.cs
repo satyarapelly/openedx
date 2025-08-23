@@ -1,59 +1,79 @@
-﻿// <copyright company="Microsoft Corporation">Copyright (c) Microsoft 2018. All rights reserved.</copyright>
+// <copyright company="Microsoft Corporation">Copyright (c) Microsoft 2018. All rights reserved.</copyright>
 
 namespace SelfHostedPXServiceCore.Mocks
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Net.Http;
-    using System.Threading;
     using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.Commerce.Payments.PXService;
 
     /// <summary>
-    /// This is a delegating handler that allows specific flights to be added to PX.ExposedFlightFeatures property of the request.
+    /// Maintains a collection of flight names that can be applied to inbound requests.
     /// </summary>
-    public class PXServiceFlightHandler : DelegatingHandler
+    public class PXServiceFlightHandler : IMiddleware
     {
-        public List<string> EnabledFlights { get; set; }
+        private const string FlightContextKey = GlobalConstants.RequestPropertyKeys.ExposedFlightFeatures;
+
+        /// <summary>
+        /// Gets the list of flights that should be exposed on each request.
+        /// </summary>
+        public List<string> EnabledFlights { get; }
 
         public PXServiceFlightHandler()
         {
             EnabledFlights = new List<string>();
         }
 
+        /// <summary>
+        /// Clears all configured flights.
+        /// </summary>
         public void ResetToDefault()
         {
             EnabledFlights.Clear();
         }
 
+        /// <summary>
+        /// Adds the comma separated flight names to the list of enabled flights.
+        /// </summary>
         public void AddToEnabledFlights(string flightsToAdd)
         {
-            EnabledFlights.AddRange(flightsToAdd.Split(new char[] { ',' }).Select(f => f.Trim()));
+            EnabledFlights.AddRange(
+                flightsToAdd.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(f => f.Trim()));
         }
 
-        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        /// <summary>
+        /// Middleware entry point used by ASP.NET Core to stamp enabled flights
+        /// onto the current <see cref="HttpContext"/>.
+        /// </summary>
+        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
-            if (EnabledFlights != null && EnabledFlights.Count > 0)
+            if (EnabledFlights.Count > 0)
             {
-                // Flights in request.Properties["PX.ExposedFlightFeatures"] will be overwritten by EnabledFlights if EnabledFlights is not empty.
-                // If PXEnableIndia3DS1Challenge exists in request.Properties["PX.ExposedFlightFeatures"], we manually add it in EnabledFlights to avoid losing it.
-                // Ideally we should add all other flights from in EnabledFlights in the future.
-                object exposableFeaturesObject = null;
-                request.Properties.TryGetValue("PX.ExposedFlightFeatures", out exposableFeaturesObject);
-                List<string> exposableFeatures = exposableFeaturesObject as List<string>;
-                if (exposableFeatures.Contains("PXEnableIndia3DS1Challenge"))
+                if (context.Items.TryGetValue(FlightContextKey, out var existing) &&
+                    existing is List<string> exposableFeatures)
                 {
-                    EnabledFlights.Add("PXEnableIndia3DS1Challenge");
+                    if (exposableFeatures.Contains("PXEnableIndia3DS1Challenge"))
+                    {
+                        EnabledFlights.Add("PXEnableIndia3DS1Challenge");
+                    }
+
+                    if (exposableFeatures.Contains("India3dsEnableForBilldesk"))
+                    {
+                        EnabledFlights.Add("India3dsEnableForBilldesk");
+                    }
                 }
 
-                if (exposableFeatures.Contains("India3dsEnableForBilldesk"))
-                {
-                    EnabledFlights.Add("India3dsEnableForBilldesk");
-                }
-
-                request.Properties["PX.ExposedFlightFeatures"] = EnabledFlights;
+                context.Items[FlightContextKey] = EnabledFlights;
             }
 
-            return await base.SendAsync(request, cancellationToken);
+            if (next != null)
+            {
+                await next(context);
+            }
         }
     }
 }
+

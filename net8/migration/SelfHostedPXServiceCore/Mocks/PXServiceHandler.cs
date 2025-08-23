@@ -3,33 +3,28 @@
 namespace SelfHostedPXServiceCore.Mocks
 {
     using System;
-    using System.Net.Http;
-    using System.Threading;
     using System.Threading.Tasks;
 
     /// <summary>
-    /// This is a delegating handler that allows callers to configure its behavior by setting custom actions
-    /// to be executed before and after calling the next handler.  It also allows callers to determine if 
-    /// the next hander should be called at all or if a configurable default response should be returned thus
-    /// short-circuiting the pipeline.
+    /// Provides hooks for pre- and post-processing around the request pipeline
+    /// without relying on <see cref="DelegatingHandler"/>.
     /// </summary>
-    public class PXServiceHandler : DelegatingHandler
+    public class PXServiceHandler : IMiddleware
     {
         /// <summary>
-        /// This action is called before sending the request to the next in the pipeline.
+        /// Action invoked before the request is sent to the next middleware.
         /// </summary>
-        public Action<HttpRequestMessage> PreProcess { get; set; }
+        public Action<HttpContext> PreProcess { get; set; }
 
         /// <summary>
-        /// Determines if the request should be sent to the next in the pipeline.
+        /// Indicates whether the next middleware should be executed.
         /// </summary>
         public bool CallInnerHandler { get; set; }
 
         /// <summary>
-        /// This action is performed after the the pipeline returns the response. It is
-        /// only performed if ProcessRemaining is set to true.
+        /// Action invoked after the next middleware completes.
         /// </summary>
-        public Func<HttpRequestMessage, HttpResponseMessage, HttpResponseMessage> PostProcess { get; set; }
+        public Func<HttpContext, Task> PostProcess { get; set; }
 
         public PXServiceHandler()
         {
@@ -43,25 +38,23 @@ namespace SelfHostedPXServiceCore.Mocks
             PostProcess = null;
         }
 
-        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        /// <summary>
+        /// Middleware entry point used by ASP.NET Core.
+        /// </summary>
+        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
-            if (PreProcess != null)
-            {
-                PreProcess(request);
-            }
+            PreProcess?.Invoke(context);
 
-            HttpResponseMessage response = null;
-            if (CallInnerHandler)
+            if (CallInnerHandler && next != null)
             {
-                response = await base.SendAsync(request, cancellationToken);
+                await next(context);
             }
 
             if (PostProcess != null)
             {
-                response = PostProcess(request, response);
+                await PostProcess(context);
             }
-
-            return response;
         }
     }
 }
+
