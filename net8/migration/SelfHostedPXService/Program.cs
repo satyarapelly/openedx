@@ -51,6 +51,13 @@ namespace SelfHostedPXService
                 {
                     Console.WriteLine(FormatJsonSafe(text));
                 }
+
+                // Additional request to verify that endpoint resolution is functioning. The diagnostic
+                // middleware in SelfHostedPxService will print the resolved controller name for this
+                // call to the console.
+                Console.WriteLine("Verifying endpoint resolution via /v7.0/probe...");
+                var verifyResp = await GetPidlFromPXService("v7.0/probe");
+                Console.WriteLine($"Verification status: {(int)verifyResp.StatusCode} {verifyResp.ReasonPhrase}");
             }
             catch (Exception ex)
             {
