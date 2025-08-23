@@ -1,4 +1,4 @@
-﻿// <copyright file="Program.cs" company="Microsoft">Copyright (c) Microsoft 2016. All rights reserved.</copyright>
+// <copyright file="Program.cs" company="Microsoft">Copyright (c) Microsoft 2016. All rights reserved.</copyright>
 
 namespace SelfHostedPXService
 {
@@ -23,9 +23,9 @@ namespace SelfHostedPXService
         /// <param name="args">Console arguments for configuring tests</param>
         /// <returns>The exit code of the test run.</returns>
         public static async Task Main(string[] args)
-        {
-            // optional base URL from args, e.g. http://localhost:49152
-            string? baseUrl = args.Length > 0 ? args[0] : "http://localhost:49152";
+         {
+            // optional base URL from args, e.g. https://localhost:7151
+            string? baseUrl = args.Length > 0 ? args[0] : "https://localhost:7151";
             Console.WriteLine(baseUrl is null
                 ? "Initializing server..."
                 : $"Initializing server on {baseUrl}...");
