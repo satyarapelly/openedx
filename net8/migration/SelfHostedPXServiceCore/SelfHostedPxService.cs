@@ -123,6 +123,7 @@ namespace SelfHostedPXServiceCore
                 },
                 configureApp: app =>
                 {
+
                     // Pull singletons for test access
                     if (!WebHostingUtility.IsApplicationSelfHosted())
                     {
@@ -136,7 +137,11 @@ namespace SelfHostedPXServiceCore
                         app.UseMiddleware<PXServicePIDLValidationHandler>();
                     }
 
-                    app.UseMiddleware<PXServiceHandler>();
+                    app.Use((HttpContext ctx, RequestDelegate next) =>
+                    {
+                        var handler = ctx.RequestServices.GetRequiredService<PXServiceHandler>();
+                        return handler.InvokeAsync(ctx, next);
+                    });
 
                     app.UseMiddleware<PXServiceFlightHandler>();
 
@@ -144,7 +149,7 @@ namespace SelfHostedPXServiceCore
                  
                 },
                 fullBaseUrl: fullBaseUrl,
-                protocol: "https");
+                protocol: "http");
         }
 
         public void ResetDependencies()
