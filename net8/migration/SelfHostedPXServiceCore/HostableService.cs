@@ -10,6 +10,7 @@ namespace SelfHostedPXServiceCore
     using System.Net.Http;
     using System.Net.NetworkInformation;
     using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Routing;
     using Microsoft.Commerce.Payments.PXCommon;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
@@ -51,7 +52,8 @@ namespace SelfHostedPXServiceCore
             Action<WebApplicationBuilder> configureServices,
             Action<WebApplication> configureApp,
             string? fullBaseUrl,
-            string? protocol)
+            string? protocol,
+            Action<IEndpointRouteBuilder>? configureEndpoints = null)
         {
             // Decide base URL
             if (string.IsNullOrWhiteSpace(fullBaseUrl))
@@ -106,6 +108,7 @@ namespace SelfHostedPXServiceCore
             // Map attribute/route-based controllers and finalize the endpoint pipeline
             App.UseEndpoints(endpoints =>
             {
+                configureEndpoints?.Invoke(endpoints);
                 endpoints.MapControllers();
             });
 

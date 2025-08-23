@@ -163,12 +163,14 @@ namespace SelfHostedPXServiceCore
                     app.UseMiddleware<PXServiceHandler>();
 
                     app.UseMiddleware<PXServiceFlightHandler>();
-
-                    // Conventional maps that mimic your old WebApiConfig
-                    WebApiConfig.AddUrlVersionedRoutes(app);
                 },
                 fullBaseUrl: fullBaseUrl,
-                protocol: "https");
+                protocol: "https",
+                configureEndpoints: endpoints =>
+                {
+                    // Conventional maps that mimic your old WebApiConfig
+                    WebApiConfig.AddUrlVersionedRoutes(endpoints);
+                });
         }
 
         public void ResetDependencies()
