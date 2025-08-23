@@ -43,7 +43,8 @@ namespace SelfHostedPXServiceCore
         /// Build + start a host with service configuration and app configuration callbacks.
         /// </summary>
         /// <param name="configureServices">Add DI/services. Controllers + Newtonsoft JSON are already registered.</param>
-        /// <param name="configureApp">Configure middleware/endpoints. <c>UseRouting()</c> and <c>MapControllers()</c> are already wired.</param>
+        /// <param name="configureApp">Configure middleware/endpoints. A routing pipeline is already wired so that
+        /// middlewares added here run <em>after</em> <c>UseRouting()</c> but before endpoints are mapped.</param>
         /// <param name="fullBaseUrl">e.g. "http://localhost:49152". If null/empty a free port is chosen.</param>
         /// <param name="protocol">"http" (default) or "https" (requires dev cert bound).</param>
         public HostableService(
@@ -92,9 +93,16 @@ namespace SelfHostedPXServiceCore
                 App.UseHttpsRedirection();
             }
 
-            // Callers can add middlewares, filters, etc.
+            // Ensure the endpoint is selected before calling custom middlewares so HttpContext.GetEndpoint()
+            // returns data (e.g. controller name) inside those middlewares. The explicit UseRouting() here
+            // runs the matcher while MapControllers() registers endpoints after all custom middleware.
+            App.UseRouting();
+
+            // Callers can add middlewares, filters, etc. They will execute after routing but before endpoints.
             configureApp?.Invoke(App);
 
+            // Map attribute/route-based controllers
+            App.MapControllers();
 
             // Start server
             App.Start();
