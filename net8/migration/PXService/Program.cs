@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Rewrite;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Commerce.Payments.Common.Environments;
 using Microsoft.Commerce.Payments.Common.Tracing;
 using Microsoft.Commerce.Payments.Common.Web;
@@ -39,7 +38,11 @@ var rewrite = new RewriteOptions()
     .AddRewrite(@"^px/(.*)$", "$1", skipRemainingRules: true);
 app.UseRewriter(rewrite);
 
-app.UseHttpsRedirection();
+// Conditionally redirect HTTP to HTTPS only when not self-hosted
+if (!WebHostingUtility.IsApplicationSelfHosted())
+{
+    app.UseHttpsRedirection();
+}
 
 // Trace correlation (mirrors WebApiConfig)
 if (!WebHostingUtility.IsApplicationSelfHosted())
@@ -63,11 +66,10 @@ if (pxSettings.PIDLDocumentValidationEnabled)
     app.UseMiddleware<PXServicePIDLValidationHandler>();
 }
 
-app.UseRouting();
-
 // Conventional maps that mimic your old WebApiConfig
 WebApiConfig.AddUrlVersionedRoutes(app);
 
+// Attribute-routed controllers
 app.MapControllers();
 
 // graceful shutdown (replaces Global.asax Application_End)
