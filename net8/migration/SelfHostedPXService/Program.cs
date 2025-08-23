@@ -23,16 +23,16 @@ namespace SelfHostedPXService
         /// <param name="args">Console arguments for configuring tests</param>
         /// <returns>The exit code of the test run.</returns>
         public static async Task Main(string[] args)
-         {
-            // optional base URL from args, e.g. http://localhost:49152
-            string? baseUrl = args.Length > 0 ? args[0] : "http://localhost:49152";
+        {
+            // optional base URL from args, e.g. http://localhost:7151
+            string? baseUrl = args.Length > 0 ? args[0] : "https://localhost:7151";
             Console.WriteLine(baseUrl is null
                 ? "Initializing server..."
                 : $"Initializing server on {baseUrl}...");
 
             // Start the self-host
             var host = new SelfHostedPxService(baseUrl, true, false);
-                var cts = new CancellationTokenSource();
+            var cts = new CancellationTokenSource();
             Console.CancelKeyPress += (_, e) => { e.Cancel = true; cts.Cancel(); };
 
             Console.WriteLine("Server initialized.");
