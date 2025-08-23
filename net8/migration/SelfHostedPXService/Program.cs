@@ -24,8 +24,8 @@ namespace SelfHostedPXService
         /// <returns>The exit code of the test run.</returns>
         public static async Task Main(string[] args)
          {
-            // optional base URL from args, e.g. https://localhost:7151
-            string? baseUrl = args.Length > 0 ? args[0] : "https://localhost:7151";
+            // optional base URL from args, e.g. http://localhost:49152
+            string? baseUrl = args.Length > 0 ? args[0] : "http://localhost:49152";
             Console.WriteLine(baseUrl is null
                 ? "Initializing server..."
                 : $"Initializing server on {baseUrl}...");
