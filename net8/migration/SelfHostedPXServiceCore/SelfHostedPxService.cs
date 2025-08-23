@@ -3,7 +3,6 @@
 namespace SelfHostedPXServiceCore
 {
     using Microsoft.AspNetCore.Builder;
-    using Microsoft.AspNetCore.Hosting;
     using Microsoft.Commerce.Payments.Common.Web;
     using Microsoft.Commerce.Payments.PXCommon;
     using Microsoft.Commerce.Payments.PXService;
@@ -35,13 +34,6 @@ namespace SelfHostedPXServiceCore
         public static PXServiceHandler? PXHandler { get; private set; }
         public static PXServiceCorsHandler? PXCorsHandler { get; private set; }
         public static PXServiceFlightHandler? PXFlightHandler { get; private set; }
-        public static PXServiceSettings PXSettings { get; private set; }
-
-        public static PXServiceHandler PXHandler { get; private set; }
-
-        public static PXServiceCorsHandler PXCorsHandler { get; private set; }
-
-        public static PXServiceFlightHandler PXFlightHandler { get; private set; }
 
         public SelfHostedPxService(string? fullBaseUrl, bool useSelfHostedDependencies, bool useArrangedResponses)
         {
@@ -126,53 +118,33 @@ namespace SelfHostedPXServiceCore
                 configureServices: builder =>
                 {
                     WebApiConfig.Register(builder, PXSettings);
-
-                    PXFlightHandler = new PXServiceFlightHandler();
-                    PXHandler = new PXServiceHandler();
-
-                    builder.Services.AddSingleton(PXFlightHandler);
-                    builder.Services.AddSingleton(PXHandler);
-                    builder.Services.AddSingleton<IDictionary<string, ApiVersion>>(supportedVersions);
-                    builder.Services.AddSingleton(versionlessControllers);
-
-                    // Ensure the handlers participate in the ASP.NET Core request pipeline.
-                    builder.Services.AddSingleton<IStartupFilter, PXServicePipelineFilter>();
-
                     builder.Services.AddSingleton<PXServiceHandler>();     // your migrated state (used by PXServiceHandler middleware)
                     builder.Services.AddSingleton<PXServiceFlightHandler>(); // state used by flighting middleware
                 },
                 configureApp: app =>
                 {
-                    // App routing + controllers
-                    app.UseRouting();
-
                     // Pull singletons for test access
                     if (!WebHostingUtility.IsApplicationSelfHosted())
                     {
                         app.UseMiddleware<PXTraceCorrelationHandler>(); 
                     }
 
-                    app.Use(async (HttpContext ctx, RequestDelegate next) =>
-                    {
-                        var handler = ctx.RequestServices.GetRequiredService<PXServiceApiVersionHandler>();
-                        await handler.InvokeAsync(ctx);
-                    });
+                    app.UseMiddleware<PXServiceApiVersionHandler>();
 
                     if (PXSettings.PIDLDocumentValidationEnabled)
                     {
                         app.UseMiddleware<PXServicePIDLValidationHandler>();
                     }
 
-                   
                     app.UseMiddleware<PXServiceHandler>();
+
                     app.UseMiddleware<PXServiceFlightHandler>();
 
                     app.MapControllers();
                  
-
                 },
                 fullBaseUrl: fullBaseUrl,
-                protocol: "http");
+                protocol: "https");
         }
 
         public void ResetDependencies()
@@ -231,4 +203,4 @@ namespace SelfHostedPXServiceCore
                 .Replace("ServiceService", "Service");
         }
     }
-
+}
