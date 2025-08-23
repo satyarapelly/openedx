@@ -27,6 +27,9 @@ namespace Microsoft.Commerce.Payments.PXService
         public static void Register(WebApplicationBuilder builder, PXServiceSettings settings)
         {
             builder.Services.AddSingleton(settings);
+
+            // Controllers and JSON serialization are registered here so the routing system can
+            // discover controller actions when HostableService builds the endpoint pipeline.
             builder.Services.AddControllers()
                 .AddNewtonsoftJson(options =>
                 {

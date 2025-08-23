@@ -125,14 +125,12 @@ namespace SelfHostedPXServiceCore
                 },
                 configureApp: app =>
                 {
-                    // Simple diagnostic middleware to verify that endpoint resolution works. It prints
-                    // the controller name selected by routing for every request. This helps ensure
-                    // that HttpContext.GetEndpoint() is populated for downstream middleware such as
-                    // PXServiceApiVersionHandler.
+                    // Diagnostic middleware used during development to verify that routing has
+                    // selected a controller. It prints the resolved controller name before and
+                    // after the remainder of the pipeline executes. If HttpContext.GetEndpoint()
+                    // is ever null here, the HostableService pipeline is misconfigured.
                     app.Use(async (context, next) =>
                     {
-                        // Capture the endpoint selected by routing before running the rest of the
-                        // pipeline in case a downstream middleware changes it.
                         var beforeEndpoint = context.GetEndpoint();
                         var beforeCad = beforeEndpoint?.Metadata.GetMetadata<ControllerActionDescriptor>();
                         var beforeName = beforeCad?.ControllerName ?? "<null>";

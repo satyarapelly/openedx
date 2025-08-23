@@ -97,31 +97,20 @@ namespace SelfHostedPXServiceCore
 
             // Ensure the routing matcher runs before custom middleware so HttpContext.GetEndpoint()
             // is populated when those middlewares execute. Endpoints must be registered before the
-            // matcher is built, so controller routes are added inside UseEndpoints which runs after
-            // our custom middleware.
+            // matcher is built, so controller routes are added when we finalize the pipeline below.
             App.UseRouting();
 
             // Callers can add middlewares, filters, etc. They will execute after routing but before
             // the selected endpoint is invoked.
             configureApp?.Invoke(App);
 
-            if (configureEndpoints != null)
+            // Map attribute/route-based controllers and finalize the endpoint pipeline. Any
+            // additional conventional routes supplied by the caller are also registered here.
+            App.UseEndpoints(endpoints =>
             {
-                // Map attribute/route-based controllers and finalize the endpoint pipeline
-                App.UseEndpoints(endpoints =>
-                {
-                    configureEndpoints?.Invoke(endpoints);
-                    endpoints.MapControllers();
-                });
-            }
-            else
-            {
-                // Map attribute/route-based controllers and finalize the endpoint pipeline
-                App.UseEndpoints(endpoints =>
-                {
-                    endpoints.MapControllers();
-                });
-            }
+                configureEndpoints?.Invoke(endpoints);
+                endpoints.MapControllers();
+            });
 
             // Start server
             App.Start();
