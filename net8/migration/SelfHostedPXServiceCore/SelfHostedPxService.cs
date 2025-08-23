@@ -3,6 +3,8 @@
 namespace SelfHostedPXServiceCore
 {
     using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Mvc.Controllers;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.Commerce.Payments.Common.Web;
     using Microsoft.Commerce.Payments.PXCommon;
     using Microsoft.Commerce.Payments.PXService;
@@ -123,7 +125,19 @@ namespace SelfHostedPXServiceCore
                 },
                 configureApp: app =>
                 {
-              
+                    // Simple diagnostic middleware to verify that endpoint resolution works. It prints
+                    // the controller name selected by routing for every request. This helps ensure
+                    // that HttpContext.GetEndpoint() is populated for downstream middleware such as
+                    // PXServiceApiVersionHandler.
+                    app.Use(async (context, next) =>
+                    {
+                        await next();
+                        var endpoint = context.GetEndpoint();
+                        var cad = endpoint?.Metadata.GetMetadata<ControllerActionDescriptor>();
+                        var controllerName = cad?.ControllerName ?? "<null>";
+                        Console.WriteLine($"[Endpoint] Path: {context.Request.Path}, Resolved controller: {controllerName}");
+                    });
+
                     // Pull singletons for test access
                     if (!WebHostingUtility.IsApplicationSelfHosted())
                     {
