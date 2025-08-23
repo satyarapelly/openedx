@@ -1,11 +1,7 @@
-﻿// PXTracingHandler.cs - Updated for .NET 8.0
+// <copyright file="PXTracingHandler.cs" company="Microsoft Corporation">Copyright (c) Microsoft 2015. All rights reserved.</copyright>
 
 namespace Microsoft.Commerce.Payments.PXCommon
 {
-    using Microsoft.Commerce.Payments.Common;
-    using Microsoft.Commerce.Payments.Common.Tracing;
-    using Microsoft.Commerce.Payments.Common.Web;
-    using Microsoft.Commerce.Tracing;
     using System;
     using System.Diagnostics;
     using System.Globalization;
@@ -13,109 +9,130 @@ namespace Microsoft.Commerce.Payments.PXCommon
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
+    using Microsoft.Commerce.Payments.Common;
+    using Microsoft.Commerce.Payments.Common.Tracing;
+    using Microsoft.Commerce.Payments.Common.Web;
+    using Microsoft.Commerce.Tracing;
+    using Environments = Microsoft.Commerce.Payments.Common.Environments;
 
     public class PXTracingHandler : DelegatingHandler
     {
+        private static readonly HttpRequestOptionsKey<EventTraceActivity> TraceActivityKey = new("PXTraceActivity");
+
+        private readonly Action<string, string, EventTraceActivity> logRequest;
+        private readonly Action<string, EventTraceActivity> logResponse;
+        private readonly Action<string, EventTraceActivity> logError;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PXTracingHandler" /> class.
+        /// </summary>
+        /// <param name="serviceName">The name of the service or client using this handler. This name is used for identification of the trace logs.</param>
+        /// <param name="logError">A tracing action that will be executed if there is an error when sending or receiving a request.</param>
+        /// <param name="logRequest">A tracing action that will be executed to log the request that's being sent. Default is no action. Do not use if the request could contain sensitive data.</param>
+        /// <param name="logResponse">A tracing action that will be executed to log the response that's received. Default is no action. Do not use if the response could contain sensitive data.</param>
         public PXTracingHandler(
             string serviceName,
-            Action<string, EventTraceActivity>? logError = null,
-            Action<string, string, EventTraceActivity>? logRequest = null,
-            Action<string, EventTraceActivity>? logResponse = null)
+            Action<string, EventTraceActivity> logError = null,
+            Action<string, string, EventTraceActivity> logRequest = null,
+            Action<string, EventTraceActivity> logResponse = null)
             : base()
         {
             this.ServiceName = serviceName;
-            this.LogError = logError ?? ((m, t) => { });
-            this.LogRequest = logRequest ?? ((a, m, t) => { });
-            this.LogResponse = logResponse ?? ((m, t) => { });
+            this.logError = logError ?? ((m, t) => PaymentsEventSource.Log.TracingHandlerTraceError(m, t));
+            this.logRequest = logRequest ?? ((a, m, t) => { });
+            this.logResponse = logResponse ?? ((m, t) => { });
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PXTracingHandler" /> class.
+        /// </summary>
+        /// <param name="serviceName">The name of the service or client using this handler. This name is used for identification of the trace logs.</param>
+        /// <param name="httpMessageHandler">An inner handler that is attached to this DelegatingHandler object.</param>
+        /// <param name="logError">A tracing action that will be executed if there is an error when sending or receiving a request.</param>
+        /// <param name="logRequest">A tracing action that will be executed to log the request that's being sent. Default is no action. Do not use if the request could contain sensitive data.</param>
+        /// <param name="logResponse">A tracing action that will be executed to log the response that's received. Default is no action. Do not use if the response could contain sensitive data.</param>
         public PXTracingHandler(
             string serviceName,
             HttpMessageHandler httpMessageHandler,
-            Action<string, EventTraceActivity>? logError = null,
-            Action<string, string, EventTraceActivity>? logRequest = null,
-            Action<string, EventTraceActivity>? logResponse = null)
+            Action<string, EventTraceActivity> logError = null,
+            Action<string, string, EventTraceActivity> logRequest = null,
+            Action<string, EventTraceActivity> logResponse = null)
             : base(httpMessageHandler)
         {
             this.ServiceName = serviceName;
-            this.LogError = logError ?? ((m, t) => { });
-            this.LogRequest = logRequest ?? ((a, m, t) => { });
-            this.LogResponse = logResponse ?? ((m, t) => { });
+            this.logError = logError ?? ((m, t) => PaymentsEventSource.Log.TracingHandlerTraceError(m, t));
+            this.logRequest = logRequest ?? ((a, m, t) => { });
+            this.logResponse = logResponse ?? ((m, t) => { });
         }
 
-        public string ServiceName { get; set; }
-        public Action<string, string, EventTraceActivity> LogRequest { get; set; }
-        public Action<string, EventTraceActivity> LogResponse { get; set; }
-        public Action<string, EventTraceActivity> LogError { get; set; }
+        public string ServiceName { get; }
 
-        protected override sealed async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        protected sealed override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            DateTime startTime = DateTime.UtcNow;
-            EventTraceActivity serverTraceActivity = request.GetRequestCorrelationId();
+            if (!request.Options.TryGetValue(TraceActivityKey, out var serverTraceActivity))
+            {
+                serverTraceActivity = request.GetRequestCorrelationId();
+                request.Options.Set(TraceActivityKey, serverTraceActivity);
+            }
 
             using (new TraceCorrelationScope(serverTraceActivity))
             {
-                await PreSendOperationAsync(request, serverTraceActivity);
-                HttpResponseMessage response = await base.SendAsync(request, cancellationToken);
-                await PostSendOperationAsync(request, response, startTime, serverTraceActivity);
+                await this.PreSendOperation(request, serverTraceActivity).ConfigureAwait(false);
+                HttpResponseMessage response = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
+                await this.PostSendOperation(request, response, serverTraceActivity).ConfigureAwait(false);
 
+                // Ensure activity on logical call context is as expected.
+                var serverTraceActivity2 = EventTraceActivity.Current;
                 Debug.Assert(
-                    serverTraceActivity.ActivityId.Equals(EventTraceActivity.Current.ActivityId),
-                    string.Format(CultureInfo.InvariantCulture,
-                        "EventTraceActivity mismatch. Expected: '{0}', Found: '{1}'",
-                        serverTraceActivity.ActivityId,
-                        EventTraceActivity.Current.ActivityId));
+                    serverTraceActivity.ActivityId.Equals(serverTraceActivity2.ActivityId),
+                    string.Format(CultureInfo.InvariantCulture, "EventTraceActivity mismatch. Expected: '{0}', Found: '{1}'", serverTraceActivity.ActivityId, serverTraceActivity2.ActivityId));
 
                 return response;
             }
         }
 
-        private async Task PreSendOperationAsync(HttpRequestMessage request, EventTraceActivity traceId)
+        private async Task PreSendOperation(HttpRequestMessage request, EventTraceActivity traceId)
         {
             try
             {
-                string requestPayload = await request.GetRequestPayload();
-                string message = $"Url:{request.RequestUri}, Payload:{requestPayload}";
-                this.LogRequest(request.GetOperationName(), message, traceId);
+                string requestPayload = await request.GetRequestPayload().ConfigureAwait(false);
+                this.logRequest(request.GetOperationName(), string.Format(CultureInfo.InvariantCulture, "Url:{0}, Payload:{1}", request.RequestUri.ToString(), requestPayload), traceId);
             }
             catch (Exception ex)
             {
-                this.LogError($"Exception in PreSendOperation: {ex.Message}", traceId);
+                this.logError(string.Format("Exception happened in presendaction. {0}", ex.Message), traceId);
             }
         }
 
-        private async Task PostSendOperationAsync(HttpRequestMessage request, HttpResponseMessage response, DateTime startTime, EventTraceActivity traceId)
+        private async Task PostSendOperation(HttpRequestMessage request, HttpResponseMessage response, EventTraceActivity traceId)
         {
             try
             {
-                StringBuilder sb = new();
+                StringBuilder sb = new StringBuilder(1000);
                 sb.AppendLine("Response details:");
-                sb.AppendLine($"Status Code: {response.StatusCode}");
+                sb.AppendLine("Status Code: " + response.StatusCode);
 
-                if (response.Content?.Headers != null)
+                if (response.Content != null && response.Content.Headers != null)
                 {
                     foreach (var header in response.Content.Headers)
                     {
-                        sb.AppendLine($"{header.Key}: {header.GetSanitizeValueForLogging()}");
+                        sb.AppendLine(string.Format(CultureInfo.InvariantCulture, "{0}: {1}", header.Key, header.GetSanitizeValueForLogging()));
                     }
 
                     if (response.Content.Headers.ContentLength != 0)
                     {
-                        sb.AppendLine(await response.Content.ReadAsStringAsync());
+                        sb.AppendLine(await response.Content.ReadAsStringAsync().ConfigureAwait(false));
                     }
                 }
 
-                string operationName = request.GetOperationNameWithPendingOnInfo();
-                string version = request.GetVersion();
-                string? callerName = request.GetRequestCallerName();
+                string callerName = request.GetRequestCallerName();
+                sb.AppendFormat("Caller: {0}", callerName ?? Constants.ClientNames.Unknown);
 
-                sb.AppendLine($"Caller: {callerName ?? Constants.ClientNames.Unknown}");
-
-                this.LogResponse(sb.ToString(), traceId);
+                this.logResponse(sb.ToString(), traceId);
             }
             catch (Exception ex)
             {
-                this.LogError($"Exception in PostSendOperation: {ex.Message}", traceId);
+                this.logError(string.Format("Exception happened in postsendaction. {0}", ex.Message), traceId);
             }
         }
     }

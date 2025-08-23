@@ -4,7 +4,6 @@ namespace SelfHostedPXServiceCore.Mocks
 {
     using System;
     using System.Threading.Tasks;
-    using Microsoft.AspNetCore.Http;
 
     /// <summary>
     /// Provides hooks for pre- and post-processing around the request pipeline
@@ -32,9 +31,6 @@ namespace SelfHostedPXServiceCore.Mocks
             ResetToDefault();
         }
 
-        /// <summary>
-        /// Resets the handler to its default state.
-        /// </summary>
         public void ResetToDefault()
         {
             CallInnerHandler = true;

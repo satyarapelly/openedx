@@ -1,140 +1,112 @@
-﻿namespace SelfHostedPXServiceCore
+// Copyright (c) Microsoft.
+// .NET 8 version – no System.Web.* dependencies.
+#nullable enable
+
+namespace SelfHostedPXServiceCore
 {
-    using Castle.Components.DictionaryAdapter;
-    using Microsoft.AspNetCore.Builder;
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Mvc.Controllers;
-    using Microsoft.AspNetCore.Routing;
-    using Microsoft.Commerce.Payments.Common.Web;
-    using Microsoft.Commerce.Payments.PXService;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Hosting;
-    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Net.Http;
     using System.Net.NetworkInformation;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
+    using Newtonsoft.Json;
 
-    public class HostableService : IDisposable
+    /// <summary>
+    /// Lightweight self-host wrapper for ASP.NET Core used by tests/emulators.
+    /// </summary>
+    public sealed class HostableService : IDisposable
     {
-        public static List<int> PreRegisteredPorts { get; private set; }
+        /// <summary>Ports you want to “reserve” before starting other hosts.</summary>
+        public static List<int> PreRegisteredPorts { get; } = new();
 
-        public string Port { get; private set; }
+        public string Port { get; private set; } = string.Empty;
+        public Uri BaseUri { get; private set; } = default!;
+        public HttpClient HttpSelfHttpClient { get; private set; } = default!;
+        public WebApplication App { get; private set; } = default!;
 
-        public Uri BaseUri { get; private set; }
-
-        public WebApplication SelfHostServer { get; private set; }
-
-        public HttpClient HttpSelfHttpClient { get; private set; }
-
-        static HostableService()
+        /// <summary>
+        /// Build + start a host. Use this overload when you only need to configure the app pipeline.
+        /// </summary>
+        /// <param name="configureApp">Configure middleware/endpoints. <c>MapControllers()</c> is already called.</param>
+        /// <param name="fullBaseUrl">e.g. "http://localhost:49152". If null/empty a free port is chosen.</param>
+        /// <param name="protocol">"http" (default) or "https" (requires dev cert bound).</param>
+        public HostableService(Action<WebApplication> configureApp, string? fullBaseUrl, string? protocol)
+            : this(_ => { }, configureApp, fullBaseUrl, protocol)
         {
-            PreRegisteredPorts = new EditableList<int>();
         }
 
-        public HostableService(Action<WebApplicationBuilder> registerConfig, string? fullBaseUrl, string? protocol, Action<IEndpointRouteBuilder>? configureRoutes = null)
+        /// <summary>
+        /// Build + start a host with service configuration and app configuration callbacks.
+        /// </summary>
+        /// <param name="configureServices">Add DI/services. Controllers + Newtonsoft JSON are already registered.</param>
+        /// <param name="configureApp">Configure middleware/endpoints. <c>UseRouting()</c> and <c>MapControllers()</c> are already wired.</param>
+        /// <param name="fullBaseUrl">e.g. "http://localhost:49152". If null/empty a free port is chosen.</param>
+        /// <param name="protocol">"http" (default) or "https" (requires dev cert bound).</param>
+        public HostableService(
+            Action<WebApplicationBuilder> configureServices,
+            Action<WebApplication> configureApp,
+            string? fullBaseUrl,
+            string? protocol)
         {
-            if (string.IsNullOrEmpty(fullBaseUrl))
+            // Decide base URL
+            if (string.IsNullOrWhiteSpace(fullBaseUrl))
             {
-                Port = GetAvailablePort();
-
-                if (string.IsNullOrEmpty(protocol))
-                {
-                    protocol = "https";
-                }
-
-                BaseUri = new Uri(string.Format("{0}://localhost:{1}", protocol, Port));
+                var p = GetAvailablePort();
+                Port = p.ToString();
+                var scheme = string.IsNullOrWhiteSpace(protocol) ? "http" : protocol!;
+                BaseUri = new Uri($"{scheme}://localhost:{Port}");
             }
             else
             {
                 BaseUri = new Uri(fullBaseUrl);
+                Port = BaseUri.Port.ToString();
             }
 
-            var builder = WebApplication.CreateBuilder();
-            builder.WebHost.UseUrls(BaseUri.AbsoluteUri);
-
-            registerConfig(builder);
-
-            SelfHostServer = builder.Build();
-
-            SelfHostServer.MapControllers();
-
-            SelfHostServer.MapGet("/routes", (EndpointDataSource ds) =>
-                Results.Text(string.Join(Environment.NewLine,
-                ds.Endpoints.OfType<RouteEndpoint>().Select(e => e.RoutePattern.RawText))));
-
-            // Define supported API versions and controllers allowed without an explicit version
-            //var supportedVersions = new Dictionary<string, ApiVersion>(StringComparer.OrdinalIgnoreCase)
-            //{
-            //    { "v7.0", new ApiVersion("v7.0", new Version(7, 0)) }
-            //};
-            //string[] versionlessControllers = { GlobalConstants.ControllerNames.ProbeController };
-            // SelfHostServer.UseMiddleware<PXServiceApiVersionHandler>(configureRoutes, versionlessControllers, SelfHostedPxService.PXSettings);
-
-            SelfHostServer.Use(async (ctx, next) =>
+            // Build host
+            var builder = WebApplication.CreateBuilder(new WebApplicationOptions
             {
-                var resolver = ctx.RequestServices.GetRequiredService<VersionedControllerSelector>();
-
-                // Try to read what routing selected
-                var endpoint = ctx.GetEndpoint();
-                var cad = endpoint?.Metadata.GetMetadata<ControllerActionDescriptor>();
-
-                string? controllerName = cad?.ControllerName;
-                string? versionFromHeader = ctx.Request.Headers["api-version"];
-                string? versionFromRoute = ctx.Request.RouteValues.TryGetValue("version", out var vObj) ? vObj?.ToString() : null;
-                string? version = !string.IsNullOrWhiteSpace(versionFromHeader) ? versionFromHeader : versionFromRoute;
-
-                // If we have a selected controller, consult the resolver
-                if (!string.IsNullOrEmpty(controllerName))
-                {
-                    var allowedType = resolver.ResolveAllowedController(ctx); // your existing helper
-                    if (allowedType is null)
-                    {
-                        ctx.Response.StatusCode = StatusCodes.Status404NotFound;
-                        await ctx.Response.WriteAsync($"No controller mapped for version '{version ?? "(none)"}'.");
-                        return;
-                    }
-
-                    // ok, let it flow
-                    await next();
-                    return;
-                }
-
-                // No endpoint matched (RouteData is null/empty)  try to parse and fail fast with a clearer 404
-                // Expected path like: /v7.0/Account001/AddressDescriptions
-                    var segments = ctx.Request.Path.Value?.Trim('/').Split('/', StringSplitOptions.RemoveEmptyEntries) ?? Array.Empty<string>();
-                if (segments.Length >= 3 && segments[0].StartsWith("v", StringComparison.OrdinalIgnoreCase))
-                {
-                    var parsedVersion = segments[0][1..];         // "7.0"
-                    var parsedController = segments[2];           // "AddressDescriptions"
-
-                    // Fake the route values just for checking
-                    ctx.Request.RouteValues["controller"] = parsedController;
-                    if (resolver.ResolveAllowedController(ctx) is null)
-                    {
-                        ctx.Response.StatusCode = StatusCodes.Status404NotFound;
-                        await ctx.Response.WriteAsync($"No controller mapped for version '{parsedVersion}'.");
-                        return;
-                    }
-                }
-
-                // Fall through; MVC will produce its normal 404
-                await next();
+                Args = Array.Empty<string>()
             });
 
-            configureRoutes?.Invoke(SelfHostServer);
-            SelfHostServer.StartAsync().Wait();
+            // Baseline service setup (controllers + Newtonsoft, ignore nulls like old WebApiConfig did)
+            builder.Services
+                .AddControllers()
+                .AddNewtonsoftJson(o => o.SerializerSettings.NullValueHandling = NullValueHandling.Ignore);
+
+            // Callers can add more services
+            configureServices?.Invoke(builder);
+
+            App = builder.Build();
+
+            // Bind to requested URL/port
+            App.Urls.Clear();
+            App.Urls.Add(BaseUri.ToString());
+
+            // Baseline pipeline
+            App.UseRouting();
+
+            // Callers can add middlewares, filters, etc.
+            configureApp?.Invoke(App);
+
+            // Ensure controllers are mapped (safe to call once)
+            App.MapControllers();
+
+            // Start server
+            App.Start();
 
             HttpSelfHttpClient = new HttpClient
             {
-                BaseAddress = BaseUri,
+                BaseAddress = BaseUri
             };
         }
 
         public void Dispose()
         {
-            SelfHostServer.StopAsync().Wait();
+            try { App?.StopAsync().GetAwaiter().GetResult(); } catch { }
+            try { HttpSelfHttpClient?.Dispose(); } catch { }
         }
 
         private static string GetAvailablePort()
