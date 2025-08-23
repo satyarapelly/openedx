@@ -81,4 +81,3 @@ static void EnsureSllInitialized()
     SllLogger.TraceMessage("Initialize SllLogger and Sll static dependencies.", EventLevel.Informational);
     AuditLogger.Instantiate();
 }
-

@@ -59,6 +59,12 @@
 		</Content>
 	</ItemGroup>
 	<ItemGroup>
+	  <Content Remove="..\Pidl\PidlFactory\V7\Config\DomainDictionaries.csv" />
+	</ItemGroup>
+	<ItemGroup>
+	  <AdditionalFiles Include="..\Pidl\PidlFactory\V7\Config\DomainDictionaries.csv" />
+	</ItemGroup>
+	<ItemGroup>
 		<Content Include="App_Data\PIServiceErrorConfig.csv">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>

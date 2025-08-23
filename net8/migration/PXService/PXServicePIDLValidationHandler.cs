@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Http;
+using Microsoft.Commerce.Payments.Common.Tracing;
 using Microsoft.Commerce.Payments.Common.Web;
 using Microsoft.Commerce.Payments.PXCommon;
 using Microsoft.Commerce.Tracing;
@@ -20,7 +21,7 @@ namespace Microsoft.Commerce.Payments.PXService
     public class PXServicePIDLValidationHandler
     {
         private static readonly string[] ValidationAllowedControllers =
-            { "AddressDescriptionsController", "PaymentMethodDescriptionsController", "ProfileDescriptionsController", "ChallengeDescriptionsController", "TaxIdDescriptionsController" };
+            { "AddressDescriptions", "PaymentMethodDescriptions", "ProfileDescriptions", "ChallengeDescriptions", "TaxIdDescription" };
 
         private readonly RequestDelegate _next;
 
@@ -39,7 +40,7 @@ namespace Microsoft.Commerce.Payments.PXService
 
             memory.Seek(0, SeekOrigin.Begin);
             var controller = context.Request.RouteValues["controller"]?.ToString();
-            var shouldValidate = context.Request.Method == HttpMethods.Get
+            var shouldValidate = context.Request.Method == AspNetCore.Http.HttpMethods.Get
                 && controller != null
                 && ValidationAllowedControllers.Contains(controller, StringComparer.OrdinalIgnoreCase)
                 && context.Response.StatusCode == (int)HttpStatusCode.OK

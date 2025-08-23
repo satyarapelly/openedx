@@ -6,7 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Protocol.Handlers;
 using Newtonsoft.Json;
-using SelfHostedPXServiceCore.Mocks;
 using System;
 using System.Collections.Generic;
 using PXServiceSettings = Microsoft.Commerce.Payments.PXService.Settings.PXServiceSettings;
@@ -42,13 +41,15 @@ namespace Microsoft.Commerce.Payments.PXService
                 return selector;
             });
 
+            builder.Services.AddSingleton<PXServiceApiVersionHandler>(); // state used by CORS middleware
+
+            string[] versionlessControllers = { GlobalConstants.ControllerNames.ProbeController };
+            builder.Services.AddSingleton(versionlessControllers);
             builder.Services.AddSingleton<IDictionary<string, ApiVersion>>(sp =>
             {
-                var selector = sp.GetRequiredService<VersionedControllerSelector>();
-                return selector.SupportedVersions;
+                var selectorInstance = sp.GetRequiredService<VersionedControllerSelector>();
+                return selectorInstance.SupportedVersions;
             });
-
-            builder.Services.AddSingleton<string[]>(new[] { GlobalConstants.ControllerNames.ProbeController });
 
             //if (settings.ValidateCors)
             //{
@@ -67,9 +68,9 @@ namespace Microsoft.Commerce.Payments.PXService
         public static void AddUrlVersionedRoutes(IEndpointRouteBuilder endpoints)
         {
             endpoints.MapControllerRoute(
-                name: GlobalConstants.V7RouteNames.Probe,
-                pattern: GlobalConstants.EndPointNames.V7Probe,
-                defaults: new { controller = C(GlobalConstants.ControllerNames.ProbeController), action = "Get" });
+               name: GlobalConstants.V7RouteNames.Probe,
+               pattern: GlobalConstants.EndPointNames.V7Probe,
+               defaults: new { controller = C(GlobalConstants.ControllerNames.ProbeController), action = "Get" });
 
             endpoints.MapControllerRoute(
                 name: GlobalConstants.V7RouteNames.GetPaymentInstrumentEx,
@@ -300,6 +301,11 @@ namespace Microsoft.Commerce.Payments.PXService
                 defaults: new { controller = C(GlobalConstants.ControllerNames.PaymentMethodDescriptionsController), action = "List" });
 
             endpoints.MapControllerRoute(
+                name: GlobalConstants.V7RouteNames.GetPaymentMethodDescriptionsApiNoId,
+                pattern: GlobalConstants.EndPointNames.V7PaymentMethodDescriptions,
+                defaults: new { controller = C(GlobalConstants.ControllerNames.PaymentMethodDescriptionsController), action = "SelectPaymentResource" });
+
+            endpoints.MapControllerRoute(
                 name: GlobalConstants.V7RouteNames.GetAddressDescriptionsApi,
                 pattern: GlobalConstants.EndPointNames.V7AddressDescriptions + "{id}",
                 defaults: new { controller = C(GlobalConstants.ControllerNames.AddressDescriptionsController), action = "GetById" });
@@ -347,7 +353,7 @@ namespace Microsoft.Commerce.Payments.PXService
             endpoints.MapControllerRoute(
                 name: GlobalConstants.V7RouteNames.GetTenantDescriptionsApi,
                 pattern: GlobalConstants.EndPointNames.V7TenantDescriptions,
-                defaults: new { controller = C(GlobalConstants.ControllerNames.TenantDescriptionsController), action = "List" });
+                defaults: new { controller = C(GlobalConstants.ControllerNames.TenantDescriptionsController), action = "Get" });
 
             endpoints.MapControllerRoute(
                 name: GlobalConstants.V7RouteNames.GetPaymentSessionDescriptionsApi,

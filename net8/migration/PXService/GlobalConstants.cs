@@ -1040,7 +1040,7 @@ namespace Microsoft.Commerce.Payments.PXService
             public const string DefaultScopeName = ".default";
         }
 
-        internal static class RequestPropertyKeys
+        public static class RequestPropertyKeys
         {
             public const string FlightContext = "PX.FlightContext";
             public const string ExposedFlightFeatures = "PX.ExposedFlightFeatures";

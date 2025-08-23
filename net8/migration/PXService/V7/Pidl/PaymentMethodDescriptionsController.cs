@@ -70,8 +70,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>A list of PIDLResource</returns>
         //// Anonymous Add or Update
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
-        [Route("paymentMethodDescriptions")]
-        [HttpGet("GetAnonymousPidl")]
+        [HttpGet()]
         public async Task<List<PIDLResource>> GetAnonymousPidl(
             string family,
             string type = null,
@@ -244,8 +243,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>A list of PIDLResource</returns>
         //// If the family is specified, operation must be add or update
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
-        [Route("{accountId}/paymentMethodDescriptions")]
-        [HttpGet("GetByFamilyAndType")]
+        [HttpGet()]
         public async Task<List<PIDLResource>> GetByFamilyAndType(
             string accountId,
             string family,

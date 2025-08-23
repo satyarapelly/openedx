@@ -43,6 +43,18 @@ namespace Microsoft.Commerce.Payments.PXService
         /// <summary>
         /// Initializes a new instance of the <see cref="PXServiceApiVersionHandler"/> class.
         /// </summary>
+        /// <param name="supportedVersions">A dictionary from api-version string to internal
+        /// version number which represents the set of supported versions.</param>
+        /// <param name="versionlessControllers">Names of controllers that should be available with no version</param>
+        /// <param name="settings">PXServiceSettings instance for the current service.</param>
+        public PXServiceApiVersionHandler(IDictionary<string, ApiVersion> supportedVersions, string[] versionlessControllers, PXServiceSettings settings)
+            : this(null, supportedVersions, versionlessControllers, settings)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PXServiceApiVersionHandler"/> class.
+        /// </summary>
         /// <param name="next">The next middleware in the pipeline.</param>
         /// <param name="supportedVersions">A dictionary from api-version string to internal
         /// version number which represents the set of supported versions.</param>
