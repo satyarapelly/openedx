@@ -123,11 +123,11 @@ namespace SelfHostedPXServiceCore
                 },
                 configureApp: app =>
                 {
-
+              
                     // Pull singletons for test access
                     if (!WebHostingUtility.IsApplicationSelfHosted())
                     {
-                        app.UseMiddleware<PXTraceCorrelationHandler>(); 
+                        app.UseMiddleware<PXTraceCorrelationHandler>();
                     }
 
                     app.UseMiddleware<PXServiceApiVersionHandler>();
@@ -137,19 +137,15 @@ namespace SelfHostedPXServiceCore
                         app.UseMiddleware<PXServicePIDLValidationHandler>();
                     }
 
-                    app.Use((HttpContext ctx, RequestDelegate next) =>
-                    {
-                        var handler = ctx.RequestServices.GetRequiredService<PXServiceHandler>();
-                        return handler.InvokeAsync(ctx, next);
-                    });
+                    app.UseMiddleware<PXServiceHandler>();
 
                     app.UseMiddleware<PXServiceFlightHandler>();
 
-                    app.MapControllers();
-                 
+                    // Conventional maps that mimic your old WebApiConfig
+                    WebApiConfig.AddUrlVersionedRoutes(app);
                 },
                 fullBaseUrl: fullBaseUrl,
-                protocol: "http");
+                protocol: "https");
         }
 
         public void ResetDependencies()
