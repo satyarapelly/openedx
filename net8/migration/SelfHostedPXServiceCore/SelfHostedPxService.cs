@@ -131,11 +131,20 @@ namespace SelfHostedPXServiceCore
                     // PXServiceApiVersionHandler.
                     app.Use(async (context, next) =>
                     {
+                        // Capture the endpoint selected by routing before running the rest of the
+                        // pipeline in case a downstream middleware changes it.
+                        var beforeEndpoint = context.GetEndpoint();
+                        var beforeCad = beforeEndpoint?.Metadata.GetMetadata<ControllerActionDescriptor>();
+                        var beforeName = beforeCad?.ControllerName ?? "<null>";
+
                         await next();
-                        var endpoint = context.GetEndpoint();
-                        var cad = endpoint?.Metadata.GetMetadata<ControllerActionDescriptor>();
-                        var controllerName = cad?.ControllerName ?? "<null>";
-                        Console.WriteLine($"[Endpoint] Path: {context.Request.Path}, Resolved controller: {controllerName}");
+
+                        var afterEndpoint = context.GetEndpoint();
+                        var afterCad = afterEndpoint?.Metadata.GetMetadata<ControllerActionDescriptor>();
+                        var afterName = afterCad?.ControllerName ?? "<null>";
+
+                        Console.WriteLine(
+                            $"[Endpoint] Path: {context.Request.Path}, Controller before: {beforeName}, after: {afterName}");
                     });
 
                     // Pull singletons for test access
@@ -154,12 +163,14 @@ namespace SelfHostedPXServiceCore
                     app.UseMiddleware<PXServiceHandler>();
 
                     app.UseMiddleware<PXServiceFlightHandler>();
-
-                    // Conventional maps that mimic your old WebApiConfig
-                    WebApiConfig.AddUrlVersionedRoutes(app);
                 },
                 fullBaseUrl: fullBaseUrl,
-                protocol: "https");
+                protocol: "https",
+                configureEndpoints: endpoints =>
+                {
+                    // Conventional maps that mimic your old WebApiConfig
+                    WebApiConfig.AddUrlVersionedRoutes(endpoints);
+                });
         }
 
         public void ResetDependencies()

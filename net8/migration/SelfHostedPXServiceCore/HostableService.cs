@@ -1,3 +1,7 @@
+// Copyright (c) Microsoft.
+// .NET 8 version – no System.Web.* dependencies.
+#nullable enable
+
 namespace SelfHostedPXServiceCore
 {
     using System;
@@ -5,61 +9,135 @@ namespace SelfHostedPXServiceCore
     using System.Linq;
     using System.Net.Http;
     using System.Net.NetworkInformation;
-    using System.Web.Http.SelfHost;
-    using Castle.Components.DictionaryAdapter;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Routing;
+    using Microsoft.Commerce.Payments.PXCommon;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
+    using Newtonsoft.Json;
 
-    public class HostableService : IDisposable
+    /// <summary>
+    /// Lightweight self-host wrapper for ASP.NET Core used by tests/emulators.
+    /// </summary>
+    public sealed class HostableService : IDisposable
     {
-        public static List<int> PreRegisteredPorts { get; private set; }
+        /// <summary>Ports you want to “reserve” before starting other hosts.</summary>
+        public static List<int> PreRegisteredPorts { get; } = new();
 
-        public string Port { get; private set; }
+        public string Port { get; private set; } = string.Empty;
+        public Uri BaseUri { get; private set; } = default!;
+        public HttpClient HttpSelfHttpClient { get; private set; } = default!;
+        public WebApplication App { get; private set; } = default!;
 
-        public Uri BaseUri { get; private set; }
-
-        public HttpSelfHostConfiguration SelfHostConfiguration { get; private set; }
-
-        public HttpSelfHostServer SelfHostServer { get; private set; }
-
-        public HttpClient HttpSelfHttpClient { get; private set; }
-
-        static HostableService()
+        /// <summary>
+        /// Build + start a host. Use this overload when you only need to configure the app pipeline.
+        /// </summary>
+        /// <param name="configureApp">Configure middleware/endpoints. <c>MapControllers()</c> is already called.</param>
+        /// <param name="fullBaseUrl">e.g. "http://localhost:49152". If null/empty a free port is chosen.</param>
+        /// <param name="protocol">"http" (default) or "https" (requires dev cert bound).</param>
+        public HostableService(Action<WebApplication> configureApp, string? fullBaseUrl, string? protocol)
+            : this(_ => { }, configureApp, fullBaseUrl, protocol)
         {
-            PreRegisteredPorts = new EditableList<int>();
         }
 
-        public HostableService(Action<HttpSelfHostConfiguration> registerConfig, string fullBaseUrl, string protocol)
+        /// <summary>
+        /// Build + start a host with service configuration and app configuration callbacks.
+        /// </summary>
+        /// <param name="configureServices">Add DI/services. Controllers + Newtonsoft JSON are already registered.</param>
+        /// <param name="configureApp">Configure middleware/endpoints. A routing pipeline is already wired so that
+        /// middlewares added here run <em>after</em> <c>UseRouting()</c> but before endpoints are mapped.</param>
+        /// <param name="fullBaseUrl">e.g. "http://localhost:49152". If null/empty a free port is chosen.</param>
+        /// <param name="protocol">"http" (default) or "https" (requires dev cert bound).</param>
+        public HostableService(
+            Action<WebApplicationBuilder> configureServices,
+            Action<WebApplication> configureApp,
+            string? fullBaseUrl,
+            string? protocol,
+            Action<IEndpointRouteBuilder>? configureEndpoints = null)
         {
-            if (string.IsNullOrEmpty(fullBaseUrl))
+            // Decide base URL
+            if (string.IsNullOrWhiteSpace(fullBaseUrl))
             {
-                Port = GetAvailablePort();
-
-                if (string.IsNullOrEmpty(protocol))
-                {
-                    protocol = "https";
-                }
-
-                BaseUri = new Uri(string.Format("{0}://localhost:{1}", protocol, Port));
+                var p = GetAvailablePort();
+                Port = p.ToString();
+                var scheme = string.IsNullOrWhiteSpace(protocol) ? "http" : protocol!;
+                BaseUri = new Uri($"{scheme}://localhost:{Port}");
             }
             else
             {
                 BaseUri = new Uri(fullBaseUrl);
+                Port = BaseUri.Port.ToString();
             }
 
-            SelfHostConfiguration = new HttpSelfHostConfiguration(BaseUri.AbsoluteUri);
-            registerConfig(SelfHostConfiguration);
+            // Build host
+            var builder = WebApplication.CreateBuilder(new WebApplicationOptions
+            {
+                Args = Array.Empty<string>()
+            });
 
-            SelfHostServer = new HttpSelfHostServer(SelfHostConfiguration);
-            SelfHostServer.OpenAsync().Wait();
+            // Baseline service setup (controllers + Newtonsoft, ignore nulls like old WebApiConfig did)
+            builder.Services
+                .AddControllers()
+                .AddNewtonsoftJson(o => o.SerializerSettings.NullValueHandling = NullValueHandling.Ignore);
 
-            HttpSelfHttpClient = new HttpClient(SelfHostServer);
-            HttpSelfHttpClient.BaseAddress = BaseUri;
+            // Callers can add more services
+            configureServices?.Invoke(builder);
+
+            App = builder.Build();
+
+            // Bind to requested URL/port
+            App.Urls.Clear();
+            App.Urls.Add(BaseUri.ToString());
+
+            // Conditionally redirect HTTP to HTTPS only when not self-hosted
+            if (!WebHostingUtility.IsApplicationSelfHosted())
+            {
+                App.UseHttpsRedirection();
+            }
+
+            // Ensure the routing matcher runs before custom middleware so HttpContext.GetEndpoint()
+            // is populated when those middlewares execute. Endpoints must be registered before the
+            // matcher is built, so controller routes are added inside UseEndpoints which runs after
+            // our custom middleware.
+            App.UseRouting();
+
+            // Callers can add middlewares, filters, etc. They will execute after routing but before
+            // the selected endpoint is invoked.
+            configureApp?.Invoke(App);
+
+            if (configureEndpoints != null)
+            {
+                // Map attribute/route-based controllers and finalize the endpoint pipeline
+                App.UseEndpoints(endpoints =>
+                {
+                    configureEndpoints?.Invoke(endpoints);
+                    endpoints.MapControllers();
+                });
+            }
+            else
+            {
+                // Map attribute/route-based controllers and finalize the endpoint pipeline
+                App.UseEndpoints(endpoints =>
+                {
+                    endpoints.MapControllers();
+                });
+            }
+
+            // Start server
+            App.Start();
+
+            HttpSelfHttpClient = new HttpClient
+            {
+                BaseAddress = BaseUri
+            };
         }
 
         public void Dispose()
         {
-            SelfHostServer.CloseAsync().Wait();
+            try { App?.StopAsync().GetAwaiter().GetResult(); } catch { }
+            try { HttpSelfHttpClient?.Dispose(); } catch { }
         }
-        
+
         private static string GetAvailablePort()
         {
             var netProperties = IPGlobalProperties.GetIPGlobalProperties();
