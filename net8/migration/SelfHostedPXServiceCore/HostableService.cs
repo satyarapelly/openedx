@@ -105,12 +105,23 @@ namespace SelfHostedPXServiceCore
             // the selected endpoint is invoked.
             configureApp?.Invoke(App);
 
-            // Map attribute/route-based controllers and finalize the endpoint pipeline
-            App.UseEndpoints(endpoints =>
+            if (configureEndpoints != null)
             {
-                configureEndpoints?.Invoke(endpoints);
-                endpoints.MapControllers();
-            });
+                // Map attribute/route-based controllers and finalize the endpoint pipeline
+                App.UseEndpoints(endpoints =>
+                {
+                    configureEndpoints?.Invoke(endpoints);
+                    endpoints.MapControllers();
+                });
+            }
+            else
+            {
+                // Map attribute/route-based controllers and finalize the endpoint pipeline
+                App.UseEndpoints(endpoints =>
+                {
+                    endpoints.MapControllers();
+                });
+            }
 
             // Start server
             App.Start();
