@@ -45,7 +45,7 @@ namespace CIT.PXService.Tests
         [AssemblyInitialize]
         public static void Initialize(TestContext context)
         {
-            SelfHostedPxService = new SelfHostedPxService(null, false, true);
+            SelfHostedPxService = SelfHostedPxService.StartInMemory(null, false, true);
             PXHandler = SelfHostedPxService.PXHandler;
             PXSettings = SelfHostedPxService.PXSettings;
             PXBaseUri = SelfHostedPxService.PxHostableService.BaseUri;
