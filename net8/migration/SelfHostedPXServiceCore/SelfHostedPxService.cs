@@ -1,52 +1,66 @@
-// In SelfHostedPxService.cs
+using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Hosting;
-// …the rest of your usings
+using Microsoft.Commerce.Payments.PXService;
+using Microsoft.Commerce.Payments.PXService.Settings;
+using PxMockSettings = SelfHostedPXServiceCore.Mocks.PXServiceSettings;
 
-public sealed class SelfHostedPxService : IDisposable
+namespace SelfHostedPXServiceCore
 {
-    // Expose the HttpClient used by Program.cs
-    public HttpClient HttpClient { get; private set; }
-
-    // --- Option B: in-memory (TestServer) bootstrap ---
-    public static SelfHostedPxService StartInMemory(bool useSelfHostedDependencies, bool useArrangedResponses)
+    /// <summary>
+    /// Lightweight PX host that runs the service in memory using <see cref="TestServer"/>.
+    /// </summary>
+    public sealed class SelfHostedPxService : IDisposable
     {
-        // Build all PX DI/config exactly as you already do in your HostableService/WebApiConfig.ConfigureRoutes
-        // but wire it into a HostBuilder with UseTestServer().
-        var px = new SelfHostedPxService(); // private ctor
-        px._host = new HostBuilder()
-            .ConfigureWebHost(web =>
+        /// <summary>HttpClient wired to the in-memory PX service.</summary>
+        public HttpClient HttpClient { get; private set; } = default!;
+
+        private IHost _host = default!;
+
+        /// <summary>
+        /// Spin up the PX service entirely in-memory. The returned client can be used to issue HTTP
+        /// requests without opening any network sockets.
+        /// </summary>
+        public static SelfHostedPxService StartInMemory(bool useSelfHostedDependencies, bool useArrangedResponses)
+        {
+            PXServiceSettings settings = new PxMockSettings(
+                useSelfHostedDependencies ? new Dictionary<Type, HostableService>() : null,
+                useArrangedResponses);
+
+            var builder = WebApplication.CreateBuilder(new WebApplicationOptions());
+            builder.WebHost.UseTestServer();
+
+            // Register controllers, version selector and middleware dependencies
+            WebApiConfig.Register(builder, settings);
+
+            var app = builder.Build();
+
+            // Ensure endpoint routing runs before custom middleware so HttpContext.GetEndpoint()
+            // is populated for downstream components.
+            app.UseRouting();
+            app.UseMiddleware<PXServiceApiVersionHandler>();
+
+            // Conventional + attribute routes
+            WebApiConfig.AddUrlVersionedRoutes(app);
+
+            app.Start();
+
+            return new SelfHostedPxService
             {
-                web.UseTestServer();
-                web.ConfigureServices(services =>
-                {
-                    // Reuse your registration from HostableService / WebApiConfig:
-                    // - controllers
-                    // - PXServiceSettings + dependency emulators
-                    // - VersionedControllerSelector + ApiVersion handler
-                    // - any middlewares you already migrated (trace, CORS, input validation, PIDL validation)
-                    SelfHostedBootstrap.ConfigureServices(services, useSelfHostedDependencies, useArrangedResponses);
-                });
-                web.Configure(app =>
-                {
-                    SelfHostedBootstrap.ConfigurePipeline(app);
-                });
-            })
-            .Build();
+                _host = app,
+                HttpClient = app.GetTestClient()
+            };
+        }
 
-        px._host.Start();
-        px.HttpClient = px._host.GetTestClient();
-        return px;
-    }
-
-    private IHost _host;
-
-    private SelfHostedPxService() { /* private for the in-memory factory */ }
-
-    public void Dispose()
-    {
-        HttpClient?.Dispose();
-        _host?.Dispose();
+        public void Dispose()
+        {
+            try { HttpClient?.Dispose(); } catch { }
+            try { _host?.Dispose(); } catch { }
+        }
     }
 }
+
