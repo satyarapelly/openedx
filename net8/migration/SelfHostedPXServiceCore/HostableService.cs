@@ -4,27 +4,24 @@
 
 namespace SelfHostedPXServiceCore
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net.Http;
-    using System.Net.NetworkInformation;
+    using Castle.Components.DictionaryAdapter;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Routing;
     using Microsoft.Commerce.Payments.PXCommon;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using Newtonsoft.Json;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net.Http;
+    using System.Net.NetworkInformation;
 
     /// <summary>
     /// Lightweight self-host wrapper for ASP.NET Core used by tests/emulators.
     /// </summary>
     public sealed class HostableService : IDisposable
     {
-        /// <summary>Ports you want to “reserve” before starting other hosts.</summary>
-        public static List<int> PreRegisteredPorts { get; } = new();
-
-        public string Port { get; private set; } = string.Empty;
         public Uri BaseUri { get; private set; } = default!;
         public HttpClient HttpSelfHttpClient { get; private set; } = default!;
         public WebApplication App { get; private set; } = default!;
@@ -34,9 +31,8 @@ namespace SelfHostedPXServiceCore
         /// </summary>
         /// <param name="configureApp">Configure middleware/endpoints. <c>MapControllers()</c> is already called.</param>
         /// <param name="fullBaseUrl">e.g. "http://localhost:49152". If null/empty a free port is chosen.</param>
-        /// <param name="protocol">"http" (default) or "https" (requires dev cert bound).</param>
-        public HostableService(Action<WebApplication> configureApp, string? fullBaseUrl, string? protocol)
-            : this(_ => { }, configureApp, fullBaseUrl, protocol)
+        public HostableService(Action<WebApplication> configureApp, Uri fullBaseUrl)
+            : this(_ => { }, configureApp, fullBaseUrl)
         {
         }
 
@@ -47,28 +43,14 @@ namespace SelfHostedPXServiceCore
         /// <param name="configureApp">Configure middleware/endpoints. A routing pipeline is already wired so that
         /// middlewares added here run <em>after</em> <c>UseRouting()</c> but before endpoints are mapped.</param>
         /// <param name="fullBaseUrl">e.g. "http://localhost:49152". If null/empty a free port is chosen.</param>
-        /// <param name="protocol">"http" (default) or "https" (requires dev cert bound).</param>
         public HostableService(
             Action<WebApplicationBuilder> configureServices,
             Action<WebApplication> configureApp,
-            string? fullBaseUrl,
-            string? protocol,
+            Uri baseUri,
             Action<IEndpointRouteBuilder>? configureEndpoints = null)
         {
-            // Decide base URL
-            if (string.IsNullOrWhiteSpace(fullBaseUrl))
-            {
-                var p = GetAvailablePort();
-                Port = p.ToString();
-                var scheme = string.IsNullOrWhiteSpace(protocol) ? "http" : protocol!;
-                BaseUri = new Uri($"{scheme}://localhost:{Port}");
-            }
-            else
-            {
-                BaseUri = new Uri(fullBaseUrl);
-                Port = BaseUri.Port.ToString();
-            }
 
+            BaseUri = baseUri;
             // Build host
             var builder = WebApplication.CreateBuilder(new WebApplicationOptions
             {
@@ -122,29 +104,6 @@ namespace SelfHostedPXServiceCore
         {
             try { App?.StopAsync().GetAwaiter().GetResult(); } catch { }
             try { HttpSelfHttpClient?.Dispose(); } catch { }
-        }
-
-        private static string GetAvailablePort()
-        {
-            var netProperties = IPGlobalProperties.GetIPGlobalProperties();
-            var tcpListeners = netProperties.GetActiveTcpListeners();
-            var udpListeners = netProperties.GetActiveUdpListeners();
-
-            var portsInUse = new List<int>();
-            portsInUse.AddRange(tcpListeners.Select(tl => tl.Port));
-            portsInUse.AddRange(udpListeners.Select(ul => ul.Port));
-
-            int firstAvailablePort = 0;
-            for (int port = 49152; port < 65535; port++)
-            {
-                if (!portsInUse.Contains(port) && !PreRegisteredPorts.Contains(port))
-                {
-                    firstAvailablePort = port;
-                    break;
-                }
-            }
-
-            return firstAvailablePort.ToString();
         }
     }
 }
