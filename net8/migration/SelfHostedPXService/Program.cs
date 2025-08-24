@@ -1,106 +1,74 @@
-// <copyright file="Program.cs" company="Microsoft">Copyright (c) Microsoft 2016. All rights reserved.</copyright>
+// Program.cs — .NET 8, in-memory hosting (Option B)
 
-namespace SelfHostedPXService
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using SelfHostedPXServiceCore;
+
+internal sealed class Program
 {
-    using System;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using System.Xml;
-    using Newtonsoft.Json;
-    using SelfHostedPXServiceCore;
-
-    internal static class Program
+    public static async Task Main(string[] args)
     {
-        /// <summary>
-        /// Application start method
-        /// Tasks:
-        /// Determine the test type from arguments [LoadTest, DiffTest, help]
-        /// Initialize test
-        /// Begin testing process
-        /// Command line example: DiffTest.exe /test DiffTest /BaseEnv PPE /TestEnv INT /DiffFilePath C:\Path\To\Known\Delta.csv
-        /// </summary>
-        /// <param name="args">Console arguments for configuring tests</param>
-        /// <returns>The exit code of the test run.</returns>
-        public static async Task Main(string[] args)
+        // Optional arg 0 was a base URL in the old model.
+        // For in-memory hosting we ignore the URL (no sockets are opened).
+        _ = (args.Length > 0) ? args[0] : null;
+
+        // Spin up the PX service and all its dependency emulators in memory.
+        // The “true, false” flags match your old usage:
+        //   useSelfHostedDependencies: true
+        //   useArrangedResponses:      false
+        using var host = SelfHostedPxService.StartInMemory(useSelfHostedDependencies: true, useArrangedResponses: false);
+
+        // Warm up like before (no real network I/O; this goes through TestServer).
+        var relativeUrl = "users/me/paymentMethodDescriptions?country=tr&family=credit_card&type=mc&language=en-US&partner=storify&operation=add";
+        var url = $"/v7.0/{relativeUrl}";
+        var response = await GetPidlFromPXService(url, host);
+        var content = FormatJson(await response.Content.ReadAsStringAsync());
+
+        if (response.IsSuccessStatusCode)
         {
-            // optional base URL from args, e.g. http://localhost:7151
-            string? baseUrl = args.Length > 0 ? args[0] : "https://localhost:7151";
-            Console.WriteLine(baseUrl is null
-                ? "Initializing server..."
-                : $"Initializing server on {baseUrl}...");
-
-            // Start the self-host
-            var host = new SelfHostedPxService(baseUrl, true, false);
-            var cts = new CancellationTokenSource();
-            Console.CancelKeyPress += (_, e) => { e.Cancel = true; cts.Cancel(); };
-
-            Console.WriteLine("Server initialized.");
-
-            // Do one warmup call; don't crash app if it fails
-            try
-            {
-                Console.WriteLine("Warming up server...");
-                var url = "v7.0/bc81f231-268a-4b9f-897a-43b7397302cc/paymentMethodDescriptions?type=amex%2Cvisa%2Cmc%2Cdiscover%2Cjcb&partner=commercialstores&operation=Add&country=US&language=en-US&family=credit_card&currency=USD";
-
-                var response = await GetPidlFromPXService(url);
-                var text = await response.Content.ReadAsStringAsync();
-
-                Console.WriteLine($"Warmup status: {(int)response.StatusCode} {response.ReasonPhrase}");
-                if (!response.IsSuccessStatusCode)
-                {
-                    Console.WriteLine(FormatJsonSafe(text));
-                }
-
-                // Additional request to verify that endpoint resolution is functioning. The diagnostic
-                // middleware in SelfHostedPxService will print the resolved controller name for this
-                // call to the console. The probe endpoint is versionless, so we call /probe.
-                Console.WriteLine("Verifying endpoint resolution via /probe...");
-                var verifyResp = await GetPidlFromPXService("probe");
-                Console.WriteLine($"Verification status: {(int)verifyResp.StatusCode} {verifyResp.ReasonPhrase}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Warmup failed (continuing to run):");
-                Console.WriteLine(ex);
-            }
-
-            Console.WriteLine("Listening... Press Ctrl+C to stop.");
-            try
-            {
-                await Task.Delay(Timeout.Infinite, cts.Token);
-            }
-            catch (OperationCanceledException) { /* Ctrl+C */ }
-            finally
-            {
-                host.Dispose();
-                Console.WriteLine("Server stopped.");
-            }
+            System.Console.WriteLine("Server successfully tested");
+        }
+        else
+        {
+            System.Console.WriteLine($"Server responded: {response.StatusCode}");
+            System.Console.WriteLine($"Response content: {content}");
         }
 
-        private static async Task<HttpResponseMessage> GetPidlFromPXService(string url)
+        // Keep the process alive until Ctrl+C
+        System.Console.WriteLine("PX (in-memory) is running. Press Ctrl+C to exit.");
+        var done = new TaskCompletionSource();
+        System.Console.CancelKeyPress += (_, e) =>
         {
-            var fullUrl = SelfHostedPxService.GetPXServiceUrl(url);
-            fullUrl = fullUrl.Contains("completePrerequisites=true", StringComparison.OrdinalIgnoreCase)
-                ? fullUrl.Replace("users/me", "EmpAccountNoAddress", StringComparison.Ordinal)
-                : fullUrl.Replace("users/me", "DiffTestUser", StringComparison.Ordinal);
+            e.Cancel = true;
+            done.TrySetResult();
+        };
+        await done.Task;
+    }
 
-            fullUrl = fullUrl.Replace("users/my-org", "DiffOrgUser", StringComparison.Ordinal);
-
-            return await SelfHostedPxService.PxHostableService.HttpSelfHttpClient.GetAsync(fullUrl);
+    private static async Task<HttpResponseMessage> GetPidlFromPXService(string url, SelfHostedPxService host)
+    {
+        // Keep your existing user substitution logic
+        var fullUrl = url;
+        if (fullUrl.Contains("completePrerequisites=true"))
+        {
+            fullUrl = fullUrl.Replace("users/me", "EmpAccountNoAddress");
+        }
+        else
+        {
+            fullUrl = fullUrl.Replace("users/me", "DiffTestUser");
         }
 
-        private static string FormatJsonSafe(string json)
-        {
-            try
-            {
-                var parsed = JsonConvert.DeserializeObject(json);
-                return JsonConvert.SerializeObject(parsed, Newtonsoft.Json.Formatting.Indented);
-            }
-            catch
-            {
-                return json;
-            }
-        }
+        fullUrl = fullUrl.Replace("users/my-org", "DiffOrgUser");
+
+        // Call the in-memory client
+        return await host.HttpClient.GetAsync(fullUrl);
+    }
+
+    private static string FormatJson(string json)
+    {
+        dynamic parsed = JsonConvert.DeserializeObject(json);
+        return JsonConvert.SerializeObject(parsed, Formatting.Indented);
     }
 }
