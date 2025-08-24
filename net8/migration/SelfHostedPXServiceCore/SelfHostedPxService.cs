@@ -1,250 +1,96 @@
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.TestServer;
-using Microsoft.Commerce.Payments.PXService;
-using Microsoft.Commerce.Payments.PXService.Accessors.IssuerService;
-using Microsoft.Commerce.Payments.PXService.Accessors.MSRewardsService;
-using Microsoft.Commerce.Payments.PXService.Accessors.PartnerSettingsService;
-using Microsoft.Commerce.Payments.PXService.Accessors.TokenPolicyService;
-using Microsoft.Commerce.Payments.PXService.Model.PayerAuthService;
-using Microsoft.Commerce.Payments.PXService.RiskService.V7;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Protocol.Handlers;
-using SelfHostedPXServiceCore.Mocks;
+using Microsoft.Commerce.Payments.PXService;
+using Microsoft.Commerce.Payments.PXService.Settings;
 using System;
 using System.Net.Http;
-using System.Net.NetworkInformation;
-using System.Web.Services.Description;
-using static QRCoder.PayloadGenerator;
 
 namespace SelfHostedPXServiceCore
 {
     /// <summary>
-    /// Lightweight PX host that runs the service in memory using <see cref="TestServer"/>.
+    /// Lightweight PX host that runs the service entirely in-memory using
+    /// <see cref="Microsoft.AspNetCore.TestHost.TestServer"/>. This mirrors the
+    /// old HttpSelfHostServer approach and avoids the need for real TCP ports
+    /// making unit and integration tests fast and reliable.
     /// </summary>
     public sealed class SelfHostedPxService : IDisposable
     {
-        public static List<int> PreRegisteredPorts { get; private set; } = new();
+        /// <summary>Wrapper around the ASP.NET Core host.</summary>
+        public static HostableService PxHostableService { get; private set; } = default!;
 
-        public static Uri PXBaseUri = new Uri("https://localhost:7151");
+        /// <summary>PX service settings registered with the host.</summary>
+        public static PXServiceSettings PXSettings { get; private set; } = default!;
 
-        public static HostableService PxHostableService { get; private set; }
+        /// <summary>Testing hook that allows request/response interception.</summary>
+        public static PXServiceHandler PXHandler { get; private set; } = default!;
 
-        public static Dictionary<Type, HostableService> SelfHostedDependencies { get; private set; }
+        /// <summary>Handler that stamps enabled flights onto requests.</summary>
+        public static PXServiceFlightHandler PXFlightHandler { get; private set; } = default!;
 
-        public static PXServiceSettings PXSettings { get; private set; }
+        /// <summary>Exposed for completeness – tests do not currently mutate it.</summary>
+        public static PXServiceCorsHandler? PXCorsHandler { get; private set; }
 
-        public static PXServiceHandler? PXHandler { get; private set; }
+        /// <summary>Client wired directly to the in-memory PX service.</summary>
+        public static HttpClient PXClient { get; private set; } = default!;
 
-        public static HttpClient PXClient { get; private set; }
+        /// <summary>Convenience accessor for the HttpClient.</summary>
+        public HttpClient HttpSelfHttpClient => PXClient;
 
-        public static PXServiceCorsHandler PXCorsHandler { get; private set; }
-
-        public static PXServiceFlightHandler PXFlightHandler { get; private set; }
-
-        /// <summary>HttpClient wired to the in-memory PX service.</summary>
-        public HttpClient HttpSelfHttpClient { get; private set; } = default!;
-
-        public IHost SelfHost = default!;
+        /// <summary>Expose the underlying host if required.</summary>
+        public IHost SelfHost => PxHostableService.App;
 
         /// <summary>
-        /// Spin up the PX service entirely in-memory. The returned client can be used to issue HTTP
-        /// requests without opening any network sockets.
+        /// Spin up the PX service in-memory. The returned instance can be used to
+        /// issue HTTP requests without opening any network sockets.
         /// </summary>
-        public static SelfHostedPxService StartInMemory(string baseUrl, bool useSelfHostedDependencies, bool useArrangedResponses)
+        public static SelfHostedPxService StartInMemory(string? baseUrl, bool useSelfHostedDependencies, bool useArrangedResponses)
         {
-            var selfHostedDependencies = new Dictionary<Type, HostableService>();
+            var baseUri = string.IsNullOrEmpty(baseUrl)
+                ? new Uri("http://localhost")
+                : new Uri(baseUrl);
 
-            if (useSelfHostedDependencies)
-            {
-                // Start up dependency emulators first so PX can connect to them.
-                // in different host with available port.
-                selfHostedDependencies = ConfigureDependencies(baseUrl);
-            }
+            PxHostableService = new HostableService(
+                builder =>
+                {
+                    // Register PX controllers/services
+                    SelfHostedBootstrap.ConfigureServices(builder, useSelfHostedDependencies, useArrangedResponses);
 
-            if (string.IsNullOrEmpty(baseUrl))
-            {
-                var port = GetAvailablePort();
-                var protocol = "https";
-                baseUrl = string.Format("{0}://localhost:{1}", protocol, port);
-                PXBaseUri = new Uri(baseUrl);
-            }
-            else
-            {
-                PXBaseUri = new Uri(baseUrl);
-            }
+                    // Middlewares exposed as testing hooks
+                    builder.Services.AddSingleton<PXServiceHandler>();
+                    builder.Services.AddSingleton<PXServiceFlightHandler>();
+                },
+                app =>
+                {
+                    // Order matters: run our test hooks before versioning/routes
+                    app.UseMiddleware<PXServiceHandler>();
+                    app.UseMiddleware<PXServiceFlightHandler>();
+                    app.UseMiddleware<PXServiceCorsHandler>();
+                    app.UseMiddleware<PXServiceApiVersionHandler>();
+                    WebApiConfig.AddUrlVersionedRoutes(app);
+                },
+                baseUri);
 
-            // Dependencies need to selfhost before px, we need to reserve px
-            // port so other dependencies don't take it.
-            PreRegisteredPorts.Add(PXBaseUri.Port);
+            PXClient = PxHostableService.HttpSelfHttpClient;
+            PXSettings = PxHostableService.App.Services.GetRequiredService<PXServiceSettings>();
+            PXHandler = PxHostableService.App.Services.GetRequiredService<PXServiceHandler>();
+            PXFlightHandler = PxHostableService.App.Services.GetRequiredService<PXServiceFlightHandler>();
+            PXCorsHandler = PxHostableService.App.Services.GetService<PXServiceCorsHandler>();
 
-            var builder = WebApplication.CreateBuilder(new WebApplicationOptions());
-            // builder.WebHost.UseTestServer();
-
-            PXServiceSettings PXSettings = new Mocks.PXServiceSettings(
-                useSelfHostedDependencies ? selfHostedDependencies : null,
-                useArrangedResponses);
-
-            WebApiConfig.Register(builder, PXSettings);
-
-            var app = builder.Build();
-
-            ConfigurePipeline(app);
-
-            app.Start();
-
-            // 4) Expose handles
-            var svc = new SelfHostedPxService
-            {
-                SelfHost = app,
-                HttpSelfHttpClient = new HttpClient { BaseAddress = PXBaseUri },
-            };
-
-            PXClient = svc.HttpSelfHttpClient;
-            // Pull optional handlers if you registered them in DI
-            PXHandler = svc.SelfHost.Services.GetService<PXServiceHandler>();
-            PXCorsHandler = svc.SelfHost.Services.GetService<PXServiceCorsHandler>();
-            PXFlightHandler = svc.SelfHost.Services.GetService<PXServiceFlightHandler>();
-
-            return svc;
+            return new SelfHostedPxService();
         }
 
         public void Dispose()
         {
-            try { HttpSelfHttpClient?.Dispose(); } catch { }
-            try { SelfHost?.Dispose(); } catch { }
-
+            try { PxHostableService?.Dispose(); } catch { }
         }
 
         /// <summary>
-        /// Configure the middleware pipeline and map routes.
+        /// Resets stateful testing hooks and dependency accessors to their default
+        /// configuration. This mirrors the behaviour of the legacy self-host.
         /// </summary>
-        public static void ConfigurePipeline(WebApplication app)
-        {
-            app.UseRouting();
-
-            // Log the matched endpoint so we can confirm HttpContext.GetEndpoint()
-            // has been populated by the routing middleware.
-            app.Use(async (ctx, next) =>
-            {
-                var ep = ctx.GetEndpoint();
-                Console.WriteLine($"[SelfHostedPxService] Endpoint: {ep?.DisplayName ?? "(null)"}");
-                await next();
-            });
-
-            app.UseMiddleware<PXServiceApiVersionHandler>();
-
-            WebApiConfig.AddUrlVersionedRoutes(app);
-
-            // Ensure endpoint middleware is registered so the selected action runs.
-            app.MapControllers();
-        }
-
-        public static string GetAvailablePort()
-        {
-            var netProperties = IPGlobalProperties.GetIPGlobalProperties();
-            var tcpListeners = netProperties.GetActiveTcpListeners();
-            var udpListeners = netProperties.GetActiveUdpListeners();
-
-            var portsInUse = new List<int>();
-            portsInUse.AddRange(tcpListeners.Select(tl => tl.Port));
-            portsInUse.AddRange(udpListeners.Select(ul => ul.Port));
-
-            int firstAvailablePort = 0;
-            for (int port = 49152; port < 65535; port++)
-            {
-                if (!portsInUse.Contains(port) && !PreRegisteredPorts.Contains(port))
-                {
-                    firstAvailablePort = port;
-                    break;
-                }
-            }
-
-            return firstAvailablePort.ToString();
-        }
-
-        public static Dictionary<Type, HostableService> ConfigureDependencies(string fullBaseUrl = "", string protocol = "https")
-        {
-            // Decide base URL
-            if (string.IsNullOrWhiteSpace(fullBaseUrl))
-            {
-                var p = GetAvailablePort();
-                var scheme = string.IsNullOrWhiteSpace(protocol) ? "http" : protocol!;
-                PXBaseUri = new Uri($"{scheme}://localhost:{p.ToString()}");
-            }
-            else
-            {
-                PXBaseUri = new Uri(fullBaseUrl);
-            }
-
-            // Dependencies need to selfhost before px, we need to reserve px
-            // port so other dependencies don't take it.
-            PreRegisteredPorts.Add(PXBaseUri.Port);
-
-
-            // No-op: All dependencies are configured in ConfigureServices above.
-            var selfhostServices = new[]
-            {
-                typeof(PIMSAccessor),
-                typeof(AccountServiceAccessor),
-                typeof(CatalogServiceAccessor),
-                typeof(PayerAuthServiceAccessor),
-                typeof(PurchaseServiceAccessor),
-                typeof(StoredValueAccessor),
-                typeof(TransactionServiceAccessor),
-                typeof(MSRewardsServiceAccessor),
-                typeof(TokenPolicyServiceAccessor),
-                typeof(PartnerSettingsServiceAccessor),
-                typeof(IssuerServiceAccessor),
-                typeof(WalletServiceAccessor),
-                typeof(TransactionDataService),
-                typeof(ChallengeManagementService),
-                typeof(RiskServiceAccessor),
-                typeof(PaymentOrchestratorService),
-                typeof(FraudDetectionService)
-            };
-
-            var selfHostedDependencies = new Dictionary<Type, HostableService>();
-
-            HostableService? dependencyEmulatorService = null;
-
-            // Create a single shared configuration action
-            Action<WebApplicationBuilder> configAction = b => Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.WebApiConfig.Register(b);
-
-            try
-            {
-                dependencyEmulatorService = new HostableService(configAction, Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.WebApiConfig.ConfigureRoutes, PXBaseUri);
-            }
-            catch
-            {
-                // Retry once just like the old code did
-                try
-                {
-                    dependencyEmulatorService = new HostableService(configAction, Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.WebApiConfig.ConfigureRoutes, PXBaseUri);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Failed to initialize DependencyEmulators. Error: {ex}");
-                }
-            }
-
-            if (dependencyEmulatorService != null)
-            {
-                foreach (var selfhostService in selfhostServices)
-                {
-                    var serviceName = GetServiceName(selfhostService.FullName!);
-                    Console.WriteLine($"{serviceName} initialized as self hosted emulator service on {dependencyEmulatorService.BaseUri}");
-                    selfHostedDependencies[selfhostService] = dependencyEmulatorService;
-                }
-            }
-
-            return selfHostedDependencies;
-        }
-
         public void ResetDependencies()
         {
-            // Reset stateful testing hooks (if registered)
             PXHandler?.ResetToDefault();
             PXFlightHandler?.ResetToDefault();
 
@@ -264,14 +110,6 @@ namespace SelfHostedPXServiceCore
             PXSettings.TokenPolicyService.ResetToDefaults();
             PXSettings.TokenizationService.ResetToDefaults();
         }
-
-        private static string GetServiceName(string serviceFullName)
-        {
-            return serviceFullName
-                .Split('.')
-                .Last()
-                .Replace("Accessor", "Service")
-                .Replace("ServiceService", "Service");
-        }
     }
 }
+

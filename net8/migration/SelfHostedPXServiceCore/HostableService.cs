@@ -4,81 +4,67 @@
 
 namespace SelfHostedPXServiceCore
 {
-    using Castle.Components.DictionaryAdapter;
     using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Routing;
-    using Microsoft.Commerce.Payments.PXCommon;
+    using Microsoft.AspNetCore.TestHost;
     using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Hosting;
     using Newtonsoft.Json;
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Net.Http;
-    using System.Net.NetworkInformation;
 
     /// <summary>
     /// Lightweight self-host wrapper for ASP.NET Core used by tests/emulators.
+    /// Runs entirely in-process via <see cref="TestServer"/> so no TCP ports are
+    /// required which keeps unit and integration tests fast and reliable.
     /// </summary>
     public sealed class HostableService : IDisposable
     {
+        /// <summary>The base address used when generating absolute URLs.</summary>
         public Uri BaseUri { get; private set; } = default!;
+
+        /// <summary>Client wired directly to the in-memory server.</summary>
         public HttpClient HttpSelfHttpClient { get; private set; } = default!;
+
+        /// <summary>The ASP.NET Core application instance.</summary>
         public WebApplication App { get; private set; } = default!;
 
         /// <summary>
-        /// Build + start a host. Use this overload when you only need to configure the app pipeline.
+        /// Build and start a host with service and app configuration callbacks.
         /// </summary>
-        /// <param name="configureApp">Configure middleware/endpoints. <c>MapControllers()</c> is already called.</param>
-        /// <param name="fullBaseUrl">e.g. "http://localhost:49152". If null/empty a free port is chosen.</param>
-        public HostableService(Action<WebApplication> configureApp, Uri fullBaseUrl)
-            : this(_ => { }, configureApp, fullBaseUrl)
-        {
-        }
-
-        /// <summary>
-        /// Build + start a host with service configuration and app configuration callbacks.
-        /// </summary>
-        /// <param name="configureServices">Add DI/services. Controllers + Newtonsoft JSON are already registered.</param>
-        /// <param name="configureApp">Configure middleware/endpoints. A routing pipeline is already wired so that
-        /// middlewares added here run <em>after</em> <c>UseRouting()</c> but before endpoints are mapped.</param>
-        /// <param name="fullBaseUrl">e.g. "http://localhost:49152". If null/empty a free port is chosen.</param>
+        /// <param name="configureServices">Adds services to the DI container.</param>
+        /// <param name="configureApp">Configures the middleware pipeline.</param>
+        /// <param name="baseUri">Base address used for generated URLs. No actual network binding occurs.</param>
+        /// <param name="configureEndpoints">Optional conventional routing configuration.</param>
         public HostableService(
             Action<WebApplicationBuilder> configureServices,
             Action<WebApplication> configureApp,
             Uri baseUri,
             Action<IEndpointRouteBuilder>? configureEndpoints = null)
         {
+            BaseUri = baseUri ?? new Uri("http://localhost");
 
-            BaseUri = baseUri;
             // Build host
             var builder = WebApplication.CreateBuilder(new WebApplicationOptions
             {
                 Args = Array.Empty<string>()
             });
 
+            // Use the in-memory test server so no sockets are opened
+            builder.WebHost.UseTestServer();
+
             // Baseline service setup (controllers + Newtonsoft, ignore nulls like old WebApiConfig did)
             builder.Services
                 .AddControllers()
                 .AddNewtonsoftJson(o => o.SerializerSettings.NullValueHandling = NullValueHandling.Ignore);
 
-            // Callers can add more services
+            // Allow callers to register additional services
             configureServices?.Invoke(builder);
 
             App = builder.Build();
 
-            // Bind to requested URL/port
-            App.Urls.Clear();
-            App.Urls.Add(BaseUri.ToString());
-
-            // Conditionally redirect HTTP to HTTPS only when not self-hosted
-            if (!WebHostingUtility.IsApplicationSelfHosted())
-            {
-                App.UseHttpsRedirection();
-            }
-
-            // Ensure the routing matcher runs before custom middleware so HttpContext.GetEndpoint()
+            // Ensure routing runs before custom middleware so HttpContext.GetEndpoint()
             // is populated when those middlewares execute.
             App.UseRouting();
 
@@ -91,29 +77,25 @@ namespace SelfHostedPXServiceCore
                 await next();
             });
 
-            // Callers can add middlewares, filters, etc. They will execute after routing but before
-            // the selected endpoint is invoked.
+            // Allow callers to add middleware/endpoints
             configureApp?.Invoke(App);
 
-            // Allow callers to register conventional routes prior to mapping controllers
+            // Allow conventional routes prior to mapping controllers
             configureEndpoints?.Invoke(App);
 
-            // Map attribute/route-based controllers and finalize the endpoint pipeline
+            // Map attribute routed controllers and finalize pipeline
             App.MapControllers();
 
-            // Start server
+            // Start the in-memory server and create a client that talks to it
             App.Start();
-
-            HttpSelfHttpClient = new HttpClient
-            {
-                BaseAddress = BaseUri
-            };
+            HttpSelfHttpClient = App.GetTestClient();
+            HttpSelfHttpClient.BaseAddress = BaseUri;
         }
 
         public void Dispose()
         {
-            try { App?.StopAsync().GetAwaiter().GetResult(); } catch { }
             try { HttpSelfHttpClient?.Dispose(); } catch { }
+            try { App?.Dispose(); } catch { }
         }
     }
 }
