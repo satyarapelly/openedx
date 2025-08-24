@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.TestServer;
 using Microsoft.Commerce.Payments.PXService;
 using Microsoft.Commerce.Payments.PXService.Accessors.IssuerService;
 using Microsoft.Commerce.Payments.PXService.Accessors.MSRewardsService;
@@ -122,9 +123,22 @@ namespace SelfHostedPXServiceCore
         public static void ConfigurePipeline(WebApplication app)
         {
             app.UseRouting();
+
+            // Log the matched endpoint so we can confirm HttpContext.GetEndpoint()
+            // has been populated by the routing middleware.
+            app.Use(async (ctx, next) =>
+            {
+                var ep = ctx.GetEndpoint();
+                Console.WriteLine($"[SelfHostedPxService] Endpoint: {ep?.DisplayName ?? "(null)"}");
+                await next();
+            });
+
             app.UseMiddleware<PXServiceApiVersionHandler>();
 
             WebApiConfig.AddUrlVersionedRoutes(app);
+
+            // Ensure endpoint middleware is registered so the selected action runs.
+            app.MapControllers();
         }
 
         public static string GetAvailablePort()

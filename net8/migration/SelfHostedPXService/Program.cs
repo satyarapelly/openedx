@@ -50,9 +50,11 @@ internal sealed class Program
         // Spin up the PX service and all its dependency emulators in memory with
         // routing configured so HttpContext.GetEndpoint() resolves correctly.
         var selfHostedSvc = SelfHostedPxService.StartInMemory(fullBaseUrl, true, false);
-   
-        var requestUrl = fullBaseUrl + "/probe";
 
+        // Kick the tires on a simple request. The server writes the matched
+        // endpoint to the console (see HostableService/ConfigurePipeline).
+        var requestUrl = fullBaseUrl + "/probe";
+        Console.WriteLine($"Calling {requestUrl} to verify endpoint resolution...");
         HttpResponseMessage response = await selfHostedSvc.HttpSelfHttpClient.GetAsync(requestUrl);
 
         // Warm up like before (no real network I/O; this goes through TestServer).
