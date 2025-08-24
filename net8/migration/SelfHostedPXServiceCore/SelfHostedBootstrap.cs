@@ -1,26 +1,42 @@
-// SelfHostedBootstrap.cs (new)
+using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Commerce.Payments.PXService;
+using Microsoft.Commerce.Payments.PXService.Settings;
 
-internal static class SelfHostedBootstrap
+namespace SelfHostedPXServiceCore
 {
-    public static void ConfigureServices(IServiceCollection services, bool useSelfHostedDependencies, bool useArrangedResponses)
+    /// <summary>
+    /// Central bootstrap for configuring the in-memory PX service so that
+    /// endpoint routing is wired the same way as the full self-host.
+    /// </summary>
+    internal static class SelfHostedBootstrap
     {
-        // Mirror your HostableService services:
-        // - AddControllers().AddNewtonsoftJson(opts => opts.SerializerSettings.NullValueHandling = NullValueHandling.Ignore);
-        // - add VersionedControllerSelector + registrations
-        // - register PXServiceSettings and dependency emulator accessors
-        // - any singletons used by middlewares
-    }
+        /// <summary>
+        /// Register PX controllers and supporting services.
+        /// </summary>
+        public static void ConfigureServices(
+            WebApplicationBuilder builder,
+            bool useSelfHostedDependencies,
+            bool useArrangedResponses)
+        {
+            PXServiceSettings settings = new Mocks.PXServiceSettings(
+                useSelfHostedDependencies ? new Dictionary<Type, HostableService>() : null,
+                useArrangedResponses);
 
-    public static void ConfigurePipeline(IApplicationBuilder app)
-    {
-        // Mirror your HostableService pipeline order exactly:
-        // - UseRouting();
-        // - UsePXTraceCorrelationMiddleware (if enabled)
-        // - UsePXServiceApiVersionHandler (middleware version)
-        // - UseCors (if enabled)
-        // - UseEndpoints + your versioned routes
-        // - /routes helper endpoint (optional)
+            WebApiConfig.Register(builder, settings);
+        }
+
+        /// <summary>
+        /// Configure the middleware pipeline and map routes.
+        /// </summary>
+        public static void ConfigurePipeline(WebApplication app)
+        {
+            app.UseRouting();
+            app.UseMiddleware<PXServiceApiVersionHandler>();
+
+            WebApiConfig.AddUrlVersionedRoutes(app);
+        }
     }
 }
+
