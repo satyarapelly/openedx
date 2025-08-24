@@ -6,7 +6,6 @@ namespace SelfHostedPXServiceCore
 {
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Routing;
     using Microsoft.AspNetCore.TestHost;
     using Microsoft.Extensions.DependencyInjection;
@@ -64,18 +63,8 @@ namespace SelfHostedPXServiceCore
 
             App = builder.Build();
 
-            // Ensure routing runs before custom middleware so HttpContext.GetEndpoint()
-            // is populated when those middlewares execute.
+            // Run routing before custom middleware so endpoint metadata is available.
             App.UseRouting();
-
-            // Emit the resolved endpoint for each request so callers can verify routing
-            // is functioning as expected.
-            App.Use(async (ctx, next) =>
-            {
-                var ep = ctx.GetEndpoint();
-                Console.WriteLine($"[HostableService] Endpoint: {ep?.DisplayName ?? "(null)"}");
-                await next();
-            });
 
             // Allow callers to add middleware/endpoints
             configureApp?.Invoke(App);

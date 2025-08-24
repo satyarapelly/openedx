@@ -62,12 +62,13 @@ namespace SelfHostedPXServiceCore
                 },
                 app =>
                 {
-                    // Order matters: run our test hooks before versioning/routes
+                    // Order matters: run our test hooks before the standard PX pipeline
                     app.UseMiddleware<PXServiceHandler>();
                     app.UseMiddleware<PXServiceFlightHandler>();
                     app.UseMiddleware<PXServiceCorsHandler>();
-                    app.UseMiddleware<PXServiceApiVersionHandler>();
-                    WebApiConfig.AddUrlVersionedRoutes(app);
+
+                    // Configure routing and versioned endpoints
+                    SelfHostedBootstrap.ConfigurePipeline(app);
                 },
                 baseUri);
 
