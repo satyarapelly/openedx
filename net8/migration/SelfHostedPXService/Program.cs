@@ -1,23 +1,64 @@
 // Program.cs — .NET 8, in-memory hosting (Option B)
 
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SelfHostedPXServiceCore;
+using System.Net.Http;
+using System.Net.NetworkInformation;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Web.Services.Description;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.Commerce.Payments.PXCommon;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 internal sealed class Program
 {
+    public static List<int> PreRegisteredPorts { get; } = new();
+
+    public static Uri BaseUri { get; private set; } = default!;
+
     public static async Task Main(string[] args)
     {
+        string? fullBaseUrl = args.Length > 0 ? args[0] : "";
+        string? protocol = args.Length > 1 ? args[1] : "https";
+
+        if (string.IsNullOrEmpty(fullBaseUrl))
+        {
+            var port = SelfHostedPxService.GetAvailablePort();
+
+            if (string.IsNullOrEmpty(protocol))
+            {
+                protocol = "https";
+            }
+
+            fullBaseUrl = string.Format("{0}://localhost:{1}", protocol, port);
+            BaseUri = new Uri(fullBaseUrl);
+        }
+        else
+        {
+            BaseUri = new Uri(fullBaseUrl);
+        }
+
+        Console.WriteLine($"Initializing server on {fullBaseUrl.ToString()}...");
+
         // Spin up the PX service and all its dependency emulators in memory with
         // routing configured so HttpContext.GetEndpoint() resolves correctly.
-        using var host = SelfHostedPxService.StartInMemory(true, false);
+        var selfHostedSvc = SelfHostedPxService.StartInMemory(fullBaseUrl, true, false);
+   
+        var requestUrl = fullBaseUrl + "/probe";
+
+        HttpResponseMessage response = await selfHostedSvc.HttpSelfHttpClient.GetAsync(requestUrl);
 
         // Warm up like before (no real network I/O; this goes through TestServer).
-        var relativeUrl = "users/me/paymentMethodDescriptions?country=tr&family=credit_card&type=mc&language=en-US&partner=storify&operation=add";
-        var url = $"/v7.0/{relativeUrl}";
-        var response = await GetPidlFromPXService(url, host);
+        requestUrl = fullBaseUrl + "/v7.0/account001/paymentMethodDescriptions?country=tr&family=credit_card&type=mc&language=en-US&partner=storify&operation=add";
+
+        response = await GetPidlFromPXService(requestUrl, selfHostedSvc);
         var content = FormatJson(await response.Content.ReadAsStringAsync());
 
         if (response.IsSuccessStatusCode)
@@ -26,7 +67,7 @@ internal sealed class Program
         }
         else
         {
-            System.Console.WriteLine($"Server responded: {response.StatusCode}");
+                System.Console.WriteLine($"Server responded: {response.StatusCode}");
             System.Console.WriteLine($"Response content: {content}");
         }
 
@@ -57,7 +98,7 @@ internal sealed class Program
         fullUrl = fullUrl.Replace("users/my-org", "DiffOrgUser");
 
         // Call the in-memory client
-        return await host.HttpClient.GetAsync(fullUrl);
+        return await host.HttpSelfHttpClient.GetAsync(fullUrl);
     }
 
     private static string FormatJson(string json)
@@ -65,4 +106,5 @@ internal sealed class Program
         dynamic parsed = JsonConvert.DeserializeObject(json);
         return JsonConvert.SerializeObject(parsed, Formatting.Indented);
     }
-}
+
+    }
