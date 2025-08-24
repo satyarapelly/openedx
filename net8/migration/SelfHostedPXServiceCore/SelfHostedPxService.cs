@@ -1,13 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Commerce.Payments.PXService;
-using Microsoft.Commerce.Payments.PXService.Settings;
-using PxMockSettings = SelfHostedPXServiceCore.Mocks.PXServiceSettings;
 
 namespace SelfHostedPXServiceCore
 {
@@ -27,25 +23,14 @@ namespace SelfHostedPXServiceCore
         /// </summary>
         public static SelfHostedPxService StartInMemory(bool useSelfHostedDependencies, bool useArrangedResponses)
         {
-            PXServiceSettings settings = new PxMockSettings(
-                useSelfHostedDependencies ? new Dictionary<Type, HostableService>() : null,
-                useArrangedResponses);
-
             var builder = WebApplication.CreateBuilder(new WebApplicationOptions());
             builder.WebHost.UseTestServer();
 
-            // Register controllers, version selector and middleware dependencies
-            WebApiConfig.Register(builder, settings);
+            SelfHostedBootstrap.ConfigureServices(builder, useSelfHostedDependencies, useArrangedResponses);
 
             var app = builder.Build();
 
-            // Ensure endpoint routing runs before custom middleware so HttpContext.GetEndpoint()
-            // is populated for downstream components.
-            app.UseRouting();
-            app.UseMiddleware<PXServiceApiVersionHandler>();
-
-            // Conventional + attribute routes
-            WebApiConfig.AddUrlVersionedRoutes(app);
+            SelfHostedBootstrap.ConfigurePipeline(app);
 
             app.Start();
 
@@ -63,4 +48,3 @@ namespace SelfHostedPXServiceCore
         }
     }
 }
-
