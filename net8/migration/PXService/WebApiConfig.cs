@@ -494,6 +494,9 @@ namespace Microsoft.Commerce.Payments.PXService
                 name: GlobalConstants.V7RouteNames.RemoveEligiblePaymentmethodsPaymentRequestExApi,
                 pattern: GlobalConstants.EndPointNames.V7RemoveEligiblePaymentmethodsPaymentRequestsEx,
                 defaults: new { controller = C(GlobalConstants.ControllerNames.PaymentRequestsExController), action = "RemoveEligiblePaymentMethods" });
+
+            // Also expose any attribute-routed controllers
+            endpoints.MapControllers();
         }
 
         private static void InitVersionSelector(VersionedControllerSelector selector)

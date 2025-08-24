@@ -10,15 +10,9 @@ internal sealed class Program
 {
     public static async Task Main(string[] args)
     {
-        // Optional arg 0 was a base URL in the old model.
-        // For in-memory hosting we ignore the URL (no sockets are opened).
-        _ = (args.Length > 0) ? args[0] : null;
-
-        // Spin up the PX service and all its dependency emulators in memory.
-        // The “true, false” flags match your old usage:
-        //   useSelfHostedDependencies: true
-        //   useArrangedResponses:      false
-        using var host = SelfHostedPxService.StartInMemory(useSelfHostedDependencies: true, useArrangedResponses: false);
+        // Spin up the PX service and all its dependency emulators in memory with
+        // routing configured so HttpContext.GetEndpoint() resolves correctly.
+        using var host = SelfHostedPxService.StartInMemory(true, false);
 
         // Warm up like before (no real network I/O; this goes through TestServer).
         var relativeUrl = "users/me/paymentMethodDescriptions?country=tr&family=credit_card&type=mc&language=en-US&partner=storify&operation=add";
