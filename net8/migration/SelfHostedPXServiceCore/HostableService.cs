@@ -6,6 +6,7 @@ namespace SelfHostedPXServiceCore
 {
     using Castle.Components.DictionaryAdapter;
     using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Routing;
     using Microsoft.Commerce.Payments.PXCommon;
     using Microsoft.Extensions.DependencyInjection;
@@ -80,6 +81,15 @@ namespace SelfHostedPXServiceCore
             // Ensure the routing matcher runs before custom middleware so HttpContext.GetEndpoint()
             // is populated when those middlewares execute.
             App.UseRouting();
+
+            // Emit the resolved endpoint for each request so callers can verify routing
+            // is functioning as expected.
+            App.Use(async (ctx, next) =>
+            {
+                var ep = ctx.GetEndpoint();
+                Console.WriteLine($"[HostableService] Endpoint: {ep?.DisplayName ?? "(null)"}");
+                await next();
+            });
 
             // Callers can add middlewares, filters, etc. They will execute after routing but before
             // the selected endpoint is invoked.
