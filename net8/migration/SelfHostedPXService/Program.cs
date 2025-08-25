@@ -10,13 +10,18 @@ internal sealed class Program
 {
     public static async Task Main(string[] args)
     {
-        string fullBaseUrl = args.Length > 0 ? args[0] : "";
-        string protocol = args.Length > 1 ? args[1] : "https";
+        string fullBaseUrl = args.Length > 0 ? args[0] : string.Empty;
 
         if (string.IsNullOrEmpty(fullBaseUrl))
         {
             var port = SelfHostedPxService.GetAvailablePort();
-            fullBaseUrl = $"{protocol}://localhost:{port}";
+            fullBaseUrl = $"http://localhost:{port}";
+        }
+        else
+        {
+            // TestServer only understands HTTP; force any supplied HTTPS URL to HTTP
+            var builder = new UriBuilder(fullBaseUrl) { Scheme = "http", Port = new Uri(fullBaseUrl).Port };
+            fullBaseUrl = builder.Uri.ToString();
         }
 
         Console.WriteLine($"Initializing server on {fullBaseUrl}...");
@@ -27,14 +32,14 @@ internal sealed class Program
 
         // Kick the tires on a simple request. The server writes the matched
         // endpoint to the console (see HostableService/ConfigurePipeline).
-        var requestUrl = fullBaseUrl + "/probe";
-        Console.WriteLine($"Calling {requestUrl} to verify endpoint resolution...");
-        HttpResponseMessage response = await selfHostedSvc.HttpSelfHttpClient.GetAsync(requestUrl);
+        Console.WriteLine("Calling /probe to verify endpoint resolution...");
+        HttpResponseMessage response = await selfHostedSvc.HttpSelfHttpClient.GetAsync("/probe");
+        Console.WriteLine($"Probe returned {(int)response.StatusCode}");
 
         // Warm up like before (no real network I/O; this goes through TestServer).
-        requestUrl = fullBaseUrl + "/v7.0/account001/paymentMethodDescriptions?country=tr&family=credit_card&type=mc&language=en-US&partner=storify&operation=add";
+        var warmupPath = "/v7.0/account001/paymentMethodDescriptions?country=tr&family=credit_card&type=mc&language=en-US&partner=storify&operation=add";
 
-        response = await GetPidlFromPXService(requestUrl, selfHostedSvc);
+        response = await GetPidlFromPXService(warmupPath, selfHostedSvc);
         var content = FormatJson(await response.Content.ReadAsStringAsync());
 
         if (response.IsSuccessStatusCode)
@@ -58,23 +63,23 @@ internal sealed class Program
         await done.Task;
     }
 
-    private static async Task<HttpResponseMessage> GetPidlFromPXService(string url, SelfHostedPxService host)
+    private static async Task<HttpResponseMessage> GetPidlFromPXService(string path, SelfHostedPxService host)
     {
         // Keep your existing user substitution logic
-        var fullUrl = url;
-        if (fullUrl.Contains("completePrerequisites=true"))
+        var relative = path;
+        if (relative.Contains("completePrerequisites=true"))
         {
-            fullUrl = fullUrl.Replace("users/me", "EmpAccountNoAddress");
+            relative = relative.Replace("users/me", "EmpAccountNoAddress");
         }
         else
         {
-            fullUrl = fullUrl.Replace("users/me", "DiffTestUser");
+            relative = relative.Replace("users/me", "DiffTestUser");
         }
 
-        fullUrl = fullUrl.Replace("users/my-org", "DiffOrgUser");
+        relative = relative.Replace("users/my-org", "DiffOrgUser");
 
         // Call the in-memory client
-        return await host.HttpSelfHttpClient.GetAsync(fullUrl);
+        return await host.HttpSelfHttpClient.GetAsync(relative);
     }
 
     private static string FormatJson(string json)

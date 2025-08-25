@@ -48,7 +48,8 @@ namespace SelfHostedPXServiceCore
             Action<IEndpointRouteBuilder>? configureEndpoints = null)
         {
 
-            BaseUri = baseUri;
+            // Force HTTP so the in-memory TestServer isn't asked to perform TLS handshakes
+            BaseUri = new UriBuilder(baseUri) { Scheme = Uri.UriSchemeHttp, Port = baseUri.Port }.Uri;
             // Build host
             var builder = WebApplication.CreateBuilder(new WebApplicationOptions
             {
@@ -68,27 +69,29 @@ namespace SelfHostedPXServiceCore
 
             App = builder.Build();
 
-            // Ensure the routing matcher runs before custom middleware so HttpContext.GetEndpoint()
-            // is populated when those middlewares execute.
+            // Ensure routing runs before any caller-provided middleware so
+            // HttpContext.GetEndpoint() is populated when they execute.
             App.UseRouting();
 
-            // Emit the resolved endpoint for each request so callers can verify routing
-            // is functioning as expected.
-            App.Use(async (ctx, next) =>
-            {
-                var ep = ctx.GetEndpoint();
-                Console.WriteLine($"[HostableService] Endpoint: {ep?.DisplayName ?? "(null)"}");
-                await next();
-            });
-
-            // Callers can add middlewares, filters, etc. They will execute after routing but before
-            // the selected endpoint is invoked.
+            // Allow callers to plug in additional middleware (auth, logging, etc.).
             configureApp?.Invoke(App);
 
-            // Allow callers to register conventional routes prior to mapping controllers
+            // Emit the resolved endpoint for each request after the rest of the
+            // pipeline has executed to help diagnose routing issues.
+            App.Use(async (ctx, next) =>
+            {
+                await next();
+                var ep = ctx.GetEndpoint();
+                Console.WriteLine($"[HostableService] Endpoint: {ep?.DisplayName ?? "(null)"}");
+            });
+
+            // Map a simple probe endpoint for quick sanity checks.
+            App.MapGet("/probe", () => "OK");
+
+            // Allow callers to register conventional routes before controllers are mapped.
             configureEndpoints?.Invoke(App);
 
-            // Map attribute/route-based controllers and finalize the endpoint pipeline
+            // Map attribute-routed controllers.
             App.MapControllers();
 
             // Start server
