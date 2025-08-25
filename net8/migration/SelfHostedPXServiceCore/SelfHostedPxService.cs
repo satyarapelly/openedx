@@ -43,8 +43,8 @@ namespace SelfHostedPXServiceCore
         public IHost SelfHost = default!;
 
         /// <summary>
-        /// Spin up the PX service entirely in-memory. The returned client can be used to issue HTTP
-        /// requests without opening any network sockets.
+        /// Spin up the PX service entirely in-memory using <see cref="Microsoft.AspNetCore.TestHost.TestServer" />.
+        /// The returned client can be used to issue HTTP requests without opening any network sockets.
         /// </summary>
         public static SelfHostedPxService StartInMemory(string baseUrl, bool useSelfHostedDependencies, bool useArrangedResponses)
         {

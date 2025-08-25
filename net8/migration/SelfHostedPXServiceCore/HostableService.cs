@@ -85,11 +85,20 @@ namespace SelfHostedPXServiceCore
             // the selected endpoint is invoked.
             configureApp?.Invoke(App);
 
-            // Allow callers to register conventional routes prior to mapping controllers
-            configureEndpoints?.Invoke(App);
+            // Finalize the pipeline: register any conventional routes and map controllers
+            // via UseEndpoints so that routing metadata is available to consumers like
+            // HttpContext.GetEndpoint().
+            App.UseEndpoints(endpoints =>
+            {
+                // Simple probe endpoint for quick sanity checks
+                endpoints.MapGet("/probe", async ctx => await ctx.Response.WriteAsync("OK"));
 
-            // Map attribute/route-based controllers and finalize the endpoint pipeline
-            App.MapControllers();
+                // Allow callers to register conventional routes prior to mapping controllers
+                configureEndpoints?.Invoke(endpoints);
+
+                // Map attribute/route-based controllers and finalize the endpoint pipeline
+                endpoints.MapControllers();
+            });
 
             // Start server
             App.Start();

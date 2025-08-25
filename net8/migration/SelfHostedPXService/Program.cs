@@ -30,6 +30,7 @@ internal sealed class Program
         var requestUrl = fullBaseUrl + "/probe";
         Console.WriteLine($"Calling {requestUrl} to verify endpoint resolution...");
         HttpResponseMessage response = await selfHostedSvc.HttpSelfHttpClient.GetAsync(requestUrl);
+        Console.WriteLine($"Probe returned {(int)response.StatusCode}");
 
         // Warm up like before (no real network I/O; this goes through TestServer).
         requestUrl = fullBaseUrl + "/v7.0/account001/paymentMethodDescriptions?country=tr&family=credit_card&type=mc&language=en-US&partner=storify&operation=add";
