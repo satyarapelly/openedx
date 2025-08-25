@@ -3,8 +3,29 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Commerce.Payments.PXService;
 using Microsoft.Commerce.Payments.PXService.Settings;
+using Microsoft.Commerce.Payments.PXService.RiskService.V7;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
+
+using OrchestrationServiceAccessor = Microsoft.Commerce.Payments.PXService.Accessors.OrchestrationService.OrchestrationServiceAccessor;
+using PayerAuthServiceAccessor = Microsoft.Commerce.Payments.PXService.Accessors.PayerAuthService.PayerAuthServiceAccessor;
+using PurchaseServiceAccessor = Microsoft.Commerce.Payments.PXService.Accessors.PurchaseService.PurchaseServiceAccessor;
+using StoredValueAccessor = Microsoft.Commerce.Payments.PXService.Accessors.StoredValue.StoredValueAccessor;
+using SellerMarketPlaceServiceAccessor = Microsoft.Commerce.Payments.PXService.Accessors.SellerMarketPlaceService.SellerMarketPlaceServiceAccessor;
+using PaymentThirdPartyServiceAccessor = Microsoft.Commerce.Payments.PXService.Accessors.PaymentThirdPartyService.PaymentThirdPartyServiceAccessor;
+using PartnerSettingsServiceAccessor = Microsoft.Commerce.Payments.PXService.Accessors.PartnerSettingsService.PartnerSettingsServiceAccessor;
+using IssuerServiceAccessor = Microsoft.Commerce.Payments.PXService.Accessors.IssuerService.IssuerServiceAccessor;
+using ChallengeManagementServiceAccessor = Microsoft.Commerce.Payments.PXService.Accessors.ChallengeManagementService.ChallengeManagementServiceAccessor;
+using WalletServiceAccessor = Microsoft.Commerce.Payments.PXService.Accessors.WalletService.WalletServiceAccessor;
+using TransactionDataServiceAccessor = Microsoft.Commerce.Payments.PXService.Accessors.TransactionDataService.TransactionDataServiceAccessor;
+using MSRewardsServiceAccessor = Microsoft.Commerce.Payments.PXService.Accessors.MSRewardsService.MSRewardsServiceAccessor;
+using TokenPolicyServiceAccessor = Microsoft.Commerce.Payments.PXService.Accessors.TokenPolicyService.TokenPolicyServiceAccessor;
+using TokenizationServiceAccessor = Microsoft.Commerce.Payments.PXService.Accessors.TokenizationService.TokenizationServiceAccessor;
+using PaymentOrchestratorServiceAccessor = Microsoft.Commerce.Payments.PXService.Accessors.PaymentOrchestratorService.PaymentOrchestratorServiceAccessor;
+using FraudDetectionServiceAccessor = Microsoft.Commerce.Payments.PXService.Accessors.FraudDetectionService.FraudDetectionServiceAccessor;
+using AddressEnrichmentServiceAccessor = Microsoft.Commerce.Payments.PXService.AddressEnrichmentService.V7.AddressEnrichmentServiceAccessor;
 
 namespace SelfHostedPXServiceCore
 {
@@ -18,6 +39,9 @@ namespace SelfHostedPXServiceCore
     {
         /// <summary>Wrapper around the ASP.NET Core host.</summary>
         public static HostableService PxHostableService { get; private set; } = default!;
+
+        /// <summary>Dependency emulator hosts keyed by accessor type.</summary>
+        public static Dictionary<Type, HostableService> SelfHostedDependencies { get; private set; } = new();
 
         /// <summary>PX service settings registered with the host.</summary>
         public static PXServiceSettings PXSettings { get; private set; } = default!;
@@ -66,18 +90,19 @@ namespace SelfHostedPXServiceCore
  var builder = WebApplication.CreateBuilder(new WebApplicationOptions());
  // builder.WebHost.UseTestServer();
 
+            var dependencies = useSelfHostedDependencies
+                ? ConfigureDependencies(baseUri)
+                : null;
+
  PXServiceSettings PXSettings = new Mocks.PXServiceSettings(
      useSelfHostedDependencies ? selfHostedDependencies : null,
      useArrangedResponses);
 
-// use it below
- // WebApiConfig.Register(builder, PXSettings); 
- 
             PxHostableService = new HostableService(
                 builder =>
                 {
                     // Register PX controllers/services
-                    SelfHostedBootstrap.ConfigureServices(builder, useSelfHostedDependencies, useArrangedResponses);
+                    SelfHostedBootstrap.ConfigureServices(builder, dependencies, useArrangedResponses);
 
                     // Middlewares exposed as testing hooks
                     builder.Services.AddSingleton<PXServiceHandler>();
@@ -100,6 +125,7 @@ namespace SelfHostedPXServiceCore
             PXHandler = PxHostableService.App.Services.GetRequiredService<PXServiceHandler>();
             PXFlightHandler = PxHostableService.App.Services.GetRequiredService<PXServiceFlightHandler>();
             PXCorsHandler = PxHostableService.App.Services.GetService<PXServiceCorsHandler>();
+            SelfHostedDependencies = dependencies ?? new Dictionary<Type, HostableService>();
 
             return new SelfHostedPxService();
         }
@@ -211,6 +237,90 @@ namespace SelfHostedPXServiceCore
             PXSettings.MSRewardsService.ResetToDefaults();
             PXSettings.TokenPolicyService.ResetToDefaults();
             PXSettings.TokenizationService.ResetToDefaults();
+        }
+
+        private static Dictionary<Type, HostableService> ConfigureDependencies(Uri baseUri)
+        {
+            var selfhostServices = new[]
+            {
+                typeof(PIMSAccessor),
+                typeof(OrchestrationServiceAccessor),
+                typeof(AccountServiceAccessor),
+                typeof(PayerAuthServiceAccessor),
+                typeof(PurchaseServiceAccessor),
+                typeof(CatalogServiceAccessor),
+                typeof(SessionServiceAccessor),
+                typeof(StoredValueAccessor),
+                typeof(RiskServiceAccessor),
+                typeof(TaxIdServiceAccessor),
+                typeof(AddressEnrichmentServiceAccessor),
+                typeof(TransactionServiceAccessor),
+                typeof(SellerMarketPlaceServiceAccessor),
+                typeof(PaymentThirdPartyServiceAccessor),
+                typeof(AzureExPAccessor),
+                typeof(PartnerSettingsServiceAccessor),
+                typeof(IssuerServiceAccessor),
+                typeof(ChallengeManagementServiceAccessor),
+                typeof(WalletServiceAccessor),
+                typeof(TransactionDataServiceAccessor),
+                typeof(MSRewardsServiceAccessor),
+                typeof(TokenPolicyServiceAccessor),
+                typeof(TokenizationServiceAccessor),
+                typeof(PaymentOrchestratorServiceAccessor),
+                typeof(FraudDetectionServiceAccessor)
+            };
+
+            var selfHostedDependencies = new Dictionary<Type, HostableService>();
+
+            HostableService? dependencyEmulatorService = null;
+
+            Action<WebApplicationBuilder> configAction = b =>
+                Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.WebApiConfig.Register(b);
+
+            try
+            {
+                dependencyEmulatorService = new HostableService(
+                    configAction,
+                    _ => { },
+                    baseUri,
+                    Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.WebApiConfig.ConfigureRoutes);
+            }
+            catch
+            {
+                try
+                {
+                    dependencyEmulatorService = new HostableService(
+                        configAction,
+                        _ => { },
+                        baseUri,
+                        Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.WebApiConfig.ConfigureRoutes);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Failed to initialize DependencyEmulators. Error: {ex}");
+                }
+            }
+
+            if (dependencyEmulatorService != null)
+            {
+                foreach (var svc in selfhostServices)
+                {
+                    var serviceName = GetServiceName(svc.FullName!);
+                    Console.WriteLine($"{serviceName} initialized as self hosted emulator service on {dependencyEmulatorService.BaseUri}");
+                    selfHostedDependencies[svc] = dependencyEmulatorService;
+                }
+            }
+
+            return selfHostedDependencies;
+        }
+
+        private static string GetServiceName(string serviceFullName)
+        {
+            return serviceFullName
+                .Split('.')
+                .Last()
+                .Replace("Accessor", "Service")
+                .Replace("ServiceService", "Service");
         }
     }
 }
