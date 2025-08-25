@@ -21,7 +21,7 @@ namespace SelfHostedPXServiceCore
     {
         public static List<int> PreRegisteredPorts { get; private set; } = new();
 
-        public static Uri PXBaseUri = new Uri("https://localhost:7151");
+        public static Uri PXBaseUri = new Uri("http://localhost:7151");
 
         public static HostableService PxHostableService { get; private set; }
 
@@ -59,7 +59,7 @@ namespace SelfHostedPXServiceCore
             if (string.IsNullOrEmpty(baseUrl))
             {
                 var port = GetAvailablePort();
-                var protocol = "https";
+                var protocol = "http";
                 baseUrl = string.Format("{0}://localhost:{1}", protocol, port);
             }
 
@@ -133,7 +133,7 @@ namespace SelfHostedPXServiceCore
             return firstAvailablePort.ToString();
         }
 
-        public static Dictionary<Type, HostableService> ConfigureDependencies(string fullBaseUrl = "", string protocol = "https")
+        public static Dictionary<Type, HostableService> ConfigureDependencies(string fullBaseUrl = "", string protocol = "http")
         {
             // Decide base URL
             if (string.IsNullOrWhiteSpace(fullBaseUrl))
