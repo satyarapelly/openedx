@@ -1,27 +1,112 @@
+﻿// Program.cs — .NET 8, in-memory hosting (Option B)
+
+using Newtonsoft.Json;
 using SelfHostedPXServiceCore;
-using System;
 using System.Net.Http;
+using System.Net.NetworkInformation;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Web.Services.Description;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.Commerce.Payments.PXCommon;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 internal sealed class Program
 {
+    public static List<int> PreRegisteredPorts { get; } = new();
+
+    public static Uri BaseUri { get; private set; } = default!;
+
     public static async Task Main(string[] args)
     {
-        string baseUrl = args.Length > 0 ? args[0] : "http://localhost";
+        string? fullBaseUrl = args.Length > 0 ? args[0] : "";
+        string? protocol = args.Length > 1 ? args[1] : "https";
 
-        Console.WriteLine($"Initializing in-memory server on {baseUrl}...");
+        if (string.IsNullOrEmpty(fullBaseUrl))
+        {
+            var port = SelfHostedPxService.GetAvailablePort();
 
-        // Spin up the PX service entirely in-memory – no TCP sockets required.
-        var selfHostedSvc = SelfHostedPxService.StartInMemory(baseUrl, false, false);
+            if (string.IsNullOrEmpty(protocol))
+            {
+                protocol = "https";
+            }
 
-        // Verify the service is reachable by issuing a simple probe request.
-        HttpResponseMessage response = await selfHostedSvc.HttpSelfHttpClient.GetAsync(new Uri(new Uri(baseUrl), "/probe"));
-        Console.WriteLine($"Probe responded with {response.StatusCode}");
+            fullBaseUrl = string.Format("{0}://localhost:{1}", protocol, port);
+            BaseUri = new Uri(fullBaseUrl);
+        }
+        else
+        {
+            BaseUri = new Uri(fullBaseUrl);
+        }
 
-        Console.WriteLine("PX (in-memory) is running. Press Ctrl+C to exit.");
+        Console.WriteLine($"Initializing server on {fullBaseUrl.ToString()}...");
+
+        // Spin up the PX service and all its dependency emulators in memory with
+        // routing configured so HttpContext.GetEndpoint() resolves correctly.
+        var selfHostedSvc = SelfHostedPxService.StartInMemory(fullBaseUrl, true, false);
+
+        // Kick the tires on a simple request. The server writes the matched
+        // endpoint to the console (see HostableService/ConfigurePipeline).
+        var requestUrl = fullBaseUrl + "/probe";
+        Console.WriteLine($"Calling {requestUrl} to verify endpoint resolution...");
+        HttpResponseMessage response = await selfHostedSvc.HttpSelfHttpClient.GetAsync(requestUrl);
+
+        // Warm up like before (no real network I/O; this goes through TestServer).
+        requestUrl = fullBaseUrl + "/v7.0/account001/paymentMethodDescriptions?country=tr&family=credit_card&type=mc&language=en-US&partner=storify&operation=add";
+
+        response = await GetPidlFromPXService(requestUrl, selfHostedSvc);
+        var content = FormatJson(await response.Content.ReadAsStringAsync());
+
+        if (response.IsSuccessStatusCode)
+        {
+            System.Console.WriteLine("Server successfully tested");
+        }
+        else
+        {
+            System.Console.WriteLine($"Server responded: {response.StatusCode}");
+            System.Console.WriteLine($"Response content: {content}");
+        }
+
+        // Keep the process alive until Ctrl+C
+        System.Console.WriteLine("PX (in-memory) is running. Press Ctrl+C to exit.");
         var done = new TaskCompletionSource();
-        Console.CancelKeyPress += (_, e) => { e.Cancel = true; done.TrySetResult(); };
+        System.Console.CancelKeyPress += (_, e) =>
+        {
+            e.Cancel = true;
+            done.TrySetResult();
+        };
         await done.Task;
     }
-}
 
+    private static async Task<HttpResponseMessage> GetPidlFromPXService(string url, SelfHostedPxService host)
+    {
+        // Keep your existing user substitution logic
+        var fullUrl = url;
+        if (fullUrl.Contains("completePrerequisites=true"))
+        {
+            fullUrl = fullUrl.Replace("users/me", "EmpAccountNoAddress");
+        }
+        else
+        {
+            fullUrl = fullUrl.Replace("users/me", "DiffTestUser");
+        }
+
+        fullUrl = fullUrl.Replace("users/my-org", "DiffOrgUser");
+
+        // Call the in-memory client
+        return await host.HttpSelfHttpClient.GetAsync(fullUrl);
+    }
+
+    private static string FormatJson(string json)
+    {
+        dynamic parsed = JsonConvert.DeserializeObject(json);
+        return JsonConvert.SerializeObject(parsed, Formatting.Indented);
+    }
+
+}
