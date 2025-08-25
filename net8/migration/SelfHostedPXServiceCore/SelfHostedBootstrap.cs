@@ -28,11 +28,12 @@ namespace SelfHostedPXServiceCore
         }
 
         /// <summary>
-        /// Configure the middleware pipeline and map routes.
+        /// Configure middleware and map conventional routes. Routing is
+        /// already enabled by <see cref="HostableService"/> so this simply adds
+        /// PX-specific handlers and versioned endpoints.
         /// </summary>
         public static void ConfigurePipeline(WebApplication app)
         {
-            app.UseRouting();
             app.UseMiddleware<PXServiceApiVersionHandler>();
 
             WebApiConfig.AddUrlVersionedRoutes(app);
