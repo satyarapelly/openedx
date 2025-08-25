@@ -13,9 +13,11 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Protocol.Handlers;
 using SelfHostedPXServiceCore.Mocks;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
+using System.Net.NetworkInformation;
 
 namespace SelfHostedPXServiceCore
 {
@@ -54,45 +56,41 @@ namespace SelfHostedPXServiceCore
         /// <summary>Expose the underlying host if required.</summary>
         public IHost SelfHost => PxHostableService.App;
 
+        /// <summary>Ports that have been reserved to avoid collisions.</summary>
+        public static List<int> PreRegisteredPorts { get; } = new();
+
+        /// <summary>Base address used by the in-memory host.</summary>
+        public static Uri PXBaseUri { get; private set; } = new Uri("http://localhost");
+
         /// <summary>
         /// Spin up the PX service in-memory. The returned instance can be used to
         /// issue HTTP requests without opening any network sockets.
         /// </summary>
         public static SelfHostedPxService StartInMemory(string? baseUrl, bool useSelfHostedDependencies, bool useArrangedResponses)
         {
-
-         var selfHostedDependencies = new Dictionary<Type, HostableService>();
-
-		 if (useSelfHostedDependencies)
-		 {
-		     // Start up dependency emulators first so PX can connect to them.
-		     // in different host with available port.
-		     selfHostedDependencies = ConfigureDependencies(baseUrl);
-		 }
- 
             var baseUri = string.IsNullOrEmpty(baseUrl)
-                ? new Uri("http://localhost")
+                ? new Uri($"http://localhost:{GetAvailablePort()}")
                 : new Uri(baseUrl);
- // Dependencies need to selfhost before px, we need to reserve px
- // port so other dependencies don't take it.
- PreRegisteredPorts.Add(PXBaseUri.Port);
 
- var builder = WebApplication.CreateBuilder(new WebApplicationOptions());
- // builder.WebHost.UseTestServer();
+            PXBaseUri = baseUri;
 
-            var dependencies = useSelfHostedDependencies
-                ? ConfigureDependencies(baseUri)
-                : null;
+            // Dependencies need to selfhost before PX, reserve the port so others don't take it.
+            PreRegisteredPorts.Add(PXBaseUri.Port);
 
- PXServiceSettings PXSettings = new Mocks.PXServiceSettings(
-     useSelfHostedDependencies ? selfHostedDependencies : null,
-     useArrangedResponses);
+            var selfHostedDependencies = new Dictionary<Type, HostableService>();
+            if (useSelfHostedDependencies)
+            {
+                // Start up dependency emulators first so PX can connect to them.
+                selfHostedDependencies = ConfigureDependencies(baseUri);
+            }
+
+            var dependencies = useSelfHostedDependencies ? selfHostedDependencies : null;
 
             PxHostableService = new HostableService(
                 builder =>
                 {
                     // Register PX controllers/services
-                    SelfHostedBootstrap.ConfigureServices(builder, dependencies, useArrangedResponses);
+                    ConfigureServices(builder, dependencies, useArrangedResponses);
 
                     // Middlewares exposed as testing hooks
                     builder.Services.AddSingleton<PXServiceHandler>();
@@ -106,7 +104,7 @@ namespace SelfHostedPXServiceCore
                     app.UseMiddleware<PXServiceCorsHandler>();
 
                     // Configure routing and versioned endpoints
-                    SelfHostedBootstrap.ConfigurePipeline(app);
+                    ConfigurePipeline(app);
                 },
                 baseUri);
 
@@ -120,83 +118,50 @@ namespace SelfHostedPXServiceCore
             return new SelfHostedPxService();
         }
 
-         public static Dictionary<Type, HostableService> ConfigureDependencies(string fullBaseUrl = "", string protocol = "https")
- {
-     // Decide base URL
-     if (string.IsNullOrWhiteSpace(fullBaseUrl))
-     {
-         var p = GetAvailablePort();
-         var scheme = string.IsNullOrWhiteSpace(protocol) ? "http" : protocol!;
-         PXBaseUri = new Uri($"{scheme}://localhost:{p.ToString()}");
-     }
-     else
-     {
-         PXBaseUri = new Uri(fullBaseUrl);
-     }
+        private static void ConfigureServices(WebApplicationBuilder builder, Dictionary<Type, HostableService>? dependencies, bool useArrangedResponses)
+        {
+            var settings = new Mocks.PXServiceSettings(dependencies, useArrangedResponses);
+            WebApiConfig.Register(builder, settings);
+        }
 
-     // Dependencies need to selfhost before px, we need to reserve px
-     // port so other dependencies don't take it.
-     PreRegisteredPorts.Add(PXBaseUri.Port);
+        private static void ConfigurePipeline(WebApplication app)
+        {
+            app.UseRouting();
 
+            app.Use(async (ctx, next) =>
+            {
+                var ep = ctx.GetEndpoint();
+                Console.WriteLine($"[SelfHostedPxService] Endpoint: {ep?.DisplayName ?? "(null)"}");
+                await next();
+            });
 
-     // No-op: All dependencies are configured in ConfigureServices above.
-     var selfhostServices = new[]
-     {
-         typeof(PIMSAccessor),
-         typeof(AccountServiceAccessor),
-         typeof(CatalogServiceAccessor),
-         typeof(PayerAuthServiceAccessor),
-         typeof(PurchaseServiceAccessor),
-         typeof(StoredValueAccessor),
-         typeof(TransactionServiceAccessor),
-         typeof(MSRewardsServiceAccessor),
-         typeof(TokenPolicyServiceAccessor),
-         typeof(PartnerSettingsServiceAccessor),
-         typeof(IssuerServiceAccessor),
-         typeof(WalletServiceAccessor),
-         typeof(TransactionDataService),
-         typeof(ChallengeManagementService),
-         typeof(RiskServiceAccessor),
-         typeof(PaymentOrchestratorService),
-         typeof(FraudDetectionService)
-     };
+            app.UseMiddleware<PXServiceApiVersionHandler>();
+            WebApiConfig.AddUrlVersionedRoutes(app);
+            app.MapControllers();
+        }
 
-     var selfHostedDependencies = new Dictionary<Type, HostableService>();
+        private static string GetAvailablePort()
+        {
+            var netProperties = IPGlobalProperties.GetIPGlobalProperties();
+            var tcpListeners = netProperties.GetActiveTcpListeners();
+            var udpListeners = netProperties.GetActiveUdpListeners();
 
-     HostableService? dependencyEmulatorService = null;
+            var portsInUse = new List<int>();
+            portsInUse.AddRange(tcpListeners.Select(tl => tl.Port));
+            portsInUse.AddRange(udpListeners.Select(ul => ul.Port));
 
-     // Create a single shared configuration action
-     Action<WebApplicationBuilder> configAction = b => Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.WebApiConfig.Register(b);
+            int firstAvailablePort = 0;
+            for (int port = 49152; port < 65535; port++)
+            {
+                if (!portsInUse.Contains(port) && !PreRegisteredPorts.Contains(port))
+                {
+                    firstAvailablePort = port;
+                    break;
+                }
+            }
 
-     try
-     {
-         dependencyEmulatorService = new HostableService(configAction, Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.WebApiConfig.ConfigureRoutes, PXBaseUri);
-     }
-     catch
-     {
-         // Retry once just like the old code did
-         try
-         {
-             dependencyEmulatorService = new HostableService(configAction, Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.WebApiConfig.ConfigureRoutes, PXBaseUri);
-         }
-         catch (Exception ex)
-         {
-             Console.WriteLine($"Failed to initialize DependencyEmulators. Error: {ex}");
-         }
-     }
-
-     if (dependencyEmulatorService != null)
-     {
-         foreach (var selfhostService in selfhostServices)
-         {
-             var serviceName = GetServiceName(selfhostService.FullName!);
-             Console.WriteLine($"{serviceName} initialized as self hosted emulator service on {dependencyEmulatorService.BaseUri}");
-             selfHostedDependencies[selfhostService] = dependencyEmulatorService;
-         }
-     }
-
-     return selfHostedDependencies;
- }
+            return firstAvailablePort.ToString();
+        }
 
         public void Dispose()
         {
