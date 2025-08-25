@@ -1,7 +1,4 @@
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.TestHost;
 using Microsoft.Commerce.Payments.PXService;
 using Microsoft.Commerce.Payments.PXService.Accessors.IssuerService;
 using Microsoft.Commerce.Payments.PXService.Accessors.MSRewardsService;
@@ -10,13 +7,10 @@ using Microsoft.Commerce.Payments.PXService.Accessors.TokenPolicyService;
 using Microsoft.Commerce.Payments.PXService.Model.PayerAuthService;
 using Microsoft.Commerce.Payments.PXService.RiskService.V7;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Protocol.Handlers;
 using SelfHostedPXServiceCore.Mocks;
 using System;
 using System.Net.Http;
 using System.Net.NetworkInformation;
-using System.Web.Services.Description;
-using static QRCoder.PayloadGenerator;
 
 namespace SelfHostedPXServiceCore
 {
@@ -59,7 +53,6 @@ namespace SelfHostedPXServiceCore
             if (useSelfHostedDependencies)
             {
                 // Start up dependency emulators first so PX can connect to them.
-                // in different host with available port.
                 selfHostedDependencies = ConfigureDependencies(baseUrl);
             }
 
@@ -68,37 +61,34 @@ namespace SelfHostedPXServiceCore
                 var port = GetAvailablePort();
                 var protocol = "https";
                 baseUrl = string.Format("{0}://localhost:{1}", protocol, port);
-                PXBaseUri = new Uri(baseUrl);
             }
-            else
-            {
-                PXBaseUri = new Uri(baseUrl);
-            }
+
+            PXBaseUri = new Uri(baseUrl);
 
             // Dependencies need to selfhost before px, we need to reserve px
             // port so other dependencies don't take it.
             PreRegisteredPorts.Add(PXBaseUri.Port);
 
-            var builder = WebApplication.CreateBuilder(new WebApplicationOptions());
-            // builder.WebHost.UseTestServer();
-
-            PXServiceSettings PXSettings = new Mocks.PXServiceSettings(
+            PXSettings = new Mocks.PXServiceSettings(
                 useSelfHostedDependencies ? selfHostedDependencies : null,
                 useArrangedResponses);
 
-            WebApiConfig.Register(builder, PXSettings);
+            var pxHost = new HostableService(
+                b => WebApiConfig.Register(b, PXSettings),
+                app =>
+                {
+                    app.UseMiddleware<PXServiceApiVersionHandler>();
+                },
+                PXBaseUri,
+                WebApiConfig.AddUrlVersionedRoutes);
 
-            var app = builder.Build();
+            PxHostableService = pxHost;
 
-            ConfigurePipeline(app);
-
-            app.Start();
-
-            // 4) Expose handles
+            // Expose handles
             var svc = new SelfHostedPxService
             {
-                SelfHost = app,
-                HttpSelfHttpClient = new HttpClient { BaseAddress = PXBaseUri },
+                SelfHost = pxHost.App,
+                HttpSelfHttpClient = pxHost.HttpSelfHttpClient,
             };
 
             PXClient = svc.HttpSelfHttpClient;
@@ -120,27 +110,6 @@ namespace SelfHostedPXServiceCore
         /// <summary>
         /// Configure the middleware pipeline and map routes.
         /// </summary>
-        public static void ConfigurePipeline(WebApplication app)
-        {
-            app.UseRouting();
-
-            // Log the matched endpoint so we can confirm HttpContext.GetEndpoint()
-            // has been populated by the routing middleware.
-            app.Use(async (ctx, next) =>
-            {
-                var ep = ctx.GetEndpoint();
-                Console.WriteLine($"[SelfHostedPxService] Endpoint: {ep?.DisplayName ?? "(null)"}");
-                await next();
-            });
-
-            app.UseMiddleware<PXServiceApiVersionHandler>();
-
-            WebApiConfig.AddUrlVersionedRoutes(app);
-
-            // Ensure endpoint middleware is registered so the selected action runs.
-            app.MapControllers();
-        }
-
         public static string GetAvailablePort()
         {
             var netProperties = IPGlobalProperties.GetIPGlobalProperties();

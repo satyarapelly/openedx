@@ -1,51 +1,25 @@
-﻿// Program.cs — .NET 8, in-memory hosting (Option B)
+﻿// Program.cs — .NET 8 in-memory hosting using TestServer
 
 using Newtonsoft.Json;
 using SelfHostedPXServiceCore;
-using System.Net.Http;
-using System.Net.NetworkInformation;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Web.Services.Description;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Commerce.Payments.PXCommon;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+using System.Threading.Tasks;
 
 internal sealed class Program
 {
-    public static List<int> PreRegisteredPorts { get; } = new();
-
-    public static Uri BaseUri { get; private set; } = default!;
-
     public static async Task Main(string[] args)
     {
-        string? fullBaseUrl = args.Length > 0 ? args[0] : "";
-        string? protocol = args.Length > 1 ? args[1] : "https";
+        string fullBaseUrl = args.Length > 0 ? args[0] : "";
+        string protocol = args.Length > 1 ? args[1] : "https";
 
         if (string.IsNullOrEmpty(fullBaseUrl))
         {
             var port = SelfHostedPxService.GetAvailablePort();
-
-            if (string.IsNullOrEmpty(protocol))
-            {
-                protocol = "https";
-            }
-
-            fullBaseUrl = string.Format("{0}://localhost:{1}", protocol, port);
-            BaseUri = new Uri(fullBaseUrl);
-        }
-        else
-        {
-            BaseUri = new Uri(fullBaseUrl);
+            fullBaseUrl = $"{protocol}://localhost:{port}";
         }
 
-        Console.WriteLine($"Initializing server on {fullBaseUrl.ToString()}...");
+        Console.WriteLine($"Initializing server on {fullBaseUrl}...");
 
         // Spin up the PX service and all its dependency emulators in memory with
         // routing configured so HttpContext.GetEndpoint() resolves correctly.
