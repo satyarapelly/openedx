@@ -1,31 +1,21 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.Commerce.Payments.PXService;
+using Microsoft.Commerce.Payments.PXService.Accessors.IssuerService;
+using Microsoft.Commerce.Payments.PXService.Accessors.MSRewardsService;
+using Microsoft.Commerce.Payments.PXService.Accessors.PartnerSettingsService;
+using Microsoft.Commerce.Payments.PXService.Accessors.TokenPolicyService;
+using Microsoft.Commerce.Payments.PXService.Model.PayerAuthService;
+using Microsoft.Commerce.Payments.PXService.RiskService.V7;
+using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Protocol.Handlers;
+using SelfHostedPXServiceCore.Mocks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Commerce.Payments.PXService;
-using Microsoft.Commerce.Payments.PXService.Settings;
-using Microsoft.Commerce.Payments.PXService.RiskService.V7;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-
-using OrchestrationServiceAccessor = Microsoft.Commerce.Payments.PXService.Accessors.OrchestrationService.OrchestrationServiceAccessor;
-using PayerAuthServiceAccessor = Microsoft.Commerce.Payments.PXService.Accessors.PayerAuthService.PayerAuthServiceAccessor;
-using PurchaseServiceAccessor = Microsoft.Commerce.Payments.PXService.Accessors.PurchaseService.PurchaseServiceAccessor;
-using StoredValueAccessor = Microsoft.Commerce.Payments.PXService.Accessors.StoredValue.StoredValueAccessor;
-using SellerMarketPlaceServiceAccessor = Microsoft.Commerce.Payments.PXService.Accessors.SellerMarketPlaceService.SellerMarketPlaceServiceAccessor;
-using PaymentThirdPartyServiceAccessor = Microsoft.Commerce.Payments.PXService.Accessors.PaymentThirdPartyService.PaymentThirdPartyServiceAccessor;
-using PartnerSettingsServiceAccessor = Microsoft.Commerce.Payments.PXService.Accessors.PartnerSettingsService.PartnerSettingsServiceAccessor;
-using IssuerServiceAccessor = Microsoft.Commerce.Payments.PXService.Accessors.IssuerService.IssuerServiceAccessor;
-using ChallengeManagementServiceAccessor = Microsoft.Commerce.Payments.PXService.Accessors.ChallengeManagementService.ChallengeManagementServiceAccessor;
-using WalletServiceAccessor = Microsoft.Commerce.Payments.PXService.Accessors.WalletService.WalletServiceAccessor;
-using TransactionDataServiceAccessor = Microsoft.Commerce.Payments.PXService.Accessors.TransactionDataService.TransactionDataServiceAccessor;
-using MSRewardsServiceAccessor = Microsoft.Commerce.Payments.PXService.Accessors.MSRewardsService.MSRewardsServiceAccessor;
-using TokenPolicyServiceAccessor = Microsoft.Commerce.Payments.PXService.Accessors.TokenPolicyService.TokenPolicyServiceAccessor;
-using TokenizationServiceAccessor = Microsoft.Commerce.Payments.PXService.Accessors.TokenizationService.TokenizationServiceAccessor;
-using PaymentOrchestratorServiceAccessor = Microsoft.Commerce.Payments.PXService.Accessors.PaymentOrchestratorService.PaymentOrchestratorServiceAccessor;
-using FraudDetectionServiceAccessor = Microsoft.Commerce.Payments.PXService.Accessors.FraudDetectionService.FraudDetectionServiceAccessor;
-using AddressEnrichmentServiceAccessor = Microsoft.Commerce.Payments.PXService.AddressEnrichmentService.V7.AddressEnrichmentServiceAccessor;
 
 namespace SelfHostedPXServiceCore
 {
@@ -73,12 +63,12 @@ namespace SelfHostedPXServiceCore
 
          var selfHostedDependencies = new Dictionary<Type, HostableService>();
 
- if (useSelfHostedDependencies)
- {
-     // Start up dependency emulators first so PX can connect to them.
-     // in different host with available port.
-     selfHostedDependencies = ConfigureDependencies(baseUrl);
- }
+		 if (useSelfHostedDependencies)
+		 {
+		     // Start up dependency emulators first so PX can connect to them.
+		     // in different host with available port.
+		     selfHostedDependencies = ConfigureDependencies(baseUrl);
+		 }
  
             var baseUri = string.IsNullOrEmpty(baseUrl)
                 ? new Uri("http://localhost")
@@ -324,4 +314,3 @@ namespace SelfHostedPXServiceCore
         }
     }
 }
-
