@@ -4,19 +4,16 @@
 
 namespace SelfHostedPXServiceCore
 {
-    using Castle.Components.DictionaryAdapter;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Routing;
+    using Microsoft.AspNetCore.TestHost;
     using Microsoft.Commerce.Payments.PXCommon;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using Newtonsoft.Json;
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Net.Http;
-    using System.Net.NetworkInformation;
 
     /// <summary>
     /// Lightweight self-host wrapper for ASP.NET Core used by tests/emulators.
@@ -58,6 +55,9 @@ namespace SelfHostedPXServiceCore
                 Args = Array.Empty<string>()
             });
 
+            // Run entirely in-memory
+            builder.WebHost.UseTestServer();
+
             // Baseline service setup (controllers + Newtonsoft, ignore nulls like old WebApiConfig did)
             builder.Services
                 .AddControllers()
@@ -67,16 +67,6 @@ namespace SelfHostedPXServiceCore
             configureServices?.Invoke(builder);
 
             App = builder.Build();
-
-            // Bind to requested URL/port
-            App.Urls.Clear();
-            App.Urls.Add(BaseUri.ToString());
-
-            // Conditionally redirect HTTP to HTTPS only when not self-hosted
-            if (!WebHostingUtility.IsApplicationSelfHosted())
-            {
-                App.UseHttpsRedirection();
-            }
 
             // Ensure the routing matcher runs before custom middleware so HttpContext.GetEndpoint()
             // is populated when those middlewares execute.
@@ -104,10 +94,8 @@ namespace SelfHostedPXServiceCore
             // Start server
             App.Start();
 
-            HttpSelfHttpClient = new HttpClient
-            {
-                BaseAddress = BaseUri
-            };
+            HttpSelfHttpClient = App.GetTestClient();
+            HttpSelfHttpClient.BaseAddress = BaseUri;
         }
 
         public void Dispose()
