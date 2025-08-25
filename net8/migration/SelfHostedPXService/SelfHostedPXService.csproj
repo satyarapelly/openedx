@@ -9,10 +9,7 @@
 		<!-- Keep your custom drop path; MSBuild will still nest by TFM -->
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-		<WarningLevel>4</WarningLevel>
-		<OutputPath>..\..\..\..\Drop\Debug\UnitTests\SelfHostedPXService\</OutputPath>
-	</PropertyGroup>
+
 
 	<ItemGroup>
 		<!-- REMOVE test SDK; this is an app, not a test project -->
