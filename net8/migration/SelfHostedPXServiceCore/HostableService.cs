@@ -48,7 +48,8 @@ namespace SelfHostedPXServiceCore
             Action<IEndpointRouteBuilder>? configureEndpoints = null)
         {
 
-            BaseUri = baseUri;
+            // Force HTTP so the in-memory TestServer isn't asked to perform TLS handshakes
+            BaseUri = new UriBuilder(baseUri) { Scheme = Uri.UriSchemeHttp, Port = baseUri.Port }.Uri;
             // Build host
             var builder = WebApplication.CreateBuilder(new WebApplicationOptions
             {

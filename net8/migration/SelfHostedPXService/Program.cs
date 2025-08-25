@@ -10,13 +10,18 @@ internal sealed class Program
 {
     public static async Task Main(string[] args)
     {
-        string fullBaseUrl = args.Length > 0 ? args[0] : "";
-        string protocol = args.Length > 1 ? args[1] : "http";
+        string fullBaseUrl = args.Length > 0 ? args[0] : string.Empty;
 
         if (string.IsNullOrEmpty(fullBaseUrl))
         {
             var port = SelfHostedPxService.GetAvailablePort();
-            fullBaseUrl = $"{protocol}://localhost:{port}";
+            fullBaseUrl = $"http://localhost:{port}";
+        }
+        else
+        {
+            // TestServer only understands HTTP; force any supplied HTTPS URL to HTTP
+            var builder = new UriBuilder(fullBaseUrl) { Scheme = "http", Port = new Uri(fullBaseUrl).Port };
+            fullBaseUrl = builder.Uri.ToString();
         }
 
         Console.WriteLine($"Initializing server on {fullBaseUrl}...");

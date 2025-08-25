@@ -48,19 +48,24 @@ namespace SelfHostedPXServiceCore
         /// </summary>
         public static SelfHostedPxService StartInMemory(string baseUrl, bool useSelfHostedDependencies, bool useArrangedResponses)
         {
+            if (string.IsNullOrEmpty(baseUrl))
+            {
+                var port = GetAvailablePort();
+                baseUrl = $"http://localhost:{port}";
+            }
+            else
+            {
+                // Ensure the in-memory host always communicates over HTTP
+                var builder = new UriBuilder(baseUrl) { Scheme = Uri.UriSchemeHttp, Port = new Uri(baseUrl).Port };
+                baseUrl = builder.Uri.ToString();
+            }
+
             var selfHostedDependencies = new Dictionary<Type, HostableService>();
 
             if (useSelfHostedDependencies)
             {
                 // Start up dependency emulators first so PX can connect to them.
                 selfHostedDependencies = ConfigureDependencies(baseUrl);
-            }
-
-            if (string.IsNullOrEmpty(baseUrl))
-            {
-                var port = GetAvailablePort();
-                var protocol = "http";
-                baseUrl = string.Format("{0}://localhost:{1}", protocol, port);
             }
 
             PXBaseUri = new Uri(baseUrl);
@@ -139,12 +144,13 @@ namespace SelfHostedPXServiceCore
             if (string.IsNullOrWhiteSpace(fullBaseUrl))
             {
                 var p = GetAvailablePort();
-                var scheme = string.IsNullOrWhiteSpace(protocol) ? "http" : protocol!;
-                PXBaseUri = new Uri($"{scheme}://localhost:{p.ToString()}");
+                PXBaseUri = new Uri($"http://localhost:{p}");
             }
             else
             {
-                PXBaseUri = new Uri(fullBaseUrl);
+                // Force HTTP for in-memory communications even if caller specified HTTPS
+                var builder = new UriBuilder(fullBaseUrl) { Scheme = Uri.UriSchemeHttp, Port = new Uri(fullBaseUrl).Port };
+                PXBaseUri = builder.Uri;
             }
 
             // Dependencies need to selfhost before px, we need to reserve px
