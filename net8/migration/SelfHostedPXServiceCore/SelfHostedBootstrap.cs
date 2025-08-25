@@ -18,11 +18,11 @@ namespace SelfHostedPXServiceCore
         /// </summary>
         public static void ConfigureServices(
             WebApplicationBuilder builder,
-            bool useSelfHostedDependencies,
+            Dictionary<Type, HostableService>? selfHostedDependencies,
             bool useArrangedResponses)
         {
             var settings = new Mocks.PXServiceSettings(
-                useSelfHostedDependencies ? new Dictionary<Type, HostableService>() : null,
+                selfHostedDependencies,
                 useArrangedResponses);
 
             // Register the concrete mock settings so tests can resolve the type directly.
