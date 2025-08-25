@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Commerce.Payments.PXService;
 using Microsoft.Commerce.Payments.PXService.Settings;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace SelfHostedPXServiceCore
 {
@@ -20,9 +21,13 @@ namespace SelfHostedPXServiceCore
             bool useSelfHostedDependencies,
             bool useArrangedResponses)
         {
-            PXServiceSettings settings = new Mocks.PXServiceSettings(
+            var settings = new Mocks.PXServiceSettings(
                 useSelfHostedDependencies ? new Dictionary<Type, HostableService>() : null,
                 useArrangedResponses);
+
+            // Register the concrete mock settings so tests can resolve the type directly.
+            // WebApiConfig.Register will also register the base PXServiceSettings type.
+            builder.Services.AddSingleton(settings);
 
             WebApiConfig.Register(builder, settings);
         }
