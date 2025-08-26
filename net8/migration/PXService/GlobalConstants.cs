@@ -414,6 +414,7 @@ namespace Microsoft.Commerce.Payments.PXService
         public static class EndPointNames
         {
             public const string V7Probe = "probe";
+            public const string V7ProbeVersioned = "{version}/probe";
             public const string V7GetPaymentInstrumentEx = "{version}/{accountId}/paymentInstrumentsEx/{piid}";
             public const string V7ListPaymentInstrumentEx = "{version}/{accountId}/paymentInstrumentsEx";
             public const string V7GetChallengeContextPaymentInstrumentEx = "{version}/{accountId}/paymentInstrumentsEx/{piid}/getChallengeContext";

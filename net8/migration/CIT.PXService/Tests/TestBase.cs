@@ -58,7 +58,7 @@ namespace CIT.PXService.Tests
 
             // Verify routing is configured – if this fails the console output from
             // HostableService will show which endpoint could not be resolved.
-            var probeResponse = PXClient.GetAsync(GetPXServiceUrl("/probe")).GetAwaiter().GetResult();
+            var probeResponse = PXClient.GetAsync(GetPXServiceUrl("/v7.0/probe")).GetAwaiter().GetResult();
             Assert.AreEqual(HttpStatusCode.OK, probeResponse.StatusCode, "PX probe endpoint is unreachable");
         }
 

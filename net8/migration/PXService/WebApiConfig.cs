@@ -69,6 +69,11 @@ namespace Microsoft.Commerce.Payments.PXService
         {
             endpoints.MapControllerRoute(
                name: GlobalConstants.V7RouteNames.Probe,
+               pattern: GlobalConstants.EndPointNames.V7ProbeVersioned,
+               defaults: new { controller = C(GlobalConstants.ControllerNames.ProbeController), action = "Get" });
+
+            endpoints.MapControllerRoute(
+               name: GlobalConstants.V7RouteNames.Probe + "NoVersion",
                pattern: GlobalConstants.EndPointNames.V7Probe,
                defaults: new { controller = C(GlobalConstants.ControllerNames.ProbeController), action = "Get" });
 

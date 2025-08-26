@@ -76,11 +76,11 @@ namespace SelfHostedPXServiceCore
 
             var pxHost = new HostableService(
                 b => WebApiConfig.Register(b, PXSettings),
-                app =>
+                configureBeforeRouting: null,
+                configureApp: app =>
                 {
                     app.UseMiddleware<PXServiceApiVersionHandler>();
                 },
-                configureApp: null,
                 baseUri: PXBaseUri,
                 configureEndpoints: WebApiConfig.AddUrlVersionedRoutes);
 

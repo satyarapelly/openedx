@@ -104,7 +104,22 @@ namespace Microsoft.Commerce.Payments.PXService
 
         private static bool IsProbeUri(PathString path)
         {
-            return path.HasValue && path.Value.TrimStart('/').Equals(GlobalConstants.EndPointNames.V7Probe, StringComparison.OrdinalIgnoreCase);
+            if (!path.HasValue)
+            {
+                return false;
+            }
+
+            var trimmed = path.Value.TrimStart('/');
+
+            if (trimmed.Equals(GlobalConstants.EndPointNames.V7Probe, StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            var segments = trimmed.Split('/', StringSplitOptions.RemoveEmptyEntries);
+            return segments.Length == 2
+                && segments[1].Equals(GlobalConstants.EndPointNames.V7Probe, StringComparison.OrdinalIgnoreCase)
+                && segments[0].StartsWith("v", StringComparison.OrdinalIgnoreCase);
         }
 
         private UserInformation AuthenticateByCert(HttpContext httpContext)
