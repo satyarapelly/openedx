@@ -797,6 +797,61 @@ namespace CIT.PXService.Tests
             }
         }
 
+        [DataRow("US", "en-US", "storify", 10, "usd", "00001", 2000, true)]
+        [DataRow("US", "en-US", "storify", 10, "usd", "00001", 2000, false)]
+        [TestMethod]
+        public async Task RedeemMSRewardsXboxNative(string country, string language, string partner, int orderAmount, string currency, string catalogSku, long rewardsPoints, bool isVariableAmountSku)
+        {
+            // Arrange
+            string userPuid = "844426234689219";
+            string deviceId = "1234567890";
+            decimal catalogSkuAmount = 2.00m;
+            var rewardsContextData = new RewardsContextData
+            {
+                OrderAmount = orderAmount,
+                Currency = currency,
+                CatalogSku = catalogSku,
+                CatalogSkuAmount = catalogSkuAmount,
+                RewardsPoints = rewardsPoints,
+                IsVariableAmountSku = isVariableAmountSku
+            };
+            string rewardsContext = JsonConvert.SerializeObject(rewardsContextData);
+
+            // Act
+            Dictionary<string, string> requestHeaders = new Dictionary<string, string>
+            {
+                { "x-ms-msaprofile", $"PUID={userPuid}" },
+                { "x-ms-deviceinfo", $"ipAddress=111.111.111.111,xboxLiveDeviceId={deviceId}" },
+                { "x-ms-flight", "PXEnableXboxNativeRewards" }
+            };
+
+            string url = $"/v7.0/Account001/rewardsDescriptions?type=MSRewards&operation=Redeem&country={country}&language={language}&partner={partner}&rewardsContextData={rewardsContext}";
+            List<PIDLResource> pidls = await GetPidlFromPXService(url, additionaHeaders: requestHeaders);
+
+            foreach (var pidl in pidls)
+            {
+                PageDisplayHint redeemMSRewardsPage = pidl.DisplayPages[0] as PageDisplayHint;
+                Assert.IsNotNull(redeemMSRewardsPage);
+                Assert.AreEqual(redeemMSRewardsPage.DisplayName, "redeemRewardsPointsPage");
+
+                ButtonDisplayHint redeemButton = pidl.GetDisplayHintById("redeemButton") as ButtonDisplayHint;
+                DisplayHintAction action = redeemButton.Action;
+                Assert.IsNotNull(action);
+                Assert.AreEqual(action.ActionType, DisplayHintActionType.restAction.ToString());
+                var actionContext = JsonConvert.DeserializeObject<RestLink>(JsonConvert.SerializeObject(action.Context));
+                Assert.IsNotNull(actionContext);
+                var payload = JsonConvert.SerializeObject(actionContext.Payload);
+                Assert.IsNotNull(payload);
+                JObject payloadData = JObject.Parse(payload);
+                Assert.AreEqual(catalogSku, payloadData["catalogItem"].ToString());
+
+                if (isVariableAmountSku)
+                {
+                    Assert.AreEqual("2", payloadData["catalogItemAmount"].ToString());
+                }
+            }
+        }
+
         [DataRow("US", "en-US", "windowsstore", 10, "usd")]
         [TestMethod]
         public async Task RedeemMSRewardsVariableSku(string country, string language, string partner, int orderAmount, string currency)

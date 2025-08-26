@@ -76,77 +76,77 @@ namespace CIT.PXService.Mocks
             this.PifdBaseUrl = "https://pifd.cp.microsoft-int.com/V6.0";
 
             this.PIMSAccessor = new PIMSAccessor(
-                "https://mockPims",
-                "https://testEmulatorBaseUrl",
-                "TestApiVersion",
-                PimsService);
+                serviceBaseUrl: "https://mockPims",
+                emulatorBaseUrl: "https://testEmulatorBaseUrl",
+                apiVersion: "TestApiVersion",
+                messageHandler: PimsService);
 
             this.OrchestrationServiceAccessor = new OrchestrationServiceAccessor(
-                "https://mockOrchestrationService",
-                "https://testEmulatorBaseUrl",
-                "TestApiVersion",
-                new Mocks.AuthTokenGetter(),
-                OrchestrationService);
+                serviceBaseUrl: "https://mockOrchestrationService",
+                emulatorBaseUrl: "https://testEmulatorBaseUrl",
+                apiVersion: "TestApiVersion",
+                authTokenGetter: new Mocks.AuthTokenGetter(),
+                messageHandler: OrchestrationService);
 
             this.AccountServiceAccessor = new AccountServiceAccessor(
-                "https://mockAccountService",
-                "https://testEmulatorBaseUrl",
-                AccountsService);
+                serviceBaseUrl: "https://mockAccountService",
+                emulatorBaseUrl: "https://testEmulatorBaseUrl",
+                messageHandler: AccountsService);
 
             this.PayerAuthServiceAccessor = new PayerAuthServiceAccessor(
-                "https://mockPayerAuthService",
-                "https://testEmulatorBaseUrl",
-                "testApiVersion",
-                PayerAuthService,
-                new Mocks.AuthTokenGetter());
+                serviceBaseUrl: "https://mockPayerAuthService",
+                emulatorBaseUrl: "https://testEmulatorBaseUrl",
+                apiVersion: "testApiVersion",
+                messageHandler: PayerAuthService,
+                authTokenGetter: new Mocks.AuthTokenGetter());
 
             this.PurchaseServiceAccessor = new PurchaseServiceAccessor(
-                "https://mockPurchaseService",
-                null,
-                this.PurchaseServiceApiVersion,
-                new Mocks.AuthTokenGetter(),
-                PurchaseService);
+                serviceBaseUrl: "https://mockPurchaseService",
+                emulatorBaseUrl: null,
+                apiVersion: this.PurchaseServiceApiVersion,
+                authTokenGetter: new Mocks.AuthTokenGetter(),
+                messageHandler: PurchaseService);
 
             this.D365ServiceAccessor = new D365ServiceAccessor(
-                "https://mockD365Service",
-                null,
-                this.D365ServiceApiVersion,
-                new Mocks.AuthTokenGetter(),
-                D365Service);
+                serviceBaseUrl: "https://mockD365Service",
+                emulatorBaseUrl: null,
+                apiVersion: this.D365ServiceApiVersion,
+                authTokenGetter: new Mocks.AuthTokenGetter(),
+                messageHandler: D365Service);
 
             this.CatalogServiceAccessor = new CatalogServiceAccessor(
-                "https://mockPurchaseService",
-                null,
-                this.CatalogServiceApiVersion,
-                new Mocks.AuthTokenGetter(),
-                CatalogService);
+                serviceBaseUrl: "https://mockPurchaseService",
+                emulatorBaseUrl: null,
+                apiVersion: this.CatalogServiceApiVersion,
+                authTokenGetter: new Mocks.AuthTokenGetter(),
+                messageHandler: CatalogService);
 
             this.SessionServiceAccessor = new SessionServiceAccessor(
-                "https://mockSessionService",
-                "2015-09-23",
-                SessionService,
-                new Mocks.AuthTokenGetter());
+                baseUrl: "https://mockSessionService",
+                apiVersion: "2015-09-23",
+                requestHandler: SessionService,
+                authTokenGetter: new Mocks.AuthTokenGetter());
 
             this.StoredValueServiceAccessor = new StoredValueAccessor(
-                "2014-10-10",
-                "http://localhost/StoredValueEmulator", // lgtm[cs/non-https-url] Suppressing Semmle warning // DevSkim: ignore DS137138 as this to access the locally hosted endpoint
-                "http://localhost/StoredValueEmulator", // lgtm[cs/non-https-url] Suppressing Semmle warning // DevSkim: ignore DS137138 as this to access the locally hosted endpoint
-                StoredValueService);
+                apiVersion: "2014-10-10",
+                serviceBaseUrl: "http://localhost/StoredValueEmulator", // lgtm[cs/non-https-url] Suppressing Semmle warning // DevSkim: ignore DS137138 as this to access the locally hosted endpoint
+                emulatorBaseUrl: "http://localhost/StoredValueEmulator", // lgtm[cs/non-https-url] Suppressing Semmle warning // DevSkim: ignore DS137138 as this to access the locally hosted endpoint
+                messageHandler: StoredValueService);
 
             this.RiskServiceAccessor = new RiskServiceAccessor(
-                "https://mockRiskService",
-                "2015-09-23",
-                RiskService);
+                serviceBaseUrl: "https://mockRiskService",
+                apiVersion: "2015-09-23",
+                messageHandler: RiskService);
 
             this.TaxIdServiceAccessor = new TaxIdServiceAccessor(
-                "https://mockTaxIdService",
-                TaxIdService);
+                serviceBaseUrl: "https://mockTaxIdService",
+                messageHandler: TaxIdService);
 
             this.AddressEnrichmentServiceAccessor = new AddressEnrichmentServiceAccessor(
-                "https://mockAddressEnrichmentService",
-                new Mocks.KeyVaultAccessor(),
-                "AddressEncrichmentApiKey",
-                AddressEnrichmentService);
+                serviceBaseUrl: "https://mockAddressEnrichmentService",
+                keyVaultAccessor: new Mocks.KeyVaultAccessor(),
+                addressEnrichmentApiKeySecretName: "AddressEncrichmentApiKey",
+                messageHandler: AddressEnrichmentService);
 
             ////this.AddressEnrichmentServiceAccessor = new AddressEnrichmentServiceAccessor(
             ////    serviceBaseUrl: "https://enrichment.cdsk.microsoft-int.com",
@@ -158,16 +158,16 @@ namespace CIT.PXService.Mocks
             ////    messageHandler: AddressEnrichmentService);
 
             this.TransactionServiceAccessor = new TransactionServiceAccessor(
-                "https://mockTransactionService",
-                "http://localhost/TransactionServiceEmulator", // DevSkim: ignore DS137138 as this to access the locally hosted endpoint
-                "2018-05-07",
-                new Mocks.AuthTokenGetter(),
-                TransactionService);
+                serviceBaseUrl: "https://mockTransactionService",
+                emulatorBaseUrl: "http://localhost/TransactionServiceEmulator", // DevSkim: ignore DS137138 as this to access the locally hosted endpoint
+                apiVersion: "2018-05-07",
+                authTokenGetter: new Mocks.AuthTokenGetter(),
+                messageHandler: TransactionService);
 
             this.ShortURLServiceAccessor = new ShortURLServiceAccessor(
-                "https://mockShortURLService",
-                "https://testEmulatorBaseUrl",
-                ShortURLService);
+                serviceBaseUrl: "https://mockShortURLService",
+                emulatorBaseUrl: "https://testEmulatorBaseUrl",
+                messageHandler: ShortURLService);
 
             this.CommerceAccountDataServiceAccessor = CommerceAccountDataService;
 

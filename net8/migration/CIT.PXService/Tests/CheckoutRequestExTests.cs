@@ -284,12 +284,24 @@ namespace CIT.PXService.Tests
             PXFlightHandler.ResetToDefault();
         }
 
+        [DataRow("visa", false, "02")]
+        [DataRow("googlepay", false, "03")]
+        [DataRow("visa", true, "03")]
+        [DataRow("googlepay", true, "03")]
         [DataRow("visa", false)]
         [DataRow("googlepay", false)]
         [DataRow("visa", true)]
         [DataRow("googlepay", true)]
+        [DataRow("visa", false, "02", true)]
+        [DataRow("googlepay", false, "03", true)]
+        [DataRow("visa", true, "03", true)]
+        [DataRow("googlepay", true, "03", true)]
+        [DataRow("visa", false, "", true)]
+        [DataRow("googlepay", false, "", true)]
+        [DataRow("visa", true, "", true)]
+        [DataRow("googlepay", true, "", true)]
         [TestMethod]
-        public async Task CheckoutRequestExConfirmPSD2Tests(string paymentMethodType, bool useUsePaymentRequestApi)
+        public async Task CheckoutRequestExConfirmPSD2Tests(string paymentMethodType, bool useUsePaymentRequestApi, string challengeWindowSize = "", bool challeneWindowSizeValueFromURL = false)
         {
             // Arrange
             if (paymentMethodType.Equals("googlepay", StringComparison.OrdinalIgnoreCase))
@@ -298,6 +310,9 @@ namespace CIT.PXService.Tests
                 global::Tests.Common.Model.Pims.PaymentInstrument expectedPI = PimsMockResponseProvider.GetPaymentInstrument("Account013", id);
                 PXSettings.PimsService.ArrangeResponse(JsonConvert.SerializeObject(expectedPI));
             }
+
+            string expectedPSSResponse = "{\"confirm\":{\"template\":\"defaulttemplate\",\"redirectionPattern\":\"inline\",\"challengeWindowSize\":\" " + challengeWindowSize.ToLower().ToString()  + "\"}}";
+            PXSettings.PartnerSettingsService.ArrangeResponse(expectedPSSResponse);
 
             var extendedPI = PimsMockResponseProvider.GetPaymentInstrument("Account001", "Account001-Pi001-Visa");
             extendedPI.PaymentInstrumentDetails.RequiredChallenge = new List<string> { "3ds2" };
@@ -442,7 +457,7 @@ namespace CIT.PXService.Tests
             Assert.IsTrue(pidls[0].DisplayPages.Count > 0, "Display pages should not be empty");
             PageDisplayHint displayPage = pidls[0].DisplayPages[0];
             Assert.AreEqual("challenge_rootPage", displayPage.HintId, "The displayPage hint ID should be 'challenge_rootPage'");
-            
+
             // Find the submit button and verify its URL format
             ButtonDisplayHint submitButton = pidls[0].GetDisplayHintById("nextButton") as ButtonDisplayHint;
             Assert.IsNotNull(submitButton, "Submit button is required in the CVV challenge");

@@ -13,7 +13,7 @@ namespace CIT.PXService.Tests
     using Microsoft.Commerce.Payments.PXService;
     using Microsoft.Commerce.Payments.PXService.Model.PurchaseService;
     using Microsoft.Commerce.Payments.PXService.V7.PaymentTransaction.Model;
-    using Microsoft.Commerce.Payments.Common.Tracing;
+    using Microsoft.Commerce.Tracing;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Microsoft.Xbox.Experimentation.Contracts.GroupsAdmin;
     using Moq;

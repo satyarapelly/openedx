@@ -5,7 +5,7 @@ namespace CIT.PXService.Tests
     using System.Net;
     using System.Net.Http;
     using System.Threading.Tasks;
-    using Microsoft.Commerce.Payments.Common.Tracing;
+    using Microsoft.Commerce.Tracing;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     [TestClass]

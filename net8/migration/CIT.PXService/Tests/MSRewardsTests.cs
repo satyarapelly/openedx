@@ -153,6 +153,106 @@ namespace CIT.PXService.Tests
             PXSettings.MSRewardsService.ResetToDefaults();
         }
 
+        [DataRow(0, "Completed", "storify")]
+        [TestMethod]
+        public async Task RedeemRewards_XboxNative_NoChallenge_Success(int redeemResultcode, string redeemStatus, string partner)
+        {
+            // Arrange
+            string userPuid = "844426234689219";
+            string deviceId = "1234567890";
+            string country = "us";
+
+            PXFlightHandler.AddToEnabledFlights("PXOverrideHasAnyPIToTrue,PXEnableXboxNativeRewards");
+
+            var rewardsServiceResponse = new
+            {
+                response = new
+                {
+                    result_message = "OrderId d2edf745-0909-4487-839d-f8d217d18c32 processed successfully.",
+                    order = new
+                    {
+                        id = "d2edf745-0909-4487-839d-f8d217d18c32",
+                        sku = "000400000253",
+                        item_snapshot = new
+                        {
+                            name = "000400000253",
+                            price = 1600,
+                            config = new
+                            {
+                                amount = "1.25",
+                                currencyCode = "USD"
+                            }
+                        }
+                    }
+                },
+                correlationId = "4b6773bf40ff45eeae08c180ac33a0c9",
+                code = redeemResultcode
+            };
+
+            var redeemRequestData = new
+            {
+                catalogItem = "000400000253"
+            };
+
+            // Arrange RewardsService response
+            PXSettings.MSRewardsService.ArrangeResponse(JsonConvert.SerializeObject(rewardsServiceResponse), HttpStatusCode.OK, HttpMethod.Post);
+
+            // Arrange PIMS response
+            var expectedPIs = new List<global::Tests.Common.Model.Pims.PaymentInstrument>() { PimsMockResponseProvider.GetPaymentInstrument("Account011", "Account011-Pi010-StoredValue") };
+            PXSettings.PimsService.ArrangeResponse(JsonConvert.SerializeObject(expectedPIs));
+
+            PXSettings.MSRewardsService.PreProcess = async (rewardsRequest) =>
+            {
+                string uri = rewardsRequest.RequestUri.ToString();
+                Assert.IsTrue(uri.Contains($"api/users({userPuid})/orders"), $"Uri should contain api/users({userPuid})/orders");
+                Assert.AreEqual(HttpMethod.Post, rewardsRequest.Method, "Method should be POST");
+
+                string requestContent = await rewardsRequest.Content.ReadAsStringAsync();
+                RedemptionRequest redemtionRequest = JsonConvert.DeserializeObject<RedemptionRequest>(requestContent);
+
+                rewardsRequest.Headers.TryGetValues("X-Rewards-HasPI", out IEnumerable<string> hasPIValues);
+                rewardsRequest.Headers.TryGetValues("X-Rewards-Country", out IEnumerable<string> countryValues);
+                Assert.AreEqual("true", hasPIValues.FirstOrDefault(), true, "X-Rewards-HasPI should be true");
+
+                Assert.AreEqual(country, countryValues.FirstOrDefault(), true, "X-Rewards-Country should be US");
+                Assert.AreEqual(redeemRequestData.catalogItem, redemtionRequest.CatalogItem, "CatalogItem should match");
+                Assert.AreEqual(deviceId, redemtionRequest.RiskContext.DeviceId, "DeviceId should match");
+            };
+
+            // Act
+            Dictionary<string, string> requestHeaders = new Dictionary<string, string>
+            {
+                { "x-ms-msaprofile", $"PUID={userPuid}" },
+                { "x-ms-deviceinfo", $"ipAddress=111.111.111.111,deviceId={deviceId}" }
+            };
+
+            HttpResponseMessage result = await SendRequestPXService($"/v7.0/Account011/msRewards?country={country}&language=en-US&partner={partner}", HttpMethod.Post, new StringContent(JsonConvert.SerializeObject(redeemRequestData), Encoding.UTF8, PaymentConstants.HttpMimeTypes.JsonContentType), requestHeaders);
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(HttpStatusCode.OK, result.StatusCode, "Expected statuscode is not found");
+
+            if (result.Content != null)
+            {
+                var pidlResource = ReadSinglePidlResourceFromJson(await result.Content.ReadAsStringAsync());
+                Assert.IsNotNull(pidlResource.ClientAction);
+                Assert.AreEqual(ClientActionType.ReturnContext, pidlResource.ClientAction.ActionType);
+                Assert.IsNotNull(pidlResource.ClientAction.Context);
+
+                JObject contextData = JObject.Parse(pidlResource.ClientAction.Context.ToString());
+                Assert.AreEqual(redeemStatus, contextData["status"].ToString());
+                Assert.AreEqual("1.25", contextData["redeemAmount"].ToString());
+                Assert.AreEqual("1600", contextData["redeemPoints"].ToString());
+                if (string.Equals(redeemStatus, "Completed", StringComparison.OrdinalIgnoreCase))
+                {
+                    Assert.AreEqual(expectedPIs.FirstOrDefault().PaymentInstrumentId, contextData["csvPIID"].ToString());
+                    Assert.AreEqual(expectedPIs.FirstOrDefault().PaymentInstrumentDetails.Balance.ToString(), contextData["csvBalance"].ToString());
+                }
+            }
+
+            PXSettings.MSRewardsService.ResetToDefaults();
+        }
+
         [DataRow(0, "Completed")]
         [DataRow(2011, "PendingRiskReview")]
         [TestMethod]
@@ -254,6 +354,213 @@ namespace CIT.PXService.Tests
                     Assert.AreEqual(expectedPIs.FirstOrDefault().PaymentInstrumentId, contextData["csvPIID"].ToString());
                     Assert.AreEqual(expectedPIs.FirstOrDefault().PaymentInstrumentDetails.Balance.ToString(), contextData["csvBalance"].ToString());
                 }
+            }
+
+            PXSettings.MSRewardsService.ResetToDefaults();
+        }
+
+        [DataRow(0, "Completed", "storify")]
+        [TestMethod]
+        public async Task RedeemRewards_XboxNative_NoChallenge_Success_variableRedemptionRequest(int redeemResultcode, string redeemStatus, string partner)
+        {
+            // Arrange
+            string userPuid = "844426234689219";
+            string deviceId = "1234567890";
+            string country = "us";
+
+            var rewardsServiceResponse = new
+            {
+                response = new
+                {
+                    result_message = "OrderId d2edf745-0909-4487-839d-f8d217d18c32 processed successfully.",
+                    order = new
+                    {
+                        id = "d2edf745-0909-4487-839d-f8d217d18c32",
+                        sku = "000400000253",
+                        item_snapshot = new
+                        {
+                            name = "000400000253",
+                            price = 1600,
+                            config = new
+                            {
+                                amount = "1.25",
+                                currencyCode = "USD"
+                            }
+                        },
+                        a = new Dictionary<string, string>()
+                        {
+                            { "amount", "10" }, { "isVariableAmount", "true" }
+                        },
+                        p = 1000
+                    }
+                },
+                correlationId = "4b6773bf40ff45eeae08c180ac33a0c9",
+                code = redeemResultcode
+            };
+
+            var redeemRequestData = new
+            {
+                catalogItem = "000400000253",
+                catalogItemAmount = "10"
+            };
+
+            // Arrange RewardsService response
+            PXSettings.MSRewardsService.ArrangeResponse(JsonConvert.SerializeObject(rewardsServiceResponse), HttpStatusCode.OK, HttpMethod.Post);
+
+            // Arrange PIMS response
+            var expectedPIs = new List<global::Tests.Common.Model.Pims.PaymentInstrument>() { PimsMockResponseProvider.GetPaymentInstrument("Account011", "Account011-Pi010-StoredValue") };
+            PXSettings.PimsService.ArrangeResponse(JsonConvert.SerializeObject(expectedPIs));
+
+            PXSettings.MSRewardsService.PreProcess = async (rewardsRequest) =>
+            {
+                string uri = rewardsRequest.RequestUri.ToString();
+                Assert.IsTrue(uri.Contains($"api/users({userPuid})/orders"), $"Uri should contain api/users({userPuid})/orders");
+                Assert.AreEqual(HttpMethod.Post, rewardsRequest.Method, "Method should be POST");
+
+                string requestContent = await rewardsRequest.Content.ReadAsStringAsync();
+                RedemptionRequest redemtionRequest = JsonConvert.DeserializeObject<RedemptionRequest>(requestContent);
+
+                rewardsRequest.Headers.TryGetValues("X-Rewards-HasPI", out IEnumerable<string> hasPIValues);
+                rewardsRequest.Headers.TryGetValues("X-Rewards-Country", out IEnumerable<string> countryValues);
+
+                Assert.AreEqual("true", hasPIValues.FirstOrDefault(), true, "X-Rewards-HasPI should be true");
+                Assert.AreEqual(country, countryValues.FirstOrDefault(), true, "X-Rewards-Country should be US");
+                Assert.AreEqual(redeemRequestData.catalogItem, redemtionRequest.CatalogItem, "CatalogItem should match");
+                Assert.AreEqual(redeemRequestData.catalogItemAmount, redemtionRequest.VariableRedemptionRequest.VariableAmount.ToString(), "catalogItemAmount should match");
+                Assert.AreEqual(deviceId, redemtionRequest.RiskContext.DeviceId, "DeviceId should match");
+            };
+
+            // Act
+            Dictionary<string, string> requestHeaders = new Dictionary<string, string>
+            {
+                { "x-ms-msaprofile", $"PUID={userPuid}" },
+                { "x-ms-deviceinfo", $"ipAddress=111.111.111.111,deviceId={deviceId}" }
+            };
+
+            HttpResponseMessage result = await SendRequestPXService($"/v7.0/Account011/msRewards?country={country}&language=en-US&partner={partner}", HttpMethod.Post, new StringContent(JsonConvert.SerializeObject(redeemRequestData), Encoding.UTF8, PaymentConstants.HttpMimeTypes.JsonContentType), requestHeaders);
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(HttpStatusCode.OK, result.StatusCode, "Expected statuscode is not found");
+
+            if (result.Content != null)
+            {
+                var pidlResource = ReadSinglePidlResourceFromJson(await result.Content.ReadAsStringAsync());
+                Assert.IsNotNull(pidlResource.ClientAction);
+                Assert.AreEqual(ClientActionType.ReturnContext, pidlResource.ClientAction.ActionType);
+                Assert.IsNotNull(pidlResource.ClientAction.Context);
+
+                JObject contextData = JObject.Parse(pidlResource.ClientAction.Context.ToString());
+                Assert.AreEqual(redeemStatus, contextData["status"].ToString());
+                Assert.AreEqual("10", contextData["redeemAmount"].ToString());
+                Assert.AreEqual("1000", contextData["redeemPoints"].ToString());
+                if (string.Equals(redeemStatus, "Completed", StringComparison.OrdinalIgnoreCase))
+                {
+                    Assert.AreEqual(expectedPIs.FirstOrDefault().PaymentInstrumentId, contextData["csvPIID"].ToString());
+                    Assert.AreEqual(expectedPIs.FirstOrDefault().PaymentInstrumentDetails.Balance.ToString(), contextData["csvBalance"].ToString());
+                }
+            }
+
+            PXSettings.MSRewardsService.ResetToDefaults();
+        }
+
+        [DataRow(2010, "E_RISK_FAILURE", true)]
+        [DataRow(2010, "E_RISK_FAILURE", false)]
+        [DataRow(2042, "E_EXISTING_RISK_REVIEW", true)]
+        [DataRow(2042, "E_EXISTING_RISK_REVIEW", false)]
+        [DataRow(2007, "E_CHALLENGE_FIRST", true)]
+        [DataRow(2007, "E_CHALLENGE_FIRST", false)]
+        [DataRow(2008, "E_SOLVE_FIRST", true)]
+        [DataRow(2008, "E_SOLVE_FIRST", false)]
+        [TestMethod]
+        public async Task RedeemRewards_XboxNative_FailureWithErrorCode(int errorCode, string errorCodeName, bool isVariableAmount)
+        {
+            // Arrange
+            string userPuid = "844426234689219";
+            string deviceId = "1234567890";
+            string country = "us";
+            string status = "Failed";
+
+            var rewardsServiceResponse = new
+            {
+                response = new
+                {
+                    result_message = "RandomErrorMessage",
+                },
+                correlationId = "4b6773bf40ff45eeae08c180ac33a0c9",
+                code = errorCode
+            };
+
+            var redeemRequestData = new Dictionary<string, string>
+            {
+                { "catalogItem", "000400000253" }
+            };
+
+            if (isVariableAmount)
+            {
+                redeemRequestData["catalogItemAmount"] = "10";
+            }
+
+            PXSettings.MSRewardsService.ArrangeResponse(JsonConvert.SerializeObject(rewardsServiceResponse), HttpStatusCode.OK, HttpMethod.Post);
+
+            PXSettings.MSRewardsService.PreProcess = async (rewardsRequest) =>
+            {
+                string uri = rewardsRequest.RequestUri.ToString();
+                Assert.IsTrue(uri.Contains($"api/users({userPuid})/orders"), $"Uri should contain api/users({userPuid})/orders");
+                Assert.AreEqual(HttpMethod.Post, rewardsRequest.Method, "Method should be POST");
+
+                string requestContent = await rewardsRequest.Content.ReadAsStringAsync();
+                RedemptionRequest redemtionRequest = JsonConvert.DeserializeObject<RedemptionRequest>(requestContent);
+
+                rewardsRequest.Headers.TryGetValues("X-Rewards-HasPI", out IEnumerable<string> hasPIValues);
+                rewardsRequest.Headers.TryGetValues("X-Rewards-Country", out IEnumerable<string> countryValues);
+                Assert.AreEqual("true", hasPIValues.FirstOrDefault(), true, "X-Rewards-HasPI should be true");
+
+                Assert.AreEqual(country, countryValues.FirstOrDefault(), true, "X-Rewards-Country should be US");
+
+                Assert.AreEqual(redeemRequestData["catalogItem"], redemtionRequest.CatalogItem, "CatalogItem should match");
+                if (isVariableAmount)
+                {
+                    Assert.AreEqual(redeemRequestData["catalogItemAmount"], redemtionRequest.VariableRedemptionRequest.VariableAmount.ToString(), "catalogItemAmount should match");
+                }
+            };
+
+            // Act
+            Dictionary<string, string> requestHeaders = new Dictionary<string, string>
+            {
+                { "x-ms-msaprofile", $"PUID={userPuid}" },
+                { "x-ms-deviceinfo", $"ipAddress=111.111.111.111,xboxLiveDeviceId={deviceId}" },
+                { "x-ms-flight", "PXShowRewardsErrorPageOnChallenge,PXOverrideHasAnyPIToTrue" }
+            };
+
+            HttpResponseMessage result = await SendRequestPXService($"/v7.0/Account011/msRewards?country={country}&language=en-US&partner=storify", HttpMethod.Post, new StringContent(JsonConvert.SerializeObject(redeemRequestData), Encoding.UTF8, PaymentConstants.HttpMimeTypes.JsonContentType), requestHeaders);
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(HttpStatusCode.OK, result.StatusCode, "Expected statuscode is not found");
+
+            if (result.Content != null)
+            {
+                var pidlResource = ReadSinglePidlResourceFromJson(await result.Content.ReadAsStringAsync());
+                Assert.IsNotNull(pidlResource.ClientAction);
+                Assert.AreEqual(ClientActionType.Pidl, pidlResource.ClientAction.ActionType);
+                Assert.IsNotNull(pidlResource.ClientAction.Context);
+
+                var pidlList = pidlResource.ClientAction.Context as List<PIDLResource>;
+                Assert.AreEqual(1, pidlList.Count);
+                var resource = pidlList[0];
+                Assert.AreEqual(1, resource.DisplayPages.Count);
+
+                PageDisplayHint msRewardsErrorPage = resource.DisplayPages[0] as PageDisplayHint;
+                Assert.IsNotNull(msRewardsErrorPage);
+                Assert.AreEqual(msRewardsErrorPage.DisplayName, "msRewardsErrorPage");
+
+                ButtonDisplayHint gotItButton = resource.GetDisplayHintById("gotItButton") as ButtonDisplayHint;
+                JObject contextData = JObject.Parse(gotItButton.Action.Context.ToString());
+                JObject instance = JObject.Parse(contextData["instance"].ToString());
+                Assert.AreEqual(errorCodeName.ToString(), instance["errorCode"].ToString());
+                Assert.AreEqual(status, instance["status"].ToString());
+                Assert.AreEqual("RandomErrorMessage", instance["errorMessage"].ToString());
             }
 
             PXSettings.MSRewardsService.ResetToDefaults();

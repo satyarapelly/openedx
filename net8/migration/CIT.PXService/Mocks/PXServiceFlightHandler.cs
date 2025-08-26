@@ -2,18 +2,18 @@
 
 namespace CIT.PXService.Mocks
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Net.Http;
+    using System.Threading;
     using System.Threading.Tasks;
 
     /// <summary>
-    /// Maintains a collection of flight names that can be applied to outbound requests.
+    /// This is a delegating handler that allows specific flights to be added to PX.ExposedFlightFeatures property of the request.
     /// </summary>
-    public class PXServiceFlightHandler
+    public class PXServiceFlightHandler : DelegatingHandler
     {
-        public List<string> EnabledFlights { get; }
+        public List<string> EnabledFlights { get; set; }
 
         public PXServiceFlightHandler()
         {
@@ -27,25 +27,17 @@ namespace CIT.PXService.Mocks
 
         public void AddToEnabledFlights(string flightsToAdd)
         {
-            EnabledFlights.AddRange(
-                flightsToAdd.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-                    .Select(f => f.Trim()));
+            EnabledFlights.AddRange(flightsToAdd.Split(new char[] { ',' }).Select(f => f.Trim()));
         }
 
-        public Task<HttpResponseMessage> InvokeAsync(
-            HttpRequestMessage request,
-            Func<HttpRequestMessage, Task<HttpResponseMessage>> next)
+        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            if (EnabledFlights.Count > 0)
+            if (EnabledFlights != null && EnabledFlights.Count > 0)
             {
-                request.Options.Set(
-                    new HttpRequestOptionsKey<List<string>>("PX.ExposedFlightFeatures"),
-                    EnabledFlights);
+                request.Properties["PX.ExposedFlightFeatures"] = EnabledFlights;
             }
 
-            return next != null
-                ? next(request)
-                : Task.FromResult<HttpResponseMessage>(null);
+            return await base.SendAsync(request, cancellationToken);
         }
     }
 }

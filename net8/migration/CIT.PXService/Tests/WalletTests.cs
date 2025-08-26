@@ -47,6 +47,7 @@ namespace CIT.PXService.Tests
                 Assert.IsNull(walletRequest.Content);
             };
 
+            PXFlightHandler.AddToEnabledFlights("PXDisableGetWalletConfigCache");
             PXSettings.WalletService.PostProcess = async (walletResponse) =>
             {
                 if (walletResponse != null)
@@ -66,7 +67,85 @@ namespace CIT.PXService.Tests
                 {
                     Assert.AreEqual(HttpStatusCode.OK, responseCode);
                     Assert.IsNotNull(responseBody);
-                    Assert.AreEqual(pxResponse, responseBody);
+                    Assert.AreEqual(pxResponse, responseBody, $"responseBody is {responseBody}, which is not expected");
+                });
+
+            PXSettings.WalletService.ResetToDefaults();
+        }
+
+        [DataRow(true)]
+        [DataRow(false)]
+        [TestMethod]
+        public async Task GetWalletConfig_cache(bool disableCache)
+        {
+            string url = $"/v7.0/getWalletConfig";
+            string expectedWalletResponse = "{\"merchantName\":\"Microsoft\",\"integrationType\":\"DIRECT\",\"directIntegrationData\":[{\"piFamily\":\"Ewallet\",\"piType\":\"ApplePay\",\"countrySupportedNetworks\":{\"us\":[\"visa\",\"mastercard\",\"discover\",\"amex\"],\"ca\":[\"visa\",\"mastercard\",\"discover\",\"amex\"],\"fr\":[\"visa\",\"mastercard\",\"amex\"],\"de\":[\"visa\",\"mastercard\",\"amex\"],\"it\":[\"visa\",\"mastercard\",\"amex\"],\"es\":[\"visa\",\"mastercard\",\"amex\"],\"gb\":[\"visa\",\"mastercard\",\"amex\"]},\"providerData\":{\"merchantIdentifier\":\"merchant.com.microsoft.paymicrosoft.sandbox\",\"merchantCapabilities\":[\"supports3DS\",\"supportsEMV\"],\"version\":\"MASKED(1)\"}},{\"piFamily\":\"Ewallet\",\"piType\":\"GooglePay\",\"countrySupportedNetworks\":{\"us\":[\"visa\",\"mastercard\",\"discover\",\"amex\"],\"ca\":[\"visa\",\"mastercard\",\"discover\",\"amex\"],\"fr\":[\"visa\",\"mastercard\",\"amex\"],\"de\":[\"visa\",\"mastercard\",\"amex\"],\"it\":[\"visa\",\"mastercard\",\"amex\"],\"es\":[\"visa\",\"mastercard\",\"amex\"],\"gb\":[\"visa\",\"mastercard\",\"amex\"]},\"providerData\":{\"allowedMethods\":[\"PAN_ONLY\",\"CRYPTOGRAM_3DS\"],\"assuranceDetailsRequired\":true,\"protocolVersion\":\"ECv2\",\"publicKey\":\"MASKED(88)\",\"publicKeyVersion\":\"01032025\",\"apiMajorVersion\":2,\"apiMinorVersion\":0,\"merchantId\":\"BCR2DN4TZ244PH2A\"}}]}";
+            string expectedPIMSResponse = "[{\"paymentMethodType\":\"applepay\",\"properties\":{\"offlineRecurring\":true,\"userManaged\":false,\"chargeThresholds\":null,\"redirectRequired\":null,\"soldToAddressRequired\":true,\"splitPaymentSupported\":true,\"supportedOperations\":[\"authorize\",\"charge\",\"refund\",\"chargeback\"],\"taxable\":false,\"providerRemittable\":false,\"providerCountry\":null,\"nonStoredPaymentMethodId\":\"be4de87d-7e38-4b2d-8836-9237eb32848e\",\"isNonStoredPaymentMethod\":true},\"paymentMethodGroup\":\"ewallet\",\"groupDisplayName\":\"eWallet\",\"exclusionTags\":null,\"paymentMethodFamily\":\"ewallet\",\"display\":{\"name\":\"ApplePay\",\"logo\":\"https://pmservices.cp.microsoft-int.com/staticresourceservice/images/v4/logo_applepay.svg\",\"logos\":[{\"mimeType\":\"image/svg+xml\",\"url\":\"https://pmservices.cp.microsoft-int.com/staticresourceservice/images/v4/logo_applepay.svg\"}]},\"AdditionalDisplayText\":null},{\"paymentMethodType\":\"googlepay\",\"properties\":{\"offlineRecurring\":true,\"userManaged\":false,\"chargeThresholds\":null,\"redirectRequired\":null,\"soldToAddressRequired\":true,\"splitPaymentSupported\":true,\"supportedOperations\":[\"authorize\",\"charge\",\"refund\",\"chargeback\"],\"taxable\":false,\"providerRemittable\":false,\"providerCountry\":null,\"nonStoredPaymentMethodId\":\"cdc85313-9b57-4052-81fb-dea336132cbf\",\"isNonStoredPaymentMethod\":true},\"paymentMethodGroup\":\"ewallet\",\"groupDisplayName\":\"eWallet\",\"exclusionTags\":null,\"paymentMethodFamily\":\"ewallet\",\"display\":{\"name\":\"GooglePay\",\"logo\":\"https://pmservices.cp.microsoft-int.com/staticresourceservice/images/v4/logo_googlepay.svg\",\"logos\":[{\"mimeType\":\"image/svg+xml\",\"url\":\"https://pmservices.cp.microsoft-int.com/staticresourceservice/images/v4/logo_googlepay.svg\"}]},\"AdditionalDisplayText\":null}]";
+            string pxResponse = "{\"PIDLConfig\":{\"SelectResource.PaymentInstrument\":{\"actions\":{\"ewallet.applepay.default\":[\"PaymentInstrumentHandler.ClientSupported\"],\"ewallet.googlepay.default\":[\"PaymentInstrumentHandler.ClientSupported\"]}},\"HandlePaymentChallenge\":{\"actions\":{\"ewallet.applepay.default\":[\"PaymentInstrumentHandler.CollectPaymentToken\"],\"ewallet.googlepay.default\":[\"PaymentInstrumentHandler.CollectPaymentToken\"]}}},\"PaymentInstrumentHandlers\":[{\"allowedAuthMethods\":[\"PAN_ONLY\",\"CRYPTOGRAM_3DS\"],\"protocolVersion\":\"ECv2\",\"publicKey\":\"MASKED(88)\",\"merchantName\":\"Microsoft\",\"apiMajorVersion\":\"2\",\"apiMinorVersion\":\"0\",\"assuranceDetailsRequired\":true,\"publicKeyVersion\":\"01032025\",\"enableGPayIframeForAllBrowsers\":false,\"merchantId\":\"BCR2DN4TZ244PH2A\",\"paymentMethodFamily\":\"ewallet\",\"paymentMethodType\":\"googlepay\",\"piid\":\"cdc85313-9b57-4052-81fb-dea336132cbf\",\"payLabel\":\"amount due plus applicable taxes\",\"integrationType\":\"DIRECT\",\"allowedAuthMethodsPerCountry\":{\"us\":[\"VISA\",\"MASTERCARD\",\"DISCOVER\",\"AMEX\"],\"ca\":[\"VISA\",\"MASTERCARD\",\"DISCOVER\",\"AMEX\"],\"fr\":[\"VISA\",\"MASTERCARD\",\"AMEX\"],\"de\":[\"VISA\",\"MASTERCARD\",\"AMEX\"],\"it\":[\"VISA\",\"MASTERCARD\",\"AMEX\"],\"es\":[\"VISA\",\"MASTERCARD\",\"AMEX\"],\"gb\":[\"VISA\",\"MASTERCARD\",\"AMEX\"]},\"clientSupported\":{\"supportedBrowsers\":{\"chrome\":\"100\",\"edge\":\"100\"},\"supportedOS\":{\"ios\":\"16.0\",\"android\":\"16.0\",\"windows\":\"16.0\"},\"additionalAPIsCheck\":[\"canMakePayment\"]},\"enableBillingAddress\":false,\"enableEmail\":false,\"disableGeoFencing\":false,\"singleMarkets\":[\"AT\",\"BE\",\"BG\",\"CH\",\"CY\",\"CZ\",\"DE\",\"DK\",\"EE\",\"ES\",\"FI\",\"FR\",\"GB\",\"GR\",\"HR\",\"HU\",\"IE\",\"IS\",\"IT\",\"LI\",\"LT\",\"LU\",\"LV\",\"MT\",\"NL\",\"NO\",\"PL\",\"PT\",\"RO\",\"SE\",\"SI\",\"SK\"]},{\"merchantCapabilities\":[\"supports3DS\",\"supportsEMV\"],\"displayName\":\"Microsoft\",\"initiative\":\"Web\",\"initiativeContext\":\"mystore.example.com\",\"merchantIdentifier\":\"merchant.com.microsoft.paymicrosoft.sandbox\",\"applePayVersion\":\"MASKED(1)\",\"paymentMethodFamily\":\"ewallet\",\"paymentMethodType\":\"applepay\",\"piid\":\"be4de87d-7e38-4b2d-8836-9237eb32848e\",\"payLabel\":\"amount due plus applicable taxes\",\"integrationType\":\"DIRECT\",\"allowedAuthMethodsPerCountry\":{\"us\":[\"VISA\",\"MASTERCARD\",\"DISCOVER\",\"AMEX\"],\"ca\":[\"VISA\",\"MASTERCARD\",\"DISCOVER\",\"AMEX\"],\"fr\":[\"VISA\",\"MASTERCARD\",\"AMEX\"],\"de\":[\"VISA\",\"MASTERCARD\",\"AMEX\"],\"it\":[\"VISA\",\"MASTERCARD\",\"AMEX\"],\"es\":[\"VISA\",\"MASTERCARD\",\"AMEX\"],\"gb\":[\"VISA\",\"MASTERCARD\",\"AMEX\"]},\"clientSupported\":{\"supportedBrowsers\":{\"safari\":\"16.1\"},\"supportedOS\":{\"ios\":\"15.0\"},\"additionalAPIsCheck\":[\"canMakePaymentWithActiveCard\"],\"paymentProxyRequired\":{\"safari\":\"16.5\"}},\"enableBillingAddress\":false,\"enableEmail\":false,\"disableGeoFencing\":false,\"singleMarkets\":[\"AT\",\"BE\",\"BG\",\"CH\",\"CY\",\"CZ\",\"DE\",\"DK\",\"EE\",\"ES\",\"FI\",\"FR\",\"GB\",\"GR\",\"HR\",\"HU\",\"IE\",\"IS\",\"IT\",\"LI\",\"LT\",\"LU\",\"LV\",\"MT\",\"NL\",\"NO\",\"PL\",\"PT\",\"RO\",\"SE\",\"SI\",\"SK\"]}]}";
+
+            PXSettings.PimsService.ArrangeResponse(expectedPIMSResponse);
+            if (disableCache)
+            {
+                PXFlightHandler.AddToEnabledFlights("PXDisableGetWalletConfigCache");
+            }
+
+            int walletServiceCalledCount = 0;
+            PXSettings.WalletService.PreProcess = (walletRequest) =>
+            {
+                Uri requestUri = walletRequest.RequestUri;
+                Assert.IsTrue(requestUri.PathAndQuery.Contains("/wallet"));
+                Assert.IsNull(walletRequest.Content);
+                walletServiceCalledCount += 1;
+            };
+
+            PXSettings.WalletService.PostProcess = async (walletResponse) =>
+            {
+                if (walletResponse != null)
+                {
+                    Assert.AreEqual(walletResponse.StatusCode, HttpStatusCode.OK);
+                    Assert.IsNotNull(walletResponse.Content);
+                    string responseContent = await walletResponse.Content.ReadAsStringAsync();
+                    Assert.AreEqual(responseContent, expectedWalletResponse);
+                }
+            };
+
+            await GetRequest(
+                url,
+                null,
+                null,
+                (responseCode, responseBody, responseHeaders) =>
+                {
+                    Assert.AreEqual(HttpStatusCode.OK, responseCode);
+                    Assert.IsNotNull(responseBody);
+                    Assert.AreEqual(pxResponse, responseBody, $"responseBody is {responseBody}, which is not expected");
+                    if (disableCache)
+                    {
+                        Assert.AreEqual(1, walletServiceCalledCount);
+                    }
+                    else
+                    {
+                        Assert.IsTrue(walletServiceCalledCount <= 1);
+                    }
+                });
+
+            // call again to test cache, wallet service should not be called again
+            await GetRequest(
+                url,
+                null,
+                null,
+                (responseCode, responseBody, responseHeaders) =>
+                {
+                    Assert.AreEqual(HttpStatusCode.OK, responseCode);
+                    Assert.IsNotNull(responseBody);
+                    Assert.AreEqual(pxResponse, responseBody, $"responseBody is {responseBody}, which is not expected");
+                    if (disableCache)
+                    {
+                        Assert.AreEqual(2, walletServiceCalledCount);
+                    }
+                    else
+                    {
+                        Assert.IsTrue(walletServiceCalledCount <= 1);
+                    }
                 });
 
             PXSettings.WalletService.ResetToDefaults();
@@ -84,6 +163,7 @@ namespace CIT.PXService.Tests
 
             PXSettings.WalletService.ArrangeResponse(expectedWalletResponse);
             PXSettings.PimsService.ArrangeResponse(expectedPIMSResponse);
+            PXFlightHandler.AddToEnabledFlights("PXDisableGetWalletConfigCache");
 
             PXSettings.WalletService.PreProcess = (walletRequest) =>
             {
@@ -111,7 +191,7 @@ namespace CIT.PXService.Tests
                 {
                     Assert.AreEqual(HttpStatusCode.OK, responseCode);
                     Assert.IsNotNull(responseBody);
-                    Assert.AreEqual(pxResponse, responseBody);
+                    Assert.AreEqual(pxResponse, responseBody, $"responseBody is {responseBody}, which is not expected");
                 });
 
             PXSettings.WalletService.ResetToDefaults();
@@ -126,7 +206,8 @@ namespace CIT.PXService.Tests
         {
             List<string> flightList = new List<string>()
             {
-                "PXWalletConfigAddDeviceSupportStatus"
+                "PXWalletConfigAddDeviceSupportStatus",
+                "PXDisableGetWalletConfigCache"
             };
 
             string url = $"/v7.0/getWalletConfig?{queryParameters}";
@@ -185,6 +266,7 @@ namespace CIT.PXService.Tests
 
             PXSettings.WalletService.ArrangeResponse(expectedWalletResponse);
             PXSettings.PimsService.ArrangeResponse(expectedPIMSResponse);
+            PXFlightHandler.AddToEnabledFlights("PXDisableGetWalletConfigCache");
 
             PXSettings.WalletService.PreProcess = (walletRequest) =>
             {
@@ -207,12 +289,12 @@ namespace CIT.PXService.Tests
             await GetRequest(
                 url,
                 null,
-                new List<string>() { "PXEnableGPayIframeForAllBrowsers" },
+                new List<string>() { "PXEnableGPayIframeForAllBrowsers", "PXDisableGetWalletConfigCache" },
                 (responseCode, responseBody, responseHeaders) =>
                 {
                     Assert.AreEqual(HttpStatusCode.OK, responseCode);
                     Assert.IsNotNull(responseBody);
-                    Assert.AreEqual(pxResponse, responseBody);
+                    Assert.AreEqual(pxResponse, responseBody, $"responseBody is {responseBody}, which is not expected");
                 });
 
             PXSettings.WalletService.ResetToDefaults();
@@ -250,12 +332,12 @@ namespace CIT.PXService.Tests
             await GetRequest(
                 url,
                 null,
-                new List<string>() { "GPayApayInstancePI" },
+                new List<string>() { "GPayApayInstancePI", "PXDisableGetWalletConfigCache" },
                 (responseCode, responseBody, responseHeaders) =>
                 {
                     Assert.AreEqual(HttpStatusCode.OK, responseCode);
                     Assert.IsNotNull(responseBody);
-                    Assert.AreEqual(pxResponse, responseBody);
+                    Assert.AreEqual(pxResponse, responseBody, $"responseBody is {responseBody}, which is not expected");
                 });
 
             PXSettings.WalletService.ResetToDefaults();
@@ -271,6 +353,7 @@ namespace CIT.PXService.Tests
 
             PXSettings.WalletService.ArrangeResponse(expectedWalletResponse);
             PXSettings.PimsService.ArrangeResponse(expectedPIMSResponse);
+            PXFlightHandler.AddToEnabledFlights("PXDisableGetWalletConfigCache");
 
             PXSettings.WalletService.PreProcess = (walletRequest) =>
             {
@@ -293,12 +376,12 @@ namespace CIT.PXService.Tests
             await GetRequest(
                 url,
                 null,
-                new List<string>() { "GPayApayInstancePI", "PXWalletConfigEnableEmail" },
+                new List<string>() { "GPayApayInstancePI", "PXWalletConfigEnableEmail", "PXDisableGetWalletConfigCache" },
                 (responseCode, responseBody, responseHeaders) =>
                 {
                     Assert.AreEqual(HttpStatusCode.OK, responseCode);
                     Assert.IsNotNull(responseBody);
-                    Assert.AreEqual(pxResponse, responseBody);
+                    Assert.AreEqual(pxResponse, responseBody, $"responseBody is {responseBody}, which is not expected");
                 });
 
             PXSettings.WalletService.ResetToDefaults();
@@ -314,6 +397,7 @@ namespace CIT.PXService.Tests
 
             PXSettings.WalletService.ArrangeResponse(expectedWalletResponse);
             PXSettings.PimsService.ArrangeResponse(expectedPIMSResponse);
+            PXFlightHandler.AddToEnabledFlights("PXDisableGetWalletConfigCache");
 
             PXSettings.WalletService.PreProcess = (walletRequest) =>
             {
@@ -336,12 +420,12 @@ namespace CIT.PXService.Tests
             await GetRequest(
                 url,
                 null,
-                new List<string>() { "GPayApayInstancePI", "PXWalletConfigEnableBillingAddress" },
+                new List<string>() { "GPayApayInstancePI", "PXWalletConfigEnableBillingAddress", "PXDisableGetWalletConfigCache" },
                 (responseCode, responseBody, responseHeaders) =>
                 {
                     Assert.AreEqual(HttpStatusCode.OK, responseCode);
                     Assert.IsNotNull(responseBody);
-                    Assert.AreEqual(pxResponse, responseBody);
+                    Assert.AreEqual(pxResponse, responseBody, $"responseBody is {responseBody}, which is not expected");
                 });
 
             PXSettings.WalletService.ResetToDefaults();
@@ -364,6 +448,7 @@ namespace CIT.PXService.Tests
             };
 
             PXSettings.WalletService.ArrangeResponse(expectedWalletResponse);
+            PXFlightHandler.AddToEnabledFlights("PXDisableGetWalletConfigCache");
 
             PXSettings.WalletService.PreProcess = (walletRequest) =>
             {
@@ -426,6 +511,7 @@ namespace CIT.PXService.Tests
 
             PXSettings.TransactionDataService.ArrangeResponse(transactionDataResponse);
             PXSettings.WalletService.ArrangeResponse(expectedWalletResponse);
+            PXFlightHandler.AddToEnabledFlights("PXDisableGetWalletConfigCache");
 
             global::Tests.Common.Model.Pims.PaymentInstrument expectedPI = PimsMockResponseProvider.GetPaymentInstrument("Account013", "cw_gpay_cc80ac8e-3e33-40f3-9fed-6efb5be47762");
             PXSettings.PimsService.ArrangeResponse(JsonConvert.SerializeObject(expectedPI), HttpStatusCode.OK, null, ".*/paymentInstruments.*");
@@ -567,6 +653,7 @@ namespace CIT.PXService.Tests
 
             PXSettings.TransactionDataService.ArrangeResponse(transactionDataResponse);
             PXSettings.WalletService.ArrangeResponse(expectedWalletResponse);
+            PXFlightHandler.AddToEnabledFlights("PXDisableGetWalletConfigCache");
 
             PXSettings.WalletService.PreProcess = (walletRequest) =>
             {
@@ -633,6 +720,7 @@ namespace CIT.PXService.Tests
 
             PXSettings.TransactionDataService.ArrangeResponse(transactionDataResponse);
             PXSettings.WalletService.ArrangeResponse(expectedValidateResponse, HttpStatusCode.OK, HttpMethod.Post, "api/wallet/validate");
+            PXFlightHandler.AddToEnabledFlights("PXDisableGetWalletConfigCache");
 
             PXSettings.WalletService.PreProcess = (walletRequest) =>
             {
@@ -697,6 +785,7 @@ namespace CIT.PXService.Tests
 
             PXSettings.TransactionDataService.ArrangeResponse(transactionDataResponse);
             PXSettings.WalletService.ArrangeResponse(expectedValidateResponse, HttpStatusCode.OK, HttpMethod.Post, "api/wallet/validate");
+            PXFlightHandler.AddToEnabledFlights("PXDisableGetWalletConfigCache");
 
             PXSettings.WalletService.PreProcess = (walletRequest) =>
             {
@@ -762,6 +851,7 @@ namespace CIT.PXService.Tests
 
             PXSettings.TransactionDataService.ArrangeResponse(transactionDataResponse);
             PXSettings.WalletService.ArrangeResponse(expectedValidateResponse, HttpStatusCode.OK, HttpMethod.Post, "api/wallet/validate");
+            PXFlightHandler.AddToEnabledFlights("PXDisableGetWalletConfigCache");
 
             PXSettings.WalletService.PreProcess = (walletRequest) =>
             {
@@ -805,12 +895,12 @@ namespace CIT.PXService.Tests
             PXSettings.WalletService.ResetToDefaults();
         }
 
-        [DataRow("PXWalletConfigAddDeviceSupportStatus,PXWalletConfigDisableGooglePay", "Mozilla/5.0 (iPhone; CPU iPhone OS 17_1_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1.1 Mobile/15E148 Safari/604.1", false, false, true)]
-        [DataRow("PXWalletConfigAddDeviceSupportStatus,PXWalletConfigDisableApplePay", "Mozilla/5.0 (iPhone; CPU iPhone OS 17_1_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1.1 Mobile/15E148 Safari/604.1", false, true, false)]
-        [DataRow("PXWalletConfigAddDeviceSupportStatus", "Mozilla/5.0 (iPhone; CPU iPhone OS 17_1_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1.1 Mobile/15E148 Safari/604.1", false, true, true)]
-        [DataRow("PXWalletConfigAddDeviceSupportStatus", "Mozilla/5.0 (iPhone; CPU iPhone OS 17_1_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1.1 Mobile/15E148 Safari/604.1", true, true, true)]
-        [DataRow("PXWalletConfigAddDeviceSupportStatus", "Mozilla/5.0 (iPhone; CPU iPhone OS 16_1_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1.1 Mobile/15E148 Safari/604.1", true, true, false)]
-        [DataRow("PXWalletConfigAddDeviceSupportStatus,PXWalletConfigDisableApplePay,PXWalletConfigDisableGooglePay", "Mozilla/5.0 (iPhone; CPU iPhone OS 16_1_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1.1 Mobile/15E148 Safari/604.1", true, false, false)]
+        [DataRow("PXWalletConfigAddDeviceSupportStatus,PXWalletConfigDisableGooglePay,PXDisableGetWalletConfigCache", "Mozilla/5.0 (iPhone; CPU iPhone OS 17_1_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1.1 Mobile/15E148 Safari/604.1", false, false, true)]
+        [DataRow("PXWalletConfigAddDeviceSupportStatus,PXWalletConfigDisableApplePay,PXDisableGetWalletConfigCache", "Mozilla/5.0 (iPhone; CPU iPhone OS 17_1_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1.1 Mobile/15E148 Safari/604.1", false, true, false)]
+        [DataRow("PXWalletConfigAddDeviceSupportStatus,PXDisableGetWalletConfigCache", "Mozilla/5.0 (iPhone; CPU iPhone OS 17_1_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1.1 Mobile/15E148 Safari/604.1", false, true, true)]
+        [DataRow("PXWalletConfigAddDeviceSupportStatus,PXDisableGetWalletConfigCache", "Mozilla/5.0 (iPhone; CPU iPhone OS 17_1_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1.1 Mobile/15E148 Safari/604.1", true, true, true)]
+        [DataRow("PXWalletConfigAddDeviceSupportStatus,PXDisableGetWalletConfigCache", "Mozilla/5.0 (iPhone; CPU iPhone OS 16_1_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1.1 Mobile/15E148 Safari/604.1", true, true, false)]
+        [DataRow("PXWalletConfigAddDeviceSupportStatus,PXWalletConfigDisableApplePay,PXWalletConfigDisableGooglePay,PXDisableGetWalletConfigCache", "Mozilla/5.0 (iPhone; CPU iPhone OS 16_1_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1.1 Mobile/15E148 Safari/604.1", true, false, false)]
         [DataTestMethod]
         public async Task ValidateWalletConfigExcludDevice(
             string flights,
@@ -863,10 +953,10 @@ namespace CIT.PXService.Tests
                 });
         }
 
-        [DataRow("ios", "safari,chrome,edge", "PXWalletConfigAddIframeFallbackSupported,PXWalletEnableGooglePayIframeFallback", true, true)]
-        [DataRow("mac os x", "safari,chrome,edge", "PXWalletConfigAddIframeFallbackSupported,PXWalletEnableGooglePayIframeFallback", false, true)]
-        [DataRow("android", "*", "PXWalletConfigAddIframeFallbackSupported", true, false)]
-        [DataRow("windows", "*", "PXWalletConfigAddIframeFallbackSupported", false, false)]
+        [DataRow("ios", "safari,chrome,edge", "PXWalletConfigAddIframeFallbackSupported,PXWalletEnableGooglePayIframeFallback,PXDisableGetWalletConfigCache", true, true)]
+        [DataRow("mac os x", "safari,chrome,edge", "PXWalletConfigAddIframeFallbackSupported,PXWalletEnableGooglePayIframeFallback,PXDisableGetWalletConfigCache", false, true)]
+        [DataRow("android", "*", "PXWalletConfigAddIframeFallbackSupported,PXDisableGetWalletConfigCache", true, false)]
+        [DataRow("windows", "*", "PXWalletConfigAddIframeFallbackSupported,PXDisableGetWalletConfigCache", false, false)]
         [DataTestMethod]
         public async Task ValidateGPayIframeFallback(
             string os,

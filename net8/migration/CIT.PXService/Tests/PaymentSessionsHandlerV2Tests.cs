@@ -13,7 +13,7 @@ namespace CIT.PXService.Tests
     using Microsoft.Commerce.Payments.PXService.Model.ThreeDSExternalService;
     using Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge;
     using Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge.Model;
-    using Microsoft.Commerce.Payments.Common.Tracing;
+    using Microsoft.Commerce.Tracing;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Moq;
     using AuthenticationRequest = Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge.Model.AuthenticationRequest;
@@ -28,6 +28,7 @@ namespace CIT.PXService.Tests
     using Microsoft.Commerce.Payments.PimsModel.V4;
     using Microsoft.Commerce.Payments.PXService.Accessors.TransactionDataService;
     using Microsoft.Commerce.Payments.Common.StoredValue;
+    using System.Net;
 
     [TestClass]
     public class PaymentSessionsHandlerV2Tests : TestBase
@@ -2613,6 +2614,292 @@ namespace CIT.PXService.Tests
         }
 
         [TestMethod]
+        [DataRow("BrowserFlowContext", true)]
+        [DataRow("BrowserFlowContext", false)]
+        [DataRow("AuthenticationResponse", true)]
+        [DataRow("AuthenticationResponse", false)]
+        public async Task Authenticate_Success(string scenario, bool includeUmbrellaSafetyNetFlight)
+        {
+            var exposedFlightFeatures = PXPSD2CompFlights.Split(',').ToList();
+
+            if (includeUmbrellaSafetyNetFlight)
+            {
+                exposedFlightFeatures.Add("PXPSD2SafetyNetAuthenticate");
+            }
+
+            var sessionData = new Microsoft.Commerce.Payments.PXService.Model.PXInternal.PaymentSession
+            {
+                Id = SessionId,
+                PaymentMethodType = "visa",
+                ExposedFlightFeatures = exposedFlightFeatures,
+                BrowserInfo = new BrowserInfo
+                {
+                    ChallengeWindowSize = ChallengeWindowSize.Five
+                },
+                MethodData = new Microsoft.Commerce.Payments.PXService.Model.PayerAuthService.ThreeDSMethodData
+                {
+                    ThreeDSMethodURL = "fakeurl",
+                    ThreeDSServerTransID = "fakeId"
+                },
+                ChallengeStatus = PaymentChallengeStatus.Unknown,
+                PaymentInstrumentAccountId = "123",
+                PaymentInstrumentId = "456",
+            };
+
+            mockSessionServiceAccessor
+                .Setup(x => x.GetSessionResourceData<Microsoft.Commerce.Payments.PXService.Model.PXInternal.PaymentSession>(It.IsAny<string>(), It.IsAny<EventTraceActivity>()))
+                .ReturnsAsync(sessionData);
+
+            mockPayerAuthServiceAccessor.Setup(x => x.Authenticate(
+            It.IsAny<Microsoft.Commerce.Payments.PXService.Model.PayerAuthService.AuthenticationRequest>(),
+            It.IsAny<EventTraceActivity>()))
+            .Returns(Task.FromResult(new Microsoft.Commerce.Payments.PXService.Model.PayerAuthService.AuthenticationResponse()
+            {
+                EnrollmentStatus = Microsoft.Commerce.Payments.PXService.Model.PayerAuthService.PaymentInstrumentEnrollmentStatus.Enrolled,
+                EnrollmentType = Microsoft.Commerce.Payments.PXService.Model.PayerAuthService.PaymentInstrumentEnrollmentType.ThreeDs,
+                TransactionStatus = TransactionStatus.Y,
+                TransactionStatusReason = TransactionStatusReason.TSR01,
+                AcsSignedContent = string.Empty,
+                MessageVersion = "2.2.0"
+            }));
+
+            var paymentSessionsHandler = new PaymentSessionsHandlerV2(
+                mockPayerAuthServiceAccessor.Object,
+                mockPims.Object,
+                mockSessionServiceAccessor.Object,
+                mockAccountServiceAccessor.Object,
+                mockPurchaseServiceAccessor.Object,
+                mockTransactionServiceAccessor.Object,
+                mockTransactionDataServiceAccessor.Object,
+                PifdBaseUrl);
+
+            if (scenario == "BrowserFlowContext")
+            {
+                BrowserFlowContext res = await paymentSessionsHandler.Authenticate(SessionId, true, new EventTraceActivity());
+                Assert.AreEqual(res.PaymentSession.ChallengeStatus, PaymentChallengeStatus.Succeeded);
+            }
+            else if (scenario == "AuthenticationResponse")
+            {
+                Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge.Model.AuthenticationResponse authenticationResponse = await paymentSessionsHandler.Authenticate(AcountId, SessionId, new AuthenticationRequest(), exposedFlightFeatures, new EventTraceActivity(), null);
+                Assert.AreEqual(authenticationResponse.ChallengeStatus, PaymentChallengeStatus.Succeeded);
+            }
+        }
+
+        [TestMethod]
+        [DataRow(PaymentChallengeStatus.Failed, "BrowserFlowContext", "ServiceErrorResponseException", DeviceChannel.Browser, true, true)]
+        [DataRow(PaymentChallengeStatus.Succeeded, "BrowserFlowContext", "ServiceErrorResponseException", DeviceChannel.Browser, true, false)]
+        [DataRow(PaymentChallengeStatus.Failed, "BrowserFlowContext", "ServiceErrorResponseException", DeviceChannel.Browser, true, false, true, HttpStatusCode.BadRequest, "InvalidRequestData")]
+        [DataRow(PaymentChallengeStatus.Failed, "BrowserFlowContext", "ServiceErrorResponseException", DeviceChannel.Browser, true, true, true, HttpStatusCode.BadRequest, "InvalidRequestData")]
+        [DataRow(PaymentChallengeStatus.Succeeded, "BrowserFlowContext", "ServiceErrorResponseException", DeviceChannel.Browser, false, true)]
+        [DataRow(PaymentChallengeStatus.Succeeded, "BrowserFlowContext", "ServiceErrorResponseException", DeviceChannel.Browser, false, false)]
+        [DataRow(PaymentChallengeStatus.Failed, "AuthenticationResponse", "ServiceErrorResponseException", DeviceChannel.AppBased, true, true)]
+        [DataRow(PaymentChallengeStatus.Succeeded, "AuthenticationResponse", "ServiceErrorResponseException", DeviceChannel.AppBased, true, false)]
+        [DataRow(PaymentChallengeStatus.Failed, "AuthenticationResponse", "ServiceErrorResponseException", DeviceChannel.AppBased, true, false, true, HttpStatusCode.BadRequest, "InvalidRequestData")]
+        [DataRow(PaymentChallengeStatus.Failed, "AuthenticationResponse", "ServiceErrorResponseException", DeviceChannel.AppBased, true, true, true, HttpStatusCode.BadRequest, "InvalidRequestData")]
+        [DataRow(PaymentChallengeStatus.Succeeded, "AuthenticationResponse", "ServiceErrorResponseException", DeviceChannel.AppBased, false, true)]
+        [DataRow(PaymentChallengeStatus.Succeeded, "AuthenticationResponse", "ServiceErrorResponseException", DeviceChannel.AppBased, false, false)]
+        [DataRow(PaymentChallengeStatus.Failed, "BrowserFlowContext", "Exception", DeviceChannel.Browser, true, true)]
+        [DataRow(PaymentChallengeStatus.Succeeded, "BrowserFlowContext", "Exception", DeviceChannel.Browser, false, true)]
+        [DataRow(PaymentChallengeStatus.Succeeded, "BrowserFlowContext", "Exception", DeviceChannel.Browser, false, false)]
+        [DataRow(PaymentChallengeStatus.Failed, "AuthenticationResponse", "Exception", DeviceChannel.AppBased, true, true)]
+        [DataRow(PaymentChallengeStatus.Succeeded, "AuthenticationResponse", "Exception", DeviceChannel.AppBased, false, true)]
+        [DataRow(PaymentChallengeStatus.Succeeded, "AuthenticationResponse", "Exception", DeviceChannel.AppBased, false, false)]
+        public async Task Authenticate_Exception_PSD2BankError(PaymentChallengeStatus expectedResult, string scenario, string errorType, DeviceChannel deviceChannel, bool includeUmbrellaSafetyNetFlight, bool includeEnforcementFlight, bool set_ExcludeErrorFeatureFormatFlighting = false, HttpStatusCode statusCode = HttpStatusCode.OK, string errorCode = "")
+        {
+            var exposedFlightFeatures = PXPSD2CompFlights.Split(',').ToList();
+
+            if (includeUmbrellaSafetyNetFlight)
+            {
+                exposedFlightFeatures.Add("PXPSD2SafetyNetAuthenticate");
+            }
+
+            if (includeEnforcementFlight)
+            {
+                exposedFlightFeatures.Add("PXPSD2BankErrorEnforcementAuthenticate" + "-" + deviceChannel);
+            }
+
+            if (set_ExcludeErrorFeatureFormatFlighting)
+            {
+                if (scenario == "BrowserFlowContext")
+                {
+                    exposedFlightFeatures.Add(string.Format("PSD2SafetyNet-BrowserAuthN-{0}-{1}", statusCode.ToString(), errorCode));
+                }
+                else
+                {
+                    exposedFlightFeatures.Add(string.Format("PSD2SafetyNet-AppAuthN-{0}-{1}", statusCode.ToString(), errorCode));
+                }
+            }
+
+            var sessionData = new Microsoft.Commerce.Payments.PXService.Model.PXInternal.PaymentSession
+            {
+                Id = SessionId,
+                PaymentMethodType = "visa",
+                ExposedFlightFeatures = exposedFlightFeatures,
+                BrowserInfo = new BrowserInfo
+                {
+                    ChallengeWindowSize = ChallengeWindowSize.Five
+                },
+                MethodData = new Microsoft.Commerce.Payments.PXService.Model.PayerAuthService.ThreeDSMethodData
+                {
+                    ThreeDSMethodURL = "fakeurl",
+                    ThreeDSServerTransID = "fakeId"
+                },
+                ChallengeStatus = PaymentChallengeStatus.Unknown,
+                PaymentInstrumentAccountId = "123",
+                PaymentInstrumentId = "456",
+                DeviceChannel = deviceChannel
+            };
+
+            mockSessionServiceAccessor
+                .Setup(x => x.GetSessionResourceData<Microsoft.Commerce.Payments.PXService.Model.PXInternal.PaymentSession>(It.IsAny<string>(), It.IsAny<EventTraceActivity>()))
+                .ReturnsAsync(sessionData);
+
+            if (errorType == "ServiceErrorResponseException")
+            {
+                ServiceErrorResponseException ex = new ServiceErrorResponseException()
+                {
+                    Response = new System.Net.Http.HttpResponseMessage()
+                    {
+                        StatusCode = statusCode
+                    },
+                    Error = new ServiceErrorResponse()
+                    {
+                        ErrorCode = errorCode
+                    }
+                };
+
+                mockPayerAuthServiceAccessor
+                    .Setup(x => x.Authenticate(It.IsAny<Microsoft.Commerce.Payments.PXService.Model.PayerAuthService.AuthenticationRequest>(), It.IsAny<EventTraceActivity>()))
+                    .Throws(ex);
+            }
+            else
+            {
+            mockPayerAuthServiceAccessor
+                .Setup(x => x.Authenticate(It.IsAny<Microsoft.Commerce.Payments.PXService.Model.PayerAuthService.AuthenticationRequest>(), It.IsAny<EventTraceActivity>()))
+                .Throws<Exception>();
+            }
+
+            var paymentSessionsHandler = new PaymentSessionsHandlerV2(
+                mockPayerAuthServiceAccessor.Object,
+                mockPims.Object,
+                mockSessionServiceAccessor.Object,
+                mockAccountServiceAccessor.Object,
+                mockPurchaseServiceAccessor.Object,
+                mockTransactionServiceAccessor.Object,
+                mockTransactionDataServiceAccessor.Object,
+                PifdBaseUrl);
+
+            if (scenario == "BrowserFlowContext")
+            {
+                BrowserFlowContext res = await paymentSessionsHandler.Authenticate(SessionId, true, new EventTraceActivity());
+                Assert.AreEqual(res.PaymentSession.ChallengeStatus, expectedResult);
+            }
+            else if (scenario == "AuthenticationResponse")
+            {
+                Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge.Model.AuthenticationResponse authenticationResponse = await paymentSessionsHandler.Authenticate(AcountId, SessionId, new AuthenticationRequest(), exposedFlightFeatures, new EventTraceActivity(), null);
+                Assert.AreEqual(authenticationResponse.ChallengeStatus, expectedResult);
+            }
+        }
+
+        [DataRow("Browser", "ServiceErrorResponseException", true, true, HttpStatusCode.BadRequest, "InvalidRequestData")]
+        [DataRow("AppBased", "ServiceErrorResponseException", true, true, HttpStatusCode.BadRequest, "InvalidRequestData")]
+        [DataRow("Browser", "ServiceErrorResponseException", true)]
+        [DataRow("AppBased", "ServiceErrorResponseException", true)]
+        [DataRow("Browser", "Exception", true)]
+        [DataRow("AppBased", "Exception", true)]
+        [DataRow("Browser", "ServiceErrorResponseException", false, true, HttpStatusCode.BadRequest, "InvalidRequestData")]
+        [DataRow("AppBased", "ServiceErrorResponseException", false, true, HttpStatusCode.BadRequest, "InvalidRequestData")]
+        [DataRow("Browser", "ServiceErrorResponseException", false)]
+        [DataRow("AppBased", "ServiceErrorResponseException", false)]
+        [DataRow("Browser", "Exception", false)]
+        [DataRow("AppBased", "Exception", false)]
+        [TestMethod]
+        public async Task CompleteThreeDSChallenge_Exception_PSD2BankError(string deviceChannel, string errorType, bool includeEnforcementFlight, bool set_ExcludeErrorFeatureFormatFlighting = false, HttpStatusCode statusCode = HttpStatusCode.OK, string errorCode = "")
+        {
+            var exposedFlightFeatures = PXPSD2CompFlights.Split(',').ToList();
+
+            if (includeEnforcementFlight)
+            {
+                exposedFlightFeatures.Add("PXPSD2BankErrorEnforcementCompleteChallenge" + "-" + deviceChannel);
+            }
+            
+            if (set_ExcludeErrorFeatureFormatFlighting)
+            {
+                exposedFlightFeatures.Add(string.Format("PSD2SafetyNet-Completion-{0}-{1}-{2}", statusCode.ToString(), errorCode, deviceChannel.ToString()));
+            }
+
+            var sessionData = new Microsoft.Commerce.Payments.PXService.Model.PXInternal.PaymentSession
+            {
+                Id = SessionId,
+                PaymentMethodType = "visa",
+                ExposedFlightFeatures = exposedFlightFeatures,
+                BrowserInfo = new BrowserInfo
+                {
+                    ChallengeWindowSize = ChallengeWindowSize.Five
+                },
+                ChallengeStatus = PaymentChallengeStatus.Unknown,
+                PaymentInstrumentAccountId = "123",
+                PaymentInstrumentId = "456",
+                Amount = 1,
+                DeviceChannel = deviceChannel == "Browser" ? DeviceChannel.Browser : DeviceChannel.AppBased
+            };
+
+            mockSessionServiceAccessor
+                .Setup(x => x.GetSessionResourceData<Microsoft.Commerce.Payments.PXService.Model.PXInternal.PaymentSession>(It.IsAny<string>(), It.IsAny<EventTraceActivity>()))
+                .ReturnsAsync(sessionData);
+
+            mockSessionServiceAccessor
+                .Setup(x => x.UpdateSessionResourceData(It.IsAny<string>(), It.IsAny<Microsoft.Commerce.Payments.PXService.Model.PXInternal.PaymentSession>(), It.IsAny<EventTraceActivity>()))
+                .Returns(Task.CompletedTask);
+
+            if (errorType == "ServiceErrorResponseException")
+            {
+                ServiceErrorResponseException ex = new ServiceErrorResponseException()
+                {
+                    Response = new System.Net.Http.HttpResponseMessage()
+                    {
+                        StatusCode = statusCode
+                    },
+                    Error = new ServiceErrorResponse()
+                    {
+                        ErrorCode = errorCode
+                    }
+                };
+
+                mockPayerAuthServiceAccessor
+                .Setup(x => x.CompleteChallenge(It.IsAny<CompletionRequest>(), It.IsAny<EventTraceActivity>()))
+                .Throws(ex);
+            }
+            else
+            {
+            mockPayerAuthServiceAccessor
+                .Setup(x => x.CompleteChallenge(It.IsAny<CompletionRequest>(), It.IsAny<EventTraceActivity>()))
+                .Throws<Exception>();
+            }
+
+            var paymentSessionsHandler = new PaymentSessionsHandlerV2(
+                mockPayerAuthServiceAccessor.Object,
+                mockPims.Object,
+                mockSessionServiceAccessor.Object,
+                mockAccountServiceAccessor.Object,
+                mockPurchaseServiceAccessor.Object,
+                mockTransactionServiceAccessor.Object,
+                mockTransactionDataServiceAccessor.Object,
+                PifdBaseUrl);
+
+                var threeDsOneChallengeResponse = await paymentSessionsHandler.CompleteThreeDSChallenge(AcountId, SessionId, exposedFlightFeatures, new EventTraceActivity());
+
+            if (includeEnforcementFlight || set_ExcludeErrorFeatureFormatFlighting)
+            {
+                Assert.AreEqual(threeDsOneChallengeResponse.ChallengeStatus, PaymentChallengeStatus.Failed);
+            }
+            else
+            {
+                Assert.AreEqual(threeDsOneChallengeResponse.ChallengeStatus, PaymentChallengeStatus.Succeeded);
+            }
+        }
+
+        [TestMethod]
         [DataRow(PXPSD2CompFlights, AcountId, TransactionStatus.Y, ChallengeCompletionIndicator.Y, null, null, PaymentChallengeStatus.Succeeded)]
         [DataRow(PXPSD2CompFlights, AcountId, TransactionStatus.U, ChallengeCompletionIndicator.Y, null, null, PaymentChallengeStatus.Succeeded)]
         [DataRow(PXPSD2CompFlights, AcountId, TransactionStatus.N, ChallengeCompletionIndicator.Y, null, TransactionStatusReason.TSR01, PaymentChallengeStatus.Succeeded)]
@@ -3796,6 +4083,139 @@ namespace CIT.PXService.Tests
 
                 Assert.AreEqual(PaymentChallengeStatus.Failed, authenticationResponse.ChallengeStatus);
             }
+        }
+
+        [TestMethod]
+        [DataRow("jcb", "jcb", PaymentChallengeStatus.Failed)]
+        [DataRow("visa", "jcb", PaymentChallengeStatus.Succeeded)]
+        public async Task CompleteThreeDSChallenge_N19TransStatusFailure(string originalPaymentMethodType, string flightedPaymentMethodType, PaymentChallengeStatus expectedPaymentChallengeStatus)
+        {
+            var exposedFlightFeatures = PXPSD2CompFlights.Split(',').ToList();
+
+            // If the flightedPaymentMethodType MATCHES the sessionId paymentMethodType, we expect the N19 status to FAIL the challenge
+            // Otherwise, proceed as usual 
+            exposedFlightFeatures.Add("PSD2_N_TSR19_FailCardType_" + flightedPaymentMethodType);
+
+            CompletionResponse mockCompletion = new CompletionResponse
+            {
+                TransactionStatus = TransactionStatus.N,
+                TransactionStatusReason = TransactionStatusReason.TSR19
+            };
+
+            var sessionData = new Microsoft.Commerce.Payments.PXService.Model.PXInternal.PaymentSession
+            {
+                Id = SessionId,
+                PaymentMethodType = originalPaymentMethodType,
+                ExposedFlightFeatures = exposedFlightFeatures,
+                ChallengeStatus = PaymentChallengeStatus.Succeeded,
+            };
+
+            mockSessionServiceAccessor
+                .Setup(x => x.GetSessionResourceData<Microsoft.Commerce.Payments.PXService.Model.PXInternal.PaymentSession>(It.IsAny<string>(), It.IsAny<EventTraceActivity>()))
+                .ReturnsAsync(sessionData);
+
+            mockTransactionDataServiceAccessor
+                .Setup(x => x.UpdateCustomerChallengeAttestation(AcountId, SessionId, true, It.IsAny<EventTraceActivity>()))
+                .ReturnsAsync("test")
+                .Verifiable();
+
+            mockPayerAuthServiceAccessor
+                .Setup(x => x.CompleteChallenge(It.IsAny<CompletionRequest>(), It.IsAny<EventTraceActivity>()))
+                .ReturnsAsync(mockCompletion);
+
+            var paymentSessionsHandler = new PaymentSessionsHandlerV2(
+                mockPayerAuthServiceAccessor.Object,
+                mockPims.Object,
+                mockSessionServiceAccessor.Object,
+                mockAccountServiceAccessor.Object,
+                mockPurchaseServiceAccessor.Object,
+                mockTransactionServiceAccessor.Object,
+                mockTransactionDataServiceAccessor.Object,
+                PifdBaseUrl);
+
+            var threeDsOneChallengeResponse = await paymentSessionsHandler.CompleteThreeDSChallenge(AcountId, SessionId, exposedFlightFeatures, new EventTraceActivity());
+
+            Assert.AreEqual(threeDsOneChallengeResponse.ChallengeStatus, expectedPaymentChallengeStatus, "ChallengeStatus is not succeeded");
+        }
+
+        [TestMethod]
+        [DataRow(true, TransactionStatus.N, TransactionStatusReason.TSR09, PaymentChallengeStatus.Failed)]
+        [DataRow(false, TransactionStatus.N, TransactionStatusReason.TSR09, PaymentChallengeStatus.Succeeded)]
+        [DataRow(true, TransactionStatus.Y, TransactionStatusReason.TSR01, PaymentChallengeStatus.Succeeded)]
+        [DataRow(false, TransactionStatus.Y, TransactionStatusReason.TSR01, PaymentChallengeStatus.Succeeded)]
+        public async Task CreatePaymentSession_ChallengeRequired_Authenticate_N09Failure(
+            bool isFlighted,
+            TransactionStatus transStatus,
+            TransactionStatusReason transStatusReason,
+            PaymentChallengeStatus expected_authChallengeStatus)
+        {
+            // Initialize PI with Cvv challenge
+            defaultCreditCardChallenge = true;
+            TestInitialize();
+
+            var paymentSessionsHandler = new PaymentSessionsHandlerV2(
+                mockPayerAuthServiceAccessor.Object,
+                mockPims.Object,
+                mockSessionServiceAccessor.Object,
+                mockAccountServiceAccessor.Object,
+                mockPurchaseServiceAccessor.Object,
+                mockTransactionServiceAccessor.Object,
+                mockTransactionDataServiceAccessor.Object,
+                PifdBaseUrl);
+
+            var flights = new List<string>();
+
+            if (isFlighted)
+            {
+                flights.Add("PXPSD2Auth-N-TSR09-Failed");
+            }
+
+            PaymentSessionData paymentSessionData = new PaymentSessionData()
+            {
+                Language = "en",
+                Amount = 0m,
+                Currency = "EUR",
+                Partner = "webblends",
+                Country = "de",
+                HasPreOrder = true,
+                ChallengeScenario = ChallengeScenario.PaymentTransaction,
+                ChallengeWindowSize = ChallengeWindowSize.Four,
+                IsMOTO = false,
+                BillableAccountId = "blah+",
+                ClassicProduct = "fooBar",
+                PaymentInstrumentId = ChallengeRequiredPiId
+            };
+
+                paymentSessionData.Partner = "cart";
+
+                // Act
+                var sessionResult = await paymentSessionsHandler.CreatePaymentSession(
+                    accountId: AcountId,
+                    paymentSessionData: paymentSessionData,
+                    deviceChannel: DeviceChannel.Browser,
+                    emailAddress: "test@outlook.com",
+                    exposedFlightFeatures: isFlighted ? flights : new List<string>(),
+                    traceActivityId: new EventTraceActivity(),
+                    testContext: new Common.TestContext(),
+                    isMotoAuthorized: "true");
+
+            mockPayerAuthServiceAccessor.Setup(x => x.Authenticate(
+            It.IsAny<Microsoft.Commerce.Payments.PXService.Model.PayerAuthService.AuthenticationRequest>(),
+            It.IsAny<EventTraceActivity>()))
+            .Returns(Task.FromResult(new Microsoft.Commerce.Payments.PXService.Model.PayerAuthService.AuthenticationResponse()
+            {
+                TransactionStatusReason = transStatusReason,
+                TransactionStatus = transStatus
+            }));
+
+            var authResult = await paymentSessionsHandler.Authenticate(AcountId, sessionResult.Id, new AuthenticationRequest(), flights, new EventTraceActivity(), null);
+
+            // Assert
+            Assert.AreEqual(expected_authChallengeStatus, authResult.ChallengeStatus);
+            
+            // Reset the challenge type for PI
+            defaultCreditCardChallenge = false;
+            TestInitialize();
         }
     }
 }

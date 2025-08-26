@@ -1,6 +1,16 @@
 ﻿// <copyright company="Microsoft Corporation">Copyright (c) Microsoft 2019. All rights reserved.</copyright>
 namespace CIT.PXService.Tests
 {
+    using global::Tests.Common.Model;
+    using global::Tests.Common.Model.Pidl;
+    using Microsoft.Commerce.Payments.Common;
+    using Microsoft.Commerce.Payments.PidlFactory.V7;
+    using Microsoft.Commerce.Payments.PXService;
+    using Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge.Model;
+    using Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Mocks;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -9,17 +19,7 @@ namespace CIT.PXService.Tests
     using System.Text;
     using System.Threading.Tasks;
     using System.Web;
-    using global::Tests.Common.Model;
-    using global::Tests.Common.Model.Pidl;
-    using Microsoft.Commerce.Payments.Common;
-    using Microsoft.Commerce.Payments.Common.Tracing;
-    using Microsoft.Commerce.Payments.PidlFactory.V7;
-    using Microsoft.Commerce.Payments.PXService;
-    using Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge.Model;
-    using Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Mocks;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
+    using static Microsoft.Commerce.Payments.PidlFactory.GlobalConstants.ServiceContextKeys;
     using static PXService.GlobalConstants;
     using PXPayerAuthServiceModel = Microsoft.Commerce.Payments.PXService.Model.PayerAuthService;
 
@@ -370,7 +370,7 @@ namespace CIT.PXService.Tests
 
             Microsoft.Commerce.Payments.PXService.Model.PXInternal.PaymentSession internalSession = await PXSettings.SessionServiceAccessor.GetSessionResourceData<Microsoft.Commerce.Payments.PXService.Model.PXInternal.PaymentSession>(
                     session.Id,
-                    new EventTraceActivity());
+                    new Microsoft.Commerce.Tracing.EventTraceActivity());
 
             if (usePaymentSessionsHandlerV2)
             {
@@ -3616,6 +3616,119 @@ namespace CIT.PXService.Tests
                 {
                     Assert.AreEqual(expectedResponse, responseContent);
                 }
+            }
+        }
+
+        [DataRow(true, true)]
+        [DataRow(true, false)]
+        [DataRow(false, true)]
+        [DataRow(false, false)]
+        [TestMethod]
+        public async Task PaymentSessions_SessionLookupOrder(bool exposeFlight, bool validSessionId)
+        {
+            var accountId = "Account001";
+            var piId = "Pi001-Visa-3DS2";
+            var sessionId = "ZFFFFFFFFFFF12345678-1234-1234-1234-123456789012";
+            PaymentChallengeStatus challengeStatus = PaymentChallengeStatus.Succeeded;
+            var response = "{\"Id\":\"" + sessionId + "\",\"piCid\":\"" + accountId + "\",\"SessionType\":0,\"Data\":\"{\\\"ExposedFlightFeatures\\\":[],\\\"PayerAuthApiVersion\\\":\\\"2019-04-16\\\",\\\"AccountId\\\":\\\"" + accountId + "\\\",\\\"BrowserInfo\\\":null,\\\"MethodData\\\":null,\\\"AuthenticationResponse\\\":null,\\\"billableAccountId\\\":null,\\\"classicProduct\\\":null,\\\"EmailAddress\\\":null,\\\"Language\\\":\\\"en-us\\\",\\\"payment_session_id\\\":\\\"" + sessionId + "\\\",\\\"account_id\\\":\\\"" + accountId + "\\\",\\\"caid\\\":null,\\\"payment_instrument_id\\\":\\\"" + piId + "\\\",\\\"partner\\\":\\\"Azure\\\",\\\"ChallengeStatus\\\":\\\"" + challengeStatus + "\\\",\\\"amount\\\":800.0,\\\"currency\\\":\\\"INR\\\",\\\"country\\\":\\\"in\\\",\\\"has_pre_order\\\":false,\\\"is_legacy\\\":false,\\\"is_moto\\\":false,\\\"three_dsecure_scenario\\\":\\\"PaymentTransaction\\\",\\\"payment_method_family\\\":\\\"credit_card\\\",\\\"payment_method_type\\\":\\\"MasterCard\\\",\\\"device_channel\\\":\\\"browser\\\",\\\"is_challenge_required\\\":true,\\\"purchaseOrderId\\\":null}\",\"EncryptData\":false,\"Result\":null,\"State\":\"INCOMPLETE\",\"TestContext\":null}";
+            var piSession = "{\"Id\":\"" + sessionId + "\",\"piCid\":\"" + accountId + "\",\"SessionType\":0,\"Data\":\"{\\\"sessionId\\\":\\\"ZFFFFFFFFFFF12345678-1234-1234-1234-123456789012\\\",\\\"accountId\\\":\\\"Account001\\\",\\\"requiredChallenge\\\":[\\\"3ds2\\\"]}\",\"EncryptData\":false,\"Result\":null,\"State\":\"INCOMPLETE\",\"TestContext\":null}";
+
+            var extendedPI = PimsMockResponseProvider.GetPaymentInstrument(accountId, piId);
+            PXSettings.PimsService.ArrangeResponse(JsonConvert.SerializeObject(extendedPI), HttpStatusCode.OK, null, ".*/extendedView.*");
+
+            PXSettings.SessionService.ResponseProvider.SessionStore.Add(sessionId, response);
+
+            PXSettings.SessionService.ResponseProvider.SessionStore.Add("PX-3DS2-" + piId, piSession);
+            PXFlightHandler.AddToEnabledFlights("PXEnablePSD2PaymentInstrumentSession");
+
+            if (exposeFlight)
+            {
+                PXFlightHandler.AddToEnabledFlights("PXEnableGetSessionWithSessionId");
+            }
+
+            if (!validSessionId)
+            {
+                sessionId = "123-123-123-123";
+            }
+
+            // Act
+            var pxResponse = await PXClient.GetAsync(
+                GetPXServiceUrl(string.Format("/v7.0/{0}/paymentSessions/{1}/{2}/AuthenticationStatus", accountId, sessionId, piId)));
+            var pxContent = JsonConvert.DeserializeObject<AuthenticationStatus>(await pxResponse.Content.ReadAsStringAsync());
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.OK, pxResponse.StatusCode, "StatusCode");
+            Assert.AreEqual(true, pxContent.Verified, "Verified");
+            Assert.AreEqual(piId, pxContent.PiId, "PiId");
+            Assert.AreEqual(sessionId, pxContent.SessionId, "SessionId");
+        }
+
+        [DataRow(true, "azure", "Azure", "EUR", 120, true)] // Relax enforcement
+        [DataRow(false, "azure", "Azure", "EUR", 120, true)] // Do not relax enforcement
+        [DataRow(true, "webblends", "Azure", "EUR", 120, true)] // Mismatched partner name, don't relax enforcement for webblends
+        [DataRow(true, "webblends", "", "EUR", 120, true)] // Relax enforcement, no partner name
+        [DataRow(true, "webblends", "Azure", "USD", 120, false)] // Mismatched partner name, don't relax enforcement for webblends, return failed validation
+        [DataRow(true, "webblends", "Azure", "EUR", 0, true)] // Mismatched partner name, don't relax enforcement for webblends, return failed validation
+        [TestMethod]
+        public async Task VerifyAdditionalSessionDataParams_RelaxEnforcement(bool includeFlight, string relaxedEnforcementPartner, string paymentSessionPartner, string paymentContextCurrency, int amount, bool verifiedResult)
+        {
+            // Arrange
+            var accountId = "Account001";
+            var piId = "Pi001-Visa-3DS2";
+            var sessionId = "ZFFFFFFFFFFF12345678-1234-1234-1234-123456789012";
+            var challengeStatus = PaymentChallengeStatus.Succeeded;
+            var response = "{\"Id\":\"" + sessionId + "\",\"piCid\":\"" + accountId + "\",\"SessionType\":0,\"Data\":\"{\\\"ExposedFlightFeatures\\\":[],\\\"PayerAuthApiVersion\\\":\\\"2019-04-16\\\",\\\"AccountId\\\":\\\"" + accountId + "\\\",\\\"BrowserInfo\\\":null,\\\"MethodData\\\":null,\\\"AuthenticationResponse\\\":null,\\\"billableAccountId\\\":null,\\\"classicProduct\\\":null,\\\"EmailAddress\\\":null,\\\"Language\\\":\\\"en-us\\\",\\\"payment_session_id\\\":\\\"" + sessionId + "\\\",\\\"account_id\\\":\\\"" + accountId + "\\\",\\\"caid\\\":null,\\\"payment_instrument_id\\\":\\\"" + piId + "\\\",\\\"partner\\\":\\\"" + paymentSessionPartner + "\\\",\\\"ChallengeStatus\\\":\\\"" + challengeStatus + "\\\",\\\"amount\\\":" + amount + ",\\\"currency\\\":\\\"EUR\\\",\\\"country\\\":\\\"de\\\",\\\"has_pre_order\\\":false,\\\"is_legacy\\\":false,\\\"is_moto\\\":false,\\\"three_dsecure_scenario\\\":\\\"PaymentTransaction\\\",\\\"payment_method_family\\\":\\\"credit_card\\\",\\\"payment_method_type\\\":\\\"MasterCard\\\",\\\"device_channel\\\":\\\"browser\\\",\\\"purchase_order_id\\\":\\\"123456\\\",\\\"is_challenge_required\\\":true}\",\"EncryptData\":false,\"Result\":null,\"State\":\"INCOMPLETE\",\"TestContext\":null}";
+
+            var extendedPI = PimsMockResponseProvider.GetPaymentInstrument(accountId, piId);
+            PXSettings.PimsService.ArrangeResponse(JsonConvert.SerializeObject(extendedPI), HttpStatusCode.OK, null, ".*/extendedView.*");
+
+            PXSettings.SessionService.ResponseProvider.SessionStore.Add(sessionId, response);
+            PXFlightHandler.AddToEnabledFlights("ValidatePaymentSessionProperties");
+            PXFlightHandler.AddToEnabledFlights("ValidatePaymentSessionPropertiesLogging");
+
+            // Act
+            var paymentContext = new object();
+
+            paymentContext = new
+            {
+                currency = paymentContextCurrency,
+                country = "de",
+                partner = "Azure",
+                hasPreOrder = false,
+                isMOTO = false,
+                challengeScenario = "PaymentTransaction",
+                purchaseOrderId = "123456",
+                pretax = 100,
+                postTax = 150
+            };
+
+            if (includeFlight)
+            {
+                PXFlightHandler.AddToEnabledFlights("PXAdditionalVerificationRelaxEnforcement_" + relaxedEnforcementPartner);
+            }
+
+            if (amount == 0)
+            {
+                PXFlightHandler.AddToEnabledFlights("PXSkipAdditionalValidationForZeroAmount");
+            }
+
+            var pxResponse = await PXClient.GetAsync(
+                GetPXServiceUrl(
+                    string.Format(
+                        "/v7.0/{0}/paymentSessions/{1}/{2}/AuthenticationStatus?paymentContext={3}",
+                        accountId,
+                        sessionId,
+                        piId,
+                        HttpUtility.UrlEncode(JsonConvert.SerializeObject(paymentContext)))));
+
+            var pxContent = JsonConvert.DeserializeObject<AuthenticationStatus>(await pxResponse.Content.ReadAsStringAsync());
+
+            Assert.AreEqual(HttpStatusCode.OK, pxResponse.StatusCode, "StatusCode");
+            Assert.AreEqual(verifiedResult, pxContent.Verified, "Verified");
+
+            if (verifiedResult == false)
+            {
+                Assert.AreEqual(VerificationResult.CurrencyMismatch, pxContent.FailureReason, "FailureReason");
             }
         }
     }

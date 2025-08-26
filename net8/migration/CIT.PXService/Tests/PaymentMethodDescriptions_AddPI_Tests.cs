@@ -3,18 +3,14 @@
 namespace CIT.PXService.Tests
 {
     using global::Tests.Common.Model.Pidl;
-    using global::Tests.Common.Model.Pims;
     using Microsoft.Commerce.Payments.PXService.Model.PXInternal;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.Linq;
     using System.Net;
-    using System.Net.Http;
     using System.Threading.Tasks;
-    using System.Web.Routing;
 
     [TestClass]
     public class PaymentMethodDescriptions_AddPI_Tests : TestBase
@@ -1520,6 +1516,194 @@ namespace CIT.PXService.Tests
                     Assert.IsTrue(expiryMonth.PossibleOptions != null && expiryMonth.PossibleValues != null, "PossibleOptions and PossibleValues of expiry Monthare expected to be not null");
                     Assert.IsTrue(expiryYear.PossibleOptions != null && expiryYear.PossibleValues != null, "PossibleOptions and PossibleValues of expiry Year are expected to be not null");
                 }
+            }
+
+            PXSettings.PartnerSettingsService.ResetToDefaults();
+        }
+
+        [DataRow("battlenet", true, "PXChangeExpiryMonthYearToExpiryDateTextBox", 1)]
+        [DataRow("battlenet", false, "PXChangeExpiryMonthYearToExpiryDateTextBox", 1)]
+        [DataRow("battlenet", true, null, 2)]
+        [DataRow("battlenet", false, null, 0)]
+        [DataTestMethod]
+        public async Task GePaymentMethodDescriptions_ExpiryDateTextBox(string partner, bool enableFeatureWithPSS, string flights, int count)
+        {
+            // Arrange
+            string requestUrl = $"/v7.0/Account001/paymentMethodDescriptions?partner={partner}&operation=add&country=US&language=en-US&family=credit_card&type=amex%2Cvisa%2Cmc%2Cdiscover%2Cjcb";
+            string expectedPSSResponse = "{\"add\":{\"template\":\"defaulttemplate\",\"redirectionPattern\":\"inline\",\"resources\":null,\"features\":{\"customizeStructure\":{\"applicableMarkets\":[],\"displayCustomizationDetail\":[{\"removeGroupForExpiryMonthAndYear\":true}]},\"removeElement\":{\"applicableMarkets\":[],\"displayCustomizationDetail\":[{\"removeAddCreditDebitCardHeading\":true,\"removeStarRequiredTextGroup\":true,\"removeMicrosoftPrivacyTextGroup\":true}]},\"hideElement\":{\"applicableMarkets\":[],\"displayCustomizationDetail\":[{\"hideAcceptCardMessage\":true,\"hideCardLogos\":true,\"hideAddress\":true,\"hidepaymentOptionSaveText\":true}]},\"singleMarketDirective\":{\"applicableMarkets\":[],\"displayCustomizationDetail\":null},\"enableElement\":{\"applicableMarkets\":[],\"displayCustomizationDetail\":[{\"enableCountryAddorUpdateCC\":true}]}}}}";
+
+            if (enableFeatureWithPSS)
+            {
+                expectedPSSResponse = "{\"add\":{\"template\":\"defaulttemplate\",\"redirectionPattern\":\"inline\",\"resources\":null,\"features\":{\"changeExpiryStyleToTextBox\":{\"applicableMarkets\":[]},\"customizeStructure\":{\"applicableMarkets\":[],\"displayCustomizationDetail\":[{\"removeGroupForExpiryMonthAndYear\":true}]},\"removeElement\":{\"applicableMarkets\":[],\"displayCustomizationDetail\":[{\"removeAddCreditDebitCardHeading\":true,\"removeStarRequiredTextGroup\":true,\"removeMicrosoftPrivacyTextGroup\":true}]},\"hideElement\":{\"applicableMarkets\":[],\"displayCustomizationDetail\":[{\"hideAcceptCardMessage\":true,\"hideCardLogos\":true,\"hideAddress\":true,\"hidepaymentOptionSaveText\":true}]},\"singleMarketDirective\":{\"applicableMarkets\":[],\"displayCustomizationDetail\":null},\"enableElement\":{\"applicableMarkets\":[],\"displayCustomizationDetail\":[{\"enableCountryAddorUpdateCC\":true}]}}}}";
+            }
+
+            PXSettings.PartnerSettingsService.ArrangeResponse(expectedPSSResponse);
+
+            Dictionary<string, string> headers = new Dictionary<string, string>
+            {
+                { "x-ms-flight", flights },
+            };
+
+            // Act            
+            List<PIDLResource> pidls = await GetPidlFromPXService(requestUrl, additionaHeaders: headers);
+
+            // Assert
+            Assert.IsNotNull(pidls, "Pidls expected to not be null");
+            foreach (var pidl in pidls)
+            {
+                var expiryGroup = pidl.GetDisplayHintById("expiryGroup");
+                PropertyDisplayHint expiryMonth = pidl.GetDisplayHintById("expiryMonth") as PropertyDisplayHint;
+                PropertyDisplayHint expiryYear = pidl.GetDisplayHintById("expiryYear") as PropertyDisplayHint;
+
+                PropertyDisplayHint expiryDate = pidl.GetDisplayHintById("expiryDate") as PropertyDisplayHint;
+
+                PropertyDescription expiryMonthDataDescription = pidl.GetPropertyDescriptionByPropertyName("expiryMonth");
+                PropertyDescription expiryYearDataDescription = pidl.GetPropertyDescriptionByPropertyName("expiryYear");
+                PropertyDescription expiryDateDataDescription = pidl.GetPropertyDescriptionByPropertyName("expiryDate");
+
+                Assert.IsNotNull(expiryGroup, "expiryGroup is expected to be not null");
+                Assert.IsNotNull(expiryMonth, "expiryMonth is expected to be not null");
+                Assert.IsNotNull(expiryYear, "expiryYear is expected to be not null");
+                Assert.IsNotNull(expiryMonthDataDescription, "expiryMonthDataDescription is expected to be not null");
+                Assert.IsNotNull(expiryYearDataDescription, "expiryYearDataDescription is expected to be not null");
+
+                if (enableFeatureWithPSS || flights != null)
+                {
+                    if (enableFeatureWithPSS)
+                    {
+                        Assert.IsTrue(expiryMonth.PossibleOptions == null && expiryMonth.PossibleValues == null, "PossibleOptions and PossibleValues of expiry Monthare expected to be null");
+                        Assert.IsTrue(expiryYear.PossibleOptions == null && expiryYear.PossibleValues == null, "PossibleOptions and PossibleValues of expiry Year are expected to be null");
+                        Assert.AreEqual("YY", expiryYear.DisplayDescription);
+                        Assert.AreEqual("MM", expiryMonth.DisplayDescription);
+
+                        Assert.IsTrue(expiryYearDataDescription.Validations.Any(v => v.ValidationType == "regex" && v.ErrorCode == "expiry_year_invalid"));
+                        Assert.IsTrue(expiryMonthDataDescription.Validations.Any(v => v.ValidationType == "regex" && v.ErrorCode == "expiry_month_invalid"));
+                    }
+
+                    if (flights != null)
+                    {
+                        Assert.IsNotNull(expiryDate, "expiryDate is expected to be not null");
+                        Assert.IsNotNull(expiryDateDataDescription, "expiryDateDataDescription is expected to be not null");
+                        Assert.AreEqual("MM/YY", expiryDate.DisplayDescription);
+                        Assert.IsNotNull(expiryDateDataDescription.SideEffects, "expiryDateDataDescription side effects is expected to be not null");
+                    }
+
+                    Assert.AreEqual(count, expiryYearDataDescription.Transformation.Count, "Transformation should contain two entries");
+                    Assert.IsNotNull(expiryYearDataDescription.Transformation["forSubmit"]);
+
+                    Assert.AreEqual(count, expiryMonthDataDescription.Transformation.Count, "Transformation should contain two entries");
+                    Assert.IsNotNull(expiryMonthDataDescription.Transformation["forSubmit"]);
+                }
+                else
+                {
+                    Assert.IsNull(expiryDate, "expiryDate is expected to be null");
+                    Assert.IsNull(expiryDateDataDescription, "expiryDateDataDescription is expected to be null");
+
+                    Assert.IsTrue(expiryMonth.PossibleOptions != null && expiryMonth.PossibleValues != null, "PossibleOptions and PossibleValues of expiry Monthare expected to be not null");
+                    Assert.IsTrue(expiryYear.PossibleOptions != null && expiryYear.PossibleValues != null, "PossibleOptions and PossibleValues of expiry Year are expected to be not null");
+                }
+            }
+
+            PXSettings.PartnerSettingsService.ResetToDefaults();
+        }
+
+        [DataRow("battlenet", true)]
+        [DataRow("battlenet", false)]
+        [DataTestMethod]
+        public async Task GePaymentMethodDescriptions_CombineExpiryToExpiryDateTextBox(string partner, bool enableFeatureWithPSS)
+        {
+            // Arrange
+            string requestUrl = $"/v7.0/Account001/paymentMethodDescriptions?partner={partner}&operation=add&country=US&language=en-US&family=credit_card&type=amex%2Cvisa%2Cmc%2Cdiscover%2Cjcb";
+            string expectedPSSResponse = "{\"add\":{\"template\":\"defaulttemplate\",\"redirectionPattern\":\"inline\",\"resources\":null,\"features\":{\"customizeStructure\":{\"applicableMarkets\":[],\"displayCustomizationDetail\":[{\"removeGroupForExpiryMonthAndYear\":true}]},\"removeElement\":{\"applicableMarkets\":[],\"displayCustomizationDetail\":[{\"removeAddCreditDebitCardHeading\":true,\"removeStarRequiredTextGroup\":true,\"removeMicrosoftPrivacyTextGroup\":true}]},\"hideElement\":{\"applicableMarkets\":[],\"displayCustomizationDetail\":[{\"hideAcceptCardMessage\":true,\"hideCardLogos\":true,\"hideAddress\":true,\"hidepaymentOptionSaveText\":true}]},\"singleMarketDirective\":{\"applicableMarkets\":[],\"displayCustomizationDetail\":null},\"enableElement\":{\"applicableMarkets\":[],\"displayCustomizationDetail\":[{\"enableCountryAddorUpdateCC\":true}]}}}}";
+
+            if (enableFeatureWithPSS)
+            {
+                expectedPSSResponse = "{\"add\":{\"template\":\"defaulttemplate\",\"redirectionPattern\":\"inline\",\"resources\":null,\"features\":{\"combineExpiryMonthYearToDateTextBox\":{\"applicableMarkets\":[]},\"customizeStructure\":{\"applicableMarkets\":[],\"displayCustomizationDetail\":[{\"removeGroupForExpiryMonthAndYear\":true}]},\"removeElement\":{\"applicableMarkets\":[],\"displayCustomizationDetail\":[{\"removeAddCreditDebitCardHeading\":true,\"removeStarRequiredTextGroup\":true,\"removeMicrosoftPrivacyTextGroup\":true}]},\"hideElement\":{\"applicableMarkets\":[],\"displayCustomizationDetail\":[{\"hideAcceptCardMessage\":true,\"hideCardLogos\":true,\"hideAddress\":true,\"hidepaymentOptionSaveText\":true}]},\"singleMarketDirective\":{\"applicableMarkets\":[],\"displayCustomizationDetail\":null},\"enableElement\":{\"applicableMarkets\":[],\"displayCustomizationDetail\":[{\"enableCountryAddorUpdateCC\":true}]}}}}";
+            }
+
+            PXSettings.PartnerSettingsService.ArrangeResponse(expectedPSSResponse);
+
+            // Act
+            List<PIDLResource> pidls = await GetPidlFromPXService(requestUrl);
+
+            // Assert
+            Assert.IsNotNull(pidls, "Pidls expected to not be null");
+            foreach (var pidl in pidls)
+            {
+                var expiryGroup = pidl.GetDisplayHintById("expiryGroup");
+                PropertyDisplayHint expiryMonth = pidl.GetDisplayHintById("expiryMonth") as PropertyDisplayHint;
+                PropertyDisplayHint expiryYear = pidl.GetDisplayHintById("expiryYear") as PropertyDisplayHint;
+
+                PropertyDisplayHint expiryDate = pidl.GetDisplayHintById("expiryDate") as PropertyDisplayHint;
+
+                PropertyDescription expiryMonthDataDescription = pidl.GetPropertyDescriptionByPropertyName("expiryMonth");
+                PropertyDescription expiryYearDataDescription = pidl.GetPropertyDescriptionByPropertyName("expiryYear");
+                PropertyDescription expiryDateDataDescription = pidl.GetPropertyDescriptionByPropertyName("expiryDate");
+
+                Assert.IsNotNull(expiryGroup, "expiryGroup is expected to be not null");
+                Assert.IsNotNull(expiryMonth, "expiryMonth is expected to be not null");
+                Assert.IsNotNull(expiryYear, "expiryYear is expected to be not null");
+                Assert.IsNotNull(expiryMonthDataDescription, "expiryMonthDataDescription is expected to be not null");
+                Assert.IsNotNull(expiryYearDataDescription, "expiryYearDataDescription is expected to be not null");
+
+                if (enableFeatureWithPSS)
+                {
+                    Assert.IsNotNull(expiryDate, "expiryDate is expected to be not null");
+                    Assert.IsNotNull(expiryDateDataDescription, "expiryDateDataDescription is expected to be not null");
+                    Assert.AreEqual("MM/YY", expiryDate.DisplayDescription);
+                    Assert.IsTrue(expiryDate.PossibleOptions == null && expiryDate.PossibleValues == null, "PossibleOptions and PossibleValues of expiry Monthare expected to be null");
+
+                    ValidatePidlPropertyRegex(pidl, "expiryDate", "02/2049", true);
+                    ValidatePidlPropertyRegex(pidl, "expiryDate", "02/2050", false);
+                    ValidatePidlPropertyRegex(pidl, "expiryDate", "00/2029", false);
+                    ValidatePidlPropertyRegex(pidl, "expiryDate", "12/29", true);
+
+                    // Checks for last year expiry date, for which the regex is expected to fail,
+                    // This test will fail next year unless regex is updated, this failure is expected.
+                    // Update regex in PidFactory Constants for expiryDate to allow years starting from current only
+                    string lastYear = DateTime.Now.AddYears(-1).ToString("yyyy");
+                    ValidatePidlPropertyRegex(pidl, "expiryDate", $"12/{lastYear}", false);
+                }
+                else
+                {
+                    Assert.IsNull(expiryDate, "expiryDate is expected to be null");
+                    Assert.IsNull(expiryDateDataDescription, "expiryDateDataDescription is expected to be null");
+                }
+            }
+
+            PXSettings.PartnerSettingsService.ResetToDefaults();
+        }
+
+        [DataRow("macmanage", "direct_debit", Constants.PaymentMethodFamilyType.Sepa)]
+        [DataTestMethod]
+        public async Task GetPaymentMethodDescriptions_SEPA_NCE(string partner, string family, string type = null)
+        {
+            // Arrange
+            string requestUrl = $"/v7.0/my-ba/paymentMethodDescriptions?partner={partner}&operation=add&country=de&language=en-US&family=direct_debit&type=sepa";
+            string expectedPSSResponse = "{\"add\":{\"template\":\"defaulttemplate\",\"redirectionPattern\":\"inline\",\"resources\":null,\"features\":{\"customizeSEPAForm\":{\"applicableMarkets\":[],\"displayCustomizationDetail\":[{\"customizeNCESEPA\":true}]},\"singleMarketDirective\":{\"applicableMarkets\":[],\"displayCustomizationDetail\":null}}}}";
+
+            PXSettings.PartnerSettingsService.ArrangeResponse(expectedPSSResponse);
+
+            Dictionary<string, string> headers = new Dictionary<string, string>
+            {
+                { "x-ms-flight", "EnableModern,PxEnableRiskEligibilityCheck" },
+                { "x-ms-billingAccountId", "commerceRootId:organizationId" },
+            };
+
+            // Act
+            List<PIDLResource> pidls = await GetPidlFromPXService(requestUrl, additionaHeaders: headers);
+
+            // Assert
+            Assert.IsNotNull(pidls, "Pidls expected to not be null");
+            foreach (var pidl in pidls)
+            {
+                var addDirectDebitSepaHeading = pidl.GetDisplayHintById("addDirectDebitSepaNewHeading") as HeadingDisplayHint;
+                Assert.IsNotNull(addDirectDebitSepaHeading, "Direct Debit Sepa Heading is expected to be not null");
+                Assert.AreEqual("Set up to pay by SEPA direct debit", addDirectDebitSepaHeading.DisplayContent);
+
+                var directDebitSepaUpdateLine1 = pidl.GetDisplayHintById("directDebitSepaUpdateLine1") as TextDisplayHint;
+                Assert.IsNotNull(directDebitSepaUpdateLine1, "Direct Debit Sepa allow popup is expected to be not null");
+                Assert.AreEqual("Allow popups on your browser to be redirected to the Direct debit agreement.", directDebitSepaUpdateLine1.DisplayContent);
             }
 
             PXSettings.PartnerSettingsService.ResetToDefaults();

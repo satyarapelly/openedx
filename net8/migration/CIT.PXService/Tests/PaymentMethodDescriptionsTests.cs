@@ -1,4 +1,4 @@
-// <copyright file="PaymentMethodDescriptionsTests.cs" company="Microsoft">Copyright (c) Microsoft. All rights reserved.</copyright>
+﻿// <copyright file="PaymentMethodDescriptionsTests.cs" company="Microsoft">Copyright (c) Microsoft. All rights reserved.</copyright>
 
 namespace CIT.PXService.Tests
 {
@@ -1583,6 +1583,10 @@ namespace CIT.PXService.Tests
 
             foreach (PIDLResource pidlResource in pidls)
             {
+                HeadingDisplayHint headingDisplayHint = pidlResource.GetDisplayHintById(Constants.DisplayHintIds.PaymentInstrumentSelectHeading) as HeadingDisplayHint;
+                Assert.IsNotNull(headingDisplayHint, "Expected PaymentInstrumentSelectHeading should not be null.");
+                Assert.AreEqual("Pick a way to pay", headingDisplayHint.DisplayContent, "Expected PaymentInstrumentSelectHeading text should match.");
+
                 ButtonDisplayHint backButton = pidlResource.GetDisplayHintById(Constants.ButtonDisplayHintIds.HiddenCancelBackButton) as ButtonDisplayHint;
                 Assert.IsNotNull(backButton, "Expected ButtonDisplayHint should not be null.");
                 Assert.IsFalse(backButton.IsHidden, "Expected ButtonDisplayHint should not be hidden.");
@@ -1597,6 +1601,11 @@ namespace CIT.PXService.Tests
                 Assert.IsNotNull(redeemGiftCardButton, "Expected RedeemGiftCardLink ButtonDisplayHint should not be null.");
                 Assert.IsTrue(redeemGiftCardButton.DisplayTags.ContainsKey("giftCardIcon"), "Expected RedeemGiftCardLink ButtonDisplayHint should have an giftCardIcon tag");
                 Assert.IsTrue(redeemGiftCardButton.StyleHints.Contains("left"), "Expected RedeemGiftCardLink ButtonDisplayHint should have a left style hint.");
+
+                DisplayHintAction redeemGiftCardButtonAction = redeemGiftCardButton.Action;
+                ActionContext redeemGiftCardActionContext = JsonConvert.DeserializeObject<ActionContext>(JsonConvert.SerializeObject(redeemGiftCardButtonAction.Context));
+                Assert.AreEqual("redeemGiftCardLink", redeemGiftCardActionContext.Instance);
+                Assert.IsNull(redeemGiftCardActionContext.ResourceActionContext);
 
                 PropertyDisplayHint listPI = pidlResource.GetDisplayHintById(Constants.DisplayHintIds.PaymentInstrument) as PropertyDisplayHint;
                 var options = listPI?.PossibleOptions;
@@ -4813,6 +4822,120 @@ namespace CIT.PXService.Tests
             }
         }
 
+        [DataRow("officesmb", false, true, true)]
+        [DataRow("officesmb", false, false, true)]
+        [DataRow("macmanage", false, true, true)]
+        [DataRow("macmanage", false, false, true)]
+        [DataRow("cart", true, false, false)]
+        [DataRow("cart", false, false, false)]
+        [DataRow("amc", true, false, false)]
+        [DataRow("amc", false, false, false)]
+        [DataRow("commercialstores", true, false, false)]
+        [DataRow("commercialstores", false, false, false)]
+        [DataRow("webblends", true, false, false)]
+        [DataRow("webblends", false, false, false)]
+        [DataTestMethod]
+        public async Task GetPaymentMethod_Validate_FeatureAddAsteriskToAllMandatoryFields(string partner, bool isFeatureFlightPXEnableAddAsteriskToAllMandatoryFieldsEnable, bool isFeatureAddAsteriskToAllMandatoryFieldsStatus, bool isPSSPartnerEnabledForPartner)
+        {
+            // Arrange
+            List<string> operations = new List<string> { Constants.OperationTypes.Add, Constants.OperationTypes.Update };
+            string partnerSettingResponse;
+            var exposedFlightFeatures = string.Empty;
+
+            Dictionary<string, string> familyWithTypes = new Dictionary<string, string>()
+            {
+                { "mc%2Cvisa%2Camex%2Cdiscover%2Cjcb", "credit_card" },
+                { "elo", "credit_card" },
+                { "verve", "credit_card" },
+                { "hipercard", "credit_card" },
+                { "sepa", "direct_debit" },
+                { "paypal", "ewallet" },
+                { "klarna", "invoice_credit" },
+            };
+
+            foreach (var familyWithType in familyWithTypes)
+            {
+                var headers = new Dictionary<string, string>()
+                {
+                    {
+                        "x-ms-flight", "PXDisablePSSCache"
+                    }
+                };
+
+                foreach (string operation in operations)
+                {
+                    if ((operation == Constants.OperationTypes.Update && string.Equals(familyWithType.Key, Constants.PaymentMethodFamilyType.PayPal, StringComparison.OrdinalIgnoreCase))
+                        || (operation == Constants.OperationTypes.Update && string.Equals(familyWithType.Key, Constants.PaymentMethodFamilyType.Klarna, StringComparison.OrdinalIgnoreCase))
+                        || (operation == Constants.OperationTypes.Add && string.Equals(familyWithType.Key, Constants.PaymentMethodFamilyType.Klarna, StringComparison.OrdinalIgnoreCase) && string.Equals(partner, Constants.PartnerNames.Cart, StringComparison.OrdinalIgnoreCase))
+                        || (string.Equals(partner, Constants.VirtualPartnerNames.Macmanage) && !string.Equals(familyWithType.Key, "credit_card", StringComparison.OrdinalIgnoreCase)))
+                    {
+                        break;
+                    }
+
+                    string country =
+                        familyWithType.Key == Constants.PaymentMethodFamilyType.Verve ? "ng" :
+                        familyWithType.Key == Constants.PaymentMethodFamilyType.Hipercard || familyWithType.Key == Constants.PaymentMethodFamilyType.Elo ? "br" :
+                        familyWithType.Key == Constants.PaymentMethodFamilyType.Rupay ? "in" :
+                        familyWithType.Key == Constants.PaymentMethodFamilyType.Sepa ? "de" :
+                        familyWithType.Key == Constants.PaymentMethodFamilyType.PayPal ? "us" :
+                        familyWithType.Key == Constants.PaymentMethodFamilyType.Klarna ? "dk" :
+                        "us";
+
+                    string url = $"/v7.0/Account001/paymentMethodDescriptions?partner={partner}&country={country}&language=en-us&operation={operation}&family={familyWithType.Value}&type={familyWithType.Key}";
+
+                        if (isPSSPartnerEnabledForPartner)
+                        {
+                            string pssPartnerName = string.Equals(partner, Constants.VirtualPartnerNames.OfficeSmb) ? "defaulttemplate" : "twopage";
+                            partnerSettingResponse = "{\"add\":{\"template\":\"" + pssPartnerName + "\",\"features\":{\"customizeDisplayContent\":{\"applicableMarkets\":[],\"displayCustomizationDetail\":[{\"addAsteriskToAllMandatoryFields\":" + isFeatureAddAsteriskToAllMandatoryFieldsStatus.ToString().ToLower() + "}]}}},\"update\":{\"template\":\"" + pssPartnerName + "\",\"features\":{\"customizeDisplayContent\":{\"applicableMarkets\":[],\"displayCustomizationDetail\":[{\"addAsteriskToAllMandatoryFields\":" + isFeatureAddAsteriskToAllMandatoryFieldsStatus.ToString().ToLower() + "}]}}}}";
+                            PXSettings.PartnerSettingsService.ArrangeResponse(partnerSettingResponse);
+                        }
+
+                        if (isFeatureFlightPXEnableAddAsteriskToAllMandatoryFieldsEnable)
+                        {
+                            PXFlightHandler.AddToEnabledFlights(Constants.PartnerFlightValues.PXEnableAddAsteriskToAllMandatoryFields);
+                        }
+
+                        if (string.Equals(familyWithType.Key, Constants.PaymentMethodFamilyType.Rupay, StringComparison.OrdinalIgnoreCase))
+                        {
+                            exposedFlightFeatures = "PXEnableRupayForIN,vnext";
+                        }
+
+                        // Act
+                        List<PIDLResource> pidls = await GetPidlFromPXService(url, flightNames: exposedFlightFeatures, additionaHeaders: headers);
+
+                        // Assert
+                        Assert.IsNotNull(pidls, "Pidl is expected to be not null");
+
+                    foreach (PIDLResource pidl in pidls)
+                    {
+                        var allHints = pidl?.GetAllDisplayHints()?.OfType<Microsoft.Commerce.Payments.PidlModel.V7.PropertyDisplayHint>().ToList();
+
+                        if (allHints != null)
+                        {
+                            foreach (var propertyDisplayHint in allHints)
+                            {
+                                var propertydescriptionValue = pidl.GetPropertyDescriptionByPropertyName(propertyDisplayHint.PropertyName);
+
+                                // Check DisplayName or DisplayDescription for asterisk
+                                var displayText = propertyDisplayHint.DisplayName ?? propertyDisplayHint.DisplayDescription;
+
+                                // In some cases, displayText may be null or showDisplayName may be false. To handle these scenarios safely, we use an if condition instead of an assert.
+                                if (displayText != null)
+                                {
+                                    Assert.IsNotNull(propertyDisplayHint);
+                                    Assert.IsTrue(((isFeatureAddAsteriskToAllMandatoryFieldsStatus || isFeatureFlightPXEnableAddAsteriskToAllMandatoryFieldsEnable) && propertydescriptionValue.IsOptional != true) ? displayText.EndsWith("*") : !displayText.EndsWith("*"), $"Expected asterisk in DisplayName/Description: {displayText}");
+                                }
+                            }
+                        }
+                    }
+
+                    PXSettings.PartnerSettingsService.ResetToDefaults();
+                    PXSettings.PimsService.ResetToDefaults();
+                    PXFlightHandler.ResetToDefault();
+                }
+            }
+        }
+
         [DataRow("Account001", "pssBasedPartner", true, "add")]
         [DataRow("AccountNoAddress", "pssBasedPartner", true, "add")]
         [DataRow("Account001", "pssBasedPartner", false, "add")]
@@ -7841,6 +7964,7 @@ namespace CIT.PXService.Tests
         [DataRow("webblends")]
         [DataRow("xbox")]
         [DataRow("cart")]
+        [DataRow("defaulttemplate")]
         [DataTestMethod]
         public async Task AddPaymentMethod_Alipay(string partners)
         {
@@ -7857,6 +7981,12 @@ namespace CIT.PXService.Tests
                     Assert.AreEqual(HttpStatusCode.OK, responseCode);
                     var pidls = ReadPidlResourceFromJson(responseBody);
                     Assert.AreEqual(1, pidls.Count);
+
+                    if (pidls[0].DisplayPages != null)
+                    {
+                        var alipayTouGroup = pidls[0].GetDisplayHintById("alipayBillingAgreementFooterTextGroup");
+                        Assert.IsNotNull(alipayTouGroup, "Page expected to have the Alipay TOU link.");
+                    }
                 });
         }
 
@@ -16756,10 +16886,11 @@ namespace CIT.PXService.Tests
             ValidatePidls(pidls);
         }
 
-        [DataRow("us", "add", true)]
-        [DataRow("us", "add", false)]
+        [DataRow("us", "add", true, true)]
+        [DataRow("us", "add", true, false)]
+        [DataRow("us", "add", false, false)]
         [DataTestMethod]
-        public async Task GetPaymentMethod_AddCreditCard_Battlenet_UsingPaymentOrchestratorService(string country, string operation, bool sendDfpIframe)
+        public async Task GetPaymentMethod_AddCreditCard_Battlenet_UsingPaymentOrchestratorService(string country, string operation, bool sendDfpIframe, bool useCommerceRiskDfpIframe)
         {
             // Arrange
             string url = $"/v7.0/paymentMethodDescriptions?partner=battlenet&operation={operation}&language=en-us&family=credit_card&country={country}";
@@ -16778,6 +16909,11 @@ namespace CIT.PXService.Tests
                 headers.Add("x-ms-flight", "PXPaasAddCCDfpIframe");
             }
 
+            if (useCommerceRiskDfpIframe)
+            {
+                headers["x-ms-flight"] = "PXPaasAddCCDfpIframe,PXPaasAddCCDfpIframeForCommerceRisk";
+            }
+
             string requestContextHeaderValue = $"{{\"tenantId\":\"tid\",\"tenantCustomerId\":\"tcid\",\"requestId\":\"wr_12345\",\"paymentAccountId\":\"accountid\"}}";
             headers.Add("x-ms-request-context", requestContextHeaderValue);
 
@@ -16785,10 +16921,10 @@ namespace CIT.PXService.Tests
             List<PIDLResource> pidls = await GetPidlFromPXService(url, additionaHeaders: headers);
 
             // Assert
-            ValidatePidls(pidls, sendDfpIframe);
+            ValidatePidls(pidls, sendDfpIframe, useCommerceRiskDfpIframe);
         }
 
-        private void ValidatePidls(List<PIDLResource> pidls, bool sendDfpIframe = false)
+        private void ValidatePidls(List<PIDLResource> pidls, bool sendDfpIframe = false, bool useCommerceRiskDfpIframe = false)
         {
             Assert.IsNotNull(pidls, "Pidl is expected to be not null");
 
@@ -16830,10 +16966,19 @@ namespace CIT.PXService.Tests
                     Assert.IsTrue(pidl.GetDisplayHintById("acceptedCupInternationalCardGroup").IsHidden);
                 }
 
-                var dfpIframe = pidl.GetDisplayHintById("dfpIframe");
+                IFrameDisplayHint dfpIframe = pidl.GetDisplayHintById("dfpIframe") as IFrameDisplayHint;
                 if (sendDfpIframe)
                 {
                     Assert.IsNotNull(dfpIframe, "DFP iframe should be present");
+
+                    if (!useCommerceRiskDfpIframe)
+                    {
+                        Assert.AreEqual("<!DOCTYPE html><html><head><script src=\"https://fpt.dfp.microsoft.com/mdt.js?session_id=wr_12345&instanceId=8e23e7ff-e2a0-4b71-bede-2f0e7d1f6674\"></script><script>window.onload=function(){if(window.dfp&&typeof window.dfp.doFpt===\"function\"){window.dfp.doFpt(document);}}</script></head><body></body></html>", dfpIframe.DisplayContent);
+                    }
+                    else
+                    {
+                        Assert.AreEqual("<!DOCTYPE html><html><head><script src=\"https://df.cfp.microsoft.com/mdt.js?session_id=wr_12345\"></script><script>window.onload=function(){if(window.dfp&&typeof window.dfp.doFpt===\"function\"){window.dfp.doFpt(document);}}</script></head><body></body></html>", dfpIframe.DisplayContent);
+                    }
                 }
                 else
                 {
@@ -17008,68 +17153,47 @@ namespace CIT.PXService.Tests
                             Assert.AreEqual(expectedChannelValue, channel.DefaultValue, "Device class is expected to be as per user agent");
                         }
 
-                        if (!string.IsNullOrEmpty(enabledFlights) && enabledFlights.Contains("EnableSepaJpmc"))
+                        if (partnerListHasSummarPage.Contains(partner))
                         {
-                            if (partnerListHasSummarPage.Contains(partner))
-                            {
-                                // pidls contains directDebitSepaUpdateNewLine1 in Members of Displaypages[1](Summary Page) as one of the hintid if jpmc flight is on
-                                Assert.IsTrue(pidls[0].DisplayPages[1].Members.Any(x => x.HintId == "directDebitSepaUpdateNewLine1"), "PIDLs Displaypages are expected to contain directDebitSepaUpdateNewLine1");
+                            // pidls contains directDebitSepaUpdateNewLine1 in Members of Displaypages[1](Summary Page) as one of the hintid if jpmc flight is on
+                            Assert.IsTrue(pidls[0].DisplayPages[1].Members.Any(x => x.HintId == "directDebitSepaUpdateNewLine1"), "PIDLs Displaypages are expected to contain directDebitSepaUpdateNewLine1");
 
-                                Assert.IsFalse(pidls[0].DisplayPages[1].Members.Any(x => x.HintId == "directDebitSepaDocuSignText"), "PIDLs Displaypages are not expected to contain directDebitSepaDocuSignText");
+                            Assert.IsFalse(pidls[0].DisplayPages[1].Members.Any(x => x.HintId == "directDebitSepaDocuSignText"), "PIDLs Displaypages are not expected to contain directDebitSepaDocuSignText");
 
-                                // pidls contain new text in Members of Displaypages[0] in contentDisplayHint if jpmc flight is on
-                                bool hasContentDisplayHintOnSummaryPage = pidls[0].DisplayPages[1].Members
-                                    .OfType<ContentDisplayHint>()
-                                    .Any(x => x.DisplayContent == "You'll be redirected to verify your bank account. After that step, you'll be redirected back to Microsoft. If verification is successful, sign the SEPA Direct Debit Mandate and you're done."
-                                    && x.HintId == "directDebitSepaUpdateNewLine1");
+                            // pidls contain new text in Members of Displaypages[0] in contentDisplayHint if jpmc flight is on
+                            bool hasContentDisplayHintOnSummaryPage = pidls[0].DisplayPages[1].Members
+                                .OfType<ContentDisplayHint>()
+                                .Any(x => x.DisplayContent == "You'll be redirected to verify your bank account. After that step, you'll be redirected back to Microsoft. If verification is successful, sign the SEPA Direct Debit Mandate and you're done."
+                                && x.HintId == "directDebitSepaUpdateNewLine1");
 
-                                Assert.IsTrue(hasContentDisplayHintOnSummaryPage, "Expected content display hint not found.");
-                            }
-                            else
-                            {
-                                // pidls contains directDebitSepaUpdateNewLine1 in Members of Displaypages[0] as one of the hintid if jpmc flight is on
-                                Assert.IsTrue(pidls[0].DisplayPages[0].Members.Any(x => x.HintId == "directDebitSepaUpdateNewLine1"), "PIDLs Displaypages are expected to contain directDebitSepaUpdateNewLine1");
-
-                                // pidls contain new text in Members of Displaypages[0] in contentDisplayHint if jpmc flight is on
-                                bool hasContentDisplayHint = pidls[0].DisplayPages[0].Members
-                                    .OfType<ContentDisplayHint>()
-                                    .Any(x => x.DisplayContent == "You'll be redirected to verify your bank account. After that step, you'll be redirected back to Microsoft. If verification is successful, sign the SEPA Direct Debit Mandate and you're done."
-                                    && x.HintId == "directDebitSepaUpdateNewLine1");
-
-                                Assert.IsTrue(hasContentDisplayHint, "Expected content display hint not found.");
-                            }
-
-                            if ((partner != Constants.PartnerNames.Bing) && (partner != Constants.PartnerNames.CommercialStores))
-                            {
-                                // pidls contains addDirectDebitSepaNewHeading in Members of Displaypages[0] as one of the hintid if jpmc flight is on
-                                Assert.IsTrue(pidls[0].DisplayPages[0].Members.Any(x => x.HintId == "addDirectDebitSepaNewHeading"), "PIDLs Displaypages are expected to contain addDirectDebitSepaNewHeading");
-
-                                // pidls contain new text in Members of Displaypages[0] in contentDisplayHint if jpmc flight is on
-                                bool hasContentDisplayHintForHeading = pidls[0].DisplayPages[0].Members
-                                    .OfType<ContentDisplayHint>()
-                                    .Any(x => x.DisplayContent == "Set up to pay by SEPA direct debit"
-                                    && x.HintId == "addDirectDebitSepaNewHeading");
-
-                                Assert.IsTrue(hasContentDisplayHintForHeading, "Expected content display hint not found.");
-                            }
+                            Assert.IsTrue(hasContentDisplayHintOnSummaryPage, "Expected content display hint not found.");
                         }
                         else
                         {
-                            if (partnerListHasSummarPage.Contains(partner))
-                            {
-                                Assert.IsFalse(pidls[0].DisplayPages[1].Members.Any(x => x.HintId == "directDebitSepaUpdateNewLine1"), "PIDLs Displaypages are expected not to contain directDebitSepaUpdateNewLine1");
+                            // pidls contains directDebitSepaUpdateNewLine1 in Members of Displaypages[0] as one of the hintid if jpmc flight is on
+                            Assert.IsTrue(pidls[0].DisplayPages[0].Members.Any(x => x.HintId == "directDebitSepaUpdateNewLine1"), "PIDLs Displaypages are expected to contain directDebitSepaUpdateNewLine1");
 
-                                Assert.IsTrue(pidls[0].DisplayPages[1].Members.Any(x => x.HintId == "directDebitSepaDocuSignText"), "PIDLs Displaypages are expected to contain directDebitSepaDocuSignText");
+                            // pidls contain new text in Members of Displaypages[0] in contentDisplayHint if jpmc flight is on
+                            bool hasContentDisplayHint = pidls[0].DisplayPages[0].Members
+                                .OfType<ContentDisplayHint>()
+                                .Any(x => x.DisplayContent == "You'll be redirected to verify your bank account. After that step, you'll be redirected back to Microsoft. If verification is successful, sign the SEPA Direct Debit Mandate and you're done."
+                                && x.HintId == "directDebitSepaUpdateNewLine1");
 
-                                Assert.IsFalse(pidls[0].DisplayPages[0].Members.Any(x => x.HintId == "addDirectDebitSepaNewHeading"), "PIDLs Displaypages are expected not to contain addDirectDebitSepaNewHeading");
-                            }
-                            else
-                            {
-                                // pidls do not contain directDebitSepaUpdateNewLine1 in Members of Displaypages[0] as one of the hintid if jpmc flight is off
-                                Assert.IsFalse(pidls[0].DisplayPages[0].Members.Any(x => x.HintId == "directDebitSepaUpdateNewLine1"), "PIDLs Displaypages are expected not to contain directDebitSepaUpdateNewLine1");
+                            Assert.IsTrue(hasContentDisplayHint, "Expected content display hint not found.");
+                        }
 
-                                Assert.IsFalse(pidls[0].DisplayPages[0].Members.Any(x => x.HintId == "addDirectDebitSepaNewHeading"), "PIDLs Displaypages are expected not to contain addDirectDebitSepaNewHeading");
-                            }
+                        if ((partner != Constants.PartnerNames.Bing) && (partner != Constants.PartnerNames.CommercialStores))
+                        {
+                            // pidls contains addDirectDebitSepaNewHeading in Members of Displaypages[0] as one of the hintid if jpmc flight is on
+                            Assert.IsTrue(pidls[0].DisplayPages[0].Members.Any(x => x.HintId == "addDirectDebitSepaNewHeading"), "PIDLs Displaypages are expected to contain addDirectDebitSepaNewHeading");
+
+                            // pidls contain new text in Members of Displaypages[0] in contentDisplayHint if jpmc flight is on
+                            bool hasContentDisplayHintForHeading = pidls[0].DisplayPages[0].Members
+                                .OfType<ContentDisplayHint>()
+                                .Any(x => x.DisplayContent == "Set up to pay by SEPA direct debit"
+                                && x.HintId == "addDirectDebitSepaNewHeading");
+
+                            Assert.IsTrue(hasContentDisplayHintForHeading, "Expected content display hint not found.");
                         }
                     }
                     catch (Exception ex)
@@ -17156,6 +17280,35 @@ namespace CIT.PXService.Tests
             }
             
             PXSettings.PartnerSettingsService.Responses.Clear();
+        }
+
+        [DataRow("de", "macmanage")]
+        [DataTestMethod]
+        public async Task GetPaymentMethodDescriptions_SEPA_NCE_Select(string country, string partner)
+        {
+            // Arrange
+            string operation = "select";
+            string accountId = "my-ba";
+
+            Dictionary<string, string> headers = new Dictionary<string, string>
+            {
+                { "x-ms-flight", "EnableModern" },
+                { "x-ms-billingAccountId", "commerceRootId:organizationId" },
+            };
+
+            // Act
+            List<PIDLResource> pidls = new List<PIDLResource>();
+            pidls = await GetPidlFromPXService(
+                string.Format(
+                    "/v7.0/{0}/paymentMethodDescriptions?partner={1}&operation={2}&language=en-us&country={3}",
+                    accountId,
+                    partner,
+                    operation,
+                    country),
+                additionaHeaders: headers);
+
+            // Assert
+            Assert.IsNotNull(pidls, "PIDLs are expected not to be null");
         }
     }
 }

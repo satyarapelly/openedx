@@ -5,7 +5,6 @@ namespace CIT.PXService.Tests
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Commerce.Payments.Pidl.Localization;
     using Microsoft.Commerce.Payments.PidlFactory.V7;
     using Microsoft.Commerce.Payments.PidlModel.V7;
@@ -1542,7 +1541,7 @@ namespace CIT.PXService.Tests
                 "testEmail",
                 "testPidlBaseUrl",
                 requestType,
-                new EventTraceActivity());
+                new Microsoft.Commerce.Tracing.EventTraceActivity());
         }
 
         private ResourceLifecycleStateManager.ErrorResourceState BuildInitialErrorState(
@@ -1584,7 +1583,7 @@ namespace CIT.PXService.Tests
                     }
                 },
                 piid,
-                new EventTraceActivity());
+                new Microsoft.Commerce.Tracing.EventTraceActivity());
         }
     }
 }

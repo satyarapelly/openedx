@@ -103,6 +103,80 @@ namespace CIT.PXService.Tests
         }
 
         /// <summary>
+        /// PSD2 SafetyNet (CallSafetyNetOperation) is ON and POST PayerAuth/Authenticate returns 400
+        /// </summary>
+        [TestMethod]
+        [DataRow(false, "", "PXPSD2SkipUrl_abcd", false)]
+        [DataRow(false, "https://acs.test.com", "PXPSD2SkipUrl_abcd", true)]
+        [DataRow(false, "https://acs.test.com", "PXPSD2SkipUrl_abcd,PXPSD2SkipUrl_test", true)]
+        [DataRow(true, "", "PXPSD2SkipUrl_abcd", false)]
+        [DataRow(true, "https://acs.test.com", "PXPSD2SkipUrl_abcd", true)]  // skip fingerprint enabled but no matching domain
+        [DataRow(true, "https://acs.test.com", "PXPSD2SkipUrl_acstestcom", false)]  // skip fingerprint enabled with matching domain
+        [DataRow(true, "https://acs.test.com:3000", "PXPSD2SkipUrl_acstestcom", false)]  // skip fingerprint enabled with matching domain
+        [DataRow(true, "https://acs.test.co.uk", "PXPSD2SkipUrl_acstestcouk", false)]  // skip fingerprint enabled with matching domain
+        [DataRow(true, "https://test.com", "PXPSD2SkipUrl_testcom", false)]  // skip fingerprint enabled with matching domain
+        [DataRow(true, "https://123.test-int.com", "PXPSD2SkipUrl_123testintcom", false)]  // skip fingerprint enabled with matching domain
+        [DataRow(true, "https://acs.test.com/foo.bar", "PXPSD2SkipUrl_acstestcom", false)]  // skip fingerprint enabled with matching domain
+        [DataRow(true, "https://test.com", "PXPSD2SkipUrl_abcd,PXPSD2SkipUrl_testcom", false)]  // skip fingerprint enabled with matching domain
+        [DataRow(true, "https://test.com", "PXPSD2SkipUrl_testcom,PXPSD2SkipUrl_abcd", false)]  // skip fingerprint enabled with matching domain
+        [DataRow(true, "https://test.com", "PXPSD2SkipUrl_", true)]  // skip fingerprint enabled with malformed flight
+        [DataRow(true, "https://payments-acs-emulator-fzeug0g7atchf8d7.b02.azurefd.net/acs/fingerprint", "PXPSD2SkipUrl_paymentsacsemulatorfzeug0g7atchf8d7b02azurefdnet", false)]
+        public async Task ChallengeDescriptions_SkipsFingerprintForURL(bool skipFingerprint, string threeDSMethodURL, string enabledSkipFlights, bool fingerprintIFrameExpected)
+        {
+            // Arrange
+            PXSettings.PimsService.ResponseProvider.RequiredChallenges = new List<string>() { "3ds2" };
+
+            PXSettings.PayerAuthService.ResponseProvider.ThreeDSMethodUrl = threeDSMethodURL;
+
+            // Act
+            if (skipFingerprint)
+            {
+                PXFlightHandler.AddToEnabledFlights("PXPSD2SkipFingerprintByUrl");
+            }
+
+            List<string> skipDomainFlights = enabledSkipFlights.Split(',').ToList();
+            foreach (var domainFlight in skipDomainFlights)
+            {
+                PXFlightHandler.AddToEnabledFlights(domainFlight);
+            }
+
+            var pxResponse = await PXClient.GetAsync(
+                GetPXServiceUrl(
+                    string.Format(
+                        "/v7.0/Account001/challengeDescriptions?operation=RenderPidlPage&language=en-GB&timezoneOffset=0&paymentSessionOrData={0}",
+                        HttpUtility.UrlEncode(JsonConvert.SerializeObject(
+                            new PaymentSessionData()
+                            {
+                                Amount = 10.0m,
+                                Currency = "EUR",
+                                Partner = "webblends",
+                                Country = "gb",
+                                PaymentInstrumentId = "Account001-Pi001-Visa",
+                                Language = "en"
+                            })))));
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.OK, pxResponse.StatusCode);
+
+            if (fingerprintIFrameExpected)
+            {
+                var pidl = ReadPidlResourceFromJson(await pxResponse.Content.ReadAsStringAsync());
+                Assert.AreEqual("page", pidl[0].DisplayPages[0].DisplayHintType);
+                Assert.AreEqual("iframe", pidl[0].DisplayPages[0].Members[0].DisplayHintType);
+
+                var iFrameHint = pidl[0].DisplayPages[0].Members[0] as IFrameDisplayHint;
+                Assert.AreEqual(60000, iFrameHint.MessageTimeout);
+                Assert.AreEqual("Pidl", iFrameHint.MessageTimeoutClientAction.ActionType.ToString());
+            }
+            else
+            {
+                var pidl = ReadPidlResourceFromJson(await pxResponse.Content.ReadAsStringAsync());
+                Assert.AreEqual(ClientActionType.ReturnContext, pidl[0].ClientAction.ActionType);
+                Assert.IsNotNull(pidl[0].ClientAction.Context);
+            }
+        }
+
+        /// <summary>
         /// CustomerId in the paymentSessionData object (PaymentInstrumentAccountId) does not match the CustomerId in the url
         /// </summary>
         [TestMethod]
@@ -2056,10 +2130,10 @@ namespace CIT.PXService.Tests
 
                 Assert.AreEqual(HttpStatusCode.OK, pxResponse.StatusCode);
 
-                var contentString = await pxResponse.Content.ReadAsStringAsync();
-                var resource = JsonConvert.DeserializeObject<Microsoft.Commerce.Payments.PidlModel.V7.PIDLResource>(contentString);
+                bool gotResource = pxResponse.TryGetContentValue(out Microsoft.Commerce.Payments.PidlModel.V7.PIDLResource resource);
 
                 Assert.IsNotNull(resource);
+                Assert.IsTrue(gotResource);
 
                 // Assert
                 if (string.Equals(challengeStatus, "Success"))

@@ -16,6 +16,7 @@ namespace CIT.PXService.Tests
     using Microsoft.Commerce.Payments.PXService.Model.PXInternal;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Newtonsoft.Json;
+    using Constants = global::Tests.Common.Model.Pidl.Constants;
 
     [TestClass]
     public class DescriptionsControllerTests : TestBase
@@ -407,14 +408,14 @@ namespace CIT.PXService.Tests
             // Act
             List<PIDLResource> pidls = await GetPidlFromPXService(requestUrl, HttpStatusCode.OK, additionaHeaders: headers);
 
-            // Assert  
+            // Assert
             Assert.IsNotNull(pidls, "Pidl is expected to be not null");
             Assert.AreEqual(1, pidls.Count, "PIDL count not expected");
             Assert.AreEqual(expectedIdentity.ToLower(), pidls[0].Identity["description_type"].ToLower(), "PIDL identity not expected");
 
             var piIdProperty = pidls[0].DataDescription["piid"] as PropertyDescription;
             Assert.IsNotNull(piIdProperty, "PiId property is expected to be not null");
-            Assert.AreEqual(piid.ToLower(), piIdProperty.DefaultValue.ToString().ToLower(), "piID property value not expected");            
+            Assert.AreEqual(piid.ToLower(), piIdProperty.DefaultValue.ToString().ToLower(), "piID property value not expected");
 
             var deleteButton = pidls[0].GetDisplayHintById("yesButton") as ButtonDisplayHint;
             Assert.IsNotNull(deleteButton, "Delete button is expected to be not null");
@@ -449,7 +450,7 @@ namespace CIT.PXService.Tests
             // Act
             List<PIDLResource> pidls = await GetPidlFromPXService(requestUrl, HttpStatusCode.OK, additionaHeaders: headers);
 
-            // Assert  
+            // Assert
             Assert.IsNotNull(pidls, "Pidl is expected to be not null");
             Assert.AreEqual(1, pidls.Count, "PIDL count not expected");
             Assert.AreEqual(expectedIdentity.ToLower(), pidls[0].Identity["description_type"].ToLower(), "PIDL identity not expected");
@@ -1710,16 +1711,16 @@ namespace CIT.PXService.Tests
                             : "challengecvvSecurityCode";
 
             var cvv = pidls[0].GetDisplayHintById(cvvHintId) as DisplayHint;
-                        
+
             Assert.IsNotNull(cvv, $"{cvvHintId} display hint should not be null");
-            
+
             var buttonHintId = pidls[0].GetDisplayHintById("nextButton") as ButtonDisplayHint;
             Assert.IsNotNull(buttonHintId, $"{buttonHintId} display hint should not be null");
             Assert.IsNotNull(buttonHintId.DisplayHintType, "displayHint Type should not be null");
             Assert.IsNotNull(buttonHintId.Action);
             Assert.AreEqual(buttonHintId.Action?.ActionType, "submit", $"The button should have submit as displayHintType");
             Assert.IsNotNull(buttonHintId.Action.Context, "The context should not be null");
-            
+
             if (enableSecureField)
             {
                 Assert.IsTrue(cvv is SecurePropertyDisplayHint, "cvv display hint should be secure field element");
@@ -1780,17 +1781,26 @@ namespace CIT.PXService.Tests
             Assert.IsNotNull(pidls[0].ClientAction.Context, "ClientAction.Context is expected to be not null");
         }
 
+        [DataRow(true, "2")]
+        [DataRow(true, "")]
+        [DataRow(false, "")]
+        [DataRow(false, "2")]
         [TestMethod]
-        public async Task GetPaymentRequestConfirmDescription3DS2ChallengeTest()
+        public async Task GetPaymentRequestConfirmDescription3DS2ChallengeTest(bool isChallengeWindowSize = false, string challengeWindowSize = "")
         {
             // Arrange
             string piid = "Account001-Pi001-Visa";
             string requestId = "pr_39c93cc0-e855-42bc-8aca-183a572e14bc";
             string url = "/v7.0/PaymentClient/descriptions?operation=Add&component=confirm";
 
+            if (isChallengeWindowSize)
+            {
+                url += $"&challengeWindowSize=1";
+            }
+
             string requestContext = "{\"tenantId\":\"tn_3f1b8c1e2c3e4c5f8b6e7d8e9f0a1b2c\",\"tenantCustomerId\":\"abc\",\"requestId\":\"pr_39c93cc0-e855-42bc-8aca-183a572e14bc\",\"paymentAccountId\":\"123\"}";
 
-            string expectedPSSResponse = "{\"add\":{\"template\":\"defaulttemplate\",\"redirectionPattern\":null,\"resources\":null,\"features\":{\"PXEnableChallengeCvvValidation\":{\"applicableMarkets\":[],\"displayCustomizationDetail\":[{\"usePSSForPXFeatureFlighting\":true}]}}}}";
+            string expectedPSSResponse = "{\"add\":{\"template\":\"defaulttemplate\",\"redirectionPattern\":null,\"resources\":null,\"challengeWindowSize\":\" " + challengeWindowSize.ToLower().ToString() + "\",\"features\":{\"PXEnableChallengeCvvValidation\":{\"applicableMarkets\":[],\"displayCustomizationDetail\":[{\"usePSSForPXFeatureFlighting\":true}]}}}}";
             PXSettings.PartnerSettingsService.ArrangeResponse(expectedPSSResponse);
 
             var paymentRequestClientActions = new PaymentRequestClientActions
@@ -1910,7 +1920,7 @@ namespace CIT.PXService.Tests
             Assert.AreEqual(1, pidls.Count, "PIDL count not expected");
 
             var selectOption = pidls[0].GetDisplayHintById("paymentInstrument") as PropertyDisplayHint;
-            var possibleOptions = selectOption?.PossibleOptions?.FirstOrDefault().Value;            
+            var possibleOptions = selectOption?.PossibleOptions?.FirstOrDefault().Value;
             Assert.AreEqual(expectedIdentity.ToLower(), pidls[0].Identity["description_type"].ToLower(), "PIDL identity not expected");
 
             var imageHint = possibleOptions.DisplayContent.Members[0] as ImageDisplayHint;
@@ -2209,6 +2219,54 @@ namespace CIT.PXService.Tests
                 {
                     Assert.IsNull(optionValue.OnResourceSelected.NextAction, "NextAction should be null when compute tax is true");
                 }
+            }
+        }
+
+        [DataRow("candycrush", "payment", null, "Add", null, "visa", 0)]
+        [DataRow("candycrush", "payment", null, "Add", "credit_card", null, 0)]
+        [DataRow("candycrush", "payment", null, "Add", "credit_card", "visa", 1)]
+        [DataRow("candycrush", "payment", null, "Add", "credit_card", "visa%2Camex%2Cmc%2Cdiscover", 4)]
+        [DataTestMethod]
+        public async Task GetPaymentClientDescriptions_AddCC_UsePaymentRequestApi(string partner, string component, string scenario, string operation, string family, string type, int pidlCount)
+        {
+            // Arrange
+            var flights = "PXUsePartnerSettingsService,UsePaymentRequestApi";
+
+            string requestUrl = string.Format("/v7.0/paymentClient/descriptions?type={0}&partner={1}&operation={2}&family={3}&component={4}", type, partner, operation, family, component);
+
+            PXSettings.PartnerSettingsService.ArrangeResponse(Constants.PSSMockResponses.ExpectedPSSResponsePaymentClient);
+
+            if (pidlCount == 0)
+            {
+                string expectedPOResponse = "{\"paymentMethodResults\":{\"paymentMethods\":[],\"paymentInstruments\":[],\"defaultPaymentInstrument\":null},\"profile\":{\"soldToAddress\":null,\"billingAddress\":null,\"addresses\":[],\"email\":\"aolivasaltam+2@microsoft.com\"},\"checkoutRequestId\":\"cr_5edd1d53-67e6-428e-ad8b-108c84af69c0\",\"paymentRequestId\":null,\"amount\":150.0,\"taxAmount\":0.0,\"subTotalAmount\":150.0,\"currency\":\"USD\",\"country\":\"US\",\"language\":\"en-us\",\"partnerName\":\"defaulttemplate\",\"metadata\":{\"AdditionalProp1\":null,\"AdditionalProp2\":null,\"AdditionalProp3\":null,\"id\":null,\"updatedBy\":null,\"lastUpdated\":\"2025-01-18T00:06:14.0658141Z\",\"createdBy\":null,\"createdDate\":\"2025-01-18T00:06:14.0658141Z\",\"OrderId\":\"ecc0bd0a37a14490bff84d5612a1bfcb\",\"OrderDate\":\"January 18 2025\"},\"lineItems\":[{\"imageUri\":\"https://is2-ssl.mzstatic.com/image/thumb/Purple124/v4/cb/6b/60/cb6b606e-70c4-e5ca-742c-5b9c30a777f2/AppIcon-1x_U007emarketing-0-7-0-85-220.png/1024x1024bb.png\",\"description\":\"Sample Item 1\",\"itemName\":\"Beginner's Bundle\",\"chargeAmount\":100.0,\"tax\":0.0,\"isTaxInclusive\":false,\"quantity\":1,\"publisherName\":\"King store\",\"productCode\":\"P001\",\"contentType\":\"Digital\",\"shipToAddress\":{\"country\":null,\"region\":null,\"district\":null,\"city\":null,\"addressLine1\":null,\"addressLine2\":null,\"addressLine3\":null,\"postalCode\":null,\"firstName\":null,\"lastName\":null,\"correspondenceName\":null,\"phoneNumber\":null},\"metadata\":{\"AdditionalProp1\":null,\"AdditionalProp2\":null,\"AdditionalProp3\":null,\"id\":null,\"updatedBy\":null,\"lastUpdated\":\"2025-01-18T00:06:14.065825Z\",\"createdBy\":null,\"createdDate\":\"2025-01-18T00:06:14.065825Z\"}},{\"imageUri\":null,\"description\":\"Sample Item 2\",\"itemName\":\"Super Sweet Deal!\",\"chargeAmount\":50.0,\"tax\":0.0,\"isTaxInclusive\":false,\"quantity\":2,\"publisherName\":\"Publisher2\",\"productCode\":\"P002\",\"contentType\":\"Physical\",\"shipToAddress\":{\"country\":null,\"region\":null,\"district\":null,\"city\":null,\"addressLine1\":null,\"addressLine2\":null,\"addressLine3\":null,\"postalCode\":null,\"firstName\":null,\"lastName\":null,\"correspondenceName\":null,\"phoneNumber\":null},\"metadata\":{\"AdditionalProp1\":null,\"AdditionalProp2\":null,\"AdditionalProp3\":null,\"id\":null,\"updatedBy\":null,\"lastUpdated\":\"2025-01-18T00:06:14.0658517Z\",\"createdBy\":null,\"createdDate\":\"2025-01-18T00:06:14.0658518Z\"}}],\"checkoutStatus\":\"PendingClientAction\"}";
+                PXSettings.PaymentOrchestratorService.ArrangeResponse(expectedPOResponse);
+            }
+
+            var requestContext = new
+            {
+                RequestID = "pr_8a3938f4-0a37-434c-bc09-ac79289834d9"
+            };
+
+            Dictionary<string, string> headers = new Dictionary<string, string>
+            {
+                { "x-ms-flight", flights },
+                { "x-ms-request-context", JsonConvert.SerializeObject(requestContext) }
+            };
+
+            // Act
+             List<PIDLResource> pidls = await GetPidlFromPXService(requestUrl, pidlCount == 0 ? HttpStatusCode.BadRequest : HttpStatusCode.OK, additionaHeaders: headers);
+
+            Assert.IsNotNull(pidls, "Pidl is expected to be not null");
+            Assert.AreEqual(pidlCount, pidls.Count, "PIDL count not expected");
+
+            if (pidls.Count > 0)
+            {
+                pidls.ForEach(pidl =>
+                {
+                    // check accountHolderName property have a display tags with key accessibilityName and value "Cardholder name"
+                    var cardholderName = pidl.GetDisplayHintById("cardholderName");
+                    Assert.AreEqual("Cardholder name", cardholderName.DisplayTags["accessibilityName"]);
+                });
             }
         }
     }

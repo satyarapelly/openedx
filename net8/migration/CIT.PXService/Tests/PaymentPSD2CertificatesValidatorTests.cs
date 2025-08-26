@@ -8,7 +8,7 @@ namespace CIT.PXService.Tests
     using Microsoft.Commerce.Payments.Common;
     using Microsoft.Commerce.Payments.Common.Web;
     using Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge;
-    using Microsoft.Commerce.Payments.Common.Tracing;
+    using Microsoft.Commerce.Tracing;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Common = Microsoft.Commerce.Payments.Common.Transaction;
 

@@ -9,9 +9,7 @@ namespace CIT.PXService.Tests
     using Microsoft.Commerce.Payments.PXService.Model.PurchaseService;
     using Microsoft.Commerce.Payments.PXService.Model.ThreeDSExternalService;
     using Microsoft.Commerce.Payments.PXService.V7;
-    using Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge;
-    using Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge.Model;
-    using Microsoft.Commerce.Payments.Common.Tracing;
+    using Microsoft.Commerce.Tracing;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Moq;
     using Newtonsoft.Json;

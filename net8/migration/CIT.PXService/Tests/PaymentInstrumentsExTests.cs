@@ -10,7 +10,6 @@ namespace CIT.PXService.Tests
     using System.Reflection;
     using System.Text;
     using System.Threading.Tasks;
-    using Microsoft.AspNetCore.WebUtilities;
     using global::Tests.Common.Model;
     using global::Tests.Common.Model.Pidl;
     using global::Tests.Common.Model.Pims;
@@ -3408,6 +3407,171 @@ namespace CIT.PXService.Tests
             PXSettings.PimsService.ResetToDefaults();
         }
 
+        [DataRow("battlenet", "2/29", "2", "2029")]
+        [DataRow("battlenet", "02/29", "02", "2029")]
+        [DataRow("battlenet", "02/2029", "02", "2029")]
+        [DataRow("battlenet", "2/2029", "2", "2029")]
+        [TestMethod]
+        public async Task PaymentInstrumentsEx_CreditCard_AddPI_SplitExpiryDateToMonthAndYear(string partner, string expiryDate, string expectedExpiryMonth, string expectedExpiryYear)
+        {
+            // Arrange
+            string accountHolderName = "testaccountname";
+            bool assertCalled = false;
+            var pimsRequestBody = new
+            {
+                paymentMethodFamily = "credit_card",
+                paymentMethodType = "visa",
+                paymentMethodOperation = "add",
+                paymentMethodCountry = "us",
+                details = new
+                {
+                    expiryDate = expiryDate,
+                    accountHolderName = accountHolderName
+                }
+            };
+
+            global::Tests.Common.Model.Pims.PaymentInstrument expectedPI = PimsMockResponseProvider.GetPaymentInstrument("Account001", "Account001-Pi001-Visa");
+            PXSettings.PimsService.ArrangeResponse(JsonConvert.SerializeObject(expectedPI));
+
+            PXSettings.PimsService.PreProcess = async (request) =>
+            {
+                // Assert the PIMS Post PI request payload request
+                string requestContent = await request.Content.ReadAsStringAsync();
+                JObject json = JObject.Parse(requestContent);
+
+                Assert.AreEqual(expectedExpiryMonth, (string)json["details"]["expiryMonth"], "The expiryMonth in the request doesn't match the expected value.");
+                Assert.AreEqual(expectedExpiryYear, (string)json["details"]["expiryYear"], "The expiryYear in the request doesn't match the expected value.");
+                Assert.AreEqual(accountHolderName, (string)json["details"]["accountHolderName"], "The accountHolderName in the request doesn't match the expected value.");
+                assertCalled = true;
+            };
+
+            // Act
+            HttpResponseMessage result = await PXClient.PostAsync($"/v7.0/Account001/paymentInstrumentsEx?country=us&language=en-US&partner={partner}", new StringContent(JsonConvert.SerializeObject(pimsRequestBody), Encoding.UTF8, PaymentConstants.HttpMimeTypes.JsonContentType));
+
+            // Assert (continuation)
+            Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
+            Assert.IsTrue(assertCalled, "PimsTestHandler.PreProcess was called");
+            PXSettings.PimsService.ResetToDefaults();
+        }
+
+        [DataRow("battlenet", "2/29", "2", "2029")]
+        [DataRow("battlenet", "02/29", "02", "2029")]
+        [DataRow("battlenet", "02/2029", "02", "2029")]
+        [DataRow("battlenet", "2/2029", "2", "2029")]
+        [TestMethod]
+        public async Task PaymentInstrumentsEx_CreditCard_UpdatePI_SplitExpiryDateToMonthAndYear(string partner, string expiryDate, string expectedExpiryMonth, string expectedExpiryYear)
+        {
+            // Arrange
+            bool assertCalled = false;
+            string piid = "Account001-Pi001-Visa";
+            var emptyRequestBody = new
+            {
+                paymentMethodFamily = "credit_card",
+                paymentMethodType = "visa",
+                details = new
+                {
+                    expiryDate = expiryDate
+                }
+            };
+
+            global::Tests.Common.Model.Pims.PaymentInstrument expectedPI = PimsMockResponseProvider.GetPaymentInstrument("Account001", piid);
+            PXSettings.PimsService.ArrangeResponse(JsonConvert.SerializeObject(expectedPI));
+
+            PXSettings.PimsService.PreProcess = async (request) =>
+            {
+                string requestContent = await request.Content.ReadAsStringAsync();
+                JObject json = JObject.Parse(requestContent);
+
+                // Assert the PIMS Post PI request payload request
+                Assert.AreEqual(expectedExpiryMonth, (string)json["details"]["expiryMonth"], "The expiryMonth in the request doesn't match the expected value.");
+                Assert.AreEqual(expectedExpiryYear, (string)json["details"]["expiryYear"], "The expiryYear in the request doesn't match the expected value.");
+                assertCalled = true;
+            };
+
+            // Act
+            HttpResponseMessage result = await PXClient.PostAsync($"/v7.0/Account001/paymentInstrumentsEx/{piid}/update?language=en-US&partner={partner}", new StringContent(JsonConvert.SerializeObject(emptyRequestBody), Encoding.UTF8, PaymentConstants.HttpMimeTypes.JsonContentType));
+
+            // Assert (continuation)
+            Assert.IsTrue(assertCalled, "PimsTestHandler.PreProcess wasn't called");
+            string resultContent = await result.Content.ReadAsStringAsync();
+            var pi = JsonConvert.DeserializeObject<global::Tests.Common.Model.Pims.PaymentInstrument>(resultContent);
+            Assert.AreEqual(expectedPI.PaymentInstrumentId, pi.PaymentInstrumentId);
+            Assert.IsNotNull(pi.PaymentInstrumentDetails.DefaultDisplayName);
+            PXSettings.PimsService.ResetToDefaults();
+        }
+
+        [DataRow("battlenet", "2/29", "2", "2029")]
+        [DataRow("battlenet", "02/29", "02", "2029")]
+        [DataRow("battlenet", "02/2029", "02", "2029")]
+        [DataRow("battlenet", "2/2029", "2", "2029")]
+        [DataTestMethod]
+        public async Task PaymentInstrumentsEx_CreditCard_AddPI_SplitExpiryDateToMonthAndYear_Anonymous(string partner, string expiryDate, string expectedExpiryMonth, string expectedExpiryYear)
+        {
+            // Arrange
+            bool assertCalled = false;
+            var status = "Completed";
+            string piid = "Account001-Pi001-Visa";
+            string url = $"/v7.0/paymentInstrumentsEx/create?country=us&language=en-US&partner={partner}";
+
+            global::Tests.Common.Model.Pims.PaymentInstrument expectedPI = PimsMockResponseProvider.GetPaymentInstrument("Account001", piid);
+            PXSettings.PimsService.ArrangeResponse(JsonConvert.SerializeObject(expectedPI));
+            PXSettings.PaymentOrchestratorService.ArrangeResponse(JsonConvert.SerializeObject(new { Id = "pr_12345", Status = status }));
+
+            var piPayload = new
+            {
+                paymentMethodFamily = "credit_card",
+                paymentMethodType = "visa",
+                details = new
+                {
+                    address = new
+                    {
+                        addressType = "billing",
+                        addressOperation = "add",
+                        addressCountry = "us",
+                        address_line1 = "One Microsoft Way",
+                        city = "Redmond",
+                        region = "wa",
+                        postal_code = "98052",
+                        country = "us"
+                    },
+                    expiryDate = expiryDate
+                }
+            };
+
+            HttpRequestMessage request = new HttpRequestMessage()
+            {
+                RequestUri = new Uri(GetPXServiceUrl(url)),
+                Method = HttpMethod.Post,
+                Content = new StringContent(JsonConvert.SerializeObject(piPayload), Encoding.UTF8, PaymentConstants.HttpMimeTypes.JsonContentType)
+            };
+
+            string requestContextHeaderValue = $"{{\"tenantId\":\"tid\",\"tenantCustomerId\":\"tcid\",\"requestId\":\"pr_12345\",\"paymentAccountId\":\"accountid\"}}";
+            request.Headers.Add("request-context", requestContextHeaderValue);
+
+            PXSettings.PimsService.PreProcess = async (pimsRequest) =>
+            {
+                // Assert the PIMS Post PI request payload request
+                string requestContent = await pimsRequest.Content.ReadAsStringAsync();
+                JObject json = JObject.Parse(requestContent);
+
+                Assert.AreEqual(expectedExpiryMonth, (string)json["details"]["expiryMonth"], "The expiryMonth in the request doesn't match the expected value.");
+                Assert.AreEqual(expectedExpiryYear, (string)json["details"]["expiryYear"], "The expiryYear in the request doesn't match the expected value.");
+                assertCalled = true;
+            };
+
+            // Act
+            var response = await PXClient.SendAsync(request);
+
+            // Assert
+            string result = await response.Content.ReadAsStringAsync();
+            JObject jsonObject = JObject.Parse(result);
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            Assert.IsNotNull(jsonObject["requestId"]);
+            Assert.AreEqual(jsonObject["status"].ToString(), status);
+            Assert.IsTrue(assertCalled, "PimsTestHandler.PreProcess was called");
+            PXSettings.PimsService.ResetToDefaults();
+        }
+
         [TestMethod]
         public async Task PaymentInstrumentsEx_CreditCard_AddPI_AVSInvalidCity()
         {
@@ -5123,7 +5287,11 @@ namespace CIT.PXService.Tests
             var emptyRequestBody = new
             {
                 paymentMethodFamily = "credit_card",
-                paymentMethodType = "visa"
+                paymentMethodType = "visa",
+                details = new
+                {
+                    expiryDate = "07/35"
+                }
             };
 
             string oldPI = "9igMnQAAAAAqAACA";
@@ -5136,12 +5304,20 @@ namespace CIT.PXService.Tests
 
             PXSettings.PimsService.ArrangeResponse(JsonConvert.SerializeObject(newPI));
 
-            PXSettings.PimsService.PreProcess = (request) =>
+            PXSettings.PimsService.PreProcess = async (request) =>
             {
                 if (request.RequestUri.AbsolutePath.Contains($"/v4.0/Account001/paymentInstruments"))
                 {
-                    var queryparams = QueryHelpers.ParseQuery(request.RequestUri.Query);
-                    Assert.IsFalse(queryparams.TryGetValue("billableAccountId", out var values) && values.Contains(expectedBillableAccountId), "Correct billable account id was extracted from the given piid");
+                    var queryparams = request.GetQueryNameValuePairs();
+                    Assert.IsFalse(queryparams.Contains(new KeyValuePair<string, string>("billableAccountId", expectedBillableAccountId)), "Correct billable account id was extracted from the given piid");
+
+                    string requestContent = await request.Content.ReadAsStringAsync();
+                    JObject json = JObject.Parse(requestContent);
+
+                    // Assert the PIMS Post PI request payload request
+                    Assert.AreEqual("07", (string)json["details"]["expiryMonth"], "The expiryMonth in the request doesn't match the expected value.");
+                    Assert.AreEqual("2035", (string)json["details"]["expiryYear"], "The expiryYear in the request doesn't match the expected value.");
+
                     assertCalled = true;
                 }
             };
@@ -9354,19 +9530,8 @@ namespace CIT.PXService.Tests
                 Assert.IsTrue(requestContent.Contains("riskData"), "does not contain riskData in request content");
                 var postReqRiskData = json.GetValue("riskData") as JObject;
 
-                if (!string.IsNullOrEmpty(featureFlight) && featureFlight.Contains("EnableSepaJpmc"))
-                {
-                    Assert.IsTrue(extendeFlightHeaders.Contains("EnableSepaJpmc"), "does not contain EnableSepaJpmc in request headers");
-
-                    string userAgentVal = postReqRiskData.GetValue("userAgent").ToString();
-
-                    Assert.AreEqual(expectedUserAgent, userAgentVal, "userAgent does not match with user agent in risk data before PIMS");
-                }
-                else
-                {
-                    Assert.IsFalse(extendeFlightHeaders.Contains("EnableSepaJpmc"), "does not contain EnableSepaJpmc in request headers");
-                    Assert.IsFalse(requestContent.Contains("userAgent"), "contains userAgent in request content");
-                }
+                string userAgentVal = postReqRiskData.GetValue("userAgent").ToString();
+                Assert.AreEqual(expectedUserAgent, userAgentVal, "userAgent does not match with user agent in risk data before PIMS");
 
                 assertCalled = true;
             };
