@@ -73,24 +73,29 @@ namespace SelfHostedPXServiceCore
             // is populated when those middlewares execute.
             App.UseRouting();
 
-            // Emit the resolved endpoint for each request so callers can verify routing
-            // is functioning as expected.
-            App.Use(async (ctx, next) =>
-            {
-                var ep = ctx.GetEndpoint();
-                Console.WriteLine($"[HostableService] Endpoint: {ep?.DisplayName ?? "(null)"}");
-                await next();
-            });
-
             // Callers can add middlewares, filters, etc. They will execute after routing but before
             // the selected endpoint is invoked.
             configureApp?.Invoke(App);
 
-            // Allow callers to register conventional routes prior to mapping controllers
-            configureEndpoints?.Invoke(App);
+            // Log which endpoint was selected for each request to aid in debugging tests.
+            App.Use(async (ctx, next) =>
+            {
+                var ep = ctx.GetEndpoint();
+                Console.WriteLine($"[HostableService] Endpoint: {ep?.DisplayName ?? "(null)"}");
+                if (ep == null)
+                {
+                    throw new InvalidOperationException($"No endpoint matched for {ctx.Request.Method} {ctx.Request.Path}");
+                }
+                await next();
+            });
 
-            // Map attribute/route-based controllers and finalize the endpoint pipeline
-            App.MapControllers();
+            // Map routes + controllers after routing has been added so HttpContext.GetEndpoint()
+            // returns the matched endpoint during the middleware above.
+            App.UseEndpoints(endpoints =>
+            {
+                configureEndpoints?.Invoke(endpoints);
+                endpoints.MapControllers();
+            });
 
             // Start server
             App.Start();
