@@ -27,7 +27,15 @@ namespace Microsoft.Commerce.Payments.PXService
         public static void Register(WebApplicationBuilder builder, PXServiceSettings settings)
         {
             builder.Services.AddSingleton(settings);
-            builder.Services.AddControllers()
+            builder.Services.AddControllers(options =>
+            {
+                options.Filters.Add(new PXServiceExceptionFilter());
+                if (settings.AuthorizationFilter != null)
+                {
+                    options.Filters.Add(settings.AuthorizationFilter);
+                }
+            })
+                .AddApplicationPart(typeof(WebApiConfig).Assembly)
                 .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
@@ -69,6 +77,11 @@ namespace Microsoft.Commerce.Payments.PXService
         {
             endpoints.MapControllerRoute(
                name: GlobalConstants.V7RouteNames.Probe,
+               pattern: GlobalConstants.EndPointNames.V7ProbeVersioned,
+               defaults: new { controller = C(GlobalConstants.ControllerNames.ProbeController), action = "Get" });
+
+            endpoints.MapControllerRoute(
+               name: GlobalConstants.V7RouteNames.Probe + "NoVersion",
                pattern: GlobalConstants.EndPointNames.V7Probe,
                defaults: new { controller = C(GlobalConstants.ControllerNames.ProbeController), action = "Get" });
 
