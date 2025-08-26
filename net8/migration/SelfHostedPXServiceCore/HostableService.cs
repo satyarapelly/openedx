@@ -22,6 +22,7 @@ namespace SelfHostedPXServiceCore
     {
         public Uri BaseUri { get; private set; } = default!;
         public HttpClient HttpSelfHttpClient { get; private set; } = default!;
+        public HttpClient Client => HttpSelfHttpClient;
         public WebApplication App { get; private set; } = default!;
 
         /// <summary>
@@ -101,6 +102,7 @@ namespace SelfHostedPXServiceCore
         public void Dispose()
         {
             try { App?.StopAsync().GetAwaiter().GetResult(); } catch { }
+            try { App?.DisposeAsync().AsTask().GetAwaiter().GetResult(); } catch { }
             try { HttpSelfHttpClient?.Dispose(); } catch { }
         }
     }

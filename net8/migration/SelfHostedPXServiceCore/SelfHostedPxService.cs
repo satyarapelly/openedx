@@ -39,6 +39,7 @@ namespace SelfHostedPXServiceCore
 
         /// <summary>HttpClient wired to the in-memory PX service.</summary>
         public HttpClient HttpSelfHttpClient { get; private set; } = default!;
+        public HttpClient Client => HttpSelfHttpClient;
 
         public IHost SelfHost = default!;
 
@@ -104,7 +105,7 @@ namespace SelfHostedPXServiceCore
         {
             try { HttpSelfHttpClient?.Dispose(); } catch { }
             try { SelfHost?.Dispose(); } catch { }
-
+            try { PxHostableService?.Dispose(); } catch { }
         }
 
         /// <summary>

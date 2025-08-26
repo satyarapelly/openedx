@@ -1,16 +1,18 @@
-﻿// Program.cs — .NET 8 in-memory hosting using TestServer
-
 using Newtonsoft.Json;
 using SelfHostedPXServiceCore;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
+// Program entry point for the in-memory PX self host. The legacy implementation
+// used HttpSelfHostServer which listened on an actual port.  In .NET 8 we use
+// <see cref="Microsoft.AspNetCore.TestHost.TestServer"/> so everything runs
+// entirely in memory and no sockets are opened.
 internal sealed class Program
 {
     public static async Task Main(string[] args)
     {
-        string fullBaseUrl = args.Length > 0 ? args[0] : "";
+        string fullBaseUrl = args.Length > 0 ? args[0] : string.Empty;
         string protocol = args.Length > 1 ? args[1] : "https";
 
         if (string.IsNullOrEmpty(fullBaseUrl))
@@ -23,7 +25,7 @@ internal sealed class Program
 
         // Spin up the PX service and all its dependency emulators in memory with
         // routing configured so HttpContext.GetEndpoint() resolves correctly.
-        var selfHostedSvc = SelfHostedPxService.StartInMemory(fullBaseUrl, true, false);
+        using var selfHostedSvc = SelfHostedPxService.StartInMemory(fullBaseUrl, true, false);
 
         // Kick the tires on a simple request. The server writes the matched
         // endpoint to the console (see HostableService/ConfigurePipeline).
@@ -39,18 +41,18 @@ internal sealed class Program
 
         if (response.IsSuccessStatusCode)
         {
-            System.Console.WriteLine("Server successfully tested");
+            Console.WriteLine("Server successfully tested");
         }
         else
         {
-            System.Console.WriteLine($"Server responded: {response.StatusCode}");
-            System.Console.WriteLine($"Response content: {content}");
+            Console.WriteLine($"Server responded: {response.StatusCode}");
+            Console.WriteLine($"Response content: {content}");
         }
 
         // Keep the process alive until Ctrl+C
-        System.Console.WriteLine("PX (in-memory) is running. Press Ctrl+C to exit.");
+        Console.WriteLine("PX (in-memory) is running. Press Ctrl+C to exit.");
         var done = new TaskCompletionSource();
-        System.Console.CancelKeyPress += (_, e) =>
+        Console.CancelKeyPress += (_, e) =>
         {
             e.Cancel = true;
             done.TrySetResult();
@@ -82,5 +84,4 @@ internal sealed class Program
         dynamic parsed = JsonConvert.DeserializeObject(json);
         return JsonConvert.SerializeObject(parsed, Formatting.Indented);
     }
-
 }
