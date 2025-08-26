@@ -76,12 +76,13 @@ namespace SelfHostedPXServiceCore
 
             var pxHost = new HostableService(
                 b => WebApiConfig.Register(b, PXSettings),
-                app =>
+                configureBeforeRouting: app =>
                 {
                     app.UseMiddleware<PXServiceApiVersionHandler>();
                 },
-                PXBaseUri,
-                WebApiConfig.AddUrlVersionedRoutes);
+                configureApp: null,
+                baseUri: PXBaseUri,
+                configureEndpoints: WebApiConfig.AddUrlVersionedRoutes);
 
             PxHostableService = pxHost;
 
@@ -184,14 +185,22 @@ namespace SelfHostedPXServiceCore
 
             try
             {
-                dependencyEmulatorService = new HostableService(configAction, Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.WebApiConfig.ConfigureRoutes, PXBaseUri);
+                dependencyEmulatorService = new HostableService(
+                    configAction,
+                    configureBeforeRouting: null,
+                    configureApp: Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.WebApiConfig.ConfigureRoutes,
+                    baseUri: PXBaseUri);
             }
             catch
             {
                 // Retry once just like the old code did
                 try
                 {
-                    dependencyEmulatorService = new HostableService(configAction, Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.WebApiConfig.ConfigureRoutes, PXBaseUri);
+                    dependencyEmulatorService = new HostableService(
+                        configAction,
+                        configureBeforeRouting: null,
+                        configureApp: Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.WebApiConfig.ConfigureRoutes,
+                        baseUri: PXBaseUri);
                 }
                 catch (Exception ex)
                 {
