@@ -18,7 +18,7 @@ namespace Microsoft.Commerce.Payments.PXService
     /// <summary>
     /// Web Api Configuration
     /// </summary>
-    public static class WebApiConfig
+    public static class WebApiConfig_donet_472
     {
         public static readonly Type PXSettingsType = typeof(PXServiceSettings);
 
