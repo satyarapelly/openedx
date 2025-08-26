@@ -1,16 +1,6 @@
 ﻿// <copyright company="Microsoft Corporation">Copyright (c) Microsoft 2019. All rights reserved.</copyright>
 namespace CIT.PXService.Tests
 {
-    using global::Tests.Common.Model;
-    using global::Tests.Common.Model.Pidl;
-    using Microsoft.Commerce.Payments.Common;
-    using Microsoft.Commerce.Payments.PidlFactory.V7;
-    using Microsoft.Commerce.Payments.PXService;
-    using Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge.Model;
-    using Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Mocks;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -19,7 +9,19 @@ namespace CIT.PXService.Tests
     using System.Text;
     using System.Threading.Tasks;
     using System.Web;
-    using static Microsoft.Commerce.Payments.PidlFactory.GlobalConstants.ServiceContextKeys;
+    using global::Tests.Common.Model;
+    using global::Tests.Common.Model.Pidl;
+    using Microsoft.Commerce.Payments.Common;
+    using Microsoft.Commerce.Payments.Common.Web;
+    using Microsoft.Commerce.Payments.Common.Tracing;
+    using Microsoft.Commerce.Payments.PidlFactory.V7;
+    using Microsoft.Commerce.Payments.PXService;
+    using Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge.Model;
+    using Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Mocks;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
+	using static Microsoft.Commerce.Payments.PidlFactory.GlobalConstants.ServiceContextKeys;
     using static PXService.GlobalConstants;
     using PXPayerAuthServiceModel = Microsoft.Commerce.Payments.PXService.Model.PayerAuthService;
 
@@ -153,7 +155,7 @@ namespace CIT.PXService.Tests
             // Assert
             Assert.AreEqual(HttpStatusCode.BadRequest, pxResponse.StatusCode);
 
-            var error = JsonConvert.DeserializeObject<ErrorResponse>(await pxResponse.Content.ReadAsStringAsync());
+            var error = JsonConvert.DeserializeObject<Microsoft.Commerce.Payments.Common.Web.ErrorResponse>(await pxResponse.Content.ReadAsStringAsync());
             Assert.AreEqual("PaymentInstrumentNotFound", error.ErrorCode);
             Assert.AreEqual("Caller is not authorized to access specified PaymentInstrumentId", error.Message);
         }
@@ -370,7 +372,7 @@ namespace CIT.PXService.Tests
 
             Microsoft.Commerce.Payments.PXService.Model.PXInternal.PaymentSession internalSession = await PXSettings.SessionServiceAccessor.GetSessionResourceData<Microsoft.Commerce.Payments.PXService.Model.PXInternal.PaymentSession>(
                     session.Id,
-                    new Microsoft.Commerce.Tracing.EventTraceActivity());
+                    new EventTraceActivity());
 
             if (usePaymentSessionsHandlerV2)
             {
@@ -1773,8 +1775,7 @@ namespace CIT.PXService.Tests
 
                 Assert.AreEqual(HttpStatusCode.OK, pxResponse.StatusCode);
 
-                bool gotResource = pxResponse.TryGetContentValue(out Microsoft.Commerce.Payments.PidlModel.V7.PIDLResource resource);
-
+                var (gotResource, resource) = await pxResponse.TryGetContentValueAsync<Microsoft.Commerce.Payments.PidlModel.V7.PIDLResource>();
                 Assert.IsNotNull(resource);
                 Assert.IsTrue(gotResource);
 

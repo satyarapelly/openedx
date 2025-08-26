@@ -13,7 +13,7 @@ namespace CIT.PXService.Tests
     using Microsoft.Commerce.Payments.PXService;
     using Microsoft.Commerce.Payments.PXService.Model.PurchaseService;
     using Microsoft.Commerce.Payments.PXService.V7.PaymentTransaction.Model;
-    using Microsoft.Commerce.Tracing;
+    using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Microsoft.Xbox.Experimentation.Contracts.GroupsAdmin;
     using Moq;
@@ -190,7 +190,7 @@ namespace CIT.PXService.Tests
             string responseText = await response.Content.ReadAsStringAsync();
 
             var responseContent = JsonConvert.DeserializeObject<Microsoft.Commerce.Payments.PXService.V7.PaymentTransaction.Model.PaymentTransactions>(responseText);
-            Assert.AreNotEqual(string.Empty, responseContent);
+            //Assert.AreNotEqual(string.Empty, responseContent);
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
         }

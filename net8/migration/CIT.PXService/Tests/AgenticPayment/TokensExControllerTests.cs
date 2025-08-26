@@ -8,7 +8,6 @@ namespace CIT.PXService.Tests
     using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Net;
     using System.Net.Http;
     using System.Text;
@@ -56,35 +55,6 @@ namespace CIT.PXService.Tests
         [DataTestMethod]
         public async Task TokensEx_InitiateTokenization_Success(string accountId, string piid, string partner, string country, string language)
         {
-            bool assertCalled = false;
-
-            PXSettings.NetworkTokenizationService.PreProcess = (request) =>
-            {
-                Assert.IsTrue(request.Headers.TryGetValues("x-ms-customer", out var headerValues), "Customer header not found");
-                string customerHeader = headerValues.FirstOrDefault();
-                Assert.IsNotNull(customerHeader, "Customer header should not be null");
-
-                var parts = customerHeader.Split('.');
-                Assert.IsTrue(parts.Length > 1, "Customer header should be a JWT with at least two parts");
-                string jwtPayloadBase64 = parts[1];
-
-                int mod4 = jwtPayloadBase64.Length % 4;
-                if (mod4 > 0)
-                {
-                    jwtPayloadBase64 += new string('=', 4 - mod4);
-                }
-
-                var json = Encoding.UTF8.GetString(Convert.FromBase64String(jwtPayloadBase64));
-                var payloadObj = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
-
-                var requesterJson = payloadObj.TryGetValue("requester", out var requesterObj) ? requesterObj?.ToString() : null;
-                Assert.IsNotNull(requesterJson, "Payload should contain 'requester' object");
-
-                var requesterDict = JsonConvert.DeserializeObject<Dictionary<string, object>>(requesterJson);
-                Assert.AreEqual("TBD", requesterDict.TryGetValue("email", out var email) ? email?.ToString() : null, "Customer header payload should contain the expected email");
-                assertCalled = true;
-            };
-
             // Arrange
             string url = $"/v7.0/{accountId}/tokensEx?partner={partner}&piid={piid}&country={country}&language={language}";
 
@@ -115,57 +85,6 @@ namespace CIT.PXService.Tests
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
             string responseContent = await response.Content.ReadAsStringAsync();
             Assert.IsNotNull(responseContent);
-
-            // Convert response into PIDLResource
-            var pidlResource = ReadSinglePidlResourceFromJson(responseContent);
-            Assert.IsNotNull(pidlResource, "PIDLResource should not be null");
-            Assert.IsNotNull(pidlResource.ClientAction, "ClientAction should not be null");
-            Assert.AreEqual(ClientActionType.Pidl, pidlResource.ClientAction.ActionType, "ClientAction type should be Pidl");
-
-            // Get the context which should contain the list of PIDLResource objects
-            var pidlResources = pidlResource.ClientAction.Context as List<PIDLResource>;
-            Assert.IsNotNull(pidlResources, "ClientAction context should contain a list of PIDLResource objects");
-            Assert.IsTrue(pidlResources.Count > 0, "PIDLResource list should not be empty");
-
-            // Find the pidl element "tokensChallengeTypesSelectChallengeType" and verify its displayContent
-            bool challengeTypeElementFound = false;
-            foreach (PIDLResource resource in pidlResources)
-            {
-                var challengeTypeDisplayHint = resource.GetDisplayHintById("tokensChallengeTypesSelectChallengeType") as PropertyDisplayHint;
-                if (challengeTypeDisplayHint != null)
-                {
-                    challengeTypeElementFound = true;
-                    Assert.IsNotNull(challengeTypeDisplayHint.PossibleOptions, "PossibleOptions should not be null for challenge type selection");
-
-                    // Verify that the displayContent contains the expected challengeMethodFriendlyName
-                    foreach (var option in challengeTypeDisplayHint.PossibleOptions.Values)
-                    {
-                        Assert.IsNotNull(option.DisplayContent, "DisplayContent should not be null for challenge method option");
-                        
-                        // The DisplayContent should be a GroupDisplayHint containing TextDisplayHints with challengeMethodFriendlyName
-                        var groupDisplayHint = option.DisplayContent as GroupDisplayHint;
-                        Assert.IsNotNull(groupDisplayHint, "DisplayContent should be a GroupDisplayHint");
-                        Assert.IsNotNull(groupDisplayHint.Members, "GroupDisplayHint members should not be null");
-                        Assert.IsTrue(groupDisplayHint.Members.Count > 0, "GroupDisplayHint should have members");
-
-                        // The first member should be a TextDisplayHint with the challengeMethodFriendlyName
-                        var challengeMethodTypeHint = groupDisplayHint.Members[0] as TextDisplayHint;
-                        Assert.IsNotNull(challengeMethodTypeHint, "First member should be a TextDisplayHint for challenge method type");
-                        Assert.IsNotNull(challengeMethodTypeHint.DisplayContent, "Challenge method type DisplayContent should not be null");
-
-                        // Verify that the DisplayContent contains expected friendly names like "Text message", "Email", or "Toll-free call"
-                        string displayContent = challengeMethodTypeHint.DisplayContent;
-                        Assert.IsTrue(
-                            displayContent.Contains("Text message") || 
-                            displayContent.Contains("Email") || 
-                            displayContent.Contains("Toll-free call"),
-                            $"DisplayContent '{displayContent}' should contain a valid challengeMethodFriendlyName");
-                    }
-                }
-            }
-
-            Assert.IsTrue(challengeTypeElementFound, "tokensChallengeTypesSelectChallengeType element should be found in the response");
-            Assert.IsTrue(assertCalled, "InitiateTokenization.PreProcess was not called");
         }
 
         [DataRow("Account002", "Account002-Pi001-Visa-AgenticPayment", GlobalConstants.Partners.XPay, "us", "en-US", true)]

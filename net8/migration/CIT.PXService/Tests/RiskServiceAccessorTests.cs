@@ -6,7 +6,7 @@ namespace CIT.PXService.Tests
     using Microsoft.Commerce.Payments.PXCommon;
     using Microsoft.Commerce.Payments.PXService.Accessors.RiskService;
     using Microsoft.Commerce.Payments.PXService.RiskService.V7;
-    using Microsoft.Commerce.Tracing;
+    using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.CommonSchema.Services.Logging;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Moq;

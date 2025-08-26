@@ -1692,7 +1692,7 @@ namespace CIT.PXService.Tests
 
             if (enableSecureField)
             {
-                flightValue += flightValue.IsNullOrEmpty() ? "PXEnableSecureFieldCvvChallenge" : ",PXEnableSecureFieldCvvChallenge";
+                flightValue += flightValue != null ? "PXEnableSecureFieldCvvChallenge" : ",PXEnableSecureFieldCvvChallenge";
             }
 
             headers.Add("x-ms-flight", flightValue);

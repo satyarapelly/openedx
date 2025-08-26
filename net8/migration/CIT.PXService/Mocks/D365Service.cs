@@ -1,124 +1,81 @@
 ﻿// <copyright company="Microsoft Corporation">Copyright (c) Microsoft 2018. All rights reserved.</copyright>
 
+using Microsoft.Commerce.Payments.PXService.Model.D365Service;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
+
 namespace CIT.PXService.Mocks
 {
-    using Microsoft.Commerce.Payments.PXService.Model.D365Service;
-    using Newtonsoft.Json;
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public class D365Service : DependencyService
+    public class D365Service : HttpMessageHandler
     {
         public static List<MockD365CheckPiResult> PaymentInstrumentCheckResponses { get; private set; }
-
         public static List<MockD365OrdersResponse> Orders { get; private set; }
-
         public static List<Cart> Carts { get; private set; }
 
         public D365Service()
         {
             ResetToDefaults();
-            var paymentInstrumentCheckResponsesJson = File.ReadAllText(
-                Path.Combine(
-                    AppDomain.CurrentDomain.BaseDirectory,
-                    @"Mocks\PaymentInstrumentCheckResponses.json"));
 
             PaymentInstrumentCheckResponses = JsonConvert.DeserializeObject<List<MockD365CheckPiResult>>(
-                paymentInstrumentCheckResponsesJson);
-
-            var ordersJson = File.ReadAllText(
-                Path.Combine(
-                    AppDomain.CurrentDomain.BaseDirectory,
-                    @"Mocks\D365OrdersResponse.json"));
+                File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Mocks\PaymentInstrumentCheckResponses.json")));
 
             Orders = JsonConvert.DeserializeObject<List<MockD365OrdersResponse>>(
-                ordersJson);
-
-            var cartJson = File.ReadAllText(
-                Path.Combine(
-                    AppDomain.CurrentDomain.BaseDirectory,
-                    @"Mocks\D365CartResponse.json"));
+                File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Mocks\D365OrdersResponse.json")));
 
             Carts = JsonConvert.DeserializeObject<List<Cart>>(
-                cartJson);
+                File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Mocks\D365CartResponse.json")));
         }
 
-        public override void ResetToDefaults()
+        public void ResetToDefaults()
         {
-            base.ResetToDefaults();
+            PaymentInstrumentCheckResponses = new List<MockD365CheckPiResult>();
+            Orders = new List<MockD365OrdersResponse>();
+            Carts = new List<Cart>();
         }
 
-        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            var response = await base.SendAsync(request, cancellationToken);
-            if (response != null)
-            {
-                return response;
-            }
-
-            var trimmedSegments = request.RequestUri.Segments.Select(s => s.Trim(new char[] { '/' })).ToArray();
-
+            var trimmedSegments = request.RequestUri.Segments.Select(s => s.Trim('/')).ToArray();
             string responseContent = null;
             HttpStatusCode statusCode = HttpStatusCode.OK;
+
             if (request.RequestUri.ToString().Contains("paymentinstrumentcheck"))
             {
-                var filteredCheckPiResult = PaymentInstrumentCheckResponses.FirstOrDefault(x => trimmedSegments[6] == x.PaymentInstrumentId)?.GetPaymentInstrumentCheckResponse();
-                if (filteredCheckPiResult == null)
-                {
-                    filteredCheckPiResult = new PaymentInstrumentCheckResponse()
-                    {
-                        PendingOrderIds = new List<string>()
-                    };
-                }
+                var piId = trimmedSegments.Length > 6 ? trimmedSegments[6] : null;
+                var result = PaymentInstrumentCheckResponses.FirstOrDefault(x => piId == x.PaymentInstrumentId)?.GetPaymentInstrumentCheckResponse()
+                    ?? new PaymentInstrumentCheckResponse { PendingOrderIds = new List<string>() };
 
-                responseContent = JsonConvert.SerializeObject(filteredCheckPiResult);
+                responseContent = JsonConvert.SerializeObject(result);
             }
-            else
+            else if (request.RequestUri.ToString().Contains("orders"))
             {
-                if (request.RequestUri.ToString().Contains("orders"))
-                {
-                    var orderId = System.Web.HttpUtility.ParseQueryString(request.RequestUri.Query).Get("orderId");
+                var query = System.Web.HttpUtility.ParseQueryString(request.RequestUri.Query);
+                var orderId = query.Get("orderId");
 
-                    // GerOrder
-                    var filteredOrder = Orders.FirstOrDefault(x => orderId == x.OrderId)?.PagedResponse;
-                    if (filteredOrder == null)
-                    {
-                        filteredOrder = new PagedResponse<Order>()
-                        {
-                            HasNextPage = false,
-                            Items = new List<Order>(),
-                        };
-                    }
+                var order = Orders.FirstOrDefault(x => x.OrderId == orderId)?.PagedResponse
+                    ?? new PagedResponse<Order> { HasNextPage = false, Items = new List<Order>() };
 
-                    responseContent = JsonConvert.SerializeObject(filteredOrder);
-                }
-                else if (request.RequestUri.ToString().Contains("GetCartByCartId"))
-                {
-                    var cartId = System.Web.HttpUtility.ParseQueryString(request.RequestUri.Query).Get("id");
+                responseContent = JsonConvert.SerializeObject(order);
+            }
+            else if (request.RequestUri.ToString().Contains("GetCartByCartId"))
+            {
+                var query = System.Web.HttpUtility.ParseQueryString(request.RequestUri.Query);
+                var cartId = query.Get("id");
 
-                    // Get Cart
-                    var filteredCart = Carts.FirstOrDefault(x => cartId == x.Id);
-                    if (filteredCart == null)
-                    {
-                        filteredCart = new Cart();
-                    }
-
-                    responseContent = JsonConvert.SerializeObject(filteredCart);
-                }
+                var cart = Carts.FirstOrDefault(x => cartId == x.Id) ?? new Cart();
+                responseContent = JsonConvert.SerializeObject(cart);
             }
 
-            return await Task.FromResult(new HttpResponseMessage(statusCode)
+            return Task.FromResult(new HttpResponseMessage(statusCode)
             {
-                Content = new StringContent(
-                    responseContent,
-                    System.Text.Encoding.UTF8,
-                    "application/json")
+                Content = new StringContent(responseContent ?? "{}", System.Text.Encoding.UTF8, "application/json")
             });
         }
     }

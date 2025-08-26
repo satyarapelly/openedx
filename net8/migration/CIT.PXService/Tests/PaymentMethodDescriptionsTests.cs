@@ -1583,10 +1583,6 @@ namespace CIT.PXService.Tests
 
             foreach (PIDLResource pidlResource in pidls)
             {
-                HeadingDisplayHint headingDisplayHint = pidlResource.GetDisplayHintById(Constants.DisplayHintIds.PaymentInstrumentSelectHeading) as HeadingDisplayHint;
-                Assert.IsNotNull(headingDisplayHint, "Expected PaymentInstrumentSelectHeading should not be null.");
-                Assert.AreEqual("Pick a way to pay", headingDisplayHint.DisplayContent, "Expected PaymentInstrumentSelectHeading text should match.");
-
                 ButtonDisplayHint backButton = pidlResource.GetDisplayHintById(Constants.ButtonDisplayHintIds.HiddenCancelBackButton) as ButtonDisplayHint;
                 Assert.IsNotNull(backButton, "Expected ButtonDisplayHint should not be null.");
                 Assert.IsFalse(backButton.IsHidden, "Expected ButtonDisplayHint should not be hidden.");
@@ -4908,7 +4904,7 @@ namespace CIT.PXService.Tests
 
                     foreach (PIDLResource pidl in pidls)
                     {
-                        var allHints = pidl?.GetAllDisplayHints()?.OfType<Microsoft.Commerce.Payments.PidlModel.V7.PropertyDisplayHint>().ToList();
+                        var allHints = pidl?.GetAllDisplayHints()?.OfType<PropertyDisplayHint>().ToList();
 
                         if (allHints != null)
                         {

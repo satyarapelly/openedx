@@ -10,10 +10,13 @@ namespace CIT.PXService.Tests
     using System.Reflection;
     using System.Text;
     using System.Threading.Tasks;
+    using Microsoft.AspNetCore.WebUtilities;
     using global::Tests.Common.Model;
     using global::Tests.Common.Model.Pidl;
     using global::Tests.Common.Model.Pims;
     using Microsoft.Commerce.Payments.Common;
+    using Microsoft.Commerce.Payments.PXService.V7;
+    using Microsoft.Commerce.Payments.Common.Web;
     using Microsoft.Commerce.Payments.PimsModel;
     using Microsoft.Commerce.Payments.PXService.Accessors.TokenPolicyService.DataModel;
     using Microsoft.Commerce.Payments.PXService.Model.CatalogService;
@@ -6009,7 +6012,7 @@ namespace CIT.PXService.Tests
             Assert.AreEqual("https://bitpay.com/invoice?id=PujzFdsApS3EymrK5BzZbo&view=iframe&lang=en-us", iframeElement.SourceUrl);
 
             var pollingAction = iframeElement.Action;
-            var context = JsonConvert.DeserializeObject<RestLink>(JsonConvert.SerializeObject(pollingAction.Context));
+            var context = JsonConvert.DeserializeObject<Microsoft.Commerce.Payments.Common.Web.RestLink>(JsonConvert.SerializeObject(pollingAction.Context));
             Assert.IsNotNull(context);
             Assert.IsTrue(context.Href.Contains("redeem"));
             Assert.IsTrue(context.Href.Contains("referenceId=ce9d0625-15ae-4b5e-9151-510cea66a431"));
@@ -8458,7 +8461,7 @@ namespace CIT.PXService.Tests
             // Assert
             if (includePidl && includeFlight)
             {
-                bool gotPayload = result.TryGetContentValue(out Microsoft.Commerce.Payments.PidlModel.V7.PidlPayload payload);
+                var (gotPayload, payload) = await result.TryGetContentValueAsync<Microsoft.Commerce.Payments.PidlModel.V7.PidlPayload>();
                 Assert.IsNotNull(payload);
                 Assert.IsTrue(gotPayload);
                 Assert.IsNotNull(payload.PidlInfo, "pidlInfo missing");
@@ -8470,7 +8473,7 @@ namespace CIT.PXService.Tests
             }
             else
             {
-                bool gotpis = result.TryGetContentValue(out Microsoft.Commerce.Payments.PimsModel.V4.PaymentInstrument[] pis);
+                var (gotpis, pis) = await result.TryGetContentValueAsync<Microsoft.Commerce.Payments.PidlModel.V7.PidlPayload>();
                 Assert.IsNotNull(pis, "PaymentInstruments list is missing");
                 Assert.IsTrue(gotpis);
             }

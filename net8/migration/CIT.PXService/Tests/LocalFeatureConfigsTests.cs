@@ -4,6 +4,7 @@ namespace CIT.PXService.Tests
 {
     using System;
     using System.Collections.Generic;
+    using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Commerce.Payments.PXService.Settings.FeatureConfig;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -327,7 +328,7 @@ namespace CIT.PXService.Tests
                 country: "us",
                 new LocalFeatureConfigs(featureConfigs, testAccountIds),
                 remoteFeatures,
-                new Microsoft.Commerce.Tracing.EventTraceActivity());
+                new EventTraceActivity());
             Assert.AreEqual(3, mergedFeatures.Count);
             Assert.AreEqual(mergedFeatures[0], Feature1);
             Assert.AreEqual(mergedFeatures[1], Feature2);
@@ -373,7 +374,7 @@ namespace CIT.PXService.Tests
                 country: "us",
                 new LocalFeatureConfigs(featureConfigs, testAccountIds),
                 remoteFeatures,
-                new Microsoft.Commerce.Tracing.EventTraceActivity());
+                new EventTraceActivity());
 
             // enable to verify the local config, we didn't dedupe when we merge to remote
             // we only append the local config to the end of remote
@@ -420,7 +421,7 @@ namespace CIT.PXService.Tests
                 country: "us",
                 new LocalFeatureConfigs(featureConfigs, testAccountIds),
                 remoteFeatures,
-                new Microsoft.Commerce.Tracing.EventTraceActivity());
+                new EventTraceActivity());
             Assert.AreEqual(3, mergedFeatures.Count);
             Assert.AreEqual(mergedFeatures[0], Feature1);
             Assert.AreEqual(mergedFeatures[1], Feature2);
@@ -453,7 +454,7 @@ namespace CIT.PXService.Tests
                     country: "us",
                     localConfig,
                     remoteFeatures,
-                    new Microsoft.Commerce.Tracing.EventTraceActivity());
+                    new EventTraceActivity());
 
                 Assert.AreEqual(2, mergedFeatures.Count);
                 Assert.AreEqual(mergedFeatures[0], Feature1);

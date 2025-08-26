@@ -45,7 +45,7 @@ namespace CIT.PXService.Tests
         [AssemblyInitialize]
         public static void Initialize(TestContext context)
         {
-            SelfHostedPxService = new SelfHostedPxService(null, false, true);
+            SelfHostedPxService = SelfHostedPxService.StartInMemory(null, false, true);
             PXHandler = SelfHostedPxService.PXHandler;
             PXSettings = SelfHostedPxService.PXSettings;
             PXBaseUri = SelfHostedPxService.PxHostableService.BaseUri;
@@ -53,6 +53,11 @@ namespace CIT.PXService.Tests
             PXBaseUri = SelfHostedPxService.PxHostableService.BaseUri;
             PXCorsHandler = SelfHostedPxService.PXCorsHandler;
             PXFlightHandler = SelfHostedPxService.PXFlightHandler;
+
+            // Verify routing is configured – if this fails the console output from
+            // HostableService will show which endpoint could not be resolved.
+            var probeResponse = PXClient.GetAsync(GetPXServiceUrl("/v7.0/probe")).GetAwaiter().GetResult();
+            Assert.AreEqual(HttpStatusCode.OK, probeResponse.StatusCode, "PX probe endpoint is unreachable");
         }
 
         [TestCleanup]

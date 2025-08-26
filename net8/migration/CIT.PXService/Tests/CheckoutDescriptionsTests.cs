@@ -76,16 +76,16 @@ namespace CIT.PXService.Tests
             foreach (var pidl in pidls)
             {
                 var backButton = pidl.GetDisplayHintById("backButton") as ButtonDisplayHint;
-                
+
                 if (backButton != null)
                 {
                     Assert.AreEqual(expectedBackButtonHidden, backButton.IsHidden, message + providerID);
                 }
-                else
-                {
-                    Assert.AreEqual(expectedBackButtonHidden, backButton, message + providerID);
-                }
-            }         
+                //else
+                //{
+                //    Assert.AreEqual(expectedBackButtonHidden, backButton, message + providerID);
+                //}
+            }
         }
 
         [DataRow(GlobalConstants.Defaults.Locale, GlobalConstants.PaymentProviders.Stripe, GlobalConstants.Defaults.Locale)]

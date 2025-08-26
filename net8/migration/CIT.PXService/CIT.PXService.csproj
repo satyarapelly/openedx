@@ -1,355 +1,42 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\..\..\..\NugetPackages\Bond.CSharp.13.0.0\build\Bond.CSharp.props" Condition="Exists('..\..\..\..\NugetPackages\Bond.CSharp.13.0.0\build\Bond.CSharp.props')" />
-  <Import Project="..\..\..\..\NugetPackages\Azure.Analytics.Experimentation.VariantAssignment.5.8.2446104\build\Azure.Analytics.Experimentation.VariantAssignment.props" Condition="Exists('..\..\..\..\NugetPackages\Azure.Analytics.Experimentation.VariantAssignment.5.8.2446104\build\Azure.Analytics.Experimentation.VariantAssignment.props')" />
-  <Import Project="..\..\..\..\NugetPackages\MSTest.TestAdapter.2.2.10\build\net46\MSTest.TestAdapter.props" Condition="Exists('..\..\..\..\NugetPackages\MSTest.TestAdapter.2.2.10\build\net46\MSTest.TestAdapter.props')" />
-  <Import Project="..\..\..\..\NugetPackages\Ms.Qos.OutgoingServiceRequest.4.0.17341.1\build\Ms.Qos.OutgoingServiceRequest.props" Condition="Exists('..\..\..\..\NugetPackages\Ms.Qos.OutgoingServiceRequest.4.0.17341.1\build\Ms.Qos.OutgoingServiceRequest.props')" />
-  <Import Project="..\..\..\..\NugetPackages\Ms.Qos.IncomingServiceRequest.4.0.17341.1\build\Ms.Qos.IncomingServiceRequest.props" Condition="Exists('..\..\..\..\NugetPackages\Ms.Qos.IncomingServiceRequest.4.0.17341.1\build\Ms.Qos.IncomingServiceRequest.props')" />
-  <Import Project="..\..\..\..\NugetPackages\Ms.Qos.4.0.17341.1\build\Ms.Qos.props" Condition="Exists('..\..\..\..\NugetPackages\Ms.Qos.4.0.17341.1\build\Ms.Qos.props')" />
-  <Import Project="..\..\..\..\NugetPackages\Microsoft.CommonSchema.Bond.4.0.17341.1\build\Microsoft.CommonSchema.Bond.props" Condition="Exists('..\..\..\..\NugetPackages\Microsoft.CommonSchema.Bond.4.0.17341.1\build\Microsoft.CommonSchema.Bond.props')" />
-  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), build.root))\msbuild\Environment.props" />
-  <Import Project="$(INETROOT)\private\Payments\tests\Test.targets" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), build.root))\msbuild\Environment.props" />
+	<Import Project="..\..\Tests\Test.targets" />
   <PropertyGroup>
-    <ProjectGuid>{40927854-FBC8-4891-B9E2-2106E0CE0008}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CIT.PXService</RootNamespace>
-    <AssemblyName>CIT.PXService</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <!-- Used in public/ext/tools/MsbuildExtensions/InlineTests.targets -->
-    <CreateTestResourcePathFromLinkPath>true</CreateTestResourcePathFromLinkPath>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-    <WarningLevel>4</WarningLevel>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+	<ProjectGuid>{40927854-FBC8-4891-B9E2-2106E0CE0008}</ProjectGuid>
+	<OutputType>Library</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <IsTestProject>true</IsTestProject>
+    <OutDir>$(DropRoot)\UnitTests\$(AssemblyName)\</OutDir>
+	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Azure.Analytics.Experimentation.VariantAssignment, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=AMD64">
-      <HintPath>..\..\..\..\NugetPackages\Azure.Analytics.Experimentation.VariantAssignment.5.8.2446104\lib\net472\Azure.Analytics.Experimentation.VariantAssignment.dll</HintPath>
-    </Reference>
-    <Reference Include="Azure.Analytics.Experimentation.VariantAssignment.Contract, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\Azure.Analytics.Experimentation.VariantAssignment.Contract.5.8.2446104\lib\net472\Azure.Analytics.Experimentation.VariantAssignment.Contract.dll</HintPath>
-    </Reference>
-    <Reference Include="Bond, Version=13.0.0.100, Culture=neutral, PublicKeyToken=87e9ead25a117286, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\Bond.Core.CSharp.13.0.0\lib\net462\Bond.dll</HintPath>
-    </Reference>
-    <Reference Include="Bond.Attributes, Version=13.0.0.100, Culture=neutral, PublicKeyToken=87e9ead25a117286, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\Bond.Core.CSharp.13.0.0\lib\net462\Bond.Attributes.dll</HintPath>
-    </Reference>
-    <Reference Include="Bond.IO, Version=13.0.0.100, Culture=neutral, PublicKeyToken=87e9ead25a117286, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\Bond.Core.CSharp.13.0.0\lib\net462\Bond.IO.dll</HintPath>
-    </Reference>
-    <Reference Include="Bond.JSON, Version=13.0.0.100, Culture=neutral, PublicKeyToken=87e9ead25a117286, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\Bond.Runtime.CSharp.13.0.0\lib\net462\Bond.JSON.dll</HintPath>
-    </Reference>
-    <Reference Include="Bond.Reflection, Version=13.0.0.100, Culture=neutral, PublicKeyToken=87e9ead25a117286, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\Bond.Core.CSharp.13.0.0\lib\net462\Bond.Reflection.dll</HintPath>
-    </Reference>
-    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\Castle.Core.4.3.1\lib\net45\Castle.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="CertificateVerificationCore, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\Microsoft.Commerce.Payments.Management.CertificateVerificationCore.1.3.30\lib\net462\CertificateVerificationCore.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Asimov.Experimentation.ClientLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d91bba2b903dc20f, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\Microsoft.Asimov.Experimentation.ClientLibrary.dll.1.0.15\lib\net45\Microsoft.Asimov.Experimentation.ClientLibrary.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\Microsoft.Bcl.AsyncInterfaces.8.0.0\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Commerce.Payments.PXService.Fakes">
-      <HintPath>FakesAssemblies\Microsoft.Commerce.Payments.PXService.Fakes.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CommonSchema.Bond, Version=4.0.17341.1, Culture=neutral, PublicKeyToken=872fbc9102191257, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\Microsoft.CommonSchema.Bond.4.0.17341.1\lib\net461\Microsoft.CommonSchema.Bond.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CommonSchema.Services, Version=5.1.218.0, Culture=neutral, PublicKeyToken=872fbc9102191257, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\Microsoft.CommonSchema.Services.5.1.218\lib\net46\Microsoft.CommonSchema.Services.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Diagnostics.Tracing.EventSource, Version=1.1.28.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\Microsoft.Diagnostics.Tracing.EventSource.Redist.1.1.28\lib\net46\Microsoft.Diagnostics.Tracing.EventSource.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Diagnostics.Tracing.TraceEvent, Version=1.0.41.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\Microsoft.Diagnostics.Tracing.TraceEvent.1.0.41\lib\net40\Microsoft.Diagnostics.Tracing.TraceEvent.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Configuration, Version=7.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\Microsoft.Extensions.Configuration.7.0.0\lib\net462\Microsoft.Extensions.Configuration.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Configuration.Abstractions, Version=7.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\Microsoft.Extensions.Configuration.Abstractions.7.0.0\lib\net462\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Configuration.Binder, Version=7.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\Microsoft.Extensions.Configuration.Binder.7.0.0\lib\net462\Microsoft.Extensions.Configuration.Binder.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.DependencyInjection, Version=7.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\Microsoft.Extensions.DependencyInjection.7.0.0\lib\net462\Microsoft.Extensions.DependencyInjection.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\Microsoft.Extensions.DependencyInjection.Abstractions.8.0.0\lib\net462\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Logging, Version=7.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\Microsoft.Extensions.Logging.7.0.0\lib\net462\Microsoft.Extensions.Logging.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\Microsoft.Extensions.Logging.Abstractions.8.0.0\lib\net462\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Logging.Configuration, Version=7.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\Microsoft.Extensions.Logging.Configuration.7.0.0\lib\net462\Microsoft.Extensions.Logging.Configuration.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Options, Version=7.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\Microsoft.Extensions.Options.7.0.0\lib\net462\Microsoft.Extensions.Options.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Options.ConfigurationExtensions, Version=7.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\Microsoft.Extensions.Options.ConfigurationExtensions.7.0.0\lib\net462\Microsoft.Extensions.Options.ConfigurationExtensions.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Primitives, Version=7.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\Microsoft.Extensions.Primitives.7.0.0\lib\net462\Microsoft.Extensions.Primitives.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.QualityTools.Testing.Fakes, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="Microsoft.Rest.ClientRuntime.Azure">
-      <HintPath>..\..\..\..\NugetPackages\Microsoft.Rest.ClientRuntime.Azure.4.0.3\lib\net45\Microsoft.Rest.ClientRuntime.Azure.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.VariantAssignment.Bond, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\Microsoft.VariantAssignment.Bond.4.1.227711\lib\net46\Microsoft.VariantAssignment.Bond.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\MSTest.TestFramework.2.2.10\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\MSTest.TestFramework.2.2.10\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Xbox.Experimentation.Contracts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d91bba2b903dc20f, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\Microsoft.Asimov.Experimentation.ClientLibrary.dll.1.0.15\lib\net45\Microsoft.Xbox.Experimentation.Contracts.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Moq, Version=4.10.0.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\Moq.4.10.1\lib\net45\Moq.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Ms.Qos, Version=4.0.17341.1, Culture=neutral, PublicKeyToken=872fbc9102191257, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\Ms.Qos.4.0.17341.1\lib\net461\Ms.Qos.dll</HintPath>
-    </Reference>
-    <Reference Include="Ms.Qos.IncomingServiceRequest, Version=4.0.17341.1, Culture=neutral, PublicKeyToken=872fbc9102191257, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\Ms.Qos.IncomingServiceRequest.4.0.17341.1\lib\net461\Ms.Qos.IncomingServiceRequest.dll</HintPath>
-    </Reference>
-    <Reference Include="Ms.Qos.OutgoingServiceRequest, Version=4.0.17341.1, Culture=neutral, PublicKeyToken=872fbc9102191257, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\Ms.Qos.OutgoingServiceRequest.4.0.17341.1\lib\net461\Ms.Qos.OutgoingServiceRequest.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\Newtonsoft.Json.13.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
-    </Reference>
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Diagnostics.DiagnosticSource, Version=7.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\System.Diagnostics.DiagnosticSource.7.0.0\lib\net462\System.Diagnostics.DiagnosticSource.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.IO, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\System.IO.4.3.0\lib\net462\System.IO.dll</HintPath>
-      <Private>True</Private>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Net.Http, Version=4.1.1.3, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\System.Net.Http.4.3.4\lib\net46\System.Net.Http.dll</HintPath>
-      <Private>True</Private>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Net.Http.Formatting, Version=5.2.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\Microsoft.AspNet.WebApi.Client.5.2.4\lib\net45\System.Net.Http.Formatting.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Net.Http.WebRequest" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\System.Runtime.4.3.0\lib\net462\System.Runtime.dll</HintPath>
-      <Private>True</Private>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\System.Runtime.CompilerServices.Unsafe.6.0.0\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Security.Cryptography.Algorithms, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\System.Security.Cryptography.Algorithms.4.3.0\lib\net463\System.Security.Cryptography.Algorithms.dll</HintPath>
-      <Private>True</Private>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Security.Cryptography.Encoding, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
-      <Private>True</Private>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Security.Cryptography.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
-      <Private>True</Private>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
-      <Private>True</Private>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Threading.Tasks.Dataflow, Version=4.6.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\System.Threading.Tasks.Dataflow.4.8.0\lib\netstandard2.0\System.Threading.Tasks.Dataflow.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\NugetPackages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
-    <Reference Include="System.Web.Http.SelfHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>$(INETROOT)\NugetPackages\Microsoft.AspNet.WebApi.SelfHost.5.2.3\lib\net45\System.Web.Http.SelfHost.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="UAParser, Version=3.1.47.0, Culture=neutral, PublicKeyToken=f7377bf021646069" />
+	<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	<PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="MSTest.TestAdapter" />
+    <PackageReference Include="MSTest.TestFramework" />
+    <PackageReference Include="Newtonsoft.Json" />
+	  <PackageReference Include="Moq" />
+	  <PackageReference Include="Microsoft.Extensions.ObjectPool" />
+	  <PackageReference Include="Microsoft.Xbox.Experimentation.Contracts" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="$(INETROOT)\private\shared\Library\Tracing\EventSource\EventSource.csproj">
-      <Project>{9036684c-6fe2-4542-97be-1430f2032354}</Project>
-      <Name>EventSource</Name>
-    </ProjectReference>
-    <ProjectReference Include="$(INETROOT)\private\Payments\Common\Common.csproj">
-      <Project>{717e55e4-ccc7-4eea-b138-15ca4d7911bf}</Project>
-      <Name>Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="$(INETROOT)\private\Payments\PXService\PXService.csproj">
-      <Project>{C8617C71-9458-4571-B7E5-3DDA7A0341C2}</Project>
-      <Name>PXService</Name>
-    </ProjectReference>
-    <ProjectReference Include="$(INETROOT)\private\Payments\Pidl\PXCommon\PXCommon.csproj">
-      <Project>{bf723e85-a62e-4c9e-a251-16b89a037e2b}</Project>
-      <Name>PXCommon</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\External\QRCoder\QRCoder.csproj">
-      <Project>{8792CC93-AC1C-4E1D-AF35-9C21990A26F6}</Project>
-      <Name>QRCoder</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Pidl\LocalizationRepository\LocalizationRepository.csproj">
-      <Project>{FA039DC0-A241-488F-890A-CF9CA6FF77E0}</Project>
-      <Name>LocalizationRepository</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Pidl\PartnerSettingsModel\PartnerSettingsModel.csproj">
-      <Project>{980463C7-08F0-4383-93D7-E541CDD4F051}</Project>
-      <Name>PartnerSettingsModel</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Pidl\PidlFactory\PidlFactory.csproj">
-      <Project>{046d7ec1-e7a0-44bc-9a7b-846d687a4f93}</Project>
-      <Name>PidlFactory</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Pidl\PidlModel\PidlModel.csproj">
-      <Project>{9c61837a-7118-42b5-ba50-480493cc190d}</Project>
-      <Name>PidlModel</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Pidl\PimsModel\PimsModel.csproj">
-      <Project>{b9da0893-6419-46fe-9fa9-6ebf61d9f0c0}</Project>
-      <Name>PimsModel</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Emulators\PXDependencyEmulators\PXDependencyEmulators.csproj">
-      <Project>{885DE277-B844-4676-86A1-A3BB48B19981}</Project>
-      <Name>PXDependencyEmulators</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SelfHostedPXServiceCore\SelfHostedPXServiceCore.csproj">
-      <Project>{59f56111-e5c6-4d5d-beac-e61c1503e995}</Project>
-      <Name>SelfHostedPXServiceCore</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Test.Common\Test.Common.csproj">
-      <Project>{d6784baf-4b15-4852-8238-94e8074d87f1}</Project>
-      <Name>Test.Common</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="GlobalConstants.cs" />
-    <Compile Include="RequestBatch.cs" />
-    <Compile Include="TestData\Samples.cs" />
-    <Compile Include="Tests\AgenticPayment\AgenticTokenDescriptionsControllerTests.cs" />
-    <Compile Include="Tests\AgenticPayment\TokensExControllerTests.cs" />
-    <Compile Include="Tests\CheckoutRequestExTests.cs" />
-    <Compile Include="Tests\ExpressCheckoutTests.cs" />
-    <Compile Include="Tests\MSRewardsTests.cs" />
-    <Compile Include="Tests\AddressTestsUtil.cs" />
-    <Compile Include="Tests\AnomalyDetectionAccessorTests.cs" />
-    <Compile Include="Tests\ChallengeManagementServiceHandlerTests.cs" />
-    <Compile Include="Tests\CheckoutChallengeTests.cs" />
-    <Compile Include="Tests\AzureExPAccessorTests.cs" />
-    <Compile Include="Tests\CheckoutExTest.cs" />
-    <Compile Include="Tests\ClientActionFactoryTests.cs" />
-    <Compile Include="Tests\CustomerHeaderTests.cs" />
-    <Compile Include="Tests\GuestAccountHelperTests.cs" />
-    <Compile Include="Tests\LocalFeatureConfigsTests.cs" />
-    <Compile Include="Tests\CertificateUserDirectoryTests.cs" />
-    <Compile Include="Tests\ChallengeDescriptionsTests.cs" />
-    <Compile Include="Tests\BillingGroupDescriptionTests.cs" />
-    <Compile Include="Tests\AnomalyDetectionTests.cs" />
-    <Compile Include="Tests\LegacyAccountHelperTests.cs" />
-    <Compile Include="Tests\HttpRequestHelperTests.cs" />
-    <Compile Include="Tests\CheckoutDescriptionsTests.cs" />
-    <Compile Include="Tests\PaymentClient\DescriptionsControllerTests.cs" />
-    <Compile Include="Tests\PaymentClient\InitializationControllerTest.cs" />
-    <Compile Include="Tests\PaymentMethodDescriptions_AddPI_Tests.cs" />
-    <Compile Include="Tests\PaymentPSD2CertificatesValidatorTests.cs" />
-    <Compile Include="Tests\HandleCheckoutTests.cs" />
-    <Compile Include="Tests\PaymentRequestExTests.cs" />
-    <Compile Include="Tests\PaymentSessionsHandlerV2Tests.cs" />
-    <Compile Include="Tests\PaymentSessionsTests.cs" />
-    <Compile Include="Tests\PaymentChallengeTests.cs" />
-    <Compile Include="Tests\PaymentSessionsV2Tests.cs" />
-    <Compile Include="Tests\PaymentSettingsTests.cs" />
-    <Compile Include="Tests\PaymentSessionsHandlerTests.cs" />
-    <Compile Include="Tests\PaymentTransactionTests.cs" />
-    <Compile Include="Tests\PXServicePIDLValidationHandlerTest.cs" />
-    <Compile Include="Tests\PXServiceCorsHandlerTest.cs" />
-    <Compile Include="Tests\PXServiceInputValidationHandlerTest.cs" />
-    <Compile Include="Tests\RewardsDescriptionsControllerTests.cs" />
-    <Compile Include="Tests\RiskServiceAccessorTests.cs" />
-    <Compile Include="Tests\TaxIdDescriptionsTests.cs" />
-    <Compile Include="Tests\ProfileDescriptionsTests.cs" />
-    <Compile Include="Tests\AddressDescriptionsTests.cs" />
-    <Compile Include="Tests\DefaultParamsTests.cs" />
-    <Compile Include="Tests\PaymentInstrumentsExTests.cs" />
-    <Compile Include="Tests\AddressesTests.cs" />
-    <Compile Include="Tests\ContextHelperTests.cs" />
-    <Compile Include="Tests\FlightingTests.cs" />
-    <Compile Include="Tests\PaymentMethodDescriptionsTests.cs" />
-    <Compile Include="Tests\PXServiceApiVersionHandlerTests.cs" />
-    <Compile Include="Tests\ResourceLifecycleStateManagerTests.cs" />
-    <Compile Include="Tests\TestBase.cs" />
-    <Compile Include="Tests\WalletTests.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <TestDependency Include="$(INETROOT)\private\Payments\Tests\Payments.Common.Config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <Link>Payments.Common.Config</Link>
-    </TestDependency>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
-  </ItemGroup>
-  <ItemGroup>
+    <ProjectReference Include="..\..\PXService\PXService.csproj" />
+    <ProjectReference Include="..\SelfHostedPXServiceCore\SelfHostedPXServiceCore.csproj" />
+    <ProjectReference Include="..\Test.Common\Test.Common.csproj" />
+    <ProjectReference Include="..\..\Common\Common.csproj" />
+    <ProjectReference Include="..\..\Pidl\PXCommon\PXCommon.csproj" />
+    <ProjectReference Include="..\..\External\QRCoder\QRCoder.csproj" />
+    <ProjectReference Include="..\..\Pidl\LocalizationRepository\LocalizationRepository.csproj" />
+    <ProjectReference Include="..\..\Pidl\PartnerSettingsModel\PartnerSettingsModel.csproj" />
+    <ProjectReference Include="..\..\Pidl\PidlFactory\PidlFactory.csproj" />
+    <ProjectReference Include="..\..\Pidl\PidlModel\PidlModel.csproj" />
+    <ProjectReference Include="..\..\Pidl\PimsModel\PimsModel.csproj" />
+    <ProjectReference Include="..\Emulators\PXDependencyEmulators\PXDependencyEmulators.csproj" />
+    </ItemGroup>
+    <ItemGroup>
     <Content Include="..\..\PXService\App_Data\ClientActionConfig.csv">
       <Link>TestData\ClientActionConfig.csv</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -358,25 +45,14 @@
       <Link>TestData\PIServiceErrorConfig.csv</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="app.config">
-      <SubType>Designer</SubType>
-    </None>
-    <Fakes Include="Fakes\Microsoft.Commerce.Payments.PXService.fakes" />
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="TestData\paymentexpprd_flight.blob">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="TestData\challengepidl.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\..\..\..\NugetPackages\Azure.Analytics.Experimentation.VariantAssignment.5.8.2446104\runtimes\win-x64\native\azure-exp-varassign.dll">
-      <Link>azure-exp-varassign.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
+    </ItemGroup>
+    <ItemGroup>
     <Content Include="..\..\PXService\App_Data\PSD2Config\certs-V17\DsCertificates.json">
       <Link>App_Data\PSD2Config\certs-V17\DsCertificates.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -558,26 +234,4 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(ExtendedTargetsPath)\Microsoft.CSharp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\..\..\..\NugetPackages\Microsoft.Diagnostics.Tracing.TraceEvent.1.0.41\build\Microsoft.Diagnostics.Tracing.TraceEvent.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\NugetPackages\Microsoft.Diagnostics.Tracing.TraceEvent.1.0.41\build\Microsoft.Diagnostics.Tracing.TraceEvent.targets'))" />
-    <Error Condition="!Exists('..\..\..\..\NugetPackages\Microsoft.CommonSchema.Bond.4.0.17341.1\build\Microsoft.CommonSchema.Bond.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\NugetPackages\Microsoft.CommonSchema.Bond.4.0.17341.1\build\Microsoft.CommonSchema.Bond.props'))" />
-    <Error Condition="!Exists('..\..\..\..\NugetPackages\Ms.Qos.4.0.17341.1\build\Ms.Qos.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\NugetPackages\Ms.Qos.4.0.17341.1\build\Ms.Qos.props'))" />
-    <Error Condition="!Exists('..\..\..\..\NugetPackages\Ms.Qos.IncomingServiceRequest.4.0.17341.1\build\Ms.Qos.IncomingServiceRequest.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\NugetPackages\Ms.Qos.IncomingServiceRequest.4.0.17341.1\build\Ms.Qos.IncomingServiceRequest.props'))" />
-    <Error Condition="!Exists('..\..\..\..\NugetPackages\Ms.Qos.OutgoingServiceRequest.4.0.17341.1\build\Ms.Qos.OutgoingServiceRequest.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\NugetPackages\Ms.Qos.OutgoingServiceRequest.4.0.17341.1\build\Ms.Qos.OutgoingServiceRequest.props'))" />
-    <Error Condition="!Exists('..\..\..\..\NugetPackages\MSTest.TestAdapter.2.2.10\build\net46\MSTest.TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\NugetPackages\MSTest.TestAdapter.2.2.10\build\net46\MSTest.TestAdapter.props'))" />
-    <Error Condition="!Exists('..\..\..\..\NugetPackages\MSTest.TestAdapter.2.2.10\build\net46\MSTest.TestAdapter.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\NugetPackages\MSTest.TestAdapter.2.2.10\build\net46\MSTest.TestAdapter.targets'))" />
-    <Error Condition="!Exists('..\..\..\..\NugetPackages\Azure.Analytics.Experimentation.VariantAssignment.5.8.2446104\build\Azure.Analytics.Experimentation.VariantAssignment.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\NugetPackages\Azure.Analytics.Experimentation.VariantAssignment.5.8.2446104\build\Azure.Analytics.Experimentation.VariantAssignment.props'))" />
-    <Error Condition="!Exists('..\..\..\..\NugetPackages\Azure.Analytics.Experimentation.VariantAssignment.5.8.2446104\build\Azure.Analytics.Experimentation.VariantAssignment.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\NugetPackages\Azure.Analytics.Experimentation.VariantAssignment.5.8.2446104\build\Azure.Analytics.Experimentation.VariantAssignment.targets'))" />
-    <Error Condition="!Exists('..\..\..\..\NugetPackages\Bond.CSharp.13.0.0\build\Bond.CSharp.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\NugetPackages\Bond.CSharp.13.0.0\build\Bond.CSharp.props'))" />
-    <Error Condition="!Exists('..\..\..\..\NugetPackages\Bond.CSharp.13.0.0\build\Bond.CSharp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\NugetPackages\Bond.CSharp.13.0.0\build\Bond.CSharp.targets'))" />
-  </Target>
-  <Import Project="..\..\..\..\NugetPackages\Microsoft.Diagnostics.Tracing.TraceEvent.1.0.41\build\Microsoft.Diagnostics.Tracing.TraceEvent.targets" Condition="Exists('..\..\..\..\NugetPackages\Microsoft.Diagnostics.Tracing.TraceEvent.1.0.41\build\Microsoft.Diagnostics.Tracing.TraceEvent.targets')" />
-  <Import Project="..\..\..\..\NugetPackages\MSTest.TestAdapter.2.2.10\build\net46\MSTest.TestAdapter.targets" Condition="Exists('..\..\..\..\NugetPackages\MSTest.TestAdapter.2.2.10\build\net46\MSTest.TestAdapter.targets')" />
-  <Import Project="..\..\..\..\NugetPackages\Azure.Analytics.Experimentation.VariantAssignment.5.8.2446104\build\Azure.Analytics.Experimentation.VariantAssignment.targets" Condition="Exists('..\..\..\..\NugetPackages\Azure.Analytics.Experimentation.VariantAssignment.5.8.2446104\build\Azure.Analytics.Experimentation.VariantAssignment.targets')" />
-  <Import Project="..\..\..\..\NugetPackages\Bond.CSharp.13.0.0\build\Bond.CSharp.targets" Condition="Exists('..\..\..\..\NugetPackages\Bond.CSharp.13.0.0\build\Bond.CSharp.targets')" />
 </Project>

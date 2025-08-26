@@ -20,8 +20,6 @@ namespace CIT.PXService.Tests
     using System.Net.Http;
     using System.Text;
     using System.Threading.Tasks;
-    using System.Web.Routing;
-    using System.Web.UI.WebControls;
     using static Microsoft.Commerce.Payments.PidlFactory.GlobalConstants.ServiceContextKeys;
 
     [TestClass]

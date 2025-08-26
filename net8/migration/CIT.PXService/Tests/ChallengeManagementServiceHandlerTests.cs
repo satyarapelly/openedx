@@ -11,7 +11,7 @@ namespace CIT.PXService.Tests
     using Microsoft.Commerce.Payments.PXService.Accessors.ChallengeManagementService;
     using Microsoft.Commerce.Payments.PXService.Model.ChallengeManagementService;
     using Microsoft.Commerce.Payments.PXService.V7.PXChallengeManagement;
-    using Microsoft.Commerce.Tracing;
+    using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Moq;    
 

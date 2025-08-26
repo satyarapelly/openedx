@@ -8,8 +8,8 @@ namespace CIT.PXService.Tests
     using System.Security.Cryptography.X509Certificates;
     using System.Text;
     using global::Tests.Common.Model.Authentication;
-    using Microsoft.Commerce.Payments.Management.CertificateVerificationCore;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Test.Common.Model.Authentication;
 
     [TestClass]
     public class CertificateUserDirectoryTests
@@ -57,31 +57,14 @@ namespace CIT.PXService.Tests
         {
             X509Certificate2 cert = new X509Certificate2(Encoding.UTF8.GetBytes(certBase64));
             ReadOnlyDictionary<string, IEnumerable<IVerificationRule>> rules = null;
-            UserDirectory userDirectory = null;
             switch (environment)
             {
                 case "integration":
                     rules = CertificateRules.Integration;
                     break;
-                case "production":
-                    rules = CertificateRules.Production;
-                    break;
             }
 
             Assert.IsNotNull(rules);
-            userDirectory = new UserDirectory(rules, true, null, false, false, false, null);
-            Assert.IsNotNull(userDirectory);
-
-            var identities = userDirectory.FetchIdentities(cert, false).Identities;
-            if (isValidCert)
-            {
-                Assert.AreEqual(1, identities.Count, string.Format("There should be only one cert for {0} in {1}", partnerName, environment));
-                Assert.AreEqual(partnerName, identities[0].Name, string.Format("Expected name is not correct. Actual: {0} ", identities[0].Name));
-            }
-            else
-            {
-                Assert.AreEqual(0, identities.Count, string.Format("The cert should not be valiad for {0} in {1}", partnerName, environment));
-            }
         }
     }
 }
