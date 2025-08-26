@@ -95,13 +95,10 @@ namespace SelfHostedPXServiceCore
             // the selected endpoint is invoked.
             configureApp?.Invoke(App);
 
-            // Map routes + controllers after routing has been added so HttpContext.GetEndpoint()
+            // Map routes + controllers using top-level registration so HttpContext.GetEndpoint()
             // returns the matched endpoint during the middleware above.
-            App.UseEndpoints(endpoints =>
-            {
-                configureEndpoints?.Invoke(endpoints);
-                endpoints.MapControllers();
-            });
+            configureEndpoints?.Invoke(App);
+            App.MapControllers();
 
             // Start server
             App.Start();
