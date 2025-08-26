@@ -35,6 +35,7 @@ namespace Microsoft.Commerce.Payments.PXService
                     options.Filters.Add(settings.AuthorizationFilter);
                 }
             })
+                .AddApplicationPart(typeof(WebApiConfig).Assembly)
                 .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
