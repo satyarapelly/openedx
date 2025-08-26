@@ -31,7 +31,7 @@ namespace SelfHostedPXServiceCore
         /// <param name="configureApp">Configure middleware/endpoints. <c>MapControllers()</c> is already called.</param>
         /// <param name="fullBaseUrl">e.g. "http://localhost:49152". If null/empty a free port is chosen.</param>
         public HostableService(Action<WebApplication> configureApp, Uri fullBaseUrl)
-            : this(_ => { }, configureApp, fullBaseUrl)
+            : this(_ => { }, null, configureApp, fullBaseUrl)
         {
         }
 
@@ -39,12 +39,15 @@ namespace SelfHostedPXServiceCore
         /// Build + start a host with service configuration and app configuration callbacks.
         /// </summary>
         /// <param name="configureServices">Add DI/services. Controllers + Newtonsoft JSON are already registered.</param>
-        /// <param name="configureApp">Configure middleware/endpoints. A routing pipeline is already wired so that
-        /// middlewares added here run <em>after</em> <c>UseRouting()</c> but before endpoints are mapped.</param>
+        /// <param name="configureBeforeRouting">Configure middleware that must run <em>before</em> routing executes
+        /// (e.g. URL rewriters).</param>
+        /// <param name="configureApp">Configure middleware that runs <em>after</em> routing but before endpoints are
+        /// invoked.</param>
         /// <param name="fullBaseUrl">e.g. "http://localhost:49152". If null/empty a free port is chosen.</param>
         public HostableService(
             Action<WebApplicationBuilder> configureServices,
-            Action<WebApplication> configureApp,
+            Action<WebApplication>? configureBeforeRouting,
+            Action<WebApplication>? configureApp,
             Uri baseUri,
             Action<IEndpointRouteBuilder>? configureEndpoints = null)
         {
@@ -69,13 +72,12 @@ namespace SelfHostedPXServiceCore
 
             App = builder.Build();
 
-            // Ensure the routing matcher runs before custom middleware so HttpContext.GetEndpoint()
-            // is populated when those middlewares execute.
-            App.UseRouting();
+            // Allow callers to register middleware that needs to run before routing (e.g. to mutate
+            // the request path used for endpoint matching).
+            configureBeforeRouting?.Invoke(App);
 
-            // Callers can add middlewares, filters, etc. They will execute after routing but before
-            // the selected endpoint is invoked.
-            configureApp?.Invoke(App);
+            // Wire up routing so the endpoint matcher runs before custom post-routing middleware.
+            App.UseRouting();
 
             // Log which endpoint was selected for each request to aid in debugging tests.
             App.Use(async (ctx, next) =>
@@ -88,6 +90,10 @@ namespace SelfHostedPXServiceCore
                 }
                 await next();
             });
+
+            // Callers can add middlewares, filters, etc. They will execute after routing but before
+            // the selected endpoint is invoked.
+            configureApp?.Invoke(App);
 
             // Map routes + controllers after routing has been added so HttpContext.GetEndpoint()
             // returns the matched endpoint during the middleware above.
