@@ -22,7 +22,7 @@ namespace CIT.PXService.Tests
             Dictionary<string, string> actualFlightContext = null;
             PXHandler.PreProcess = (request) =>
             {
-                actualFlightContext = request.Properties["PX.FlightContext"] as Dictionary<string, string>;
+                actualFlightContext = request.GetProperties()["PX.FlightContext"] as Dictionary<string, string>;
             };
 
             // Act
@@ -51,7 +51,7 @@ namespace CIT.PXService.Tests
             Dictionary<string, string> actualFlightContext = null;
             PXHandler.PreProcess = (request) =>
             {
-                actualFlightContext = request.Properties["PX.FlightContext"] as Dictionary<string, string>;
+                actualFlightContext = request.GetProperties()["PX.FlightContext"] as Dictionary<string, string>;
             };
 
             // Act
@@ -91,7 +91,7 @@ namespace CIT.PXService.Tests
             Dictionary<string, string> actualFlightContext = null;
             PXHandler.PreProcess = (request) =>
             {
-                actualFlightContext = request.Properties["PX.FlightContext"] as Dictionary<string, string>;
+                actualFlightContext = request.GetProperties()["PX.FlightContext"] as Dictionary<string, string>;
             };
 
             // Act
@@ -131,7 +131,7 @@ namespace CIT.PXService.Tests
             Dictionary<string, string> actualFlightContext = null;
             PXHandler.PreProcess = (request) =>
             {
-                actualFlightContext = request.Properties["PX.FlightContext"] as Dictionary<string, string>;
+                actualFlightContext = request.GetProperties()["PX.FlightContext"] as Dictionary<string, string>;
             };
 
             // Act
@@ -166,7 +166,7 @@ namespace CIT.PXService.Tests
             Dictionary<string, string> actualFlightContext = null;
             PXHandler.PreProcess = (request) =>
             {
-                actualFlightContext = request.Properties["PX.FlightContext"] as Dictionary<string, string>;
+                actualFlightContext = request.GetProperties()["PX.FlightContext"] as Dictionary<string, string>;
             };
 
             // Act

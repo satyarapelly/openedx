@@ -20,18 +20,18 @@ namespace CIT.PXService.Tests
 
             bool isGuestAccount = GuestAccountHelper.IsGuestAccount(request);
             Assert.IsTrue(isGuestAccount);
-            Assert.AreEqual(request.Properties["x-ms-customer_customerType"], CustomerType.AnonymousUser);
+            Assert.AreEqual(request.GetProperties()["x-ms-customer_customerType"], CustomerType.AnonymousUser);
         }
 
         [TestMethod]
         public void Test_IsGuestAccount_FromRequestProperties()
         {
             HttpRequestMessage request = new HttpRequestMessage();
-            request.Properties["x-ms-customer_customerType"] = CustomerType.AnonymousUser;
+            request.GetProperties()["x-ms-customer_customerType"] = CustomerType.AnonymousUser;
 
             bool isGuestAccount = GuestAccountHelper.IsGuestAccount(request);
             Assert.IsTrue(isGuestAccount);
-            Assert.AreEqual(request.Properties["x-ms-customer_customerType"], CustomerType.AnonymousUser);
+            Assert.AreEqual(request.GetProperties()["x-ms-customer_customerType"], CustomerType.AnonymousUser);
         }
     }
 }

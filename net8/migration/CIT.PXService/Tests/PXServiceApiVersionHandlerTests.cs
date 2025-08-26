@@ -75,8 +75,8 @@ namespace CIT.PXService.Tests
             ApiVersion version = null;
             PXHandler.PreProcess = (request) =>
             {
-                versionKeyFound = request.Properties.ContainsKey(PaymentConstants.Web.Properties.Version);
-                versionObject = request.Properties[PaymentConstants.Web.Properties.Version];
+                versionKeyFound = request.GetProperties().ContainsKey(PaymentConstants.Web.Properties.Version);
+                versionObject = request.GetProperties()[PaymentConstants.Web.Properties.Version];
                 version = versionObject as ApiVersion;
             };
 
@@ -101,8 +101,8 @@ namespace CIT.PXService.Tests
             Dictionary<string, string> flightContext = null;
             PXHandler.PreProcess = (request) =>
             {
-                flightContextKeyFound = request.Properties.ContainsKey("PX.FlightContext");
-                flightContextObject = request.Properties["PX.FlightContext"];
+                flightContextKeyFound = request.GetProperties().ContainsKey("PX.FlightContext");
+                flightContextObject = request.GetProperties()["PX.FlightContext"];
                 flightContext = flightContextObject as Dictionary<string, string>;
             };
 
@@ -127,8 +127,8 @@ namespace CIT.PXService.Tests
             IEnumerable<KeyValuePair<string, string>> queryParams = null;
             PXHandler.PreProcess = (request) =>
             {
-                queryParamsKeyFound = request.Properties.ContainsKey("Payments.QueryParameters");
-                queryParamsObject = request.Properties["Payments.QueryParameters"];
+                queryParamsKeyFound = request.GetProperties().ContainsKey("Payments.QueryParameters");
+                queryParamsObject = request.GetProperties()["Payments.QueryParameters"];
                 queryParams = queryParamsObject as IEnumerable<KeyValuePair<string, string>>;
             };
 

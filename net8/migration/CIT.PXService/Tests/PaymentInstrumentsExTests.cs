@@ -6775,9 +6775,9 @@ namespace CIT.PXService.Tests
 
             PXSettings.AccountsService.PreProcess = async (request) =>
             {
-                if (request.Method == HttpMethod.Get && request.Properties.ContainsKey(actionNameKey))
+                if (request.Method == HttpMethod.Get && request.GetProperties().ContainsKey(actionNameKey))
                 {
-                    if (string.Equals(request.Properties[actionNameKey].ToString(), "GetProfiles", StringComparison.OrdinalIgnoreCase))
+                    if (string.Equals(request.GetProperties()[actionNameKey].ToString(), "GetProfiles", StringComparison.OrdinalIgnoreCase))
                     {
                         if (!pimsAssertCalled)
                         {
@@ -6786,7 +6786,7 @@ namespace CIT.PXService.Tests
                             Assert.IsFalse(getAddressByCountryAssertCalled);
                         }
                     }
-                    else if (string.Equals(request.Properties[actionNameKey].ToString(), "GetAddressByCountry", StringComparison.OrdinalIgnoreCase))
+                    else if (string.Equals(request.GetProperties()[actionNameKey].ToString(), "GetAddressByCountry", StringComparison.OrdinalIgnoreCase))
                     {
                         Assert.IsTrue(addressEnrichmentAssertCalled);
                         Assert.IsTrue(getProfilesAssertCalled);
@@ -6798,9 +6798,9 @@ namespace CIT.PXService.Tests
                         }
                     }
                 }
-                else if (request.Method == HttpMethod.Post && request.Properties.ContainsKey(actionNameKey))
+                else if (request.Method == HttpMethod.Post && request.GetProperties().ContainsKey(actionNameKey))
                 {
-                    if (string.Equals(request.Properties[actionNameKey].ToString(), "PostAddress", StringComparison.OrdinalIgnoreCase))
+                    if (string.Equals(request.GetProperties()[actionNameKey].ToString(), "PostAddress", StringComparison.OrdinalIgnoreCase))
                     {
                         string requestContent = await request.Content.ReadAsStringAsync();
                         postAddressAssertCalled = true;
@@ -6808,7 +6808,7 @@ namespace CIT.PXService.Tests
                         Assert.IsTrue(getAddressByCountryAssertCalled);
                         Assert.IsFalse(updateProfileAssertCalled);
                     }
-                    else if (string.Equals(request.Properties[actionNameKey].ToString(), "UpdateProfile", StringComparison.OrdinalIgnoreCase))
+                    else if (string.Equals(request.GetProperties()[actionNameKey].ToString(), "UpdateProfile", StringComparison.OrdinalIgnoreCase))
                     {
                         Assert.IsTrue(postAddressAssertCalled);
                         updateProfileAssertCalled = true;
@@ -7465,7 +7465,7 @@ namespace CIT.PXService.Tests
 
             // Assert
             string resultContent = await result.Content.ReadAsStringAsync();
-            string instrumentManagementPropertyMessage = result.RequestMessage.Properties["InstrumentManagement.Message"].ToString();
+            string instrumentManagementPropertyMessage = result.RequestMessage.GetProperties()["InstrumentManagement.Message"].ToString();
             Assert.IsNotNull(instrumentManagementPropertyMessage);
             if (verifyJarvisAccountIdHmac)
             {
