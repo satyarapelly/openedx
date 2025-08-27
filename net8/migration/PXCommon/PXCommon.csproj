@@ -1,5 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
+	<Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), build.root))\msbuild\Environment.props" />
 	<Import Project="..\..\Payments.targets" />
 
 	<PropertyGroup>

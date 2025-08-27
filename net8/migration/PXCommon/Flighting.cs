@@ -755,6 +755,9 @@ namespace Microsoft.Commerce.Payments.PXCommon
             // Flight to enable feature, which is to change style structure of expiry month and year from dropdown to one text box for month and year.
             public const string PXChangeExpiryMonthYearToExpiryDateTextBox = "PXChangeExpiryMonthYearToExpiryDateTextBox";
 
+            // Flight to enable feature, which is to change style structure of expiry month and year from dropdown to one text box for month and year.
+            public const string PXCombineExpiryMonthYearToDateTextBox = "PXCombineExpiryMonthYearToDateTextBox";
+
             // Ebables to use deep copy of payment experience partner settings instead of shallow copy
             public const string PXEnablePartnerSettingsDeepCopy = "PXEnablePartnerSettingsDeepCopy";
 
@@ -775,6 +778,9 @@ namespace Microsoft.Commerce.Payments.PXCommon
 
             // To disable the cache for GetWalletConfig
             public const string PXDisableGetWalletConfigCache = "PXDisableGetWalletConfigCache";
+
+            // Fail PSD2NTSR19 by only for specific card types
+            public const string PSD2NTSR19FailCardType = "PSD2_N_TSR19_FailCardType_";
 
             // To disable the cache for GetWalletConfig
             public const string PXPaasAddCCDfpIframeForCommerceRisk = "PXPaasAddCCDfpIframeForCommerceRisk";

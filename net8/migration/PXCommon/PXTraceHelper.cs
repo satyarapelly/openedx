@@ -1,16 +1,25 @@
 ﻿// <copyright file="InstrumentManagementTraceHelper.cs" company="Microsoft">Copyright (c) Microsoft 2015. All rights reserved.</copyright>
 
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Commerce.Payments.Common;
-using System;
-
 namespace Microsoft.Commerce.Payments.Management.Common
 {
+    using System;
+	using Microsoft.AspNetCore.Http;
+	using Microsoft.AspNetCore.WebUtilities;
+	using Microsoft.Commerce.Payments.Common;
+
     public static class InstrumentManagementTraceHelper
     {
         private const string MobileCarrierBilling = "mobile_carrier_billing";
 
+        /// <summary>
+        /// General method to add the tracing properties needed by the Trancing Handler to log this properties in the SLL logs.
+        /// </summary>
+        /// <param name="request">HttpRequestMessage to which the properties will be added.</param>
+        /// <param name="accountId">The account id. Can be null.</param>
+        /// <param name="paymentInstrumentId">The payment instrument id. Can be null.</param>
+        /// <param name="family">The payment method family. Can be null.</param>
+        /// <param name="type">The payment method type. Can be null.</param>
+        /// <param name="country">Country of the Pi. Can be null.</param>
         public static void AddTracingProperties(this HttpRequest request, string accountId, string paymentInstrumentId, string family = null, string type = null, string country = null)
         {
             request.HttpContext.Items[PaymentConstants.Web.InstrumentManagementProperties.AccountId] = accountId;

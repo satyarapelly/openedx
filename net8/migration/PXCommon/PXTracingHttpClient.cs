@@ -1,10 +1,11 @@
-// <copyright file="PXTracingHttpClient.cs" company="Microsoft">Copyright (c) Microsoft 2015. All rights reserved.</copyright>
+﻿// <copyright file="PXTracingHttpClient.cs" company="Microsoft">Copyright (c) Microsoft 2015. All rights reserved.</copyright>
 
 namespace Microsoft.Commerce.Payments.PXCommon
 {
     using System;
     using System.Net.Http;
-    using Microsoft.Commerce.Tracing;
+    using Microsoft.Commerce.Payments.Common.Tracing;
+    using Microsoft.Commerce.Payments.Common.Web;
 
     /// <summary>
     /// This client class wraps a typical HttpClient into a tracing handler

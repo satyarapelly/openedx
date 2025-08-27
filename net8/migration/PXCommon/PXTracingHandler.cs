@@ -1,4 +1,4 @@
-// <copyright file="PXTracingHandler.cs" company="Microsoft Corporation">Copyright (c) Microsoft 2015. All rights reserved.</copyright>
+﻿// <copyright file="PXTracingHandler.cs" company="Microsoft Corporation">Copyright (c) Microsoft 2015. All rights reserved.</copyright>
 
 namespace Microsoft.Commerce.Payments.PXCommon
 {
@@ -12,7 +12,6 @@ namespace Microsoft.Commerce.Payments.PXCommon
     using Microsoft.Commerce.Payments.Common;
     using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Commerce.Payments.Common.Web;
-    using Microsoft.Commerce.Tracing;
     using Environments = Microsoft.Commerce.Payments.Common.Environments;
 
     public class PXTracingHandler : DelegatingHandler
@@ -38,7 +37,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
             : base()
         {
             this.ServiceName = serviceName;
-            this.logError = logError ?? ((m, t) => PaymentsEventSource.Log.TracingHandlerTraceError(m, t));
+            this.logError = logError;
             this.logRequest = logRequest ?? ((a, m, t) => { });
             this.logResponse = logResponse ?? ((m, t) => { });
         }
@@ -60,7 +59,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
             : base(httpMessageHandler)
         {
             this.ServiceName = serviceName;
-            this.logError = logError ?? ((m, t) => PaymentsEventSource.Log.TracingHandlerTraceError(m, t));
+            this.logError = logError;
             this.logRequest = logRequest ?? ((a, m, t) => { });
             this.logResponse = logResponse ?? ((m, t) => { });
         }
