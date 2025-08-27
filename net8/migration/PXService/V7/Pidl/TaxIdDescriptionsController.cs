@@ -31,7 +31,12 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>A list of PIDLResource object</returns>
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpGet]
-        public List<PIDLResource> Get(string accountId, string country, string language = null, string partner = Constants.ServiceDefaults.DefaultPartnerName, string type = null)
+        public List<PIDLResource> Get(
+            [FromRoute] string accountId,
+            [FromRoute] string country,
+            [FromQuery] string? language = null,
+            [FromQuery] string partner = Constants.ServiceDefaults.DefaultPartnerName,
+            [FromQuery] string? type = null)
         {
             // Use Partner Settings if enabled for the partner
             PaymentExperienceSetting setting = this.GetPaymentExperienceSetting(Constants.Operations.Add);
@@ -57,7 +62,14 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>A list of PIDLResource object</returns>
         [HttpGet]
         [ApiExplorerSettings(IgnoreApi = true)]
-        public List<PIDLResource> GetStandaloneTaxPidl(string accountId, string country, string operation, string language = null, string partner = Constants.ServiceDefaults.DefaultPartnerName, string type = null, string scenario = null)
+        public List<PIDLResource> GetStandaloneTaxPidl(
+            [FromRoute] string accountId,
+            [FromRoute] string country,
+            [FromQuery] string operation,
+            [FromQuery] string? language = null,
+            [FromQuery] string partner = Constants.ServiceDefaults.DefaultPartnerName,
+            [FromQuery] string? type = null,
+            [FromQuery] string? scenario = null)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
             accountId = accountId + string.Empty;
