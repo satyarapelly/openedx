@@ -426,7 +426,7 @@ namespace Microsoft.Commerce.Payments.PXService
             endpoints.MapControllerRoute(
                 name: GlobalConstants.V7RouteNames.SessionsByIdApi,
                 pattern: GlobalConstants.EndPointNames.V7SessionsById,
-                defaults: new { controller = C(GlobalConstants.ControllerNames.SessionsController), action = "GetSession" });
+                defaults: new { controller = C(GlobalConstants.ControllerNames.SessionsController), action = "GetBySessionId" });
 
             endpoints.MapControllerRoute(
                 name: GlobalConstants.V7RouteNames.SessionsApi,
