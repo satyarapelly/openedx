@@ -84,7 +84,7 @@ namespace CIT.PXService.Tests
             {
                 PXHandler.PreProcess = (pxRequest) =>
                 {
-                    pxRequest.Properties[PXService.GlobalConstants.RequestPropertyKeys.ExposedFlightFeatures] = flightFeatures == null ? new List<string>() : flightFeatures;
+                    pxRequest.GetProperties()[PXService.GlobalConstants.RequestPropertyKeys.ExposedFlightFeatures] = flightFeatures == null ? new List<string>() : flightFeatures;
                 };
             }
 
@@ -101,7 +101,7 @@ namespace CIT.PXService.Tests
             {
                 PXHandler.PreProcess = (request) =>
                 {
-                    request.Properties[PXService.GlobalConstants.RequestPropertyKeys.ExposedFlightFeatures] = string.IsNullOrEmpty(flightNames) ? new List<string>() : flightNames.Split(',').ToList<string>();
+                    request.GetProperties()[PXService.GlobalConstants.RequestPropertyKeys.ExposedFlightFeatures] = string.IsNullOrEmpty(flightNames) ? new List<string>() : flightNames.Split(',').ToList<string>();
                 };
             }
 
@@ -144,7 +144,7 @@ namespace CIT.PXService.Tests
             List<string> enabledFeatures = null;
             PXHandler.PreProcess = (request) =>
             {
-                enabledFeatures = request.Properties[PXService.GlobalConstants.RequestPropertyKeys.ExposedFlightFeatures] as List<string> ?? new List<string>();
+                enabledFeatures = request.GetProperties()[PXService.GlobalConstants.RequestPropertyKeys.ExposedFlightFeatures] as List<string> ?? new List<string>();
                 foreach (string flightName in flightNames)
                 {
                     enabledFeatures.Add(flightName);
@@ -161,7 +161,7 @@ namespace CIT.PXService.Tests
         {
             PXHandler.PreProcess = (request) =>
             {
-                request.Properties[PXService.GlobalConstants.RequestPropertyKeys.ExposedFlightFeatures] = string.IsNullOrEmpty(flightNames) ? new List<string>() : flightNames.Split(',').ToList<string>();
+                request.GetProperties()[PXService.GlobalConstants.RequestPropertyKeys.ExposedFlightFeatures] = string.IsNullOrEmpty(flightNames) ? new List<string>() : flightNames.Split(',').ToList<string>();
             };
 
             var response = await PXClient.GetAsync(GetPXServiceUrl(url));
@@ -174,7 +174,7 @@ namespace CIT.PXService.Tests
         {
             PXHandler.PreProcess = (r) =>
             {
-                r.Properties[PXService.GlobalConstants.RequestPropertyKeys.ExposedFlightFeatures] = string.IsNullOrEmpty(flightNames) ? new List<string>() : flightNames.Split(',').ToList<string>();
+                r.GetProperties()[PXService.GlobalConstants.RequestPropertyKeys.ExposedFlightFeatures] = string.IsNullOrEmpty(flightNames) ? new List<string>() : flightNames.Split(',').ToList<string>();
             };
 
             var request = new HttpRequestMessage(method, url);
@@ -190,7 +190,7 @@ namespace CIT.PXService.Tests
         {
             PXHandler.PreProcess = (r) =>
             {
-                r.Properties[PXService.GlobalConstants.RequestPropertyKeys.ExposedFlightFeatures] = string.IsNullOrEmpty(flightNames) ? new List<string>() : flightNames.Split(',').ToList<string>();
+                r.GetProperties()[PXService.GlobalConstants.RequestPropertyKeys.ExposedFlightFeatures] = string.IsNullOrEmpty(flightNames) ? new List<string>() : flightNames.Split(',').ToList<string>();
             };
 
             var request = new HttpRequestMessage(method, url);

@@ -2297,7 +2297,7 @@ namespace CIT.PXService.Tests
 
             PXSettings.PayerAuthService.PreProcess = (request) =>
             {
-                var authRequestContent = request.Properties["Payments.Content"] as Microsoft.Commerce.Payments.PXService.Model.PayerAuthService.AuthenticationRequest;
+                var authRequestContent = request.GetProperties()["Payments.Content"] as Microsoft.Commerce.Payments.PXService.Model.PayerAuthService.AuthenticationRequest;
                 Assert.AreEqual(authRequestContent.MessageVersion, expectedAuthReqMessageVersion, "Mismatch between expected AuthRequest Message Version");
             };
 
@@ -2378,7 +2378,7 @@ namespace CIT.PXService.Tests
             /// Act
             PXSettings.PayerAuthService.PreProcess = (request) =>
             {
-                var authRequestContent = request.Properties["Payments.Content"] as Microsoft.Commerce.Payments.PXService.Model.PayerAuthService.AuthenticationRequest;
+                var authRequestContent = request.GetProperties()["Payments.Content"] as Microsoft.Commerce.Payments.PXService.Model.PayerAuthService.AuthenticationRequest;
                 Assert.AreEqual(authRequestContent.MessageVersion, authReqMessageVersion, "Mismatch between expected AuthRequest Message Version");
             };
 

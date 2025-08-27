@@ -60,9 +60,9 @@ namespace CIT.PXService.Tests
             bool didValidationSucceed = true;
             PXHandler.PreProcess = (request) =>
             {
-                if (request.Properties.ContainsKey("InputValidationFailed"))
+                if (request.GetProperties().ContainsKey("InputValidationFailed"))
                 {
-                    didValidationSucceed = !(bool)request.Properties["InputValidationFailed"];
+                    didValidationSucceed = !(bool)request.GetProperties()["InputValidationFailed"];
                 }
             };
 
@@ -110,9 +110,9 @@ namespace CIT.PXService.Tests
             bool didValidationSucceed = true;
             PXHandler.PreProcess = (request) =>
             {
-                if (request.Properties.ContainsKey("InputValidationFailed"))
+                if (request.GetProperties().ContainsKey("InputValidationFailed"))
                 {
-                    didValidationSucceed = !(bool)request.Properties["InputValidationFailed"];
+                    didValidationSucceed = !(bool)request.GetProperties()["InputValidationFailed"];
                 }
             };
 
@@ -169,9 +169,9 @@ namespace CIT.PXService.Tests
             bool didValidationSucceed = true;
             PXHandler.PreProcess = (request) =>
             {
-                if (request.Properties.ContainsKey("InputValidationFailed"))
+                if (request.GetProperties().ContainsKey("InputValidationFailed"))
                 {
-                    didValidationSucceed = !(bool)request.Properties["InputValidationFailed"];
+                    didValidationSucceed = !(bool)request.GetProperties()["InputValidationFailed"];
                 }
             };
 
@@ -229,9 +229,9 @@ namespace CIT.PXService.Tests
             bool didValidationSucceed = true;
             PXHandler.PreProcess = (request) =>
             {
-                if (request.Properties.ContainsKey("InputValidationFailed"))
+                if (request.GetProperties().ContainsKey("InputValidationFailed"))
                 {
-                    didValidationSucceed = !(bool)request.Properties["InputValidationFailed"];
+                    didValidationSucceed = !(bool)request.GetProperties()["InputValidationFailed"];
                 }
             };
 
@@ -288,9 +288,9 @@ namespace CIT.PXService.Tests
             bool didValidationSucceed = true;
             PXHandler.PreProcess = (request) =>
             {
-                if (request.Properties.ContainsKey("InputValidationFailed"))
+                if (request.GetProperties().ContainsKey("InputValidationFailed"))
                 {
-                    didValidationSucceed = !(bool)request.Properties["InputValidationFailed"];
+                    didValidationSucceed = !(bool)request.GetProperties()["InputValidationFailed"];
                 }
             };
 
@@ -338,9 +338,9 @@ namespace CIT.PXService.Tests
             bool didValidationSucceed = true;
             PXHandler.PreProcess = (request) =>
             {
-                if (request.Properties.ContainsKey("InputValidationFailed"))
+                if (request.GetProperties().ContainsKey("InputValidationFailed"))
                 {
-                    didValidationSucceed = !(bool)request.Properties["InputValidationFailed"];
+                    didValidationSucceed = !(bool)request.GetProperties()["InputValidationFailed"];
                 }
             };
 
@@ -400,9 +400,9 @@ namespace CIT.PXService.Tests
             bool didValidationSucceed = true;
             PXHandler.PreProcess = (request) =>
             {
-                if (request.Properties.ContainsKey("InputValidationFailed"))
+                if (request.GetProperties().ContainsKey("InputValidationFailed"))
                 {
-                    didValidationSucceed = !(bool)request.Properties["InputValidationFailed"];
+                    didValidationSucceed = !(bool)request.GetProperties()["InputValidationFailed"];
                 }
             };
 
@@ -448,9 +448,9 @@ namespace CIT.PXService.Tests
             bool didValidationSucceed = true;
             PXHandler.PreProcess = (request) =>
             {
-                if (request.Properties.ContainsKey("InputValidationFailed"))
+                if (request.GetProperties().ContainsKey("InputValidationFailed"))
                 {
-                    didValidationSucceed = !(bool)request.Properties["InputValidationFailed"];
+                    didValidationSucceed = !(bool)request.GetProperties()["InputValidationFailed"];
                 }
             };
 
@@ -502,9 +502,9 @@ namespace CIT.PXService.Tests
             bool didValidationSucceed = true;
             PXHandler.PreProcess = (request) =>
             {
-                if (request.Properties.ContainsKey("InputValidationFailed"))
+                if (request.GetProperties().ContainsKey("InputValidationFailed"))
                 {
-                    didValidationSucceed = !(bool)request.Properties["InputValidationFailed"];
+                    didValidationSucceed = !(bool)request.GetProperties()["InputValidationFailed"];
                 }
             };
 
@@ -554,9 +554,9 @@ namespace CIT.PXService.Tests
             bool didValidationSucceed = true;
             PXHandler.PreProcess = (request) =>
             {
-                if (request.Properties.ContainsKey("InputValidationFailed"))
+                if (request.GetProperties().ContainsKey("InputValidationFailed"))
                 {
-                    didValidationSucceed = !(bool)request.Properties["InputValidationFailed"];
+                    didValidationSucceed = !(bool)request.GetProperties()["InputValidationFailed"];
                 }
             };
 
@@ -617,9 +617,9 @@ namespace CIT.PXService.Tests
             bool didValidationSucceed = true;
             PXHandler.PreProcess = (request) =>
             {
-                if (request.Properties.ContainsKey("InputValidationFailed"))
+                if (request.GetProperties().ContainsKey("InputValidationFailed"))
                 {
-                    didValidationSucceed = !(bool)request.Properties["InputValidationFailed"];
+                    didValidationSucceed = !(bool)request.GetProperties()["InputValidationFailed"];
                 }
             };
 
@@ -675,9 +675,9 @@ namespace CIT.PXService.Tests
             bool didValidationSucceed = true;
             PXHandler.PreProcess = (request) =>
             {
-                if (request.Properties.ContainsKey("InputValidationFailed"))
+                if (request.GetProperties().ContainsKey("InputValidationFailed"))
                 {
-                    didValidationSucceed = !(bool)request.Properties["InputValidationFailed"];
+                    didValidationSucceed = !(bool)request.GetProperties()["InputValidationFailed"];
                 }
             };
 
@@ -724,9 +724,9 @@ namespace CIT.PXService.Tests
             bool didValidationSucceed = true;
             PXHandler.PreProcess = (request) =>
             {
-                if (request.Properties.ContainsKey("InputValidationFailed"))
+                if (request.GetProperties().ContainsKey("InputValidationFailed"))
                 {
-                    didValidationSucceed = !(bool)request.Properties["InputValidationFailed"];
+                    didValidationSucceed = !(bool)request.GetProperties()["InputValidationFailed"];
                 }
             };
 
@@ -776,9 +776,9 @@ namespace CIT.PXService.Tests
             bool didValidationSucceed = true;
             PXHandler.PreProcess = (request) =>
             {
-                if (request.Properties.ContainsKey("InputValidationFailed"))
+                if (request.GetProperties().ContainsKey("InputValidationFailed"))
                 {
-                    didValidationSucceed = !(bool)request.Properties["InputValidationFailed"];
+                    didValidationSucceed = !(bool)request.GetProperties()["InputValidationFailed"];
                 }
             };
 
@@ -828,9 +828,9 @@ namespace CIT.PXService.Tests
             bool didValidationSucceed = true;
             PXHandler.PreProcess = (request) =>
             {
-                if (request.Properties.ContainsKey("InputValidationFailed"))
+                if (request.GetProperties().ContainsKey("InputValidationFailed"))
                 {
-                    didValidationSucceed = !(bool)request.Properties["InputValidationFailed"];
+                    didValidationSucceed = !(bool)request.GetProperties()["InputValidationFailed"];
                 }
             };
 
@@ -890,9 +890,9 @@ namespace CIT.PXService.Tests
             bool didValidationSucceed = true;
             PXHandler.PreProcess = (request) =>
             {
-                if (request.Properties.ContainsKey("InputValidationFailed"))
+                if (request.GetProperties().ContainsKey("InputValidationFailed"))
                 {
-                    didValidationSucceed = !(bool)request.Properties["InputValidationFailed"];
+                    didValidationSucceed = !(bool)request.GetProperties()["InputValidationFailed"];
                 }
             };
 
@@ -940,9 +940,9 @@ namespace CIT.PXService.Tests
             bool didValidationSucceed = true;
             PXHandler.PreProcess = (request) =>
             {
-                if (request.Properties.ContainsKey("InputValidationFailed"))
+                if (request.GetProperties().ContainsKey("InputValidationFailed"))
                 {
-                    didValidationSucceed = !(bool)request.Properties["InputValidationFailed"];
+                    didValidationSucceed = !(bool)request.GetProperties()["InputValidationFailed"];
                 }
             };
 
@@ -996,9 +996,9 @@ namespace CIT.PXService.Tests
             bool didValidationSucceed = true;
             PXHandler.PreProcess = (request) =>
             {
-                if (request.Properties.ContainsKey("InputValidationFailed"))
+                if (request.GetProperties().ContainsKey("InputValidationFailed"))
                 {
-                    didValidationSucceed = !(bool)request.Properties["InputValidationFailed"];
+                    didValidationSucceed = !(bool)request.GetProperties()["InputValidationFailed"];
                 }
             };
 
@@ -1044,9 +1044,9 @@ namespace CIT.PXService.Tests
             bool didValidationSucceed = true;
             PXHandler.PreProcess = (request) =>
             {
-                if (request.Properties.ContainsKey("InputValidationFailed"))
+                if (request.GetProperties().ContainsKey("InputValidationFailed"))
                 {
-                    didValidationSucceed = !(bool)request.Properties["InputValidationFailed"];
+                    didValidationSucceed = !(bool)request.GetProperties()["InputValidationFailed"];
                 }
             };
 
@@ -1099,9 +1099,9 @@ namespace CIT.PXService.Tests
             bool didValidationSucceed = true;
             PXHandler.PreProcess = (request) =>
             {
-                if (request.Properties.ContainsKey("InputValidationFailed"))
+                if (request.GetProperties().ContainsKey("InputValidationFailed"))
                 {
-                    didValidationSucceed = !(bool)request.Properties["InputValidationFailed"];
+                    didValidationSucceed = !(bool)request.GetProperties()["InputValidationFailed"];
                 }
             };
 
@@ -1153,9 +1153,9 @@ namespace CIT.PXService.Tests
             bool didValidationSucceed = true;
             PXHandler.PreProcess = (request) =>
             {
-                if (request.Properties.ContainsKey("InputValidationFailed"))
+                if (request.GetProperties().ContainsKey("InputValidationFailed"))
                 {
-                    didValidationSucceed = !(bool)request.Properties["InputValidationFailed"];
+                    didValidationSucceed = !(bool)request.GetProperties()["InputValidationFailed"];
                 }
             };
 
@@ -1201,9 +1201,9 @@ namespace CIT.PXService.Tests
             bool didValidationSucceed = true;
             PXHandler.PreProcess = (request) =>
             {
-                if (request.Properties.ContainsKey("InputValidationFailed"))
+                if (request.GetProperties().ContainsKey("InputValidationFailed"))
                 {
-                    didValidationSucceed = !(bool)request.Properties["InputValidationFailed"];
+                    didValidationSucceed = !(bool)request.GetProperties()["InputValidationFailed"];
                 }
             };
 
@@ -1249,9 +1249,9 @@ namespace CIT.PXService.Tests
             bool didValidationSucceed = true;
             PXHandler.PreProcess = (request) =>
             {
-                if (request.Properties.ContainsKey("InputValidationFailed"))
+                if (request.GetProperties().ContainsKey("InputValidationFailed"))
                 {
-                    didValidationSucceed = !(bool)request.Properties["InputValidationFailed"];
+                    didValidationSucceed = !(bool)request.GetProperties()["InputValidationFailed"];
                 }
             };
 
@@ -1297,9 +1297,9 @@ namespace CIT.PXService.Tests
             bool didValidationSucceed = true;
             PXHandler.PreProcess = (request) =>
             {
-                if (request.Properties.ContainsKey("InputValidationFailed"))
+                if (request.GetProperties().ContainsKey("InputValidationFailed"))
                 {
-                    didValidationSucceed = !(bool)request.Properties["InputValidationFailed"];
+                    didValidationSucceed = !(bool)request.GetProperties()["InputValidationFailed"];
                 }
             };
 
@@ -1338,9 +1338,9 @@ namespace CIT.PXService.Tests
             bool didValidationSucceed = true;
             PXHandler.PreProcess = (request) =>
             {
-                if (request.Properties.ContainsKey("InputValidationFailed"))
+                if (request.GetProperties().ContainsKey("InputValidationFailed"))
                 {
-                    didValidationSucceed = !(bool)request.Properties["InputValidationFailed"];
+                    didValidationSucceed = !(bool)request.GetProperties()["InputValidationFailed"];
                 }
             };
 
