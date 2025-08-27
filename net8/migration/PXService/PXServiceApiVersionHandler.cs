@@ -121,6 +121,12 @@ namespace Microsoft.Commerce.Payments.PXService
             request.Content = new StreamContent(httpContext.Request.Body);
             request.Options.Set(new HttpRequestOptionsKey<HttpContext>("HttpContext"), httpContext);
 
+            void SetProperty(string key, object? value)
+            {
+                request.SetProperty(key, value);
+                httpContext.Request.SetProperty(key, value);
+            }
+
             // Extract version and accountId from the RequestUri.
             // As can be seen from sample PX RequestUris below, version ("v7.0" in the example below) is part of the url.  Also,
             // if the commerce account id exists ("f2ac3e1d-e724-4820-baa0-0098584c6dcc" in the example below), it appears in the 
@@ -344,7 +350,7 @@ namespace Microsoft.Commerce.Payments.PXService
             flightContext.Add(Flighting.ContextKeys.BrowserVer, browserVer);
             flightContext.Add(Flighting.ContextKeys.ReferrerDomain, referrerDomain);
 
-            request.SetProperty(GlobalConstants.RequestPropertyKeys.FlightContext, flightContext);
+            SetProperty(GlobalConstants.RequestPropertyKeys.FlightContext, flightContext);
 
             // Get feature config from AzureExp
             // TODO: if AzureExp is supporeted and needed in Sovereign clouds, then we shall enable AzureExp
@@ -1054,10 +1060,10 @@ namespace Microsoft.Commerce.Payments.PXService
             // Use Partner Setttings Service if flight is enabled
             PartnerSettings partnerSettings = await PartnerSettingsHelper.GetPaymentExperienceSetting(settings, partner, partnerSettingsVersion, traceActivityId, exposableFeatures);
 
-            request.SetProperty(GlobalConstants.RequestPropertyKeys.PartnerSettings, partnerSettings);
-            request.SetProperty(GlobalConstants.RequestPropertyKeys.ExposedFlightFeatures, exposableFeatures);
-            request.SetProperty(GlobalConstants.RequestPropertyKeys.FlightAssignmentContext, featureConfig?.AssignmentContext);
-            request.SetProperty(GlobalConstants.RequestPropertyKeys.FlightFeatureConfig, featureConfig);
+            SetProperty(GlobalConstants.RequestPropertyKeys.PartnerSettings, partnerSettings);
+            SetProperty(GlobalConstants.RequestPropertyKeys.ExposedFlightFeatures, exposableFeatures);
+            SetProperty(GlobalConstants.RequestPropertyKeys.FlightAssignmentContext, featureConfig?.AssignmentContext);
+            SetProperty(GlobalConstants.RequestPropertyKeys.FlightFeatureConfig, featureConfig);
 
             // When an account has the PXRateLimitPerAccountOnChallengeApis, return BadRequest response.
             // This is different from PXReturn502ForMaliciousRequest as that flight is to prevent sdk retires
@@ -1111,7 +1117,7 @@ namespace Microsoft.Commerce.Payments.PXService
 
             if (request.ContainsProperty(PaymentConstants.Web.Properties.Version))
             {
-                request.SetProperty(PaymentConstants.Web.Properties.Version, apiVersion);
+                SetProperty(PaymentConstants.Web.Properties.Version, apiVersion);
             }
             else
             {

@@ -6,7 +6,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using System.Net.Http;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.DependencyInjection;
@@ -204,9 +203,14 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             {
                 if (this.exposedFlightFeatures == null)
                 {
-                    object exposableFeaturesObject = null;
-                    this.HttpContext.Items.TryGetValue(GlobalConstants.RequestPropertyKeys.ExposedFlightFeatures, out exposableFeaturesObject);
-                    this.exposedFlightFeatures = exposableFeaturesObject as List<string> ?? new List<string>();
+                    if (this.Request.TryGetProperty(GlobalConstants.RequestPropertyKeys.ExposedFlightFeatures, out List<string>? features))
+                    {
+                        this.exposedFlightFeatures = features ?? new List<string>();
+                    }
+                    else
+                    {
+                        this.exposedFlightFeatures = new List<string>();
+                    }
                 }
 
                 return this.exposedFlightFeatures;
@@ -219,14 +223,9 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             {
                 if (this.partnerSettings == null)
                 {
-                    var requestMessage = this.Request.ToHttpRequestMessage();
-                    if (requestMessage.TryGetProperty(GlobalConstants.RequestPropertyKeys.PartnerSettings, out PartnerSettings? settings))
+                    if (this.Request.TryGetProperty(GlobalConstants.RequestPropertyKeys.PartnerSettings, out PartnerSettings? settings))
                     {
                         this.partnerSettings = settings;
-                    }
-                    else if (this.HttpContext.Items.TryGetValue(GlobalConstants.RequestPropertyKeys.PartnerSettings, out var partnerSettingsObject))
-                    {
-                        this.partnerSettings = partnerSettingsObject as PartnerSettings;
                     }
                 }
 
