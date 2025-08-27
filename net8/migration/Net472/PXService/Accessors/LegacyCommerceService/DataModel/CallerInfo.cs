@@ -1,0 +1,62 @@
+﻿// <copyright file="CallerInfo.cs" company="Microsoft">Copyright (c) Microsoft. All rights reserved.</copyright>
+
+namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.DataModel
+{
+    using System;
+    using System.Runtime.Serialization;
+    using Microsoft.Practices.EnterpriseLibrary.Validation;
+    using Microsoft.Practices.EnterpriseLibrary.Validation.Validators;
+
+    [DataContract(Namespace = NamespaceConstants.Namespace)]
+    public class CallerInfo : IExtensibleDataObject
+    {
+        #region IExtensibleDataObject members
+        private ExtensionDataObject _extensionData;
+        public ExtensionDataObject ExtensionData
+        {
+            get { return _extensionData; }
+            set { _extensionData = value; }
+        }
+        #endregion
+
+        [ObjectValidator(Tag = "CallerInfo")]
+        [DataMember]
+        public Identity Delegator { get; set; }
+
+        [ObjectValidator(Tag = "CallerInfo")]
+        [DataMember]
+        public Identity Requester { get; set; }
+
+        [IgnoreNulls]
+        [StringLengthValidator(16, 16,
+            MessageTemplate = "AccountId:{0} must be 16 characters",
+            Tag = "CallerInfo")]
+        [DataMember]
+        public string AccountId { get; set; }
+
+        [SelfValidation]
+        public void Validate(ValidationResults results)
+        {
+
+            if (Delegator == null && Requester == null)
+            {
+                results.AddResult(new ValidationResult(
+                    "Delegator or Requester is required.",
+                    this,
+                    "Delegator and Requester",
+                    "CallerInfo",
+                    null));
+            }
+            if (Delegator != null && !string.Equals(Delegator.IdentityType, "PUID", StringComparison.OrdinalIgnoreCase))
+            {
+                results.AddResult(new ValidationResult(
+                    "Delegator only supports PUID Identity.",
+                    this,
+                    "Delegator",
+                    "CallerInfo",
+                    null));
+            }
+        }
+
+    }
+}

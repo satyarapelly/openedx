@@ -1,0 +1,58 @@
+﻿// <copyright file="GuestAccountHelper.cs" company="Microsoft">Copyright (c) Microsoft. All rights reserved.</copyright>
+
+namespace Microsoft.Commerce.Payments.PXService.V7
+{
+    using System;
+    using System.Net.Http;
+    using Microsoft.Commerce.Payments.Common.Web;
+    using Microsoft.Commerce.Payments.PXService.V7.Contexts;
+    using Microsoft.Commerce.Tracing;
+    using static Microsoft.Commerce.Payments.PXService.V7.Contexts.Constants;
+
+    public class GuestAccountHelper
+    {
+        /// <summary>
+        /// Customer type key. This key is used to store customer type in HttpContext.
+        /// The customer type is extracted from x-ms-customer request header.
+        /// </summary>
+        private const string CustomerTypeKey = "x-ms-customer_customerType";
+
+        /// <summary>
+        /// Check if the request is from guest account based on the metadata in the x-ms-customer request header.
+        /// </summary>
+        /// <param name="request">HttpRequest object</param>
+        /// <returns>Returns bool isGuestAccount </returns>
+        public static bool IsGuestAccount(HttpRequestMessage request)
+        {
+            try
+            {
+                string customerType;
+                if (request.Properties.ContainsKey(CustomerTypeKey))
+                {
+                    customerType = request.GetProperty(CustomerTypeKey) as string;
+                }
+                else
+                {
+                    CustomerHeader customerHeader = CustomerHeader.Parse(request);
+                    customerType = customerHeader?.TargetCustomer?.CustomerType;
+                    if (!string.IsNullOrWhiteSpace(customerType))
+                    {
+                        // Store customer type in request properties so that it can be used without parsing customer header again.
+                        request.Properties[CustomerTypeKey] = customerType;
+                    }
+                }
+
+                return customerType?.Equals(
+                    CustomerType.AnonymousUser,
+                    StringComparison.InvariantCultureIgnoreCase)
+                    ?? false;
+            }
+            catch (Exception ex)
+            {
+                SllWebLogger.TracePXServiceException("GuestAccountHelper.IsGuestAccount: " + ex.ToString(), EventTraceActivity.Empty);
+            }
+
+            return false;
+        }
+    }
+}
