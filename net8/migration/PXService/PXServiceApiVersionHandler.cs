@@ -3,7 +3,6 @@
 namespace Microsoft.Commerce.Payments.PXService
 {
     using Azure.Core;
-    using Microsoft.AspNetCore.Components;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc.Controllers;
     using Microsoft.AspNetCore.Routing;
@@ -36,19 +35,18 @@ namespace Microsoft.Commerce.Payments.PXService
         private const string PXFlightAssignmentContextHeader = "x-ms-px-flight-assignmentcontext";
         private const string NoSniff = "nosniff";
 
-        private readonly string[] versionlessControllers;
-        private readonly IDictionary<string, ApiVersion> supportedVersions;
+        private readonly HashSet<string> versionlessControllers;
+        private readonly IReadOnlyDictionary<string, ApiVersion> supportedVersions;
         private readonly PXServiceSettings settings;
         private readonly RequestDelegate next;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PXServiceApiVersionHandler"/> class.
         /// </summary>
-        /// <param name="supportedVersions">A dictionary from api-version string to internal
-        /// version number which represents the set of supported versions.</param>
-        /// <param name="versionlessControllers">Names of controllers that should be available with no version</param>
+        /// <param name="supportedVersions">Mapping from api-version string to internal version numbers.</param>
+        /// <param name="versionlessControllers">Names of controllers that should be available with no version.</param>
         /// <param name="settings">PXServiceSettings instance for the current service.</param>
-        public PXServiceApiVersionHandler(IDictionary<string, ApiVersion> supportedVersions, string[] versionlessControllers, PXServiceSettings settings)
+        public PXServiceApiVersionHandler(IReadOnlyDictionary<string, ApiVersion> supportedVersions, IEnumerable<string> versionlessControllers, PXServiceSettings settings)
             : this(null, supportedVersions, versionlessControllers, settings)
         {
         }
@@ -57,15 +55,14 @@ namespace Microsoft.Commerce.Payments.PXService
         /// Initializes a new instance of the <see cref="PXServiceApiVersionHandler"/> class.
         /// </summary>
         /// <param name="next">The next middleware in the pipeline.</param>
-        /// <param name="supportedVersions">A dictionary from api-version string to internal
-        /// version number which represents the set of supported versions.</param>
+        /// <param name="supportedVersions">Mapping from api-version string to internal version numbers.</param>
         /// <param name="versionlessControllers">Names of controllers that should be available with no version.</param>
         /// <param name="settings">PXServiceSettings instance for the current service.</param>
-        public PXServiceApiVersionHandler(RequestDelegate next, IDictionary<string, ApiVersion> supportedVersions, string[] versionlessControllers, PXServiceSettings settings)
+        public PXServiceApiVersionHandler(RequestDelegate next, IReadOnlyDictionary<string, ApiVersion> supportedVersions, IEnumerable<string> versionlessControllers, PXServiceSettings settings)
         {
             this.next = next;
             this.supportedVersions = supportedVersions;
-            this.versionlessControllers = versionlessControllers ?? Array.Empty<string>();
+            this.versionlessControllers = versionlessControllers != null ? new HashSet<string>(versionlessControllers, StringComparer.OrdinalIgnoreCase) : new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             this.settings = settings;
         }
 
@@ -80,7 +77,7 @@ namespace Microsoft.Commerce.Payments.PXService
                 ? Convert.ToString(c)
                 : null;
 
-            if (controllerName != null && this.versionlessControllers.Contains(controllerName, StringComparer.OrdinalIgnoreCase))
+            if (controllerName != null && this.versionlessControllers.Contains(controllerName))
             {
                 await this.next(httpContext);
                 return;
@@ -1107,7 +1104,7 @@ namespace Microsoft.Commerce.Payments.PXService
             }
 
             ApiVersion apiVersion;
-            if (!supportedVersions.TryGetValue(externalVersion, out apiVersion))
+            if (!this.supportedVersions.TryGetValue(externalVersion, out apiVersion))
             {
                 return request.CreateInvalidApiVersionResponse(externalVersion);
             }

@@ -4,7 +4,6 @@ using Microsoft.Commerce.Payments.Common.Web;
 using Microsoft.Commerce.Payments.PXService.Settings;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Protocol.Handlers;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -26,7 +25,11 @@ namespace Microsoft.Commerce.Payments.PXService
         /// <param name="settings">PX service settings instance.</param>
         public static void Register(WebApplicationBuilder builder, PXServiceSettings settings)
         {
+            ArgumentNullException.ThrowIfNull(builder);
+            ArgumentNullException.ThrowIfNull(settings);
+
             builder.Services.AddSingleton(settings);
+            builder.Services.AddRouting(options => options.LowercaseUrls = true);
             builder.Services.AddControllers(options =>
             {
                 options.Filters.Add(new PXServiceExceptionFilter());
@@ -52,8 +55,8 @@ namespace Microsoft.Commerce.Payments.PXService
             builder.Services.AddSingleton<PXServiceApiVersionHandler>(); // state used by CORS middleware
 
             string[] versionlessControllers = { GlobalConstants.ControllerNames.ProbeController };
-            builder.Services.AddSingleton(versionlessControllers);
-            builder.Services.AddSingleton<IDictionary<string, ApiVersion>>(sp =>
+            builder.Services.AddSingleton<IEnumerable<string>>(versionlessControllers);
+            builder.Services.AddSingleton<IReadOnlyDictionary<string, ApiVersion>>(sp =>
             {
                 var selectorInstance = sp.GetRequiredService<VersionedControllerSelector>();
                 return selectorInstance.SupportedVersions;

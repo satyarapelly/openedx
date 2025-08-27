@@ -6,6 +6,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using System.Net.Http;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.DependencyInjection;
@@ -218,9 +219,15 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             {
                 if (this.partnerSettings == null)
                 {
-                    object partnerSettingsObject = null;
-                    this.HttpContext.Items.TryGetValue(GlobalConstants.RequestPropertyKeys.PartnerSettings, out partnerSettingsObject);
-                    this.partnerSettings = partnerSettingsObject as PartnerSettings;
+                    var requestMessage = this.Request.ToHttpRequestMessage();
+                    if (requestMessage.TryGetProperty(GlobalConstants.RequestPropertyKeys.PartnerSettings, out PartnerSettings? settings))
+                    {
+                        this.partnerSettings = settings;
+                    }
+                    else if (this.HttpContext.Items.TryGetValue(GlobalConstants.RequestPropertyKeys.PartnerSettings, out var partnerSettingsObject))
+                    {
+                        this.partnerSettings = partnerSettingsObject as PartnerSettings;
+                    }
                 }
 
                 return this.partnerSettings;
