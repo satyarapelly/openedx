@@ -80,16 +80,20 @@ namespace Microsoft.Commerce.Payments.PXService
                 ? Convert.ToString(c)
                 : null;
 
+
             if (!string.IsNullOrEmpty(controllerName))
             {
                 var resolver = httpContext.RequestServices.GetRequiredService<VersionedControllerSelector>();
                 var allowedType = resolver.ResolveAllowedController(httpContext); // returns Type? or null per your Core helper
                 if (allowedType is null)
                 {
-                    var version = httpContext.Request.Headers["api-version"].ToString();
-                    httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
-                    await httpContext.Response.WriteAsync($"No controller mapped for version '{(string.IsNullOrWhiteSpace(version) ? "(none)" : version)}'.");
-                    return;
+                    if (!allowedVersionlessRequest)
+                    {
+                        var version = httpContext.Request.Headers["api-version"].ToString();
+                        httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
+                        await httpContext.Response.WriteAsync($"No controller mapped for version '{(string.IsNullOrWhiteSpace(version) ? "(none)" : version)}'.");
+                        return;
+                    }
                 }
 
                 allowedVersionlessRequest = true;
@@ -123,15 +127,7 @@ namespace Microsoft.Commerce.Payments.PXService
                 return;
             }
 
-            var requestMessage = httpContext.Request.ToHttpRequestMessage();
-
-            httpContext.Request.EnableBuffering();
-            httpContext.Request.Body.Position = 0;
-            requestMessage.Content = new StreamContent(httpContext.Request.Body);
-
-            requestMessage.Options.Set(new HttpRequestOptionsKey<HttpContext>("HttpContext"), httpContext);
-
-            var responseMessage = await this.SendAsync(requestMessage, httpContext.RequestAborted);
+            var responseMessage = await this.SendAsync(httpContext, httpContext.RequestAborted);
 
             if (!httpContext.Response.HasStarted)
             {
@@ -161,8 +157,14 @@ namespace Microsoft.Commerce.Payments.PXService
         /// <param name="cancellationToken">A token which may be used to listen
         /// for cancellation.</param>
         /// <returns>The outbound response.</returns>
-        private async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        private async Task<HttpResponseMessage> SendAsync(HttpContext httpContext, CancellationToken cancellationToken)
         {
+            HttpRequestMessage request = httpContext.Request.ToHttpRequestMessage();
+            httpContext.Request.EnableBuffering();
+            httpContext.Request.Body.Position = 0;
+            request.Content = new StreamContent(httpContext.Request.Body);
+            request.Options.Set(new HttpRequestOptionsKey<HttpContext>("HttpContext"), httpContext);
+
             // Extract version and accountId from the RequestUri.
             // As can be seen from sample PX RequestUris below, version ("v7.0" in the example below) is part of the url.  Also,
             // if the commerce account id exists ("f2ac3e1d-e724-4820-baa0-0098584c6dcc" in the example below), it appears in the 
@@ -1160,7 +1162,6 @@ namespace Microsoft.Commerce.Payments.PXService
                 request.AddProperty(PaymentConstants.Web.Properties.Version, apiVersion);
             }
 
-            var httpContext = request.GetHttpContext();
             if (this.next != null && httpContext != null)
             {
                 if (httpContext.Request.Body.CanSeek)

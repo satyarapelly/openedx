@@ -30,16 +30,16 @@ namespace Microsoft.Commerce.Payments.PXService
             builder.Services.AddControllers(options =>
             {
                 options.Filters.Add(new PXServiceExceptionFilter());
-                if (settings.AuthorizationFilter != null)
-                {
-                    options.Filters.Add(settings.AuthorizationFilter);
-                }
+                //if (settings.AuthorizationFilter != null)
+                //{
+                //    options.Filters.Add(settings.AuthorizationFilter);
+                //}
             })
-                .AddApplicationPart(typeof(WebApiConfig).Assembly)
-                .AddNewtonsoftJson(options =>
-                {
-                    options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
-                });
+            .AddApplicationPart(typeof(WebApiConfig).Assembly)
+            .AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+            });
 
             builder.Services.AddSingleton<VersionedControllerSelector>(sp =>
             {
@@ -76,9 +76,9 @@ namespace Microsoft.Commerce.Payments.PXService
         public static void AddUrlVersionedRoutes(IEndpointRouteBuilder endpoints)
         {
             endpoints.MapControllerRoute(
-               name: GlobalConstants.V7RouteNames.Probe,
-               pattern: GlobalConstants.EndPointNames.V7ProbeVersioned,
-               defaults: new { controller = C(GlobalConstants.ControllerNames.ProbeController), action = "Get" });
+                name: GlobalConstants.V7RouteNames.Probe,
+                pattern: GlobalConstants.EndPointNames.V7ProbeVersioned,
+                defaults: new { controller = C(GlobalConstants.ControllerNames.ProbeController), action = "Get" });
 
             endpoints.MapControllerRoute(
                name: GlobalConstants.V7RouteNames.Probe + "NoVersion",
@@ -341,12 +341,12 @@ namespace Microsoft.Commerce.Payments.PXService
             endpoints.MapControllerRoute(
                 name: GlobalConstants.V7RouteNames.GetChallengeDescriptionsApi,
                 pattern: GlobalConstants.EndPointNames.V7ChallengeDescriptions + "{id}",
-                defaults: new { controller = C(GlobalConstants.ControllerNames.ChallengeDescriptionsController), action = "Get" });
+                defaults: new { controller = C(GlobalConstants.ControllerNames.ChallengeDescriptionsController), action = "GetById" });
 
             endpoints.MapControllerRoute(
                 name: GlobalConstants.V7RouteNames.GetChallengeDescriptionsApiNoId,
                 pattern: GlobalConstants.EndPointNames.V7ChallengeDescriptions,
-                defaults: new { controller = C(GlobalConstants.ControllerNames.ChallengeDescriptionsController), action = "List" });
+                defaults: new { controller = C(GlobalConstants.ControllerNames.ChallengeDescriptionsController), action = "GetPaymentChallenge" });
 
             endpoints.MapControllerRoute(
                 name: GlobalConstants.V7RouteNames.GetProfileDescriptionsApiNoId,
@@ -528,6 +528,10 @@ namespace Microsoft.Commerce.Payments.PXService
             selector.AddVersionless(
                 Key(GlobalConstants.ControllerNames.ProbeController),
                 typeof(ProbeController));
+
+            selector.AddVersionless(
+                Key(GlobalConstants.ControllerNames.HealthController),
+                typeof(HealthController));
 
             // --- V7 controllers (ported 1:1 from your WebApiConfig.AddV7Controllers) ---
             var v7 = new Dictionary<string, Type>(StringComparer.OrdinalIgnoreCase)

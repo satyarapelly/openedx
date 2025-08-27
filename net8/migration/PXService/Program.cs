@@ -29,7 +29,9 @@ WebApiConfig.Register(builder, pxSettings);
 builder.Services.AddApplicationInsightsTelemetry();
 
 var app = builder.Build();
-
+// Ensure the routing matcher runs before custom middleware so HttpContext.GetEndpoint()
+// is populated when those middlewares execute.
+app.UseRouting();
 ApplicationInsightsProvider.SetupAppInsightsConfiguration(pxSettings.ApplicationInsightInstrumentKey, pxSettings.ApplicationInsightMode);
 EnsureSllInitialized();
 
@@ -69,7 +71,6 @@ if (pxSettings.PIDLDocumentValidationEnabled)
 // Conventional maps that mimic your old WebApiConfig
 WebApiConfig.AddUrlVersionedRoutes(app);
 
-// Attribute-routed controllers
 app.MapControllers();
 
 // graceful shutdown (replaces Global.asax Application_End)

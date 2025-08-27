@@ -320,7 +320,7 @@ namespace Microsoft.Commerce.Payments.PXService
         public static class ControllerNames
         {
             public const string ProbeController = "ProbeController";
-
+            public const string HealthController = "HealthController";
             public const string PaymentInstrumentsExController = "PaymentInstrumentsExController";
             public const string SettingsController = "SettingsController";
             public const string SessionsController = "SessionsController";
