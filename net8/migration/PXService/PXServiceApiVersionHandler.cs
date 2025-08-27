@@ -2,6 +2,7 @@
 
 namespace Microsoft.Commerce.Payments.PXService
 {
+    using Azure.Core;
     using Microsoft.AspNetCore.Components;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc.Controllers;
@@ -70,7 +71,6 @@ namespace Microsoft.Commerce.Payments.PXService
 
         public async Task InvokeAsync(HttpContext httpContext)
         {
-            var allowedVersionlessRequest = false;
             var endpoint = httpContext.GetEndpoint();
             var cad = endpoint?.Metadata.GetMetadata<ControllerActionDescriptor>();
             var controllerName = cad?.ControllerName; // short name (no "Controller")
@@ -80,49 +80,8 @@ namespace Microsoft.Commerce.Payments.PXService
                 ? Convert.ToString(c)
                 : null;
 
-
-            if (!string.IsNullOrEmpty(controllerName))
+            if (controllerName != null && this.versionlessControllers.Contains(controllerName, StringComparer.OrdinalIgnoreCase))
             {
-                var resolver = httpContext.RequestServices.GetRequiredService<VersionedControllerSelector>();
-                var allowedType = resolver.ResolveAllowedController(httpContext); // returns Type? or null per your Core helper
-                if (allowedType is null)
-                {
-                    if (!allowedVersionlessRequest)
-                    {
-                        var version = httpContext.Request.Headers["api-version"].ToString();
-                        httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
-                        await httpContext.Response.WriteAsync($"No controller mapped for version '{(string.IsNullOrWhiteSpace(version) ? "(none)" : version)}'.");
-                        return;
-                    }
-                }
-
-                allowedVersionlessRequest = true;
-            }
-
-            // No endpoint matched (RouteData is null/empty)  try to parse and fail fast with a clearer 404
-            // Expected path like: /v7.0/Account001/AddressDescriptions
-            var segments = httpContext.Request.Path.Value?.Trim('/').Split('/', StringSplitOptions.RemoveEmptyEntries) ?? Array.Empty<string>();
-            if (segments.Length >= 3 && segments[0].StartsWith("v", StringComparison.OrdinalIgnoreCase))
-            {
-                var parsedVersion = segments[0][1..];         // "7.0"
-                var parsedController = segments[2];           // "AddressDescriptions"
-                var resolver = httpContext.RequestServices.GetRequiredService<VersionedControllerSelector>();
-
-                // Fake the route values just for checking
-                httpContext.Request.RouteValues["controller"] = parsedController;
-                if (resolver.ResolveAllowedController(httpContext) is null)
-                {
-                    httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
-                    await httpContext.Response.WriteAsync($"No controller mapped for version '{parsedVersion}'.");
-                    return;
-                }
-
-                allowedVersionlessRequest = true;
-            }
-
-            if (allowedVersionlessRequest)
-            {
-                // If we have a next handler, call it
                 await this.next(httpContext);
                 return;
             }
