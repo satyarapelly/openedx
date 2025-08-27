@@ -34,16 +34,16 @@ namespace Microsoft.Commerce.Payments.PXCommon
         private const string DefaultLogValue = "<none>";
         private const int DefaultConnectionLeaseTimeoutInMs = 120 * 1000;
         private const int DefaultMaxIdleTime = -1;
-        private readonly IHttpContextAccessor? _httpContextAccessor;
+        private readonly IHttpContextAccessor httpContextAccessor;
         private readonly RequestDelegate _next;
-        private readonly bool _isDependentServiceRequest;
+        private bool isDependentServiceRequest;
 
-        public PXTraceCorrelationHandler(string serviceName, HttpMessageHandler innerHandler, bool isDependentServiceRequest, Action<string, EventTraceActivity>? logError = null, IHttpContextAccessor? httpContextAccessor = null)
+        public PXTraceCorrelationHandler(string serviceName, HttpMessageHandler innerHandler, bool isDependentServiceRequest, Action<string, EventTraceActivity> logError = null, IHttpContextAccessor httpContextAccessor = null)
             : base(innerHandler)
         {
             this.ServiceName = serviceName;
-            this._isDependentServiceRequest = isDependentServiceRequest;
-            this._httpContextAccessor = httpContextAccessor;
+            this.isDependentServiceRequest = isDependentServiceRequest;
+            this.httpContextAccessor = httpContextAccessor;
             this.LogError = logError;
             this._next = _ => Task.CompletedTask;
         }
@@ -51,12 +51,12 @@ namespace Microsoft.Commerce.Payments.PXCommon
         public PXTraceCorrelationHandler(
             string serviceName,
             Action<string, string, string, string, string, string, HttpRequestMessage, HttpResponseMessage, string, string, string, string, string, string, string, string> logIncomingRequestToAppInsight,
-            IHttpContextAccessor? httpContextAccessor = null)
+            IHttpContextAccessor httpContextAccessor = null)
         {
             this.ServiceName = serviceName;
-            this._isDependentServiceRequest = false;
+            this.isDependentServiceRequest = false;
             this.LogIncomingRequestToAppInsight = logIncomingRequestToAppInsight;
-            this._httpContextAccessor = httpContextAccessor;
+            this.httpContextAccessor = httpContextAccessor;
             this._next = _ => Task.CompletedTask;
         }
 
@@ -65,13 +65,13 @@ namespace Microsoft.Commerce.Payments.PXCommon
             HttpMessageHandler innerHandler,
             bool isDependentServiceRequest,
             Action<string, string, HttpRequestMessage, HttpResponseMessage, string, string, string, string> logOutgoingToAppInsight,
-            IHttpContextAccessor? httpContextAccessor = null)
+            IHttpContextAccessor httpContextAccessor = null)
            : base(innerHandler)
         {
             this.ServiceName = serviceName;
-            this._isDependentServiceRequest = isDependentServiceRequest;
+            this.isDependentServiceRequest = isDependentServiceRequest;
             this.LogToApplicationInsight = logOutgoingToAppInsight;
-            this._httpContextAccessor = httpContextAccessor;
+            this.httpContextAccessor = httpContextAccessor;
             this._next = _ => Task.CompletedTask;
         }
 
@@ -79,8 +79,8 @@ namespace Microsoft.Commerce.Payments.PXCommon
             RequestDelegate next,
             string serviceName,
             bool isDependentServiceRequest = false,
-            Action<string, EventTraceActivity>? logError = null,
-            IHttpContextAccessor? httpContextAccessor = null)
+            Action<string, EventTraceActivity> logError = null,
+            IHttpContextAccessor httpContextAccessor = null)
             : this(serviceName, (HttpMessageHandler)null, isDependentServiceRequest, logError, httpContextAccessor)
         {
             this._next = next;
@@ -143,7 +143,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
         /// <returns>The response message.</returns>
         protected override sealed Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            if (this._isDependentServiceRequest)
+            if (this.isDependentServiceRequest)
             {
                 return this.SendAsyncOutgoing(request, cancellationToken);
             }
@@ -155,7 +155,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
 
         public async Task InvokeAsync(HttpContext context)
         {
-            if (this._isDependentServiceRequest)
+            if (this.isDependentServiceRequest)
             {
                 await this._next(context);
                 return;
@@ -174,7 +174,18 @@ namespace Microsoft.Commerce.Payments.PXCommon
                 requestMessage.SetRouteData(new RouteValueDictionary(routeValues));
             }
 
-            CopyItemsToOptions(context, requestMessage);
+            void CopyItemsToOptions()
+            {
+                foreach (var item in context.Items)
+                {
+                    if (item.Key is string key)
+                    {
+                        requestMessage.Options.Set(new HttpRequestOptionsKey<object>(key), item.Value);
+                    }
+                }
+            }
+
+            CopyItemsToOptions();
 
             string operationName = this.GetOperationName(requestMessage);
             if (!context.Items.ContainsKey(PaymentConstants.Web.Properties.OperationName))
@@ -211,7 +222,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
             {
                 await this._next(context);
 
-                CopyItemsToOptions(context, requestMessage);
+                CopyItemsToOptions();
 
                 context.Response.Headers.Add("x-info", "px-azure");
                 context.Response.Headers.Add(PaymentConstants.PaymentExtendedHttpHeaders.CorrelationId, requestTraceId.ActivityId.ToString());
@@ -236,17 +247,6 @@ namespace Microsoft.Commerce.Payments.PXCommon
             finally
             {
                 stopwatch.Stop();
-            }
-        }
-
-        private static void CopyItemsToOptions(HttpContext context, HttpRequestMessage requestMessage)
-        {
-            foreach (var item in context.Items)
-            {
-                if (item.Key is string key)
-                {
-                    requestMessage.Options.Set(new HttpRequestOptionsKey<object>(key), item.Value);
-                }
             }
         }
 
@@ -622,7 +622,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
 
         private void RemoveRequestContextItem(string key)
         {
-            IDictionary<object, object>? items = this._httpContextAccessor?.HttpContext?.Items;
+            IDictionary<object, object> items = this.httpContextAccessor?.HttpContext?.Items;
             if (items != null && items.ContainsKey(key))
             {
                 items.Remove(key);
