@@ -1,12 +1,40 @@
-namespace Microsoft.CommonSchema.Services.Logging
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
+
+namespace Microsoft.Commerce.Payments.Common.Web
 {
-    /// <summary>
-    /// Placeholder for database action result types until real implementation is available.
-    /// </summary>
-    public enum DatabaseActionResult
+    [global::Bond.Attribute("Description", "For logging PX actions against database.")]
+    [global::Bond.Schema]
+    public partial class DatabaseActionResult
+        : global::Microsoft.Telemetry.Data<global::Microsoft.Telemetry.Base>
     {
-        Unknown = 0,
-        Success = 1,
-        Failure = 2
+        [global::Bond.Id(10), global::Bond.Required]
+        public bool Success { get; set; }
+
+        [global::Bond.Id(20), global::Bond.Required]
+        public string DatabaseName { get; set; }
+
+        [global::Bond.Id(30), global::Bond.Required]
+        public string ContainerName { get; set; }
+
+        [global::Bond.Id(40), global::Bond.Required]
+        public string Action { get; set; }
+
+        [global::Bond.Id(50)]
+        public string Exception { get; set; }
+
+        public DatabaseActionResult()
+            : this("Microsoft.Commerce.Payments.Common.Web.DatabaseActionResult", "DatabaseActionResult")
+        {
+        }
+
+        protected DatabaseActionResult(string fullName, string name)
+        {
+            DatabaseName = "";
+            ContainerName = "";
+            Action = "";
+            Exception = "";
+        }
     }
 }
+
