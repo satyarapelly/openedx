@@ -1131,29 +1131,34 @@ namespace Microsoft.Commerce.Payments.PXService
                     httpContext.Request.Body.Position = 0;
                 }
 
+                httpContext.Response.OnStarting(() =>
+                {
+                    httpContext.Response.Headers[OperationVersionHeader] = apiVersion.ExternalVersion;
+
+                    if (exposableFeatures != null && exposableFeatures.Count != 0)
+                    {
+                        httpContext.Response.Headers[ExposableFlightsHeader] = string.Join(",", exposableFeatures);
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(featureConfig?.AssignmentContext))
+                    {
+                        httpContext.Response.Headers[PXFlightAssignmentContextHeader] = featureConfig.AssignmentContext;
+                    }
+
+                    if (exposableFeatures != null && exposableFeatures.Contains(Flighting.Features.PXSendContentTypeOptionsHeader, StringComparer.OrdinalIgnoreCase))
+                    {
+                        httpContext.Response.Headers[ContentTypeOptionsHeader] = NoSniff;
+                    }
+
+                    if (exposableFeatures != null && exposableFeatures.Contains(Flighting.Features.PXSendNoRetryOnServerErrorHeader, StringComparer.OrdinalIgnoreCase))
+                    {
+                        httpContext.Response.Headers[RetryOnServerErrorHeader] = "false";
+                    }
+
+                    return Task.CompletedTask;
+                });
+
                 await this.next(httpContext);
-
-                httpContext.Response.Headers.Add(OperationVersionHeader, apiVersion.ExternalVersion);
-
-                if (exposableFeatures != null && exposableFeatures.Count != 0)
-                {
-                    httpContext.Response.Headers.Add(ExposableFlightsHeader, string.Join(",", exposableFeatures));
-                }
-
-                if (!string.IsNullOrWhiteSpace(featureConfig?.AssignmentContext))
-                {
-                    httpContext.Response.Headers.Add(PXFlightAssignmentContextHeader, featureConfig?.AssignmentContext);
-                }
-
-                if (exposableFeatures != null && exposableFeatures.Contains(Flighting.Features.PXSendContentTypeOptionsHeader, StringComparer.OrdinalIgnoreCase))
-                {
-                    httpContext.Response.Headers.Add(ContentTypeOptionsHeader, NoSniff);
-                }
-
-                if (exposableFeatures != null && exposableFeatures.Contains(Flighting.Features.PXSendNoRetryOnServerErrorHeader, StringComparer.OrdinalIgnoreCase))
-                {
-                    httpContext.Response.Headers.Add(RetryOnServerErrorHeader, "false");
-                }
 
                 return new HttpResponseMessage((HttpStatusCode)httpContext.Response.StatusCode);
             }
