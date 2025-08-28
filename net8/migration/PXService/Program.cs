@@ -28,7 +28,7 @@ WebApiConfig.Register(builder, pxSettings);
 // optional – if you rely on your own AI setup it’s fine to leave this
 builder.Services.AddApplicationInsightsTelemetry();
 
-var app = builder.Build();
+using var app = builder.Build();
 // Ensure the routing matcher runs before custom middleware so HttpContext.GetEndpoint()
 // is populated when those middlewares execute.
 app.UseRouting();
@@ -47,10 +47,7 @@ if (!WebHostingUtility.IsApplicationSelfHosted())
 }
 
 // Trace correlation (mirrors WebApiConfig)
-if (!WebHostingUtility.IsApplicationSelfHosted())
-{
-    app.UseMiddleware<PXTraceCorrelationHandler>(Constants.ServiceNames.PXService, ApplicationInsightsProvider.LogIncomingOperation);
-}
+WebApiConfig.UseTracing(app);
 
 // API version handler
 app.UseMiddleware<PXServiceApiVersionHandler>();
@@ -76,7 +73,7 @@ app.MapControllers();
 // graceful shutdown (replaces Global.asax Application_End)
 app.Lifetime.ApplicationStopping.Register(() => pxSettings?.AzureExPAccessor?.StopPolling());
 
-app.Run();
+await app.RunAsync();
 
 // -------- helpers --------
 static void EnsureSllInitialized()

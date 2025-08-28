@@ -203,9 +203,14 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             {
                 if (this.exposedFlightFeatures == null)
                 {
-                    object exposableFeaturesObject = null;
-                    this.HttpContext.Items.TryGetValue(GlobalConstants.RequestPropertyKeys.ExposedFlightFeatures, out exposableFeaturesObject);
-                    this.exposedFlightFeatures = exposableFeaturesObject as List<string> ?? new List<string>();
+                    if (this.Request.TryGetProperty(GlobalConstants.RequestPropertyKeys.ExposedFlightFeatures, out List<string>? features))
+                    {
+                        this.exposedFlightFeatures = features ?? new List<string>();
+                    }
+                    else
+                    {
+                        this.exposedFlightFeatures = new List<string>();
+                    }
                 }
 
                 return this.exposedFlightFeatures;
@@ -218,9 +223,10 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             {
                 if (this.partnerSettings == null)
                 {
-                    object partnerSettingsObject = null;
-                    this.HttpContext.Items.TryGetValue(GlobalConstants.RequestPropertyKeys.PartnerSettings, out partnerSettingsObject);
-                    this.partnerSettings = partnerSettingsObject as PartnerSettings;
+                    if (this.Request.TryGetProperty(GlobalConstants.RequestPropertyKeys.PartnerSettings, out PartnerSettings? settings))
+                    {
+                        this.partnerSettings = settings;
+                    }
                 }
 
                 return this.partnerSettings;
