@@ -55,14 +55,16 @@ namespace Microsoft.Commerce.Payments.Common.Web
         {
             // Not all the APIs have version.
             string apiExternalVersion = string.Empty;
-            if (request.Options.TryGetValue(new HttpRequestOptionsKey<object>(PaymentConstants.Web.Properties.Version), out _))
+            if (request.Properties.ContainsKey(PaymentConstants.Web.Properties.Version))
             {
                 apiExternalVersion = request.GetApiVersion().ExternalVersion;
             }
 
-            request.Options.TryGetValue(new HttpRequestOptionsKey<object>(PaymentConstants.Web.Properties.CallerName), out var callerObject);
+            object callerObject;
+            request.Properties.TryGetValue(PaymentConstants.Web.Properties.CallerName, out callerObject);
 
-            request.Options.TryGetValue(new HttpRequestOptionsKey<object>(PaymentConstants.Web.Properties.CallerThumbprint), out var callerThumbprintObject);
+            object callerThumbprintObject;
+            request.Properties.TryGetValue(PaymentConstants.Web.Properties.CallerThumbprint, out callerThumbprintObject);
 
             Ms.Qos.ServiceRequestStatus operationStatus = Ms.Qos.ServiceRequestStatus.Undefined;
 
@@ -131,12 +133,14 @@ namespace Microsoft.Commerce.Payments.Common.Web
                 SllLogger.EnvironmentLogOption,
                 (envelope) =>
                 {
-                    if (request.Options.TryGetValue(new HttpRequestOptionsKey<object>(PaymentConstants.Web.Properties.FlightingExperimentId), out var flightingExperimentId))
+                    object flightingExperimentId;
+                    if (request.Properties.TryGetValue(PaymentConstants.Web.Properties.FlightingExperimentId, out flightingExperimentId))
                     {
                         envelope.SetApp(new Telemetry.Extensions.app { expId = flightingExperimentId.ToString() });
                     }
 
-                    if (request.Options.TryGetValue(new HttpRequestOptionsKey<object>(PaymentConstants.Web.Properties.ScenarioId), out var scenarioId) && envelope.tags != null)
+                    object scenarioId;
+                    if (request.Properties.TryGetValue(PaymentConstants.Web.Properties.ScenarioId, out scenarioId) && envelope.tags != null)
                     {
                         envelope.tags["scenarioId"] = scenarioId.ToString();
                     }
@@ -197,12 +201,13 @@ namespace Microsoft.Commerce.Payments.Common.Web
         {
             // Not all the APIs have version.
             string apiExternalVersion = string.Empty;
-            if (request.Options.TryGetValue(new HttpRequestOptionsKey<object>(PaymentConstants.Web.Properties.Version), out _))
+            if (request.Properties.ContainsKey(PaymentConstants.Web.Properties.Version))
             {
                 apiExternalVersion = request.GetApiVersion().ExternalVersion;
             }
 
-            request.Options.TryGetValue(new HttpRequestOptionsKey<object>(PaymentConstants.Web.Properties.CallerName), out var callerObject);
+            object callerObject;
+            request.Properties.TryGetValue(PaymentConstants.Web.Properties.CallerName, out callerObject);
 
             ServiceRequestStatus operationStatus = ServiceRequestStatus.Undefined;
 
@@ -327,7 +332,7 @@ namespace Microsoft.Commerce.Payments.Common.Web
         {
             // Not all the APIs have version.
             object apiVersion = null;
-            request.Options.TryGetValue(new HttpRequestOptionsKey<object>(PaymentConstants.Web.Properties.Version), out apiVersion);
+            request.Properties.TryGetValue(PaymentConstants.Web.Properties.Version, out apiVersion);
 
             Ms.Qos.ServiceRequestStatus operationStatus = Ms.Qos.ServiceRequestStatus.Undefined;
 
@@ -650,6 +655,37 @@ namespace Microsoft.Commerce.Payments.Common.Web
 
             authenticationResult.Log(
                 EventLevel.Informational,
+                SllLogger.EnvironmentLogOption);
+        }
+
+        /// <summary>
+        /// Trace Token Authentication Result
+        /// </summary>
+        /// <param name="success">database action succeed or not</param>
+        /// <param name="databaseName">database name</param>
+        /// <param name="containerName">database container name</param>
+        /// <param name="action">database action</param>
+        /// <param name="ex">if succeed = false, more detail from exception</param>
+        public static void DatabaseActionResult(
+            bool success,
+            string databaseName,
+            string containerName,
+            string action,
+            Exception ex = null)
+        {
+            DatabaseActionResult databaseActionResult = new DatabaseActionResult()
+            {
+                Success = success,
+                DatabaseName = databaseName,
+                ContainerName = containerName,
+                Action = action,
+                Exception = ex?.ToString()
+            };
+
+            EventLevel eventLevel = success ? EventLevel.Informational : EventLevel.Error;
+
+            databaseActionResult.Log(
+                eventLevel,
                 SllLogger.EnvironmentLogOption);
         }
 
