@@ -66,7 +66,12 @@ namespace Microsoft.Commerce.Payments.PXCommon
 
         public string ServiceName { get; }
 
-        protected sealed override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        protected sealed override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            return this.InvokeAsync(request, cancellationToken);
+        }
+
+        protected virtual async Task<HttpResponseMessage> InvokeAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             if (!request.Options.TryGetValue(TraceActivityKey, out var serverTraceActivity))
             {
