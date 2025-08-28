@@ -44,7 +44,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
             this.ServiceName = serviceName;
             this.isDependentServiceRequest = isDependentServiceRequest;
             this.httpContextAccessor = httpContextAccessor;
-            this.LogError = logError;
+            this.LogError = logError ?? ((_, __) => { });
             this._next = _ => Task.CompletedTask;
         }
 
@@ -470,7 +470,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
             }
             catch (Exception ex)
             {
-                this.LogError("PXTraceCorrelationHandler.TraceClientOperation: " + ex.Message, requestTraceId);
+                this.LogError?.Invoke("PXTraceCorrelationHandler.TraceClientOperation: " + ex.Message, requestTraceId);
             }
         }
 
@@ -592,7 +592,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
             }
             catch (Exception ex)
             {
-                this.LogError("PXTraceCorrelationHandler.TraceClientOperation: " + ex.Message, requestTraceId);
+                this.LogError?.Invoke("PXTraceCorrelationHandler.TraceClientOperation: " + ex.Message, requestTraceId);
             }
         }
 
