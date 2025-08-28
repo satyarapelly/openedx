@@ -39,8 +39,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>Json configuration</returns>
         [HttpGet("GetWalletConfig")]
         public async Task<HttpResponseMessage> GetWalletConfig(
-            string partner = null,
-            string client = null)
+            [FromQuery] string partner = null,
+            [FromQuery] string client = null)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
             ProviderDataResponse response = await this.Settings.WalletServiceAccessor.GetProviderData(traceActivityId, this.ExposedFlightFeatures);

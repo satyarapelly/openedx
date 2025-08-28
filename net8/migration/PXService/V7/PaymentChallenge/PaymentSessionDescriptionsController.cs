@@ -25,7 +25,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
         /// <param name="paymentSessionData">The context to create PaymentSession</param>
         /// <returns>Returns a purchase context PIDL for the given piid</returns>
         [HttpGet]
-        public async Task<List<PIDLResource>> Get([FromBody] string accountId, [FromBody] string paymentSessionData)
+        public async Task<List<PIDLResource>> Get([FromRoute] string accountId, [FromQuery] string paymentSessionData)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
             try

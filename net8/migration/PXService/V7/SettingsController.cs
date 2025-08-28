@@ -38,7 +38,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A setting object</response>
         /// <returns>A setting object</returns>
         [HttpGet]
-        public ActionResult GetSettings([FromRoute] string appName, [FromRoute] string appVersion, string language = null)
+        public ActionResult GetSettings([FromRoute] string appName, [FromRoute] string appVersion, [FromQuery] string language = null)
         {
             if (string.Equals(appName, Constants.AppDetails.WalletPackageName, StringComparison.OrdinalIgnoreCase))
             {

@@ -34,7 +34,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">An address object</response>
         /// <returns>An address object</returns>
         [HttpGet]
-        public async Task<HttpResponseMessage> GetAddressById([FromQuery] string accountId, string addressId)
+        public async Task<HttpResponseMessage> GetAddressById([FromRoute] string accountId, [FromQuery] string addressId)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
 
@@ -60,11 +60,11 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         [HttpPost]
         public async Task<HttpResponseMessage> Post(
             [FromBody]PIDLData address, 
-            [FromQuery]string accountId, 
-            string partner, 
-            string language, 
-            bool avsSuggest,
-            string scenario = null)
+            [FromRoute] string accountId,
+            [FromQuery] string partner,
+            [FromQuery] string language,
+            [FromQuery] bool avsSuggest,
+            [FromQuery] string scenario = null)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
             this.Request.AddPartnerProperty(partner?.ToLower());
@@ -128,10 +128,10 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         [HttpPatch]
         public async Task<HttpResponseMessage> Patch(
             [FromBody] PIDLData address, 
-            [FromQuery] string accountId, 
-            [FromQuery]string addressId, 
-            string partner,
-            string scenario = null)
+            [FromRoute] string accountId,
+            [FromQuery] string addressId,
+            [FromQuery] string partner,
+            [FromQuery] string scenario = null)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
             this.Request.AddPartnerProperty(partner?.ToLower());

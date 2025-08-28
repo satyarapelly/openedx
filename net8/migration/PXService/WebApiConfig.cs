@@ -390,17 +390,17 @@ namespace Microsoft.Commerce.Payments.PXService
             endpoints.MapControllerRoute(
                 name: GlobalConstants.V7RouteNames.GetProfileDescriptionsApiNoId,
                 pattern: GlobalConstants.EndPointNames.V7ProfileDescriptions,
-                defaults: new { controller = C(GlobalConstants.ControllerNames.ProfileDescriptionsController), action = "List" });
+                defaults: new { controller = C(GlobalConstants.ControllerNames.ProfileDescriptionsController), action = "GetByCountry" });
 
             endpoints.MapControllerRoute(
                 name: GlobalConstants.V7RouteNames.GetBillingGroupDescriptionsApiNoId,
                 pattern: GlobalConstants.EndPointNames.V7BillingGroupDescriptions,
-                defaults: new { controller = C(GlobalConstants.ControllerNames.BillingGroupDescriptionsController), action = "List" });
+                defaults: new { controller = C(GlobalConstants.ControllerNames.BillingGroupDescriptionsController), action = "GetBillingGroupsDescription" });
 
             endpoints.MapControllerRoute(
                 name: GlobalConstants.V7RouteNames.GetTaxIdDescriptionsApi,
                 pattern: GlobalConstants.EndPointNames.V7TaxIdDescriptions,
-                defaults: new { controller = C(GlobalConstants.ControllerNames.TaxIdDescriptionsController), action = "List" });
+                defaults: new { controller = C(GlobalConstants.ControllerNames.TaxIdDescriptionsController), action = "Get" });
 
             endpoints.MapControllerRoute(
                 name: GlobalConstants.V7RouteNames.GetTenantDescriptionsApi,
@@ -465,7 +465,7 @@ namespace Microsoft.Commerce.Payments.PXService
             endpoints.MapControllerRoute(
                 name: GlobalConstants.V7RouteNames.SessionsByIdApi,
                 pattern: GlobalConstants.EndPointNames.V7SessionsById,
-                defaults: new { controller = C(GlobalConstants.ControllerNames.SessionsController), action = "GetSession" });
+                defaults: new { controller = C(GlobalConstants.ControllerNames.SessionsController), action = "GetBySessionId" });
 
             endpoints.MapControllerRoute(
                 name: GlobalConstants.V7RouteNames.SessionsApi,
@@ -520,7 +520,7 @@ namespace Microsoft.Commerce.Payments.PXService
             endpoints.MapControllerRoute(
                 name: GlobalConstants.V7RouteNames.GetRewardsDescriptionsApi,
                 pattern: GlobalConstants.EndPointNames.V7RewardsDescriptions,
-                defaults: new { controller = C(GlobalConstants.ControllerNames.RewardsDescriptionsController), action = "List" });
+                defaults: new { controller = C(GlobalConstants.ControllerNames.RewardsDescriptionsController), action = "Get" });
 
             endpoints.MapControllerRoute(
                 name: GlobalConstants.V7RouteNames.PaymentClientInitializationApi,

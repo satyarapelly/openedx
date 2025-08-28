@@ -40,13 +40,13 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Needs to be an instance method for Route action selection")]
         [HttpGet]
         public async Task<List<PIDLResource>> Get(
-            string accountId,
-            string type,
-            string operation,
-            string country = null,
-            string language = null,
-            string partner = Constants.ServiceDefaults.DefaultPartnerName,
-            string rewardsContextData = null)
+            [FromRoute] string accountId,
+            [FromQuery] string type,
+            [FromQuery] string operation,
+            [FromQuery] string? country = null,
+            [FromQuery] string? language = null,
+            [FromQuery] string partner = Constants.ServiceDefaults.DefaultPartnerName,
+            [FromQuery] string? rewardsContextData = null)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
 
