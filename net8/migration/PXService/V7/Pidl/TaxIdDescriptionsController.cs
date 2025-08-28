@@ -284,7 +284,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>A list of PIDLResource object</returns>
         [HttpGet]
         [ApiExplorerSettings(IgnoreApi = true)]
-        public List<PIDLResource> GetStandaloneTaxPidl(string country, string operation, string language = null, string partner = Constants.ServiceDefaults.DefaultPartnerName, string type = null, string scenario = null)
+        public List<PIDLResource> GetStandaloneTaxPidl([FromRoute] string country, [FromQuery] string operation, [FromQuery] string? language = null, [FromQuery] string partner = Constants.ServiceDefaults.DefaultPartnerName, [FromQuery] string? type = null, [FromQuery] string? scenario = null)
         {
             return this.GetStandaloneTaxPidl(
                 string.Empty,
