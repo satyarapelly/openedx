@@ -9,8 +9,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using System.Net.Http;
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
-    using System.Web;
-    using System.Web.Http;
+    using Microsoft.AspNetCore.Mvc;
+    using Common.Web;
     using Microsoft.Commerce.Payments.PXService.Model.ShortURLDB;
     using OpenTelemetry.Trace;
 
