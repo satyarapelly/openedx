@@ -323,6 +323,16 @@ namespace Microsoft.Commerce.Payments.PXService
                 defaults: new { controller = C(GlobalConstants.ControllerNames.TokensExController), action = "Mandate" });
 
             endpoints.MapControllerRoute(
+                name: GlobalConstants.V7RouteNames.CreateShortURL,
+                pattern: GlobalConstants.EndPointNames.V7CreateShortURL,
+                defaults: new { controller = C(GlobalConstants.ControllerNames.ShortURLController), action = "Create" });
+
+            endpoints.MapControllerRoute(
+                name: GlobalConstants.V7RouteNames.DeleteShortURL,
+                pattern: GlobalConstants.EndPointNames.V7DeleteShortURL,
+                defaults: new { controller = C(GlobalConstants.ControllerNames.ShortURLController), action = "Delete" });
+
+            endpoints.MapControllerRoute(
                 name: GlobalConstants.V7RouteNames.GetAgenticTokenDescriptionsApi,
                 pattern: GlobalConstants.EndPointNames.V7AgenticTokenDescriptions,
                 defaults: new { controller = C(GlobalConstants.ControllerNames.AgenticTokenDescriptionsController) });
@@ -595,6 +605,7 @@ namespace Microsoft.Commerce.Payments.PXService
                 { Key(GlobalConstants.ControllerNames.PaymentRequestsExController),       typeof(V7.PaymentClient.PaymentRequestsExController) },
                 { Key(GlobalConstants.ControllerNames.AgenticTokenDescriptionsController),typeof(V7.AgenticTokenDesctipionsController) },
                 { Key(GlobalConstants.ControllerNames.TokensExController),                typeof(V7.TokensExController) },
+                { Key(GlobalConstants.ControllerNames.ShortURLController),               typeof(V7.ShortURL.ShortURLController) },
             };
 
             selector.AddVersion("v7.0", v7);
