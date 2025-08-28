@@ -44,7 +44,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
             this.ServiceName = serviceName;
             this.isDependentServiceRequest = isDependentServiceRequest;
             this.httpContextAccessor = httpContextAccessor;
-            this.LogError = logError;
+            this.LogError = logError ?? ((_, __) => { });
             this._next = _ => Task.CompletedTask;
         }
 
@@ -58,6 +58,16 @@ namespace Microsoft.Commerce.Payments.PXCommon
             this.LogIncomingRequestToAppInsight = logIncomingRequestToAppInsight;
             this.httpContextAccessor = httpContextAccessor;
             this._next = _ => Task.CompletedTask;
+        }
+
+        public PXTraceCorrelationHandler(
+            RequestDelegate next,
+            string serviceName,
+            Action<string, string, string, string, string, string, HttpRequestMessage, HttpResponseMessage, string, string, string, string, string, string, string, string> logIncomingRequestToAppInsight,
+            IHttpContextAccessor httpContextAccessor = null)
+            : this(serviceName, logIncomingRequestToAppInsight, httpContextAccessor)
+        {
+            this._next = next;
         }
 
         public PXTraceCorrelationHandler(
@@ -470,7 +480,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
             }
             catch (Exception ex)
             {
-                this.LogError("PXTraceCorrelationHandler.TraceClientOperation: " + ex.Message, requestTraceId);
+                this.LogError?.Invoke("PXTraceCorrelationHandler.TraceClientOperation: " + ex.Message, requestTraceId);
             }
         }
 
@@ -592,7 +602,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
             }
             catch (Exception ex)
             {
-                this.LogError("PXTraceCorrelationHandler.TraceClientOperation: " + ex.Message, requestTraceId);
+                this.LogError?.Invoke("PXTraceCorrelationHandler.TraceClientOperation: " + ex.Message, requestTraceId);
             }
         }
 

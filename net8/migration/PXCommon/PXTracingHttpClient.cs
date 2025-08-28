@@ -4,6 +4,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
 {
     using System;
     using System.Net.Http;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Commerce.Payments.Common.Web;
 
@@ -23,16 +24,19 @@ namespace Microsoft.Commerce.Payments.PXCommon
             string serviceName,
             Action<string, EventTraceActivity> logError = null,
             Action<string, string, EventTraceActivity> logRequest = null,
-            Action<string, EventTraceActivity> logResponse = null)
+            Action<string, EventTraceActivity> logResponse = null,
+            IHttpContextAccessor httpContextAccessor = null)
             : base(new PXTraceCorrelationHandler(
-                serviceName: serviceName, 
+                serviceName: serviceName,
                 innerHandler: new PXTracingHandler(
-                    serviceName: serviceName, 
-                    httpMessageHandler: new HttpClientHandler(), 
-                    logError: logError, 
-                    logRequest: logRequest, 
-                    logResponse: logResponse), 
-                isDependentServiceRequest: true))
+                    serviceName: serviceName,
+                    httpMessageHandler: new HttpClientHandler(),
+                    logError: logError,
+                    logRequest: logRequest,
+                    logResponse: logResponse),
+                isDependentServiceRequest: true,
+                logError: logError,
+                httpContextAccessor: httpContextAccessor))
         {
         }
 
@@ -49,39 +53,46 @@ namespace Microsoft.Commerce.Payments.PXCommon
             HttpMessageHandler httpMessageHandler,
             Action<string, EventTraceActivity> logError = null,
             Action<string, string, EventTraceActivity> logRequest = null,
-            Action<string, EventTraceActivity> logResponse = null) :
+            Action<string, EventTraceActivity> logResponse = null,
+            IHttpContextAccessor httpContextAccessor = null) :
             base(new PXTraceCorrelationHandler(
-                serviceName: serviceName, 
+                serviceName: serviceName,
                 innerHandler: new PXTracingHandler(
-                    serviceName: serviceName, 
-                    httpMessageHandler: httpMessageHandler, 
-                    logError: logError, 
-                    logRequest: logRequest, 
-                    logResponse: logResponse), 
-                isDependentServiceRequest: true))
+                    serviceName: serviceName,
+                    httpMessageHandler: httpMessageHandler,
+                    logError: logError,
+                    logRequest: logRequest,
+                    logResponse: logResponse),
+                isDependentServiceRequest: true,
+                logError: logError,
+                httpContextAccessor: httpContextAccessor))
         {
         }
 
         public PXTracingHttpClient(
             string serviceName,
             HttpMessageHandler httpMessageHandler,
-            Action<string, string, HttpRequestMessage, HttpResponseMessage, string, string, string, string> logOutgoingRequestToApplicationInsight) :
+            Action<string, string, HttpRequestMessage, HttpResponseMessage, string, string, string, string> logOutgoingRequestToApplicationInsight,
+            IHttpContextAccessor httpContextAccessor = null) :
             base(new PXTraceCorrelationHandler(
                 serviceName: serviceName,
                 innerHandler: httpMessageHandler,
                 isDependentServiceRequest: true,
-                logOutgoingToAppInsight: logOutgoingRequestToApplicationInsight))
+                logOutgoingToAppInsight: logOutgoingRequestToApplicationInsight,
+                httpContextAccessor: httpContextAccessor))
         {
         }
 
         public PXTracingHttpClient(
             string serviceName,
-            Action<string, string, HttpRequestMessage, HttpResponseMessage, string, string, string, string> logOutgoingRequestToApplicationInsight) :
+            Action<string, string, HttpRequestMessage, HttpResponseMessage, string, string, string, string> logOutgoingRequestToApplicationInsight,
+            IHttpContextAccessor httpContextAccessor = null) :
             base(new PXTraceCorrelationHandler(
                 serviceName: serviceName,
                 innerHandler: new HttpClientHandler(),
                 isDependentServiceRequest: true,
-                logOutgoingToAppInsight: logOutgoingRequestToApplicationInsight))
+                logOutgoingToAppInsight: logOutgoingRequestToApplicationInsight,
+                httpContextAccessor: httpContextAccessor))
         {
         }
     }

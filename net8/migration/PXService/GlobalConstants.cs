@@ -243,6 +243,8 @@ namespace Microsoft.Commerce.Payments.PXService
             public const string ConfirmPaymentRequestExApi = "V7ConfirmPaymentRequestExApi";
             public const string AttachChallengeDataPaymentRequestExApi = "V7AttachChallengeDataPaymentRequestExApi";
             public const string RemoveEligiblePaymentmethodsPaymentRequestExApi = "V7RemoveEligiblePaymentmethodsPaymentRequestExApi";
+            public const string CreateShortURL = "V7CreateShortURL";
+            public const string DeleteShortURL = "V7DeleteShortURL";
         }
 
         internal static class APINames
@@ -368,6 +370,7 @@ namespace Microsoft.Commerce.Payments.PXService
 
             // PaymentRequests Controller
             public const string PaymentRequestsExController = "PaymentRequestsExController";
+            public const string ShortURLController = "ShortURLController";
         }
 
         internal static class ExceptionDataKeys
@@ -472,6 +475,8 @@ namespace Microsoft.Commerce.Payments.PXService
             public const string V7ConfirmPaymentRequestsEx = "{version}/paymentClient/paymentRequestsEx/{paymentRequestId}/confirm";
             public const string V7AttachChallengeDataPaymentRequestsEx = "{version}/paymentClient/paymentRequestsEx/{paymentRequestId}/attachChallengeData";
             public const string V7RemoveEligiblePaymentmethodsPaymentRequestsEx = "{version}/paymentClient/paymentRequestsEx/{paymentRequestId}/removeEligiblePaymentmethods";
+            public const string V7CreateShortURL = "{version}/shorturl";
+            public const string V7DeleteShortURL = "{version}/shorturl/{codeOrUrl}";
 
             // Anonymous Endpoints
             public const string V7Transformation = "{version}/transformation/";

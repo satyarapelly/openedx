@@ -15,30 +15,30 @@ namespace Microsoft.Commerce.Payments.Common.Web
     /// </summary>
     public class VersionedControllerSelector
     {
-        private readonly ILogger<VersionedControllerSelector> _logger;
+        private readonly ILogger<VersionedControllerSelector> logger;
 
         // Map of external version string (e.g. "v7.0") to controller mappings.
-        private readonly Dictionary<string, Dictionary<string, Type>> _versionedControllers = new(StringComparer.OrdinalIgnoreCase);
+        private readonly Dictionary<string, Dictionary<string, Type>> versionedControllers = new(StringComparer.OrdinalIgnoreCase);
 
         // Controllers that do not require a version (probe etc.).
-        private readonly Dictionary<string, Type> _versionlessControllers = new(StringComparer.OrdinalIgnoreCase);
+        private readonly Dictionary<string, Type> versionlessControllers = new(StringComparer.OrdinalIgnoreCase);
 
         // Supported API versions exposed to callers (external -> ApiVersion).
-        private readonly Dictionary<string, ApiVersion> _supportedVersions = new(StringComparer.OrdinalIgnoreCase);
+        private readonly Dictionary<string, ApiVersion> supportedVersions = new(StringComparer.OrdinalIgnoreCase);
 
-        public VersionedControllerSelector(ILogger<VersionedControllerSelector> logger) => _logger = logger;
+        public VersionedControllerSelector(ILogger<VersionedControllerSelector> logger) => this.logger = logger;
 
         /// <summary>
         /// Gets the set of supported API versions.
         /// </summary>
-        public IDictionary<string, ApiVersion> SupportedVersions => _supportedVersions;
+        public IReadOnlyDictionary<string, ApiVersion> SupportedVersions => supportedVersions;
 
         /// <summary>
         /// Registers controllers that are bound to a specific API version.
         /// </summary>
         /// <param name="version">External version string (for example "v7.0").</param>
         /// <param name="controllers">Controller name to type mappings.</param>
-        public void AddVersion(string version, Dictionary<string, Type> controllers)
+        public void AddVersion(string version, IReadOnlyDictionary<string, Type> controllers)
         {
             if (string.IsNullOrWhiteSpace(version))
             {
@@ -55,8 +55,8 @@ namespace Microsoft.Commerce.Payments.Common.Web
                 internalVersion = new Version(1, 0);
             }
 
-            _supportedVersions[version] = new ApiVersion(version, internalVersion);
-            _versionedControllers[version] = controllers;
+            supportedVersions[version] = new ApiVersion(version, internalVersion);
+            versionedControllers[version] = new Dictionary<string, Type>(controllers, StringComparer.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace Microsoft.Commerce.Payments.Common.Web
             if (controllerName is null) throw new ArgumentNullException(nameof(controllerName));
             if (controllerType is null) throw new ArgumentNullException(nameof(controllerType));
 
-            _versionlessControllers[controllerName] = controllerType;
+            versionlessControllers[controllerName] = controllerType;
         }
 
         /// <summary>
@@ -85,18 +85,18 @@ namespace Microsoft.Commerce.Payments.Common.Web
 
             if (context.Items.TryGetValue(PaymentConstants.Web.Properties.Version, out var versionObj)
                 && versionObj is ApiVersion apiVersion
-                && _versionedControllers.TryGetValue(apiVersion.ExternalVersion, out var versionMap)
+                && versionedControllers.TryGetValue(apiVersion.ExternalVersion, out var versionMap)
                 && versionMap.TryGetValue(controllerName, out var controllerType))
             {
                 return controllerType;
             }
 
-            if (_versionlessControllers.TryGetValue(controllerName, out var versionlessType))
+            if (versionlessControllers.TryGetValue(controllerName, out var versionlessType))
             {
                 return versionlessType;
             }
 
-            _logger.LogDebug("No controller found for '{Controller}'", controllerName);
+            logger.LogDebug("No controller found for '{Controller}'", controllerName);
             return null;
         }
     }

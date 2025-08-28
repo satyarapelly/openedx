@@ -3,7 +3,6 @@
 namespace Microsoft.Commerce.Payments.PXService
 {
     using Azure.Core;
-    using Microsoft.AspNetCore.Components;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc.Controllers;
     using Microsoft.AspNetCore.Routing;
@@ -36,19 +35,18 @@ namespace Microsoft.Commerce.Payments.PXService
         private const string PXFlightAssignmentContextHeader = "x-ms-px-flight-assignmentcontext";
         private const string NoSniff = "nosniff";
 
-        private readonly string[] versionlessControllers;
-        private readonly IDictionary<string, ApiVersion> supportedVersions;
+        private readonly HashSet<string> versionlessControllers;
+        private readonly IReadOnlyDictionary<string, ApiVersion> supportedVersions;
         private readonly PXServiceSettings settings;
         private readonly RequestDelegate next;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PXServiceApiVersionHandler"/> class.
         /// </summary>
-        /// <param name="supportedVersions">A dictionary from api-version string to internal
-        /// version number which represents the set of supported versions.</param>
-        /// <param name="versionlessControllers">Names of controllers that should be available with no version</param>
+        /// <param name="supportedVersions">Mapping from api-version string to internal version numbers.</param>
+        /// <param name="versionlessControllers">Names of controllers that should be available with no version.</param>
         /// <param name="settings">PXServiceSettings instance for the current service.</param>
-        public PXServiceApiVersionHandler(IDictionary<string, ApiVersion> supportedVersions, string[] versionlessControllers, PXServiceSettings settings)
+        public PXServiceApiVersionHandler(IReadOnlyDictionary<string, ApiVersion> supportedVersions, IEnumerable<string> versionlessControllers, PXServiceSettings settings)
             : this(null, supportedVersions, versionlessControllers, settings)
         {
         }
@@ -57,15 +55,14 @@ namespace Microsoft.Commerce.Payments.PXService
         /// Initializes a new instance of the <see cref="PXServiceApiVersionHandler"/> class.
         /// </summary>
         /// <param name="next">The next middleware in the pipeline.</param>
-        /// <param name="supportedVersions">A dictionary from api-version string to internal
-        /// version number which represents the set of supported versions.</param>
+        /// <param name="supportedVersions">Mapping from api-version string to internal version numbers.</param>
         /// <param name="versionlessControllers">Names of controllers that should be available with no version.</param>
         /// <param name="settings">PXServiceSettings instance for the current service.</param>
-        public PXServiceApiVersionHandler(RequestDelegate next, IDictionary<string, ApiVersion> supportedVersions, string[] versionlessControllers, PXServiceSettings settings)
+        public PXServiceApiVersionHandler(RequestDelegate next, IReadOnlyDictionary<string, ApiVersion> supportedVersions, IEnumerable<string> versionlessControllers, PXServiceSettings settings)
         {
             this.next = next;
             this.supportedVersions = supportedVersions;
-            this.versionlessControllers = versionlessControllers ?? Array.Empty<string>();
+            this.versionlessControllers = versionlessControllers != null ? new HashSet<string>(versionlessControllers, StringComparer.OrdinalIgnoreCase) : new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             this.settings = settings;
         }
 
@@ -80,7 +77,7 @@ namespace Microsoft.Commerce.Payments.PXService
                 ? Convert.ToString(c)
                 : null;
 
-            if (controllerName != null && this.versionlessControllers.Contains(controllerName, StringComparer.OrdinalIgnoreCase))
+            if (controllerName != null && this.versionlessControllers.Contains(controllerName))
             {
                 await this.next(httpContext);
                 return;
@@ -123,6 +120,12 @@ namespace Microsoft.Commerce.Payments.PXService
             httpContext.Request.Body.Position = 0;
             request.Content = new StreamContent(httpContext.Request.Body);
             request.Options.Set(new HttpRequestOptionsKey<HttpContext>("HttpContext"), httpContext);
+
+            void SetProperty(string key, object? value)
+            {
+                request.SetProperty(key, value);
+                httpContext.Request.SetProperty(key, value);
+            }
 
             // Extract version and accountId from the RequestUri.
             // As can be seen from sample PX RequestUris below, version ("v7.0" in the example below) is part of the url.  Also,
@@ -347,7 +350,7 @@ namespace Microsoft.Commerce.Payments.PXService
             flightContext.Add(Flighting.ContextKeys.BrowserVer, browserVer);
             flightContext.Add(Flighting.ContextKeys.ReferrerDomain, referrerDomain);
 
-            request.SetProperty(GlobalConstants.RequestPropertyKeys.FlightContext, flightContext);
+            SetProperty(GlobalConstants.RequestPropertyKeys.FlightContext, flightContext);
 
             // Get feature config from AzureExp
             // TODO: if AzureExp is supporeted and needed in Sovereign clouds, then we shall enable AzureExp
@@ -1057,10 +1060,10 @@ namespace Microsoft.Commerce.Payments.PXService
             // Use Partner Setttings Service if flight is enabled
             PartnerSettings partnerSettings = await PartnerSettingsHelper.GetPaymentExperienceSetting(settings, partner, partnerSettingsVersion, traceActivityId, exposableFeatures);
 
-            request.SetProperty(GlobalConstants.RequestPropertyKeys.PartnerSettings, partnerSettings);
-            request.SetProperty(GlobalConstants.RequestPropertyKeys.ExposedFlightFeatures, exposableFeatures);
-            request.SetProperty(GlobalConstants.RequestPropertyKeys.FlightAssignmentContext, featureConfig?.AssignmentContext);
-            request.SetProperty(GlobalConstants.RequestPropertyKeys.FlightFeatureConfig, featureConfig);
+            SetProperty(GlobalConstants.RequestPropertyKeys.PartnerSettings, partnerSettings);
+            SetProperty(GlobalConstants.RequestPropertyKeys.ExposedFlightFeatures, exposableFeatures);
+            SetProperty(GlobalConstants.RequestPropertyKeys.FlightAssignmentContext, featureConfig?.AssignmentContext);
+            SetProperty(GlobalConstants.RequestPropertyKeys.FlightFeatureConfig, featureConfig);
 
             // When an account has the PXRateLimitPerAccountOnChallengeApis, return BadRequest response.
             // This is different from PXReturn502ForMaliciousRequest as that flight is to prevent sdk retires
@@ -1107,14 +1110,14 @@ namespace Microsoft.Commerce.Payments.PXService
             }
 
             ApiVersion apiVersion;
-            if (!supportedVersions.TryGetValue(externalVersion, out apiVersion))
+            if (!this.supportedVersions.TryGetValue(externalVersion, out apiVersion))
             {
                 return request.CreateInvalidApiVersionResponse(externalVersion);
             }
 
             if (request.ContainsProperty(PaymentConstants.Web.Properties.Version))
             {
-                request.SetProperty(PaymentConstants.Web.Properties.Version, apiVersion);
+                SetProperty(PaymentConstants.Web.Properties.Version, apiVersion);
             }
             else
             {
@@ -1128,29 +1131,34 @@ namespace Microsoft.Commerce.Payments.PXService
                     httpContext.Request.Body.Position = 0;
                 }
 
+                httpContext.Response.OnStarting(() =>
+                {
+                    httpContext.Response.Headers[OperationVersionHeader] = apiVersion.ExternalVersion;
+
+                    if (exposableFeatures != null && exposableFeatures.Count != 0)
+                    {
+                        httpContext.Response.Headers[ExposableFlightsHeader] = string.Join(",", exposableFeatures);
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(featureConfig?.AssignmentContext))
+                    {
+                        httpContext.Response.Headers[PXFlightAssignmentContextHeader] = featureConfig.AssignmentContext;
+                    }
+
+                    if (exposableFeatures != null && exposableFeatures.Contains(Flighting.Features.PXSendContentTypeOptionsHeader, StringComparer.OrdinalIgnoreCase))
+                    {
+                        httpContext.Response.Headers[ContentTypeOptionsHeader] = NoSniff;
+                    }
+
+                    if (exposableFeatures != null && exposableFeatures.Contains(Flighting.Features.PXSendNoRetryOnServerErrorHeader, StringComparer.OrdinalIgnoreCase))
+                    {
+                        httpContext.Response.Headers[RetryOnServerErrorHeader] = "false";
+                    }
+
+                    return Task.CompletedTask;
+                });
+
                 await this.next(httpContext);
-
-                httpContext.Response.Headers.Add(OperationVersionHeader, apiVersion.ExternalVersion);
-
-                if (exposableFeatures != null && exposableFeatures.Count != 0)
-                {
-                    httpContext.Response.Headers.Add(ExposableFlightsHeader, string.Join(",", exposableFeatures));
-                }
-
-                if (!string.IsNullOrWhiteSpace(featureConfig?.AssignmentContext))
-                {
-                    httpContext.Response.Headers.Add(PXFlightAssignmentContextHeader, featureConfig?.AssignmentContext);
-                }
-
-                if (exposableFeatures != null && exposableFeatures.Contains(Flighting.Features.PXSendContentTypeOptionsHeader, StringComparer.OrdinalIgnoreCase))
-                {
-                    httpContext.Response.Headers.Add(ContentTypeOptionsHeader, NoSniff);
-                }
-
-                if (exposableFeatures != null && exposableFeatures.Contains(Flighting.Features.PXSendNoRetryOnServerErrorHeader, StringComparer.OrdinalIgnoreCase))
-                {
-                    httpContext.Response.Headers.Add(RetryOnServerErrorHeader, "false");
-                }
 
                 return new HttpResponseMessage((HttpStatusCode)httpContext.Response.StatusCode);
             }

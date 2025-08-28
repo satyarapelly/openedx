@@ -309,6 +309,23 @@ namespace Microsoft.Commerce.Payments.Common.Web
             return payload;
         }
 
+        public static void SetProperty(this HttpRequest request, string key, object? value)
+        {
+            request.HttpContext.Items[key] = value;
+        }
+
+        public static bool TryGetProperty<T>(this HttpRequest request, string key, out T? value)
+        {
+            if (request.HttpContext.Items.TryGetValue(key, out var obj) && obj is T t)
+            {
+                value = t;
+                return true;
+            }
+
+            value = default;
+            return false;
+        }
+
 
     }
 }
