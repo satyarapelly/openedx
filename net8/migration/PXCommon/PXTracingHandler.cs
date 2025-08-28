@@ -37,7 +37,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
             : base()
         {
             this.ServiceName = serviceName;
-            this.logError = logError;
+            this.logError = logError ?? ((m, t) => { });
             this.logRequest = logRequest ?? ((a, m, t) => { });
             this.logResponse = logResponse ?? ((m, t) => { });
         }
@@ -59,7 +59,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
             : base(httpMessageHandler)
         {
             this.ServiceName = serviceName;
-            this.logError = logError;
+            this.logError = logError ?? ((m, t) => { });
             this.logRequest = logRequest ?? ((a, m, t) => { });
             this.logResponse = logResponse ?? ((m, t) => { });
         }
@@ -111,16 +111,24 @@ namespace Microsoft.Commerce.Payments.PXCommon
                 sb.AppendLine("Response details:");
                 sb.AppendLine("Status Code: " + response.StatusCode);
 
-                if (response.Content != null && response.Content.Headers != null)
+                var content = response.Content;
+                if (content != null && content.Headers != null)
                 {
-                    foreach (var header in response.Content.Headers)
+                    foreach (var header in content.Headers)
                     {
                         sb.AppendLine(string.Format(CultureInfo.InvariantCulture, "{0}: {1}", header.Key, header.GetSanitizeValueForLogging()));
                     }
 
-                    if (response.Content.Headers.ContentLength != 0)
+                    if (content.Headers.ContentLength != 0)
                     {
-                        sb.AppendLine(await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+                        try
+                        {
+                            sb.AppendLine(await content.ReadAsStringAsync().ConfigureAwait(false));
+                        }
+                        catch (ObjectDisposedException)
+                        {
+                            this.logError("Response content disposed before it could be read", traceId);
+                        }
                     }
                 }
 
