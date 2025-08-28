@@ -85,6 +85,20 @@ namespace Microsoft.Commerce.Payments.PXService
         }
 
         /// <summary>
+        /// Adds tracing middleware equivalent to the legacy <see cref="PXTraceCorrelationHandler"/> message handler.
+        /// </summary>
+        /// <param name="app">The application builder.</param>
+        public static void UseTracing(IApplicationBuilder app)
+        {
+            if (!WebHostingUtility.IsApplicationSelfHosted())
+            {
+                app.UseMiddleware<PXTraceCorrelationHandler>(
+                    Constants.ServiceNames.PXService,
+                    ApplicationInsightsProvider.LogIncomingOperation);
+            }
+        }
+
+        /// <summary>
         /// Adds conventional routes that include the API version in the URL.
         /// </summary>
         /// <param name="routes">Endpoint route builder for the application.</param>

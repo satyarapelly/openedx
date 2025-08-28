@@ -47,10 +47,7 @@ if (!WebHostingUtility.IsApplicationSelfHosted())
 }
 
 // Trace correlation (mirrors WebApiConfig)
-if (!WebHostingUtility.IsApplicationSelfHosted())
-{
-    app.UseMiddleware<PXTraceCorrelationHandler>(Constants.ServiceNames.PXService, ApplicationInsightsProvider.LogIncomingOperation);
-}
+WebApiConfig.UseTracing(app);
 
 // API version handler
 app.UseMiddleware<PXServiceApiVersionHandler>();

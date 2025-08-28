@@ -61,6 +61,16 @@ namespace Microsoft.Commerce.Payments.PXCommon
         }
 
         public PXTraceCorrelationHandler(
+            RequestDelegate next,
+            string serviceName,
+            Action<string, string, string, string, string, string, HttpRequestMessage, HttpResponseMessage, string, string, string, string, string, string, string, string> logIncomingRequestToAppInsight,
+            IHttpContextAccessor httpContextAccessor = null)
+            : this(serviceName, logIncomingRequestToAppInsight, httpContextAccessor)
+        {
+            this._next = next;
+        }
+
+        public PXTraceCorrelationHandler(
             string serviceName,
             HttpMessageHandler innerHandler,
             bool isDependentServiceRequest,
