@@ -1,40 +1,61 @@
 // <copyright file="ShortURLController.cs" company="Microsoft">Copyright (c) Microsoft. All rights reserved.</copyright>
 
-namespace Microsoft.Commerce.Payments.PXService.V7.ShortURL
+namespace Microsoft.Commerce.Payments.PXService.V7
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Text.RegularExpressions;
     using System.Threading.Tasks;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Commerce.Payments.Common.Tracing;
-    using Microsoft.Commerce.Payments.Common.Web;
-    using Microsoft.Commerce.Payments.PXService.Model.ShortURLService;
+    using System.Web;
+    using System.Web.Http;
+    using Microsoft.Commerce.Payments.PXService.Model.ShortURLDB;
+    using OpenTelemetry.Trace;
 
-    [ApiController]
-    [Route("{version}/shorturl")]
     public class ShortURLController : ProxyController
     {
-        /// <summary>
-        /// Creates a short URL for the supplied long URL.
-        /// </summary>
-        /// <param name="request">Request containing the long URL and optional TTL in minutes.</param>
-        /// <returns>The created short URL response.</returns>
         [HttpPost]
-        public async Task<ActionResult<CreateShortURLResponse>> Create([FromBody] CreateShortURLRequest request)
+        public async Task<HttpResponseMessage> Create([FromBody] CreateRequest request)
         {
-            EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
-            var response = await this.Settings.ShortURLServiceAccessor.CreateShortURL(request.URL, request.TTLMinutes, traceActivityId);
-            return this.Ok(response);
+            CreateResponse response = await this.Settings.ShortURLDBAccessor.Create(request);
+            return Request.CreateResponse(HttpStatusCode.Created, response);
         }
 
-        /// <summary>
-        /// Deletes an existing short URL.
-        /// </summary>
-        /// <param name="codeOrUrl">The short code or URL to delete.</param>
-        [HttpDelete("{codeOrUrl}")]
-        public async Task<IActionResult> Delete(string codeOrUrl)
+        [HttpGet]
+        public async Task<HttpResponseMessage> Get(string code)
         {
-            EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
-            await this.Settings.ShortURLServiceAccessor.DeleteShortURL(codeOrUrl, traceActivityId);
-            return this.NoContent();
+            if (code == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Code is null.");
+            }
+
+            if (!Regex.IsMatch(code, "^[A-Z0-9]*$") || !(code.Length == PXCommon.Constants.ShortURL.CodeLength))
+            {   
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+
+            CodeEntry entry;
+            try
+            {
+                entry = await this.Settings.ShortURLDBAccessor.GetCodeEntryAsync(code);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+
+            if (entry == null || entry.MarkedForDeletion || DateTime.Now > entry.ExpireTime)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+
+            entry.Hits++;
+            await this.Settings.ShortURLDBAccessor.UpdateCodeEntryAsync(entry);
+
+            string url = entry.URL;
+            return Request.CreateResponse(HttpStatusCode.Redirect, url);
         }
     }
 }

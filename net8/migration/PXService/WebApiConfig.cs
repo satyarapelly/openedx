@@ -547,6 +547,11 @@ namespace Microsoft.Commerce.Payments.PXService
                 pattern: GlobalConstants.EndPointNames.V7RemoveEligiblePaymentmethodsPaymentRequestsEx,
                 defaults: new { controller = C(GlobalConstants.ControllerNames.PaymentRequestsExController), action = "RemoveEligiblePaymentMethods" });
 
+           endpoints.MapControllerRoute(
+               name: GlobalConstants.V7RouteNames.ShortURLWithCode,
+               pattern: GlobalConstants.EndPointNames.V7ShortURLWithCode,
+               defaults: new { controller = GlobalConstants.ControllerNames.ShortURLController });
+            
             // Also expose any attribute-routed controllers
             endpoints.MapControllers();
         }
