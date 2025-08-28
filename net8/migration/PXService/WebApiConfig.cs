@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Commerce.Payments.Common.Web;
+using Microsoft.Commerce.Payments.PXCommon;
 using Microsoft.Commerce.Payments.PXService.Settings;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -29,6 +31,7 @@ namespace Microsoft.Commerce.Payments.PXService
             ArgumentNullException.ThrowIfNull(settings);
 
             builder.Services.AddSingleton(settings);
+            builder.Services.AddHttpContextAccessor();
             builder.Services.AddRouting(options => options.LowercaseUrls = true);
             builder.Services.AddControllers(options =>
             {
@@ -53,6 +56,15 @@ namespace Microsoft.Commerce.Payments.PXService
             });
 
             builder.Services.AddSingleton<PXServiceApiVersionHandler>(); // state used by CORS middleware
+
+            builder.Services.AddTransient<PXTracingHttpClient>(sp =>
+            {
+                var accessor = sp.GetRequiredService<IHttpContextAccessor>();
+                return new PXTracingHttpClient(
+                    Constants.ServiceNames.PXService,
+                    logOutgoingRequestToApplicationInsight: ApplicationInsightsProvider.LogOutgoingOperation,
+                    httpContextAccessor: accessor);
+            });
 
             string[] versionlessControllers = { GlobalConstants.ControllerNames.ProbeController };
             builder.Services.AddSingleton<IEnumerable<string>>(versionlessControllers);
