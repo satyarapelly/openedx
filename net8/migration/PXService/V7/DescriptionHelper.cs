@@ -27,6 +27,13 @@ namespace Microsoft.Commerce.Payments.PXService.V7
 
         public static void AddDFPIframe(List<PIDLResource> retVal, string checkoutRequestId, List<string> exposedFlightFeatures)
         {
+            bool updateDisplayContent = false;
+            if (exposedFlightFeatures?.Contains(Flighting.Features.IncludePIDLDescriptionsV2) ?? false)
+            {
+                updateDisplayContent = true;
+                checkoutRequestId = string.Format("({0})", checkoutRequestId);
+            }
+
             string instance_id = Microsoft.Commerce.Payments.Common.Environments.Environment.IsProdOrPPEEnvironment ? Constants.DFPInstanceIds.PROD : Constants.DFPInstanceIds.INT;
             string displayContent = $"<!DOCTYPE html><html><head><script src=\"https://fpt.dfp.microsoft.com/mdt.js?session_id={checkoutRequestId}&instanceId={instance_id}\"></script><script>window.onload=function(){{if(window.dfp&&typeof window.dfp.doFpt===\"function\"){{window.dfp.doFpt(document);}}}}</script></head><body></body></html>";
             if (exposedFlightFeatures?.Contains(Flighting.Features.PXPaasAddCCDfpIframeForCommerceRisk) ?? false)
@@ -43,6 +50,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                     Width = "0px",
                     Height = "0px",
                     DisplayTags = new Dictionary<string, string> { { "accessibilityName", "dfpIframe" } },
+                    UpdateDisplayContent = updateDisplayContent,
                 };
 
                 resource.DisplayPages[0].Members.Add(dfpIFrame);

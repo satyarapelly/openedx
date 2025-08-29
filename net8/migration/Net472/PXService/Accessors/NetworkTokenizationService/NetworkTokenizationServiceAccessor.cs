@@ -267,7 +267,7 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.NetworkTokenizationSer
                 exposedFlightFeatures);
         }
 
-        public async Task<PasskeyOperationResponse> PasskeyAuthenticate(string ntid, int authenticationAmount, string currencyCode, string puid, string deviceId, EventTraceActivity traceActivityId, List<string> exposedFlightFeatures, object sessionContext, object browserData, string applicationUrl, string merchantName, string email)
+        public async Task<PasskeyOperationResponse> PasskeyAuthenticate(string ntid, int authenticationAmount, string currencyCode, string puid, string deviceId, EventTraceActivity traceActivityId, List<string> exposedFlightFeatures, object sessionContext, object browserData, string applicationUrl, string merchantName, string email, PimsModel.V4.AddressInfo address)
         {
             string requestUrl = string.Format(V7.Constants.UriTemplate.PasskeyAuthenticate, ntid);
 
@@ -282,6 +282,7 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.NetworkTokenizationSer
                     ApplicationUrl = applicationUrl,
                     MerchantName = merchantName
                 },
+                AddressInfo = address
             };
 
             PasskeyOperationResponse requestChallengeResponse = await this.SendPostRequest<PasskeyOperationResponse>(
@@ -331,7 +332,7 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.NetworkTokenizationSer
             return requestChallengeResponse;
         }
 
-        public async Task<PasskeyMandateResponse> SetMandates(string ntid, string puid, EventTraceActivity traceActivityId, List<string> exposedFlightFeatures, object appInstance, AssuranceData assuranceData, List<Mandate> mandates, string dfSessionId, string email)
+        public async Task<object> SetMandates(string ntid, string puid, EventTraceActivity traceActivityId, List<string> exposedFlightFeatures, object appInstance, AssuranceData assuranceData, List<Mandate> mandates, string dfSessionId, string email)
         {
             string requestUrl = string.Format(V7.Constants.UriTemplate.SetMandates, ntid);
 
@@ -344,7 +345,7 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.NetworkTokenizationSer
                 DfpSessionId = dfSessionId
             };
 
-            PasskeyMandateResponse passkeyMandateResponse = await this.SendPostRequest<PasskeyMandateResponse>(
+            object passkeyMandateResponse = await this.SendPostRequest<object>(
                 requestUrl,
                 "SetMandates",
                 traceActivityId,

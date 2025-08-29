@@ -16,12 +16,15 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentClient
     using Microsoft.Commerce.Payments.PidlFactory.V7;
     using Microsoft.Commerce.Payments.PidlModel.V7;
     using Microsoft.Commerce.Payments.PimsModel.V4;
+    using Microsoft.Commerce.Payments.PXCommon;
+    using Microsoft.Commerce.Payments.PXService.Model.FraudDetectionService;
     using Microsoft.Commerce.Payments.PXService.Model.PaymentOrchestratorService;
-    using Microsoft.Commerce.Payments.PXService.Model.ThreeDSExternalService;
     using Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge.Model;
     using Microsoft.Commerce.Tracing;
+    using Newtonsoft.Json;
     using ClientAction = PXCommon.ClientAction;
     using ClientActionType = PXCommon.ClientActionType;
+    using PaymentInstrument = PimsModel.V4.PaymentInstrument;
 
     public class CheckoutRequestsExController : ProxyController
     {
@@ -190,10 +193,30 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentClient
                 // Post express checkout data to PIMS and get PIID
                 piid = await this.PostPItoPIMS(pi, country, partner, traceActivityId);
             }
+            else
+            {
+                // Extract composite payload sections if provided
+                var compositeResult = await this.HandleCompositePayloadAsync(
+                    confirmPayload,
+                    piid,
+                    paymentMethodType,
+                    checkoutRequestId,
+                    partner,
+                    traceActivityId);
+
+                piid = compositeResult.Item1;
+                var error = compositeResult.Item2;
+                var statusCode = compositeResult.Item3;
+
+                if (error != null)
+                {
+                    return this.Request.CreateResponse(statusCode, error);
+                }
+            }
 
             if (string.IsNullOrEmpty(piid))
             {
-                throw TraceCore.TraceException(traceActivityId, new ValidationException(ErrorCode.InvalidRequestData, string.Format("response status code: {0}, error: {1}", "InvalidPIData", "The input email is null or empty.")));
+                throw TraceCore.TraceException(traceActivityId, new ValidationException(ErrorCode.InvalidRequestData, string.Format("response status code: {0}, error: {1}", "InvalidPIData", "The input piid is null or empty.")));
             }
 
             // remove the else condition block and related functions once the flight is 100% enabled
@@ -341,6 +364,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentClient
         private async Task<string> PostPItoPIMS(PIDLData pi, string country, string partner, EventTraceActivity traceActivityId)
         {
             // Set payment instrument details
+            PaymentInstrument newPI = null;
             var requestContext = this.GetRequestContext(traceActivityId);
             var metaData = ProxyController.GetMetaData(requestContext);
             var additionalProps = new Dictionary<string, object>() { { "UsageType", UsageType.Inline }, { "MetaData", metaData } };
@@ -354,10 +378,193 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentClient
                 queryParams = queryParams.Concat(new[] { new KeyValuePair<string, string>(V7.Constants.QueryParameterName.Country, country) });
             }
 
-            // POST payment instrument
-            PimsModel.V4.PaymentInstrument newPI = await this.Settings.PIMSAccessor.PostPaymentInstrument(pi, traceActivityId, queryParams, null, partner, this.ExposedFlightFeatures);
+            string paymentMethodFamily = pi.TryGetPropertyValueFromPIDLData(V7.Constants.PaymentInstrument.PaymentMethodFamily);
+            string paymentMethodType = pi.TryGetPropertyValueFromPIDLData(V7.Constants.PropertyDescriptionIds.PaymentMethodType);
+
+            if (!string.IsNullOrEmpty(paymentMethodFamily) && string.Equals(paymentMethodFamily, V7.Constants.PaymentMethodFamily.credit_card.ToString(), StringComparison.OrdinalIgnoreCase))
+            {
+                ServiceErrorResponseException ex = null;
+                string requestId = requestContext.RequestId;
+
+                if (string.IsNullOrWhiteSpace(requestId))
+                {
+                    throw TraceCore.TraceException(traceActivityId, new ValidationException(ErrorCode.InvalidRequestData, string.Format("response status code: {0}, error: {1}", "InvalidPIData", "RequestId is missing")));
+                }
+
+                if (requestContext == null || string.IsNullOrWhiteSpace(requestContext.PaymentAccountId))
+                {
+                    throw TraceCore.TraceException(traceActivityId, new ValidationException(ErrorCode.InvalidRequestData, string.Format("response status code: {0}, error: {1}", "InvalidPIData", "paymentAccountId is missing")));
+                }
+
+                var additionalPIProps = new Dictionary<string, object>() { { "ValidationType", "none" }, { "AttachmentType", AttachmentType.Standalone } };
+                ProxyController.SetPiData(pi, additionalPIProps);
+
+                try
+                {
+                    Model.PaymentOrchestratorService.AttachPaymentInstrumentResponse attachPIResponse = null;
+
+                    if (this.ExposedFlightFeatures.Contains(Flighting.Features.PXIntegrateFraudDetectionService, StringComparer.OrdinalIgnoreCase))
+                    {
+                        EvaluationResult evaluationResult;
+                        try
+                        {
+                            evaluationResult = await this.Settings.FraudDetectionServiceAccessor.BotDetection(requestId, traceActivityId);
+                        }
+                        catch (Exception botCheckResultException)
+                        {
+                            // In case of bot check failure, we will continue with the request and return Approved recommendation
+                            evaluationResult = new EvaluationResult { Recommendation = V7.Constants.FraudDetectionServiceConstants.ApprovedRecommendation };
+                            PaymentsEventSource.Log.TracingHandlerTraceError($"PX Fraud Detection Service Failure. Error: {botCheckResultException.Message} for AccountId {requestContext.PaymentAccountId}, family {paymentMethodFamily}, type {paymentMethodType}.", traceActivityId);
+                        }
+                    }
+
+                    newPI = await this.Settings.PIMSAccessor.PostPaymentInstrument(pi, traceActivityId, queryParams, additionalHeaders: null, partner, this.ExposedFlightFeatures);
+                    var savePaymentDetails = pi.TryGetPropertyValue($"{V7.Constants.DataDescriptionPropertyNames.SavePaymentDetails}");
+
+                    if (this.UsePaymentRequestApiEnabled())
+                    {
+                        attachPIResponse = await this.Settings.PaymentOrchestratorServiceAccessor.AttachPaymentInstrumentToPaymentRequest(requestId, newPI.PaymentInstrumentId, pi.TryGetPropertyValue(V7.Constants.PaymentInstrument.DetailsCVVToken), traceActivityId, savePaymentDetails);
+                    }
+                    else
+                    {
+                        attachPIResponse = await this.Settings.PaymentOrchestratorServiceAccessor.AttachPaymentInstrument(requestId, newPI.PaymentInstrumentId, pi.TryGetPropertyValue(V7.Constants.PaymentInstrument.DetailsCVVToken), traceActivityId, savePaymentDetails);
+                    }
+                }
+                catch (ServiceErrorResponseException exception)
+                {
+                    ex = exception;
+                }
+
+                if (ex != null)
+                {
+                    ProxyController.MapCreditCardCommonError(ref ex, "en-Us");
+                }
+            }
+            else
+            {
+                // POST payment instrument
+                newPI = await this.Settings.PIMSAccessor.PostPaymentInstrument(pi, traceActivityId, queryParams, null, partner, this.ExposedFlightFeatures);
+            }
 
             return newPI?.PaymentInstrumentId;
+        }
+
+        private async Task<Tuple<string, ServiceErrorResponse, HttpStatusCode>> HandleCompositePayloadAsync(
+            PIDLData confirmPayload,
+            string piid,
+            string paymentMethodType,
+            string checkoutRequestId,
+            string partner,
+            EventTraceActivity traceActivityId)
+        {
+            string paymentJson = confirmPayload?.TryGetPropertyValueFromPIDLData(V7.Constants.Component.Payment);
+            string addressJson = confirmPayload?.TryGetPropertyValueFromPIDLData(V7.Constants.Component.Address);
+            string profileJson = confirmPayload?.TryGetPropertyValueFromPIDLData(V7.Constants.Component.Profile);
+
+            PIDLData paymentData = !string.IsNullOrWhiteSpace(paymentJson) ? JsonConvert.DeserializeObject<PIDLData>(paymentJson) : null;
+            PIDLData addressData = !string.IsNullOrWhiteSpace(addressJson) ? JsonConvert.DeserializeObject<PIDLData>(addressJson) : null;
+            PIDLData profileData = !string.IsNullOrWhiteSpace(profileJson) ? JsonConvert.DeserializeObject<PIDLData>(profileJson) : null;
+
+            // 1) Attach profile
+            if (profileData != null)
+            {
+                try
+                {
+                    string email = profileData.TryGetPropertyValue(V7.Constants.PropertyDescriptionIds.EmailAddress);
+                    if (string.IsNullOrEmpty(email))
+                    {
+                        email = profileData.TryGetPropertyValueFromPIDLData(V7.Constants.CheckoutRequestPropertyName.Email);
+                    }
+
+                    if (!string.IsNullOrEmpty(email))
+                    {
+                        if (this.UsePaymentRequestApiEnabled())
+                        {
+                            await this.Settings.PaymentOrchestratorServiceAccessor.AttachProfileToPaymentRequest(email, traceActivityId, checkoutRequestId);
+                        }
+                        else
+                        {
+                            await this.Settings.PaymentOrchestratorServiceAccessor.AttachProfile(email, traceActivityId, checkoutRequestId);
+                        }
+                    }
+                    else
+                    {
+                        var error = new ServiceErrorResponse(ErrorCode.InvalidRequestData.ToString(), "The input email is null or empty.");
+                        error.Component = V7.Constants.Component.Profile;
+
+                        // If an error occurs before a valid piid is obtained or set, you should return null for the piid value
+                        return Tuple.Create<string, ServiceErrorResponse, HttpStatusCode>(null, error, HttpStatusCode.BadRequest);
+                    }
+                }
+                catch (ServiceErrorResponseException ex)
+                {
+                    ex.Error.Component = V7.Constants.Component.Profile;
+
+                    // If an error occurs before a valid piid is obtained or set, you should return null for the piid value
+                    return Tuple.Create<string, ServiceErrorResponse, HttpStatusCode>(null, ex.Error, ex.Response.StatusCode);
+                }
+            }
+
+            // 2) Validate and attach address
+            if (addressData != null)
+            {
+                try
+                {
+                    try
+                    {
+                        await this.Settings.AccountServiceAccessor.LegacyValidateAddress(addressData, traceActivityId);
+                    }
+                    catch (ServiceErrorResponseException ex)
+                    {
+                        ex.Error.Component = V7.Constants.Component.Address;
+
+                        // If an error occurs before a valid piid is obtained or set, you should return null for the piid value
+                        return Tuple.Create<string, ServiceErrorResponse, HttpStatusCode>(null, ex.Error, ex.Response.StatusCode);
+                    }
+
+                    var poAddress = CheckoutRequestsExHandler.ConvertPIDLDataToPOAddress(addressData);
+                    string addressType = addressData.TryGetPropertyValue(V7.Constants.PropertyDescriptionIds.AddressType);
+                    if (string.IsNullOrEmpty(addressType))
+                    {
+                        addressType = V7.Constants.AddressTypes.Billing;
+                    }
+
+                    if (this.UsePaymentRequestApiEnabled())
+                    {
+                        await this.Settings.PaymentOrchestratorServiceAccessor.AttachAddressToPaymentRequest(poAddress, addressType, traceActivityId, checkoutRequestId);
+                    }
+                    else
+                    {
+                        await this.Settings.PaymentOrchestratorServiceAccessor.AttachAddress(poAddress, addressType, traceActivityId, checkoutRequestId);
+                    }
+                }
+                catch (ServiceErrorResponseException ex)
+                {
+                    ex.Error.Component = V7.Constants.Component.Address;
+
+                    // If an error occurs before a valid piid is obtained or set, you should return null for the piid value
+                    return Tuple.Create<string, ServiceErrorResponse, HttpStatusCode>(null, ex.Error, ex.Response.StatusCode);
+                }
+            }
+
+            // 3) Post PI (if paymentData and piid not already present)
+            if (string.IsNullOrEmpty(piid) && paymentData != null)
+            {
+                try
+                {
+                    string paymentCountry = paymentData.TryGetPropertyValue(V7.Constants.PropertyDescriptionIds.PaymentMethodCountry);
+                    piid = await this.PostPItoPIMS(paymentData, paymentCountry, partner, traceActivityId);
+                }
+                catch (ServiceErrorResponseException ex)
+                {
+                    ex.Error.Component = V7.Constants.Component.Payment;
+
+                    // If an error occurs before a valid piid is obtained or set, you should return null for the piid value
+                    return Tuple.Create<string, ServiceErrorResponse, HttpStatusCode>(null, ex.Error, ex.Response.StatusCode);
+                }
+            }
+
+            return Tuple.Create(piid, (ServiceErrorResponse)null, HttpStatusCode.OK);
         }
     }
 }

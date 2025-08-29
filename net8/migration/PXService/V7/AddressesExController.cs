@@ -59,7 +59,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>An address object</returns>
         [HttpPost]
         public async Task<HttpResponseMessage> Post(
-            [FromBody]PIDLData address, 
+            [FromBody] PIDLData address,
             [FromRoute] string accountId,
             [FromQuery] string partner,
             [FromQuery] string language,
@@ -127,7 +127,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>An address object</returns>
         [HttpPatch]
         public async Task<HttpResponseMessage> Patch(
-            [FromBody] PIDLData address, 
+            [FromBody] PIDLData address,
             [FromRoute] string accountId,
             [FromQuery] string addressId,
             [FromQuery] string partner,

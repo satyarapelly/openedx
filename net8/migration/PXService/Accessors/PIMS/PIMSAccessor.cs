@@ -135,6 +135,23 @@ namespace Microsoft.Commerce.Payments.PXService
             return paymentMethods;
         }
 
+        public async Task<Model.PaymentOrchestratorService.PaymentMethodResult> GetEligiblePaymentMethods(string country, decimal amount, string paymentAccountId, List<Model.PaymentOrchestratorService.PaymentMethodType> allowedPaymentMethods, EventTraceActivity traceActivityId)
+        {
+            Model.PaymentOrchestratorService.PaymentMethodResult paymentMethods = new Model.PaymentOrchestratorService.PaymentMethodResult();
+
+            string requestUrl = string.Format(V7.Constants.UriTemplate.GetEligiblePaymentMethods, paymentAccountId);
+
+            var eligiblePaymentMethodsRequest = new Model.PaymentOrchestratorService.EligiblePaymentMethodsRequest(country, amount, allowedPaymentMethods);
+
+            paymentMethods = await this.SendPostRequest<Model.PaymentOrchestratorService.PaymentMethodResult>(
+                requestUrl,
+                eligiblePaymentMethodsRequest,
+                "PostEligiblePaymentMethods",
+                traceActivityId) ?? paymentMethods;
+
+            return paymentMethods;
+        }
+
         public async Task<PaymentInstrument> GetPaymentInstrument(string accountId, string piid, EventTraceActivity traceActivityId, string partner = null, string country = null, string language = null, List<string> exposedFlightFeatures = null, PaymentExperienceSetting setting = null)
         {
             string requestUrl = string.Format(V7.Constants.UriTemplate.GetPI, accountId, piid);

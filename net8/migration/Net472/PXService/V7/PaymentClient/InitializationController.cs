@@ -138,46 +138,25 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             }
         }
 
-        private static List<PaymentMethodType> GetAllowedPaymentMethods(PIDLData initializeData)
+        private static PaymentRequestContext GetPaymentRequestContext(PIDLData initializeData)
         {
             if (initializeData != null)
             {
-                var allowedPaymentMethodsString = initializeData.TryGetPropertyValue(V7.Constants.PIDLDataPropertyNames.AllowedPaymentMethods);
-                if (!string.IsNullOrEmpty(allowedPaymentMethodsString))
+                var paymentRequestContextString = JsonConvert.SerializeObject(initializeData);
+                if (!string.IsNullOrEmpty(paymentRequestContextString))
                 {
                     try
                     {
-                        return JsonConvert.DeserializeObject<List<PaymentMethodType>>(allowedPaymentMethodsString);
+                        return JsonConvert.DeserializeObject<PaymentRequestContext>(paymentRequestContextString);
                     }
                     catch (JsonException ex)
                     {
-                        throw new InvalidOperationException($"Failed to deserialize AllowedPaymentMethods from PIDLData: {allowedPaymentMethodsString}", ex);
+                        throw new InvalidOperationException($"Failed to deserialize PaymentRequestContext from PIDLData: {paymentRequestContextString}", ex);
                     }
                 }
             }
 
-            return new List<PaymentMethodType>();
-        }
-
-        private static PaymentCapabilities GetCapabilities(PIDLData initializeData)
-        {
-            if (initializeData != null)
-            {
-                var capabilitiesString = initializeData.TryGetPropertyValueFromPIDLData(V7.Constants.PIDLDataPropertyNames.Capabilities);
-                if (!string.IsNullOrEmpty(capabilitiesString))  
-                {
-                    try
-                    {
-                        return JsonConvert.DeserializeObject<PaymentCapabilities>(capabilitiesString);
-                    }
-                    catch (JsonException ex)
-                    {
-                        throw new InvalidOperationException($"Failed to deserialize Capabilities from PIDLData: {capabilitiesString}", ex);
-                    }
-                }
-            }
-
-            return new PaymentCapabilities();
+            return new PaymentRequestContext();
         }
 
         private static string GetPaymentAccountId(RequestContext requestContext)
@@ -413,19 +392,20 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             var paymentRequestClientActions = new PaymentRequestClientActions();
             if (initializeData != null)
             {
+                var paymentRequestContext = GetPaymentRequestContext(initializeData);
                 paymentRequestClientActions.PaymentRequestId = requestContext.RequestId;
-                paymentRequestClientActions.Country = initializeData?.TryGetPropertyValueFromPIDLData(V7.Constants.QueryParameterName.Country);
-                paymentRequestClientActions.Language = initializeData?.TryGetPropertyValueFromPIDLData(V7.Constants.QueryParameterName.Language);
-                paymentRequestClientActions.Currency = initializeData?.TryGetPropertyValueFromPIDLData(V7.Constants.QueryParameterName.Currency);
-                paymentRequestClientActions.Amount = Convert.ToDecimal(initializeData?.TryGetPropertyValueFromPIDLData(V7.Constants.PIDLDataPropertyNames.Amount));
+                paymentRequestClientActions.Country = paymentRequestContext?.Country;
+                paymentRequestClientActions.Language = paymentRequestContext?.Language;
+                paymentRequestClientActions.Currency = paymentRequestContext?.Currency;
+                paymentRequestClientActions.Amount = paymentRequestContext?.Amount ?? 0;
 
                 var paymentAccountId = GetPaymentAccountId(requestContext);
-                paymentRequestClientActions.Capabilities = GetCapabilities(initializeData);
-                var allowedPaymentMethods = GetAllowedPaymentMethods(initializeData);
+                paymentRequestClientActions.Capabilities = paymentRequestContext?.Capabilities;
+                var allowedPaymentMethods = paymentRequestContext?.MerchantAccountProfile?.AllowedPaymentMethods;
 
                 try
                 {
-                    var paymentMethodsResult = await this.Settings.PIMSAccessor.GetEligiblePaymentMethods(paymentRequestClientActions.Country, paymentRequestClientActions.Amount, paymentAccountId, allowedPaymentMethods, eventTraceActivity);
+                    var paymentMethodsResult = await this.Settings.PIMSAccessor.GetEligiblePaymentMethods(paymentRequestClientActions.Country, paymentRequestClientActions.Amount, paymentAccountId, allowedPaymentMethods?.ToList(), eventTraceActivity);
                     paymentRequestClientActions.PaymentMethodResults = paymentMethodsResult;
                 }
                 catch (Exception ex)

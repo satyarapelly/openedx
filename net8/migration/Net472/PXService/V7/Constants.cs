@@ -775,6 +775,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             internal const string MCPP = "mcpp";
             internal const string BattleNet = "battlenet";
             internal const string CandyCrush = "candycrush";
+            internal const string AzureManage = "azuremanage";
         }
 
         internal static class TemplateName
@@ -886,6 +887,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             internal const string PXUseInlineExpressCheckoutHtml = "PXUseInlineExpressCheckoutHtml";
             internal const string PXExpressCheckoutUseIntStaticResources = "PXExpressCheckoutUseIntStaticResources";
             internal const string PXExpressCheckoutUseProdStaticResources = "PXExpressCheckoutUseProdStaticResources";
+            internal const string PXUseShortURLController = "PXUseShortURLController";
 
             // Used to enable the china union pay payment method for the CN market for international partners
             internal const string PXEnableCUPInternational = "PXEnableCUPInternational";
@@ -933,6 +935,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
 
         internal static class PaymentInstrument
         {
+            internal const string DetailsCVVToken = "details.cvvToken";
             internal const string Details = "details";
             internal const string PaymentMethod = "paymentMethod";
             internal const string PaymentMethodFamily = "paymentMethodFamily";
@@ -2123,6 +2126,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
 
             public const string PaymentMethodFamily = "paymentMethodFamily";
             public const string PaymentMethodType = "paymentMethodType";
+            public const string PaymentMethodCountry = "paymentMethodCountry";
             public const string SavePaymentDetails = "savePaymentDetails";
             public const string UpdateAddressEnabled = "update_address_enabled";
             public const string ExpressCheckoutPaymentData = "expressCheckoutPaymentData";

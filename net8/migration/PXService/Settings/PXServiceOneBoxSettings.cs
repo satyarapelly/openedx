@@ -18,6 +18,7 @@ namespace Microsoft.Commerce.Payments.PXService.Settings
     using Microsoft.Commerce.Payments.PXService.Accessors.PartnerSettingsService;
     using Microsoft.Commerce.Payments.PXService.Accessors.PaymentOrchestratorService;
     using Microsoft.Commerce.Payments.PXService.Accessors.SellerMarketPlaceService;
+    using Microsoft.Commerce.Payments.PXService.Accessors.ShortURLDB;
     using Microsoft.Commerce.Payments.PXService.Accessors.ShortURLService;
     using Microsoft.Commerce.Payments.PXService.Accessors.TokenizationService;
     using Microsoft.Commerce.Payments.PXService.Accessors.TokenPolicyService;
@@ -198,6 +199,8 @@ namespace Microsoft.Commerce.Payments.PXService.Settings
             this.ShortURLServiceAccessor = new ShortURLServiceAccessor(
                 serviceBaseUrl: "https://rds-int.ms",
                 messageHandler: shortUrlRequestHandler);
+
+            this.ShortURLDBAccessor = new ShortURLDBAccessor("https://localhost:8081", "pay-ms-local.com");
 
             var partnerSettingsRequestHandler = new HttpClientHandler();
             this.PartnerSettingsServiceAccessor = new PartnerSettingsServiceAccessor(

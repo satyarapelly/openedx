@@ -91,7 +91,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             {
                 if (token.NetworkTokenUsage == NetworkTokenUsage.EcomMerchant)
                 {
-                    HttpResponseMessage response = await this.HandleDeviceBindingAndPasskeySetup(token, paymentInstrument, traceActivityId, this.ExposedFlightFeatures, emailAddress, puid, deviceId, language, partner, setting, authenticationAmount, currencyCode, sessionContext, browserData, applicationUrl, merchantName, country, payload);
+                    HttpResponseMessage response = await this.HandleDeviceBindingAndPasskeySetup(token, paymentInstrument, traceActivityId, this.ExposedFlightFeatures, emailAddress, puid, deviceId, language, partner, setting, authenticationAmount, currencyCode, sessionContext, browserData, applicationUrl, merchantName, country, payload, paymentInstrument?.PaymentInstrumentDetails?.Address);
                     return response;
                 }
             }
@@ -102,7 +102,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             if (tokenizableResponse.Tokenizable)
             {
                 GetTokenMetadataResponse token = await this.Settings.NetworkTokenizationServiceAccessor.RequestToken(puid, deviceId, traceActivityId, ExposedFlightFeatures, emailAddress, country, language, paymentInstrument);
-                HttpResponseMessage response = await this.HandleDeviceBindingAndPasskeySetup(token, paymentInstrument, traceActivityId, this.ExposedFlightFeatures, emailAddress, puid, deviceId, language, partner, setting, authenticationAmount, currencyCode, sessionContext, browserData, applicationUrl, merchantName, country, payload);
+                HttpResponseMessage response = await this.HandleDeviceBindingAndPasskeySetup(token, paymentInstrument, traceActivityId, this.ExposedFlightFeatures, emailAddress, puid, deviceId, language, partner, setting, authenticationAmount, currencyCode, sessionContext, browserData, applicationUrl, merchantName, country, payload, paymentInstrument?.PaymentInstrumentDetails?.Address);
                 return response;
             }
             else
@@ -306,7 +306,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 emailAddress = await this.TryGetClientContext(GlobalConstants.ClientContextKeys.MsaProfile.EmailAddress);
             }
 
-            PasskeyMandateResponse response = await this.Settings.NetworkTokenizationServiceAccessor.SetMandates(ntid, puid, traceActivityId, this.ExposedFlightFeatures, appInstance, adObj, mandates, dfSessionId, emailAddress);
+            object response = await this.Settings.NetworkTokenizationServiceAccessor.SetMandates(ntid, puid, traceActivityId, this.ExposedFlightFeatures, appInstance, adObj, mandates, dfSessionId, emailAddress);
 
             PIDLResource mandatePidlResource = new PIDLResource()
             {
@@ -430,7 +430,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
            string applicationUrl,
            string merchantName,
            string country,
-           PIDLData payload)
+           PIDLData payload,
+           PimsModel.V4.AddressInfo address)
         {
             PXCommon.ClientAction pidlClientAction = null;
 
@@ -446,7 +447,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 browserData,
                 applicationUrl,
                 merchantName,
-                emailAddress);
+                emailAddress,
+                address);
 
             if (passkeyAuthenticateResponse.Action == PasskeyAction.REGISTER_DEVICE_BINDING)
             {

@@ -938,6 +938,7 @@ namespace Microsoft.Commerce.Payments.PXService
             ExtractAndRemovePartnerFlight(request, exposableFeatures, Flighting.Features.PXDisableGetWalletConfigCache);
             ExtractAndRemovePartnerFlight(request, exposableFeatures, Flighting.Features.PXPaasAddCCDfpIframeForCommerceRisk);
             ExtractAndRemovePartnerFlight(request, exposableFeatures, Flighting.Features.PXCombineExpiryMonthYearToDateTextBox);
+            ExtractAndRemovePartnerFlight(request, exposableFeatures, Flighting.Features.PXUseShortURLController);
             ExtractAndRemovePartnerFlight(request, exposableFeatures, Flighting.Features.IncludePIDLDescriptionsV2);
 
             string pXEnableSearchTransactionParallelRequest = GetPartnerFlight(request, Flighting.Features.PXEnableSearchTransactionParallelRequest);

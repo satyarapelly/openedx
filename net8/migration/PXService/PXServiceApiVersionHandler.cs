@@ -2,11 +2,11 @@
 
 namespace Microsoft.Commerce.Payments.PXService
 {
-    using Azure.Core;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc.Controllers;
     using Microsoft.AspNetCore.Routing;
     using Microsoft.Commerce.Payments.Common;
+    using Microsoft.Commerce.Payments.Common.Helper;
     using Microsoft.Commerce.Payments.Common.Web;
     using Microsoft.Commerce.Payments.PartnerSettingsModel;
     using Microsoft.Commerce.Payments.PXCommon;
@@ -135,40 +135,32 @@ namespace Microsoft.Commerce.Payments.PXService
             // https://paymentexperience.cp.microsoft.com/px/v7.0/settings/Microsoft.MicrosoftWallet/16336.2.2.0
             // https://paymentexperience.cp.microsoft.com/px/v7.0/f2ac3e1d-e724-4820-baa0-0098584c6dcc/paymentInstrumentsEx?country=us&language=en-US&partner=xbox
             string accountId = string.Empty;
-            string accountIdPattern = @"^[a-f0-9-]{30,40}/$";
-            Regex accountIdRegex = new Regex(accountIdPattern, RegexOptions.IgnoreCase);
-
+            var allowedVersionRequest = false;
             string externalVersion = string.Empty;
-            string versionPattern = @"^v\d+\.\d+/$";
-            Regex versionRegex = new Regex(versionPattern, RegexOptions.IgnoreCase);
-            bool versionFound = false;
-            foreach (string seg in request.RequestUri.Segments)
+
+            // Fallback: from route values (works for conventional routes)
+            var controllerName = httpContext.Request.RouteValues.TryGetValue("controller", out var c)
+                ? Convert.ToString(c)
+                : null;
+
+            httpContext.Request.RouteValues.TryGetValue("accountId", out accountId);
+            httpContext.Request.RouteValues.TryGetValue("version", out externalVersion);
+
+            if (!string.IsNullOrEmpty(controllerName))
             {
-                try
+                var resolver = httpContext.RequestServices.GetRequiredService<VersionedControllerSelector>();
+                var allowedType = resolver.ResolveAllowedController(httpContext); // returns Type? or null per your Core helper
+                if (allowedType is null)
                 {
-                    if (versionFound)
+                    if (!allowedVersionRequest)
                     {
-                        MatchCollection accountIdMatches = accountIdRegex.Matches(seg);
-                        if (accountIdMatches.Count == 1)
-                        {
-                            accountId = accountIdMatches[0].Value.TrimEnd(new char[] { '/' });
-                        }
-
-                        break;
-                    }
-
-                    MatchCollection matches = versionRegex.Matches(seg);
-                    if (matches.Count == 1)
-                    {
-                        string versionInUrl = matches[0].Value.Substring(0, matches[0].Value.Length - 1);
-                        decimal.Parse(versionInUrl.Substring(1));
-                        externalVersion = versionInUrl;
-                        versionFound = true;
+                        var version = httpContext.Request.Headers["api-version"].ToString();
+                        httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
+                        await httpContext.Response.WriteAsync($"No controller mapped for version '{(string.IsNullOrWhiteSpace(version) ? "(none)" : version)}'.");
                     }
                 }
-                catch
-                {
-                }
+
+                allowedVersionRequest = true;
             }
 
             string ipAddress = GetUserIpAddress(request);
@@ -975,13 +967,15 @@ namespace Microsoft.Commerce.Payments.PXService
             ExtractAndRemovePartnerFlight(request, exposableFeatures, Flighting.Features.PXEnablePartnerSettingsDeepCopy);
             ExtractAndRemovePartnerFlight(request, exposableFeatures, Flighting.Features.PXOverrideHasAnyPIToTrue);
             ExtractAndRemovePartnerFlight(request, exposableFeatures, Flighting.Features.PXEnableXboxNativeRewards);
-            ExtractAndRemovePartnerFlight(request, exposableFeatures, Flighting.Features.PXShowRewardsErrorPageOnChallenge);
+            ExtractAndRemovePartnerFlight(request, exposableFeatures, Flighting.Features.PXShowRewardsErrorPage);
             ExtractAndRemovePartnerFlight(request, exposableFeatures, Flighting.Features.PXSkipAdditionalValidationForZeroAmount);
             ExtractAndRemovePartnerFlight(request, exposableFeatures, Flighting.Features.PXEnableAddAsteriskToAllMandatoryFields);
             ExtractAndRemovePartnerFlight(request, exposableFeatures, Flighting.Features.PXUseNTSIntUrl);
             ExtractAndRemovePartnerFlight(request, exposableFeatures, Flighting.Features.PXDisableGetWalletConfigCache);
             ExtractAndRemovePartnerFlight(request, exposableFeatures, Flighting.Features.PXPaasAddCCDfpIframeForCommerceRisk);
             ExtractAndRemovePartnerFlight(request, exposableFeatures, Flighting.Features.PXCombineExpiryMonthYearToDateTextBox);
+            ExtractAndRemovePartnerFlight(request, exposableFeatures, Flighting.Features.PXUseShortURLController);
+            ExtractAndRemovePartnerFlight(request, exposableFeatures, Flighting.Features.IncludePIDLDescriptionsV2);
 
             string pXEnableSearchTransactionParallelRequest = GetPartnerFlight(request, Flighting.Features.PXEnableSearchTransactionParallelRequest);
             if (!string.IsNullOrEmpty(pXEnableSearchTransactionParallelRequest))

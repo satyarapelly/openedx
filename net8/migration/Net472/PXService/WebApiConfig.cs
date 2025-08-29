@@ -477,6 +477,11 @@ namespace Microsoft.Commerce.Payments.PXService
                name: GlobalConstants.V7RouteNames.RemoveEligiblePaymentmethodsPaymentRequestExApi,
                routeTemplate: GlobalConstants.EndPointNames.V7RemoveEligiblePaymentmethodsPaymentRequestsEx,
                defaults: new { controller = GlobalConstants.ControllerNames.PaymentRequestsExController, action = "RemoveEligiblePaymentmethods" });
+
+            config.Routes.MapHttpRoute(
+               name: GlobalConstants.V7RouteNames.ShortURLWithCode,
+               routeTemplate: GlobalConstants.EndPointNames.V7ShortURLWithCode,
+               defaults: new { controller = GlobalConstants.ControllerNames.ShortURLController });
         }
 
         private static void InitVersionSelector()
@@ -521,7 +526,8 @@ namespace Microsoft.Commerce.Payments.PXService
                     { GlobalConstants.ControllerNames.ExpressCheckoutController, typeof(V7.ExpressCheckoutController) },
                     { GlobalConstants.ControllerNames.PaymentRequestsExController, typeof(V7.PaymentClient.PaymentRequestsExController) },
                     { GlobalConstants.ControllerNames.AgenticTokenDescriptionsController, typeof(V7.AgenticTokenDesctipionsController) },
-                    { GlobalConstants.ControllerNames.TokensExController, typeof(V7.TokensExController) }
+                    { GlobalConstants.ControllerNames.TokensExController, typeof(V7.TokensExController) },
+                    { GlobalConstants.ControllerNames.ShortURLController, typeof(V7.ShortURLController) }
                 });
         }
 

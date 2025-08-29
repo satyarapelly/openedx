@@ -5,8 +5,8 @@ namespace Microsoft.Commerce.Payments.PXService
     using System;
     using System.Security.Cryptography.X509Certificates;
     using System.Threading.Tasks;
-    using Azure.Identity;
-    using Azure.Security.KeyVault.Secrets;
+    using global::Azure.Identity;
+    using global::Azure.Security.KeyVault.Secrets;
 
     public class KeyVaultAccessor : IKeyVaultAccessor, IDisposable
     {

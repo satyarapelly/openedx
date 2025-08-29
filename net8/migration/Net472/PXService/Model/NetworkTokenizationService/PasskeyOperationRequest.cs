@@ -35,5 +35,10 @@ namespace Microsoft.Commerce.Payments.PXService.Model.NetworkTokenizationService
         /// Gets or sets the merchant identifier.
         /// </summary>
         public MerchantIdentifier MerchantIdentifier { get; set; }
+
+        /// <summary>
+        /// Gets or sets the address from PI.
+        /// </summary>
+        public PimsModel.V4.AddressInfo AddressInfo { get; set; }
     }
 }

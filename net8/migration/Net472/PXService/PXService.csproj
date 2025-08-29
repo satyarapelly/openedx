@@ -47,8 +47,8 @@
     <Reference Include="Azure.Analytics.Experimentation.VariantAssignment.Contract, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\NugetPackages\Azure.Analytics.Experimentation.VariantAssignment.Contract.5.8.2446104\lib\net472\Azure.Analytics.Experimentation.VariantAssignment.Contract.dll</HintPath>
     </Reference>
-    <Reference Include="Azure.Core, Version=1.38.0.0, Culture=neutral, PublicKeyToken=92742159e12e44c8, processorArchitecture=MSIL">
-      <HintPath>..\..\..\NugetPackages\Azure.Core.1.38.0\lib\net472\Azure.Core.dll</HintPath>
+    <Reference Include="Azure.Core, Version=1.44.1.0, Culture=neutral, PublicKeyToken=92742159e12e44c8, processorArchitecture=MSIL">
+      <HintPath>..\..\..\NugetPackages\Azure.Core.1.44.1\lib\net472\Azure.Core.dll</HintPath>
     </Reference>
     <Reference Include="Azure.Identity, Version=1.11.4.0, Culture=neutral, PublicKeyToken=92742159e12e44c8, processorArchitecture=MSIL">
       <HintPath>..\..\..\NugetPackages\Azure.Identity.1.11.4\lib\netstandard2.0\Azure.Identity.dll</HintPath>
@@ -119,6 +119,18 @@
     </Reference>
     <Reference Include="Microsoft.AspNetCore.DataProtection.Abstractions, Version=5.0.8.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\..\..\NugetPackages\Microsoft.AspNetCore.DataProtection.Abstractions.5.0.8\lib\net461\Microsoft.AspNetCore.DataProtection.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Azure.Cosmos.Client">
+      <HintPath>..\..\..\NugetPackages\Microsoft.Azure.Cosmos.3.52.1\lib\netstandard2.0\Microsoft.Azure.Cosmos.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Azure.Cosmos.Core">
+      <HintPath>..\..\..\NugetPackages\Microsoft.Azure.Cosmos.3.52.1\lib\netstandard2.0\Microsoft.Azure.Cosmos.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Azure.Cosmos.Direct">
+      <HintPath>..\..\..\NugetPackages\Microsoft.Azure.Cosmos.3.52.1\lib\netstandard2.0\Microsoft.Azure.Cosmos.Direct.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Azure.Cosmos.Serialization.HybridRow">
+      <HintPath>..\..\..\NugetPackages\Microsoft.Azure.Cosmos.3.52.1\lib\netstandard2.0\Microsoft.Azure.Cosmos.Serialization.HybridRow.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\..\..\NugetPackages\Microsoft.Bcl.AsyncInterfaces.8.0.0\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
@@ -384,11 +396,11 @@
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\..\..\NugetPackages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
     </Reference>
-    <Reference Include="System.ClientModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=92742159e12e44c8, processorArchitecture=MSIL">
-      <HintPath>..\..\..\NugetPackages\System.ClientModel.1.0.0\lib\netstandard2.0\System.ClientModel.dll</HintPath>
+    <Reference Include="System.ClientModel, Version=1.1.0.0, Culture=neutral, PublicKeyToken=92742159e12e44c8, processorArchitecture=MSIL">
+      <HintPath>..\..\..\NugetPackages\System.ClientModel.1.1.0\lib\netstandard2.0\System.ClientModel.dll</HintPath>
     </Reference>
-    <Reference Include="System.Collections.Immutable, Version=1.2.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\NugetPackages\System.Collections.Immutable.1.4.0\lib\netstandard2.0\System.Collections.Immutable.dll</HintPath>
+    <Reference Include="System.Collections.Immutable, Version=1.2.5.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\NugetPackages\System.Collections.Immutable.1.7.0\lib\netstandard2.0\System.Collections.Immutable.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.Annotations, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\..\NugetPackages\System.ComponentModel.Annotations.5.0.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
@@ -396,9 +408,13 @@
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
+    <Reference Include="System.Configuration.ConfigurationManager, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\..\NugetPackages\System.Configuration.ConfigurationManager.6.0.0\lib\net461\System.Configuration.ConfigurationManager.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data" />
-    <Reference Include="System.Diagnostics.DiagnosticSource, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\..\..\NugetPackages\System.Diagnostics.DiagnosticSource.8.0.0\lib\net462\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    <Reference Include="System.Data.OracleClient" />
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=8.0.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\..\NugetPackages\System.Diagnostics.DiagnosticSource.8.0.1\lib\net462\System.Diagnostics.DiagnosticSource.dll</HintPath>
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Drawing.Common, Version=4.0.0.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -424,8 +440,8 @@
     <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\..\..\NugetPackages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
     </Reference>
-    <Reference Include="System.Memory.Data, Version=1.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\..\..\NugetPackages\System.Memory.Data.1.0.2\lib\net461\System.Memory.Data.dll</HintPath>
+    <Reference Include="System.Memory.Data, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\..\NugetPackages\System.Memory.Data.6.0.0\lib\net461\System.Memory.Data.dll</HintPath>
     </Reference>
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http, Version=4.1.1.3, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -482,9 +498,13 @@
     <Reference Include="System.Security.Cryptography.Xml, Version=6.0.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\..\..\NugetPackages\System.Security.Cryptography.Xml.6.0.1\lib\net461\System.Security.Cryptography.Xml.dll</HintPath>
     </Reference>
+    <Reference Include="System.Security.Permissions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\..\NugetPackages\System.Security.Permissions.6.0.0\lib\net461\System.Security.Permissions.dll</HintPath>
+    </Reference>
     <Reference Include="System.Security.Principal.Windows, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\..\NugetPackages\System.Security.Principal.Windows.5.0.0\lib\net461\System.Security.Principal.Windows.dll</HintPath>
     </Reference>
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Text.Encodings.Web, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\..\..\NugetPackages\System.Text.Encodings.Web.8.0.0\lib\net462\System.Text.Encodings.Web.dll</HintPath>
     </Reference>
@@ -494,6 +514,7 @@
     <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\..\..\NugetPackages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
     </Reference>
+    <Reference Include="System.Transactions" />
     <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\..\..\NugetPackages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
     </Reference>
@@ -517,6 +538,7 @@
     <Reference Include="UAParser, Version=3.1.47.0, Culture=neutral, PublicKeyToken=f7377bf021646069, processorArchitecture=MSIL">
       <HintPath>..\..\..\NugetPackages\UAParser.3.1.47\lib\net45\UAParser.dll</HintPath>
     </Reference>
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="..\..\..\NugetPackages\Unity.3.5.1404.0\lib\net45\Microsoft.Practices.Unity.dll">
@@ -624,6 +646,8 @@
     <Compile Include="Accessors\RiskService\RiskEligibilityResponse.cs" />
     <Compile Include="Accessors\RiskService\RiskServiceRequestPaymentInstrument.cs" />
     <Compile Include="Accessors\RiskService\RiskServiceResponsePaymentInstrument.cs" />
+    <Compile Include="Accessors\ShortURLDB\IShortURLDBAccessor.cs" />
+    <Compile Include="Accessors\ShortURLDB\ShortURLDBAccessor.cs" />
     <Compile Include="Accessors\TokenizationService\ITokenizationServiceAccessor.cs" />
     <Compile Include="Accessors\TokenizationService\TokenizationServiceAccessor.cs" />
     <Compile Include="Accessors\TokenPolicyService\DataModel\TokenDescriptionPolicyType.cs" />
@@ -689,11 +713,9 @@
     <Compile Include="Model\NetworkTokenizationService\NetworkTokenUsage.cs" />
     <Compile Include="Model\NetworkTokenizationService\PasskeyAction.cs" />
     <Compile Include="Model\NetworkTokenizationService\AuthenticationPreferencesEnabled.cs" />
-    <Compile Include="Model\NetworkTokenizationService\PasskeyAuthContext.cs" />
     <Compile Include="Model\NetworkTokenizationService\PasskeyOperationRequest.cs" />
     <Compile Include="Model\NetworkTokenizationService\PasskeyOperationResponse.cs" />
     <Compile Include="Model\NetworkTokenizationService\PasskeyMandateRequest.cs" />
-    <Compile Include="Model\NetworkTokenizationService\PasskeyMandateResponse.cs" />
     <Compile Include="Model\NetworkTokenizationService\PlatformType.cs" />
     <Compile Include="Model\NetworkTokenizationService\RequestChallengeRequest.cs" />
     <Compile Include="Model\NetworkTokenizationService\RequestChallengeResponse.cs" />
@@ -718,6 +740,7 @@
     <Compile Include="Model\PaymentOrchestratorService\PayinCap.cs" />
     <Compile Include="Model\PaymentOrchestratorService\PaymentCapabilities.cs" />
     <Compile Include="Model\PaymentOrchestratorService\PaymentInstrumentActionType.cs" />
+    <Compile Include="Model\PaymentOrchestratorService\PaymentRequestContext.cs" />
     <Compile Include="Model\PaymentOrchestratorService\Psd2ChallengeValue.cs" />
     <Compile Include="Model\PaymentOrchestratorService\Psd2ChallengeData.cs" />
     <Compile Include="Model\PaymentOrchestratorService\AttachPSD2ChallengeDataContext.cs" />
@@ -781,6 +804,9 @@
     <Compile Include="Model\RewardsService\RewardsContextData.cs" />
     <Compile Include="Model\SelfhostHttpContext.cs" />
     <Compile Include="Model\SessionService\PaymentContext.cs" />
+    <Compile Include="Model\ShortURLDB\CodeEntry.cs" />
+    <Compile Include="Model\ShortURLDB\CreateRequest.cs" />
+    <Compile Include="Model\ShortURLDB\CreateResponse.cs" />
     <Compile Include="Model\ThreeDSExternalService\ChallengeContext.cs" />
     <Compile Include="Model\TokenizationService\GetEncryptionKeyResponse.cs" />
     <Compile Include="Model\TokenizationService\EncryptionKey.cs" />
@@ -1181,6 +1207,7 @@
     <Compile Include="V7\ExternalPaymentTokenTransformers\GoogleTokenTransformer.cs" />
     <Compile Include="V7\PaymentChallenge\Model\VerificationResult.cs" />
     <Compile Include="V7\Pidl\AgenticTokenDesctipionsController.cs" />
+    <Compile Include="V7\ShortURL\ShortURLController.cs" />
     <Compile Include="V7\TokensExController.cs" />
     <Compile Include="V7\WalletsHandler.cs" />
     <Compile Include="V7\CSVTokenHelper.cs" />

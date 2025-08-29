@@ -30,6 +30,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using Microsoft.Commerce.Payments.PXService.Model.IssuerService;
     using Microsoft.Commerce.Payments.PXService.Model.NetworkTokenizationService;    
     using Microsoft.Commerce.Payments.PXService.Model.PXInternal;
+    using Microsoft.Commerce.Payments.PXService.Model.ShortURLDB;
     using Microsoft.Commerce.Payments.PXService.Model.ShortURLService;
     using Microsoft.Commerce.Payments.PXService.V7.Contexts;
     using Microsoft.Commerce.Payments.PXService.V7.PaymentClient;
@@ -735,11 +736,11 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 }
                 else if (IsCreditCard(paymentMethodFamily, paymentMethodType))
                 {
-                    MapCreditCardCommonError(ref ex, language);
+                    ProxyController.MapCreditCardCommonError(ref ex, language);
                 }
                 else if (IsAch(paymentMethodFamily, paymentMethodType) || IsSepa(paymentMethodFamily, paymentMethodType))
                 {
-                    MapCreditCardCommonError(ref ex, language);
+                    ProxyController.MapCreditCardCommonError(ref ex, language);
                 }
 
                 return this.Request.CreateResponse(ex.Response.StatusCode, ex.Error, "application/json");
@@ -1832,116 +1833,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             ex.Error.Message = LocalizationRepository.Instance.GetLocalizedString(Constants.CreditCardErrorMessages.Generic, language);
         }
 
-        private static void MapCreditCardCommonError(ref ServiceErrorResponseException ex, string language)
-        {
-            if (string.Equals(ex.Error.ErrorCode, Constants.CreditCardErrorCodes.InvalidCvv, StringComparison.OrdinalIgnoreCase))
-            {
-                ex.Error.Message = Constants.ClientActionContract.NoMessage;
-                ex.Error.AddDetail(new ServiceErrorDetail()
-                {
-                    ErrorCode = ex.Error.ErrorCode,
-                    Message = LocalizationRepository.Instance.GetLocalizedString(Constants.CreditCardErrorMessages.InvalidCvv, language),
-                    Target = Constants.CreditCardErrorTargets.Cvv,
-                });
-            }
-            else if (string.Equals(ex.Error.ErrorCode, Constants.CreditCardErrorCodes.InvalidAccountHolder, StringComparison.OrdinalIgnoreCase))
-            {
-                ex.Error.Message = Constants.ClientActionContract.NoMessage;
-                ex.Error.AddDetail(new ServiceErrorDetail()
-                {
-                    ErrorCode = ex.Error.ErrorCode,
-                    Message = LocalizationRepository.Instance.GetLocalizedString(Constants.CreditCardErrorMessages.InvalidAccountHolder, language),
-                    Target = Constants.CreditCardErrorTargets.AccountHolderName,
-                });
-            }
-            else if (string.Equals(ex.Error.ErrorCode, Constants.CreditCardErrorCodes.ExpiredCard, StringComparison.OrdinalIgnoreCase))
-            {
-                ex.Error.Message = Constants.ClientActionContract.NoMessage;
-                ex.Error.AddDetail(new ServiceErrorDetail()
-                {
-                    ErrorCode = ex.Error.ErrorCode,
-                    Message = LocalizationRepository.Instance.GetLocalizedString(Constants.CreditCardErrorMessages.ExpiredCard, language),
-                    Target = string.Format("{0},{1}", Constants.CreditCardErrorTargets.ExpiryMonth, Constants.CreditCardErrorTargets.ExpiryYear),
-                });
-            }
-            else if (string.Equals(ex.Error.ErrorCode, Constants.CreditCardErrorCodes.InvalidExpiryDate, StringComparison.OrdinalIgnoreCase))
-            {
-                ex.Error.Message = Constants.ClientActionContract.NoMessage;
-                ex.Error.AddDetail(new ServiceErrorDetail()
-                {
-                    ErrorCode = ex.Error.ErrorCode,
-                    Message = LocalizationRepository.Instance.GetLocalizedString(Constants.CreditCardErrorMessages.InvalidExpiryDate, language),
-                    Target = string.Format("{0},{1}", Constants.CreditCardErrorTargets.ExpiryMonth, Constants.CreditCardErrorTargets.ExpiryYear),
-                });
-            }
-            else if (string.Equals(ex.Error.ErrorCode, Constants.CreditCardErrorCodes.InvalidCity, StringComparison.OrdinalIgnoreCase))
-            {
-                ex.Error.Message = Constants.ClientActionContract.NoMessage;
-                ex.Error.AddDetail(new ServiceErrorDetail()
-                {
-                    ErrorCode = ex.Error.ErrorCode,
-                    Message = LocalizationRepository.Instance.GetLocalizedString(Constants.CreditCardErrorMessages.InvalidCity, language),
-                    Target = Constants.CreditCardErrorTargets.City,
-                });
-            }
-            else if (string.Equals(ex.Error.ErrorCode, Constants.CreditCardErrorCodes.InvalidState, StringComparison.OrdinalIgnoreCase))
-            {
-                ex.Error.Message = Constants.ClientActionContract.NoMessage;
-                ex.Error.AddDetail(new ServiceErrorDetail()
-                {
-                    ErrorCode = ex.Error.ErrorCode,
-                    Message = LocalizationRepository.Instance.GetLocalizedString(Constants.CreditCardErrorMessages.InvalidState, language),
-                    Target = Constants.CreditCardErrorTargets.State,
-                });
-            }
-            else if (string.Equals(ex.Error.ErrorCode, Constants.CreditCardErrorCodes.InvalidZipCode, StringComparison.OrdinalIgnoreCase))
-            {
-                ex.Error.Message = Constants.ClientActionContract.NoMessage;
-                ex.Error.AddDetail(new ServiceErrorDetail()
-                {
-                    ErrorCode = ex.Error.ErrorCode,
-                    Message = LocalizationRepository.Instance.GetLocalizedString(Constants.CreditCardErrorMessages.InvalidZipCode, language),
-                    Target = Constants.CreditCardErrorTargets.PostalCode,
-                });
-            }
-            else if (string.Equals(ex.Error.ErrorCode, Constants.CreditCardErrorCodes.InvalidCountryCode, StringComparison.OrdinalIgnoreCase)
-                || string.Equals(ex.Error.ErrorCode, Constants.CreditCardErrorCodes.InvalidCountry, StringComparison.OrdinalIgnoreCase))
-            {
-                ex.Error.Message = Constants.ClientActionContract.NoMessage;
-                ex.Error.AddDetail(new ServiceErrorDetail()
-                {
-                    ErrorCode = ex.Error.ErrorCode,
-                    Message = LocalizationRepository.Instance.GetLocalizedString(Constants.CreditCardErrorMessages.InvalidCountry, language),
-                    Target = Constants.CreditCardErrorTargets.Country,
-                });
-            }
-            else if (string.Equals(ex.Error.ErrorCode, Constants.CreditCardErrorCodes.InvalidAddress, StringComparison.OrdinalIgnoreCase))
-            {
-                // For InvalidAddress, PxService does not know the exact payload of address group.
-                // Set full-set of address info as target, PIDL SDK will highlight only existed fields.
-                ex.Error.Message = Constants.ClientActionContract.NoMessage;
-                ex.Error.AddDetail(new ServiceErrorDetail()
-                {
-                    ErrorCode = ex.Error.ErrorCode,
-                    Message = LocalizationRepository.Instance.GetLocalizedString(Constants.CreditCardErrorMessages.InvalidAddress, language),
-                    Target = string.Format(
-                    "{0},{1},{2},{3},{4},{5},{6}",
-                    Constants.CreditCardErrorTargets.AddressLine1,
-                    Constants.CreditCardErrorTargets.AddressLine2,
-                    Constants.CreditCardErrorTargets.AddressLine3,
-                    Constants.CreditCardErrorTargets.City,
-                    Constants.CreditCardErrorTargets.State,
-                    Constants.CreditCardErrorTargets.Country,
-                    Constants.CreditCardErrorTargets.PostalCode),
-                });
-            }
-            else
-            {
-                // Catch all for any other error scenario
-                ex.Error.Message = LocalizationRepository.Instance.GetLocalizedString(Constants.CreditCardErrorMessages.Generic, language);
-            }
-        }
-
         private static void MapKlarnaAddError(ref ServiceErrorResponseException ex, string language)
         {
             if (string.Equals(ex.Error.ErrorCode, Constants.KlarnaErrorCodes.PersonalNumberBadFormat, StringComparison.OrdinalIgnoreCase))
@@ -2654,21 +2545,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             return scenario != null && scenario.Equals(Constants.ScenarioNames.SecondScreenAddPi) ? true : false;
         }
 
-        private static void SetPiData(PIDLData pi, Dictionary<string, object> data)
-        {
-            foreach (var item in data)
-            {
-                if (pi.ContainsKey(item.Key))
-                {
-                    pi[item.Key] = item.Value;
-                }
-                else
-                {
-                    pi.Add(item.Key, item.Value);
-                }
-            }
-        }
-
         private async Task<HttpResponseMessage> HandleAnonymousAdd(PIDLData pi, string sessionId, string language, string partner, EventTraceActivity traceActivityId, string country, string scenario, string orderId, bool completePrerequisites, string billableAccountId)
         {
             string accountId = await this.AddCcQrCodeAnonymousCallCheck(pi, partner, sessionId, traceActivityId);
@@ -2729,6 +2605,13 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         {
             try
             {
+                // Add flighting here to route to using new short url controller instead
+                if (this.ExposedFlightFeatures.Contains(Flighting.Features.PXUseShortURLController))
+                {
+                    CreateResponse shortURLDBCreateResponse = await this.Settings.ShortURLDBAccessor.Create(new CreateRequest() { URL = longUrl, TTLMinutes = ttlMinutes });
+                    return shortURLDBCreateResponse.Uri.ToString();
+                }
+
                 CreateShortURLResponse shortUrlCreateResponse = await this.Settings.ShortURLServiceAccessor.CreateShortURL(longUrl, ttlMinutes, traceActivityId);
                 return shortUrlCreateResponse.Uri.ToString();
             }
@@ -3560,7 +3443,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                     }
                     else
                     {
-                        MapCreditCardCommonError(ref ex, language);
+                        ProxyController.MapCreditCardCommonError(ref ex, language);
                     }
 
                     //// If EnableConditionalFieldsForBillingAddress feature is enabled, an UpdatePropertyValue clientAction is attached to the error to show address group if there is an non terminal error returned from service.
@@ -4375,7 +4258,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             }
 
             var additionalPIProps = new Dictionary<string, object>() { { "ValidationType", "none" }, { "AttachmentType", AttachmentType.Standalone } };
-            SetPiData(pi, additionalPIProps);
+            ProxyController.SetPiData(pi, additionalPIProps);
 
             var metaData = ProxyController.GetMetaData(requestContext);
             var additionalProps = new Dictionary<string, object>() { { "UsageType", UsageType.Inline }, { "MetaData", metaData } };

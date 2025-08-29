@@ -94,6 +94,13 @@ namespace Microsoft.Commerce.Payments.PXService
         [JsonProperty(Order = 40)]
         public ServiceErrorResponse InnerError { get; set; }
 
+        /// <summary>
+        /// Gets or sets component information if the source of the error was a component
+        /// when it gets this error
+        /// </summary>
+        [JsonProperty(Order = 50)]
+        public string Component { get; set; }
+
         [JsonIgnore]
         public HttpStatusCode HttpStatusCode { get; set; }
 

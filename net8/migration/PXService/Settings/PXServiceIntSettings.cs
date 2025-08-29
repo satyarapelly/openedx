@@ -14,6 +14,7 @@ namespace Microsoft.Commerce.Payments.PXService.Settings
     using Microsoft.Commerce.Payments.PXService.Accessors.FraudDetectionService;
     using Microsoft.Commerce.Payments.PXService.Accessors.NetworkTokenizationService;
     using Microsoft.Commerce.Payments.PXService.Accessors.PaymentOrchestratorService;
+    using Microsoft.Commerce.Payments.PXService.Accessors.ShortURLDB;
     using Microsoft.Commerce.Payments.PXService.Accessors.ShortURLService;
     using Microsoft.Commerce.Payments.PXService.Accessors.TokenizationService;
     using Microsoft.Commerce.Payments.PXService.Accessors.TransactionDataService;
@@ -157,8 +158,10 @@ namespace Microsoft.Commerce.Payments.PXService.Settings
 
             var shortUrlRequestHandler = GetAADRequestHandler(PXCommon.Constants.ServiceNames.ShortURLService, this.AzureActiveDirectoryTokenLoaderFactory);
             this.ShortURLServiceAccessor = new ShortURLServiceAccessor(
-                serviceBaseUrl: "https://pay-int.ms",
+                serviceBaseUrl: "https://pay-int.com",
                 messageHandler: shortUrlRequestHandler);
+
+            this.ShortURLDBAccessor = new ShortURLDBAccessor("https://px-shorturl-db-int.documents.azure.com:443/", "pay-ms-int.com");
 
             var transactionDataWebRequestHandler = GetAADRequestHandler(PXCommon.Constants.ServiceNames.TransactionDataService, this.AzureActiveDirectoryTokenLoaderFactory);
             this.TransactionDataServiceAccessor = new TransactionDataServiceAccessor(
@@ -210,7 +213,7 @@ namespace Microsoft.Commerce.Payments.PXService.Settings
                     Role = GlobalConstants.ClientRoles.Test,
                     AllowedAccounts = "18c69db8-dd2e-48a0-8887-1ccabd0bbcb2,3cfa0e51-97ae-49a8-9a71-398ca2ba0683,62dc8681-6753-484a-981a-128f82a43d25,7e5242d0-33ea-4bd1-a691-5193af93c4c7,ec8c235c-65e2-4a3d-bd7d-a20ed8ec1688",
                     AllowedAuthenticatedPathTemplate = "/v7.0/{0}",
-                    AllowedUnAuthenticatedPaths = "/v7.0/settings/Microsoft.Payments.Client,/v7.0/addresses/legacyValidate,/v7.0/addresses/modernValidate,/v7.0/paymentSessions,/v7.0/sessions,/v7.0/checkoutsEx,/v7.0/checkoutDescriptions",
+                    AllowedUnAuthenticatedPaths = "/v7.0/settings/Microsoft.Payments.Client,/v7.0/addresses/legacyValidate,/v7.0/addresses/modernValidate,/v7.0/paymentSessions,/v7.0/sessions,/v7.0/checkoutsEx,/v7.0/checkoutDescriptions,/v7.0/shortURL",
                     PartnerName = Partner.Name.PXCOT.ToString(),
                     ApplicationId = "a2b81e22-f9e9-436b-8bf8-f3d41fc2516e" // Application name: PX-MI-COT-INT 
                 },

@@ -11,6 +11,7 @@ namespace Microsoft.Commerce.Payments.PXService.Settings
     using Microsoft.Commerce.Payments.PXService.Accessors.MSRewardsService;
     using Microsoft.Commerce.Payments.PXService.Accessors.PartnerSettingsService;
     using Microsoft.Commerce.Payments.PXService.Accessors.SellerMarketPlaceService;
+    using Microsoft.Commerce.Payments.PXService.Accessors.ShortURLDB;
     using Microsoft.Commerce.Payments.PXService.Accessors.TokenizationService;
     using Microsoft.Commerce.Payments.PXService.Accessors.TokenPolicyService;
     using Microsoft.Commerce.Payments.PXService.RiskService.V7;

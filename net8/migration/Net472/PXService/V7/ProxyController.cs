@@ -8,11 +8,12 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using System.Threading.Tasks;
     using System.Web;
     using System.Web.Http;
-    using Azure.Core;
+    using global::Azure.Core;
     using Common.Helper;
     using Microsoft.Commerce.Payments.Common;
     using Microsoft.Commerce.Payments.Common.Web;
     using Microsoft.Commerce.Payments.PartnerSettingsModel;
+    using Microsoft.Commerce.Payments.Pidl.Localization;
     using Microsoft.Commerce.Payments.PidlFactory.V7;
     using Microsoft.Commerce.Payments.PidlModel.V7;
     using Microsoft.Commerce.Payments.PimsModel.V4;
@@ -238,6 +239,116 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             }
         }
 
+        public static void MapCreditCardCommonError(ref ServiceErrorResponseException ex, string language)
+        {
+            if (string.Equals(ex.Error.ErrorCode, Constants.CreditCardErrorCodes.InvalidCvv, StringComparison.OrdinalIgnoreCase))
+            {
+                ex.Error.Message = Constants.ClientActionContract.NoMessage;
+                ex.Error.AddDetail(new ServiceErrorDetail()
+                {
+                    ErrorCode = ex.Error.ErrorCode,
+                    Message = LocalizationRepository.Instance.GetLocalizedString(Constants.CreditCardErrorMessages.InvalidCvv, language),
+                    Target = Constants.CreditCardErrorTargets.Cvv,
+                });
+            }
+            else if (string.Equals(ex.Error.ErrorCode, Constants.CreditCardErrorCodes.InvalidAccountHolder, StringComparison.OrdinalIgnoreCase))
+            {
+                ex.Error.Message = Constants.ClientActionContract.NoMessage;
+                ex.Error.AddDetail(new ServiceErrorDetail()
+                {
+                    ErrorCode = ex.Error.ErrorCode,
+                    Message = LocalizationRepository.Instance.GetLocalizedString(Constants.CreditCardErrorMessages.InvalidAccountHolder, language),
+                    Target = Constants.CreditCardErrorTargets.AccountHolderName,
+                });
+            }
+            else if (string.Equals(ex.Error.ErrorCode, Constants.CreditCardErrorCodes.ExpiredCard, StringComparison.OrdinalIgnoreCase))
+            {
+                ex.Error.Message = Constants.ClientActionContract.NoMessage;
+                ex.Error.AddDetail(new ServiceErrorDetail()
+                {
+                    ErrorCode = ex.Error.ErrorCode,
+                    Message = LocalizationRepository.Instance.GetLocalizedString(Constants.CreditCardErrorMessages.ExpiredCard, language),
+                    Target = string.Format("{0},{1}", Constants.CreditCardErrorTargets.ExpiryMonth, Constants.CreditCardErrorTargets.ExpiryYear),
+                });
+            }
+            else if (string.Equals(ex.Error.ErrorCode, Constants.CreditCardErrorCodes.InvalidExpiryDate, StringComparison.OrdinalIgnoreCase))
+            {
+                ex.Error.Message = Constants.ClientActionContract.NoMessage;
+                ex.Error.AddDetail(new ServiceErrorDetail()
+                {
+                    ErrorCode = ex.Error.ErrorCode,
+                    Message = LocalizationRepository.Instance.GetLocalizedString(Constants.CreditCardErrorMessages.InvalidExpiryDate, language),
+                    Target = string.Format("{0},{1}", Constants.CreditCardErrorTargets.ExpiryMonth, Constants.CreditCardErrorTargets.ExpiryYear),
+                });
+            }
+            else if (string.Equals(ex.Error.ErrorCode, Constants.CreditCardErrorCodes.InvalidCity, StringComparison.OrdinalIgnoreCase))
+            {
+                ex.Error.Message = Constants.ClientActionContract.NoMessage;
+                ex.Error.AddDetail(new ServiceErrorDetail()
+                {
+                    ErrorCode = ex.Error.ErrorCode,
+                    Message = LocalizationRepository.Instance.GetLocalizedString(Constants.CreditCardErrorMessages.InvalidCity, language),
+                    Target = Constants.CreditCardErrorTargets.City,
+                });
+            }
+            else if (string.Equals(ex.Error.ErrorCode, Constants.CreditCardErrorCodes.InvalidState, StringComparison.OrdinalIgnoreCase))
+            {
+                ex.Error.Message = Constants.ClientActionContract.NoMessage;
+                ex.Error.AddDetail(new ServiceErrorDetail()
+                {
+                    ErrorCode = ex.Error.ErrorCode,
+                    Message = LocalizationRepository.Instance.GetLocalizedString(Constants.CreditCardErrorMessages.InvalidState, language),
+                    Target = Constants.CreditCardErrorTargets.State,
+                });
+            }
+            else if (string.Equals(ex.Error.ErrorCode, Constants.CreditCardErrorCodes.InvalidZipCode, StringComparison.OrdinalIgnoreCase))
+            {
+                ex.Error.Message = Constants.ClientActionContract.NoMessage;
+                ex.Error.AddDetail(new ServiceErrorDetail()
+                {
+                    ErrorCode = ex.Error.ErrorCode,
+                    Message = LocalizationRepository.Instance.GetLocalizedString(Constants.CreditCardErrorMessages.InvalidZipCode, language),
+                    Target = Constants.CreditCardErrorTargets.PostalCode,
+                });
+            }
+            else if (string.Equals(ex.Error.ErrorCode, Constants.CreditCardErrorCodes.InvalidCountryCode, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(ex.Error.ErrorCode, Constants.CreditCardErrorCodes.InvalidCountry, StringComparison.OrdinalIgnoreCase))
+            {
+                ex.Error.Message = Constants.ClientActionContract.NoMessage;
+                ex.Error.AddDetail(new ServiceErrorDetail()
+                {
+                    ErrorCode = ex.Error.ErrorCode,
+                    Message = LocalizationRepository.Instance.GetLocalizedString(Constants.CreditCardErrorMessages.InvalidCountry, language),
+                    Target = Constants.CreditCardErrorTargets.Country,
+                });
+            }
+            else if (string.Equals(ex.Error.ErrorCode, Constants.CreditCardErrorCodes.InvalidAddress, StringComparison.OrdinalIgnoreCase))
+            {
+                // For InvalidAddress, PxService does not know the exact payload of address group.
+                // Set full-set of address info as target, PIDL SDK will highlight only existed fields.
+                ex.Error.Message = Constants.ClientActionContract.NoMessage;
+                ex.Error.AddDetail(new ServiceErrorDetail()
+                {
+                    ErrorCode = ex.Error.ErrorCode,
+                    Message = LocalizationRepository.Instance.GetLocalizedString(Constants.CreditCardErrorMessages.InvalidAddress, language),
+                    Target = string.Format(
+                    "{0},{1},{2},{3},{4},{5},{6}",
+                    Constants.CreditCardErrorTargets.AddressLine1,
+                    Constants.CreditCardErrorTargets.AddressLine2,
+                    Constants.CreditCardErrorTargets.AddressLine3,
+                    Constants.CreditCardErrorTargets.City,
+                    Constants.CreditCardErrorTargets.State,
+                    Constants.CreditCardErrorTargets.Country,
+                    Constants.CreditCardErrorTargets.PostalCode),
+                });
+            }
+            else
+            {
+                // Catch all for any other error scenario
+                ex.Error.Message = LocalizationRepository.Instance.GetLocalizedString(Constants.CreditCardErrorMessages.Generic, language);
+            }
+        }
+
         protected static void SetDetailsData(PIDLData pi, Dictionary<string, object> data, EventTraceActivity traceActivityId)
         {
             string paymentInstrumentDetailsPropertyName = "details";
@@ -264,6 +375,21 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 catch (Exception ex)
                 {
                     SllWebLogger.TracePXServiceException("PaymentInstrumentsExController.SetDetailsData: " + ex.ToString(), traceActivityId);
+                }
+            }
+        }
+
+        protected static void SetPiData(PIDLData pi, Dictionary<string, object> data)
+        {
+            foreach (var item in data)
+            {
+                if (pi.ContainsKey(item.Key))
+                {
+                    pi[item.Key] = item.Value;
+                }
+                else
+                {
+                    pi.Add(item.Key, item.Value);
                 }
             }
         }

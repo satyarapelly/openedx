@@ -14,7 +14,7 @@ namespace Microsoft.Commerce.Payments.PXService.Model.NetworkTokenizationService
         /// <summary>
         /// Gets or sets the authentication context.
         /// </summary>
-        public PasskeyAuthContext AuthContext { get; set; }
+        public object AuthContext { get; set; }
 
         /// <summary>
         /// Gets or sets the passkey action that needs to be acted upon.

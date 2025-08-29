@@ -32,6 +32,7 @@
 		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" />
 		<PackageReference Include="Newtonsoft.Json" />
 		<PackageReference Include="Azure.Storage.Blobs" />
+		<PackageReference Include="Microsoft.Azure.Cosmos" />
 		<PackageReference Include="UAParser" />
 	</ItemGroup>
 

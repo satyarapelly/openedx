@@ -236,6 +236,8 @@ namespace Microsoft.Commerce.Payments.PXService
             public const string TokensExChallengeApi = "V7TokensExChallengeApi";
             public const string TokensExValidateChallengeApi = "V7TokensExValidateChallengeApi";
             public const string TokensExMandatesApi = "V7TokensExMandates";
+            public const string ShortURL = "V7ShortURL";
+            public const string ShortURLWithCode = "V7ShortURLWithCode";
 
             // Payment Client
             public const string PaymentClientInitializationApi = "V7PaymentClientInitializationAPI";
@@ -334,6 +336,7 @@ namespace Microsoft.Commerce.Payments.PXService
             public const string CheckoutDescriptionsController = "CheckoutDescriptionsController";
             public const string ExpressCheckoutController = "ExpressCheckoutController";
             public const string TokensExController = "TokensExController";
+            public const string ShortURLController = "ShortURLController";
 
             // Anonymous or Authenticated controllers
             public const string CardsController = "CardsController";
@@ -451,6 +454,7 @@ namespace Microsoft.Commerce.Payments.PXService
             public const string V7TokensExChallenge = "{version}/{accountId}/tokensEx/{ntid}/challenges/{challengeid}";
             public const string V7TokensExValidateChallenge = "{version}/{accountId}/tokensEx/{ntid}/challenges/{challengeid}/validate";
             public const string V7TokensExMandate = "{version}/{accountId}/tokensEx/{ntid}/mandates";
+            public const string V7ShortURLWithCode = "{version}/shortURL/{code}";
 
             // Pidl Endpoints
             public const string V7AgenticTokenDescriptions = "{version}/{accountId}/agenticTokenDescriptions/";

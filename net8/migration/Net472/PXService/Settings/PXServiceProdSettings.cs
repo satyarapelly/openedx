@@ -15,6 +15,7 @@ namespace Microsoft.Commerce.Payments.PXService.Settings
     using Microsoft.Commerce.Payments.PXService.Accessors.FraudDetectionService;
     using Microsoft.Commerce.Payments.PXService.Accessors.NetworkTokenizationService;
     using Microsoft.Commerce.Payments.PXService.Accessors.PaymentOrchestratorService;
+    using Microsoft.Commerce.Payments.PXService.Accessors.ShortURLDB;
     using Microsoft.Commerce.Payments.PXService.Accessors.ShortURLService;
     using Microsoft.Commerce.Payments.PXService.Accessors.TokenizationService;
     using Microsoft.Commerce.Payments.PXService.Accessors.TransactionDataService;

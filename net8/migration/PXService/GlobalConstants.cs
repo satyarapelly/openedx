@@ -185,6 +185,7 @@ namespace Microsoft.Commerce.Payments.PXService
             public const string GetBillingGroupDescriptionsApiNoId = "V7GetBillingGroupDescriptionsAPINoId";
             public const string GetDigitizationDescriptionsApi = "V7GetDigitizationDescriptionsAPI";
             public const string GetTaxIdDescriptionsApi = "V7GetTaxIdDescriptionsAPI";
+            public const string V7GetTaxIdDescriptionsWithScenarioAPI = "V7GetTaxIdDescriptionsWithScenarioAPI";
             public const string GetRewardsDescriptionsApi = "V7GetRewardsDescriptionsAPI";
             public const string GetTenantDescriptionsApi = "V7GetTenantDescriptionsAPI";
             public const string TransformationApi = "V7TransformationApi";
@@ -869,7 +870,7 @@ namespace Microsoft.Commerce.Payments.PXService
                 internal static readonly string IPAddress = string.Format(Format, ClientContextGroups.DeviceInfo, "ipAddress");
                 internal static readonly string UserAgent = string.Format(Format, ClientContextGroups.DeviceInfo, "userAgent");
                 internal static readonly string DeviceId = string.Format(Format, ClientContextGroups.DeviceInfo, "deviceId");
-            }            
+            }
 
             internal static class CMLegalEntityProfile
             {

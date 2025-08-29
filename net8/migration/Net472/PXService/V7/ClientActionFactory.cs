@@ -5,7 +5,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Web;
     using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Commerce.Payments.PartnerSettingsModel;
     using Microsoft.Commerce.Payments.PidlFactory.V7;
@@ -206,7 +205,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             }
             else if (IsSepa(paymentInstrument))
             {
-                AddClientActionToSepaRequest(paymentInstrument, language, partner, classicProduct, billableAccountId, traceActivityId, exposedFlightFeatures);
+                AddClientActionToSepaRequest(paymentInstrument, language, partner, classicProduct, billableAccountId, traceActivityId, exposedFlightFeatures, setting, completePrerequisites, country, scenario);
             }
             else if (IsCreditCard(paymentInstrument) && string.Equals(country, "in", StringComparison.OrdinalIgnoreCase))
             {
@@ -742,7 +741,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             }
         }
 
-        private static void AddClientActionToSepaRequest(PaymentInstrument paymentInstrument, string language, string partner, string classicProduct, string billableAccountId, EventTraceActivity traceActivityId, List<string> exposedFlightFeatures = null)
+        private static void AddClientActionToSepaRequest(PaymentInstrument paymentInstrument, string language, string partner, string classicProduct, string billableAccountId, EventTraceActivity traceActivityId, List<string> exposedFlightFeatures = null, PaymentExperienceSetting setting = null, bool completePrerequisites = false, string country = null, string scenario = null)
         {
             PaymentInstrumentDetails paymentInstrumentDetails = paymentInstrument.PaymentInstrumentDetails;
 
@@ -756,6 +755,15 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                     {
                         RedirectionServiceLink redirectLink = GetRedirectionServiceLink(paymentInstrument);
                         ClientAction clientAction = new ClientAction(ClientActionType.Redirect);
+
+                        if (PartnerSettingsHelper.IsFeatureEnabledUsingPartnerSettings(PartnerSettingsHelper.Features.UseTwoStaticPageRedirection, null, setting))
+                        {
+                            clientAction = new ClientAction(ClientActionType.Pidl);
+                            clientAction.Context = PIDLResourceFactory.Instance.GetSepaRedirectAndStatusCheckDescriptionForPI(paymentInstrument, language, partner, scenario, classicProduct, completePrerequisites, country, enablePolling: false, setting: setting);
+                            paymentInstrument.ClientAction = clientAction;
+                            return;
+                        }
+
                         clientAction.Context = redirectLink;
 
                         if (!Constants.InlinePartners.Contains(partner.ToLowerInvariant()))
@@ -768,8 +776,10 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                     }
                 }
             }
-            else if (string.Equals(paymentInstrument.Status.ToString(), Constants.PaymentInstrumentStatus.Active, StringComparison.OrdinalIgnoreCase))
+            else if (string.Equals(paymentInstrument.Status.ToString(), Constants.PaymentInstrumentStatus.Active, StringComparison.OrdinalIgnoreCase) && !string.Equals(partner, Constants.PartnerName.Azure, StringComparison.OrdinalIgnoreCase) && !string.Equals(partner, Constants.PartnerName.AzureManage, StringComparison.OrdinalIgnoreCase))
             {
+                // Currently for the new integration of SEPA redirection, static pages are being implemented for Azure and AzureManage only.
+                // In this flow, GET PI call happens with active PI status which triggers this flow, hence excluding these two storefronts.
                 // Task 20657986: [PM Task] PIDL static page for "failed", "expired" and "0 retry time" SEPA PI
                 // PxService might need to show static page for failed, expired PicvStatus based on the above PM task
                 // RemainingAttempts is a valid number that is greater than 0

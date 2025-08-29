@@ -50,7 +50,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
         /// <param name="accountId">Pi Account Id</param>
         /// <returns>Returns the created PaymentSession</returns>
         [HttpPost]
-        [ActionName("PostPaymentSession")]
         public async Task<PaymentSession> Post([FromRoute] string accountId)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
@@ -238,7 +237,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
         /// <param name="sessionId">Session Id</param>
         /// <returns>Returns payment instrument or payment instrument status used for polling</returns>
         [HttpGet]
-        [ActionName("qrCodeStatus")]
         public async Task<Microsoft.Commerce.Payments.PimsModel.V4.PaymentInstrument> GetQRCodePaymentSession([FromRoute] string accountId, [FromRoute] string sessionId)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
@@ -372,7 +370,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
         /// <param name="accountId">Pi Account Id</param>
         /// <returns>Returns the created PaymentSession</returns>
         [HttpPost]
-        [ActionName("CreateAndAuthenticate")]
         public async Task<CreateAndAuthenticateResponse> CreateAndAuthenticate([FromRoute] string accountId)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
@@ -445,8 +442,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
         /// <param name="sessionId">Session Id</param>
         /// <returns>Returns the created PaymentSession</returns>
         [HttpPost]
-        [ActionName("NotifyThreeDSChallengeCompleted")]
-        [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<HttpResponseMessage> NotifyThreeDSChallengeCompleted([FromRoute] string accountId, [FromRoute] string sessionId)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
@@ -468,7 +463,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
         /// <param name="sessionId">Session Id</param>
         /// <returns>Returns the created PaymentSession</returns>
         [HttpPost]
-        [ActionName("BrowserAuthenticate")]
         public async Task<HttpResponseMessage> Authenticate([FromRoute] string sessionId)
         {
             ClientAction nextAction = null;
@@ -657,8 +651,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
         }
 
         [HttpPost]
-        [ActionName("BrowserNotifyThreeDSChallengeCompleted")]
-        [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<HttpResponseMessage> NotifyThreeDSChallengeCompleted([FromRoute] string sessionId)
         {
             ClientAction clientAction = null;
@@ -752,11 +744,9 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
         /// <param name="cvvChallengePayload">Payload containing tokenized CVV</param>
         /// <returns>Returns RDS URL</returns>
         [HttpPost]
-        [ActionName("BrowserAuthenticateThreeDSOne")]
-        [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<HttpResponseMessage> BrowserAuthenticateThreeDSOne(
-            string accountId,
-            string sessionId,
+            [FromRoute] string accountId,
+            [FromRoute] string sessionId,
             [FromBody] PIDLData cvvChallengePayload)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
@@ -950,7 +940,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
         /// <param name="rx">Payload containing tokenized CVV</param>
         /// <returns>Returns the HTML that does a POST to ACS Url</returns>
         [HttpGet]
-        [ActionName("BrowserAuthenticateRedirectionThreeDSOne")]
         public async Task<HttpResponseMessage> BrowserAuthenticateRedirectionThreeDSOne([FromRoute] string sessionId, [FromQuery] string ru, [FromQuery] string rx)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
@@ -985,8 +974,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
         }
 
         [HttpPost]
-        [ActionName("BrowserNotifyThreeDSOneChallengeCompleted")]
-        [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<HttpResponseMessage> BrowserNotifyThreeDSOneChallengeCompleted([FromRoute] string sessionId)
         {
             Uri redirectUrl;
@@ -1049,7 +1036,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
         /// <param name="cvvChallengePayload">Payload containing tokenized CVV</param>
         /// <returns>Returns RDS URL</returns>
         [HttpPost]
-        [ActionName("AuthenticateIndiaThreeDS")]
         public async Task<HttpResponseMessage> AuthenticateIndiaThreeDS([FromRoute] string accountId, [FromRoute] string sessionId, [FromBody] PIDLData cvvChallengePayload)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
@@ -1146,7 +1132,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
         /// <returns>Returns an object with the property Verified=true when the challenge has been verified or is not applicable.
         /// False if the challenge was failed or its status is unknown.</returns>
         [HttpGet]
-        [ActionName("AuthenticationStatus")]
         public async Task<HttpResponseMessage> AuthenticationStatus([FromRoute] string accountId, [FromRoute] string sessionId, [FromQuery] string piId, [FromQuery] string paymentContext = null)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();

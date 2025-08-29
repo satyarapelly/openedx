@@ -177,5 +177,8 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.MSRewardsService.DataM
 
         // Variable Redemption
         E_INVALID_VARIABLE_REDEMPTION_REQUEST = 12010,
+
+        // PX Deserialization Error
+        E_REWARDS_GENERIC_ERROR = 13001,
     }
 }

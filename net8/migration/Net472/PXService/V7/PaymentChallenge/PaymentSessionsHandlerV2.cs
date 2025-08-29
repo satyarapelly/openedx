@@ -269,7 +269,13 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
                 // 4. If fingerprinting was skipped by ACS, call PayerAuth.Authenticate
                 bool skipFingerprint = ShouldSkipFingerprintStep(exposedFlightFeatures, methodData.ThreeDSMethodURL);
 
-                if (skipFingerprint)
+                bool skipChallenge = ShouldSkipChallengeStep(exposedFlightFeatures, methodData?.ThreeDSMethodURL);
+
+                if (skipChallenge)
+                {
+                    throw new InvalidOperationException("Skip challenge and enter fingerprint safety net flow");
+                }
+                else if (skipFingerprint)
                 {
                     return await this.Authenticate(
                         threeDSMethodCompletionIndicator: (skipFingerprint && !string.IsNullOrEmpty(methodData.ThreeDSMethodURL)) ? PayerAuth.ThreeDSMethodCompletionIndicator.N : PayerAuth.ThreeDSMethodCompletionIndicator.U,
@@ -1845,6 +1851,34 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
             {
                 var rootDomain = GetRootDomain(threeDSMethodURL)?.ToLowerInvariant();
                 var skipDomain = $"PXPSD2SkipUrl_{rootDomain}";
+                if (exposedFlightFeatures.Contains(skipDomain, StringComparer.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool ShouldSkipChallengeStep(List<string> exposedFlightFeatures, string threeDSMethodURL)
+        {
+            if (exposedFlightFeatures == null || threeDSMethodURL == null)
+            {
+                return false;
+            }
+
+            // This is the uber level skip challenge flight.  If this is enabled we skip for all urls, should be done for specific user IDs
+            if (exposedFlightFeatures.Contains(Flighting.Features.PXPSD2SkipChallenge, StringComparer.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            // If this is enabled, we've enabled the capability to skip challenge by URL.  Then the flight list is parsed for specific urls to skip
+            // which are defined by PXPSD2SkipChallengeUrl_<uri-host-joined-with-non-alphanumeric-characters-removed>.  ex. acs.test.com => PXPSD2SkipChallengeUrl_acstestcom
+            if (exposedFlightFeatures.Contains(Flighting.Features.PXPSD2SkipChallengeByUrl, StringComparer.OrdinalIgnoreCase))
+            {
+                var rootDomain = GetRootDomain(threeDSMethodURL)?.ToLowerInvariant();
+                var skipDomain = $"PXPSD2SkipChallengeUrl_{rootDomain}";
                 if (exposedFlightFeatures.Contains(skipDomain, StringComparer.OrdinalIgnoreCase))
                 {
                     return true;

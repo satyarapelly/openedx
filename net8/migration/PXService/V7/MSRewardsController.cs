@@ -9,7 +9,9 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Commerce.Payments.Common.Web;
+    using Microsoft.Commerce.Payments.PartnerSettingsModel;
     using Microsoft.Commerce.Payments.PidlFactory.V7;
+    using Microsoft.Commerce.Payments.PidlFactory.V7.PIDLFeatureProcess;
     using Microsoft.Commerce.Payments.PidlModel.V7;
     using Microsoft.Commerce.Payments.PimsModel.V4;
     using Microsoft.Commerce.Payments.PXCommon;
@@ -49,6 +51,8 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             string userAgent = await this.TryGetClientContext(GlobalConstants.ClientContextKeys.DeviceInfo.UserAgent);
             string xboxDeviceId = await this.TryGetClientContext(GlobalConstants.ClientContextKeys.DeviceInfo.XboxLiveDeviceId);
             string deviceId = await this.TryGetClientContext(GlobalConstants.ClientContextKeys.DeviceInfo.DeviceId);
+
+            PaymentExperienceSetting setting = this.GetPaymentExperienceSetting(Constants.Operations.Redeem);
 
             // Prepare redemption request
             RedemptionRequest redemptionRequest = new RedemptionRequest();
@@ -110,16 +114,35 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                 hasAnyStoredPI = true;
             }
 
-            // Call the MS Rewards service to redeem the rewards
-            RedemptionResult redemptionResult = await this.Settings.MSRewardsServiceAccessor.RedeemRewards(userId, country, partner, hasAnyStoredPI, redemptionRequest, traceActivityId);
-
             PIDLResource retVal = new PIDLResource();
+            ClientAction clientAction = new ClientAction(ClientActionType.Pidl);
+            List<PIDLResource> retList = null;
+            RedemptionResult redemptionResult = null;
+            try
+            {
+                // Call the MS Rewards service to redeem the rewards
+                redemptionResult = await this.Settings.MSRewardsServiceAccessor.RedeemRewards(userId, country, partner, hasAnyStoredPI, redemptionRequest, traceActivityId);
+            }
+            catch (Exception ex)
+            {
+                if (this.ExposedFlightFeatures?.Contains(Flighting.Features.PXShowRewardsErrorPage, StringComparer.OrdinalIgnoreCase) ?? false)
+                {
+                    retList = PIDLResourceFactory.Instance.GetRewardsDescriptions(Constants.DescriptionTypes.MSRewards, Constants.RewardsOperations.Error, country, language, partner);
+                    string errorMessage = "Failed to redeem rewards. Please try again later.";
+                    retList = ProcessErrorPIDL(retList, RewardsErrorCode.E_REWARDS_GENERIC_ERROR, errorMessage);
+                }
+                else
+                {
+                    // If flight is not enabled, throw the original exception as-is
+                    throw ex;
+                }
+            }
 
             if (redemptionResult != null)
             {
                 // Show the failure code as it is returned from the service as default
                 // this will be overwritten based on the redemption result code
-                ClientAction clientAction = new ClientAction(ClientActionType.Failure)
+                clientAction = new ClientAction(ClientActionType.Failure)
                 {
                     Context = new { errorCode = redemptionResult.Code, errorCodeName = redemptionResult.Code.ToString(), errorMessage = redemptionResult.ResultMessage }
                 };
@@ -154,31 +177,29 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                         };
                         break;
                     case RewardsErrorCode.E_CHALLENGE_FIRST:
-                        if (this.ExposedFlightFeatures?.Contains(Flighting.Features.PXShowRewardsErrorPageOnChallenge, StringComparer.OrdinalIgnoreCase) ?? false)
+                        if (this.ExposedFlightFeatures?.Contains(Flighting.Features.PXShowRewardsErrorPage, StringComparer.OrdinalIgnoreCase) ?? false)
                         {
                             showErrorPageOnChallenge = true;
                             break;
                         }
 
                         string phoneNumber = redemptionResult.MsaPhoneNumber;
-                        clientAction = new ClientAction(ClientActionType.Pidl);
-                        List<PIDLResource> retList;
                         if (phoneNumber == null)
                         {
                             // If phoneNumber is empty or null, show the QR code PIDL pointing to aka.ms/editPhone
                             retList = PIDLResourceFactory.Instance.GetEditPhoneQRCodeDescriptions(language, partner);
-                            clientAction.Context = ProcessEditPhonePIDL(retList, country, language, partner, redeemData.CatalogItem, redeemData.CatalogItemAmount);
+                            retList = ProcessEditPhonePIDL(retList, country, language, partner, redeemData.CatalogItem, redeemData.CatalogItemAmount);
                         }
                         else
                         {
                             // Show the client action with type as "PIDL" and context as challenge screen PIDL asking user to pick SMS or Call
-                            retList = PIDLResourceFactory.Instance.GetRewardsDescriptions("MSRewards", "selectChallengeType", country, language, partner);
-                            clientAction.Context = ProcessChallengePIDL(retList, country, language, partner, redeemData.CatalogItem, redeemData.CatalogItemAmount, phoneNumber);
+                            retList = PIDLResourceFactory.Instance.GetRewardsDescriptions(Constants.DescriptionTypes.MSRewards, Constants.RewardsOperations.SelectChallengeType, country, language, partner);
+                            retList = ProcessChallengePIDL(retList, country, language, partner, redeemData.CatalogItem, redeemData.CatalogItemAmount, phoneNumber);
                         }
 
                         break;
                     case RewardsErrorCode.E_SOLVE_FIRST:
-                        if (this.ExposedFlightFeatures?.Contains(Flighting.Features.PXShowRewardsErrorPageOnChallenge, StringComparer.OrdinalIgnoreCase) ?? false)
+                        if (this.ExposedFlightFeatures?.Contains(Flighting.Features.PXShowRewardsErrorPage, StringComparer.OrdinalIgnoreCase) ?? false)
                         {
                             showErrorPageOnChallenge = true;
                             break;
@@ -186,14 +207,11 @@ namespace Microsoft.Commerce.Payments.PXService.V7
 
                         // Show the client action with type as "PIDL" and context as challenge screen PIDL asking user to enter the solve code
                         string challengeToken = redemptionResult.ResultMessage;
-                        List<PIDLResource> solveCodePIDL = PIDLResourceFactory.Instance.GetRewardsDescriptions("MSRewards", "submitChallengeCode", country, language, partner);
-                        clientAction = new ClientAction(ClientActionType.Pidl)
-                        {
-                            Context = ProcessSolveCodePIDL(solveCodePIDL, country, language, partner, redeemData.CatalogItem, redeemData.CatalogItemAmount, challengeToken, redeemData.ChallengePreference)
-                        };
+                        retList = PIDLResourceFactory.Instance.GetRewardsDescriptions(Constants.DescriptionTypes.MSRewards, Constants.RewardsOperations.SubmitChallengeCode, country, language, partner);
+                        retList = ProcessSolveCodePIDL(retList, country, language, partner, redeemData.CatalogItem, redeemData.CatalogItemAmount, challengeToken, redeemData.ChallengePreference);
                         break;
                     case RewardsErrorCode.E_RISK_REVIEW:
-                        if (this.ExposedFlightFeatures?.Contains(Flighting.Features.PXShowRewardsErrorPageOnChallenge, StringComparer.OrdinalIgnoreCase) ?? false)
+                        if (this.ExposedFlightFeatures?.Contains(Flighting.Features.PXShowRewardsErrorPage, StringComparer.OrdinalIgnoreCase) ?? false)
                         {
                             showErrorPageOnChallenge = true;
                             break;
@@ -206,7 +224,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
                         };
                         break;
                     default:
-                        if (this.ExposedFlightFeatures?.Contains(Flighting.Features.PXShowRewardsErrorPageOnChallenge, StringComparer.OrdinalIgnoreCase) ?? false)
+                        if (this.ExposedFlightFeatures?.Contains(Flighting.Features.PXShowRewardsErrorPage, StringComparer.OrdinalIgnoreCase) ?? false)
                         {
                             showErrorPageOnChallenge = true;
                         }
@@ -216,16 +234,37 @@ namespace Microsoft.Commerce.Payments.PXService.V7
 
                 if (showErrorPageOnChallenge)
                 {
-                    List<PIDLResource> errorPidl = PIDLResourceFactory.Instance.GetRewardsDescriptions("MSRewards", "error", country, language, partner);
-                    clientAction = new ClientAction(ClientActionType.Pidl)
-                    {
-                        Context = ProcessErrorPIDL(errorPidl, redemptionResult.Code, redemptionResult.ResultMessage)
-                    };
+                    retList = PIDLResourceFactory.Instance.GetRewardsDescriptions(Constants.DescriptionTypes.MSRewards, Constants.RewardsOperations.Error, country, language, partner);
+                    retList = ProcessErrorPIDL(retList, redemptionResult.Code, redemptionResult.ResultMessage);
                 }
-
-                retVal.ClientAction = clientAction;
             }
 
+            if (retList != null && retList.Count > 0)
+            {
+                FeatureContext featureContext = new FeatureContext(
+                    country,
+                    GetSettingTemplate(partner, setting, Constants.DescriptionTypes.MSRewards, null, null),
+                    Constants.DescriptionTypes.MSRewards,
+                    Constants.Operations.Redeem,
+                    scenario: null,
+                    language,
+                    null,
+                    this.ExposedFlightFeatures,
+                    setting?.Features,
+                    paymentMethodfamily: null,
+                    null,
+                    smdMarkets: null,
+                    originalPartner: partner,
+                    isGuestAccount: GuestAccountHelper.IsGuestAccount(this.Request));
+
+                PostProcessor.Process(retList, PIDLResourceFactory.FeatureFactory, featureContext);
+                clientAction = new ClientAction(ClientActionType.Pidl)
+                {
+                    Context = retList
+                };
+            }
+
+            retVal.ClientAction = clientAction;
             return retVal;
         }
 

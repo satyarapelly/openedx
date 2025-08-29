@@ -25,6 +25,8 @@ namespace Microsoft.Commerce.Payments.PXService
 
         Task<List<PaymentMethod>> GetPaymentMethods(string country, string family, string type, string language, EventTraceActivity traceActivityId, IList<KeyValuePair<string, string>> additionalHeaders = null, string partner = null, List<string> exposedFlightFeatures = null, string operation = null, PaymentExperienceSetting setting = null);
 
+        Task<Model.PaymentOrchestratorService.PaymentMethodResult> GetEligiblePaymentMethods(string country, decimal amount, string paymentAccountId, List<Model.PaymentOrchestratorService.PaymentMethodType> allowedPaymentMethods, EventTraceActivity traceActivityId);
+
         Task<object> GetSeCardPersos(string accountId, string piid, ulong deviceId, EventTraceActivity traceActivityId);
 
         Task<PaymentInstrument[]> ListPaymentInstrument(string accountId, ulong deviceId, string[] status, EventTraceActivity traceActivityId, IEnumerable<KeyValuePair<string, string>> queryParams = null, string partner = null, string country = null, string language = null, List<string> exposedFlightFeatures = null, string operation = null, PaymentExperienceSetting setting = null);

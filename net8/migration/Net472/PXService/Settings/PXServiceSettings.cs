@@ -24,6 +24,7 @@ namespace Microsoft.Commerce.Payments.PXService.Settings
     using Microsoft.Commerce.Payments.PXService.Accessors.PartnerSettingsService;
     using Microsoft.Commerce.Payments.PXService.Accessors.PaymentOrchestratorService;
     using Microsoft.Commerce.Payments.PXService.Accessors.SellerMarketPlaceService;
+    using Microsoft.Commerce.Payments.PXService.Accessors.ShortURLDB;
     using Microsoft.Commerce.Payments.PXService.Accessors.ShortURLService;
     using Microsoft.Commerce.Payments.PXService.Accessors.TokenizationService;
     using Microsoft.Commerce.Payments.PXService.Accessors.TokenPolicyService;
@@ -129,6 +130,8 @@ namespace Microsoft.Commerce.Payments.PXService.Settings
         public ITransactionServiceAccessor TransactionServiceAccessor { get; protected set; }
 
         public IShortURLServiceAccessor ShortURLServiceAccessor { get; protected set; }
+
+        public IShortURLDBAccessor ShortURLDBAccessor { get; protected set; }
 
         public IPaymentThirdPartyServiceAccessor PaymentThirdPartyServiceAccessor { get; protected set; }
 

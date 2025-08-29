@@ -4,6 +4,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
 {
     using System;
     using System.Collections.Generic;
+    using Microsoft.Commerce.Payments.PXService.Model.NetworkTokenizationService;
 
     /// <summary>
     /// Constants container, each set of constants will be grouped into a nested class
@@ -441,6 +442,19 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             }
         }
 
+        internal static Dictionary<ChallengeMethodType, string> ChallengeMethodTypeToFriendlyNameMappings
+        {
+            get
+            {
+                return new Dictionary<ChallengeMethodType, string>
+                {
+                    { ChallengeMethodType.OtpSms, "Text message" },
+                    { ChallengeMethodType.OtpEmail, "Email" },
+                    { ChallengeMethodType.OutboundCall, "Toll-free call" }
+                };
+            }
+        }
+
         internal static Dictionary<string, string> XboxCardApplyCountryToLanguage
         {
             get
@@ -761,6 +775,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             internal const string MCPP = "mcpp";
             internal const string BattleNet = "battlenet";
             internal const string CandyCrush = "candycrush";
+            internal const string AzureManage = "azuremanage";
         }
 
         internal static class TemplateName
@@ -872,6 +887,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             internal const string PXUseInlineExpressCheckoutHtml = "PXUseInlineExpressCheckoutHtml";
             internal const string PXExpressCheckoutUseIntStaticResources = "PXExpressCheckoutUseIntStaticResources";
             internal const string PXExpressCheckoutUseProdStaticResources = "PXExpressCheckoutUseProdStaticResources";
+            internal const string PXUseShortURLController = "PXUseShortURLController";
 
             // Used to enable the china union pay payment method for the CN market for international partners
             internal const string PXEnableCUPInternational = "PXEnableCUPInternational";
@@ -919,6 +935,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
 
         internal static class PaymentInstrument
         {
+            internal const string DetailsCVVToken = "details.cvvToken";
             internal const string Details = "details";
             internal const string PaymentMethod = "paymentMethod";
             internal const string PaymentMethodFamily = "paymentMethodFamily";
@@ -1170,6 +1187,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             public const string Checkout = "Checkout";
             public const string Addresses = "Addresses";
             public const string RewardsDescription = "rewards";
+            public const string MSRewards = "msrewards";
             public const string StaticDescription = "static";
             public const string ConfirmDescription = "confirm";
             public const string InitializeDescription = "initialize";
@@ -1229,6 +1247,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             internal const string DeviceId = "&deviceId={0}";
             internal const string Language = "&language={0}";
             internal const string GetPaymentMethods = PimsVersion + "/paymentMethods?country={0}&family={1}&type={2}&language={3}";
+            internal const string GetEligiblePaymentMethods = PimsVersion + "/{0}/paymentInstruments/getEligiblePaymentMethods";
             internal const string GetHIPVisualCaptcha = "v1.0/challenge/visual?partnerid={0}";
             internal const string GetHIPAudioCaptcha = "v1.0/challenge/audio?partnerid={0}";
             internal const string PostHIPVisualCaptcha = "v1.0/challenge/visual/solution?partnerid={0}&azureregion={1}";
@@ -1862,6 +1881,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             public const string Search = "search";
             public const string SearchTransactions = "searchTransactions";
             public const string Replace = "replace";
+            public const string Redeem = "redeem";
             public const string FundStoredValue = "fundStoredValue";
             public const string Default = "default";
             public const string Offer = "offer";
@@ -1871,6 +1891,13 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             public const string Confirm = "confirm";
             public const string Initialize = "initialize";
             public const string Get = "get";
+        }
+
+        internal static class RewardsOperations
+        {
+            public const string SelectChallengeType = "selectChallengeType";
+            public const string SubmitChallengeCode = "submitChallengeCode";
+            public const string Error = "error";
         }
 
         internal static class Component
@@ -1909,6 +1936,9 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         {
             public const string ComponentsDataConfirmWindowSize = "componentsData.confirm.windowSize";
             public const string PaymentRequestClientActions = "paymentRequestClientActions";
+            public const string Amount = "amount";
+            public const string AllowedPaymentMethods = "merchantAccountProfile.allowedPaymentMethods";
+            public const string Capabilities = "capabilities";
         }
 
         internal static class Profile
@@ -2096,6 +2126,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
 
             public const string PaymentMethodFamily = "paymentMethodFamily";
             public const string PaymentMethodType = "paymentMethodType";
+            public const string PaymentMethodCountry = "paymentMethodCountry";
             public const string SavePaymentDetails = "savePaymentDetails";
             public const string UpdateAddressEnabled = "update_address_enabled";
             public const string ExpressCheckoutPaymentData = "expressCheckoutPaymentData";
@@ -2298,6 +2329,11 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         internal static class Prefixes
         {
             internal const string PaymentInstrumentSessionPrefix = "PX-3DS2-";
+        }
+
+        internal static class DisplayHintIdPrefixes
+        {
+            internal const string OptionTextContainer = "optionTextContainer_";
         }
 
         internal static class ShortURLServiceTimeToLive

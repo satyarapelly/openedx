@@ -65,8 +65,6 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.ShortURLDB
             if (!IsValidUri(bigURL))
             {
                 Exception ex = new ArgumentException("Invalid URL format.");
-
-                // hack commenting as part of merge conflicts.
                 SllWebLogger.DatabaseActionResult(
                     false,
                     this.dbName,
