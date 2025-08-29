@@ -34,7 +34,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         [HttpPost]
         public async Task<PIDLResource> PostRedeemRequest(
             [FromBody] MSRewardsRedeemRequest redeemData,
-            [FromQuery] string accountId,
+            [FromRoute] string accountId,
             [FromQuery] string country = null,
             [FromQuery] string language = null,
             [FromQuery] string partner = Constants.ServiceDefaults.DefaultPartnerName)

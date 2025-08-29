@@ -33,7 +33,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         [HttpGet]
         public List<PIDLResource> Get(
             [FromRoute] string accountId,
-            [FromRoute] string country,
+            [FromQuery] string country,
             [FromQuery] string? language = null,
             [FromQuery] string partner = Constants.ServiceDefaults.DefaultPartnerName,
             [FromQuery] string? type = null)
@@ -64,7 +64,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         [ApiExplorerSettings(IgnoreApi = true)]
         public List<PIDLResource> GetStandaloneTaxPidl(
             [FromRoute] string accountId,
-            [FromRoute] string country,
+            [FromQuery] string country,
             [FromQuery] string operation,
             [FromQuery] string? language = null,
             [FromQuery] string partner = Constants.ServiceDefaults.DefaultPartnerName,
@@ -284,7 +284,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <returns>A list of PIDLResource object</returns>
         [HttpGet]
         [ApiExplorerSettings(IgnoreApi = true)]
-        public List<PIDLResource> GetStandaloneTaxPidl([FromRoute] string country, [FromQuery] string operation, [FromQuery] string? language = null, [FromQuery] string partner = Constants.ServiceDefaults.DefaultPartnerName, [FromQuery] string? type = null, [FromQuery] string? scenario = null)
+        public List<PIDLResource> GetStandaloneTaxPidl([FromQuery] string country, [FromQuery] string operation, [FromQuery] string? language = null, [FromQuery] string partner = Constants.ServiceDefaults.DefaultPartnerName, [FromQuery] string? type = null, [FromQuery] string? scenario = null)
         {
             return this.GetStandaloneTaxPidl(
                 string.Empty,
