@@ -1359,7 +1359,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A card profeil object</response>
         /// <returns>A payment instrument object</returns>
         [HttpGet]
-        public async Task<object> GetCardProfile([FromRoute] string accountId, [FromQuery] string piid, [FromQuery] ulong deviceId)
+        public async Task<object> GetCardProfile([FromRoute] string accountId, [FromRoute] string piid, [FromQuery] ulong deviceId)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
             this.Request.AddTracingProperties(accountId, piid, null, null);
@@ -1379,7 +1379,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A card profeil object</response>
         /// <returns>A payment instrument object</returns>
         [HttpGet]
-        public async Task<object> GetSeCardPersos([FromRoute] string accountId, [FromQuery] string piid, [FromQuery] ulong deviceId)
+        public async Task<object> GetSeCardPersos([FromRoute] string accountId, [FromRoute] string piid, [FromQuery] ulong deviceId)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
             this.Request.AddTracingProperties(accountId, piid, null, null);
@@ -1400,7 +1400,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A payment instrument object</response>
         /// <returns>A object</returns>
         [HttpPost]
-        public async Task<object> PostReplenishTransactionCredentials([FromRoute] string accountId, [FromQuery] string piid, [FromQuery] ulong deviceId, [FromBody] object requestData)
+        public async Task<object> PostReplenishTransactionCredentials([FromRoute] string accountId, [FromRoute] string piid, [FromQuery] ulong deviceId, [FromBody] object requestData)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
             this.Request.AddTracingProperties(accountId, piid, null, null);
@@ -1421,7 +1421,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A payment instrument object</response>
         /// <returns>A object</returns>
         [HttpPost]
-        public async Task<object> AcquireLUKs([FromRoute] string accountId, [FromQuery] string piid, [FromQuery] ulong deviceId, [FromBody] object requestData)
+        public async Task<object> AcquireLUKs([FromRoute] string accountId, [FromRoute] string piid, [FromQuery] ulong deviceId, [FromBody] object requestData)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
             this.Request.AddTracingProperties(accountId, piid, null, null);
@@ -1441,7 +1441,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A payment instrument object</response>
         /// <returns>A object</returns>
         [HttpPost]
-        public async Task<object> ConfirmLUKs([FromRoute] string accountId, [FromQuery] ulong deviceId, [FromQuery] string piid)
+        public async Task<object> ConfirmLUKs([FromRoute] string accountId, [FromQuery] ulong deviceId, [FromRoute] string piid)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
             this.Request.AddTracingProperties(accountId, piid, null, null);
@@ -1462,7 +1462,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
         /// <response code="200">A payment instrument object</response>
         /// <returns>A object</returns>
         [HttpPost]
-        public async Task<object> ValidateCvv([FromRoute] string accountId, [FromQuery] string piid, [FromQuery] string language, [FromBody] object requestData)
+        public async Task<object> ValidateCvv([FromRoute] string accountId, [FromRoute] string piid, [FromQuery] string language, [FromBody] object requestData)
         {
             EventTraceActivity traceActivityId = this.Request.GetRequestCorrelationId();
             this.Request.AddTracingProperties(accountId, piid, null, null);
