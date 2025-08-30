@@ -1,22 +1,21 @@
-﻿// <copyright file="PXTraceCorrelationHandler.cs" company="Microsoft Corporation">Copyright (c) Microsoft 2013. All rights reserved.</copyright>
+// <copyright file="PXTraceCorrelationHandler.cs" company="Microsoft Corporation">Copyright (c) Microsoft 2013. All rights reserved.</copyright>
 
 namespace Microsoft.Commerce.Payments.PXCommon
 {
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Http.Extensions;
-    using Microsoft.AspNetCore.Routing;
-    using Microsoft.Commerce.Payments.Common;
-    using Microsoft.Commerce.Payments.Common.Tracing;
-    using Microsoft.Commerce.Payments.Common.Web;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
-    using System.Linq;
     using System.Net;
     using System.Net.Http;
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
+    using System.Web;
+    using System.Web.Http.Routing;
+    using Microsoft.Commerce.Payments.Common;
+    using Microsoft.Commerce.Payments.Common.Tracing;
+    using Microsoft.Commerce.Payments.Common.Web;
+    using Microsoft.Commerce.Tracing;
     using static Microsoft.Commerce.Payments.Common.PaymentConstants.Web;
     using CorrelationVector = Microsoft.CommonSchema.Services.Logging.CorrelationVector;
     using Sll = Microsoft.CommonSchema.Services.Logging.Sll;
@@ -34,73 +33,42 @@ namespace Microsoft.Commerce.Payments.PXCommon
         private const string DefaultLogValue = "<none>";
         private const int DefaultConnectionLeaseTimeoutInMs = 120 * 1000;
         private const int DefaultMaxIdleTime = -1;
-        private readonly IHttpContextAccessor httpContextAccessor;
-        private readonly RequestDelegate _next;
         private bool isDependentServiceRequest;
 
-        public PXTraceCorrelationHandler(string serviceName, HttpMessageHandler innerHandler, bool isDependentServiceRequest, Action<string, EventTraceActivity> logError = null, IHttpContextAccessor httpContextAccessor = null)
+        public PXTraceCorrelationHandler(string serviceName, HttpMessageHandler innerHandler, bool isDependentServiceRequest, Action<string, EventTraceActivity> logError = null)
             : base(innerHandler)
         {
             this.ServiceName = serviceName;
             this.isDependentServiceRequest = isDependentServiceRequest;
-            this.httpContextAccessor = httpContextAccessor;
-            this.LogError = logError ?? ((_, __) => { });
-            this._next = _ => Task.CompletedTask;
+            this.LogError = logError ?? ((m, t) => PaymentsEventSource.Log.TracingHandlerTraceError(m, t));
         }
 
         public PXTraceCorrelationHandler(
-            string serviceName,
-            Action<string, string, string, string, string, string, HttpRequestMessage, HttpResponseMessage, string, string, string, string, string, string, string, string> logIncomingRequestToAppInsight,
-            IHttpContextAccessor httpContextAccessor = null)
+            string serviceName, 
+            Action<string, string, string, string, string, string, HttpRequestMessage, HttpResponseMessage, string, string, string, string, string, string, string, string> logIncomingRequestToAppInsight)
         {
             this.ServiceName = serviceName;
             this.isDependentServiceRequest = false;
             this.LogIncomingRequestToAppInsight = logIncomingRequestToAppInsight;
-            this.httpContextAccessor = httpContextAccessor;
-            this._next = _ => Task.CompletedTask;
         }
 
         public PXTraceCorrelationHandler(
-            RequestDelegate next,
-            string serviceName,
-            Action<string, string, string, string, string, string, HttpRequestMessage, HttpResponseMessage, string, string, string, string, string, string, string, string> logIncomingRequestToAppInsight,
-            IHttpContextAccessor httpContextAccessor = null)
-            : this(serviceName, logIncomingRequestToAppInsight, httpContextAccessor)
-        {
-            this._next = next;
-        }
-
-        public PXTraceCorrelationHandler(
-            string serviceName,
-            HttpMessageHandler innerHandler,
+            string serviceName, 
+            HttpMessageHandler innerHandler, 
             bool isDependentServiceRequest,
-            Action<string, string, HttpRequestMessage, HttpResponseMessage, string, string, string, string> logOutgoingToAppInsight,
-            IHttpContextAccessor httpContextAccessor = null)
+            Action<string, string, HttpRequestMessage, HttpResponseMessage, string, string, string, string> logOutgoingToAppInsight)
            : base(innerHandler)
         {
             this.ServiceName = serviceName;
             this.isDependentServiceRequest = isDependentServiceRequest;
             this.LogToApplicationInsight = logOutgoingToAppInsight;
-            this.httpContextAccessor = httpContextAccessor;
-            this._next = _ => Task.CompletedTask;
-        }
-
-        public PXTraceCorrelationHandler(
-            RequestDelegate next,
-            string serviceName,
-            bool isDependentServiceRequest = false,
-            Action<string, EventTraceActivity> logError = null,
-            IHttpContextAccessor httpContextAccessor = null)
-            : this(serviceName, (HttpMessageHandler)null, isDependentServiceRequest, logError, httpContextAccessor)
-        {
-            this._next = next;
         }
 
         private Action<string, string, HttpRequestMessage, HttpResponseMessage, string, string, string, string> LogToApplicationInsight { get; set; }
 
         private Action<string, string, string, string, string, string, HttpRequestMessage, HttpResponseMessage, string, string, string, string, string, string, string, string> LogIncomingRequestToAppInsight { get; set; }
 
-        public Action<string, EventTraceActivity> LogError { get; set; }
+        private Action<string, EventTraceActivity> LogError { get; set; }
 
         private string ServiceName { get; set; }
 
@@ -163,103 +131,6 @@ namespace Microsoft.Commerce.Payments.PXCommon
             }
         }
 
-        public async Task InvokeAsync(HttpContext context)
-        {
-            if (this.isDependentServiceRequest)
-            {
-                await this._next(context);
-                return;
-            }
-
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-            string startTime = DateTime.UtcNow.ToString("o");
-
-            var request = context.Request;
-            var requestMessage = request.ToHttpRequestMessage();
-
-            var routeValues = context.GetRouteData()?.Values;
-            if (routeValues != null)
-            {
-                requestMessage.SetRouteData(new RouteValueDictionary(routeValues));
-            }
-
-            void CopyItemsToOptions()
-            {
-                foreach (var item in context.Items)
-                {
-                    if (item.Key is string key)
-                    {
-                        requestMessage.Options.Set(new HttpRequestOptionsKey<object>(key), item.Value);
-                    }
-                }
-            }
-
-            CopyItemsToOptions();
-
-            string operationName = this.GetOperationName(requestMessage);
-            if (!context.Items.ContainsKey(PaymentConstants.Web.Properties.OperationName))
-            {
-                context.Items[PaymentConstants.Web.Properties.OperationName] = operationName;
-                requestMessage.Options.Set(new HttpRequestOptionsKey<object>(PaymentConstants.Web.Properties.OperationName), operationName);
-            }
-
-            CorrelationVector correlationVector = SllCorrelationVectorManager.SetCorrelationVectorAtRequestEntry(requestMessage);
-            EventTraceActivity serverTraceId = new EventTraceActivity { CorrelationVectorV4 = correlationVector };
-            EventTraceActivity requestTraceId = GetOrCreateCorrelationIdFromHeader(requestMessage);
-
-            if (!context.Items.ContainsKey(PaymentConstants.Web.Properties.TrackingId))
-            {
-                string trackingId = GetOrCreateTrackingIdFromHeader(requestMessage);
-                context.Items[PaymentConstants.Web.Properties.TrackingId] = trackingId;
-                requestMessage.Options.Set(new HttpRequestOptionsKey<object>(PaymentConstants.Web.Properties.TrackingId), trackingId);
-            }
-
-            if (!context.Items.ContainsKey(PaymentConstants.Web.Properties.ServerTraceId))
-            {
-                context.Items[PaymentConstants.Web.Properties.ServerTraceId] = serverTraceId;
-            }
-
-            if (!context.Items.ContainsKey(PaymentConstants.Web.Properties.ClientTraceId))
-            {
-                context.Items[PaymentConstants.Web.Properties.ClientTraceId] = requestTraceId;
-            }
-
-            string reqPayload = await request.GetRequestPayload();
-            requestMessage.Content = new StringContent(reqPayload ?? string.Empty, Encoding.UTF8, request.ContentType);
-
-            try
-            {
-                await this._next(context);
-
-                CopyItemsToOptions();
-
-                context.Response.Headers.Add("x-info", "px-azure");
-                context.Response.Headers.Add(PaymentConstants.PaymentExtendedHttpHeaders.CorrelationId, requestTraceId.ActivityId.ToString());
-                foreach (DependenciesCertInfo dependencyNameUsingCert in Enum.GetValues(typeof(DependenciesCertInfo)))
-                {
-                    this.RemoveRequestContextItem(dependencyNameUsingCert.ToString());
-                }
-
-                var responsePayload = await context.Response.GetResponsePayloadAsync();
-                var responseMessage = new HttpResponseMessage((HttpStatusCode)context.Response.StatusCode)
-                {
-                    Content = new StringContent(responsePayload ?? string.Empty, Encoding.UTF8, context.Response.ContentType)
-                };
-
-                foreach (var header in context.Response.Headers)
-                {
-                    responseMessage.Headers.TryAddWithoutValidation(header.Key, header.Value.ToArray());
-                }
-
-                await this.TraceOperation(requestMessage, responseMessage, request.GetOperationNameWithPendingOnInfo(), startTime, stopwatch, string.Empty, requestTraceId, serverTraceId);
-            }
-            finally
-            {
-                stopwatch.Stop();
-            }
-        }
-
         /// <summary>
         /// SLL Tracing
         /// </summary>
@@ -286,18 +157,17 @@ namespace Microsoft.Commerce.Payments.PXCommon
                 // Don't even get the route data if both are present
                 if (string.IsNullOrWhiteSpace(accountId) || string.IsNullOrWhiteSpace(paymentInstrumentId))
                 {
-                    var data = request.GetRouteDataSafe();
-
+                    IHttpRouteData data = request.GetRouteData();
                     if (data != null)
                     {
-                        if (string.IsNullOrWhiteSpace(accountId) && data.TryGetValue("accountId", out var accId))
+                        if (string.IsNullOrWhiteSpace(accountId))
                         {
-                            accountId = accId?.ToString();
+                            accountId = data.Values.ContainsKey("accountId") ? data.Values["accountId"] as string : null;
                         }
 
-                        if (string.IsNullOrWhiteSpace(paymentInstrumentId) && data.TryGetValue("instrumentId", out var piId))
+                        if (string.IsNullOrWhiteSpace(paymentInstrumentId))
                         {
-                            paymentInstrumentId = piId?.ToString();
+                            paymentInstrumentId = data.Values.ContainsKey("paymentInstrumentId") ? data.Values["paymentInstrumentId"] as string : null;
                         }
                     }
                 }
@@ -352,9 +222,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
 
                 bool isTest = request.HasTestContext();
 
-                if (LoggingConfig.Mode == LoggingMode.Sll)
-                {
-                    SllWebLogger.TracePXServiceIncomingOperation(
+                SllWebLogger.TracePXServiceIncomingOperation(
                     operationName,
                     accountId,
                     paymentInstrumentId,
@@ -377,83 +245,6 @@ namespace Microsoft.Commerce.Payments.PXCommon
                     partner: partner,
                     pidlOperation: pidlOperation,
                     avsSuggest: avsSuggest);
-                }
-                else if (LoggingConfig.Mode == LoggingMode.OpenTelemetry)
-                {
-                    Logger.Qos.TracePXServiceIncomingOperation(
-                        operationName,
-                        accountId,
-                        paymentInstrumentId,
-                        paymentMethodFamily,
-                        paymentMethodType,
-                        country,
-                        request,
-                        response,
-                        requestPayload,
-                        responsePaylod,
-                        startTime,
-                        stopwatch,
-                        requestTraceActivityId,
-                        authenticationInfo,
-                        serverTraceActivityId,
-                        message,
-                        errorCode,
-                        errorMessage,
-                        isTest,
-                        partner: partner,
-                        pidlOperation: pidlOperation,
-                        avsSuggest: avsSuggest);
-                }
-                else
-                {
-                    SllWebLogger.TracePXServiceIncomingOperation(
-                    operationName,
-                    accountId,
-                    paymentInstrumentId,
-                    paymentMethodFamily,
-                    paymentMethodType,
-                    country,
-                    request,
-                    response,
-                    requestPayload,
-                    responsePaylod,
-                    startTime,
-                    stopwatch,
-                    requestTraceActivityId,
-                    authenticationInfo,
-                    serverTraceActivityId,
-                    message,
-                    errorCode,
-                    errorMessage,
-                    isTest,
-                    partner: partner,
-                    pidlOperation: pidlOperation,
-                    avsSuggest: avsSuggest);
-
-                    Logger.Qos.TracePXServiceIncomingOperation(
-                        operationName,
-                        accountId,
-                        paymentInstrumentId,
-                        paymentMethodFamily,
-                        paymentMethodType,
-                        country,
-                        request,
-                        response,
-                        requestPayload,
-                        responsePaylod,
-                        startTime,
-                        stopwatch,
-                        requestTraceActivityId,
-                        authenticationInfo,
-                        serverTraceActivityId,
-                        message,
-                        errorCode,
-                        errorMessage,
-                        isTest,
-                        partner: partner,
-                        pidlOperation: pidlOperation,
-                        avsSuggest: avsSuggest);
-                }
 
                 AuditLogger.AuditIncomingCall(
                 operationName,
@@ -480,7 +271,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
             }
             catch (Exception ex)
             {
-                this.LogError?.Invoke("PXTraceCorrelationHandler.TraceClientOperation: " + ex.Message, requestTraceId);
+                this.LogError("PXTraceCorrelationHandler.TraceClientOperation: " + ex.Message, requestTraceId);
             }
         }
 
@@ -527,9 +318,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
                 string certInfo = request.GetProperty(PaymentConstants.Web.Properties.CertInfo) as string ?? "<none>";
                 string servicePointData = request.GetProperty(Properties.ServicePointData) as string ?? "<none>";
 
-                if (LoggingConfig.Mode == LoggingMode.Sll)
-                {
-                    SllWebLogger.TracePXServiceOutgoingOperation(
+                SllWebLogger.TracePXServiceOutgoingOperation(
                     operationName,
                     serviceName,
                     request,
@@ -542,53 +331,6 @@ namespace Microsoft.Commerce.Payments.PXCommon
                     string.Empty,
                     certInfo,
                     servicePointData);
-                }
-                else if (LoggingConfig.Mode == LoggingMode.OpenTelemetry)
-                {
-                    Logger.Qos.TracePXServiceOutgoingOperation(
-                        operationName,
-                        serviceName,
-                        request,
-                        response,
-                        await request.GetRequestPayload(),
-                        responseContent,
-                        startTime,
-                        stopwatch,
-                        requestTraceId.ActivityId.ToString(),
-                        string.Empty,
-                        certInfo,
-                        servicePointData);
-                }
-                else
-                {
-                    SllWebLogger.TracePXServiceOutgoingOperation(
-                    operationName,
-                    serviceName,
-                    request,
-                    response,
-                    await request.GetRequestPayload(),
-                    responseContent,
-                    startTime,
-                    stopwatch,
-                    requestTraceId.ActivityId.ToString(),
-                    string.Empty,
-                    certInfo,
-                    servicePointData);
-
-                    Logger.Qos.TracePXServiceOutgoingOperation(
-                        operationName,
-                        serviceName,
-                        request,
-                        response,
-                        await request.GetRequestPayload(),
-                        responseContent,
-                        startTime,
-                        stopwatch,
-                        requestTraceId.ActivityId.ToString(),
-                        string.Empty,
-                        certInfo,
-                        servicePointData);
-                }
 
                 this.LogToApplicationInsight?.Invoke(
                     operationName,
@@ -602,7 +344,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
             }
             catch (Exception ex)
             {
-                this.LogError?.Invoke("PXTraceCorrelationHandler.TraceClientOperation: " + ex.Message, requestTraceId);
+                this.LogError("PXTraceCorrelationHandler.TraceClientOperation: " + ex.Message, requestTraceId);
             }
         }
 
@@ -630,12 +372,14 @@ namespace Microsoft.Commerce.Payments.PXCommon
             return trackingId;
         }
 
-        private void RemoveRequestContextItem(string key)
+        private static void RemoveRequestContextItem(string key)
         {
-            IDictionary<object, object> items = this.httpContextAccessor?.HttpContext?.Items;
-            if (items != null && items.ContainsKey(key))
+            if (HttpContext.Current?.Request?.RequestContext?.HttpContext?.Items != null)
             {
-                items.Remove(key);
+                if (HttpContext.Current.Request.RequestContext.HttpContext.Items.Contains(key))
+                {
+                    HttpContext.Current.Request.RequestContext.HttpContext.Items.Remove(key);
+                }
             }
         }
 
@@ -678,19 +422,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
             }
             catch (Exception ex)
             {
-                if (LoggingConfig.Mode == LoggingMode.Sll)
-                {
-                    SllWebLogger.TracePXServiceException(string.Format("Exception thrown while configuring ConnectionLeaseTimeout of ServicePoint {0}: {1}", request?.RequestUri?.ToString(), ex.ToString()), EventTraceActivity.Empty);
-                }
-                else if (LoggingConfig.Mode == LoggingMode.OpenTelemetry)
-                {
-                    Logger.Qos.TracePXServiceException(string.Format("Exception thrown while configuring ConnectionLeaseTimeout of ServicePoint {0}: {1}", request?.RequestUri?.ToString(), ex.ToString()), EventTraceActivity.Empty);
-                }
-                else
-                {
-                    SllWebLogger.TracePXServiceException(string.Format("Exception thrown while configuring ConnectionLeaseTimeout of ServicePoint {0}: {1}", request?.RequestUri?.ToString(), ex.ToString()), EventTraceActivity.Empty);
-                    Logger.Qos.TracePXServiceException(string.Format("Exception thrown while configuring ConnectionLeaseTimeout of ServicePoint {0}: {1}", request?.RequestUri?.ToString(), ex.ToString()), EventTraceActivity.Empty);
-                }
+                SllWebLogger.TracePXServiceException(string.Format("Exception thrown while configuring ConnectionLeaseTimeout of ServicePoint {0}: {1}", request?.RequestUri?.ToString(), ex.ToString()), EventTraceActivity.Empty);
             }
         }
 
@@ -700,13 +432,13 @@ namespace Microsoft.Commerce.Payments.PXCommon
             if (operationName == null)
             {
                 // If the operation name does not exist in the request properties, then parse the request data to construct operation name.
-                var data = request.GetRouteDataSafe();
+                IHttpRouteData data = request.GetRouteData();
 
                 StringBuilder counterNameBuilder = new StringBuilder();
                 if (data != null)
                 {
-                    string controller = data.TryGetValue("controller", out var controllerObj) ? controllerObj?.ToString() : null;
-
+                    // PaymentInstrumentOperationsController will be retrired after Px fully moved to PaymentInstrumentsController/resume
+                    string controller = data.Values["controller"] as string;
                     if (string.Equals(controller, PaymentInstrumentOperationsController, StringComparison.InvariantCultureIgnoreCase))
                     {
                         controller = PaymentInstrumentsController;
@@ -716,10 +448,10 @@ namespace Microsoft.Commerce.Payments.PXCommon
                     counterNameBuilder.Append("-");
                     counterNameBuilder.Append(request.Method.ToString());
 
-                    if (data.TryGetValue("action", out var actionObj) && actionObj != null)
+                    if (data.Values.ContainsKey("action"))
                     {
                         counterNameBuilder.Append("-");
-                        counterNameBuilder.Append(actionObj.ToString());
+                        counterNameBuilder.Append(data.Values["action"]);
                     }
                 }
                 else
@@ -779,6 +511,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
                 // then the requests overlap.To avoid this we do trace transfer from requestTraceId to ServerTraceId.
                 // All the payments servertraces will be correlated with serverTraceId.
                 request.Properties.Add(PaymentConstants.Web.Properties.ServerTraceId, serverTraceId);
+                PaymentsEventSource.Log.CommonMappingCorrelationId(serverTraceId, requestTraceId);
             }
             else
             {
@@ -805,7 +538,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
                 response.Headers.Add(PaymentConstants.PaymentExtendedHttpHeaders.CorrelationId, requestTraceId.ActivityId.ToString());
                 foreach (DependenciesCertInfo dependencyNameUsingCert in Enum.GetValues(typeof(DependenciesCertInfo)))
                 {
-                    this.RemoveRequestContextItem(dependencyNameUsingCert.ToString());
+                    RemoveRequestContextItem(dependencyNameUsingCert.ToString());
                 }
 
                 await this.TraceOperation(request, response, request.GetOperationNameWithPendingOnInfo(), startTime, stopwatch, string.Empty, requestTraceId, serverTraceId);
