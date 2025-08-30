@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Commerce.Payments.Common.Web;
 using Microsoft.Commerce.Payments.PXCommon;
 using Microsoft.Commerce.Payments.PXService.Settings;
@@ -66,14 +65,10 @@ namespace Microsoft.Commerce.Payments.PXService
                 return selectorInstance.SupportedVersions;
             });
 
-            builder.Services.AddTransient<PXTracingHttpClient>(sp =>
-            {
-                var accessor = sp.GetRequiredService<IHttpContextAccessor>();
-                return new PXTracingHttpClient(
+            builder.Services.AddTransient<PXTracingHttpClient>(_ =>
+                new PXTracingHttpClient(
                     Constants.ServiceNames.PXService,
-                    logOutgoingRequestToApplicationInsight: ApplicationInsightsProvider.LogOutgoingOperation,
-                    httpContextAccessor: accessor);
-            });
+                    logOutgoingRequestToApplicationInsight: ApplicationInsightsProvider.LogOutgoingOperation));
 
             //if (settings.ValidateCors)
             //{
