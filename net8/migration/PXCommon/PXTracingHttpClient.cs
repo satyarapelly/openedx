@@ -4,7 +4,6 @@ namespace Microsoft.Commerce.Payments.PXCommon
 {
     using System;
     using System.Net.Http;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Commerce.Payments.Common.Web;
 
@@ -24,8 +23,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
             string serviceName,
             Action<string, EventTraceActivity> logError = null,
             Action<string, string, EventTraceActivity> logRequest = null,
-            Action<string, EventTraceActivity> logResponse = null,
-            IHttpContextAccessor httpContextAccessor = null)
+            Action<string, EventTraceActivity> logResponse = null)
             : base(new PXTraceCorrelationHandler(
                 serviceName: serviceName,
                 innerHandler: new PXTracingHandler(
@@ -35,8 +33,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
                     logRequest: logRequest,
                     logResponse: logResponse),
                 isDependentServiceRequest: true,
-                logError: logError,
-                httpContextAccessor: httpContextAccessor))
+                logError: logError))
         {
         }
 
@@ -53,9 +50,8 @@ namespace Microsoft.Commerce.Payments.PXCommon
             HttpMessageHandler httpMessageHandler,
             Action<string, EventTraceActivity> logError = null,
             Action<string, string, EventTraceActivity> logRequest = null,
-            Action<string, EventTraceActivity> logResponse = null,
-            IHttpContextAccessor httpContextAccessor = null) :
-            base(new PXTraceCorrelationHandler(
+            Action<string, EventTraceActivity> logResponse = null)
+            : base(new PXTraceCorrelationHandler(
                 serviceName: serviceName,
                 innerHandler: new PXTracingHandler(
                     serviceName: serviceName,
@@ -64,35 +60,30 @@ namespace Microsoft.Commerce.Payments.PXCommon
                     logRequest: logRequest,
                     logResponse: logResponse),
                 isDependentServiceRequest: true,
-                logError: logError,
-                httpContextAccessor: httpContextAccessor))
+                logError: logError))
         {
         }
 
         public PXTracingHttpClient(
             string serviceName,
             HttpMessageHandler httpMessageHandler,
-            Action<string, string, HttpRequestMessage, HttpResponseMessage, string, string, string, string> logOutgoingRequestToApplicationInsight,
-            IHttpContextAccessor httpContextAccessor = null) :
-            base(new PXTraceCorrelationHandler(
+            Action<string, string, HttpRequestMessage, HttpResponseMessage, string, string, string, string> logOutgoingRequestToApplicationInsight)
+            : base(new PXTraceCorrelationHandler(
                 serviceName: serviceName,
                 innerHandler: httpMessageHandler,
                 isDependentServiceRequest: true,
-                logOutgoingToAppInsight: logOutgoingRequestToApplicationInsight,
-                httpContextAccessor: httpContextAccessor))
+                logOutgoingToAppInsight: logOutgoingRequestToApplicationInsight))
         {
         }
 
         public PXTracingHttpClient(
             string serviceName,
-            Action<string, string, HttpRequestMessage, HttpResponseMessage, string, string, string, string> logOutgoingRequestToApplicationInsight,
-            IHttpContextAccessor httpContextAccessor = null) :
-            base(new PXTraceCorrelationHandler(
+            Action<string, string, HttpRequestMessage, HttpResponseMessage, string, string, string, string> logOutgoingRequestToApplicationInsight)
+            : base(new PXTraceCorrelationHandler(
                 serviceName: serviceName,
                 innerHandler: new HttpClientHandler(),
                 isDependentServiceRequest: true,
-                logOutgoingToAppInsight: logOutgoingRequestToApplicationInsight,
-                httpContextAccessor: httpContextAccessor))
+                logOutgoingToAppInsight: logOutgoingRequestToApplicationInsight))
         {
         }
     }
