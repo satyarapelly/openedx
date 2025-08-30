@@ -1,26 +1,27 @@
-﻿// <copyright file="PXServiceAuthorizationFilterAttribute.cs" company="Microsoft">Copyright (c) Microsoft. All rights reserved.</copyright>
+// <copyright file="PXServiceAuthorizationFilterAttribute.cs" company="Microsoft">Copyright (c) Microsoft. All rights reserved.</copyright>
 
 namespace Microsoft.Commerce.Payments.PXService
 {
-	using System;
-	using System.Diagnostics;
-	using System.Linq;
-	using System.Net;
-	using System.Security.Cryptography.X509Certificates;
-	using System.Security.Principal;
-	using System.Threading;
-	using System.Threading.Tasks;
-	using Microsoft.ApplicationInsights.AspNetCore.Extensions;
-	using Microsoft.AspNetCore.Authorization;
-	using Microsoft.AspNetCore.Http;
-	using Microsoft.AspNetCore.Mvc.Filters;
-	using Microsoft.Commerce.Payments.Common.Authorization;
-	using Microsoft.Commerce.Payments.PXCommon;
-	using Microsoft.Extensions.Primitives;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Net.Http.Headers;
+    using System.Security.Cryptography.X509Certificates;
+    using System.Security.Principal;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using System.Web.Http;
+    using System.Web.Http.Controllers;
+    using Microsoft.Commerce.Payments.Common.Authorization;
+    using Microsoft.Commerce.Payments.PXCommon;
+    using Properties = Common.PaymentConstants.Web.Properties;
 
-    public sealed class PXServiceAuthorizationFilterAttribute : Attribute, IAsyncAuthorizationFilter
+    public sealed class PXServiceAuthorizationFilterAttribute : AuthorizeAttribute
     {
-        private static readonly IIdentity NullIdentity = new GenericIdentity("NULL", "NULL");
+        private static readonly IIdentity NullIdentity = new GenericIdentity("NULL", "NULL"); 
 
         public bool AllowUnauthenticatedHttpCalls { get; set; }
 
@@ -32,179 +33,210 @@ namespace Microsoft.Commerce.Payments.PXService
 
         public TokenMiseValidator TokenMiseValidator { get; set; }
 
-        public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
+        public override async Task OnAuthorizationAsync(HttpActionContext actionContext, CancellationToken cancellationToken)
         {
-            var request = context.HttpContext.Request;
-            var properties = context.HttpContext.Items;
-
-            properties["CallerName"] = GlobalConstants.ClientNames.Unknown;
-            string cV = string.Empty; // PXTraceCorrelationHandler.GetOrCreateCorrelationIdFromHeader(context.Result).CorrelationVectorV4.ToString();
-
-            if (request.IsHttps)
+            actionContext.Request.Properties[Properties.CallerName] = GlobalConstants.ClientNames.Unknown;
+            string cV = PXTraceCorrelationHandler.GetOrCreateCorrelationIdFromHeader(actionContext.Request).CorrelationVectorV4.ToString();
+            if (actionContext.Request.RequestUri.Scheme == Uri.UriSchemeHttps)
             {
-                if (AllowUnauthenticatedHttpsCalls || IsProbeUri(request.Path))
+                if (this.AllowUnauthenticatedHttpsCalls || IsProbeUri(actionContext.Request.RequestUri.PathAndQuery))
                 {
-                    context.HttpContext.User = new GenericPrincipal(NullIdentity, null);
-                    properties["CallerName"] = GlobalConstants.ClientNames.AnonymousCaller;
-                    return;
+                    actionContext.RequestContext.Principal = new AdminPrincipal(NullIdentity);
+                    actionContext.Request.Properties[Properties.CallerName] = GlobalConstants.ClientNames.AnonymousCaller;
+                    await base.OnAuthorizationAsync(actionContext, cancellationToken);
                 }
-
-                string certAuthResult = GlobalConstants.AuthResult.ByPass;
-                string tokenAuthResult = GlobalConstants.AuthResult.Succeed;
-
-                var partner = await AuthenticateTokenMISE(context.HttpContext, cV);
-
-                if (partner == null)
+                else
                 {
-                    tokenAuthResult = GlobalConstants.AuthResult.Failed;
-                    partner = AuthenticateByCert(context.HttpContext);
-                    certAuthResult = partner == null ? GlobalConstants.AuthResult.Failed : GlobalConstants.AuthResult.Succeed;
-                }
+                    string certAuthResult = GlobalConstants.AuthResult.ByPass;
+                    string tokenAuthResult = GlobalConstants.AuthResult.Succeed;
 
-                if (partner != null)
-                {
-                    properties["CertConfig"] = $"role {partner.Role}, requestUri {request.Path}, allow path {partner.AllowedAuthenticatedPathTemplate}";
-                    if (UserInformation.IsAuthorized(request.GetUri(), partner))
+                    var partner = await this.AuthenticateTokenMISE(actionContext, cancellationToken, cV);
+
+                    // Fail back to certificate authentication, once PIFD migration out certificate, 
+                    // the following lines should be removed.
+                    if (partner == null) 
                     {
-                        properties["CertPrinciple"] = "having principle";
-                        context.HttpContext.User = new GenericPrincipal(NullIdentity, null);
+                        tokenAuthResult = GlobalConstants.AuthResult.Failed;
+                        partner = this.AuthenticateByCert(actionContext);
+                        certAuthResult = partner == null ? 
+                            GlobalConstants.AuthResult.Failed : 
+                            GlobalConstants.AuthResult.Succeed;
                     }
-                    properties["CallerName"] = partner.PartnerName;
-                }
-                else
-                {
-                    context.Result = new Microsoft.AspNetCore.Mvc.ContentResult
-                    {
-                        StatusCode = (int)HttpStatusCode.Unauthorized,
-                        Content = ErrorConstants.ErrorMessages.CertRequired
-                    };
-                }
 
-                properties["CertAuthResult"] = certAuthResult;
-                properties["TokenAuthResult"] = tokenAuthResult;
+                    // Authorize partners
+                    if (partner != null) 
+                    {
+                        actionContext.Request.Properties[Properties.CertConfig] = string.Format("role {0}, requestUri {1}, authrizedCert allow path {2}, allow account {3}, AllowedUnAuthenticatedPath {4} ", partner.Role, actionContext.Request.RequestUri.AbsoluteUri, partner.AllowedAuthenticatedPathTemplate, partner.AllowedAccounts, partner.AllowedUnAuthenticatedPaths);
+                        if (UserInformation.IsAuthorized(actionContext.Request.RequestUri, partner))
+                        {
+                            // TODO: update with user principal
+                            actionContext.Request.Properties[Properties.CertPrinciple] = "having principle";
+                            actionContext.RequestContext.Principal = new AdminPrincipal(NullIdentity);
+                        }
+
+                        actionContext.Request.Properties[Properties.CallerName] = partner.PartnerName;
+                        await base.OnAuthorizationAsync(actionContext, cancellationToken);
+                    }
+                    else
+                    {
+                        // consider adding certRequired error message
+                        HandleDecline(actionContext, HttpStatusCode.Unauthorized, ErrorConstants.ErrorMessages.CertRequired);
+                    }
+
+                    actionContext.Request.Properties[Properties.CertAuthResult] = certAuthResult;
+                    actionContext.Request.Properties[Properties.TokenAuthResult] = tokenAuthResult;
+                }
             }
-            else
+            else if (actionContext.Request.RequestUri.Scheme == Uri.UriSchemeHttp)
             {
-                if (AllowUnauthenticatedHttpCalls || IsProbeUri(request.Path))
+                if (this.AllowUnauthenticatedHttpCalls || IsProbeUri(actionContext.Request.RequestUri.PathAndQuery))
                 {
-                    context.HttpContext.User = new GenericPrincipal(NullIdentity, null);
-                    properties["CallerName"] = GlobalConstants.ClientNames.AnonymousCaller;
+                    actionContext.RequestContext.Principal = new AdminPrincipal(NullIdentity);
+                    actionContext.Request.Properties[Properties.CallerName] = GlobalConstants.ClientNames.AnonymousCaller;
+                    await base.OnAuthorizationAsync(actionContext, cancellationToken);
                 }
                 else
                 {
-                    properties["CertAuthError"] = $"{AllowUnauthenticatedHttpCalls} {request.Path}";
-                    context.Result = new Microsoft.AspNetCore.Mvc.ContentResult
-                    {
-                        StatusCode = (int)HttpStatusCode.Forbidden,
-                        Content = ErrorConstants.ErrorMessages.ProtocolNotSupport
-                    };
+                    actionContext.Request.Properties[Properties.CertAuthError] = string.Format("{0} {1}", this.AllowUnauthenticatedHttpCalls, actionContext.Request.RequestUri.PathAndQuery);
+                    HandleDecline(actionContext, HttpStatusCode.Forbidden, ErrorConstants.ErrorMessages.ProtocolNotSupport);
                 }
             }
         }
 
-        private static bool IsProbeUri(PathString path)
+        private static bool IsProbeUri(string relativePath)
         {
-            if (!path.HasValue)
-            {
-                return false;
-            }
-
-            var trimmed = path.Value.TrimStart('/');
-
-            if (trimmed.Equals(GlobalConstants.EndPointNames.V7Probe, StringComparison.OrdinalIgnoreCase))
-            {
-                return true;
-            }
-
-            var segments = trimmed.Split('/', StringSplitOptions.RemoveEmptyEntries);
-            return segments.Length == 2
-                && segments[1].Equals(GlobalConstants.EndPointNames.V7Probe, StringComparison.OrdinalIgnoreCase)
-                && segments[0].StartsWith("v", StringComparison.OrdinalIgnoreCase);
+            return string.Equals(relativePath.Remove(0, 1), GlobalConstants.EndPointNames.V7Probe, StringComparison.OrdinalIgnoreCase);
         }
 
-        private UserInformation AuthenticateByCert(HttpContext httpContext)
+        private static void HandleDecline(HttpActionContext actionContext, HttpStatusCode statusCode, string errorMessage)
         {
-            X509Certificate2 cert = httpContext.Connection.ClientCertificate;
-            if (cert == null && httpContext.Request.Headers.TryGetValue("X-ARR-ClientCert", out StringValues certHeaders))
+            actionContext.Response = new HttpResponseMessage(statusCode)
             {
-                string certStr = certHeaders.FirstOrDefault();
+                ReasonPhrase = errorMessage
+            };
+        }
+
+        private UserInformation GetCertificateBySubjectName(string subject)
+        {
+            return this.UberUserDirectory.UserInformation.SingleOrDefault(
+                p => p?.CertificateVerificationRule != null 
+                && string.Equals(CertificateHelper.NormalizeDistinguishedName(p.CertificateVerificationRule.Subject), subject, StringComparison.OrdinalIgnoreCase));
+        }
+
+        private IIdentity[] ValidateCertificate(X509Certificate2 cert, HttpActionContext actionContext)
+        {
+            Management.CertificateVerificationCore.IdentitiesResult identitiesResult = null;
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+
+            try
+            {
+                //// Fetch certificate's identity, return cert's identity if already stored in cache (expiry time 1 hour), otherwise fetch from dSMS endpoint and store the result in cache
+                identitiesResult = this.CertificateAuthenticator.FetchIdentities(cert, true);
+                string certAuthInfo = string.Format(
+                                        "[VerifyCertificateEvent] subject = {0}, issuer = {1}, thumbprint = {2}, expirationDate = {3}, reason = {4}, verificationResult = {5}, Latency = {6}, partner = {7}",
+                                        cert?.Subject,
+                                        cert?.Issuer,
+                                        cert?.Thumbprint,
+                                        cert?.GetExpirationDateString(),
+                                        string.Format("Verification for {0} completed, Result: {1}, Message: {2}", cert?.Subject, identitiesResult?.Result, identitiesResult?.Message),
+                                        identitiesResult?.Result,
+                                        sw.ElapsedMilliseconds,
+                                        string.Join(",", identitiesResult?.Identities?.Select(x => x.Name)));
+
+                actionContext.Request.Properties[Properties.CertAuthInfo] = certAuthInfo;
+            }
+            catch (Exception ex)
+            {
+                actionContext.Request.Properties[Properties.CertAuthError] = string.Format("Fetch cert's identities failed : Subject: '{0}' Issuer: '{1}' Thumbprint: '{2}' is not configured as allowed client certificates for {3}. Error: {4}", cert == null ? "<none>" : cert.Subject, cert == null ? "<none>" : cert.Issuer, cert == null ? "<none>" : cert.Thumbprint, actionContext.Request.RequestUri.AbsoluteUri, ex.ToString());
+            }
+
+            return identitiesResult?.Identities?.ToArray();
+        }
+
+        private UserInformation AuthenticateByCert(HttpActionContext actionContext)
+        {
+            X509Certificate2 cert = actionContext.Request.GetClientCertificate();
+            if (cert == null)
+            {
+                string certStr = null;
+                IEnumerable<string> certHeaders;
+                if (actionContext.Request.Headers.TryGetValues("X-ARR-ClientCert", out certHeaders))
+                {
+                    certStr = certHeaders.FirstOrDefault();
+                }
+
                 if (!string.IsNullOrEmpty(certStr))
                 {
                     try
                     {
                         cert = new X509Certificate2(Convert.FromBase64String(certStr));
-                        httpContext.Items["CertInfo"] = $"Subject: '{cert.Subject}' Issuer: '{cert.Issuer}' Thumbprint: '{cert.Thumbprint}'";
+                        actionContext.Request.Properties[Properties.CertInfo] = string.Format("find certificate Subject: '{0}' Issuer: '{1}' Thumbprint: '{2}'  {3}", cert == null ? "<none>" : cert.Subject, cert == null ? "<none>" : cert.Issuer, cert == null ? "<none>" : cert.Thumbprint, actionContext.Request.RequestUri.AbsoluteUri);
                     }
                     catch (Exception ex)
                     {
-                        httpContext.Items["CertInfo"] = $"Can't parse cert: {ex}";
+                        actionContext.Request.Properties[Properties.CertInfo] = string.Format("Can't convert X-ARR-ClientCert into valid cert because: {0}", ex.ToString());
                     }
                 }
             }
 
+            UserInformation partner = null;
             if (cert != null)
             {
-                var identities = ValidateCertificate(cert, httpContext);
+                IIdentity[] identities = this.ValidateCertificate(cert, actionContext);
+
                 if (identities == null || identities.Length == 0 || !identities[0].IsAuthenticated)
                 {
-                    httpContext.Items["CertAuthError"] = $"Certificate not valid: {cert.Subject}";
-                    return null;
+                    // TODO: clean up logging to reflect new auth story.
+                    actionContext.Request.Properties[Properties.CertAuthError] = actionContext.Request.Properties[Properties.CertAuthError] ?? string.Format("Certificate's subject or issuer is not in the allowed list: Subject: '{0}' Issuer: '{1}' Thumbprint: '{2}' is not configured as allowed client certificates for {3}", cert == null ? "<none>" : cert.Subject, cert == null ? "<none>" : cert.Issuer, cert == null ? "<none>" : cert.Thumbprint, actionContext.Request.RequestUri.AbsoluteUri);
+                    HandleDecline(actionContext, HttpStatusCode.Unauthorized, ErrorConstants.ErrorMessages.CertRequired);
                 }
 
-                return UberUserDirectory.UserInformation.SingleOrDefault(p =>
-                    p?.CertificateVerificationRule != null &&
-                    CertificateHelper.NormalizeDistinguishedName(p.CertificateVerificationRule.Subject).Equals(
-                        CertificateHelper.NormalizeDistinguishedName(cert.Subject), StringComparison.OrdinalIgnoreCase));
+                string callerThumbprint = CertificateHelper.NormalizeThumbprint(cert.Thumbprint);
+                partner = this.GetCertificateBySubjectName(CertificateHelper.NormalizeDistinguishedName(cert.Subject));
             }
 
-            return null;
+            return partner;
         }
 
-        private IIdentity[] ValidateCertificate(X509Certificate2 cert, HttpContext httpContext)
-        {
-            var sw = Stopwatch.StartNew();
-            try
-            {
-                var result = CertificateAuthenticator.FetchIdentities(cert, true);
-                httpContext.Items["CertAuthInfo"] = $"subject = {cert.Subject}, result = {result?.Result}, latency = {sw.ElapsedMilliseconds}";
-                return result?.Identities?.ToArray();
-            }
-            catch (Exception ex)
-            {
-                httpContext.Items["CertAuthError"] = $"Cert identity fetch failed: {ex}";
-                return null;
-            }
-        }
-
-        private async Task<UserInformation> AuthenticateTokenMISE(HttpContext httpContext, string incomingRequestId)
+        private async Task<UserInformation> AuthenticateTokenMISE(
+            HttpActionContext actionContext,
+            CancellationToken cancellationToken,
+            string incomingRequestId)
         {
             try
             {
-                var authHeader = httpContext.Request.Headers["Authorization"].ToString();
-                var headerValue = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", authHeader.Split(' ').Last());
-                var result = await TokenMiseValidator.ValidateAsync(headerValue, incomingRequestId, CancellationToken.None);
-                if (result?.Success == true)
+                AuthenticationHeaderValue authenticationHeader = actionContext.Request.Headers.Authorization;
+                MiseTokenValidationResult miseResult = await this.TokenMiseValidator.ValidateAsync(authenticationHeader, incomingRequestId, cancellationToken);
+
+                if (miseResult != null)
                 {
-                    var caller = UberUserDirectory.UserInformation.SingleOrDefault(p =>
-                        string.Equals(p?.ApplicationId, result.ApplicationId, StringComparison.OrdinalIgnoreCase));
-                    if (caller == null)
+                    if (miseResult.Success)
                     {
-                        httpContext.Items["TokenAuthError"] = $"{result.ApplicationId} isn't whitelisted";
+                        var tokenPrincipal = miseResult.TokenPrincipal;
+                        var appId = miseResult.ApplicationId;
+                        UserInformation caller = this.UberUserDirectory.UserInformation.SingleOrDefault(p => string.Equals(p?.ApplicationId, appId, StringComparison.OrdinalIgnoreCase));
+
+                        if (caller == null)
+                        {
+                            actionContext.Request.Properties[Properties.TokenAuthError] = string.Format("{0} isn't whitelisted", appId);
+                        }
+                        else
+                        {
+                            actionContext.Request.Properties[Properties.TokenAuthWarning] = string.Format("Successfully authenticated AAD with appId {0} using MISE+SAL", appId);
+                        }
+
+                        return caller;
                     }
                     else
                     {
-                        httpContext.Items["TokenAuthWarning"] = $"Authenticated AAD with appId {result.ApplicationId}";
+                        actionContext.Request.Properties[Properties.TokenAuthWarning] = string.Format("Failed to validate AAD token using MISE+SAL. Message: {0}", miseResult.Message);
                     }
-                    return caller;
-                }
-                else
-                {
-                    httpContext.Items["TokenAuthWarning"] = $"Token validation failed: {result?.Message}";
                 }
             }
             catch (Exception ex)
             {
-                httpContext.Items["TokenAuthError"] = $"Token auth failed: {ex}";
+                actionContext.Request.Properties[Properties.TokenAuthError] = string.Format("Token auth failed unexpected {0}", ex.ToString());
             }
 
             return null;
