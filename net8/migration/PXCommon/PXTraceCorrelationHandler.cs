@@ -328,14 +328,21 @@ namespace Microsoft.Commerce.Payments.PXCommon
                     Sll.Context.Vector = requestTraceId.CorrelationVectorV4;
                 }
 
-                string responseContent;
+                string responseContent = string.Empty;
                 try
                 {
                     // Sometimes when the request is cancelled or there is an error in the network stream,
-                    // exceptions occour because the returned stream says CanSeek = false.
-                    // We have this try catch to not cause an exception when trying to log the response.
-                    // We also set the status code to GatewayTimeout so that we don't consider the call successful.
-                    responseContent = await response.Content.ReadAsStringAsync();
+                    // exceptions occur because the returned stream cannot be read or has been disposed.
+                    // We catch these exceptions to avoid failing while logging and mark the request as timed out.
+                    if (response.Content != null)
+                    {
+                        responseContent = await response.Content.ReadAsStringAsync();
+                    }
+                }
+                catch (ObjectDisposedException ex)
+                {
+                    response.StatusCode = HttpStatusCode.GatewayTimeout;
+                    responseContent = ex.ToString();
                 }
                 catch (InvalidOperationException ex)
                 {
