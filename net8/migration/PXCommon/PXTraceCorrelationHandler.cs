@@ -44,17 +44,18 @@ namespace Microsoft.Commerce.Payments.PXCommon
         }
 
         public PXTraceCorrelationHandler(
-            string serviceName, 
+            string serviceName,
             Action<string, string, string, string, string, string, HttpRequestMessage, HttpResponseMessage, string, string, string, string, string, string, string, string> logIncomingRequestToAppInsight)
         {
             this.ServiceName = serviceName;
             this.isDependentServiceRequest = false;
             this.LogIncomingRequestToAppInsight = logIncomingRequestToAppInsight;
+            this.LogError = (m, t) => PaymentsEventSource.Log.TracingHandlerTraceError(m, t);
         }
 
         public PXTraceCorrelationHandler(
-            string serviceName, 
-            HttpMessageHandler innerHandler, 
+            string serviceName,
+            HttpMessageHandler innerHandler,
             bool isDependentServiceRequest,
             Action<string, string, HttpRequestMessage, HttpResponseMessage, string, string, string, string> logOutgoingToAppInsight)
            : base(innerHandler)
@@ -62,6 +63,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
             this.ServiceName = serviceName;
             this.isDependentServiceRequest = isDependentServiceRequest;
             this.LogToApplicationInsight = logOutgoingToAppInsight;
+            this.LogError = (m, t) => PaymentsEventSource.Log.TracingHandlerTraceError(m, t);
         }
 
         private Action<string, string, HttpRequestMessage, HttpResponseMessage, string, string, string, string> LogToApplicationInsight { get; set; }
@@ -271,7 +273,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
             }
             catch (Exception ex)
             {
-                this.LogError("PXTraceCorrelationHandler.TraceClientOperation: " + ex.Message, requestTraceId);
+                this.LogError?.Invoke("PXTraceCorrelationHandler.TraceClientOperation: " + ex.Message, requestTraceId);
             }
         }
 
@@ -344,7 +346,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
             }
             catch (Exception ex)
             {
-                this.LogError("PXTraceCorrelationHandler.TraceClientOperation: " + ex.Message, requestTraceId);
+                this.LogError?.Invoke("PXTraceCorrelationHandler.TraceClientOperation: " + ex.Message, requestTraceId);
             }
         }
 
