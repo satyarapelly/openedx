@@ -23,7 +23,7 @@ namespace CIT.PXService.Tests
         [TestMethod]
         public async Task AllControllerEndpointsAreReachable()
         {
-            var dataSources = SelfHostedPxService.PxHostableService.App.Services.GetServices<EndpointDataSource>();
+            var dataSources = TestBase.SelfHostedPxService.SelfHost.Services.GetServices<EndpointDataSource>();
             var endpoints = dataSources
                 .SelectMany(ds => ds.Endpoints)
                 .OfType<RouteEndpoint>()
