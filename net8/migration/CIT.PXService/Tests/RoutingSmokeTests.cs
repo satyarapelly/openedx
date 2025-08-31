@@ -33,7 +33,8 @@ namespace CIT.PXService.Tests
 
             foreach (var ep in endpoints)
             {
-                var pattern = "/" + ep.RoutePattern.RawText;
+                var rawPattern = ep.RoutePattern.RawText;
+                var pattern = "/" + rawPattern;
                 pattern = pattern.Replace("{version}", "v7.0", StringComparison.OrdinalIgnoreCase)
                                  .Replace("{accountId}", "acc")
                                  .Replace("{piid}", "pi")
@@ -41,9 +42,19 @@ namespace CIT.PXService.Tests
                                  .Replace("{challengeid}", "ch")
                                  .Replace("{paymentRequestId}", "pr")
                                  .Replace("{checkoutRequestId}", "cr")
-                                 .Replace("{sessionId}", "sid")
-                                 .Replace("{appName}", "app")
-                                 .Replace("{appVersion}", "1");
+                                 .Replace("{sessionId}", "sid");
+
+                if (rawPattern.Contains("{appName}", StringComparison.OrdinalIgnoreCase))
+                {
+                    pattern = pattern.Replace("{appName}", "Microsoft.MicrosoftWallet", StringComparison.OrdinalIgnoreCase)
+                                     .Replace("{appVersion}", "1");
+                }
+                else
+                {
+                    pattern = pattern.Replace("{appName}", "app", StringComparison.OrdinalIgnoreCase)
+                                     .Replace("{appVersion}", "1");
+                }
+
                 pattern = Regex.Replace(pattern, "{[^/]+}", "1");
 
                 var method = ep.Metadata.GetMetadata<HttpMethodMetadata>()?.HttpMethods?.FirstOrDefault() ?? HttpMethods.Get;

@@ -16,6 +16,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
+    [NonController]
     public class PaymentSessionDescriptionsController : ProxyController
     {
         /// <summary>
