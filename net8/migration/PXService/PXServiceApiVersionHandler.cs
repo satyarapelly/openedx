@@ -68,16 +68,15 @@ namespace Microsoft.Commerce.Payments.PXService
 
         public async Task InvokeAsync(HttpContext httpContext)
         {
-            var endpoint = httpContext.GetEndpoint();
-            var cad = endpoint?.Metadata.GetMetadata<ControllerActionDescriptor>();
-            var controllerName = cad?.ControllerName; // short name (no "Controller")
+            var routeData = httpContext.GetRouteData();
+            object controller;
+            bool allowedVersionlessRequest =
+                routeData != null &&
+                routeData.Values.TryGetValue("controller", out controller) &&
+                controller != null &&
+                this.versionlessControllers.Contains(controller.ToString(), StringComparer.OrdinalIgnoreCase);
 
-            // Fallback: from route values (works for conventional routes)
-            controllerName ??= httpContext.Request.RouteValues.TryGetValue("controller", out var c)
-                ? Convert.ToString(c)
-                : null;
-
-            if (controllerName != null && this.versionlessControllers.Contains(controllerName))
+            if (allowedVersionlessRequest)
             {
                 await this.next(httpContext);
                 return;
@@ -116,32 +115,39 @@ namespace Microsoft.Commerce.Payments.PXService
             // https://paymentexperience.cp.microsoft.com/px/v7.0/settings/Microsoft.MicrosoftWallet/16336.2.2.0
             // https://paymentexperience.cp.microsoft.com/px/v7.0/f2ac3e1d-e724-4820-baa0-0098584c6dcc/paymentInstrumentsEx?country=us&language=en-US&partner=xbox
             string accountId = string.Empty;
-            var allowedVersionRequest = false;
             string externalVersion = string.Empty;
 
-            // Fallback: from route values (works for conventional routes)
-            var controllerName = httpContext.Request.RouteValues.TryGetValue("controller", out var c)
-                ? Convert.ToString(c)
-                : null;
+            // Extract version and optional account id from the path segments
+            string accountIdPattern = @"^[a-f0-9-]{30,40}$";
+            Regex accountIdRegex = new Regex(accountIdPattern, RegexOptions.IgnoreCase);
 
-            httpContext.Request.RouteValues.TryGetValue("accountId", out accountId);
-            httpContext.Request.RouteValues.TryGetValue("version", out externalVersion);
+            string versionPattern = @"^v\d+\.\d+$";
+            Regex versionRegex = new Regex(versionPattern, RegexOptions.IgnoreCase);
+            bool versionFound = false;
 
-            if (!string.IsNullOrEmpty(controllerName))
+            foreach (string seg in httpContext.Request.Path.Value?.Split('/', StringSplitOptions.RemoveEmptyEntries) ?? Array.Empty<string>())
             {
-                var resolver = httpContext.RequestServices.GetRequiredService<VersionedControllerSelector>();
-                var allowedType = resolver.ResolveAllowedController(httpContext); // returns Type? or null per your Core helper
-                if (allowedType is null)
+                try
                 {
-                    if (!allowedVersionRequest)
+                    if (versionFound)
                     {
-                        var version = httpContext.Request.Headers["api-version"].ToString();
-                        httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
-                        await httpContext.Response.WriteAsync($"No controller mapped for version '{(string.IsNullOrWhiteSpace(version) ? "(none)" : version)}'.");
+                        if (accountIdRegex.IsMatch(seg))
+                        {
+                            accountId = seg;
+                        }
+
+                        break;
+                    }
+
+                    if (versionRegex.IsMatch(seg))
+                    {
+                        externalVersion = seg;
+                        versionFound = true;
                     }
                 }
-
-                allowedVersionRequest = true;
+                catch
+                {
+                }
             }
 
             string ipAddress = GetUserIpAddress(request);
