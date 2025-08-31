@@ -124,15 +124,24 @@ namespace CIT.PXService.Tests
 
         public static async Task<List<PIDLResource>> GetPidlFromPXServiceWithPartnerHeader(string url, string headerKey, string headerValue, string leftoverHeader)
         {
+            string observedHeader = null;
+            PXHandler.PostProcess = ctx =>
+            {
+                if (ctx.Request.Headers.TryGetValue(headerKey, out var values))
+                {
+                    observedHeader = values.FirstOrDefault();
+                }
+
+                return Task.CompletedTask;
+            };
+
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, GetPXServiceUrl(url));
             request.Headers.Add(headerKey, headerValue);
 
             var response = await PXClient.SendAsync(request);
 
-            IEnumerable<string> headerValues;
-            Assert.IsTrue(request.Headers.TryGetValues(headerKey, out headerValues));
-            headerValue = headerValues.FirstOrDefault();
-            Assert.AreEqual(leftoverHeader, headerValue);
+            PXHandler.ResetToDefault();
+            Assert.AreEqual(leftoverHeader, observedHeader, $"Expected '{leftoverHeader}' remaining in {headerKey} header.");
 
             string responseJson = await response.Content.ReadAsStringAsync();
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, responseJson);
