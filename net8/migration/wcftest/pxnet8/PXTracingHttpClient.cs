@@ -32,8 +32,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
                     httpMessageHandler: new HttpClientHandler(),
                     logError: logError,
                     logRequest: logRequest,
-                    logResponse: logResponse),
-                isDependentServiceRequest: true))
+                    logResponse: logResponse)))
         {
         }
 
@@ -58,8 +57,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
                     httpMessageHandler: httpMessageHandler,
                     logError: logError,
                     logRequest: logRequest,
-                    logResponse: logResponse),
-                isDependentServiceRequest: true))
+                    logResponse: logResponse)))
         {
         }
 
@@ -70,7 +68,6 @@ namespace Microsoft.Commerce.Payments.PXCommon
             base(new PXTraceCorrelationHandler(
                 serviceName: serviceName,
                 innerHandler: httpMessageHandler,
-                isDependentServiceRequest: true,
                 logOutgoingToAppInsight: logOutgoingRequestToApplicationInsight))
         {
         }
@@ -81,7 +78,6 @@ namespace Microsoft.Commerce.Payments.PXCommon
             base(new PXTraceCorrelationHandler(
                 serviceName: serviceName,
                 innerHandler: new HttpClientHandler(),
-                isDependentServiceRequest: true,
                 logOutgoingToAppInsight: logOutgoingRequestToApplicationInsight))
         {
         }
