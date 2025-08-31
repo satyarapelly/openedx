@@ -14,6 +14,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Routing;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
     using Microsoft.Commerce.Payments.Common;
     using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Commerce.Payments.Common.Web;
@@ -36,6 +37,8 @@ namespace Microsoft.Commerce.Payments.PXCommon
         private const int DefaultConnectionLeaseTimeoutInMs = 120 * 1000;
         private const int DefaultMaxIdleTime = -1;
         private bool isDependentServiceRequest;
+        private readonly RequestDelegate? _next;
+        private readonly ILogger<PXTraceCorrelationHandler>? _logger;
 
         public PXTraceCorrelationHandler(string serviceName, HttpMessageHandler innerHandler, bool isDependentServiceRequest, Action<string, EventTraceActivity> logError = null)
             : base(innerHandler)
@@ -45,12 +48,23 @@ namespace Microsoft.Commerce.Payments.PXCommon
         }
 
         public PXTraceCorrelationHandler(
-            string serviceName, 
+            string serviceName,
             Action<string, string, string, string, string, string, HttpRequestMessage, HttpResponseMessage, string, string, string, string, string, string, string, string> logIncomingRequestToAppInsight)
         {
             this.ServiceName = serviceName;
             this.isDependentServiceRequest = false;
             this.LogIncomingRequestToAppInsight = logIncomingRequestToAppInsight;
+        }
+
+        public PXTraceCorrelationHandler(
+            RequestDelegate next,
+            ILogger<PXTraceCorrelationHandler> logger,
+            string serviceName,
+            Action<string, string, string, string, string, string, HttpRequestMessage, HttpResponseMessage, string, string, string, string, string, string, string, string> logIncomingRequestToAppInsight)
+            : this(serviceName, logIncomingRequestToAppInsight)
+        {
+            this._next = next;
+            this._logger = logger;
         }
 
         public PXTraceCorrelationHandler(
@@ -109,6 +123,18 @@ namespace Microsoft.Commerce.Payments.PXCommon
             }
 
             return requestTraceId;
+        }
+
+        public async Task InvokeAsync(HttpContext context)
+        {
+            if (this._next == null)
+            {
+                throw new InvalidOperationException("PXTraceCorrelationHandler middleware not initialized");
+            }
+
+            this._logger?.LogDebug("Handling request {Method} {Path}", context.Request.Method, context.Request.Path);
+            await this._next(context);
+            this._logger?.LogDebug("Finished request {Method} {Path} with {StatusCode}", context.Request.Method, context.Request.Path, context.Response.StatusCode);
         }
 
         /// <summary>
