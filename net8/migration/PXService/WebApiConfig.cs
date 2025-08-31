@@ -330,7 +330,7 @@ namespace Microsoft.Commerce.Payments.PXService
 
             endpoints.MapControllerRoute(
                 name: GlobalConstants.V7RouteNames.GetPaymentMethodDescriptionsApi,
-                pattern: GlobalConstants.EndPointNames.V7PaymentMethodDescriptions + "{id}",
+                pattern: GlobalConstants.EndPointNames.V7PaymentMethodDescriptions + "/{id}",
                 defaults: new { controller = C(GlobalConstants.ControllerNames.PaymentMethodDescriptionsController), action = "GetByFamilyAndType" });
 
             endpoints.MapControllerRoute(
@@ -345,7 +345,7 @@ namespace Microsoft.Commerce.Payments.PXService
 
             endpoints.MapControllerRoute(
                 name: GlobalConstants.V7RouteNames.GetAddressDescriptionsApi,
-                pattern: GlobalConstants.EndPointNames.V7AddressDescriptions + "{id}",
+                pattern: GlobalConstants.EndPointNames.V7AddressDescriptions + "/{id}",
                 defaults: new { controller = C(GlobalConstants.ControllerNames.AddressDescriptionsController), action = "GetById" });
 
             endpoints.MapControllerRoute(
@@ -365,7 +365,7 @@ namespace Microsoft.Commerce.Payments.PXService
 
             endpoints.MapControllerRoute(
                 name: GlobalConstants.V7RouteNames.GetChallengeDescriptionsApi,
-                pattern: GlobalConstants.EndPointNames.V7ChallengeDescriptions + "{id}",
+                pattern: GlobalConstants.EndPointNames.V7ChallengeDescriptions + "/{id}",
                 defaults: new { controller = C(GlobalConstants.ControllerNames.ChallengeDescriptionsController), action = "GetById" });
 
             endpoints.MapControllerRoute(
