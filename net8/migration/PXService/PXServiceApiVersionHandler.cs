@@ -68,41 +68,21 @@ namespace Microsoft.Commerce.Payments.PXService
 
         public async Task InvokeAsync(HttpContext httpContext)
         {
-            var endpoint = httpContext.GetEndpoint();
-            var cad = endpoint?.Metadata.GetMetadata<ControllerActionDescriptor>();
-            var controllerName = cad?.ControllerName; // short name (no "Controller")
+            var routeData = httpContext.GetRouteData();
+            object controller;
+            bool allowedVersionlessRequest =
+                routeData != null &&
+                routeData.Values.TryGetValue("controller", out controller) &&
+                controller != null &&
+                this.versionlessControllers.Contains(controller.ToString(), StringComparer.OrdinalIgnoreCase);
 
-            // Fallback: from route values (works for conventional routes)
-            controllerName ??= httpContext.Request.RouteValues.TryGetValue("controller", out var c)
-                ? Convert.ToString(c)
-                : null;
-
-            if (controllerName != null && this.versionlessControllers.Contains(controllerName))
+            if (allowedVersionlessRequest)
             {
                 await this.next(httpContext);
                 return;
             }
 
-            var responseMessage = await this.SendAsync(httpContext, httpContext.RequestAborted);
-
-            if (!httpContext.Response.HasStarted)
-            {
-                httpContext.Response.StatusCode = (int)responseMessage.StatusCode;
-                foreach (var header in responseMessage.Headers)
-                {
-                    httpContext.Response.Headers[header.Key] = header.Value.ToArray();
-                }
-
-                if (responseMessage.Content != null)
-                {
-                    foreach (var header in responseMessage.Content.Headers)
-                    {
-                        httpContext.Response.Headers[header.Key] = header.Value.ToArray();
-                    }
-
-                    await responseMessage.Content.CopyToAsync(httpContext.Response.Body);
-                }
-            }
+            await this.SendAsync(httpContext, httpContext.RequestAborted);
         }
 
         /// <summary>
@@ -113,7 +93,7 @@ namespace Microsoft.Commerce.Payments.PXService
         /// <param name="cancellationToken">A token which may be used to listen
         /// for cancellation.</param>
         /// <returns>The outbound response.</returns>
-        private async Task<HttpResponseMessage> SendAsync(HttpContext httpContext, CancellationToken cancellationToken)
+        private async Task SendAsync(HttpContext httpContext, CancellationToken cancellationToken)
         {
             HttpRequestMessage request = httpContext.Request.ToHttpRequestMessage();
             httpContext.Request.EnableBuffering();
@@ -135,32 +115,39 @@ namespace Microsoft.Commerce.Payments.PXService
             // https://paymentexperience.cp.microsoft.com/px/v7.0/settings/Microsoft.MicrosoftWallet/16336.2.2.0
             // https://paymentexperience.cp.microsoft.com/px/v7.0/f2ac3e1d-e724-4820-baa0-0098584c6dcc/paymentInstrumentsEx?country=us&language=en-US&partner=xbox
             string accountId = string.Empty;
-            var allowedVersionRequest = false;
             string externalVersion = string.Empty;
 
-            // Fallback: from route values (works for conventional routes)
-            var controllerName = httpContext.Request.RouteValues.TryGetValue("controller", out var c)
-                ? Convert.ToString(c)
-                : null;
+            // Extract version and optional account id from the path segments
+            string accountIdPattern = @"^[a-f0-9-]{30,40}$";
+            Regex accountIdRegex = new Regex(accountIdPattern, RegexOptions.IgnoreCase);
 
-            httpContext.Request.RouteValues.TryGetValue("accountId", out accountId);
-            httpContext.Request.RouteValues.TryGetValue("version", out externalVersion);
+            string versionPattern = @"^v\d+\.\d+$";
+            Regex versionRegex = new Regex(versionPattern, RegexOptions.IgnoreCase);
+            bool versionFound = false;
 
-            if (!string.IsNullOrEmpty(controllerName))
+            foreach (string seg in httpContext.Request.Path.Value?.Split('/', StringSplitOptions.RemoveEmptyEntries) ?? Array.Empty<string>())
             {
-                var resolver = httpContext.RequestServices.GetRequiredService<VersionedControllerSelector>();
-                var allowedType = resolver.ResolveAllowedController(httpContext); // returns Type? or null per your Core helper
-                if (allowedType is null)
+                try
                 {
-                    if (!allowedVersionRequest)
+                    if (versionFound)
                     {
-                        var version = httpContext.Request.Headers["api-version"].ToString();
-                        httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
-                        await httpContext.Response.WriteAsync($"No controller mapped for version '{(string.IsNullOrWhiteSpace(version) ? "(none)" : version)}'.");
+                        if (accountIdRegex.IsMatch(seg))
+                        {
+                            accountId = seg;
+                        }
+
+                        break;
+                    }
+
+                    if (versionRegex.IsMatch(seg))
+                    {
+                        externalVersion = seg;
+                        versionFound = true;
                     }
                 }
-
-                allowedVersionRequest = true;
+                catch
+                {
+                }
             }
 
             string ipAddress = GetUserIpAddress(request);
@@ -1071,7 +1058,8 @@ namespace Microsoft.Commerce.Payments.PXService
                     || request.RequestUri.AbsolutePath.IndexOf("PaymentSessionDescriptions", StringComparison.OrdinalIgnoreCase) >= 0
                     || request.RequestUri.AbsolutePath.IndexOf("RDSSession", StringComparison.OrdinalIgnoreCase) >= 0))
             {
-                return request.CreateResponse(HttpStatusCode.BadRequest);
+                await WriteResponseAsync(httpContext, request.CreateResponse(HttpStatusCode.BadRequest));
+                return;
             }
 
             // when the flight PXReturn502ForMaliciousRequest is on, return 502(BadGateway) response with a flag to disable retry on server
@@ -1080,7 +1068,8 @@ namespace Microsoft.Commerce.Payments.PXService
             {
                 HttpResponseMessage responseMessage = request.CreateResponse(HttpStatusCode.BadGateway);
                 responseMessage.Headers.Add(RetryOnServerErrorHeader, "false");
-                return responseMessage;
+                await WriteResponseAsync(httpContext, responseMessage);
+                return;
             }
 
             IEnumerable<KeyValuePair<string, string>>? queryStrings = null;
@@ -1100,13 +1089,15 @@ namespace Microsoft.Commerce.Payments.PXService
 
             if (string.IsNullOrEmpty(externalVersion))
             {
-                return request.CreateNoApiVersionResponse();
+                await WriteResponseAsync(httpContext, request.CreateNoApiVersionResponse());
+                return;
             }
 
             ApiVersion apiVersion;
             if (!this.supportedVersions.TryGetValue(externalVersion, out apiVersion))
             {
-                return request.CreateInvalidApiVersionResponse(externalVersion);
+                await WriteResponseAsync(httpContext, request.CreateInvalidApiVersionResponse(externalVersion));
+                return;
             }
 
             if (request.ContainsProperty(PaymentConstants.Web.Properties.Version))
@@ -1153,11 +1144,7 @@ namespace Microsoft.Commerce.Payments.PXService
                 });
 
                 await this.next(httpContext);
-
-                return new HttpResponseMessage((HttpStatusCode)httpContext.Response.StatusCode);
             }
-
-            return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
         /// <summary>
@@ -1261,6 +1248,33 @@ namespace Microsoft.Commerce.Payments.PXService
         private static bool IsThreeDSOneTestAccount(string accountId)
         {
             return GlobalConstants.ThreeDSTestAccountIds.Contains(accountId, StringComparer.OrdinalIgnoreCase);
+        }
+
+        private static async Task WriteResponseAsync(HttpContext httpContext, HttpResponseMessage responseMessage)
+        {
+            httpContext.Response.StatusCode = (int)responseMessage.StatusCode;
+            foreach (var header in responseMessage.Headers)
+            {
+                httpContext.Response.Headers[header.Key] = header.Value.ToArray();
+            }
+
+            if (responseMessage.Content != null)
+            {
+                if (responseMessage.Content.Headers.ContentType != null)
+                {
+                    httpContext.Response.ContentType = responseMessage.Content.Headers.ContentType.ToString();
+                }
+
+                foreach (var header in responseMessage.Content.Headers)
+                {
+                    if (!string.Equals(header.Key, "Content-Type", StringComparison.OrdinalIgnoreCase))
+                    {
+                        httpContext.Response.Headers[header.Key] = header.Value.ToArray();
+                    }
+                }
+
+                await responseMessage.Content.CopyToAsync(httpContext.Response.Body);
+            }
         }
 
         private string GetUserIpAddress(HttpRequestMessage request)
