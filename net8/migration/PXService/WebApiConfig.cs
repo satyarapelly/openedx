@@ -5,7 +5,6 @@ using Microsoft.Commerce.Payments.PXCommon;
 using Microsoft.Commerce.Payments.PXService.Settings;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Protocol.Handlers;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -66,14 +65,10 @@ namespace Microsoft.Commerce.Payments.PXService
                 return selectorInstance.SupportedVersions;
             });
 
-            builder.Services.AddTransient<PXTracingHttpClient>(sp =>
-            {
-                var accessor = sp.GetRequiredService<IHttpContextAccessor>();
-                return new PXTracingHttpClient(
+            builder.Services.AddTransient<PXTracingHttpClient>(_ =>
+                new PXTracingHttpClient(
                     Constants.ServiceNames.PXService,
-                    logOutgoingRequestToApplicationInsight: ApplicationInsightsProvider.LogOutgoingOperation,
-                    httpContextAccessor: accessor);
-            });
+                    logOutgoingRequestToApplicationInsight: ApplicationInsightsProvider.LogOutgoingOperation));
 
             //if (settings.ValidateCors)
             //{
