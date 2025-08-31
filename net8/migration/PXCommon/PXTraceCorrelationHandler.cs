@@ -10,8 +10,10 @@ namespace Microsoft.Commerce.Payments.PXCommon
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
-    using System.Web;
-    using System.Web.Http.Routing;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Routing;
+    using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Commerce.Payments.Common;
     using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Commerce.Payments.Common.Web;
@@ -27,6 +29,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
     /// </summary>
     public class PXTraceCorrelationHandler : DelegatingHandler
     {
+        public static IHttpContextAccessor? HttpContextAccessor { get; set; }
         private const string PaymentInstrumentOperationsController = "PaymentInstrumentOperationsController";
         private const string PaymentInstrumentsController = "PaymentInstrumentsController";
         private const string DefaultLogValue = "<none>";
@@ -155,17 +158,17 @@ namespace Microsoft.Commerce.Payments.PXCommon
                 // Don't even get the route data if both are present
                 if (string.IsNullOrWhiteSpace(accountId) || string.IsNullOrWhiteSpace(paymentInstrumentId))
                 {
-                    IHttpRouteData data = request.GetRouteData();
+                    RouteValueDictionary? data = request.GetRouteDataSafe();
                     if (data != null)
                     {
                         if (string.IsNullOrWhiteSpace(accountId))
                         {
-                            accountId = data.Values.ContainsKey("accountId") ? data.Values["accountId"] as string : null;
+                            accountId = data.ContainsKey("accountId") ? data["accountId"] as string : null;
                         }
 
                         if (string.IsNullOrWhiteSpace(paymentInstrumentId))
                         {
-                            paymentInstrumentId = data.Values.ContainsKey("paymentInstrumentId") ? data.Values["paymentInstrumentId"] as string : null;
+                            paymentInstrumentId = data.ContainsKey("paymentInstrumentId") ? data["paymentInstrumentId"] as string : null;
                         }
                     }
                 }
@@ -372,12 +375,10 @@ namespace Microsoft.Commerce.Payments.PXCommon
 
         private static void RemoveRequestContextItem(string key)
         {
-            if (HttpContext.Current?.Request?.RequestContext?.HttpContext?.Items != null)
+            var items = HttpContextAccessor?.HttpContext?.Items;
+            if (items != null && items.ContainsKey(key))
             {
-                if (HttpContext.Current.Request.RequestContext.HttpContext.Items.Contains(key))
-                {
-                    HttpContext.Current.Request.RequestContext.HttpContext.Items.Remove(key);
-                }
+                items.Remove(key);
             }
         }
 
@@ -430,13 +431,13 @@ namespace Microsoft.Commerce.Payments.PXCommon
             if (operationName == null)
             {
                 // If the operation name does not exist in the request properties, then parse the request data to construct operation name.
-                IHttpRouteData data = request.GetRouteData();
+                RouteValueDictionary? data = request.GetRouteDataSafe();
 
                 StringBuilder counterNameBuilder = new StringBuilder();
                 if (data != null)
                 {
                     // PaymentInstrumentOperationsController will be retrired after Px fully moved to PaymentInstrumentsController/resume
-                    string controller = data.Values["controller"] as string;
+                    string controller = data["controller"] as string;
                     if (string.Equals(controller, PaymentInstrumentOperationsController, StringComparison.InvariantCultureIgnoreCase))
                     {
                         controller = PaymentInstrumentsController;
@@ -446,10 +447,10 @@ namespace Microsoft.Commerce.Payments.PXCommon
                     counterNameBuilder.Append("-");
                     counterNameBuilder.Append(request.Method.ToString());
 
-                    if (data.Values.ContainsKey("action"))
+                    if (data.ContainsKey("action"))
                     {
                         counterNameBuilder.Append("-");
-                        counterNameBuilder.Append(data.Values["action"]);
+                        counterNameBuilder.Append(data["action"]);
                     }
                 }
                 else
@@ -620,6 +621,16 @@ namespace Microsoft.Commerce.Payments.PXCommon
             {
                 stopwatch.Stop();
             }
+        }
+    }
+
+    public static class PXTraceCorrelationHandlerExtensions
+    {
+        public static IApplicationBuilder UsePXTraceCorrelationHandler(this IApplicationBuilder app)
+        {
+            ArgumentNullException.ThrowIfNull(app);
+            PXTraceCorrelationHandler.HttpContextAccessor = app.ApplicationServices.GetRequiredService<IHttpContextAccessor>();
+            return app;
         }
     }
 }
