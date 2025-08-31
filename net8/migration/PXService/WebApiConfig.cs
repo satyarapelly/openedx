@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Commerce.Payments.Common.Tracing;
 using Microsoft.Commerce.Payments.Common.Web;
 using Microsoft.Commerce.Payments.PXCommon;
 using Microsoft.Commerce.Payments.PXService.Settings;
@@ -81,6 +82,24 @@ namespace Microsoft.Commerce.Payments.PXService
             if (settings.PIDLDocumentValidationEnabled)
             {
                 builder.Services.AddSingleton<PXServicePIDLValidationHandler>(); // state used by pidl validation middleware
+            }
+        }
+
+        /// <summary>
+        /// Configures middleware required for the PX service.
+        /// </summary>
+        /// <param name="app">The web application.</param>
+        /// <param name="settings">PX service settings instance.</param>
+        public static void Configure(WebApplication app, PXServiceSettings settings)
+        {
+            ArgumentNullException.ThrowIfNull(app);
+            ArgumentNullException.ThrowIfNull(settings);
+
+            if (!WebHostingUtility.IsApplicationSelfHosted())
+            {
+                app.UsePXTraceCorrelationHandler(
+                    Constants.ServiceNames.PXService,
+                    ApplicationInsightsProvider.LogIncomingOperation);
             }
         }
 
