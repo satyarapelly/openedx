@@ -10,12 +10,11 @@ namespace Microsoft.Commerce.Payments.PXCommon
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Routing;
+    using System.Web;
+    using System.Web.Http.Routing;
     using Microsoft.Commerce.Payments.Common;
     using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Commerce.Payments.Common.Web;
-    using Microsoft.Commerce.Tracing;
     using static Microsoft.Commerce.Payments.Common.PaymentConstants.Web;
     using CorrelationVector = Microsoft.CommonSchema.Services.Logging.CorrelationVector;
     using Sll = Microsoft.CommonSchema.Services.Logging.Sll;
@@ -40,7 +39,6 @@ namespace Microsoft.Commerce.Payments.PXCommon
         {
             this.ServiceName = serviceName;
             this.isDependentServiceRequest = isDependentServiceRequest;
-            this.LogError = logError ?? ((m, t) => PaymentsEventSource.Log.TracingHandlerTraceError(m, t));
         }
 
         public PXTraceCorrelationHandler(
@@ -64,11 +62,11 @@ namespace Microsoft.Commerce.Payments.PXCommon
             this.LogToApplicationInsight = logOutgoingToAppInsight;
         }
 
+        public Action<string, EventTraceActivity> LogError { get; set; }
+
         private Action<string, string, HttpRequestMessage, HttpResponseMessage, string, string, string, string> LogToApplicationInsight { get; set; }
 
         private Action<string, string, string, string, string, string, HttpRequestMessage, HttpResponseMessage, string, string, string, string, string, string, string, string> LogIncomingRequestToAppInsight { get; set; }
-
-        private Action<string, EventTraceActivity> LogError { get; set; }
 
         private string ServiceName { get; set; }
 
@@ -157,17 +155,17 @@ namespace Microsoft.Commerce.Payments.PXCommon
                 // Don't even get the route data if both are present
                 if (string.IsNullOrWhiteSpace(accountId) || string.IsNullOrWhiteSpace(paymentInstrumentId))
                 {
-                    RouteValueDictionary data = request.GetRouteDataSafe();
+                    IHttpRouteData data = request.GetRouteData();
                     if (data != null)
                     {
                         if (string.IsNullOrWhiteSpace(accountId))
                         {
-                            accountId = data.TryGetValue("accountId", out var value) ? value as string : null;
+                            accountId = data.Values.ContainsKey("accountId") ? data.Values["accountId"] as string : null;
                         }
 
                         if (string.IsNullOrWhiteSpace(paymentInstrumentId))
                         {
-                            paymentInstrumentId = data.TryGetValue("paymentInstrumentId", out var value) ? value as string : null;
+                            paymentInstrumentId = data.Values.ContainsKey("paymentInstrumentId") ? data.Values["paymentInstrumentId"] as string : null;
                         }
                     }
                 }
@@ -374,10 +372,12 @@ namespace Microsoft.Commerce.Payments.PXCommon
 
         private static void RemoveRequestContextItem(string key)
         {
-            var items = new HttpContextAccessor().HttpContext?.Items;
-            if (items != null && items.ContainsKey(key))
+            if (HttpContext.Current?.Request?.RequestContext?.HttpContext?.Items != null)
             {
-                items.Remove(key);
+                if (HttpContext.Current.Request.RequestContext.HttpContext.Items.Contains(key))
+                {
+                    HttpContext.Current.Request.RequestContext.HttpContext.Items.Remove(key);
+                }
             }
         }
 
@@ -430,13 +430,13 @@ namespace Microsoft.Commerce.Payments.PXCommon
             if (operationName == null)
             {
                 // If the operation name does not exist in the request properties, then parse the request data to construct operation name.
-                RouteValueDictionary data = request.GetRouteDataSafe();
+                IHttpRouteData data = request.GetRouteData();
 
                 StringBuilder counterNameBuilder = new StringBuilder();
                 if (data != null)
                 {
                     // PaymentInstrumentOperationsController will be retrired after Px fully moved to PaymentInstrumentsController/resume
-                    string controller = data.TryGetValue("controller", out var controllerObj) ? controllerObj as string : null;
+                    string controller = data.Values["controller"] as string;
                     if (string.Equals(controller, PaymentInstrumentOperationsController, StringComparison.InvariantCultureIgnoreCase))
                     {
                         controller = PaymentInstrumentsController;
@@ -446,10 +446,10 @@ namespace Microsoft.Commerce.Payments.PXCommon
                     counterNameBuilder.Append("-");
                     counterNameBuilder.Append(request.Method.ToString());
 
-                    if (data.ContainsKey("action"))
+                    if (data.Values.ContainsKey("action"))
                     {
                         counterNameBuilder.Append("-");
-                        counterNameBuilder.Append(data["action"]);
+                        counterNameBuilder.Append(data.Values["action"]);
                     }
                 }
                 else
@@ -509,7 +509,6 @@ namespace Microsoft.Commerce.Payments.PXCommon
                 // then the requests overlap.To avoid this we do trace transfer from requestTraceId to ServerTraceId.
                 // All the payments servertraces will be correlated with serverTraceId.
                 request.Properties.Add(PaymentConstants.Web.Properties.ServerTraceId, serverTraceId);
-                PaymentsEventSource.Log.CommonMappingCorrelationId(serverTraceId, requestTraceId);
             }
             else
             {
