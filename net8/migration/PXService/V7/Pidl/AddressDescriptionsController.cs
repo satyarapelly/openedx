@@ -49,7 +49,7 @@ namespace Microsoft.Commerce.Payments.PXService.V7
             [FromQuery] string partner = Constants.ServiceDefaults.DefaultPartnerName,
             [FromQuery] string? scenario = null,
             [FromQuery] string? operation = null,
-            [FromRoute] string? addressId = null,
+            string? addressId = null,
             [FromQuery] bool avsSuggest = false,
             [FromQuery] bool setAsDefaultBilling = false)
         {
