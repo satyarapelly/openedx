@@ -29,16 +29,20 @@ WebApiConfig.Register(builder, pxSettings);
 builder.Services.AddApplicationInsightsTelemetry();
 
 using var app = builder.Build();
+
+// Rewrite URLs to maintain legacy behavior.
+var rewrite = new RewriteOptions()
+    // Remove a trailing slash so routes match whether or not it is provided.
+    .AddRewrite(@"^(.*[^/])/$", "$1", skipRemainingRules: false)
+    // Replicate <rewrite> rule: /px/(.*) -> /$1  (internal rewrite)
+    .AddRewrite(@"^px/(.*)$", "$1", skipRemainingRules: true);
+app.UseRewriter(rewrite);
+
 // Ensure the routing matcher runs before custom middleware so HttpContext.GetEndpoint()
 // is populated when those middlewares execute.
 app.UseRouting();
 ApplicationInsightsProvider.SetupAppInsightsConfiguration(pxSettings.ApplicationInsightInstrumentKey, pxSettings.ApplicationInsightMode);
 EnsureSllInitialized();
-
-// Replicate <rewrite> rule: /px/(.*) -> /$1  (internal rewrite)
-var rewrite = new RewriteOptions()
-    .AddRewrite(@"^px/(.*)$", "$1", skipRemainingRules: true);
-app.UseRewriter(rewrite);
 
 // Conditionally redirect HTTP to HTTPS only when not self-hosted
 if (!WebHostingUtility.IsApplicationSelfHosted())

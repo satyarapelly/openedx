@@ -437,7 +437,7 @@ namespace Microsoft.Commerce.Payments.PXService
             public const string V7ValidateCvvEx = "{version}/{accountId}/paymentInstrumentsEx/{piid}/validateCvv";
             public const string V7GetSettings = "{version}/settings/{appName}/{appVersion}";
             public const string V7GetSettingsInPost = "{version}/{accountId}/settings";
-            public const string V7PaymentSessions = "{version}/{accountId}/paymentSessions/";
+            public const string V7PaymentSessions = "{version}/{accountId}/paymentSessions";
             public const string V7PaymentSessionsGet = "{version}/{accountId}/paymentSessions/{sessionId}/status";
             public const string V7QrCodePaymentSessionsGet = "{version}/{accountId}/secondScreenSessions/{sessionId}/qrCodeStatus";
             public const string V7PaymentSessionsCreateAndAuthenticate = "{version}/{accountId}/paymentSessions/createAndAuthenticate";
@@ -446,10 +446,10 @@ namespace Microsoft.Commerce.Payments.PXService
             public const string V7PaymentSessionsAuthenticateIndiaThreeDS = "{version}/{accountId}/paymentSessions/{sessionId}/authenticateIndiaThreeDS";
             public const string V7PaymentSessionsNotifyThreeDSChallengeCompleted = "{version}/{accountId}/paymentSessions/{sessionId}/notifyThreeDSChallengeCompleted";
             public const string V7PaymentTransactions = "{version}/{accountId}/paymentTransactions";
-            public const string V7AddressesEx = "{version}/{accountId}/addressesEx/";
+            public const string V7AddressesEx = "{version}/{accountId}/addressesEx";
             public const string V7AddressesExWithId = "{version}/{accountId}/addressesEx/{addressId}";
             public const string V7ApplyPaymentInstrumentEx = "{version}/paymentInstrumentsEx";
-            public const string V7MSRewards = "{version}/{accountId}/msRewards/";
+            public const string V7MSRewards = "{version}/{accountId}/msRewards";
             public const string V7PaymentSessionsAuthenticationStatus = "{version}/{accountId}/paymentSessions/{sessionId}/{piId}/authenticationStatus";
             public const string V7AttachAddressCheckoutRequestsEx = "{version}/paymentClient/checkoutRequestsEx/{checkoutRequestId}/attachAddress";
             public const string V7AttachProfileCheckoutRequestsEx = "{version}/paymentClient/checkoutRequestsEx/{checkoutRequestId}/attachProfile";
@@ -462,17 +462,17 @@ namespace Microsoft.Commerce.Payments.PXService
             public const string V7TokensExMandate = "{version}/{accountId}/tokensEx/{ntid}/mandates";
 
             // Pidl Endpoints
-            public const string V7AgenticTokenDescriptions = "{version}/{accountId}/agenticTokenDescriptions/";
-            public const string V7PaymentMethodDescriptions = "{version}/{accountId}/paymentMethodDescriptions/";
-            public const string V7ChallengeDescriptions = "{version}/{accountId}/challengeDescriptions/";
-            public const string V7AddressDescriptions = "{version}/{accountId}/addressDescriptions/";
-            public const string V7ProfileDescriptions = "{version}/{accountId}/profileDescriptions/";
-            public const string V7BillingGroupDescriptions = "{version}/{accountId}/billingGroupDescriptions/";
-            public const string V7TaxIdDescriptions = "{version}/{accountId}/taxIdDescriptions/";
-            public const string V7TenantDescriptions = "{version}/{accountId}/tenantDescriptions/";
-            public const string V7GetPaymentSessionDescription = "{version}/{accountId}/paymentSessionDescriptions/";
+            public const string V7AgenticTokenDescriptions = "{version}/{accountId}/agenticTokenDescriptions";
+            public const string V7PaymentMethodDescriptions = "{version}/{accountId}/paymentMethodDescriptions";
+            public const string V7ChallengeDescriptions = "{version}/{accountId}/challengeDescriptions";
+            public const string V7AddressDescriptions = "{version}/{accountId}/addressDescriptions";
+            public const string V7ProfileDescriptions = "{version}/{accountId}/profileDescriptions";
+            public const string V7BillingGroupDescriptions = "{version}/{accountId}/billingGroupDescriptions";
+            public const string V7TaxIdDescriptions = "{version}/{accountId}/taxIdDescriptions";
+            public const string V7TenantDescriptions = "{version}/{accountId}/tenantDescriptions";
+            public const string V7GetPaymentSessionDescription = "{version}/{accountId}/paymentSessionDescriptions";
             public const string V7ProvisionWalletToken = "{version}/{accountId}/provisionWalletToken";
-            public const string V7RewardsDescriptions = "{version}/{accountId}/rewardsDescriptions/";
+            public const string V7RewardsDescriptions = "{version}/{accountId}/rewardsDescriptions";
             public const string V7ConfirmPaymentRequestsEx = "{version}/paymentClient/paymentRequestsEx/{paymentRequestId}/confirm";
             public const string V7AttachChallengeDataPaymentRequestsEx = "{version}/paymentClient/paymentRequestsEx/{paymentRequestId}/attachChallengeData";
             public const string V7RemoveEligiblePaymentmethodsPaymentRequestsEx = "{version}/paymentClient/paymentRequestsEx/{paymentRequestId}/removeEligiblePaymentmethods";
@@ -480,14 +480,14 @@ namespace Microsoft.Commerce.Payments.PXService
             public const string V7DeleteShortURL = "{version}/shorturl/{codeOrUrl}";
 
             // Anonymous Endpoints
-            public const string V7Transformation = "{version}/transformation/";
-            public const string V7Validation = "{version}/validation/";
-            public const string V7AnonymousAddressDescriptions = "{version}/addressDescriptions/";
-            public const string V7AnonymousTaxIdDescriptions = "{version}/taxIdDescriptions/";
-            public const string V7AnonymousPaymentMethodDescriptions = "{version}/paymentMethodDescriptions/";
+            public const string V7Transformation = "{version}/transformation";
+            public const string V7Validation = "{version}/validation";
+            public const string V7AnonymousAddressDescriptions = "{version}/addressDescriptions";
+            public const string V7AnonymousTaxIdDescriptions = "{version}/taxIdDescriptions";
+            public const string V7AnonymousPaymentMethodDescriptions = "{version}/paymentMethodDescriptions";
             public const string V7AnonymousPaymentMethodDescriptionsSessionId = "{version}/paymentMethodDescriptions/{sessionId}";
             public const string V7SessionsById = "{version}/sessions/{sessionId}";
-            public const string V7Sessions = "{version}/sessions/";
+            public const string V7Sessions = "{version}/sessions";
             public const string V7AnonymousLegacyAddressValidation = "{version}/addresses/legacyValidate";
             public const string V7AnonymousModernAddressValidation = "{version}/addresses/modernValidate";
             public const string V7AnonymousRDSSessionQuery = "{version}/rdssession/query";
@@ -505,8 +505,8 @@ namespace Microsoft.Commerce.Payments.PXService
             public const string V7AnonymousWalletSetupProviderSession = "{version}/setupWalletProviderSession";
 
             // Anonymous or authenticated endpoints
-            public const string V7Cards = "{version}/cards/";
-            public const string V7Assets = "{version}/assets/";
+            public const string V7Cards = "{version}/cards";
+            public const string V7Assets = "{version}/assets";
 
             // Payment Client
             public const string V7PaymentClientInitialization = "{version}/PaymentClient/Initialize";
