@@ -4,6 +4,7 @@ namespace Microsoft.Commerce.Payments.PXCommon
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Diagnostics;
     using System.Net;
     using System.Net.Http;
@@ -128,9 +129,80 @@ namespace Microsoft.Commerce.Payments.PXCommon
                 throw new InvalidOperationException("PXTraceCorrelationHandler middleware not initialized");
             }
 
-            this.logger?.LogDebug("Handling request {Method} {Path}", context.Request.Method, context.Request.Path);
-            await this.next(context);
-            this.logger?.LogDebug("Finished request {Method} {Path} with {StatusCode}", context.Request.Method, context.Request.Path, context.Response.StatusCode);
+            HttpRequestMessage request = context.Request.ToHttpRequestMessage();
+            request.SetRouteData(new RouteValueDictionary(context.GetRouteData()?.Values ?? new RouteValueDictionary()));
+
+            foreach (var item in context.Items)
+            {
+                if (item.Key is string key)
+                {
+                    request.Options.Set(new HttpRequestOptionsKey<object>(key), item.Value);
+                }
+            }
+
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            string startTime = DateTime.UtcNow.ToString("o");
+
+            string operationName = this.GetOperationName(request);
+            var operationNameKey = new HttpRequestOptionsKey<object>(PaymentConstants.Web.Properties.OperationName);
+            if (!request.Options.TryGetValue(operationNameKey, out _))
+            {
+                request.Options.Set(operationNameKey, operationName);
+            }
+
+            CorrelationVector correlationVector = SllCorrelationVectorManager.SetCorrelationVectorAtRequestEntry(request);
+            EventTraceActivity serverTraceId = new EventTraceActivity { CorrelationVectorV4 = correlationVector };
+            EventTraceActivity requestTraceId = GetOrCreateCorrelationIdFromHeader(request);
+
+            var trackingIdKey = new HttpRequestOptionsKey<object>(PaymentConstants.Web.Properties.TrackingId);
+            if (!request.Options.TryGetValue(trackingIdKey, out _))
+            {
+                string trackingId = GetOrCreateTrackingIdFromHeader(request);
+                request.Options.Set(trackingIdKey, trackingId);
+            }
+
+            var serverTraceIdKey = new HttpRequestOptionsKey<object>(PaymentConstants.Web.Properties.ServerTraceId);
+            if (!request.Options.TryGetValue(serverTraceIdKey, out _))
+            {
+                request.Options.Set(serverTraceIdKey, serverTraceId);
+            }
+
+            var clientTraceIdKey = new HttpRequestOptionsKey<object>(PaymentConstants.Web.Properties.ClientTraceId);
+            if (!request.Options.TryGetValue(clientTraceIdKey, out _))
+            {
+                request.Options.Set(clientTraceIdKey, requestTraceId);
+            }
+
+            await request.GetRequestPayload();
+
+            try
+            {
+                await this.next(context);
+
+                var responseMessage = new HttpResponseMessage((HttpStatusCode)context.Response.StatusCode);
+                foreach (var header in context.Response.Headers)
+                {
+                    responseMessage.Headers.TryAddWithoutValidation(header.Key, header.Value.ToArray());
+                }
+
+                context.Response.Headers["x-info"] = "px-azure";
+                context.Response.Headers[PaymentConstants.PaymentExtendedHttpHeaders.CorrelationId] = requestTraceId.ActivityId.ToString();
+
+                await this.TraceOperation(
+                    request,
+                    responseMessage,
+                    context.Request.GetOperationNameWithPendingOnInfo(),
+                    startTime,
+                    stopwatch,
+                    string.Empty,
+                    requestTraceId,
+                    serverTraceId);
+            }
+            finally
+            {
+                stopwatch.Stop();
+            }
         }
 
         /// <summary>
