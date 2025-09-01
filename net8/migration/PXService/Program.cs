@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Commerce.Payments.Common.Environments;
 using Microsoft.Commerce.Payments.Common.Tracing;
 using Microsoft.Commerce.Payments.Common.Web;
-using Microsoft.Commerce.Payments.PXCommon;
 using Microsoft.Commerce.Payments.PXService;
 using Microsoft.Commerce.Payments.PXService.Settings;
 using Microsoft.Extensions.DependencyInjection;
@@ -41,6 +40,7 @@ app.UseRewriter(rewrite);
 // Ensure the routing matcher runs before custom middleware so HttpContext.GetEndpoint()
 // is populated when those middlewares execute.
 app.UseRouting();
+WebApiConfig.Configure(app, pxSettings);
 ApplicationInsightsProvider.SetupAppInsightsConfiguration(pxSettings.ApplicationInsightInstrumentKey, pxSettings.ApplicationInsightMode);
 EnsureSllInitialized();
 
@@ -48,12 +48,6 @@ EnsureSllInitialized();
 if (!WebHostingUtility.IsApplicationSelfHosted())
 {
     app.UseHttpsRedirection();
-}
-
-// Trace correlation (mirrors WebApiConfig)
-if (!WebHostingUtility.IsApplicationSelfHosted())
-{
-    app.UseMiddleware<PXTraceCorrelationHandler>(Constants.ServiceNames.PXService, ApplicationInsightsProvider.LogIncomingOperation);
 }
 
 // API version handler
