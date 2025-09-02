@@ -168,20 +168,17 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Mock
 
         private static string GetNextLink(System.Uri requestUri, string continuationToken)
         {
-            if (string.IsNullOrWhiteSpace(value: continuationToken))
+            if (string.IsNullOrWhiteSpace(continuationToken))
             {
                 return null;
             }
 
-            var uriBuilder = new System.UriBuilder(uri: requestUri);
-            NameValueCollection queryParameters = requestUri.ParseQueryString();
+            var queryParameters = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(requestUri.Query);
+            queryParameters["continuationToken"] = continuationToken;
 
-            queryParameters.Remove(name: "continuationToken");
-            queryParameters.Add(name: "continuationToken", value: continuationToken);
-
-            uriBuilder.Query = queryParameters.ToString();
-
-            return uriBuilder.ToString();
+            var newQuery = string.Join("&", queryParameters.SelectMany(kvp => kvp.Value.Select(v => $"{kvp.Key}={System.Uri.EscapeDataString(v)}")));
+            var uriBuilder = new System.UriBuilder(requestUri) { Query = newQuery };
+            return uriBuilder.Uri.ToString();
         }
 
         private static PaymentInstrumentCheckResponse GetCheckPIResult(string[] trimmedSegments)
