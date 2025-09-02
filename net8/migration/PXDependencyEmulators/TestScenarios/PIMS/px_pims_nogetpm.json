@@ -1,9 +1,0 @@
-﻿{
-  "testScenarioName": "px.pims.nogetpm",
-  "responsesPerApiCall": {
-    "getPM": {
-      "statusCode": 200,
-      "content": []
-    } 
-  }
-}    

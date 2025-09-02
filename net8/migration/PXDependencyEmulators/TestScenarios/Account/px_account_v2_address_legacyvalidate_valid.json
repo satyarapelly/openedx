@@ -1,9 +1,0 @@
-﻿{
-  "testScenarioName": "px.account.v2.address.legacyvalidate.valid",
-  "responsesPerApiCall": {
-    "legacyValidateAddress": {
-      "statusCode": 200,
-      "content": "\"Valid\""
-    }
-  }
-}
