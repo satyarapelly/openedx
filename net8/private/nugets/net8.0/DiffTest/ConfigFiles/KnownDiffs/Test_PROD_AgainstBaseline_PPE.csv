@@ -1,2 +1,0 @@
-﻿ResourceType,ResourceIdentity,Country,Language,Partner,Operation,Scenario,DeltaType,BaselineJPath,NewJPath,NewValue
-paymentMethodDescriptions,,,,,selectInstance,,edit,$..creationDateTime,,_Any_
