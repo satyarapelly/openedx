@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>Microsoft.Commerce.Payments.Management.CertificateVerificationCore</id>
+    <version>1.3.34</version>
+    <authors>pimsengg@microsoft.com</authors>
+    <description>Security update for exposed certificate private keys - bug fix.</description>
+    <releaseNotes>Added New Verification Type to support Highsite</releaseNotes>
+    <copyright>Copyright (c) Microsoft Corporation</copyright>
+    <dependencies>
+      <group targetFramework=".NETFramework4.6.2">
+        <dependency id="Newtonsoft.Json" version="13.0.1" exclude="Build,Analyzers" />
+        <dependency id="System.Net.Http" version="4.3.3" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="Newtonsoft.Json" version="13.0.1" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>
