@@ -20,7 +20,11 @@
     <PackageReference Include="Newtonsoft.Json" />
 	  <PackageReference Include="Moq" />
 	  <PackageReference Include="Microsoft.Extensions.ObjectPool" />
-	  <PackageReference Include="Microsoft.Xbox.Experimentation.Contracts" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Xbox.Experimentation.Contracts">
+      <HintPath>..\..\..\nugets\net8.0\Microsoft.Xbox.Experimentation.Contracts.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\PXService\PXService.csproj" />
