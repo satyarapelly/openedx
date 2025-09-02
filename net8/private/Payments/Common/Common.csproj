@@ -1,59 +1,115 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-	<Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), build.root))\msbuild\Environment.props" />
-	<Import Project="..\Payments.targets" />
+<Project Sdk="Microsoft.NET.Sdk">
+        <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), build.root))\msbuild\Environment.props" />
+        <Import Project="..\Payments.targets" />
 
-	<PropertyGroup>
-		<TargetFrameworks>net8.0</TargetFrameworks>
-		<RootNamespace>Microsoft.Commerce.Payments.Common</RootNamespace>
-		<AssemblyName>Microsoft.Commerce.Payments.Common</AssemblyName>
-		<OutputType>Library</OutputType>
-		<ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
-	</PropertyGroup>
-	<ItemGroup>
-		<FrameworkReference Include="Microsoft.AspNetCore.App" />
-	</ItemGroup>
-	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" />
-		<PackageReference Include="Microsoft.CommonSchema.Services" />
-		<PackageReference Include="Microsoft.Extensions.Configuration" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
-		<PackageReference Include="Microsoft.Extensions.Logging" />
-		<PackageReference Include="Microsoft.Extensions.ObjectPool" />
-		<PackageReference Include="Microsoft.Extensions.Options" />
-		<PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" />
-		<PackageReference Include="Microsoft.Extensions.Primitives" />
-		<PackageReference Include="Microsoft.Win32.Registry" />
-		<PackageReference Include="Newtonsoft.Json" />
-		<PackageReference Include="OpenTelemetry" />
-		<PackageReference Include="OpenTelemetry.Api" />
-		<PackageReference Include="OpenTelemetry.Audit.Geneva" />
-		<PackageReference Include="OpenTelemetry.Exporter.Console" />
-		<PackageReference Include="OpenTelemetry.Exporter.Geneva" />
-		<PackageReference Include="System.Buffers" />
-		<PackageReference Include="System.Collections.Immutable" />
-		<PackageReference Include="System.ComponentModel.Annotations" />
-		<PackageReference Include="System.Data.SqlClient" />
-		<PackageReference Include="System.Diagnostics.DiagnosticSource" />
-		<PackageReference Include="System.Diagnostics.EventLog" />
-		<PackageReference Include="System.Memory" />
-		<PackageReference Include="System.Net.Http.Json" />
-		<PackageReference Include="System.Numerics.Vectors" />
-		<PackageReference Include="System.Reflection.Emit.Lightweight" />
-		<PackageReference Include="System.Runtime.CompilerServices.Unsafe" />
-		<PackageReference Include="System.Text.Encodings.Web" />
-		<PackageReference Include="System.Text.Json" />
-		<PackageReference Include="System.Threading.Tasks.Extensions" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Analyzers" />
-	</ItemGroup>
+        <PropertyGroup>
+                <TargetFrameworks>net8.0</TargetFrameworks>
+                <RootNamespace>Microsoft.Commerce.Payments.Common</RootNamespace>
+                <AssemblyName>Microsoft.Commerce.Payments.Common</AssemblyName>
+                <OutputType>Library</OutputType>
+                <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
+        </PropertyGroup>
+        <ItemGroup>
+                <FrameworkReference Include="Microsoft.AspNetCore.App" />
+        </ItemGroup>
+        <ItemGroup>
+                <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" />
+                <PackageReference Include="Microsoft.Extensions.Configuration" />
+                <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
+                <PackageReference Include="Microsoft.Extensions.Configuration.Binder" />
+                <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+                <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+                <PackageReference Include="Microsoft.Extensions.Logging" />
+                <PackageReference Include="Microsoft.Extensions.ObjectPool" />
+                <PackageReference Include="Microsoft.Extensions.Options" />
+                <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" />
+                <PackageReference Include="Microsoft.Extensions.Primitives" />
+                <PackageReference Include="Microsoft.Win32.Registry" />
+                <PackageReference Include="Newtonsoft.Json" />
+                <PackageReference Include="OpenTelemetry" />
+                <PackageReference Include="OpenTelemetry.Api" />
+                <PackageReference Include="OpenTelemetry.Exporter.Console" />
+                <PackageReference Include="System.Buffers" />
+                <PackageReference Include="System.Collections.Immutable" />
+                <PackageReference Include="System.ComponentModel.Annotations" />
+                <PackageReference Include="System.Data.SqlClient" />
+                <PackageReference Include="System.Diagnostics.DiagnosticSource" />
+                <PackageReference Include="System.Diagnostics.EventLog" />
+                <PackageReference Include="System.Memory" />
+                <PackageReference Include="System.Net.Http.Json" />
+                <PackageReference Include="System.Numerics.Vectors" />
+                <PackageReference Include="System.Reflection.Emit.Lightweight" />
+                <PackageReference Include="System.Runtime.CompilerServices.Unsafe" />
+                <PackageReference Include="System.Text.Encodings.Web" />
+                <PackageReference Include="System.Text.Json" />
+                <PackageReference Include="System.Threading.Tasks.Extensions" />
+                <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" />
+                <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" />
+                <PackageReference Include="Microsoft.AspNetCore.Mvc.Analyzers" />
+        </ItemGroup>
 
-	<ItemGroup>
-		<EmbeddedResource Include="Resources\Currency.csv" />
-		<None Include="app.config" />
-	</ItemGroup>
+        <ItemGroup>
+                <EmbeddedResource Include="Resources\Currency.csv" />
+                <None Include="app.config" />
+        </ItemGroup>
+
+        <ItemGroup>
+                <Reference Include="Microsoft.CommonSchema.Services">
+                        <HintPath>..\..\nugets\net8.0\Microsoft.CommonSchema.Services.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+                <Reference Include="OpenTelemetry.Audit.Geneva">
+                        <HintPath>..\..\nugets\net8.0\OpenTelemetry.Audit.Geneva.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+                <Reference Include="OpenTelemetry.Exporter.Geneva">
+                        <HintPath>..\..\nugets\net8.0\OpenTelemetry.Exporter.Geneva.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+                <Reference Include="Microsoft.CommonSchema.Bond">
+                        <HintPath>..\..\nugets\net8.0\Microsoft.CommonSchema.Bond.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+                <Reference Include="Bond">
+                        <HintPath>..\..\nugets\net8.0\Bond.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+                <Reference Include="Bond.Attributes">
+                        <HintPath>..\..\nugets\net8.0\Bond.Attributes.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+                <Reference Include="Bond.IO">
+                        <HintPath>..\..\nugets\net8.0\Bond.IO.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+                <Reference Include="Bond.JSON">
+                        <HintPath>..\..\nugets\net8.0\Bond.JSON.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+                <Reference Include="Bond.Reflection">
+                        <HintPath>..\..\nugets\net8.0\Bond.Reflection.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+                <Reference Include="Microsoft.Diagnostics.Tracing.TraceEvent">
+                        <HintPath>..\..\nugets\net8.0\Microsoft.Diagnostics.Tracing.TraceEvent.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+                <Reference Include="Microsoft.Diagnostics.FastSerialization">
+                        <HintPath>..\..\nugets\net8.0\Microsoft.Diagnostics.FastSerialization.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+                <Reference Include="Ms.Qos">
+                        <HintPath>..\..\nugets\net8.0\Ms.Qos.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+                <Reference Include="Ms.Qos.IncomingServiceRequest">
+                        <HintPath>..\..\nugets\net8.0\Ms.Qos.IncomingServiceRequest.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+                <Reference Include="Ms.Qos.OutgoingServiceRequest">
+                        <HintPath>..\..\nugets\net8.0\Ms.Qos.OutgoingServiceRequest.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+        </ItemGroup>
 
 </Project>
