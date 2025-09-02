@@ -37,18 +37,18 @@
   
   <!-- team specific values-->
   <ItemGroup>
-    <NonTeamPrivateFolders Include="$(INETROOT)\Private\Shared;$(INETROOT)\Private\developer;$(INETROOT)\Private\_ReSharper.dirs" />
-    
-    <Teams Include="$([System.IO.Directory]::GetDirectories(`$(INETROOT)\Private`))" Exclude="@(NonTeamPrivateFolders)">
+    <NonTeamPrivateFolders Include="$(INETROOT)\private\Shared;$(INETROOT)\private\developer;$(INETROOT)\private\_ReSharper.dirs" />
+
+    <Teams Include="$([System.IO.Directory]::GetDirectories(`$(INETROOT)\private`))" Exclude="@(NonTeamPrivateFolders)">
       <IsCurrentTeam>$(MSBuildProjectFullPath.StartsWith(%(Identity)\, true, null))</IsCurrentTeam>
       <Name>%(Filename)</Name>
     </Teams>
   </ItemGroup>
   
   <PropertyGroup>
-     <SllTracingSdkPath>$(INETROOT)\Private\Shared\Library\Tracing\SllLogging</SllTracingSdkPath>
+     <SllTracingSdkPath>$(INETROOT)\private\Shared\Library\Tracing\SllLogging</SllTracingSdkPath>
      <!-- Derive the team name based on the path of the current project file e.g. d:\sd\depot\private\{team}\project\proj.csproj == {team} -->
-     <Private>$(INETROOT)\Private\</Private>
+     <Private>$(INETROOT)\private\</Private>
      <PrivateLength>$(Private.Length)</PrivateLength>
      <TeamEndIndex>$(MSBuildProjectFullPath.IndexOf(\, $(PrivateLength)))</TeamEndIndex>
      <TeamLength>$([MSBUILD]::Subtract($(TeamEndIndex), $(PrivateLength)))</TeamLength>
@@ -57,7 +57,7 @@
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(TeamName)' != ''">
-     <TeamRoot>$(INETROOT)\Private\$(TeamName)</TeamRoot>
+     <TeamRoot>$(INETROOT)\private\$(TeamName)</TeamRoot>
 	 <DropRoot>$(INETROOT)\Drop\$(Configuration)</DropRoot>
      <ProjectDirRelativeToTeamDir>$(MSBuildProjectDirectory.Substring($(TeamRoot.Length)))</ProjectDirRelativeToTeamDir>
      <OutputPath>bin\$(Configuration)</OutputPath>

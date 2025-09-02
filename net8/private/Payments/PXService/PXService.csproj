@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
@@ -52,13 +52,33 @@
                         <Private>true</Private>
                 </Reference>
                 <Reference Include="CertificateVerificationCore">
-                        <HintPath>..\..\nugets\net8.0\microsoft.commerce.payments.management.certificateverificationcore\1.3.34\lib\netstandard2.0\CertificateVerificationCore.dll</HintPath>
+                        <HintPath>..\..\nugets\net8.0\CertificateVerificationCore.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+                <Reference Include="Microsoft.IdentityModel.S2S">
+                        <HintPath>..\..\nugets\net8.0\Microsoft.IdentityModel.S2S.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+                <Reference Include="Microsoft.IdentityModel.S2S.Tokens">
+                        <HintPath>..\..\nugets\net8.0\Microsoft.IdentityModel.S2S.Tokens.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+                <Reference Include="Microsoft.IdentityModel.S2S.Configuration">
+                        <HintPath>..\..\nugets\net8.0\Microsoft.IdentityModel.S2S.Configuration.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+                <Reference Include="Microsoft.CommonSchema.Services">
+                        <HintPath>..\..\nugets\net8.0\Microsoft.CommonSchema.Services.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+                <Reference Include="Microsoft.Diagnostics.Tracing.TraceEvent">
+                        <HintPath>..\..\nugets\net8.0\Microsoft.Diagnostics.Tracing.TraceEvent.dll</HintPath>
                         <Private>true</Private>
                 </Reference>
         </ItemGroup>
 
-	<!-- Bring along the WCF configuration file at build time -->
-	<ItemGroup>
+        <!-- Bring along the WCF configuration file at build time -->
+        <ItemGroup>
 		<Content Update="wcf.config">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
