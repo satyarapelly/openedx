@@ -1,0 +1,2004 @@
+﻿[
+	// Below is the example of the structure for the feature test configuration.
+	//{
+	//	"featureName": "customizeDisplayTag", // Required.
+	//  It should be the feature name or feature.SubFeatureName e.g. customizeDisplayContent.setBackButtonDisplayContentAsCancel
+	//
+	//	"disableTesting": true, // Optional. If set to true, it will skip the all the tests for the feature.
+	//
+	//	"testCountries": [], // Optional.
+	//  If left blank or removed, it will test for all the countries from Constants.CountriesTest
+	//
+	//	"testPartners": [ "officesmb" ], // Required
+	//  Atleast one partnername is required. It can be anything as we are using pss mock
+	//
+	//	"tests": [ // List of tests for the feature. Can contain multiple tests with different urls
+	//		{
+	//			"url": "paymentMethodDescriptions?country={country}&language=en-US&family=credit_card&type={type}&partner={partner}&operation={operation}",
+	//			Required. Parameters like language, family, etc
+	//
+	//			"userType": "me", // Optional. Will use userType as "me" if not specified. It can be me, my-org, anonymous
+	//
+	//			"operations": [ "add" ], // Optional. It can be left blank as [] or remove the property from test
+	//
+	//			"types": [ "amex%2Cvisa%2Cmc%2Cdiscover%2Cjcb" ], // Similiar to operations
+	//
+	//			"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.customizeDisplayTag",
+	//			Required. TestScenario headers
+	//
+	//			"flights": "showAVSSuggestions,enableAVSAddtionalFlags", // Optional.
+	//
+	//			"additionalHeaders": {
+	//				"headerName1": "value1",
+	//				"x-ms-authinfo": "value2"
+	//			}
+	//			Optional. Used to pass addtional headers other than x-ms-test & x-ms-flight
+	//
+	//			"skipCombinations": [
+	//				{ "partner": "officesmb", "operation": "add", "country": "cn", "type": "_any_" }
+	//			]
+	//			Optional. skipCombinations is scoped to single test and used to skip some combination of params
+	//			which might be not supported based on country, partner, type or operation
+	//			Providing the value as "_any_" will skip for any value
+	//		}
+	//	]
+	//},
+	{
+		// Removes the display tags
+		"featureName": "customizeDisplayTag",
+		"testCountries": [], // tests for all countries in Constants.CountriesTest
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?country={country}&language=en-US&family=credit_card&type={type}&partner={partner}&operation={operation}",
+				"operations": [ "add" ],
+				"types": [ "amex%2Cvisa%2Cmc%2Cdiscover%2Cjcb" ],
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.customizeDisplayTag",
+				"skipCombinations": [
+					{
+						"partner": "officesmb",
+						"operation": "add",
+						"country": "cn",
+						"type": "_any_"
+					}
+				]
+			}
+		]
+	},
+	{
+		// Adds plus icon to the "Add a new payment method" button
+		"featureName": "addPMButtonWithPlusIcon",
+		"testPartners": [ "officesmb" ],
+		"testCountries": [ "us" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?country={country}&partner={partner}&operation={operation}",
+				"operations": [ "selectInstance" ],
+				"testSceanrioHeaders": "px.pims.listpi.success,px.partnersettings.addpmbuttonwithplusicon",
+				"skipCombinations": []
+			}
+		]
+	},
+	{
+		// When the feature flight is enabled, the CVV validation enforces a minimum length of 3 and a maximum length of 4, along with an error message for invalid input.
+		"featureName": "PXEnableChallengeCvvValidation",
+		"testPartners": [ "officesmb" ],
+		"testCountries": [],
+
+		"tests": [
+			{
+				"url": "challengeDescriptions?type=cvv&partner={partner}&operation={operation}&country={country}&language=en-US",
+				"operations": [ "RenderPidlPage" ],
+				"testSceanrioHeaders": "px.partnersettings.defaulttemplate.challenge.enableChallengeCvvValidation,px.pims.handlepaymentchallenge.cvv.success",
+				"skipCombinations": []
+			}
+		]
+	},
+	{
+		// customizeStructure: Changes display content of a PIDL element
+		"featureName": "customizeStructure.removeGroupForExpiryMonthAndYear",
+		"testCountries": [ "us", "in" ],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?partner={partner}&operation={operation}&language=en-us&family=credit_card&country={country}",
+				"operations": [ "add" ],
+				"types": [],
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.customizeStructure",
+				"skipCombinations": []
+			}
+		]
+	},
+	{
+		// Sets back button display content as cancel
+		"featureName": "customizeDisplayContent.setBackButtonDisplayContentAsCancel",
+		"testCountries": [ "us" ],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?country={country}&language=en-US&operation={operation}&family=credit_card&type={type}&partner={partner}",
+				"operations": [ "add" ],
+				"types": [ "mc%2Cvisa%2Camex%2Cdiscover%2Cjcb" ],
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.defaulttemplate.change.content",
+				"skipCombinations": []
+			}
+		]
+	},
+	{
+		// Add prefill address checkbox
+		"featureName": "addPrefillAddressCheckbox",
+		"testCountries": [],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?country={country}&language=en-US&operation={operation}&family=credit_card&type={type}&partner={partner}",
+				"operations": [ "add" ],
+				"types": [ "mc%2Cvisa%2Camex%2Cdiscover%2Cjcb" ],
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.defaulttemplate.prefillBillingAddressCheckbox"
+			}
+		]
+	},
+	{
+		// Add prefill address checkbox for verve credit card type
+		"featureName": "addPrefillAddressCheckbox_ng",
+		"testCountries": ["ng"],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?country={country}&language=en-US&operation={operation}&family=credit_card&type={type}&partner={partner}",
+				"operations": [ "add" ],
+				"types": [ "verve" ],
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.defaulttemplate.prefillBillingAddressCheckbox"
+			}
+		]
+	},
+	{
+		// Add prefill address checkbox for other credit card type
+		"featureName": "addPrefillAddressCheckbox_br",
+		"testCountries": [ "br" ],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?country={country}&language=en-US&operation={operation}&family=credit_card&type={type}&partner={partner}",
+				"operations": [ "add" ],
+				"types": [ "elo" ],
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.defaulttemplate.prefillBillingAddressCheckbox"
+			},
+			{
+				"url": "paymentMethodDescriptions?country={country}&language=en-US&operation={operation}&family=credit_card&type={type}&partner={partner}",
+				"operations": [ "add" ],
+				"types": [ "hipercard" ],
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.defaulttemplate.prefillBillingAddressCheckbox"
+			}
+		]
+	},
+	{
+		// Updates the submit action of address forms to legacy validate
+		"featureName": "SubmitActionType.legacyValidate",
+		"testCountries": [],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "addressDescriptions?country={country}&language=en-US&type={type}&partner={partner}&operation={operation}",
+				"operations": [ "add", "update" ],
+				"types": [ "billing", "shipping", "px_v3_billing", "orgAddress" ],
+				"testSceanrioHeaders": "px.partnersettings.defaulttemplate.address.updatesubmitlink.legacyValidate",
+				"skipCombinations": [
+					{
+						"partner": "officesmb",
+						"operation": "update",
+						"country": "_any_",
+						"type": "px_v3_billing"
+					}
+				]
+			}
+		]
+	},
+	{
+		// Updates the submit action of address forms to Jarvis CM
+		"featureName": "SubmitActionType.jarviscm",
+		"testCountries": [],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "addressDescriptions?country={country}&language=en-US&type={type}&partner={partner}&operation={operation}",
+				"operations": [ "add", "update" ],
+				"types": [ "hapiV1SoldToIndividual", "orgAddress", "hapiserviceusageaddress" ],
+				"testSceanrioHeaders": "px.partnersettings.defaulttemplate.address.submitaction.jarviscm"
+			}
+		]
+	},
+	{
+		// updated the header in the form when the flight feature enableAddtionalAddressHeader is enabled
+		"featureName": "EnableAddtionalAddressHeader",
+		"testCountries": [],
+		"testPartners": [ "macmanage" ],
+
+		"tests": [
+			{
+				"url": "addressDescriptions?country={country}&language=en-US&type={type}&partner={partner}&operation={operation}",
+				"operations": [ "add" ],
+				"types": [ "hapiserviceusageaddress" ],
+				"testSceanrioHeaders": "px.partnersettings.defaulttemplate.enableAddtionalAddressHeader"
+			},
+			{
+				"url": "addressDescriptions?country={country}&language=en-US&type={type}&partner={partner}&operation={operation}",
+				"operations": [ "add" ],
+				"types": [ "hapiv1SoldToIndividual" ],
+				"testSceanrioHeaders": "px.partnersettings.defaulttemplate.enableAddtionalAddressHeader"
+			}
+		]
+	},
+	{
+		// updated the header in the form when the flight feature enableAddtionalAddressHeader is enabled
+		"featureName": "EnbleAddtionalAddressHeaderForHapiDisabledTax",
+		"testCountries": [ "tr", "am", "no", "by", "cl", "mx", "my", "bd", "id", "th", "bh", "cm", "ge", "gh", "is", "ke", "md", "ng", "om", "tj", "ua", "uz", "zw", "fj", "gt", "kh", "ph", "vn" ],
+		"testPartners": [ "macmanage" ],
+
+		"tests": [
+			{
+				"url": "addressDescriptions?country={country}&language=en-US&type={type}&partner={partner}&operation={operation}",
+				"operations": [ "add" ],
+				"types": [ "hapiserviceusageaddress" ],
+				"testSceanrioHeaders": "px.partnersettings.defaulttemplate.addHapiSUADisabledTaxResourceId.enableAddtionalAddressHeader"
+			}
+		]
+	},
+	{
+		// updated the header in the form when the flight feature enableAddtionalAddressHeader is enabled
+		"featureName": "EnableAddtionalAddressHeaderForHapi",
+		"testCountries": [],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "addressDescriptions?country={country}&language=en-US&type={type}&partner={partner}&operation={operation}",
+				"operations": [ "add" ],
+				"types": [ "hapiV1BillToIndividual", "hapiv1SoldToOrganization", "hapiV1BillToOrganization" ],
+				"testSceanrioHeaders": "px.partnersettings.defaulttemplate.hapiV1.enableAddtionalAddressHeader"
+			}
+		]
+	},
+	{
+		// Enables the Doing Business As field in hapiv1SoldToOrganization address form.
+		"featureName": "EnableDoingBusinessAsField",
+		"testCountries": [ "us", "gb", "in" ],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "addressDescriptions?country={country}&language=en-US&type={type}&partner={partner}&operation={operation}",
+				"operations": [ "add", "update" ],
+				"types": [ "hapiv1SoldToOrganization" ],
+				"testSceanrioHeaders": "px.partnersettings.defaulttemplate.enableDoingBusinessAsField"
+			}
+		]
+	},
+	{
+		// Sets Save button display content as Next
+		"featureName": "customizeDisplayContent.setSaveButtonDisplayContentAsNext",
+		"testCountries": [],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?country={country}&language=en-US&operation={operation}&family=credit_card&type={type}&partner={partner}",
+				"operations": [ "add" ],
+				"types": [ "mc%2Cvisa%2Camex%2Cdiscover%2Cjcb" ],
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.onepage.change.content",
+				"skipCombinations": []
+			}
+		]
+	},
+	{
+		// Sets Save button display content as Book and removes cancel button
+		"featureName": "customizeDisplayContent.setSaveButtonDisplayContentAsBook_RemoveElement.removeCancelButton",
+		"testCountries": [ "us" ],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?country={country}&language=en-US&operation={operation}&family=credit_card&type={type}&partner={partner}&allowedPaymentMethods=%5B%22credit_card.amex%22%2C%22credit_card.mc%22%2C%22credit_card.visa%22%5D",
+				"operations": [ "add" ],
+				"types": [ "mc%2Cvisa%2Camex%2Cdiscover%2Cjcb" ],
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.onepage.setSaveButtonDisplayContentAsBook.removeCancelButton"
+			}
+		]
+	},
+	{
+		// Sets Save button display content as Book and removes cancel button
+		"featureName": "hideElement.hidePaymentSummaryText_hidepaymentOptionSaveText",
+		"testCountries": [ "us" ],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?country={country}&language=en-US&operation={operation}&family=credit_card&type={type}&partner={partner}&allowedPaymentMethods=%5B%22credit_card.amex%22%2C%22credit_card.mc%22%2C%22credit_card.visa%22%5D",
+				"operations": [ "add" ],
+				"types": [ "mc%2Cvisa%2Camex%2Cdiscover%2Cjcb" ],
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.onepage.hidePaymentSummaryText.hidepaymentOptionSaveText"
+			}
+		]
+	},
+	{
+		// Flight to enable the feature enableUpdateCreditCardRegex to update regex based on the family type for add operation.
+		"featureName": "enableUpdateCreditCardRegex",
+		"testCountries": [ "us", "in", "ca", "gb" ],
+		"testPartners": [ "defaulttemplate", "amc", "cart", "commercialstores", "webblends" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-US&family=credit_card",
+				"operations": [ "add" ],
+				"types": [ "visa" ],
+				"testSceanrioHeaders": "px.pims.cc.add.success",
+				"flights": "PXEnableUpdateVisaCreditCardRegex"
+			}
+		]
+	},
+	{
+		// The enableFormButtonGapAdjustment flight feature is used to adjust the gap between the submit buttons
+		"featureName": "enableFormButtonGapAdjustment",
+		"testCountries": [],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "challengeDescriptions?type={type}&piid=rGJabgAAAAAJAACA&partner={partner}&operation={operation}&country={country}&language=en-us",
+				"operations": [ "RenderPidlPage" ],
+				"types": [ "cvv" ],
+				"testSceanrioHeaders": "px.pims.handlepaymentchallenge.cvv.success,px.partnersettings.defaulttemplate.challenge.enableFormButtonGapAdjustment"
+			}
+		]
+	},
+	{
+		// Enables the virtual family paymentMethods
+		"featureName": "enableVirtualFamilyPM",
+		"testCountries": [],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?country={country}&language=en-US&partner={partner}&operation={operation}&family=virtual&type={type}",
+				"operations": [ "add" ],
+				"types": [ "invoice_basic", "invoice_check", "alipay", "unionpay" ],
+				"testSceanrioHeaders": "px.pims.nogetpm,px.partnersettings.defaulttemplate.enablevirtualfamilypm",
+				"skipCombinations": []
+			},
+			{
+				"url": "paymentMethodDescriptions?country={country}&language=en-US&partner={partner}&operation={operation}&family=virtual&type={type}",
+				"operations": [ "add", "update" ],
+				"types": [ "legacy_invoice" ],
+				"testSceanrioHeaders": "px.pims.virtual.legacy,px.partnersettings.defaulttemplate.enablevirtualfamilypm"
+			},
+			{
+				"url": "paymentMethodDescriptions?country={country}&language=en-US&partner={partner}&operation={operation}&family=virtual&type={type}",
+				"operations": [ "add" ],
+				"types": [ "invoice_basic", "invoice_check" ],
+				"testSceanrioHeaders": "px.pims.virtual.legacy,px.partnersettings.defaulttemplate.enablevirtualfamilypm",
+				"flights": "showAVSSuggestions,enableAVSAddtionalFlags"
+			},
+			{
+				// selectpmbuttonlist template is used
+				"url": "paymentMethodDescriptions?country={country}&language=en-US&partner={partner}&operation={operation}&allowedPaymentMethods=%5B%22credit_card%22%2C%22virtual.invoice_basic%22%2C%22virtual.invoice_check%22%2C%22virtual.alipay%22%2C%22virtual.unionpay%22%2C%22direct_debit.ach%22%5D",
+				"operations": [ "select" ],
+				"types": [],
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.selectpmbuttonlist.enablevirtualfamilypm"
+			},
+			{
+				// selectpmradiobuttonlist template is used
+				"url": "paymentMethodDescriptions?country={country}&language=en-US&partner={partner}&operation={operation}&allowedPaymentMethods=%5B%22credit_card%22%2C%22virtual.invoice_basic%22%2C%22virtual.invoice_check%22%2C%22virtual.alipay%22%2C%22virtual.unionpay%22%2C%22direct_debit.ach%22%5D",
+				"operations": [ "select" ],
+				"types": [],
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.selectpmradiobuttonlist.enablevirtualfamilypm"
+			}
+		]
+	},
+	{
+		// Address validation
+		"featureName": "addressValidation",
+		"testCountries": [],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "addressDescriptions?country={country}&language=en-US&type={type}&partner={partner}&operation={operation}",
+				"operations": [ "add" ],
+				"types": [ "hapiv1SoldToIndividual" ],
+				"testSceanrioHeaders": "px.partnersettings.onepage.addressvalidation"
+			},
+			{
+				"url": "paymentMethodDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-US&family=credit_card",
+				"operations": [ "add" ],
+				"types": [ "amex%2Cvisa%2Cmc%2Cdiscover%2Cjcb" ],
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.onepage.addressvalidation"
+			}
+		]
+	},
+	{
+		// Removes optional from the labels
+		"featureName": "removeOptionalInLabel",
+		"testCountries": [],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "addressDescriptions?country={country}&language=en-US&type={type}&partner={partner}&operation={operation}",
+				"operations": [ "add" ],
+				"types": [ "hapiV1BillToIndividual", "hapiv1SoldToIndividual" ],
+				"testSceanrioHeaders": "px.partnersettings.defaulttemplate.removeOptionalInLabel",
+				"skipCombinations": []
+			}
+		]
+	},
+	{
+		// Customizes Address Form
+		"featureName": "customizeAddressForm",
+		"testCountries": [],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				// test for feature hides fields as per requirement
+				"url": "addressDescriptions?country={country}&language=en-US&type={type}&partner={partner}&operation={operation}",
+				"operations": [ "add", "update" ],
+				"types": [ "hapiV1BillToIndividual", "hapiv1SoldToIndividual" ],
+				"testSceanrioHeaders": "px.partnersettings.onepage.address",
+				"skipCombinations": []
+			},
+			{
+				"url": "addressDescriptions?country={country}&language=en-US&type={type}&partner={partner}&operation={operation}",
+				"operations": [ "add", "update" ],
+				"types": [ "hapiV1BillToIndividual", "hapiv1SoldToIndividual" ],
+				"testSceanrioHeaders": "px.partnersettings.onepage.address.additionalfields",
+				"skipCombinations": []
+			},
+			{
+				"url": "addressDescriptions?country={country}&language=en-US&type={type}&partner={partner}&operation={operation}",
+				"operations": [ "add", "update" ],
+				"types": [ "hapiv1SoldToIndividual" ],
+				"testSceanrioHeaders": "px.partnersettings.onepage.address.hidegroup"
+			},
+			{
+				// Tests the feature to change shipping to shippingv3 address
+				"url": "addressDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-US",
+				"operations": [ "add" ],
+				"types": [ "shipping" ],
+				"testSceanrioHeaders": "px.partnersettings.defaulttemplate.updateAddressShippingToShippingV3"
+			},
+			{
+				// Tests the feature to change Individual or organization to billing addresstype with scenario and enables country dropdown
+				// Also tests fieldsToBeEnabled
+				"url": "addressDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-US",
+				"userType": "anonymous",
+				"operations": [ "add", "update" ],
+				"types": [ "organization", "individual" ],
+				"testSceanrioHeaders": "px.partnersettings.defaulttemplate.updateIndividualAndOrganizationToBillingForAnonymous"
+			}
+		]
+	},
+	{
+		// Swaps first and last name. Toggles middle name on form
+		"featureName": "customizeElementLocation.moveLastNameBeforeFirstName_and_showMiddleName",
+		"testCountries": [],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "addressDescriptions?country={country}&language=en-US&type={type}&partner={partner}&operation={operation}",
+				"operations": [ "add", "update" ],
+				"types": [ "hapiv1SoldToIndividual" ],
+				"testSceanrioHeaders": "px.partnersettings.onepage.element.swap"
+			},
+			{
+				"url": "addressDescriptions?country={country}&language=en-US&type={type}&partner={partner}&operation={operation}",
+				"operations": [ "add", "update" ],
+				"types": [ "hapiv1SoldToIndividual" ],
+				"testSceanrioHeaders": "px.partnersettings.onepage.element.swap.withflighting"
+			}
+		]
+	},
+	{
+		"featureName": "useClientSidePrefill",
+		"testPartners": [ "officesmb", "cart", "listpibuttonlist" ],
+		"testCountries": [ "us", "in" ],
+
+		"tests": [
+			{
+				"url": "paymentInstrumentsEx?country={country}&partner={partner}&operation={operation}&language=en-us&includePidl=true&allowedPaymentMethods=%5B%22credit_card%22%2C%22direct_debit%22%2C%22online_bank_transfer.paysafecard%22%2C%22ewallet%22%2C%22mobile_billing_non_sim%22%2C%22virtual%22%2C%22add_new_payment_method%22%5D",
+				"operations": [ "selectInstance" ],
+				"testSceanrioHeaders": "px.pims.listpi.success,px.partnersettings.listpibuttonlist.useClientSidePrefill",
+				"flights": "IncludePIDLWithPaymentInstrumentList"
+			}
+		]
+	},
+	{
+		// Enables zipcode and state grouping. Disables firstName & lastName grouping
+		"featureName": "enableZipCodeStateGrouping_and_disableFirstNameLastNameGrouping",
+		"testCountries": [ "us", "in" ],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "addressDescriptions?country={country}&language=en-US&type={type}&partner={partner}&operation={operation}",
+				"operations": [ "add", "update" ],
+				"types": [ "hapiv1SoldToIndividual" ],
+				"testSceanrioHeaders": "px.partnersettings.onepage.firstnamelastname.zipcodestate.grouping"
+			},
+			{
+				"url": "addressDescriptions?country={country}&language=en-US&type={type}&partner={partner}&operation={operation}",
+				"operations": [ "add", "update" ],
+				"types": [ "hapiv1SoldToIndividual" ],
+				"testSceanrioHeaders": "px.partnersettings.defaulttemplate.zipcodestate.grouping"
+			}
+		]
+	},
+	{
+		// Removes data sources from the pidls
+		"featureName": "removeDataSourceResources",
+		"testCountries": [ "us", "in", "it", "eg" ],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "addressDescriptions?country={country}&language=en-US&type={type}&partner={partner}&operation={operation}",
+				"operations": [ "update" ],
+				"types": [ "hapiServiceUsageAddress" ],
+				"testSceanrioHeaders": "px.partnersettings.defaulttemplate.RemoveDataSource"
+			},
+			{
+				"url": "profileDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-US",
+				"operations": [ "update" ],
+				"types": [ "consumer" ],
+				"testSceanrioHeaders": "px.partnersettings.defaulttemplate.RemoveDataSource"
+			},
+			{
+				"url": "taxIdDescriptions?type={type}&scenario=withCountryDropdown&partner={partner}&operation={operation}&language=en-us&country={country}",
+				"operations": [ "update" ],
+				"types": [ "commercial_tax_id" ],
+				"testSceanrioHeaders": "px.partnersettings.defaulttemplate.RemoveDataSource",
+				"skipCombinations": [
+						{ "partner": "_any_", "operation": "_any_", "country": "us", "type": "commercial_tax_id" }
+				]
+			}
+		]
+	},
+	{
+		// Removes data sources from the pidls
+		"featureName": "enableUpdateCCLogo",
+		"testCountries": [ "us" ],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-US&family=credit_card",
+				"operations": [ "update" ],
+				"types": [ "visa" ],
+				"flights": "PXUsePartnerSettingsService",
+				"testSceanrioHeaders": "px.partnersettings.defaulttemplate.enableUpdateCCLogo,px.pims.cc.update.success"
+			},
+			{
+				"url": "paymentMethodDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-US&family=credit_card",
+				"operations": [ "update" ],
+				"types": [ "amex" ],
+				"flights": "PXUsePartnerSettingsService",
+				"testSceanrioHeaders": "px.partnersettings.defaulttemplate.enableUpdateCCLogo,px.pims.cc.update.success"
+			},
+			{
+				"url": "paymentMethodDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-US&family=credit_card",
+				"operations": [ "update" ],
+				"types": [ "mc" ],
+				"flights": "PXUsePartnerSettingsService",
+				"testSceanrioHeaders": "px.partnersettings.defaulttemplate.enableUpdateCCLogo,px.pims.cc.update.success"
+			},
+			{
+				"url": "paymentMethodDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-US&family=credit_card",
+				"operations": [ "update" ],
+				"types": [ "discover" ],
+				"flights": "PXUsePartnerSettingsService",
+				"testSceanrioHeaders": "px.partnersettings.defaulttemplate.enableUpdateCCLogo,px.pims.cc.update.success"
+			}
+		]
+	},
+	{
+		// Uses Hapi submit link for profile instead of jarvis
+		"featureName": "useProfileUpdateToHapi",
+		"testCountries": [],
+		"testPartners": [ "officesmb", "smboobemodern" ],
+
+		"tests": [
+			{
+				"url": "profileDescriptions??type={type}&partner={partner}&operation={operation}&country={country}&language=en-US",
+				"operations": [ "update" ],
+				"types": [ "organization" ],
+				"testSceanrioHeaders": "px.partnersettings.defaulttemplate.useProfileUpdateToHapi"
+			}
+		]
+	},
+	{
+		// Changes the privacy statement hyperlink to a button
+		"featureName": "changeDisplayHintToText.setPrivacyStatementHyperLinkDisplayToButton",
+		"testCountries": [ "us" ],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-US&family=credit_card",
+				"operations": [ "add" ],
+				"types": [ "amex%2Cvisa%2Cmc%2Cdiscover%2Cjcb" ],
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.defaulttemplate.update.content"
+			},
+			{
+				"url": "paymentMethodDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-US&family=credit_card",
+				"operations": [ "add" ],
+				"types": [ "amex%2Cvisa%2Cmc%2Cdiscover%2Cjcb" ],
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.onepage.update.content"
+			},
+			{
+				"url": "paymentMethodDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-US&family=credit_card",
+				"operations": [ "add" ],
+				"types": [ "amex%2Cvisa%2Cmc%2Cdiscover%2Cjcb" ],
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.twopage.update.content"
+			}
+		]
+	},
+	{
+		// Changes consumer profile pidl submit link to jarvis patch link from PUT
+		"featureName": "updatePidlSubmitLink.updateConsumerProfileSubmitLinkToJarvisPatch",
+		"testCountries": [],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "profileDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-us",
+				"operations": [ "update" ],
+				"types": [ "consumer" ],
+				"testSceanrioHeaders": "px.partnersettings.defaulttemplate.updatesubmitlink"
+			}
+		]
+	},
+	{
+		// Sets the submitUrl to empty in TaxId resource for returning secondary pidl payload to partner
+		"featureName": "updatePidlSubmitLink.setSubmitURLToEmptyForTaxId",
+		"testCountries": [ "it", "in" ],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "taxIdDescriptions?type={type}&scenario=withcountrydropdown&partner={partner}&operation={operation}&country={country}&language=en-us",
+				"operations": [ "add" ],
+				"types": [ "commercial_tax_id" ],
+				"testSceanrioHeaders": "px.partnersettings.defaulttemplate.updatesubmitlink"
+			}
+		]
+	},
+	{
+		// hides country in PIDL form for TaxId
+		"featureName": "dpHideCountry",
+		"testCountries": [ "it", "in", "pt", "eg", "ci", "sn", "zm","la" ],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "taxIdDescriptions?type={type}&scenario=departmentalPurchase&partner={partner}&operation={operation}&country={country}&language=en-US",
+				"operations": [ "add" ],
+				"types": [ "commercial_tax_id" ],
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.dphidecountry"
+			}
+		]
+	},
+	{
+		// Enables the conditional fields based on the checkbox
+		"featureName": "enableConditionalFieldsForBillingAddress",
+		"testCountries": [ "us" ],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-US&family=credit_card",
+				"operations": [ "add" ],
+				"types": [ "amex%2Cvisa%2Cmc%2Cdiscover%2Cjcb" ],
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.enable.conditionalfields.for.billingaddress"
+			}
+		]
+	},
+	{
+		// Enables the conditional fields based on the checkbox
+		"featureName": "enableConditionalFieldsForBillingAddress.hideAddressCheckBoxIfAddressIsNotPrefilledFromServer",
+		"testCountries": [ "us" ],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-US&family=credit_card",
+				"operations": [ "add" ],
+				"types": [ "amex%2Cvisa%2Cmc%2Cdiscover%2Cjcb" ],
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.enable.conditionalfields.for.billingaddress.hideaddresscheckbox"
+			}
+		]
+	},
+	{
+		// Uses profileType + prerequisitesV3 form instead of profileType + prerequisites while adding/updating pi
+		"featureName": "useProfilePrerequisitesV3",
+		"testCountries": [ "us" ],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-us&family=credit_card&completePrerequisites=false",
+				"operations": [ "add" ],
+				"types": [ "amex%2Cvisa%2Cmc%2Cdiscover%2Cjcb" ],
+				"testSceanrioHeaders": "px.account.v3.no.address,px.pims.cc.add.success,px.partnersettings.defaulttemplate.useProfilePrerequisitesV3",
+				"flights": "PXUseJarvisV3ForCompletePrerequisites"
+			}
+		]
+	},
+	{
+		// When AllMandatoryFieldsText feature is enabled, we are adding the text 'All fields are mandatory/required.' to the display content of the form.
+		"featureName": "addAllFieldsRequiredText",
+		"testCountries": [],
+		"testPartners": [ "macmanage" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-us&family=credit_card",
+				"operations": [ "add" ],
+				"types": [ "amex%2Cvisa%2Cmc%2Cdiscover%2Cjcb" ],
+				"testSceanrioHeaders": "px.partnersettings.defaulttemplate.addallrequiredfieldstext,px.pims.cc.add.success"
+			},
+			{
+				"url": "paymentMethodDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-us&family=credit_card",
+				"operations": [ "update" ],
+				"types": [ "amex%2Cvisa%2Cmc%2Cdiscover%2Cjcb" ],
+				"testSceanrioHeaders": "px.partnersettings.defaulttemplate.addallrequiredfieldstext,px.pims.cc.update.success"
+			},
+			{
+				"url": "paymentMethodDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-us&family=credit_card",
+				"operations": [ "add" ],
+				"types": [ "amex%2Cvisa%2Cmc%2Cdiscover%2Cjcb" ],
+				"testSceanrioHeaders": "px.partnersettings.twopage.addallrequiredfieldstext,px.pims.cc.add.success"
+			},
+			{
+				"url": "paymentMethodDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-us&family=credit_card",
+				"operations": [ "update" ],
+				"types": [ "amex%2Cvisa%2Cmc%2Cdiscover%2Cjcb" ],
+				"testSceanrioHeaders": "px.partnersettings.twopage.addallrequiredfieldstext,px.pims.cc.update.success"
+			}
+		]
+	},
+	{
+		// When AddAsteriskToAllMandatoryFields feature is enabled, Automatically appends an asterisk (*) to the display text of all mandatory fields in PIDL forms to visually indicate required fields.
+		"featureName": "addAsteriskToAllMandatoryFields",
+		"testCountries": [],
+		"testPartners": [ "battlenet" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-us&family=credit_card",
+				"operations": [ "add" ],
+				"types": [ "amex%2Cvisa%2Cmc%2Cdiscover%2Cjcb" ],
+				"testSceanrioHeaders": "px.partnersettings.battlenet.addAsteriskToAllMandatoryFields,px.pims.cc.add.success"
+			},
+			{
+				"url": "paymentMethodDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-us&family=credit_card",
+				"operations": [ "update" ],
+				"types": [ "amex%2Cvisa%2Cmc%2Cdiscover%2Cjcb" ],
+				"testSceanrioHeaders": "px.partnersettings.battlenet.addAsteriskToAllMandatoryFields,px.pims.cc.update.success"
+			},
+			{
+				"url": "paymentMethodDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-us&family=credit_card",
+				"operations": [ "add" ],
+				"types": [ "amex%2Cvisa%2Cmc%2Cdiscover%2Cjcb" ],
+				"flights": "PXEnableAddAsteriskToAllMandatoryFields",
+				"testSceanrioHeaders": "px.partnersettings.twopage,px.pims.cc.add.success"
+			},
+			{
+				"url": "paymentMethodDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-us&family=credit_card",
+				"operations": [ "update" ],
+				"types": [ "amex%2Cvisa%2Cmc%2Cdiscover%2Cjcb" ],
+				"flights": "PXEnableAddAsteriskToAllMandatoryFields",
+				"testSceanrioHeaders": "px.partnersettings.twopage,px.pims.cc.update.success"
+			}
+		]
+	},
+	{
+		// Shows cardHolderName in the first line and LastFourDigits and Expiry in the next line for a list pi dropdown
+		// Displays the PI's information on two lines
+		"featureName": "splitListPIInformationIntoTwoLines",
+		"testCountries": [ "us" ],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				// Testing only splitListPIInformationIntoTwoLines feature
+				"url": "paymentMethodDescriptions?partner={partner}&operation={operation}&country={country}&language=en-US",
+				"operations": [ "selectinstance" ],
+				"types": [],
+				"testSceanrioHeaders": "px.pims.listpi.success,px.partnersettings.listpidropdown.splitListPIInformationIntoTwoLines"
+			},
+			{
+				// testing the splitListPIInformationIntoTwoLines with showPIExpirationInformation also feature enabled
+				"url": "paymentMethodDescriptions?partner={partner}&operation={operation}&country={country}&language=en-US",
+				"operations": [ "selectinstance" ],
+				"types": [],
+				"testSceanrioHeaders": "px.pims.listpi.success,px.partnersettings.listpidropdown.splitListPIInformationIntoTwoLinesWithExpired"
+			}
+		]
+	},
+	{
+		// To changes the display for check payment method type.
+		"featureName": "OverrideCheckDisplayNameToWireTransfer",
+		"testCountries": [],
+		"testPartners": [ "macmanage" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?partner={partner}&operation={operation}&country={country}&language=en-USfilters=%7B%22filterExpiredPayment%22%3Atrue%7D&allowedPaymentMethods=%5B%22credit_card%22%2C%22direct_debit%22%2C%22offline_bank_transfer.check%22%5D",
+				"operations": [ "selectinstance" ],
+				"types": [ "mc%2Cvisa%2Camex%2Cdiscover%2Cjcb%2Ccheck%2Csepa%2Crupay" ],
+				"testSceanrioHeaders": "px.pims.listpi.success,px.partnersettings.listpidropdown.OverrideCheckDisplayNameToWireTransfer"
+			}
+		]
+	},
+	{
+		// These three features enables additional title,header, & footer for address form
+		"featureName": "enableAddtionalAddressTitle_enableAddtionalAddressHeader_and_enableAddtionalAddressFooter",
+		"testCountries": [],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				// Tests all three features
+				"url": "addressDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-US",
+				"operations": [ "add" ],
+				"types": [ "hapiV1SoldToIndividual" ],
+				"testSceanrioHeaders": "px.partnersettings.onepage.additional.header.footer.title.address"
+			},
+			{
+				// Tests additional header and footer features
+				"url": "addressDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-US",
+				"operations": [ "add" ],
+				"types": [ "hapiV1SoldToIndividual" ],
+				"testSceanrioHeaders": "px.partnersettings.onepage.additional.header.footer"
+			}
+		]
+	},
+	{
+		// Moves CardNumber field before CardHolderName field in add pi form
+		"featureName": "customizeElementLocation.moveCardNumberBeforeCardHolderName",
+		"testCountries": [ "us" ],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-US&family=credit_card",
+				"operations": [ "add" ],
+				"types": [ "amex%2Cvisa%2Cmc%2Cdiscover%2Cjcb" ],
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.onepage.change.location"
+			}
+		]
+	},
+	{
+		// Moves OrganizationName field before EmailAddress field in address form
+		"featureName": "customizeElementLocation.moveOrganizationNameBeforeEmailAddress",
+		"testCountries": [],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "addressDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-US",
+				"operations": [ "add" ],
+				"types": [ "hapiV1SoldToOrganization" ],
+				"testSceanrioHeaders": "px.partnersettings.defaulttemplate.moveOrganizationNameBeforeEmailAddress"
+			}
+		]
+	},
+	{
+		// Hides add a credit or debit card heading on form. And hides country dropdown
+		"featureName": "hideElement.hideAddCreditDebitCardHeading_and_hideCountryDropdown",
+		"testCountries": [ "us" ],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-US&family=credit_card",
+				"operations": [ "add" ],
+				"types": [ "amex%2Cvisa%2Cmc%2Cdiscover%2Cjcb" ],
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.onepage.hideaddcreditdebitcardheadingAndCountryDropdown"
+			}
+		]
+	},
+	{
+		// SelectPMDropDown template styling.
+		"featureName": "SelectpmDropDownStyling",
+		"testCountries": [],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?partner={partner}&operation={operation}&country={country}&language=en-US",
+				"operations": [ "select" ],
+				"testSceanrioHeaders": "px.pims.console.selectpm.grouping,px.partnersettings.selectpmdropdown"
+			}
+		]
+	},
+	{
+		// Hides add a credit or debit card heading on form. And hides country dropdown
+		"featureName": "hideElement.HidePaymentMethodHeading_HideChangeSettingText",
+		"testCountries": [ "us" ],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-US&family=ewallet",
+				"operations": [ "add" ],
+				"types": [ "gcash" ],
+				"flights": "enablePaymentMethodGrouping,vnext",
+				"testSceanrioHeaders": "px.pims.gcash.add.success,px.partnersettings.onepage.hidePaymentMethodHeading",
+				"additionalHeaders": {
+					"x-ms-deviceinfo": "ipAddress=111.111.111.111,userAgent={Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/11.11 (KHTML, like Gecko) Chrome/111.111.111.111 Safari/11.11 Edg/111.111.111.111}"
+				}
+			},
+			{
+				"url": "paymentMethodDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-US&family=ewallet",
+				"operations": [ "add" ],
+				"types": [ "truemoney" ],
+				"flights": "enablePaymentMethodGrouping,vnext",
+				"testSceanrioHeaders": "px.pims.truemoney.add.success,px.partnersettings.onepage.hidePaymentMethodHeading",
+				"additionalHeaders": {
+					"x-ms-deviceinfo": "ipAddress=111.111.111.111,userAgent={Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/11.11 (KHTML, like Gecko) Chrome/111.111.111.111 Safari/11.11 Edg/111.111.111.111}"
+				}
+			},
+			{
+				"url": "paymentMethodDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-US&family=ewallet",
+				"operations": [ "add" ],
+				"types": [ "touchngo" ],
+				"flights": "PXUsePartnerSettingsService,enablePaymentMethodGrouping,vnext",
+				"testSceanrioHeaders": "px.pims.touchngo.add.success,px.partnersettings.onepage.hidePaymentMethodHeading",
+				"additionalHeaders": {
+					"x-ms-deviceinfo": "ipAddress=111.111.111.111,userAgent={Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/11.11 (KHTML, like Gecko) Chrome/111.111.111.111 Safari/11.11 Edg/111.111.111.111}"
+				}
+			}
+		]
+	},
+	{
+		// Hides first, middle & last names for CompletePrerequisites flow
+		"featureName": "hideElement.HideFirstAndLastNameForCompletePrerequisites",
+		"testCountries": [ "us" ],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-US&family=credit_card&completePrerequisites=true",
+				"operations": [ "add" ],
+				"types": [ "amex%2Cvisa%2Cmc%2Cdiscover%2Cjcb" ],
+				"testSceanrioHeaders": "px.account.v3.us.employee.empty.profile,px.pims.cc.add.success,px.partnersettings.onepage.hideelement",
+				"additionalHeaders": {
+					"x-ms-authinfo": "type=QUFE,email=bWFsaUBzaG93aW5ndGltZS5jb20=,tid=MTcyMzY0MGItN2VhMy00YmE2LWExYTctNjZiOWQ0MDkzMmRj,oid=MzgzMzA5ODMtNjhkZC00NDI5LWE2Y2MtMzdjMTQ0Yzg3YjIx,tokenBody=ZXlKaGRXUWlPaUkwTldFek16QmlNUzFpTVdWakxUUmpZekV0T1RFMk1TMDVaakF6T1RreVlXRTBPV1lpTENKcGMzTWlPaUpvZEhSd2N6b3ZMM04wY3k1M2FXNWtiM2R6TG01bGRDOHhOekl6TmpRd1lpMDNaV0V6TFRSaVlUWXRZVEZoTnkwMk5tSTVaRFF3T1RNeVpHTXZJaXdpYVdGMElqb3hOVFk1T1RZMU5UWTRMQ0p1WW1ZaU9qRTFOams1TmpVMU5qZ3NJbVY0Y0NJNk1UVTJPVGsyT0RVek1Dd2lZV055SWpvaU1TSXNJbUZwYnlJNklqUXlSbWRaU1doaFJuSTBjR0ZRTjJwRGMydHdjRmhKY2pkb2NXRTNPV3R6Y1doTmVVcFVPWEZuTWpWWEswSlBlQ3RsYzBFaUxDSmhiWElpT2xzaWNIZGtJbDBzSW1Gd2NHbGtJam9pTURBd01EQXdNRFl0TURBd01DMHdabVl4TFdObE1EQXRNREF3TURBd01EQXdNREF3SWl3aVlYQndhV1JoWTNJaU9pSXlJaXdpWm1GdGFXeDVYMjVoYldVaU9pSkJiR2tpTENKbmFYWmxibDl1WVcxbElqb2lUVzlvWVcxdFpXUWlMQ0pwY0dGa1pISWlPaUkzTkM0eE1Ua3VNVGMxTGpJaUxDSnVZVzFsSWpvaVRXOW9ZVzF0WldRZ1FXeHBJaXdpYjJsa0lqb2lNemd6TXpBNU9ETXROamhrWkMwME5ESTVMV0UyWTJNdE16ZGpNVFEwWXpnM1lqSXhJaXdpYjI1d2NtVnRYM05wWkNJNklsTXRNUzAxTFRJeExURXdPRFV3TXpFeU1UUXRNamczTWpFNE56STVMVGd6T1RVeU1qRXhOUzB6TVRVMk15SXNJbkIxYVdRaU9pSXhNREF6TWpBd01ETkZSVVpHUVRsRUlpd2ljMk53SWpvaWRYTmxjbDlwYlhCbGNuTnZibUYwYVc5dUlpd2ljM1ZpSWpvaVZubE1ZMlp1YW5kV1VYSlhPVFpSUlRac1lsaFpWMUl5YUV0RFR6bE9aMDV2VmtZNFQyUjRlSFJxU1NJc0luUnBaQ0k2SWpFM01qTTJOREJpTFRkbFlUTXROR0poTmkxaE1XRTNMVFkyWWpsa05EQTVNekprWXlJc0luVnVhWEYxWlY5dVlXMWxJam9pYldGc2FVQnphRzkzYVc1bmRHbHRaUzVqYjIwaUxDSjFjRzRpT2lKdFlXeHBRSE5vYjNkcGJtZDBhVzFsTG1OdmJTSXNJblYwYVNJNklrbFdZVmRVTldWaWExVkhVRW8yUkhvMVZtZDBRVUVpTENKMlpYSWlPaUl4TGpBaUxDSjNhV1J6SWpwYklqWXlaVGt3TXprMExUWTVaalV0TkRJek55MDVNVGt3TFRBeE1qRTNOekUwTldVeE1DSmRmUQ==,context=bWU=",
+					"x-ms-clientcontext-encoding": "base64"
+				}
+			},
+			{
+				"url": "paymentMethodDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-US&family=credit_card&completePrerequisites=true",
+				"operations": [ "add" ],
+				"types": [ "amex%2Cvisa%2Cmc%2Cdiscover%2Cjcb" ],
+				"flights": "showMiddleName",
+				"testSceanrioHeaders": "px.account.v3.us.employee.empty.profile,px.pims.cc.add.success,px.partnersettings.onepage.hideelement",
+				"additionalHeaders": {
+					"x-ms-authinfo": "type=aad,context=me"
+				}
+			}
+		]
+	},
+	{
+		// Hides Accept Card Message
+		"featureName": "hideElement.hideAcceptCardMessage",
+		"testCountries": [ "us" ],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-US&family=credit_card",
+				"operations": [ "add" ],
+				"types": [ "amex%2Cvisa%2Cmc%2Cdiscover%2Cjcb" ],
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.hideAcceptCardMessage"
+			}
+		]
+	},
+	{
+		// Stops from making the post call for saving GSTID if it is empty
+		"featureName": "noSubmitIfGSTIDEmpty",
+		"testCountries": [ "in" ],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "taxIdDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-US",
+				"operations": [ "add" ],
+				"types": [ "commercial_tax_id" ],
+				"testSceanrioHeaders": "px.partnersettings.onepage.noSubmitIfGSTIDEmpty"
+			}
+		]
+	},
+	{
+		// singleMarketDirective is enabled for pss by default
+		"featureName": "singleMarketDirective",
+		"testCountries": [ "fr" ],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-US&family=credit_card",
+				"operations": [ "add" ],
+				"types": [ "amex%2Cvisa%2Cmc%2Cdiscover%2Cjcb" ],
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.onepage.smd"
+			}
+		]
+	},
+	{
+		// Uses text for CVV Help Link. And also tests CvvDisplayHelpPosition
+		"featureName": "useTextForCVVHelpLink_CvvDisplayHelpPosition",
+		"testCountries": [ "us" ],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-US&family=credit_card",
+				"operations": [ "add" ],
+				"types": [ "amex%2Cvisa%2Cmc%2Cdiscover%2Cjcb" ],
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.onepage.usetextforcvvhelplink"
+			}
+		]
+	},
+	{
+		// Removes heading and star required text group
+		"featureName": "removeElement.removeAddCreditDebitCardHeading_and_removeStarRequiredTextGroup",
+		"testCountries": [ "fr" ],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-US&family=credit_card",
+				"operations": [ "add" ],
+				"types": [ "amex%2Cvisa%2Cmc%2Cdiscover%2Cjcb" ],
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.removeAddCreditDebitCardHeadingAndRequiredStarGroup"
+			}
+		]
+	},
+	{
+		// Removes yes & back buttons from ewallet
+		"featureName": "removeElement.removeEwalletYesButtons_removeEwalletBackButtons",
+		"testCountries": [ "us" ],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-US&family=ewallet&completePrerequisites=true",
+				"operations": [ "add" ],
+				"types": [ "paypal" ],
+				"testSceanrioHeaders": "px.pims.paypal.add.success,px.partnersettings.onepage.removeEwalletYesButtons"
+			}
+		]
+	},
+	{
+		// Removes Billing Address Page Heading
+		"featureName": "removeElement.removeAddressFormHeading",
+		"testCountries": [],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "AddressDescriptions?country={country}&language=en-US&type={type}&partner={partner}&operation={operation}&scenario=modernAccount",
+				"operations": [ "add" ],
+				"types": [ "billing" ],
+				"testSceanrioHeaders": "px.partnersettings.defaulttemplate.removeEwalletYesButtons"
+			}
+		]
+	},
+	{
+		// Enables the placeholders
+		"featureName": "enablePlaceholder",
+		"testCountries": [],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "AddressDescriptions?country={country}&language=en-US&type={type}&partner={partner}&operation={operation}",
+				"operations": [ "add", "update" ],
+				"types": [ "billing", "shipping", "hapiV1SoldToIndividual", "hapiV1BillToIndividual" ],
+				"testSceanrioHeaders": "px.partnersettings.enable.placeholder"
+			},
+			{
+				"url": "taxidDescriptions?operation={operation}&country={country}&language=en-US&type={type}&partner={partner}&scenario=withCountryDropdown",
+				"operations": [ "add", "update" ],
+				"types": [ "commercial_tax_id" ],
+				"testSceanrioHeaders": "px.partnersettings.enable.placeholder"
+			},
+			{
+				"url": "paymentMethodDescriptions?partner={partner}&operation={operation}&family=credit_card&type={type}&country={country}&language=en-US",
+				"operations": [ "add", "update" ],
+				"types": [ "mc%2Cvisa%2Camex%2Cdiscover%2Cjcb" ],
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.enable.placeholder"
+			}
+		]
+	},
+	{
+		// Removes the fields from address froms
+		"featureName": "CustomizeAddressForm.FieldsToBeRemoved",
+		"testCountries": [],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "addressDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-US",
+				"operations": [ "add", "update" ],
+				"types": [ "hapiv1SoldToIndividual", "shipping", "shipping_v3", "orgaddress", "billing" ],
+				"testSceanrioHeaders": "px.partnersettings.defaulttemplate.fieldstoberemoved"
+			}
+		]
+	},
+	{
+		// Hides the fields from address froms
+		"featureName": "CustomizeAddressForm.fieldsToBeHidden",
+		"testCountries": [],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "addressDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-US",
+				"operations": [ "add", "update" ],
+				"types": [ "hapiV1SoldToIndividual", "hapiV1BillToIndividual" ],
+				"testSceanrioHeaders": "px.partnersettings.onepage.address"
+			}
+		]
+	},
+	{
+		// Hides the fields from address froms
+		"featureName": "CustomizeAddressForm.fieldsToBeDisabled",
+		"testCountries": [],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "addressDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-US",
+				"operations": [ "add" ],
+				"types": [ "hapiV1SoldToIndividual", "hapiV1BillToIndividual" ],
+				"testSceanrioHeaders": "px.partnersettings.onepage.fieldsToBeDisabled"
+			}
+		]
+	},
+	{
+		// Makes the fields required. Disables the countryDropdown for address, useAddressDataSourceForUpdate
+		"featureName": "CustomizeAddressForm.fieldsToMakeRequired_disableCountryDropdown",
+		"testCountries": [],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "addressDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-US",
+				"operations": [ "add", "update" ],
+				"types": [ "hapiV1SoldToIndividual" ],
+				"testSceanrioHeaders": "px.partnersettings.onepage.address.additionalfields"
+			}
+		]
+	},
+	{
+		// Un group first and lastname
+		"featureName": "CustomizeAddressForm.ungroupAddressFirstNameLastName",
+		"testCountries": [],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "addressDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-US",
+				"operations": [ "add", "update" ],
+				"types": [ "hapiV1SoldToIndividual", "shipping", "orgaddress" ],
+				"testSceanrioHeaders": "px.partnersettings.onepage.ungroupAddressFirstNameLastName"
+			}
+		]
+	},
+	{
+		// Removes optional text from fields
+		"featureName": "CustomizeAddressForm.removeOptionalTextFromFields",
+		"testCountries": [],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "addressDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-US",
+				"operations": [ "add", "update" ],
+				"types": [ "hapiv1SoldToIndividual", "shipping", "shipping_v3", "orgaddress", "billing" ],
+				"testSceanrioHeaders": "px.partnersettings.defaulttemplate.removeOptionalTextFromFields"
+			}
+		]
+	},
+	{
+		// Updates accessiblity name with position
+		"featureName": "CustomizeDisplayTag.updateAccessibilityNameWithPosition",
+		"testCountries": [],
+		"testPartners": [ "officesmb", "xboxsettings", "storify" ],
+
+		"tests": [
+			{
+				"url": "AddressDescriptions?country={country}&language=en-US&type={type}&partner={partner}&operation={operation}",
+				"operations": [ "add" ],
+				"types": [ "billing" ],
+				"flights": "XboxUpdateAccessibilityNameWithPosition",
+				"testSceanrioHeaders": "px.partnersettings.defaulttemplate"
+			},
+			{
+				"url": "AddressDescriptions?country={country}&language=en-US&type={type}&partner={partner}&operation={operation}&scenario=shipping",
+				"operations": [ "add" ],
+				"types": [ "jarvis_v3" ],
+				"flights": "XboxUpdateAccessibilityNameWithPosition",
+				"testSceanrioHeaders": "px.partnersettings.defaulttemplate",
+				"skipCombinations": [
+					{
+						"partner": "xboxsettings",
+						"operation": "add",
+						"country": "xk",
+						"type": "_any_"
+					},
+					{
+						"partner": "storify",
+						"operation": "add",
+						"country": "xk",
+						"type": "_any_"
+					},
+					{
+						"partner": "officesmb",
+						"operation": "_any_",
+						"country": "_any_",
+						"type": "_any_"
+					}
+				]
+			},
+			{
+				"url": "paymentMethodDescriptions?partner={partner}&operation={operation}&language=en-us&family=credit_card&country={country}&completePrerequisites=true",
+				"operations": [ "add" ],
+				"flights": "XboxUpdateAccessibilityNameWithPosition",
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.defaulttemplate",
+				"skipCombinations": [
+					{
+						"partner": "_any_",
+						"operation": "_any_",
+						"country": "cn",
+						"type": "_any_"
+					}
+				]
+			}
+		]
+	},
+	{
+		// Updates accessiblity name with position
+		"featureName": "CustomizeDisplayTag.UpdateXboxElementsAccessibilityHints",
+		"testCountries": [],
+		"testPartners": [ "officesmb", "XboxNative" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?partner={partner}&operation={operation}&type={type}&language=en-us&family=credit_card&country={country}&completePrerequisites=true",
+				"operations": [ "add" ],
+				"types": [ "visa", "amex", "mc", "discover", "jcb" ],
+				"flights": "PXEnableXboxAccessibilityHint",
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.defaulttemplate",
+				"additionalHeaders": {
+					"x-ms-pidlsdk-version": "2.4.0"
+				}
+			},
+			{
+				"url": "paymentMethodDescriptions?partner={partner}&operation={operation}&type={type}&language=en-us&family=credit_card&country={country}",
+				"operations": [ "update" ],
+				"types": [ "visa", "amex", "mc", "discover", "jcb" ],
+				"flights": "PXEnableXboxAccessibilityHint",
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.defaulttemplate",
+				"additionalHeaders": {
+					"x-ms-pidlsdk-version": "2.4.0"
+				}
+			},
+			{
+				"url": "paymentMethodDescriptions?partner={partner}&operation={operation}&type={type}&language=en-us&family=credit_card&country={country}&completePrerequisites=true",
+				"operations": [ "add" ],
+				"types": [ "visa", "amex", "mc", "discover", "jcb" ],
+				"flights": "PXEnableXboxAccessibilityHint",
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.defaulttemplate",
+				"additionalHeaders": {
+					"x-ms-pidlsdk-version": "1.22.3"
+				}
+			},
+			{
+				"url": "paymentMethodDescriptions?partner={partner}&operation={operation}&type={type}&language=en-us&family=credit_card&country={country}",
+				"operations": [ "update" ],
+				"types": [ "visa", "amex", "mc", "discover", "jcb" ],
+				"flights": "PXEnableXboxAccessibilityHint",
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.defaulttemplate",
+				"additionalHeaders": {
+					"x-ms-pidlsdk-version": "1.22.3"
+				}
+			}
+		]
+	},
+	{
+		// Display Tags To Be Removed
+		"featureName": "CustomizeDisplayTag.DisplayTagsToBeRemoved",
+		"testCountries": [ "us" ],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?partner={partner}&operation={operation}&language=en-us&family=credit_card&country={country}&type={type}",
+				"operations": [ "add" ],
+				"types": [ "amex%2Cvisa%2Cmc%2Cdiscover%2Cjcb" ],
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.customizeDisplayTag"
+			}
+		]
+	},
+	{
+		// Adds styling and reorganizing display content in Add CC, PayPal, & Venmo
+		"featureName": "AddCCTwoPageForWindows_AddPayPalTwoPageForWindows",
+		"testCountries": [ "us" ],
+		"testPartners": [ "windowsstore" ],
+
+		"tests": [
+			{
+				// AddCCTwoPageForWindows
+				"url": "paymentMethodDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-US&family=credit_card&completePrerequisites=true",
+				"operations": [ "add" ],
+				"types": [ "amex%2Cvisa%2Cmc%2Cdiscover%2Cjcb" ],
+				"flights": "PXUsePartnerSettingsService",
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.windowsstore"
+			},
+			{
+				// AddPayPalTwoPageForWindows
+				"url": "paymentMethodDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-US&family=ewallet&completePrerequisites=true",
+				"operations": [ "add" ],
+				"types": [ "paypal" ],
+				"flights": "PXUsePartnerSettingsService",
+				"testSceanrioHeaders": "px.pims.paypal.add.success,px.partnersettings.windowsstore"
+			},
+			{
+				// AddVenmoForWindows
+				"url": "paymentMethodDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-US&family=ewallet",
+				"operations": [ "add" ],
+				"types": [ "venmo" ],
+				"flights": "enablePaymentMethodGrouping,vnext,PxEnableVenmo,PxEnableSelectPMAddPIVenmo,PXUsePartnerSettingsService",
+				"testSceanrioHeaders": "px.pims.venmo.add.pending.get.pending,px.partnersettings.windowsstore"
+			}
+		]
+	},
+	{
+		// Reorganizing display content in Update CC
+		"featureName": "UpdateCCTwoPageForWindows",
+		"testCountries": [ "us" ],
+		"testPartners": [ "windowsstore" ],
+
+		"tests": [
+			{
+				// It also includes removeSpaceInPrivacyTextGroup displayCustomization
+				"url": "paymentMethodDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-US&family=credit_card&completePrerequisites=true",
+				"operations": [ "update" ],
+				"types": [ "amex%2Cvisa%2Cmc%2Cdiscover%2Cjcb" ],
+				"flights": "PXUsePartnerSettingsService",
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.windowsstore"
+			}
+		]
+	},
+	{
+		// Customize the Profile form
+		"featureName": "CustomizeProfileForm_CustomizeSubmitButtonContext",
+		"testCountries": [],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				// Tests the dataFieldsToRemoveFromPayload, dataFieldsToRemoveFullPath & convertProfileTypeTo
+				"url": "ProfileDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-US",
+				"operations": [ "add" ],
+				"types": [ "consumerV3" ],
+				"testSceanrioHeaders": "px.partnersettings.webblendsFamily.familyFunding.withAVS"
+			}
+		]
+	},
+	{
+		// Enables country dropdown in credit card form
+		"featureName": "EnableElement.enableCountryAddorUpdateCC",
+		"testCountries": [ "us" ],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?partner={partner}&operation={operation}&country={country}&language=en-US&family=credit_card",
+				"operations": [ "add", "update" ],
+				"types": [],
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.defaulttemplate.enableCountryAddorUpdateCC"
+			}
+		]
+	},
+	{
+		// Enables secure fields
+		"featureName": "EnableSecureField.enableSecureFieldAddCC",
+		"testCountries": [ "us" ],
+		"testPartners": [ "officesmb", "Webblends" ],
+
+		"tests": [
+			{
+				// feature is enabled via flight
+				"url": "paymentMethodDescriptions?partner={partner}&operation={operation}&country={country}&language=en-US&family=credit_card",
+				"operations": [ "add" ],
+				"types": [],
+				"flights": "PXEnableSecureFieldAddCreditCard",
+				"testSceanrioHeaders": "px.pims.cc.add.success",
+				"skipCombinations": [
+					// skip the PSS partners
+					{
+						"partner": "officesmb",
+						"operation": "add",
+						"country": "_any_",
+						"type": "_any_"
+					}
+				]
+			},
+			{
+				// feature is enabled via pss settting
+				"url": "paymentMethodDescriptions?partner={partner}&operation={operation}&country={country}&language=en-US&family=credit_card",
+				"operations": [ "add" ],
+				"types": [],
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.defaulttemplate.enableSecureFieldAddCC",
+				"skipCombinations": [
+					// skip the non-PSS partners
+					{
+						"partner": "Webblends",
+						"operation": "add",
+						"country": "_any_",
+						"type": "_any_"
+					}
+				]
+			}
+		]
+	},
+	{
+		// Enables Tokenization Encryption
+		"featureName": "EnableTokenizationEncryption",
+		"testCountries": [ "us" ],
+		"testPartners": [ "officesmb", "northStarWeb" ],
+		"disableTesting": true,
+
+		"tests": [
+			{
+				// feature is enabled via flight
+				"url": "paymentMethodDescriptions?partner={partner}&operation={operation}&country={country}&language=en-US&family=credit_card",
+				"operations": [ "add" ],
+				"types": [],
+				"flights": "PXEnableTokenizationEncryptionAddUpdateCC",
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.defaulttemplate"
+			},
+			{
+				"url": "paymentMethodDescriptions?partner={partner}&operation={operation}&country={country}&language=en-US&family=credit_card",
+				"operations": [ "add" ],
+				"types": [],
+				"flights": "PXEnableTokenizationEncryptionAddUpdateCC,PXEnableSecureFieldAddCreditCard,PXEnableTokenizationEncryptionFetchConfigWithScript",
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.defaulttemplate"
+			},
+			{
+				"url": "paymentMethodDescriptions?partner={partner}&operation={operation}&country={country}&language=en-US&family=credit_card",
+				"operations": [ "update" ],
+				"types": [],
+				"flights": "PXEnableTokenizationEncryptionAddUpdateCC,PXEnableSecureFieldUpdateCreditCard,PXEnableTokenizationEncryptionFetchConfigWithScript",
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.defaulttemplate"
+			},
+			{
+				"url": "paymentMethodDescriptions?partner={partner}&operation={operation}&country={country}&language=en-US&family=credit_card",
+				"operations": [ "add" ],
+				"types": [],
+				"flights": "PXEnableTokenizationEncryptionAddUpdateCC,PXEnableSecureFieldAddCreditCard,PXEnableTokenizationEncryptionFetchConfigWithScript,PXEnableTokenizationEncFetchConfigAddCCPiAuthKey",
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.defaulttemplate"
+			},
+			{
+				"url": "paymentMethodDescriptions?partner={partner}&operation={operation}&country={country}&language=en-US&family=credit_card",
+				"operations": [ "update" ],
+				"types": [],
+				"flights": "PXEnableTokenizationEncryptionAddUpdateCC,PXEnableSecureFieldUpdateCreditCard,PXEnableTokenizationEncryptionFetchConfigWithScript,PXEnableTokenizationEncFetchConfigAddCCPiAuthKey",
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.defaulttemplate"
+			}
+		]
+	},
+	{
+		// Groups address fields on creditcard form
+		"featureName": "groupAddressFields",
+		"testCountries": [ "us", "gb" ],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?partner={partner}&operation={operation}&country={country}&language=en-US&family=credit_card",
+				"operations": [ "add" ],
+				"types": [],
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.defaulttemplate.groupAddressFields"
+			},
+			{
+				"url": "paymentMethodDescriptions?partner={partner}&operation={operation}&country={country}&language=en-US&family=credit_card",
+				"operations": [ "add" ],
+				"types": [],
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.defaulttemplate.groupAddressFields.zip.state.group"
+			},
+			{
+				"url": "paymentMethodDescriptions?partner={partner}&operation={operation}&country={country}&language=en-US&family=credit_card",
+				"operations": [ "update" ],
+				"types": [],
+				"testSceanrioHeaders": "px.pims.cc.update.success,px.partnersettings.defaulttemplate.groupAddressFields"
+			},
+			{
+				"url": "paymentMethodDescriptions?partner={partner}&operation={operation}&country={country}&language=en-US&family=credit_card",
+				"operations": [ "update" ],
+				"types": [],
+				"testSceanrioHeaders": "px.pims.cc.update.success,px.partnersettings.defaulttemplate.groupAddressFields.zip.state.group"
+			},
+			{
+				"url": "addressDescriptions?country={country}&language=en-US&type=billing&partner={partner}&operation={operation}",
+				"operations": [ "add", "update" ],
+				"testSceanrioHeaders": "px.partnersettings.defaulttemplate.groupAddressFields"
+			},
+			{
+				"url": "addressDescriptions?country={country}&language=en-US&type=billing&partner={partner}&operation={operation}",
+				"operations": [ "add", "update" ],
+				"testSceanrioHeaders": "px.partnersettings.defaulttemplate.groupAddressFields.zip.state.group"
+			}
+		]
+	},
+	{
+		// Used for reorganizing display content in Redeem Gift Card
+		"featureName": "RedeemGiftCard",
+		"testCountries": [],
+		"testPartners": [ "windowsstore" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?partner={partner}&operation={operation}&country={country}&language=en-US&family=ewallet",
+				"operations": [ "add" ],
+				"types": [ "stored_value" ],
+				"flights": "PXUsePartnerSettingsService",
+				"testSceanrioHeaders": "px.pims.ewallet.giftcard,px.partnersettings.windowsstore"
+			}
+		]
+	},
+	{
+		// Adds syncToLegacy=0 query param to jarvis post address api. This skips CTP account creation from jarvis.
+		"featureName": "SkipJarvisAddressSyncToLegacy",
+		"testCountries": [],
+		"testPartners": [ "officesmb", "officeoobe" ],
+
+		"tests": [
+			{
+				"url": "AddressDescriptions?country={country}&language=en-US&type={type}&partner={partner}&operation={operation}",
+				"operations": [ "add" ],
+				"types": [ "billing" ],
+				"flights": "PXSkipJarvisAddressSyncToLegacy",
+				"testSceanrioHeaders": "px.partnersettings.defaulttemplate" // will be used for officesmb
+			}
+		]
+	},
+	{
+		// Swaps PI logo source url
+		"featureName": "SwapLogoSource.useFixedSVGForMC",
+		"testCountries": [ "us" ],
+		"testPartners": [ "officesmb", "WindowsSettings" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?country={country}&partner={partner}&family=credit_card&type={type}&operation={operation}",
+				"operations": [ "add", "update" ],
+				"types": [ "mc" ],
+				"flights": "PXUsePartnerSettingsService",
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.defaulttemplate.swapLogoSource"
+			}
+		]
+	},
+	{
+		// Disables India Tokenization by removing properties from displayDescriptions and DataDescriptions
+		"featureName": "DisableIndiaTokenization",
+		"testCountries": [ "in" ],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?country={country}&partner={partner}&family=credit_card&type={type}&operation={operation}",
+				"operations": [ "add", "update" ],
+				"types": [ "visa%2Cmc" ],
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.defaulttemplate.disableIndiaTokenization"
+			}
+		]
+	},
+	{
+		// Updates PaymentMethod HeadingType To Text
+		"featureName": "UpdateElementType.UpdatePaymentMethodHeadingTypeToText",
+		"testCountries": [],
+		"testPartners": [ "officesmb", "cart" ],
+
+		"tests": [
+			{
+				// feature is enabled via flight PXEnableTextForDisplayHint
+				"url": "paymentMethodDescriptions?country={country}&language=en-us&partner={partner}&operation={operation}",
+				"operations": [ "select" ],
+				"flights": "PXEnableTextForDisplayHint",
+				"testSceanrioHeaders": "px.partnersettings.selectpmbuttonlist,px.pims.listpi.success" // will be used for officesmb
+			},
+			{
+				"url": "paymentMethodDescriptions?country={country}&language=en-us&partner={partner}&operation={operation}",
+				"operations": [ "select" ],
+				"flights": "PXEnableTextForDisplayHint,enablePaymentMethodGrouping,enablePMGroupingSubpageSubmitBlock",
+				"testSceanrioHeaders": "px.partnersettings.selectpmbuttonlist,px.pims.listpi.success" // will be used for officesmb
+			}
+		]
+	},
+	{
+		// Update all the logo urls in pidl display hints to point to staticresources CDN
+		"featureName": "UpdateStaticResourceServiceEndpoint",
+		"testCountries": [ "us" ],
+		"testPartners": [ "officesmb", "cart" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?partner={partner}&country={country}&language=en-us&operation={operation}&family=credit_card&type={type}",
+				"operations": [ "add" ],
+				"types": [ "amex%2Cvisa%2Cmc%2Cdiscover%2Cjcb" ],
+				"flights": "PXUseCDNForStaticResourceService",
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.defaulttemplate"
+			}
+		]
+	},
+	{
+		// Enables XboxNative Style Hints
+		"featureName": "EnableXboxNativeStyleHints",
+		"testCountries": [],
+		"testPartners": [ "storify", "officesmb" ],
+
+		"tests": [
+			{
+				// feature is enabled via flight PXEnableXboxNativeStyleHints
+				"url": "paymentMethodDescriptions?&partner={partner}&operation={operation}&language=en-US&country={country}&allowedPaymentMethods=%5B%22credit_card.visa%22%2C%22credit_card.amex%22%2C%22credit_card.mc%22%2C%22ewallet.paypal%22%2C%22ewallet.stored_value%22%2C%22invoice_credit.klarna%22%2C%22mobile_billing_non_sim.dk3-dk-nonsim%22%2C%22mobile_billing_non_sim.dkt-dk-nonsim%22%2C%22mobile_billing_non_sim.tli-dk-nonsim%22%2C%22mobile_billing_non_sim.tor-dk-nonsim%22%2C%22online_bank_transfer.paysafecard%22%5D",
+				"operations": [ "selectInstance" ],
+				"flights": "PXEnableVenmo,PXEnableXboxNativeStyleHints",
+				"testSceanrioHeaders": "px.pims.listpi.success,px.partnersettings.listpidropdown"
+			}
+		]
+	},
+	{
+		//feature to enable KlarneCheckoutPage on the PIDL by adding into the paymentMethodIds list
+		"featureName": "EnableKlarnaCheckout",
+		"testCountries": ["nl", "at", "de", "fi", "dk", "no", "se"],
+		"testPartners": [ "macmanage", "officesmb" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?type=klarna&partner={partner}&operation=Add&country={country}&language=en-US&family=invoice_credit&currency=USD",
+				"operations": [ "add" ],
+				"testSceanrioHeaders": "px.partnersettings.add.klarna.checkout,px.pims.klarna.add.success"
+			}
+		]
+	},
+	{
+		// Moves the selectedPI to first option making it default instance in listpi
+		"featureName": "MoveSelectedPIToFirstOption",
+		"testCountries": [],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?&partner={partner}&operation={operation}&language=en-US&country={country}&filters=%7B%22id%22%3A%22FgGmBAAAAAApAACC%22%7D",
+				"operations": [ "selectInstance" ],
+				"testSceanrioHeaders": "px.pims.listpi.success,px.partnersettings.listpibuttonlist.MoveSelectedPIToFirstOption"
+			},
+			{
+				"url": "paymentMethodDescriptions?&partner={partner}&operation={operation}&language=en-US&country={country}&filters=%7B%22id%22%3A%22FgGmBAAAAAApAACC%22%7D",
+				"operations": [ "selectInstance" ],
+				"testSceanrioHeaders": "px.pims.listpi.success,px.partnersettings.listpidropdown.MoveSelectedPIToFirstOption"
+			},
+			{
+				"url": "paymentMethodDescriptions?&partner={partner}&operation={operation}&language=en-US&country={country}&filters=%7B%22id%22%3A%22FgGmBAAAAAApAACC%22%7D",
+				"operations": [ "selectInstance" ],
+				"testSceanrioHeaders": "px.pims.listpi.success,px.partnersettings.listpiradiobutton.MoveSelectedPIToFirstOption"
+			}
+		]
+	},
+	{
+		// Updates data source for local card PIDLs with a configuration
+		"featureName": "AddLocalCardFiltering",
+		"testCountries": [],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?&partner={partner}&operation={operation}&language=en-US&country={country}",
+				"operations": [ "selectInstance" ],
+				"testSceanrioHeaders": "px.pims.listpi.success,px.partnersettings.listpidropdown.addLocalCardFiltering"
+			}
+		]
+	},
+	{
+		// Updates the action context properties
+		"featureName": "CustomizeActionContext.replaceContextInstanceWithPaymentInstrumentId",
+		"testCountries": [],
+		"testPartners": [ "officesmb", "commercialsignup", "azure" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?&partner={partner}&operation={operation}&country={country}",
+				"operations": [ "selectInstance" ],
+				"flights": "PXEnableReplaceContextInstanceWithPaymentInstrumentId",
+				"testSceanrioHeaders": "px.pims.listpi.success,px.partnersettings.listpidropdown",
+				"additionalHeaders": {
+					"x-ms-customer": "eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJyZXF1ZXN0ZXIiOiJ7fSIsInRhcmdldCI6IntcImN1c3RvbWVyVHlwZVwiOlwiYW5vbnltb3VzdXNyXCIsXCJjdXN0b21lcklkXCI6XCI4MDEwNmEwYS00NDQ5LTQ5YzMtOTJmNC1iNWU2ZWRhNDQ3NDNcIixcIm9uQmVoYWxmT2ZcIjpmYWxzZX0iLCJjYWxsZXIiOiJPbXMiLCJhdXRoVHlwZSI6Ilg1MDkiLCJ2ZXJzaW9uIjoiMS4wIiwibmJmIjoxNjkyMzg3MDMwLCJleHAiOjE2OTI0MzAyMzAsImlzcyI6InVybjptaWNyb3NvZnQ6b21zIn0."
+				}
+			},
+			{
+				"url": "paymentMethodDescriptions?&partner={partner}&operation={operation}&country={country}",
+				"operations": [ "selectInstance" ],
+				"flights": "PXEnableReplaceContextInstanceWithPaymentInstrumentId,PXEnableEmpOrgListPI",
+				"testSceanrioHeaders": "px.pims.listpi.success,px.partnersettings.listpidropdown",
+				"additionalHeaders": {
+					"x-ms-customer": "eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJyZXF1ZXN0ZXIiOiJ7fSIsInRhcmdldCI6IntcImN1c3RvbWVyVHlwZVwiOlwiYW5vbnltb3VzdXNyXCIsXCJjdXN0b21lcklkXCI6XCI4MDEwNmEwYS00NDQ5LTQ5YzMtOTJmNC1iNWU2ZWRhNDQ3NDNcIixcIm9uQmVoYWxmT2ZcIjpmYWxzZX0iLCJjYWxsZXIiOiJPbXMiLCJhdXRoVHlwZSI6Ilg1MDkiLCJ2ZXJzaW9uIjoiMS4wIiwibmJmIjoxNjkyMzg3MDMwLCJleHAiOjE2OTI0MzAyMzAsImlzcyI6InVybjptaWNyb3NvZnQ6b21zIn0."
+				}
+			}
+		]
+	},
+	{
+		// Includes defined credit logo urls in the data description
+		"featureName": "IncludeCreditCardLogos",
+		"testCountries": [],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?&partner={partner}&operation={operation}&country={country}",
+				"operations": [ "selectInstance" ],
+				"testSceanrioHeaders": "px.partnersettings.listpidropdown.includeCreditCardLogos,px.pims.listpi.success"
+			}
+		]
+	},
+	{
+		// Makes local card details template inline
+		"featureName": "InlineLocalCardDetails",
+		"testCountries": [],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?&partner={partner}&operation={operation}&country={country}&language=en-US",
+				"operations": [ "selectInstance" ],
+				"testSceanrioHeaders": "px.partnersettings.listpidropdown.inlineLocalCardDetails,px.pims.listpi.success"
+			}
+		]
+	},
+	{
+		// Returns the backuppiselection pidl for split payment supported filter is passed
+		"featureName": "returnBackupPidlForSplitPaymentSupported",
+		"testCountries": [],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?&partner={partner}&operation={operation}&country={country}&language=en-US&filters=%7B%22splitPaymentSupported%22%3Atrue%7D",
+				"operations": [ "selectInstance" ],
+				"testSceanrioHeaders": "px.pims.listpi.success,px.partnersettings.listpiradiobutton.returnBackupPidlForSplitPaymentSupported"
+			},
+			{
+				"url": "paymentMethodDescriptions?&partner={partner}&operation={operation}&country={country}&language=en-US&filters=%7B%22splitPaymentSupported%22%3Atrue%2C%22isBackupPiOptional%22%3Atrue%7D",
+				"operations": [ "selectInstance" ],
+				"testSceanrioHeaders": "px.pims.listpi.success,px.partnersettings.listpiradiobutton.returnBackupPidlForSplitPaymentSupported"
+			}
+		]
+	},
+	{
+		// Makes local card details template inline
+		"featureName": "ListAddressForWindows",
+		"testCountries": [],
+		"testPartners": [ "windowsstore" ],
+
+		"tests": [
+			{
+				"url": "AddressDescriptions?scenario=billing&partner={partner}&operation={operation}&language=en-US&country={country}",
+				"operations": [ "selectInstance" ],
+				"flights": "PXUsePartnerSettingsService",
+				"testSceanrioHeaders": "px.partnersettings.windowsstore"
+			}
+		]
+	},
+	{
+		// Styling for ListPI
+		"featureName": "ListPIForWindows",
+		"testCountries": [],
+		"testPartners": [ "officesmb", "windowsstore" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?country={country}&partner={partner}&language=en-US&operation={operation}&allowedPaymentMethods=%5B%22credit_card%22%2C%22direct_debit%22%2C%22online_bank_transfer.paysafecard%22%2C%22ewallet%22%2C%22mobile_billing_non_sim%22%2C%22virtual%22%5D&filters=%7B%22chargeThreshold%22%3A%2220%22%7D",
+				"operations": [ "selectInstance" ],
+				"flights": "PXUsePartnerSettingsService",
+				"testSceanrioHeaders": "px.pims.listpi.success,px.partnersettings.windowsstore",
+				"skipCombinations": [
+					{
+						"partner": "officesmb",
+						"operation": "selectInstance",
+						"country": "_any_",
+						"type": "_any_"
+					}
+				]
+			},
+			{
+				"url": "paymentMethodDescriptions?country={country}&partner={partner}&language=en-US&operation={operation}&allowedPaymentMethods=%5B%22credit_card%22%2C%22direct_debit%22%2C%22online_bank_transfer.paysafecard%22%2C%22ewallet%22%2C%22mobile_billing_non_sim%22%2C%22virtual%22%5D&filters=%7B%22chargeThreshold%22%3A%2220%22%7D",
+				"operations": [ "selectInstance" ],
+				"testSceanrioHeaders": "px.pims.listpi.success,px.partnersettings.listpidropdown.listPIForWindows",
+				"skipCombinations": [
+					{
+						"partner": "windowsstore",
+						"operation": "selectInstance",
+						"country": "_any_",
+						"type": "_any_"
+					}
+				]
+			}
+		]
+	},
+	{
+		// Feature skips selectInstance (listPI) if no PIs available and returns AddResource action to client
+		"featureName": "SkipSelectInstanceNoPI",
+		"testCountries": [],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?country={country}&partner={partner}&language=en-US&operation={operation}",
+				"operations": [ "selectInstance" ],
+				"testSceanrioHeaders": "px.pims.listpi.nopi.success,px.partnersettings.listpidropdown.skipSelectInstanceNoPI.triggeredBy"
+			},
+			{
+				"url": "paymentMethodDescriptions?country={country}&partner={partner}&language=en-US&operation={operation}",
+				"operations": [ "selectInstance" ],
+				"testSceanrioHeaders": "px.pims.listpi.nopi.success,px.partnersettings.listpidropdown.skipSelectInstanceNoPI"
+			},
+			{
+				"url": "paymentMethodDescriptions?country={country}&partner={partner}&language=en-US&operation={operation}&filters=%7B%22isBackupPiOptional%22%3Atrue%7D",
+				"operations": [ "selectInstance" ],
+				"testSceanrioHeaders": "px.pims.listpi.nopi.success,px.partnersettings.listpidropdown.skipSelectInstanceNoPI.backupPI.triggeredBy"
+			},
+			{
+				"url": "paymentMethodDescriptions?country={country}&partner={partner}&language=en-US&operation={operation}",
+				"operations": [ "selectInstance" ],
+				"testSceanrioHeaders": "px.pims.listpi.nopi.success,px.partnersettings.listpidropdown.skipSelectInstanceNoPI.cconly"
+			}
+		]
+	},
+	{
+		// Shows expiration alert for expired card in list pi dropdown
+		"featureName": "ShowPIExpirationInformation",
+		"testCountries": [],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?country={country}&partner={partner}&language=en-US&operation={operation}",
+				"operations": [ "selectInstance" ],
+				"testSceanrioHeaders": "px.pims.listpi.success,,px.partnersettings.listpidropdown.showpiexpirationinformation"
+			},
+			{
+				"url": "paymentMethodDescriptions?country={country}&partner={partner}&language=en-US&operation={operation}",
+				"operations": [ "selectInstance" ],
+				"testSceanrioHeaders": "px.pims.listpi.expiredcc.success,px.partnersettings.listpidropdown.showpiexpirationinformation"
+			}
+		]
+	},
+	{
+		// Add an Element to a PIDL
+		"featureName": "AddElement",
+		"testCountries": [],
+		"testPartners": [ "webblends" ],
+
+		// also includes addCancelButton displayCustomization
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?country={country}&partner={partner}&language=en-US&operation={operation}",
+				"operations": [ "select" ],
+				"testSceanrioHeaders": "px.partnersettings.selectpmbuttonlist.addElement,px.pims.listpi.success"
+			}
+		]
+	},
+	{
+		// Removes the regex, mandatory, min/max length etc. validations for creditcard address fields
+		"featureName": "RemoveAddressFieldsValidationForCC",
+		"testCountries": [ "us", "in", "jp", "gb" ],
+		"testPartners": [ "officesmb", "battlenet" ],
+
+		"tests": [
+			{
+				"url": "paymentMethodDescriptions?partner={partner}&operation={operation}&country={country}&language=en-US&family=credit_card&type={type}",
+				"operations": [ "add" ],
+				"types": [ "amex%2Cvisa%2Cmc%2Cdiscover%2Cjcb" ],
+				"testSceanrioHeaders": "px.account.v3.no.address,px.partnersettings.battlenet.removeAddressFieldsValidationForCC,px.pims.cc.add.success"
+			}
+		]
+	},
+	{
+		"featureName": "TemplateConsumerTaxIdTest",
+		"testCountries": [ "br", "tw" ],
+		"testPartners": [ "officesmb", "defaulttemplate", "consumersupport" ],
+
+		"tests": [
+			{
+				"url": "taxIdDescriptions?type={type}&partner={partner}&operation={operation}&country={country}&language=en-us",
+				"operations": [ "add" ],
+				"types": [ "consumer_tax_id" ],
+				"testSceanrioHeaders": "px.partnersettings.defaulttemplate"
+			}
+		]
+	},
+	{
+		// Tests the address line1 maxLength to 255 under a flight
+		// TODO: Remove the below difftests when removing the flight and if the changes are covered by existing difftests
+		"featureName": "UpdateAddressline1MaxLength",
+		"testCountries": [ "us", "in", "ca", "gb" ],
+		"testPartners": [ "officesmb" ],
+
+		"tests": [
+			{
+				"url": "addressDescriptions?country={country}&language=en-US&type={type}&partner={partner}&operation={operation}",
+				"operations": [ "add", "update" ],
+				"types": [ "billing", "billingGroup", "hapiServiceUsageAddress", "hapiV1SoldToIndividual", "shipping", "orgAddress" ],
+				"testSceanrioHeaders": "px.partnersettings.defaulttemplate",
+				"flights": "UpdateAddressline1MaxLength"
+			},
+			{
+				"url": "ProfileDescriptions?country={country}&language=en-US&type={type}&partner={partner}&operation={operation}",
+				"operations": [ "add", "update" ],
+				"types": [ "consumerV3", "employee" ],
+				"testSceanrioHeaders": "px.partnersettings.defaulttemplate",
+				"flights": "UpdateAddressline1MaxLength",
+				"skipCombinations": [
+					{
+						"partner": "_any_",
+						"operation": "update",
+						"country": "_any_",
+						"type": "consumerV3"
+					}
+				]
+			},
+			{
+				"url": "paymentMethodDescriptions?partner={partner}&operation={operation}&country={country}&language=en-US&family=credit_card&type={type}",
+				"operations": [ "add" ],
+				"types": [ "amex%2Cvisa%2Cmc%2Cdiscover%2Cjcb" ],
+				"testSceanrioHeaders": "px.pims.cc.add.success,px.partnersettings.defaulttemplate",
+				"flights": "UpdateAddressline1MaxLength"
+			},
+			{
+				"url": "paymentMethodDescriptions?partner={partner}&operation={operation}&country={country}&language=en-US&family=direct_debit&type={type}",
+				"operations": [ "add" ],
+				"types": [ "sepa" ],
+				"testSceanrioHeaders": "px.pims.sepa.add.success,px.partnersettings.defaulttemplate",
+				"flights": "UpdateAddressline1MaxLength"
+			}
+		]
+	},
+	{
+		"featureName": "PaymentMethodGrouping",
+		"testCountries": [ "us", "in", "jp", "gb" ],
+		"testPartners": [ "northstarweb" ],
+
+		"tests": [
+			{
+				// feature is enabled via flight PXUsePartnerSettingsService
+				"url": "paymentMethodDescriptions?country={country}&language=en-us&partner={partner}&operation={operation}",
+				"operations": [ "select" ],
+				"flights": "PXUsePartnerSettingsService",
+				"testSceanrioHeaders": "px.partnersettings.northstarweb,px.pims.console.selectpm.grouping"
+			}
+		]
+	}
+]
