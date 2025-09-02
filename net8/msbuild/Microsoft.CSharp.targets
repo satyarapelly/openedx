@@ -1,0 +1,105 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+ 
+    <PropertyGroup>
+      <MsBuildAllProjects>$(MsBuildAllProjects);$(MsBuildThisFileFullPath)</MsBuildAllProjects>
+    </PropertyGroup>
+
+  <!-- Translate ProjectTypeGuids -->
+  <PropertyGroup>
+    <_NonNullProjectTypeGuids>$(ProjectTypeGuids);</_NonNullProjectTypeGuids>
+    <_LowerProjectTypeGuids>$(_NonNullProjectTypeGuids.ToLower())</_LowerProjectTypeGuids>
+    <IsWebApplicationProject                  Condition="$(_LowerProjectTypeGuids.IndexOf('349c5851-65df-11da-9384-00065b846f21')) != '-1'">true</IsWebApplicationProject>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(IsWebApplicationProject)'=='true' OR '$(IsCloudProject)'=='true'">
+    <OutDir>bin\</OutDir>
+    <OutputPath>$(OutDir)</OutputPath>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(TestEngine)' != ''">
+    <OutDir>$(DropRoot)\UnitTests\$(AssemblyName)\</OutDir>
+  </PropertyGroup>
+
+  <!-- 
+    For Web projects, allow specification of a WebProjectOutputPath.  For command line builds, 
+    the web project will be published to this folder.  Publishing removes non-content files 
+    and source files, and prepares the web project for xcopy deployment
+  -->
+  <PropertyGroup Condition="'$(IsWebApplicationProject)'=='true'">
+    <WebProjectOutputDir Condition="'$(WebProjectOutputPath)' != ''">$(WebProjectOutputPath)</WebProjectOutputDir>
+    <OutputPath Condition="'$(WebProjectOutputPath)' != ''">$(WebProjectOutputPath)</OutputPath>
+    <UseWPP_CopyWebApplication>True</UseWPP_CopyWebApplication>
+    <PipelineDependsOnBuild>False</PipelineDependsOnBuild>
+    <!--PublishPipelineCollectFilesCore>$(PublishPipelineCollectFilesCore);CollectAppConfigFiles</PublishPipelineCollectFilesCore-->
+  </PropertyGroup>
+
+  <!-- MSBuild changes to enable FXCop post Corext build. This reuses the OACRDisabled flag that projects previously used to avoid Code Analysis. -->
+  <PropertyGroup>
+    <RunCodeAnalysis Condition="'$(RunCodeAnalysis)'=='' And '$(OACRDisabled)' != 'true'">true</RunCodeAnalysis>
+  </PropertyGroup>
+  
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <BuildDependsOn>
+        $(BuildDependsOn);
+		CopyTestDependency
+    </BuildDependsOn>
+  </PropertyGroup>
+  <Import Project="Payments.Tasks.targets"/>
+  <Import Project="$(StyleCopMsBuildPath)\build\StyleCop.MSBuild.Targets" 
+    Condition="'$(StyleCopEnabled)' != 'false' AND Exists('$(StyleCopMsBuildPath)\build\StyleCop.MSBuild.Targets')" />
+  <!-- add version generator -->
+  <PropertyGroup>
+    <BuildDependsOn>
+        CommonAssemblyAttributes;
+        $(BuildDependsOn)
+    </BuildDependsOn>
+  </PropertyGroup>
+  
+  <!--
+    Creates modified version of AssemblyInfo.cs, replaces [AssemblyVersion] attribute with the one specifying actual build version (from MSBuild properties), and includes that file instead of the original AssemblyInfo.cs in the compilation.
+
+    Works with both, .cs and .vb version of the AssemblyInfo file, meaning it supports C# and VB.Net projects simultaneously.
+  -->
+  <Target Name="CommonAssemblyAttributes">
+    <ItemGroup>
+	  <AssemblyAttributes Include="AssemblyVersion">
+	    <_Parameter1>1.0.0.0</_Parameter1>
+      </AssemblyAttributes>
+	  <AssemblyAttributes Include="AssemblyFileVersion">
+	    <_Parameter1>$(BuildVersion)</_Parameter1>
+	  </AssemblyAttributes>
+	  <AssemblyAttributes Include="AssemblyProduct">
+	    <_Parameter1>$(BuildVersion) $(Configuration) $(COMPUTERNAME).</_Parameter1>
+	  </AssemblyAttributes>
+	  <AssemblyAttributes Include="AssemblyCompany">
+	    <_Parameter1>$(AssemblyCompany)</_Parameter1>
+	  </AssemblyAttributes>
+	  <AssemblyAttributes Include="AssemblyTitle">
+	    <_Parameter1>$(AssemblyName)</_Parameter1>
+	  </AssemblyAttributes>
+	  <AssemblyAttributes Include="AssemblyCopyright">
+	    <_Parameter1>$(AssemblyCopyright)</_Parameter1>
+	  </AssemblyAttributes>
+	  <Compile Include="$(IntermediateOutputPath)\_AssemblyAttributes.cs" />
+	</ItemGroup>
+    <MakeDir Directories="$(IntermediateOutputPath)" Condition="!Exists('$(IntermediateOutputPath)')" />
+    <WriteCodeFragment Language="C#" OutputFile="_AssemblyAttributes.cs" AssemblyAttributes="@(AssemblyAttributes)" OutputDirectory="$(IntermediateOutputPath)" Condition="!Exists('$(IntermediateOutputPath)\_AssemblyAttributes.cs')"/>
+  </Target>
+
+  <Target Name="CopyTestDependency"
+          Condition="'@(TestDependency)' != ''">
+
+    <Message Text="Starting CopyTestDependency" />
+    <!-- Copy the test resource to its relative link path in the root test directory (If CreateTestResourcePathFromLinkPath is true and the link path is valid) -->
+    <Copy SourceFiles="@(TestDependency)" DestinationFiles="@(TestDependency->'$(OutDir)\%(Link)')" SkipUnchangedFiles="true"
+        Condition="'$(CreateTestResourcePathFromLinkPath)' == 'true' AND '%(TestDependency.Link)' != '' AND '%(TestDependency.Filename)' != ''"/>
+    <!-- Else copy the files to the root test folder -->
+    <Copy SourceFiles="@(TestDependency)" DestinationFolder="$(OutDir)" SkipUnchangedFiles="true"
+        Condition="('$(CreateTestResourcePathFromLinkPath)' != 'true' OR '%(TestDependency.Link)' == '') AND '%(TestDependency.Filename)' != ''"/>
+
+    <Exec Command="robocopy.cmd %(TestDependency.Identity) $(OutDir) /E /COPY:DAT /R:0 /A-:R /NP /NJH /NDL /NFL /NJS >NUL"
+        Condition="'%(TestDependency.Filename)' == ''"/>
+  </Target>		  
+  <!--Import Project="$(INETROOT)\tools\msbuild_beta45\Extensions\StyleCop\v4.7\StyleCop.Targets" /-->
+</Project>

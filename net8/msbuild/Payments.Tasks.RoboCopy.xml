@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ProjectSchemaDefinitions xmlns="http://schemas.microsoft.com/build/2009/properties" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+  <Rule
+    Name="Robocopy"
+    PageTemplate="tool"
+    DisplayName="Robocopy"
+    Order="200">
+    <Rule.DataSource>
+      <DataSource
+        Persistence="ProjectFile"
+        ItemType="Robocopy" />
+    </Rule.DataSource>
+    <StringListProperty
+      Name="DestinationFolder"
+      HelpUrl="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/vcmasm/html/vclrfml.asp"
+      DisplayName="Destination folder"
+      Description="Robocopy" />
+  </Rule>
+</ProjectSchemaDefinitions>

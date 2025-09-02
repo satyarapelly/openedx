@@ -1,0 +1,2 @@
+This folder is ONLY here as a temporary workaround so I could get paymod building outside of Corext.
+If you check in anything here for reasons NOT strictly to do with migration, you'll be hearing from me.
