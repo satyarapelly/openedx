@@ -1,0 +1,4 @@
+PropertyHintId,CountryIds,FeatureNames,DisplayType,PropertyName,DependentPropertyName,DependentPropertyValueRegex,DisplayName,DisplayDescription,IsHidden,IsDisabled,IsHighlighted,IsDefault,IsBack,InputScope,MaskInput,ShowDisplayName,DisplayFormat,DisplayExample,MinLength,MaxLength,DisplayContent,DisplayContentDescription,DisplayHelpSequenceId,DisplayHelpSequenceText,ClientAction,Context,DestinationId,PossibleValues,DisplaySelectionText,SourceUrl,DisplayLogo,SelectType,MaskDisplay,DisplayConditionFunctionName,DataCollectionSource,DataCollectionFilterFunctionName,IsSelectFirstItem,DisplayImage,DisplayHelpPosition,StyleHints
+paymentMethod,,,property,id,,,Payment Methods,,,,,,,,,FALSE,,,,,,,,,success,,,,,,,radio,,,,,,,,
+cancelButton,,,button,,,,,,,,,,TRUE,,,,,,,,Cancel,,,,gohome,,,,,,,,,,,,,,,
+paymentMethodSelectHeading,,,heading,,,,,,,,,,,,,,,,,,Pick a payment method,,,,,,,,,,,,,,,,,,,

@@ -1,0 +1,90 @@
+<!DOCTYPE HTML>
+
+<html>
+<head>
+    <title>3DS - One-Time Passcode - PA</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <link rel="stylesheet" href="/css/webstyles.css">
+  
+</head>
+<body class="">
+<div id="page-wrapper">
+    <!-- Header Section -->
+    <header id="header" class="canvas">
+        <span class="logo-ul"></span>
+        <span class="logo-bank"></span>
+    </header>
+
+    <!-- Main Content Section -->
+    <section id="content" class="canvas">
+        <div class="row">
+			<h2>Purchase Authentication</h2>
+			<p>We have send you a text message with a code to your registered mobile number ending *99.</p>
+            <p>You are paying Microsoft the amount of @@amount@@ today.</p>
+        </div>
+
+        <div class="row">
+            <p><strong>Enter your code below:</strong></p>
+            <form action="challenge" method="post" name="cardholderInput">
+				<input type="hidden" name="x-ms-test" value="@@mstestheader@@"/>
+                <input type="hidden" name="threeDSSessionData" value="@@threeDSSessionData@@">				
+                <input type="hidden" name="timedout" value="">
+                <input type="text" class="input-field" name="challengeDataEntry" value="" placeholder="Enter Code Here">
+                <input type="submit" class="button primary" name="btnSubmit" value="Submit">
+                <input type="submit" class="button" name="resend" value="Resend Code">
+                <input type="submit" class="button" name="cancel" value="Cancel">
+            </form>
+        </div>
+    </section>
+
+    <!-- Help Section -->
+    <script type="text/javascript">
+        function toggleInfo(divId) {
+           var divElement = document.getElementById(divId);
+           var style = divElement.style;
+           if (!style || style.display == "none")
+                divElement.style.display = "inline-block";
+           else
+             divElement.style.display = "none";
+        }
+    </script>     
+    <section id="help" class="container">
+		<table>
+			<tr>
+				<td height="15px">
+					<label class="summaryLabel" onClick="toggleInfo('helpDiv')">Need some help?</label></br>
+					<div class="summaryContent" id="helpDiv" style="display:none">Help content will be displayed here.</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label class="summaryLabel" onClick="toggleInfo('moreDiv')">Learn more about authentication</label></br>
+					<div class="summaryContent" id="moreDiv" style="display:none">Authentication information will be displayed here.</div>
+				</td>
+			</tr>
+		</table>
+    </section>
+
+    <!-- Footer -->
+    <footer id="footer">
+        <ul class="copyright">
+            <li>&copy; UL . All rights reserved.</li>
+            </li>
+        </ul>
+    </footer>
+
+    <script type="text/javascript">
+        window.onload=function(){ 
+            window.setTimeout(function() { 
+                var form = document.forms[0];
+                form.elements.timedout.value = "true";
+                form.submit(); 
+            }, 60000);
+        };    
+    </script>
+
+</div>
+</body>
+</html>

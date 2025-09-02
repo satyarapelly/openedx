@@ -1,0 +1,26 @@
+- name: Development
+  href: development.md
+- name: Devbox Debugging
+  href: devbox-debugging.md
+- name: Devbox Setup
+  href: devbox-setup.md
+- name: Docs Deployment
+  href: docs-deployment.md
+- name: Docs Guidelines
+  href: doc-guidelines.md
+  items:
+    - name: Philosophy
+      href: doc-philosophy.md
+    - name: Setup
+      href: doc-setup.md
+    - name: Template
+      href: doc-template.md
+- name: Getting Started with Manage Payments
+  href: manage-payments-getting-started.md
+  items:
+    - name: Manage Payments Devbox Setup
+      href: manage-payments-dev-setup.md
+- name: PIDLSDK Setup
+  href: pidlsdk-setup.md
+- name: PIDLSDK UI Tests
+  href: pidlsdk-addingUITests.md

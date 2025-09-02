@@ -1,0 +1,31 @@
+- name: Engineering
+  href: engineering.md
+- name: Build Pipelines
+  href: build-pipelines.md
+- name: Local Cache
+  href: local-cache.md
+- name: Manage Payments Build
+  href: manage-payments-build.md
+- name: Manage Payments Testing
+  href: manage-payments-testing.md
+- name: Manage Payments Release
+  href: manage-payments-release.md
+- name: P+S Identity Resiliency
+  href: identityresiliency.md
+- name: P+S Reliability
+  href: reliability.md
+  items:
+    - name: Anomaly Detection
+      href: anomalydetection.md
+- name: PX AAD applications
+  href: aad-applications.md
+- name: PX Client
+  href: pxclient.md
+- name: Secret Management
+  href: secret-management.md
+- name: Secure Field Isolation
+  href: secure-field-isolation.md
+- name: Tests
+  href: tests/tests.md
+- name: Wallet Deprecation
+  href: walletdeprecation.md

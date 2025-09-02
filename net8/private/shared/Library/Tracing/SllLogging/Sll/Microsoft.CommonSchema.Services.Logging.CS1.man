@@ -1,0 +1,124 @@
+<instrumentationManifest xmlns="http://schemas.microsoft.com/win/2004/08/events">
+ <instrumentation xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:win="http://manifests.microsoft.com/win/2004/08/windows/events">
+  <events xmlns="http://schemas.microsoft.com/win/2004/08/events">
+<provider name="Microsoft-CommonSchema-ServiceLogging" guid="{c142a9f8-f9f6-5d08-14e6-48b27ec1d4bb}" resourceFileName="C:\a\bin\Release\CommonSchema\Microsoft.CommonSchema.Services.Logging.Microsoft-CommonSchema-ServiceLogging.etwManifest.dll" messageFileName="C:\a\bin\Release\CommonSchema\Microsoft.CommonSchema.Services.Logging.Microsoft-CommonSchema-ServiceLogging.etwManifest.dll" symbol="MicrosoftCommonSchemaServiceLogging">
+ <tasks>
+  <task name="LogCommonSchemaLogAlwaysRealTime" value="65522"/>
+  <task name="LogCommonSchemaVerboseRealTime" value="65523"/>
+  <task name="LogCommonSchemaCriticalRealTime" value="65524"/>
+  <task name="LogCommonSchemaErrorRealTime" value="65525"/>
+  <task name="LogCommonSchemaWarningRealTime" value="65526"/>
+  <task name="LogCommonSchemaInformationRealTime" value="65527"/>
+  <task name="LogCommonSchemaLogAlways" value="65528"/>
+  <task name="LogCommonSchemaVerbose" value="65529"/>
+  <task name="LogCommonSchemaCritical" value="65530"/>
+  <task name="LogCommonSchemaError" value="65531"/>
+  <task name="LogCommonSchemaWarning" value="65532"/>
+  <task name="LogCommonSchemaInformation" value="65533"/>
+ </tasks>
+ <opcodes>
+ </opcodes>
+ <keywords>
+  <keyword name="General"  message="$(string.keyword_General)" mask="0x1"/>
+  <keyword name="RealTime"  message="$(string.keyword_RealTime)" mask="0x2"/>
+ </keywords>
+ <events>
+  <event value="1" version="0" level="win:Informational" keywords="General" task="LogCommonSchemaInformation" template="LogCommonSchemaInformationArgs"/>
+  <event value="2" version="0" level="win:Warning" keywords="General" task="LogCommonSchemaWarning" template="LogCommonSchemaWarningArgs"/>
+  <event value="3" version="0" level="win:Error" keywords="General" task="LogCommonSchemaError" template="LogCommonSchemaErrorArgs"/>
+  <event value="4" version="0" level="win:Critical" keywords="General" task="LogCommonSchemaCritical" template="LogCommonSchemaCriticalArgs"/>
+  <event value="5" version="0" level="win:Verbose" keywords="General" task="LogCommonSchemaVerbose" template="LogCommonSchemaVerboseArgs"/>
+  <event value="6" version="0" level="win:LogAlways" keywords="General" task="LogCommonSchemaLogAlways" template="LogCommonSchemaLogAlwaysArgs"/>
+  <event value="7" version="0" level="win:Informational" keywords="General RealTime" task="LogCommonSchemaInformationRealTime" template="LogCommonSchemaInformationRealTimeArgs"/>
+  <event value="8" version="0" level="win:Warning" keywords="General RealTime" task="LogCommonSchemaWarningRealTime" template="LogCommonSchemaWarningRealTimeArgs"/>
+  <event value="9" version="0" level="win:Error" keywords="General RealTime" task="LogCommonSchemaErrorRealTime" template="LogCommonSchemaErrorRealTimeArgs"/>
+  <event value="10" version="0" level="win:Critical" keywords="General RealTime" task="LogCommonSchemaCriticalRealTime" template="LogCommonSchemaCriticalRealTimeArgs"/>
+  <event value="11" version="0" level="win:Verbose" keywords="General RealTime" task="LogCommonSchemaVerboseRealTime" template="LogCommonSchemaVerboseRealTimeArgs"/>
+  <event value="12" version="0" level="win:LogAlways" keywords="General RealTime" task="LogCommonSchemaLogAlwaysRealTime" template="LogCommonSchemaLogAlwaysRealTimeArgs"/>
+ </events>
+ <templates>
+  <template tid="LogCommonSchemaInformationArgs">
+   <data name="eventName" inType="win:UnicodeString"/>
+   <data name="eventVersion" inType="win:UnicodeString"/>
+   <data name="eventDateTime" inType="win:UnicodeString"/>
+   <data name="commonSchemaEvent" inType="win:UnicodeString"/>
+  </template>
+  <template tid="LogCommonSchemaWarningArgs">
+   <data name="eventName" inType="win:UnicodeString"/>
+   <data name="eventVersion" inType="win:UnicodeString"/>
+   <data name="eventDateTime" inType="win:UnicodeString"/>
+   <data name="commonSchemaEvent" inType="win:UnicodeString"/>
+  </template>
+  <template tid="LogCommonSchemaErrorArgs">
+   <data name="eventName" inType="win:UnicodeString"/>
+   <data name="eventVersion" inType="win:UnicodeString"/>
+   <data name="eventDateTime" inType="win:UnicodeString"/>
+   <data name="commonSchemaEvent" inType="win:UnicodeString"/>
+  </template>
+  <template tid="LogCommonSchemaCriticalArgs">
+   <data name="eventName" inType="win:UnicodeString"/>
+   <data name="eventVersion" inType="win:UnicodeString"/>
+   <data name="eventDateTime" inType="win:UnicodeString"/>
+   <data name="commonSchemaEvent" inType="win:UnicodeString"/>
+  </template>
+  <template tid="LogCommonSchemaVerboseArgs">
+   <data name="eventName" inType="win:UnicodeString"/>
+   <data name="eventVersion" inType="win:UnicodeString"/>
+   <data name="eventDateTime" inType="win:UnicodeString"/>
+   <data name="commonSchemaEvent" inType="win:UnicodeString"/>
+  </template>
+  <template tid="LogCommonSchemaLogAlwaysArgs">
+   <data name="eventName" inType="win:UnicodeString"/>
+   <data name="eventVersion" inType="win:UnicodeString"/>
+   <data name="eventDateTime" inType="win:UnicodeString"/>
+   <data name="commonSchemaEvent" inType="win:UnicodeString"/>
+  </template>
+  <template tid="LogCommonSchemaInformationRealTimeArgs">
+   <data name="eventName" inType="win:UnicodeString"/>
+   <data name="eventVersion" inType="win:UnicodeString"/>
+   <data name="eventDateTime" inType="win:UnicodeString"/>
+   <data name="commonSchemaEvent" inType="win:UnicodeString"/>
+  </template>
+  <template tid="LogCommonSchemaWarningRealTimeArgs">
+   <data name="eventName" inType="win:UnicodeString"/>
+   <data name="eventVersion" inType="win:UnicodeString"/>
+   <data name="eventDateTime" inType="win:UnicodeString"/>
+   <data name="commonSchemaEvent" inType="win:UnicodeString"/>
+  </template>
+  <template tid="LogCommonSchemaErrorRealTimeArgs">
+   <data name="eventName" inType="win:UnicodeString"/>
+   <data name="eventVersion" inType="win:UnicodeString"/>
+   <data name="eventDateTime" inType="win:UnicodeString"/>
+   <data name="commonSchemaEvent" inType="win:UnicodeString"/>
+  </template>
+  <template tid="LogCommonSchemaCriticalRealTimeArgs">
+   <data name="eventName" inType="win:UnicodeString"/>
+   <data name="eventVersion" inType="win:UnicodeString"/>
+   <data name="eventDateTime" inType="win:UnicodeString"/>
+   <data name="commonSchemaEvent" inType="win:UnicodeString"/>
+  </template>
+  <template tid="LogCommonSchemaVerboseRealTimeArgs">
+   <data name="eventName" inType="win:UnicodeString"/>
+   <data name="eventVersion" inType="win:UnicodeString"/>
+   <data name="eventDateTime" inType="win:UnicodeString"/>
+   <data name="commonSchemaEvent" inType="win:UnicodeString"/>
+  </template>
+  <template tid="LogCommonSchemaLogAlwaysRealTimeArgs">
+   <data name="eventName" inType="win:UnicodeString"/>
+   <data name="eventVersion" inType="win:UnicodeString"/>
+   <data name="eventDateTime" inType="win:UnicodeString"/>
+   <data name="commonSchemaEvent" inType="win:UnicodeString"/>
+  </template>
+ </templates>
+</provider>
+</events>
+</instrumentation>
+<localization>
+ <resources culture="en-US">
+  <stringTable>
+   <string id="keyword_General" value="General"/>
+   <string id="keyword_RealTime" value="RealTime"/>
+  </stringTable>
+ </resources>
+</localization>
+</instrumentationManifest>

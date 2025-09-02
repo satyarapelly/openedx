@@ -1,0 +1,3 @@
+DisplayStringId,CountryIds,Type,Code,Value,Target
+singleFieldErrorMessage,,constant,singleFieldErrorMessage,"There is 1 field in the form that requires your attention",
+multipleFieldsErrorMessage,,constant,multipleFieldsErrorMessage,"There are {n} fields in the form that require your attention",

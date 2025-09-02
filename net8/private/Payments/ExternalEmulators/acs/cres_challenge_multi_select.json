@@ -1,0 +1,36 @@
+{
+  "threeDSServerTransID": "8a880dc0-d2d2-4067-bcb1-b08d1690b26e",
+  "acsTransID": "d7c1ee99-9478-44a6-b1f2-391e29c6b340",
+  "acsUiType": "03",
+  "challengeCompletionInd": "N",
+  "challengeAddInfo": "Additional information to be shown.",
+  "challengeInfoHeader": "Payment Security",
+  "challengeInfoText": "Please answer 3 security questions from YourBank to complete your payment.\n\nSelect all that apply. Amount: %f",
+  "challengeInfoLabel": "Question 2: What cities have you lived in the past?",
+  "challengeInfoTextIndicator": "N",
+  "expandInfoLabel": "Need more help?",
+  "expandInfoText": "The issuer will ask the cities that you have lived in the past. Please choose the method to receive this code.",
+  "messageType": "CRes",
+  "messageVersion": "2.2.0",
+  "issuerImage": {
+    "medium": "https://payments-acs-emulator-fzeug0g7atchf8d7.b02.azurefd.net/images/yourbanklogo_large.png",
+    "high": "https://payments-acs-emulator-fzeug0g7atchf8d7.b02.azurefd.net/images/yourbanklogo_large.png",
+    "extraHigh": "https://payments-acs-emulator-fzeug0g7atchf8d7.b02.azurefd.net/images/yourbanklogo_large.png"
+  },
+  "psImage": {
+    "medium": "https://payments-acs-emulator-fzeug0g7atchf8d7.b02.azurefd.net/images/cardnetworklogo_large.png",
+    "high": "https://payments-acs-emulator-fzeug0g7atchf8d7.b02.azurefd.net/images/cardnetworklogo_large.png",
+    "extraHigh": "https://payments-acs-emulator-fzeug0g7atchf8d7.b02.azurefd.net/images/cardnetworklogo_large.png"
+  },
+  "sdkTransID": "b2385523-a66c-4907-ac3c-91848e8c0067",
+  "submitAuthenticationLabel": "Continue",
+  "whyInfoLabel": "Learn more about authentication",
+  "whyInfoText": "Some explanation about why using 3-D Secure is an excellent idea as part of an online payment transaction",
+  "acsCounterAtoS": "001",
+  "challengeSelectInfo": [
+    { "final1": "Chicago, Illinois" },
+    { "final2": "Dallas, Texas" },
+    { "final3": "New York, New York" },
+    { "final4": "Seattle, Washington" }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+    "markdownlint.config": {
+        "default": true,
+        "MD003": { "style": "atx" },
+        "MD004": { "style": "dash" },
+        "MD007": { "indent": 4 },
+        "MD013": { "line_length": 120 },
+        "MD022": { "lines_above": 1, "lines_below": 0 },
+        "MD035": { "style": "---"},
+        "MD043": { 
+            "headings": [
+                "+",
+                "## Target audience",
+                "+"
+        ] },
+        "MD044": {
+            "names": [
+                "JavaScript"
+            ]
+        },
+        "MD048": { "style": "backtick" },
+        "no-hard-tabs": true
+    },
+    "cSpell.words": [
+        "Devbox",
+        "Livesite",
+        "PIDL",
+        "PIDLSDK",
+        "PIFD",
+        "PIMS",
+        "PX",
+        "signup",
+        "tokenizes"
+    ],
+    "[markdown]": {
+        "editor.wordWrap": "off"
+    }    
+}

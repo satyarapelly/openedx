@@ -1,0 +1,18 @@
+- name: PIDLSDK Missing Telemetry by Day
+  href: PIDLSDK-Missing-Telemetry-by-Day.md
+- name: PIDLSDK Missing Telemetry By Partner
+  href: PIDLSDK-Missing-Telemetry-By-Partner.md
+- name: Missing Telemetry
+  href: Missing-Telemetry.md
+- name: Updated Query
+  href: Updated-Query.md
+- name: With PIFD data
+  href: With-PIFD-data.md
+- name: PIFD with more updates
+  href: PIFD-with-more-updates.md
+- name: PIFD with more Updates 2
+  href: PIFD-with-more-Updates-2.md
+- name: 'PIFD/PX Query to get service side telemetry loss'
+  href: PIFDPX-Query-to-get-service-side-telemetry-loss.md
+- name: 'PIFD/PX Query to get service side Hourly telemetry loss'
+  href: PIFDPX-Query-to-get-service-side-Hourly-telemetry-loss.md

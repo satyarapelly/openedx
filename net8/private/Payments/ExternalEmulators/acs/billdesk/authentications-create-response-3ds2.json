@@ -1,0 +1,49 @@
+{
+	"links": [
+		{
+			"href": "https://payments-acs-emulator-fzeug0g7atchf8d7.b02.azurefd.net/payments/ve1_2/challenge",
+			"rel": "redirect",
+			"method": "post",
+			"parameters": {
+				"creq": "eJxVUV1PwkAQ/CtN3+1dgSKS5chhNTSmCFJNfDL1eoFCP+DaavXXu9cP0X1odubutrMzMK/TxPiQqojzbGbaFjUNmYk8irPdzHwO7q8m5pxBsFdSulspKiUZ+LIowp004mhmvvGRM6ZYQ3pt39yYDNb8SZ4ZdDMZjrQGQHqIj5XYh1nJIBTnhbdidlNAOgipVJ7LFi5tagKkJSALU8m2nrv0XrwVf"
+			}
+		}
+	],
+	"itemcode": "{{This placeholder should have been replaced}}",
+	"objectid": "authentication",
+	"authenticationid": "{{This placeholder should have been replaced}}",
+	"authentication_date": "2020-11-18T10:14:10+05:30",
+	"amount": "{{This placeholder should have been replaced}}",
+	"currency": "{{This placeholder should have been replaced}}",
+	"mercid": "{{This placeholder should have been replaced}}",
+	"bankid": "{{This placeholder should have been replaced}}",
+	"payment_method_type": "{{This placeholder should have been replaced}}",
+	"authentication_type": "{{This placeholder should have been replaced}}",
+	"authentication_status": "pending",
+	"orderid": "{{This placeholder should have been replaced}}",
+	"next_step": "3ds2_challenge",
+	"authentication_error_code": "AUP0000",
+	"authentication_error_type": "pending",
+	"authentication_error_desc": "Authentication Pending",
+	"additional_info": {
+		"additional_info1": "Details1",
+		"additional_info2": "Details2",
+		"additional_info3": "Details3",
+		"additional_info4": "Details4",
+		"additional_info5": "Details5",
+		"additional_info6": "Details6",
+		"additional_info7": "Details7",
+		"additional_info8": "Details8",
+		"additional_info9": "Details9",
+		"additional_info10": "Details10"
+	},
+	"card": {
+		"masked_value": "{{This placeholder should have been replaced}}",
+		"type": "{{This placeholder should have been replaced}}"
+	},
+	"device": {
+		"init_channel": "{{This placeholder should have been replaced}}",
+		"ip": "{{This placeholder should have been replaced}}",
+		"user_agent": "{{This placeholder should have been replaced}}"
+	}
+}

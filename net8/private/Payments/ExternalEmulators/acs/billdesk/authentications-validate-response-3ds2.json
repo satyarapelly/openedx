@@ -1,0 +1,25 @@
+{
+  "itemcode": "{{This placeholder should have been replaced}}",
+  "objectid": "authentication",
+  "authenticationid": "{{This placeholder should have been replaced}}",
+  "authentication_date": "{{This placeholder should have been replaced}}",
+  "amount": "{{This placeholder should have been replaced}}",
+  "currency": "{{This placeholder should have been replaced}}",
+  "mercid": "{{This placeholder should have been replaced}}",
+  "bankid": "{{This placeholder should have been replaced}}",
+  "payment_method_type": "{{This placeholder should have been replaced}}",
+  "authentication_type": "{{This placeholder should have been replaced}}",
+  "authentication_status": "{{This placeholder should have been replaced}}",
+  "orderid": "{{This placeholder should have been replaced}}",
+  "eci": "05",
+  "threeds_version": "2.1.0",
+  "ds_transaction_id": "9ae6259e-08b8-42bb-97a2-48d8a1d2a690",
+  "authentication_error_code": "AUS0000",
+  "authentication_error_type": "success",
+  "authentication_error_desc": "Authentication Successful",
+  "card": {
+    "masked_value": "{{This placeholder should have been replaced}}",
+    "type": "{{This placeholder should have been replaced}}"
+  },
+  "cavv": "CGtpseerccma=="
+}

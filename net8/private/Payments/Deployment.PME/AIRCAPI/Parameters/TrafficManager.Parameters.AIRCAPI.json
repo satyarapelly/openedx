@@ -1,0 +1,24 @@
+﻿{
+  "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentParameters.json",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "name": {
+      "value": "PX-TrafficManager-AIRCAPI"
+    },
+    "resourceGroup": {
+      "value": "PX-Services-AIRCAPI-WestUS"
+    },
+    "resourceType": {
+      "value": "Microsoft.Web/sites"
+    },
+    "resourceName": {
+      "value": "PaymentExperience-AIRCAPI-westus"
+    },
+    "azureEndpoint": {
+      "value": "paymentexperience-aircapi-westus.azurewebsites.net"
+    },
+    "azureEndpointLocation": {
+      "value": "West US"
+    }
+  }
+}

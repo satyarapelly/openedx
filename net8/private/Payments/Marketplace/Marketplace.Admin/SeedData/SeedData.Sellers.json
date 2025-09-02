@@ -1,0 +1,16 @@
+[
+  {
+    "version": "1.0",
+    "id": "F765A697-A3A1-49C8-B277-283E59D6FB29",
+    "bucketId": "F7",
+    "name": "Radware, Inc.",
+    "logo": "/images/radware_logo.svg"
+  },
+  {
+    "version": "1.0",
+    "id": "13F108EF-AAEA-4836-8F9C-D1E84EBAAE5F",
+    "bucketId": "13",
+    "name": "Stoneridge Software LLC",
+    "logo": "/images/stoneridge_logo.png"
+  }
+]

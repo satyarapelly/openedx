@@ -1,0 +1,2 @@
+PropertyDescriptionId,CountryIds,PropertyType,DataType,DisplayProperty,IsKey,IsOptional,IsUpdatable,DataProtection,DefaultValue,PossibleValues,PidlDownloadEnabled,PidlDownloadParameter,DisplayOnly,Scenario
+address_state_province,fr,userData,string,,,,TRUE,,,{}FRProvinces,,,,

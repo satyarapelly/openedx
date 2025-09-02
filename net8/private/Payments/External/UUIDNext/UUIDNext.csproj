@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), build.root))\msbuild\Environment.props" />
+  <Import Project="$(INETROOT)\private\Payments\Payments.targets" />
+  <PropertyGroup>
+    <ProjectGuid>{A8792CC9-3C1C-4E1D-AF35-9C21990A26F7}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>UUIDNext</RootNamespace>
+    <AssemblyName>UUIDNext</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <DefineConstants>NETSTANDARD2_0</DefineConstants>
+    <LangVersion>12.0</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\NugetPackages\System.Buffers.4.6.1\lib\net462\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\NugetPackages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\NugetPackages\System.Numerics.Vectors.4.6.1\lib\net462\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\NugetPackages\System.Runtime.CompilerServices.Unsafe.6.1.2\lib\net462\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Root directory files -->
+    <Compile Include="Uuid.cs" />
+    <Compile Include="Database.cs" />
+    <Compile Include="GuidHelper.cs" />
+    <!-- Generator directory files -->
+    <Compile Include="Generator\MonotonicityHandler.cs" />
+    <Compile Include="Generator\UuidV4Generator.cs" />
+    <Compile Include="Generator\UuidV5Generator.cs" />
+    <Compile Include="Generator\UuidV7FromSpecificDateGenerator.cs" />
+    <Compile Include="Generator\UuidV7Generator.cs" />
+    <Compile Include="Generator\UuidV8SqlServerGenerator.cs" />
+    <!-- Tools directory files -->
+    <Compile Include="Tools\BetterCache.cs" />
+    <Compile Include="Tools\GuidComparer.cs" />
+    <Compile Include="Tools\PrefetchedRandomNumberGenerator.cs" />
+    <Compile Include="Tools\RandomNumberGeneratorPolyfill.cs" />
+    <Compile Include="Tools\UuidDecoder.cs" />
+    <Compile Include="Tools\UuidToolkit.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

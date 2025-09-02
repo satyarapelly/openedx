@@ -1,0 +1,84 @@
+﻿{
+  // This is a temp solution. All the configurations should be stored in Azure config once intergation is ready
+
+  // PX flighting to use AVS suggestions in address
+  "PXEnableAVSSuggestions": {
+    "countries": "am,az,br,by,hu,iq,kg,kz,md,mm,pl,ru,sa,ss,th,tj,ua,us,uz,vn,za"
+  },
+  // Used by commercial store update profile. For all the enabled countries, profile will be posted to HAPI instead of Jarvis
+  "PXProfileUpdateToHapi": {
+    "partners": "commercialstores,smboobe"
+  },
+  // Used to flight the pds2 prod integeration
+  "PXPSD2ProdIntegration": {
+    "partners": "cart,amcweb,xboxweb,webblends,onedrive,commercialstores,azure,mst,bing,mseg,setupoffice,storeoffice,ggpdeds,appsource,officeoobe,oxooobe,amcxbox,payin,commercialsupport,oxodime,oxowebdirect,storify,3ds2authn,xbet,saturn,xboxsubs"
+  },
+  // PSD2 Challenge Authentication Transaction Status Code Mapping.  This is of the format {PSD2 challenge authentication}-{transaction status}-{Challenge cancel / timeout indicator}-{mapped challenge status that we return to the customer}
+  "PXPSD2Auth-_-_-Succeeded": {
+    "available_to_all": true
+  },
+  // PSD2 Challenge Authentication Transaction Status Code Mapping.  This is of the format {PSD2 challenge authentication}-{transaction status}-{Challenge cancel / timeout indicator}-{mapped challenge status that we return to the customer}
+  "PXPSD2Auth-C-_-Unknown": {
+    "available_to_all": true
+  },
+  // PSD2 Challenge Authentication Transaction Status Code Mapping.  This is of the format {PSD2 challenge authentication}-{transaction status}-{Challenge cancel / timeout indicator}-{mapped challenge status that we return to the customer}
+  "PXPSD2Auth-N-TSR10-Failed": {
+    "available_to_all": true
+  },
+  // PSD2 Challenge Authentication Transaction Status Code Mapping.  This is of the format {PSD2 challenge authentication}-{transaction status}-{Challenge cancel / timeout indicator}-{mapped challenge status that we return to the customer}
+  "PXPSD2Auth-R-_-Failed": {
+    "available_to_all": true
+  },
+  // psd2 challenge authentication transaction status code mapping.  this is of the format {psd2 challenge authentication}-{transaction status}-{challenge cancel / timeout indicator}-{mapped challenge status that we return to the customer}
+  "PXPSD2Auth-FR-_-Failed": {
+    "available_to_all": true
+  },
+  // PSD2 Challenge Completion Transaction Status Code Mapping.  This is of the format {PSD2 challenge completion}-{transaction status}-{transaction status reason}-{Challenge cancel / timeout indicator}-{mapped challenge status that we return to the customer}
+  "PXPSD2Comp-_-_-_-Succeeded": {
+    "available_to_all": true
+  },
+  // PSD2 Challenge Completion Transaction Status Code Mapping.  This is of the format {PSD2 challenge completion}-{transaction status}-{transaction status reason}-{Challenge cancel / timeout indicator}-{mapped challenge status that we return to the customer}
+  "PXPSD2Comp-_-_-01-Cancelled": {
+    "available_to_all": true
+  },
+  // PSD2 Challenge Completion Transaction Status Code Mapping.  This is of the format {PSD2 challenge completion}-{transaction status}-{transaction status reason}-{Challenge cancel / timeout indicator}-{mapped challenge status that we return to the customer}
+  "PXPSD2Comp-N-_-04-TimedOut": {
+    "available_to_all": true
+  },
+  // PSD2 Challenge Completion Transaction Status Code Mapping.  This is of the format {PSD2 challenge completion}-{transaction status}-{transaction status reason}-{Challenge cancel / timeout indicator}-{mapped challenge status that we return to the customer}
+  "PXPSD2Comp-N-TSR10-_-Failed": {
+    "available_to_all": true
+  },
+  // PSD2 Challenge Completion Transaction Status Code Mapping.  This is of the format {PSD2 challenge completion}-{transaction status}-{transaction status reason}-{Challenge cancel / timeout indicator}-{mapped challenge status that we return to the customer}
+  "PXPSD2Comp-R-_-_-Failed": {
+    "available_to_all": true
+  },
+  // PSD2 Challenge Completion Transaction Status Code Mapping.  This is of the format {PSD2 challenge completion}-{transaction status}-{transaction status reason}-{Challenge cancel / timeout indicator}-{mapped challenge status that we return to the customer}
+  "PXPSD2Comp-FR-_-_-Failed": {
+    "available_to_all": true
+  },
+  // Flight for PIDL SDK clients to pick PaymentClientSettings.json V20 version for PSD2 scenarios
+  "PXPSD2SettingVersionV20": {
+    "available_to_all": true
+  },
+  // Even if PI extended view had no 3ds2 in requiredChallenges, this flight causes requests to proceed with processing as though 3ds2 was required
+  "PXPSD2PretendPIMSReturned3DS2": {
+  },
+  // Enable additional redirect URL text for PayPal as last item before the buttons
+  "PXEnablePaypalRedirectUrlText": {
+    "partners": "webblends"
+  },
+  // Used to enable India3DS1 cvv and qr code flows
+  "PXEnableIndia3DS1Challenge": {
+  },
+  // Used by commercial store update employee profile. 
+  // For all the enabled countries, profile will be posted to HAPI instead of Jarvis
+  // currently there is only a couple developer account under flight
+  // therefore there isn't any parnters, country or available_to_all configuration.
+  "PXEmployeeProfileUpdateToHapi": {
+  },
+  // Used to enable Single Market Directive for Commercial partners
+  "PXEnableSmdCommercial": {
+    "countries": "li,mt,is,cy,lu,sk,si,hr,lv,hu,bg,ie,ee,lt,cz,gr,no,dk,fi,ch,pt,be,se,it,ro,at,nl,es,pl,fr,de,gb,"
+  }
+}

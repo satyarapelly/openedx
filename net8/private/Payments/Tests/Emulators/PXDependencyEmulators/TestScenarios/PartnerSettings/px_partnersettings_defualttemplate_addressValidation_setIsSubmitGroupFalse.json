@@ -1,0 +1,26 @@
+{
+  "testScenarioName": "px.partnersettings.defaulttemplate.addressvalidation.setissubmitgroupfalse",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "validateinstance": {
+          "template": "defaulttemplate",
+          "features": {
+            "setIsSubmitGroupFalse": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "fieldsToSetIsSubmitGroupFalse": [
+                    "addressSuggestionUseThisAddressButtonWithSuggestions",
+                    "addressSuggestionUseThisAddressButtonWithoutSuggestions"
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

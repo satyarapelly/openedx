@@ -1,0 +1,52 @@
+﻿{
+  "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentParameters.json",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "name": {
+      "value": "PX-KV-AIRCAPI"
+    },
+    "managedIdentity": {
+      "value": "PXService-AIRCAPI"
+    },
+    "accessPolicies": {
+      "value": [
+        {
+          "_id": "Microsoft Azure App Service",
+          "tenantId": "975f013f-7f24-47e8-a7d3-abc4752bf346",
+          "objectId": "b453993d-81d4-41a7-be3a-549bc2435ffa",
+          "permissions": {
+            "keys": [
+              "Get"
+            ],
+            "secrets": [
+              "Get"
+            ],
+            "certificates": [
+              "Get"
+            ]
+          }
+        },
+        {
+          "_id": "UST-PST-SREJITAccess",
+          "tenantId": "975f013f-7f24-47e8-a7d3-abc4752bf346",
+          "objectId": "d0810d2c-2013-430a-bd1e-79230dbd0aea",
+          "permissions": {
+            "certificates": [
+              "All"
+            ]
+          }
+        },
+        {
+          "_id": "UST-PST-DevJITAccess",
+          "tenantId": "975f013f-7f24-47e8-a7d3-abc4752bf346",
+          "objectId": "a84ac73c-4e2c-4eac-b5d4-9c0ee2809324",
+          "permissions": {
+            "certificates": [
+              "All"
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

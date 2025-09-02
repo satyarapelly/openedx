@@ -1,0 +1,301 @@
+﻿// <copyright file="ServiceClient.cs" company="Microsoft">Copyright (c) Microsoft 2015. All rights reserved.</copyright>
+
+namespace Example1
+{
+    using System;
+    using System.Diagnostics;
+    using System.Net;
+    using System.Net.Cache;
+    using System.Net.Http;
+    using System.Net.Http.Headers;
+    using System.Security.Cryptography.X509Certificates;
+    using System.Text;
+    using System.Threading.Tasks;
+    using Newtonsoft.Json;
+
+    public class ServiceClient
+    {
+        private readonly JsonSerializerSettings serializerSettings;
+        private readonly string serviceName;
+        private Lazy<X509Certificate2> clientCertificate;
+        private HttpClient httpClient;
+        private bool serverCertificateValidation;
+        private string proxyServer;
+        private TimeSpan timeoutThreshold;
+        private RequestCacheLevel cacheLevel;
+
+        private string clientCertInfo;
+        private bool clientCertInfoLoad;
+
+        public ServiceClient(
+            string serviceName,
+            string baseUrl,
+            Lazy<X509Certificate2> clientCertificate,
+            bool serverCertificateValidation = true,
+            JsonSerializerSettings serializerSettings = null)
+            : this(serviceName, baseUrl, clientCertificate, serverCertificateValidation, proxyServer: null, RequestCacheLevel.BypassCache, serializerSettings)
+        {
+        }
+
+        public ServiceClient(
+            string serviceName,
+            string baseUrl,
+            Lazy<X509Certificate2> clientCertificate,
+            TimeSpan timeoutThreshold,
+            bool serverCertificateValidation = true,
+            JsonSerializerSettings serializerSettings = null)
+            : this(serviceName, baseUrl, clientCertificate, serverCertificateValidation, proxyServer: null, RequestCacheLevel.BypassCache, serializerSettings)
+        {
+            this.timeoutThreshold = timeoutThreshold;
+        }
+
+        public ServiceClient(
+            string serviceName,
+            string baseUrl,
+            Lazy<X509Certificate2> clientCertificate,
+            bool serverCertificateValidation,
+            string proxyServer,
+            RequestCacheLevel cacheLevel = RequestCacheLevel.BypassCache,
+            JsonSerializerSettings serializerSettings = null)
+        {
+            this.BaseUrl = baseUrl;
+            this.clientCertificate = clientCertificate;
+            this.serverCertificateValidation = serverCertificateValidation;
+            this.proxyServer = proxyServer;
+            this.timeoutThreshold = TimeSpan.MaxValue;
+            this.serviceName = serviceName;
+            this.cacheLevel = cacheLevel;
+            this.serializerSettings = serializerSettings;
+            this.clientCertInfoLoad = false;
+        }
+
+        protected string BaseUrl { get; private set; }
+
+        protected MSALAuthenticationClient AuthenticationClient { get; set; }
+
+        protected string ClientCertInfo
+        {
+            get
+            {
+                if (!this.clientCertInfoLoad)
+                {
+                    this.clientCertInfoLoad = true;
+                    if (this.clientCertificate != null && this.clientCertificate.Value != null)
+                    {
+                //        this.clientCertInfo = CertificateHelper.ExtractDebugInformation(this.clientCertificate.Value);
+                    }
+                    else
+                    {
+                        this.clientCertInfo = null;
+                    }
+                }
+
+                return this.clientCertInfo;
+            }
+        }
+
+        protected HttpClient HttpClient
+        {
+            get
+            {
+                if (this.httpClient == null)
+                {
+                    lock (this)
+                    {
+                        if (this.httpClient == null)
+                        {
+                            //var webRequestHandler = new WebRequestHandler();
+                            var webRequestHandler = new HttpClientHandler();
+                            if (this.AuthenticationClient == null && this.clientCertificate != null && this.clientCertificate.Value != null)
+                            {
+                                webRequestHandler.ClientCertificates.Add(this.clientCertificate.Value);
+                            }
+
+                            if (!this.serverCertificateValidation)
+                            {
+                                webRequestHandler.ServerCertificateCustomValidationCallback += 
+                                    (sender, certificate, chain, sslPolicyErrors) => { return true; };
+                            }
+
+                            webRequestHandler.UseProxy = false;
+
+                            //webRequestHandler.CachePolicy = new RequestCachePolicy(this.cacheLevel);
+
+                            this.httpClient = new HttpClient(webRequestHandler);
+
+                            if (this.timeoutThreshold != TimeSpan.MaxValue)
+                            {
+                                this.httpClient.Timeout = this.timeoutThreshold;
+                            }
+                        }
+                    }
+                }
+
+                return this.httpClient;
+            }
+        }
+
+        protected virtual Task BeforeSend(HttpRequestMessage request)
+        {
+            return Task.FromResult(0);
+        }
+
+        protected async Task<T> SendRequest<T>(
+            string url,
+            string operationName,
+            HttpMethod httpMethod,
+            string apiVersion,
+            object requestContent/*,
+            TestContext testContext*/)
+        {
+            using (HttpRequestMessage request = new HttpRequestMessage(httpMethod, url))
+            {
+                /*
+                request.Headers.Add(PaymentConstants.PaymentExtendedHttpHeaders.CorrelationId, traceActivityId.ActivityId.ToString());
+                request.IncrementCorrelationVector(traceActivityId);
+                */
+                request.Headers.Add("Connection", "Keep-Alive");
+                request.Headers.Add("Keep-Alive", "timeout=60");
+                request.Headers.Add("api-version", apiVersion);
+                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                if (this.AuthenticationClient != null)
+                {
+                    var authHeader = await this.AuthenticationClient.GetDefaultTokenAsync();
+                    request.Headers.Add("Authorization", authHeader);
+                }
+
+                /*
+                if (testContext != null)
+                {
+                    request.Headers.Add(PaymentConstants.PaymentExtendedHttpHeaders.TestHeader, JsonConvert.SerializeObject(testContext));
+                }*/
+
+                string serializedRequestContent = string.Empty;
+                if (requestContent != null)
+                {
+                    serializedRequestContent = this.serializerSettings == null ? JsonConvert.SerializeObject(requestContent) : JsonConvert.SerializeObject(requestContent, this.serializerSettings);
+                    request.Content = new StringContent(serializedRequestContent, Encoding.UTF8, "application/json");
+                }
+
+                await this.BeforeSend(request);
+
+                Stopwatch stopwatch = new Stopwatch();
+                stopwatch.Start();
+
+                string responseMessage = null;
+                string traceException = null;
+                HttpResponseMessage response = null;
+
+                try
+                {
+                    response = await this.HttpClient.SendAsync(request);
+
+                    bool httpError = false;
+                    if (response.Content != null)
+                    {
+                        responseMessage = await response.Content.ReadAsStringAsync();
+                    }
+
+                    stopwatch.Stop();
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        if (responseMessage == null)
+                        {
+                            return default(T);
+                        }
+
+                        return this.serializerSettings == null ? JsonConvert.DeserializeObject<T>(responseMessage) : JsonConvert.DeserializeObject<T>(responseMessage, this.serializerSettings);
+                    }
+
+                    ErrorResponse errorResponse = null;
+                    if (responseMessage != null)
+                    {
+                        try
+                        {
+                            errorResponse = this.serializerSettings == null ? JsonConvert.DeserializeObject<ErrorResponse>(responseMessage) : JsonConvert.DeserializeObject<ErrorResponse>(responseMessage, this.serializerSettings);
+                        }
+                        catch (JsonException)
+                        {
+                            errorResponse = null;
+                        }
+                    }
+
+                    /*
+                    if (response.StatusCode != HttpStatusCode.NotFound || errorResponse == null)
+                    {
+                        ClientSdkLogEvents.SessionServiceClientReceiveResponse(responseMessage == null ? string.Empty : responseMessage, traceActivityId);
+                    }*/
+
+                    if (errorResponse == null)
+                    {
+                        httpError = true;
+                        errorResponse = new ErrorResponse(string.Format("HttpError{0}", response.StatusCode), responseMessage);
+                    }
+
+                    throw new ServiceCallException(errorResponse, httpError, response.StatusCode);
+                }
+                catch (Exception e)
+                {
+                    traceException = e.ToString();
+                    throw;
+                }
+                finally
+                {
+                    /*
+                    Logger.Qos.TraceServiceLoggingOutgoing(
+                        dependencyServiceName: serviceName,
+                        operationName: operationName,
+                        operationVersion: apiVersion,
+                        request: request,
+                        response: response,
+                        requestPayload: serializedRequestContent,
+                        responsePayload: responseMessage ?? traceException,
+                        latencyMs: (int)stopwatch.ElapsedMilliseconds,
+                        requestTraceId: traceActivityId.ActivityId.ToString(),
+                        serverTraceId: traceActivityId.ActivityId.ToString(),
+                        message: string.Empty,
+                        flightingExperimentId: string.Empty,
+                        serviceRequestStatus: (response != null && response.IsSuccessStatusCode) ? CommerceServiceRequestStatus.Success : CommerceServiceRequestStatus.ServiceError,
+                        clientAuthInfo: null,
+                        correlationVectorOverride: traceActivityId.GetCorrelationVectorValue());
+                    */
+                    if (response != null)
+                    {
+                        response.Dispose();
+                        response = null;
+                    }
+                }
+            }
+        }
+
+        private HttpClient CreateHttpClient()
+        {
+            var webRequestHandler = new HttpClientHandler();
+            if (this.clientCertificate != null && this.clientCertificate.Value != null)
+            {
+                webRequestHandler.ClientCertificates.Add(this.clientCertificate.Value);
+            }
+
+            if (!this.serverCertificateValidation)
+            {
+                webRequestHandler.ServerCertificateCustomValidationCallback += 
+                    (sender, certificate, chain, sslPolicyErrors) => { return true; };
+            }
+
+            webRequestHandler.UseProxy = false;
+
+            //webRequestHandler.CachePolicy = new RequestCachePolicy(this.cacheLevel);
+
+            var tempHttpClient = new HttpClient(webRequestHandler);
+
+            if (this.timeoutThreshold != TimeSpan.MaxValue)
+            {
+                tempHttpClient.Timeout = this.timeoutThreshold;
+            }
+
+            return tempHttpClient;
+        }
+    }
+}

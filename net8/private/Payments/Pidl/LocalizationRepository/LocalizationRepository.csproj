@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), build.root))\msbuild\Environment.props" />
+	<Import Project="..\..\Payments.targets" />
+
+	<PropertyGroup>
+		<TargetFrameworks>net8.0</TargetFrameworks>
+		<ProjectGuid>{FA039DC0-A241-488F-890A-CF9CA6FF77E0}</ProjectGuid>
+		<OutputType>Library</OutputType>
+		<AppDesignerFolder>Properties</AppDesignerFolder>
+		<RootNamespace>Microsoft.Commerce.Payments.PidlLocalizationRepository</RootNamespace>
+		<AssemblyName>Microsoft.Commerce.Payments.PidlLocalizationRepository</AssemblyName>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+
+		<NoWarn>$(NoWarn);MSB3568</NoWarn>
+	</PropertyGroup>
+</Project>

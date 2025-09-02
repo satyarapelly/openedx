@@ -1,0 +1,14 @@
+<!-- Common settings used for Payments projects. -->
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <DontImportCodeContracts>true</DontImportCodeContracts>
+    <StyleCopOverrideSettingsFile>$(INETROOT)\private\Payments\Settings.StyleCop</StyleCopOverrideSettingsFile>
+    <Prefer32Bit>false</Prefer32Bit>
+    <SangamBinVersion>7.01.3505877</SangamBinVersion>
+	<RobocopyRetryCount>100</RobocopyRetryCount>
+	<RobocopyRetryWait>1</RobocopyRetryWait>
+	<RobocopyShowErrorOnRetry>false</RobocopyShowErrorOnRetry>
+  </PropertyGroup>
+</Project>
+

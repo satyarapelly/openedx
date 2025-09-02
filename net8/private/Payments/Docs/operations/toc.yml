@@ -1,0 +1,53 @@
+- name: Operations
+  href: operations.md
+- name: Certificate Change / Upgrade
+  href: certificate-version-upgrades.md
+- name: Certificate Renewal
+  href: renew-certificate.md
+- name: ECR Drill
+  href: ECRDrill.md
+- name: Engineering Region Deployment
+  href: engineering-region-deployment.md
+- name: Feature Region Deployment
+  href: feature-region-deployment.md
+- name: Livesite SOP
+  href: livesite-sop.md
+  items:
+    - name: Icm Ticket (PX)
+      href: icm-ticket-guide.md
+    - name: Icm Ticket (PidlSdk)
+      href: icm-ticket-guide-pidlsdk.md
+- name: Log Analytics Data Retention
+  href: data-retention.md
+- name: Main Deployment
+  href: mainDeployment.md
+- name: Observability
+  href: observability.md
+  items:
+    - name: Adding Properties to Logs
+      href: adding-log-properties.md
+- name: SLA
+  href: sla.md
+- name: S360
+  href: s360/S360.md
+  items:
+    - name: General
+      href: s360/General.md
+      items:
+        - name: How to JIT
+          href: s360/How-To-JIT.md
+    - name: Security Code Bugs / 1ES Open Source Vulnerabilities
+      href: s360/CG-Security-Code-Bugs-OR-1ES-Open-Source-Vulnerabilities.md
+      items:
+        - name: Type:Upgrading NuGet packages
+          href: s360/CGType-Upgrading-NuGet-packages.md
+        - name: Type:Upgrading NPM packages
+          href: s360/CGType-Upgrading-NPM-packages.md
+    - name: Map Geneva Metrics Accounts to Service Tree ID
+      href: s360/map-geneva-metrics-accounts-to-service-tree-ID.md
+    - name: MISE Compliance
+      href: s360/MISE-Compliance.md
+    - name: CodeQL Local setup for PX
+      href: s360/CodeQL/CodeQL-LocalSetup.md
+    - name: CodeQL Local setup for Static Resources
+      href: s360/CodeQL/CodeQL-LocalSetup-StaticResources.md

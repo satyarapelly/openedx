@@ -1,0 +1,86 @@
+{
+  "testScenarioName": "px.challengemanagementservice.challenge.create.failure",
+  "responsesPerApiCall": {
+    "createChallenge": {
+      "statusCode": 500,
+      "content": {
+        "error": {
+          "code": "Internal Server Error",
+          "message": "Some thing went wrong, unable to create a challenege",
+          "innerHttpError": null,
+          "properties": {}
+        },
+        "properties": {}
+      }
+    },
+    "getChallengeStatus": {
+      "statusCode": 404,
+      "content": {
+        "error": {
+          "code": "Not Found",
+          "message": "Challenge not found",
+          "innerHttpError": null,
+          "properties": {}
+        },
+        "properties": {}
+      }
+    },
+    "createChallengeSession": {
+      "statusCode": 201,
+      "content": {
+        "session_id": "554403e2-96ce-4c9e-aa9a-45b4c60f3f19",
+        "session_type": "PXAddPISession",
+        "status": "Active",
+        "parent_session_id": null,
+        "child_sessions": null,
+        "session_data_hash": "9249ca5a047185daf4d9601b210329e6c129a3e3cf6a28033aa5d4079967139d",
+        "session_data": "{\r\n\t\"account_Id\": \"654321\",\r\n\t\"card_number\": \"4012888888889995\",\r\n\t\"partner\": \"amc\",\r\n\t\"operation\": \"add\",\r\n\t\"family\": \"credit_card\",\r\n\t\"type\": \"visa\",\r\n\t\"language\": \"en-us\",\r\n\t\"country\": \"usa\",\r\n\t\"challenge_required\": \"true\",\r\n\t\"challenge_completed\": \"false\",\r\n\t\"challenge_retries\": 1,\r\n\t\"Sec-Ch-Ua\": \"Not.A/Brand;v=8, Chromium;v=114, Google Chrome;v=114\",\r\n\t\"Sec-Ch-Ua-Mobile\": \"?0,Sec-Ch-Ua-Platform:Windows\",\r\n\t\"User-Agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36\",\r\n\t\"client_ip\": \"1.1.0.0\"\r\n}",
+        "session_length": 20,
+        "session_sliding_expiration": true,
+        "session_expires_at": "2023-10-16T23:02:43.892784Z",
+        "created_by": "PXAddPISession",
+        "updated_by": "PXAddPISession",
+        "created_date": "2023-10-16T22:42:43.8934613Z",
+        "updated_date": "2023-10-16T22:42:43.8934613Z"
+      }
+    },
+    "getChallengeSessionData": {
+      "statusCode": 200,
+      "content": {
+        "session_id": "554403e2-96ce-4c9e-aa9a-45b4c60f3f19",
+        "session_type": "PXAddPISession",
+        "status": "Active",
+        "parent_session_id": null,
+        "child_sessions": null,
+        "session_data_hash": "9249ca5a047185daf4d9601b210329e6c129a3e3cf6a28033aa5d4079967139d",
+        "session_data": "{\r\n\t\"account_Id\": \"654321\",\r\n\t\"card_number\": \"4012888888889995\",\r\n\t\"partner\": \"amc\",\r\n\t\"operation\": \"add\",\r\n\t\"family\": \"credit_card\",\r\n\t\"type\": \"visa\",\r\n\t\"language\": \"en-us\",\r\n\t\"country\": \"usa\",\r\n\t\"challenge_required\": \"true\",\r\n\t\"challenge_completed\": \"false\",\r\n\t\"challenge_retries\": 1,\r\n\t\"Sec-Ch-Ua\": \"Not.A/Brand;v=8, Chromium;v=114, Google Chrome;v=114\",\r\n\t\"Sec-Ch-Ua-Mobile\": \"?0,Sec-Ch-Ua-Platform:Windows\",\r\n\t\"User-Agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36\",\r\n\t\"client_ip\": \"1.1.0.0\"\r\n}",
+        "session_length": 20,
+        "session_sliding_expiration": true,
+        "session_expires_at": "2023-10-16T23:07:56.3759138Z",
+        "created_by": "PXAddPISession",
+        "updated_by": "PXAddPISession",
+        "created_date": "2023-10-16T22:42:43.8934613Z",
+        "updated_date": "2023-10-16T22:47:56.3759934Z"
+      }
+    },
+    "updateChallengeSession": {
+      "statusCode": 200,
+      "content": {
+        "session_id": "554403e2-96ce-4c9e-aa9a-45b4c60f3f19",
+        "session_type": "PXAddPISession",
+        "status": "Active",
+        "parent_session_id": null,
+        "child_sessions": null,
+        "session_data_hash": "e57813c8a6eff71930bf4bb88948a72d29d1495b929df6256067d2275d3d1ecb",
+        "session_data": "{\r\n\t\"account_Id\": \"654321\",\r\n\t\"card_number\": \"4012888888889995\",\r\n\t\"partner\": \"amc\",\r\n\t\"operation\": \"add\",\r\n\t\"family\": \"credit_card\",\r\n\t\"type\": \"visa\",\r\n\t\"language\": \"en-us\",\r\n\t\"country\": \"usa\",\r\n\t\"challenge_required\": \"false\",\r\n\t\"challenge_completed\": \"false\",\r\n\t\"challenge_retries\": 1,\r\n\t\"Sec-Ch-Ua\": \"Not.A/Brand;v=8, Chromium;v=114, Google Chrome;v=114\",\r\n\t\"Sec-Ch-Ua-Mobile\": \"?0,Sec-Ch-Ua-Platform:Windows\",\r\n\t\"User-Agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36\",\r\n\t\"client_ip\": \"1.1.0.0\"\r\n}",
+        "session_length": 20,
+        "session_sliding_expiration": true,
+        "session_expires_at": "2023-10-16T23:10:13.7222708Z",
+        "created_by": "PXAddPISession",
+        "updated_by": "PXAddPISession",
+        "created_date": "2023-10-16T22:42:43.8934613Z",
+        "updated_date": "2023-10-16T22:50:13.7222848Z"
+      }
+    }
+  }
+}

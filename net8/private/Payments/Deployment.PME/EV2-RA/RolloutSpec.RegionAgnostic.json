@@ -1,0 +1,211 @@
+{
+  "$schema": "https://ev2schema.azure.net/schemas/2020-04-01/RegionAgnosticRolloutSpecification.json",
+  "contentVersion": "1.0.0.0",
+  "rolloutMetadata": {
+    "serviceModelPath": "ServiceModel.RegionAgnostic.json",
+    "scopeBindingsPath": "ScopeBindings.RegionAgnostic.json",
+    "name": "Payment Experience Service test rollout",
+    "rolloutType": "Major",
+    "buildSource": {
+      "parameters": {
+        "versionFile": "buildver.txt"
+      }
+    },
+    "rolloutPolicyReferences": [
+      {
+        "name": "DefaultAutoRestartPolicy",
+        "version": "*"
+      }
+    ],
+    "configuration": {
+      "serviceGroupScope": {
+        "specPath": "config\\Config.$serviceGroup().json"
+      }
+    },
+    "notification": {
+      "email": {
+        "to": "kowshikpfte@microsoft.com"
+      }
+    }
+  },
+  "orchestratedSteps": [
+    {
+      "name": "Rollout_GlobalResources",
+      "targetType": "ServiceResourceDefinition",
+      "targetName": "GlobalResources",
+      "actions": [
+        "deploy"
+      ]
+    },
+    {
+      "name": "Rollout_GlobalResources_ShortUrlCosmosDb",
+      "targetType": "ServiceResourceDefinition",
+      "targetName": "GlobalResources.ShortUrlCosmosDb",
+      "actions": [
+        "deploy"
+      ]
+    },
+    {
+      "name": "Rollout_Network",
+      "targetType": "ServiceResourceDefinition",
+      "targetName": "Network",
+      "actions": [
+        "deploy"
+      ]
+    },
+    {
+      "name": "Rollout_Main_KeyVault_Creation",
+      "targetType": "ServiceResourceDefinition",
+      "targetName": "Main-KeyVault-Creation",
+      "actions": [
+        "deploy",
+        "extension/setprivateissuer",
+        "extension/setpublicissuer"
+      ],
+      "dependsOn": [
+        "Rollout_Network"
+      ]
+    },
+    {
+      "name": "Rollout_Main_KeyVault_CreateCert_PXTLS",
+      "targetType": "ServiceResourceDefinition",
+      "targetName": "Main-KeyVault-CreateCert-PXTLS",
+      "actions": [
+        "extension/createcert"
+      ],
+      "dependsOn": [
+        "Rollout_Main_KeyVault_Creation"
+      ]
+    },
+    {
+      "name": "Rollout_Main_KeyVault_CreateCert_PXGeneva",
+      "targetType": "ServiceResourceDefinition",
+      "targetName": "Main-KeyVault-CreateCert-PXGeneva",
+      "actions": [
+        "extension/createcert"
+      ],
+      "dependsOn": [
+        "Rollout_Main_KeyVault_Creation"
+      ]
+    },
+    {
+      "name": "Rollout_Main_KeyVault_CreateCert_PXAAD",
+      "targetType": "ServiceResourceDefinition",
+      "targetName": "Main-KeyVault-CreateCert-PXAAD",
+      "actions": [
+        "extension/createcert"
+      ],
+      "dependsOn": [
+        "Rollout_Main_KeyVault_Creation"
+      ]
+    },
+    {
+      "name": "Rollout_Main_KeyVault_CreateCert_PXCTP",
+      "targetType": "ServiceResourceDefinition",
+      "targetName": "Main-KeyVault-CreateCert-PXCTP",
+      "actions": [
+        "extension/createcert"
+      ],
+      "dependsOn": [
+        "Rollout_Main_KeyVault_Creation"
+      ]
+    },
+    {
+      "name": "Rollout_Main_KeyVault_CreateCert_PXClientAuth",
+      "targetType": "ServiceResourceDefinition",
+      "targetName": "Main-KeyVault-CreateCert-PXClientAuth",
+      "actions": [
+        "extension/createcert"
+      ],
+      "dependsOn": [
+        "Rollout_Main_KeyVault_Creation"
+      ]
+    },
+    {
+      "name": "Rollout_Main",
+      "targetType": "ServiceResourceDefinition",
+      "targetName": "Main",
+      "actions": [
+        "deploy"
+      ],
+      "dependsOn": [
+        "Rollout_Main_KeyVault_Creation",
+        "Rollout_Main_KeyVault_CreateCert_PXTLS",
+        "Rollout_Main_KeyVault_CreateCert_PXGeneva",
+        "Rollout_Main_KeyVault_CreateCert_PXAAD",
+        "Rollout_Main_KeyVault_CreateCert_PXCTP",
+        "Rollout_Main_KeyVault_CreateCert_PXClientAuth"
+      ]
+    },
+    {
+      "name": "Rollout_App_PX",
+      "targetType": "ServiceResourceDefinition",
+      "targetName": "App-PX",
+      "actions": [
+        "deploy"
+      ],
+      "dependsOn": [
+        "Rollout_Network",
+        "Rollout_Main"
+      ]
+    },
+    {
+      "name": "Rollout_App_PX_Rbac",
+      "targetType": "ServiceResourceDefinition",
+      "targetName": "App-PX-Rbac",
+      "actions": [
+        "deploy"
+      ],
+      "dependsOn": [
+        "Rollout_App_PX"
+      ]
+    },
+    {
+      "name": "Rollout_App_PX_Deploy",
+      "targetType": "ServiceResourceDefinition",
+      "targetName": "App-PX-Deploy",
+      "actions": [
+        "deploy"
+      ],
+      "dependsOn": [
+        "Rollout_App_PX",
+        "Rollout_App_PX_Rbac"
+      ]
+    },
+    {
+      "name": "Rollout_PostTest_App_Swap",
+      "targetType": "ServiceResourceDefinition",
+      "targetName": "App-PX-Swap",
+      "actions": [
+        "wait/manualApproval",
+        "deploy"
+      ],
+      "dependsOn": [
+        "Rollout_App_PX_Deploy"
+      ]
+    },
+    {
+      "name": "Rollout_App_PX_DependencyEmulators",
+      "targetType": "ServiceResourceDefinition",
+      "targetName": "App-PX-DependencyEmulators",
+      "actions": [
+        "deploy"
+      ],
+      "dependsOn": [
+        "Rollout_Network",
+        "Rollout_Main"
+      ]
+    },
+    {
+      "name": "Rollout_App_PX_DependencyEmulators_Deploy",
+      "targetType": "ServiceResourceDefinition",
+      "targetName": "App-PX-DependencyEmulators-Deploy",
+      "actions": [
+        "deploy"
+      ],
+      "dependsOn": [
+        "Rollout_App_PX_DependencyEmulators"
+      ]
+    }
+  ]
+}

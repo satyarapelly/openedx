@@ -1,0 +1,28 @@
+{
+  "threeDSServerTransID": "2931fd0a-d5d1-4748-a1c9-6145c59926b3",
+  "acsTransID": "94f8c62f-ad63-407e-9533-08300570480c",
+  "messageVersion": "2.2.0",
+  "challengeCompletionInd": "N",
+  "sdkTransID": "d0f480e9-1656-48ca-841b-30ed13384040",
+  "messageType": "CRes",
+  "issuerImage": {
+    "medium": "https://payments-acs-emulator-fzeug0g7atchf8d7.b02.azurefd.net/images/yourbanklogo_large.png",
+    "high": "https://payments-acs-emulator-fzeug0g7atchf8d7.b02.azurefd.net/images/yourbanklogo_large.png",
+    "extraHigh": "https://payments-acs-emulator-fzeug0g7atchf8d7.b02.azurefd.net/images/yourbanklogo_large.png"
+  },
+  "psImage": {
+    "medium": "https://payments-acs-emulator-fzeug0g7atchf8d7.b02.azurefd.net/images/cardnetworklogo_large.png",
+    "high": "https://payments-acs-emulator-fzeug0g7atchf8d7.b02.azurefd.net/images/cardnetworklogo_large.png",
+    "extraHigh": "https://payments-acs-emulator-fzeug0g7atchf8d7.b02.azurefd.net/images/cardnetworklogo_large.png"
+  },
+  "acsUiType": "04",
+  "acsCounterAtoS": "000",
+  "expandInfoLabel": "Need more help?",
+  "expandInfoText": "The issuer will send you a one-time password. Please choose the method to receive this code.",
+  "whyInfoLabel": "Learn more about authentication",
+  "whyInfoText": "Some explanation about why using 3-D Secure is an excellent idea as part of an online payment transaction",
+  "challengeInfoHeader": "Payment security",
+  "challengeInfoText": "For added security, you will be authenticated with YourBank application.\n\nStep 1 - Open your YourBank application directly from your phone and verify this payment.\n\nStep 2 - Tap continue after you have completed authentication with your YourBank application. Amount: %f",
+  "oobContinueLabel": "Continue",
+  "challengeInfoLabel": ""
+}

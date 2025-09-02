@@ -1,0 +1,38 @@
+# Node.js
+# Build ACS code, create Docker Image and Publish it to the Azure Container Registry
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+name: $(Date:yyyyMMdd)$(Rev:.r)
+
+trigger:
+- master
+
+strategy:
+  matrix:
+    node_12_x:
+      node_version: 12.13.x
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: $(node_version)
+  displayName: 'Install Node.js'
+
+- script: |
+    npm --prefix ./private/Payments/ExternalEmulators/acs install
+  displayName: 'npm install and build'
+  workingDirectory: '$(System.DefaultWorkingDirectory)'
+
+- task: Docker@2
+  inputs:
+    containerRegistry: 'ACSEmulatorAzureRegistryConnection'
+    repository: 'acs-emulator-app'
+    command: 'buildAndPush'
+    Dockerfile: '$(System.DefaultWorkingDirectory)/private/Payments/ExternalEmulators/acs/DockerFile'
+    buildContext: '$(System.DefaultWorkingDirectory)/private/Payments/ExternalEmulators/acs'
+    tags: 
+      '$(Build.BuildNumber)'

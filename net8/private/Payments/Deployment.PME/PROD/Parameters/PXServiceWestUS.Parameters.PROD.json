@@ -1,0 +1,73 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentParameters.json",
+  "contentVersion": "[BUILD_VERSION]",
+  "paths": ["sitePackageLink"],
+  "parameters": {
+    "deploymentLabel": {
+      "value": "PXService-PROD [BUILD_VERSION]"
+    },
+    "siteName": {
+      "value": "PXService-PROD"
+    },
+    "servicePlanName": {
+      "value": "PXService-PROD"
+    },
+    "sitePackageLink": {
+      "value": "WebSites\\PXService.zip"
+    },
+    "websitePlanSku": {
+      "value": "Standard"
+    },
+    "websitePlanSize": {
+      "value": "S1"
+    },
+    "websiteCapacity": {
+      "value": 4
+    },
+    "alwaysOn": {
+      "value": true
+    },
+    "managedIdentityResourceGroup": {
+      "value": "PX-PROD-Global"
+    },
+    "managedIdentity": {
+      "value": "PXService-PROD"
+    },
+    "accountClientCertificateName": {
+      "value": "AccountClientCertificate"
+    },
+    "billingGroupClientCertificateName": {
+      "value": "BillingGroupClientCertificate"
+    },
+    "commerceAccountClientCertificateName": {
+      "value": "CommerceAccountClientCertificate"
+    },
+    "flightingClientCertificateName": {
+      "value": "FlightingClientCertificate"
+    },
+    "payerAuthClientCertificateName": {
+      "value": "PayerAuthClientCertificate"
+    },
+    "payoutClientCertificateName": {
+      "value": "PayoutClientCertificate"
+    },
+    "pimsClientCertificateName": {
+      "value": "DeprecatingPIMSClientCertificate"
+    },
+    "riskClientCertificateName": {
+      "value": "RiskClientCertificate"
+    },
+    "sessionClientCertificateName": {
+      "value": "SessionClientCertificate"
+    },
+    "taxIdClientCertificateName": {
+      "value": "TaxIdClientCertificate"
+    },
+    "keyVaultName": {
+      "value": "PX-PROD"
+    },
+    "environmentName": {
+      "value": "CPPaymentPX-PROD-WestUS"
+    }
+  }
+}

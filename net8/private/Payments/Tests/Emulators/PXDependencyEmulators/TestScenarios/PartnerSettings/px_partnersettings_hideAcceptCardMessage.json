@@ -1,0 +1,23 @@
+{
+  "testScenarioName": "px.partnersettings.hideAcceptCardMessage",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "add": {
+          "template": "defaulttemplate",
+          "features": {
+            "hideElement": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "hideAcceptCardMessage": true
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

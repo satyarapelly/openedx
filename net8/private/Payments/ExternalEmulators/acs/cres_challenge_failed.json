@@ -1,0 +1,10 @@
+{
+    "threeDSServerTransID":"ee0738da-80ba-48b5-b5d4-edfbe9f29bf6",
+    "acsTransID":"c51b27ec-48e8-48bf-b27c-babe801787fb",
+    "messageVersion":"2.2.0",
+    "sdkTransID":"103d22db-5e8a-4398-8a41-57437d14122e",
+    "messageType":"CRes",
+    "challengeCompletionInd":"Y",
+    "transStatus":"N",
+    "acsCounterAtoS":"001"
+}

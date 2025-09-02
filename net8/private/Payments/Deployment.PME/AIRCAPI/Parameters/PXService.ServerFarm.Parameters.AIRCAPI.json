@@ -1,0 +1,30 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "keyVaultName": {
+      "value": "PX-KV-AIRCAPI"
+    },
+    "managedIdentity": {
+      "value": "PXService-AIRCAPI"
+    },
+    "managedIdentityResourceGroup": {
+      "value": "PX-Infra-AIRCAPI-CentralUS"
+    },
+    "servicePlanName": {
+      "value": "PaymentExperience-AIRCAPI"
+    },
+    "siteName": {
+      "value": "PaymentExperience-AIRCAPI"
+    },
+    "websiteCapacity": {
+      "value": 2
+    },
+    "websiteSkuName": {
+      "value": "P1V3"
+    },
+    "websiteSkuTier": {
+      "value": "PremiumV3"
+    }
+  }
+}

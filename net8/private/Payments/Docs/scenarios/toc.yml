@@ -1,0 +1,20 @@
+- name: Scenarios
+  href: scenarios.md
+- name: Address Reduction
+  href: address-reduction.md
+- name: AMC Address
+  href: amc-address.md
+- name: India 3DS
+  href: india-3ds.md
+- name: List Dynamics 365 pending orders
+  href: listD365PendingOrders.md
+- name: PI - Add other types
+  href: PI-add-other-types.md
+- name: PSD2 Auth Sequence Diagram
+  href: PSD2AuthSeqDiagram.md
+- name: SMD Commercial
+  href: smd-commercial.md
+- name: Tax ID Collection
+  href: taxid-collection.md
+- name: Trade AVS
+  href: trade-avs.md

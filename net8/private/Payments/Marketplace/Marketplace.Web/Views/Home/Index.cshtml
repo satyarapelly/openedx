@@ -1,0 +1,52 @@
+﻿@using ThirdParty.Model
+
+@model List<CatalogItem>
+
+@{
+    ViewData["Title"] = "Products & Services";
+}
+
+@*<p class="text-md-left"><b>@ViewData["Title"]</b></p>*@
+<h4>@ViewData["Title"]</h4>
+
+<div class="container" style="margin:20px 0px 20px; padding:0px">
+    @foreach (var c in @Model)
+    {
+        <div class="row bg-light rounded border shadow w-100" style="margin:20px 0px; padding: 10px 0px">
+            <div class="col-sm-4" style="min-width:100px;">
+                <img src="@c.Product.Image" class="rounded float-left" style="width: 100px; margin: 0px 20px 10px 0px" />
+                @foreach (var sku in @c.Skus)
+                {
+                    <div class="row" style="margin:0px 0px 10px">
+                        Pricing 
+                        @Html.DisplayFor(m => sku.Price)
+                        @if (sku.PaymentType == PaymentType.Recurring)
+                        {
+                            @Html.Raw("/month")
+                        }
+                    </div>
+                    <div class="row">
+                        <button type="button" class="btn btn-primary"
+                            onclick="location.href='@Url.Action("AddItem", "Cart", new {id = @c.Id, skuId = @sku.Id})'"
+                            style="width:140px; height:30px; padding:2px">
+                            Add to Cart
+                        </button>
+                    </div>
+                }
+
+                <div class="row">
+                    <p style="font-size: 80%; margin: 10px 0px 0px 0px">Sold by: @c.Product.Seller.Name</p>
+                </div>
+                <div class="row">
+                    <img src="@c.Product.Seller.Logo" style="height: 35px; " />
+                </div>
+            </div>
+
+            <div class="col-sm-8">
+                <p><b>@Html.Raw(c.Product.Title)</b></p>
+                <b style="font-size: 80%">@Html.Raw(c.Product.Subtitle)</b>
+                <p style="font-size: 80%">@Html.Raw(c.Product.Description)</p>
+            </div>
+        </div>
+    }
+</div>

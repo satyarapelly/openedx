@@ -1,0 +1,21 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "workloadName": {
+      "value": "__WORKLOAD_NAME__"
+    },
+    "appServiceKeyword": {
+      "value": "__APP_SERVICE_KEY_WORD__"
+    },
+    "userAssignedMIName" :{
+      "value": "__UAMI_GBL_NAME__"
+    },
+    "hostName": {
+      "value": "__Front_Door_Host_Name__"
+    },
+    "originEndPoint": {
+      "value": "__Front_Door_Origin_End_Point__"
+    }
+  }
+}

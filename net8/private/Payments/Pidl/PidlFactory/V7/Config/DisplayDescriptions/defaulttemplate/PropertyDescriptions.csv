@@ -1,0 +1,8 @@
+PropertyDescriptionId,CountryIds,PropertyType,DataType,DisplayProperty,IsKey,IsOptional,IsUpdatable,DataProtection,DefaultValue,PossibleValues,PidlDownloadEnabled,PidlDownloadParameter,DisplayOnly,Scenario
+cvv_3_update,,userData,string,,,,TRUE,cvv,,,,,,includecvv
+cvv_4_update,,userData,string,,,,TRUE,cvv,,,,,,includecvv
+hapiV1ModernAccountV20190531IndividualAddress_firstName,,userData,string,,,TRUE,TRUE,,({dataSources.addressResource.address.firstName}),,,,,
+hapiV1ModernAccountV20190531IndividualAddress_lastName,,userData,string,,,TRUE,TRUE,,({dataSources.addressResource.address.lastName}),,,,,
+hapiV1ModernAccountV20190531Address_firstName,,userData,string,,,TRUE,TRUE,,({dataSources.addressResource.address.firstName}),,,,,
+hapiV1ModernAccountV20190531Address_lastName,,userData,string,,,TRUE,TRUE,,({dataSources.addressResource.address.lastName}),,,,,
+hapiV1ModernAccountV20190531Address_tradeName,,userData,string,,,TRUE,TRUE,,({dataSources.addressResource.tradeName}),,,,,

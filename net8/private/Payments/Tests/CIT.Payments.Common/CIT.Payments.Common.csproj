@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), build.root))\msbuild\Environment.props" />
+	<Import Project="..\..\Tests\Test.targets" />
+	<PropertyGroup>
+		<ProjectGuid>{7A4F4E54-DEA0-42C1-95BE-4C61216FFE9F}</ProjectGuid>
+		<OutputType>Library</OutputType>
+		<AppDesignerFolder>Properties</AppDesignerFolder>
+		<RootNamespace>CIT.Payments.Common</RootNamespace>
+		<AssemblyName>CIT.Payments.Common</AssemblyName>
+		<TargetFramework>net8.0</TargetFramework>
+		<!-- Used in public/ext/tools/MsbuildExtensions/InlineTests.targets -->
+		<CreateTestResourcePathFromLinkPath>true</CreateTestResourcePathFromLinkPath>
+		<IsTestProject>true</IsTestProject>
+		<OutDir>$(DropRoot)\UnitTests\$(AssemblyName)\</OutDir>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Newtonsoft.Json" />
+		<PackageReference Include="MSTest.TestAdapter" />
+		<PackageReference Include="MSTest.TestFramework" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\Common\Common.csproj" />
+		<ProjectReference Include="..\..\Pidl\PidlFactory\PidlFactory.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="app.config" />
+	</ItemGroup>
+</Project>

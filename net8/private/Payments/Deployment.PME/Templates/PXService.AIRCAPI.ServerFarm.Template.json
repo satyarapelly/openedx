@@ -1,0 +1,55 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
+  "contentVersion": "0.0.0.1",
+  "parameters": {
+    "servicePlanName": {
+      "type": "string"
+    },
+    "siteName": {
+      "type": "string"
+    },
+    "websiteSkuTier": {
+      "type": "string",
+      "defaultValue": "Shared"
+    },
+    "websiteSkuName": {
+      "type": "string",
+      "defaultValue": "D1"
+    },
+    "websiteCapacity": {
+      "type": "int",
+      "defaultValue": 1
+    },
+    "managedIdentityResourceGroup": {
+      "type": "string",
+      "defaultValue": ""
+    },
+    "managedIdentity": {
+      "type": "string",
+      "defaultValue": ""
+    },
+    "keyVaultName": {
+      "type": "string"
+    }
+  },
+  "variables": {
+    "resourceLocation": "[resourcegroup().location]",
+    "websiteApiVersion": "2015-08-01",
+    "resourceLocationEscapeSpace": "[replace(variables('resourceLocation'),' ','')]",
+    "fullSiteName": "[concat(parameters('siteName'), '-', variables('resourceLocationEscapeSpace'))]",
+    "fullServicePlanName": "[concat(parameters('servicePlanName'), '-', replace(variables('resourceLocation'),' ',''))]"
+  },
+  "resources": [
+    {
+      "apiVersion": "[variables('websiteApiVersion')]",
+      "name": "[variables('fullServicePlanName')]",
+      "type": "Microsoft.Web/serverfarms",
+      "location": "[variables('resourceLocation')]",
+      "sku": {
+        "name": "[parameters('websiteSkuName')]",
+        "tier": "[parameters('websiteSkuTier')]",
+        "capacity": "[parameters('websiteCapacity')]"
+      }
+    }
+  ]
+}

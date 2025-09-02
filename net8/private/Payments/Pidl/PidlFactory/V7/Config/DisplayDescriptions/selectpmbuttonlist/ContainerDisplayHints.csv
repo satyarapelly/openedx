@@ -1,0 +1,5 @@
+ContainerHintId,CountryIds,DisplaySequenceId,DisplayType,DisplayName,LayoutOrientation,LayoutAlignment,ShowDisplayName,IsSubmitGroup,Extend,FirstButtonGroup,ExtendButtonGroup,ContainerDescription,DisplayConditionFunctionName,DataCollectionSource,DataCollectionFilterFunctionName,StyleHints
+paymentMethodSelectPage,,paymentMethodSelectPageSequence,page,PaymentMethodSelectionPage,,,,,,,,,,,,
+paymentMethodSelectPMGroupingPage,,paymentMethodSelectPMGroupingPageSequence,page,paymentMethodSelectPMGroupingPage,,,,,,,,,,,,
+paymentOptionDisplayGroup,,paymentOptionDisplayGroupSequence,group,,,,,,,,,,,,,
+paymentOptionTextGroup,,paymentOptionTextGroupSequence,textgroup,,,,,,,,,,,,,

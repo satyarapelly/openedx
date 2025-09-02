@@ -1,0 +1,114 @@
+{
+  "testScenarioName": "px.partnersettings.defaulttemplate.enableDoingBusinessAsField",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "add": {
+          "template": "defaulttemplate",
+          "features": {
+            "customizeAddressForm": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "addressType": "hapiV1SoldToOrganization",
+                  "dataSource": "hapi",
+                  "fieldsToBeHidden": [
+                    "pageTitle",
+                    "firstName",
+                    "middleName",
+                    "lastName",
+                    "microsoftPrivacyTextGroup"
+                  ],
+                  "fieldsToBeEnabled": null,
+                  "fieldsToMakeRequired": [
+                    "companyName"
+                  ],
+                  "fieldsToBeRemoved": null,
+                  "removeOptionalTextFromFields": true
+                }
+              ]
+            },
+            "customizeElementLocation": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "addressType": "hapiV1SoldToOrganization",
+                  "moveOrganizationNameBeforeEmailAddress": true
+                }
+              ]
+            },
+            "enableDoingBusinessAsField": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "usePSSForPXFeatureFlighting": true
+                }
+              ]
+            },
+            "disableFirstNameLastNameGrouping": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "usePSSForPXFeatureFlighting": true
+                }
+              ]
+            }
+          }
+        },
+        "update": {
+          "template": "defaulttemplate",
+          "features": {
+            "customizeAddressForm": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "addressType": "hapiV1SoldToOrganization",
+                  "dataSource": "hapi",
+                  "fieldsToBeHidden": [
+                    "pageTitle",
+                    "firstName",
+                    "middleName",
+                    "lastName",
+                    "microsoftPrivacyTextGroup"
+                  ],
+                  "fieldsToBeEnabled": null,
+                  "fieldsToMakeRequired": [
+                    "companyName"
+                  ],
+                  "fieldsToBeRemoved": null,
+                  "removeOptionalTextFromFields": true
+                }
+              ]
+            },
+            "customizeElementLocation": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "addressType": "hapiV1SoldToOrganization",
+                  "moveOrganizationNameBeforeEmailAddress": true
+                }
+              ]
+            },
+            "enableDoingBusinessAsField": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "usePSSForPXFeatureFlighting": true
+                }
+              ]
+            },
+            "disableFirstNameLastNameGrouping": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "usePSSForPXFeatureFlighting": true
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk" DefaultTargets="Build">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <AzureFunctionsVersion>v2</AzureFunctionsVersion>
+    <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
+    <OutputPath>..\..\..\..\Drop\$(Configuration)\$(MSBuildProjectName)\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Azure.Services.AppAuthentication" />
+    <PackageReference Include="Microsoft.Azure.Storage.Blob" />
+    <PackageReference Include="Microsoft.Azure.Storage.Common" />
+    <PackageReference Include="Microsoft.NET.Sdk.Functions" />
+    <PackageReference Include="VSTestConsoleV2" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PostDeploymentTests.PXService\PostDeploymentTests.PXService.csproj">
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="host.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="local.settings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </None>
+  </ItemGroup>
+  <Target Name="CopyTestBits" AfterTargets="Build">
+    <ItemGroup>
+      <TestBits Include="..\..\..\..\Drop\$(Configuration)\PostDeploymentTests\**\*.*" />
+    </ItemGroup>
+    <Message Text="Copy test bits from '@(TestBits)' to '$(OutputPath)Tests\%(RecursiveDir)'." Importance="High" />
+    <Copy SourceFiles="@(TestBits)" DestinationFolder="$(OutputPath)Tests\%(RecursiveDir)"/>
+  </Target>
+  <Target Name="ZipOutputPath" AfterTargets="CopyTestBits">
+    <Message Text="Zip Directory $(OutputPath)'." Importance="High" />
+    <ZipDirectory
+        SourceDirectory="$(OutputPath)"
+        DestinationFile="$(OutputPath)\..\..\Deployment\WebSites\$(MSBuildProjectName).zip"
+        Overwrite="true"/>
+  </Target>
+</Project>

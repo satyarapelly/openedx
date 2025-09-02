@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>Microsoft.Commerce.Payments.Tools.InstallCertificates</AssemblyName>
+    <RootNamespace>Microsoft.Commerce.Payments.Tools.InstallCertificates</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Bond.CSharp" />
+    <PackageReference Include="Ms.Qos.OutgoingServiceRequest" />
+    <PackageReference Include="Ms.Qos.IncomingServiceRequest" />
+    <PackageReference Include="Ms.Qos" />
+    <PackageReference Include="Microsoft.CommonSchema.Bond" />
+    <PackageReference Include="Microsoft.Diagnostics.Tracing.TraceEvent" />
+    <PackageReference Include="Newtonsoft.Json" />
+    <PackageReference Include="System.Security.AccessControl" />
+    <PackageReference Include="System.Threading.Tasks.Dataflow" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="readme.md" />
+    <None Include="_TraceEventProgrammersGuide.docx" />
+    <Content Include="TraceEvent.ReadMe.txt" />
+    <Content Include="TraceEvent.ReleaseNotes.txt" />
+  </ItemGroup>
+
+</Project>

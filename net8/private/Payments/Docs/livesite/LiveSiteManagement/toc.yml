@@ -1,0 +1,22 @@
+- name: First time on call 
+  href: First-time-on-call.md
+- name: On call week  
+  href: On-call-week/toc.yml
+  topicHref: On-call-week.md
+- name: Access
+  href: Access/toc.yml
+  topicHref: Access.md
+- name: 'MetricsAdvisor/Kensho'
+  href: MetricsAdvisorKensho/toc.yml
+  topicHref: MetricsAdvisorKensho.md
+- name: Standard operations
+  href: Standard-operations/toc.yml
+  topicHref: Standard-operations.md
+- name: Weekly alert tuning
+  href: Weekly-alert-tuning/toc.yml
+  topicHref: Weekly-alert-tuning.md
+- name: Identified Tasks 
+  href: Identified-Tasks.md
+- name: Note per area
+  href: Note-per-area/toc.yml
+  topicHref: Note-per-area.m

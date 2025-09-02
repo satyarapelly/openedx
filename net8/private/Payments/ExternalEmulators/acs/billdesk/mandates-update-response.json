@@ -1,0 +1,41 @@
+{
+    "objectid": "mandate",
+    "mandateid": "MA199000042326",
+    "mercid": "BDMERCID",
+    "customer_refid": "CUREF01112020001",
+    "subscription_refid": "SUBS01112020001",
+    "subscription_desc": "Unlimited Plan",
+    "start_date": "2020-11-03",
+    "end_date": "2021-10-10",
+    "amount": "500.00",
+    "amount_type": "maximum",
+    "currency": "356",
+    "frequency": "adho",
+    "status": "active",
+    "createdon": "2020-11-03T21:34:41+05:30",
+    "payment_method_type": "card",
+    "ru": "https://www.merchanturl.com/response.jsp",
+    "additional_info": {
+        "additional_info1": "Details1",
+        "additional_info2": "Details2",
+        "additional_info3": "Details3",
+        "additional_info4": "Details4",
+        "additional_info5": "Details5",
+        "additional_info6": "Details6",
+        "additional_info7": "Details7",
+        "additional_info8": "Details8",
+        "additional_info9": "Details9",
+        "additional_info10": "Details10"
+    },
+    "customer": {
+        "first_name": "John",
+        "last_name": "Doe",
+        "email": "john.doe@somedomain.com",
+        "email_alt": "john.doe@somedomain.com",
+        "mobile": "9800000000",
+        "mobile_alt": "9800000000"
+    },
+    "verification_error_code": "TRS0000",
+    "verification_error_type": "success",
+    "verification_error_desc": "Transaction Successful"
+}

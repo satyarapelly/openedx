@@ -1,0 +1,46 @@
+ContainerHintId,CountryIds,DisplaySequenceId,DisplayType,DisplayName,LayoutOrientation,LayoutAlignment,ShowDisplayName,IsSubmitGroup,Extend,FirstButtonGroup,ExtendButtonGroup,ContainerDescription,DisplayConditionFunctionName,DataCollectionSource,DataCollectionFilterFunctionName,StyleHints
+expiryGroup,,expirySequence,group,,inline,,FALSE,,,,,,,,,"gap-small, width-fill"
+cancelSaveGroup,,cancelSaveGroupSequence,group,,inline,,,TRUE,,,,,,,,"padding-top-small, gap-medium"
+cancelBackSaveGroup,,cancelBackSaveGroupSequence,group,,inline,,,TRUE,,,,,,,,"padding-vertical-medium, gap-medium, width-fill"
+microsoftPrivacyTextGroup,,microsoftPrivacyTextGroupSequence,textgroup,,,,,,,,,,,,,gap-small
+creditCardVisaAddPage,,creditCardVisaAddPageSequence,page,AccountDetailsPage,,,,,,,,,,,,gap-small
+creditCardMCAddPage,,creditCardMCAddPageSequence,page,AccountDetailsPage,,,,,,,,,,,,gap-small
+creditCardDiscoverAddPage,,creditCardDiscoverAddPageSequence,page,AccountDetailsPage,,,,,,,,,,,,gap-small
+creditCardJCBAddPage,,creditCardJCBAddPageSequence,page,AccountDetailsPage,,,,,,,,,,,,gap-small
+creditCardEloAddPage,,creditCardEloAddPageSequence,page,AccountDetailsPage,,,,,,,,,,,,
+creditCardHipercardAddPage,,creditCardHipercardAddPageSequence,page,AccountDetailsPage,,,,,,,,,,,,
+creditCardVerveAddPage,,creditCardVerveAddPageSequence,page,AccountDetailsPage,,,,,,,,,,,,
+creditCardVisaAddWithUpdateAddressEnabledPage,,creditCardVisaAddWithUpdateAddressEnabledPageSequence,page,AccountDetailsPage,,,,,,,,,,,,
+creditCardMCAddWithUpdateAddressEnabledPage,,creditCardMCAddWithUpdateAddressEnabledPageSequence,page,AccountDetailsPage,,,,,,,,,,,,
+creditCardDiscoverAddWithUpdateAddressEnabledPage,,creditCardDiscoverAddWithUpdateAddressEnabledPageSequence,page,AccountDetailsPage,,,,,,,,,,,,
+creditCardJCBAddWithUpdateAddressEnabledPage,,creditCardJCBAddWithUpdateAddressEnabledPageSequence,page,AccountDetailsPage,,,,,,,,,,,,
+creditCardEloAddWithUpdateAddressEnabledPage,,creditCardEloAddWithUpdateAddressEnabledPageSequence,page,AccountDetailsPage,,,,,,,,,,,,
+creditCardHipercardAddWithUpdateAddressEnabledPage,,creditCardHipercardAddWithUpdateAddressEnabledPageSequence,page,AccountDetailsPage,,,,,,,,,,,,
+creditCardVerveAddWithUpdateAddressEnabledPage,,creditCardVerveAddWithUpdateAddressEnabledPageSequence,page,AccountDetailsPage,,,,,,,,,,,,
+creditCardVisaAddWithUpdateAddressDisabledPage,,creditCardVisaAddWithUpdateAddressDisabledPageSequence,page,AccountDetailsPage,,,,,,,,,,,,
+creditCardMCAddWithUpdateAddressDisabledPage,,creditCardMCAddWithUpdateAddressDisabledPageSequence,page,AccountDetailsPage,,,,,,,,,,,,
+creditCardDiscoverAddWithUpdateAddressDisabledPage,,creditCardDiscoverAddWithUpdateAddressDisabledPageSequence,page,AccountDetailsPage,,,,,,,,,,,,
+creditCardJCBAddWithUpdateAddressDisabledPage,,creditCardJCBAddWithUpdateAddressDisabledPageSequence,page,AccountDetailsPage,,,,,,,,,,,,
+creditCardEloAddWithUpdateAddressDisabledPage,,creditCardEloAddWithUpdateAddressDisabledPageSequence,page,AccountDetailsPage,,,,,,,,,,,,
+creditCardHipercardAddWithUpdateAddressDisabledPage,,creditCardHipercardAddWithUpdateAddressDisabledPageSequence,page,AccountDetailsPage,,,,,,,,,,,,
+creditCardVerveAddWithUpdateAddressDisabledPage,,creditCardVerveAddWithUpdateAddressDisabledPageSequence,page,AccountDetailsPage,,,,,,,,,,,,
+creditCardAmexAddPage,,creditCardAmexAddPageSequence,page,AccountDetailsPage,,,,,,,,,,,,
+creditCardAmexAddWithUpdateAddressEnabledPage,,creditCardAmexAddWithUpdateAddressEnabledPageSequence,page,AccountDetailsPage,,,,,,,,,,,,
+creditCardAmexAddWithUpdateAddressDisabledPage,,creditCardAmexAddWithUpdateAddressDisabledPageSequence,page,AccountDetailsPage,,,,,,,,,,,,
+creditCardUpdatePage,,creditCardUpdatePageSequence,page,AccountDetailsPage,,,,,,,,,,,,gap-small
+creditCardUpdateWithCvvPage,,creditCardUpdateWithCvvPageSequence,page,AccountDetailsPage,,,,,,,,,,,,
+starRequiredTextGroup,,starRequiredTextGroupSequence,textgroup,,,,,,,,,,,,,
+cvvGroup,,cvvGroupSequence,group,,,,,,,,,,,,,
+addressStateGroup,,addressStateGroupSequence,group,,,,,,,,,,,,,
+expiryMonthGroup,,expiryMonthGroupSequence,group,,,,,,,,,,,,,
+expiryYearGroup,,expiryYearGroupSequence,group,,,,,,,,,,,,,
+acceptedVisaCardGroup,,acceptedVisaCardGroupSequence,group,,,,FALSE,,,,,,,,,
+acceptedAmexCardGroup,,acceptedAmexCardGroupSequence,group,,,,FALSE,,,,,,,,,
+acceptedMCCardGroup,,acceptedMCCardGroupSequence,group,,,,FALSE,,,,,,,,,
+acceptedDiscoverCardGroup,,acceptedDiscoverCardGroupSequence,group,,,,FALSE,,,,,,,,,
+acceptedJCBCardGroup,,acceptedJCBCardGroupSequence,group,,,,FALSE,,,,,,,,,
+acceptedEloCardGroup,,acceptedEloCardGroupSequence,group,,,,FALSE,,,,,,,,,
+acceptedHipercardCardGroup,,acceptedHipercardCardGroupSequence,group,,,,FALSE,,,,,,,,,
+acceptedVerveCardGroup,,acceptedVerveCardGroupSequence,group,,,,FALSE,,,,,,,,,
+addressGroup,,addressGroupSequence,group,,,,,,,,,,,,,
+billingAddressShowAddForConditionalFieldsGroup,,billingAddressShowAddForConditionalFieldsGroupSequence,group,,,,,,,,,,,,,

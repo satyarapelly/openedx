@@ -1,0 +1,46 @@
+{
+    "objectid": "mandate",
+    "mandateid": "{{placeholder}}",
+    "mercid": "{{placeholder}}",
+    "customer_refid": "{{placeholder}}",
+    "subscription_refid": "{{placeholder}}",
+    "subscription_desc": "{{placeholder}}",
+    "start_date": "{{placeholder}}",
+    "end_date": "{{placeholder}}",
+    "amount": "{{placeholder}}",
+    "amount_type": "{{placeholder}}",
+    "currency": "{{placeholder}}",
+    "frequency": "{{placeholder}}",
+    "status": "{{placeholder}}",
+    "createdon": "{{placeholder}}",
+    "payment_method_type": "{{placeholder}}",
+    "ru": "{{placeholder}}",
+    "additional_info": {
+        "additional_info1": "Details1",
+        "additional_info2": "Details2",
+        "additional_info3": "Details3",
+        "additional_info4": "Details4",
+        "additional_info5": "Details5",
+        "additional_info6": "Details6",
+        "additional_info7": "Details7",
+        "additional_info8": "Details8",
+        "additional_info9": "Details9",
+        "additional_info10": "Details10"
+    },
+    "verification_error_code": "TRS0000",
+    "verification_error_type": "success",
+    "verification_error_desc": "Transaction Successful",
+    "next_step": "redirect",
+    "links": [
+        {
+			"href": "https://payments-acs-emulator-fzeug0g7atchf8d7.b02.azurefd.net/payments/ve1_2/challenge",
+            "rel": "redirect",
+            "method": "post",
+            "parameters": {
+                "MD": "U4560000084589",
+                "PaReq":"eJxVUmtvgkAQ/CuE7+XuEAya5QyWNpIGqhVM+qmhcBGUh/Io9t/3jkdtLyHZmVuGnVlgdcsz6YtVdVoWpkwULEusiMo4LY6mHPjPD4a8ouAnFWP2nkVtxSi4rK7DI5PS2JQ/Ak2fY3EMTTcWMoWt9cauFEZNyiUVFdAE+ctVlIRFQyGMrmvHo6Q/gEYIOascm67tXhRrgAYCijBndO/YG+fgeNa79QKopyAq26KpvulMnwOaALRVRpOmudRLhNqwUT7TLItZfVaiMgckbgHdZ9m2oqq52i2NqXt66jzf0g7+jngnq3Ntq3u1d+TVPpuARAfEYcOoilWCdWxIZL7Es6WGAfU8hLkYQ0wkqQrm9EjARXzHGsBgEKvi/i8PPOWKL2FyNCFgt0tZMN7B8/ytgZuKEDdzt/C4EeFGDU/NswPd9YOObRJNPNwJ8XamKeLuG4RoyvNSF2RQFQCQkEDjJtG4b179+w9+AP8tuEY=",
+                "TermUrl": "https://www.merchanturl.com/response.jsp"
+            }
+        }
+    ]
+}

@@ -1,0 +1,108 @@
+﻿@using ThirdParty.Model
+@model List<Order>
+
+@{
+    ViewData["Title"] = "Orders";
+}
+
+@*<p class="text-md-left"><b>@ViewData["Title"]</b></p>*@
+<h4>@ViewData["Title"]</h4>
+
+<div class="container" style="margin:20px 0px 20px; padding:0px">
+
+    @foreach (var o in @Model)
+    {
+        var day = o.CheckoutDate.ToLocalTime().Day;
+        var suffix = (day % 10 == 1 && day % 100 != 11) ? "st"
+        : (day % 10 == 2 && day % 100 != 12) ? "nd"
+        : (day % 10 == 3 && day % 100 != 13) ? "rd"
+        : "th";
+        var dateTime1 = o.CheckoutDate.ToLocalTime().ToString($"MMM dd");
+        var dateTime2 = o.CheckoutDate.ToLocalTime().ToString($" yyyy - h:mm tt");
+
+        var classes = "card w-100 shadow ";
+        @if (string.Equals(ViewBag.HighlightId, o.Id, StringComparison.OrdinalIgnoreCase))
+        {
+            if (o.State == OrderState.PaymentSucceeded)
+            {
+                classes += "highlightSucceeded";
+            }
+            else if (o.State == OrderState.PaymentFailed)
+            {
+                classes += "highlightFailed";
+            }
+            else if (o.State == OrderState.PaymentExperienceCompleted)
+            {
+                classes += "highlightPending";
+            }
+        }
+
+        <div class="@classes" >
+            <div class="card-header">
+                @{
+                    switch (o.State)
+                    {
+                        case OrderState.PaymentExperienceCompleted:
+                            <b>Pending</b>
+                            <span class="spinner-border text-primary spinner-border-sm" role="status" aria-hidden="true"></span>
+                            <p style="font-size:80%">
+                                We are waiting for payment confirmation from your bank.  This typically
+                                completes within a few seconds but can take longer if the payment did
+                                not go through.  Please check again after sometime.
+                                <br />
+                                <b>Amount: @Html.DisplayFor(m => o.Total)</b>
+                                <br />
+                                Order date: @dateTime1<sup>@suffix</sup>@dateTime2
+                            </p>
+                            break;
+                        case OrderState.Fulfilled:
+                        case OrderState.PaymentSucceeded:
+
+                            <b>Completed</b>
+                            <b style="float:right">Total @Html.DisplayFor(m => o.Total)</b>
+                            <p style="font-size:80%">
+                                Order date: @dateTime1<sup>@suffix</sup>@dateTime2
+                            </p>
+                            break;
+                        case OrderState.PaymentFailed:
+                            <b>Payment declined</b>
+                            <p style="font-size:80%">
+                                Payment was declined.  Please try a different payment method.
+                                <br />
+                                <b>Amount: @Html.DisplayFor(m => o.Total)</b>
+                                <br />
+                                Order date: @dateTime1<sup>@suffix</sup>@dateTime2
+                            </p>
+                            break;
+                        default:
+                            <p>Unknown</p>
+                            ;
+                            break;
+                    }
+                }
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    @foreach (var item in @o.Items)
+                    {
+
+                        <li class="list-group-item">
+                            <img src="@item.Product.Image" class="rounded float-left" style="width: 80px; margin: 0px 10px 10px 0px" />
+                            <b>@item.Product.Title</b>
+                            <br />
+                            <font style="font-size:80%">@item.Product.Subtitle</font>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+        <br/>
+    }
+
+</div>
+
+<script type="text/javascript">
+    window.onload = function() {
+        ordersPageOnLoad();
+    };
+</script>

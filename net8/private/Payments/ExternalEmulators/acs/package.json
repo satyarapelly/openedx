@@ -1,0 +1,27 @@
+{
+  "name": "acs",
+  "version": "2.0.0",
+  "description": "ACS Node Server",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Selvan Ramasamy",
+  "license": "ISC",
+  "dependencies": {
+    "@azure/cosmos": "^4.0.0",
+    "@azure/identity": "^4.0.1",
+    "@azure/keyvault-secrets": "^4.8.0",
+    "applicationinsights": "^1.5.0",
+    "async": "^3.2.3",
+    "base64url": "^3.0.1",
+    "express": "^4.17.1",
+    "https-proxy-agent": "^3.0.1",
+    "lodash": "^4.17.21",
+    "mem": "^5.1.1",
+    "moment": "^2.29.2",
+    "uuid": "^3.4.0",
+    "escape-html": "^1.0.3"
+  },
+  "private": true
+}

@@ -1,0 +1,24 @@
+PropertyHintId,CountryIds,MessageSource,DefaultErrorMessage,ErrorRegEx,ErrorCode,ErrorMessage
+cardholderName,,fromErrorCode,Incorrectly formatted cardholder name,,required_field_empty,Cardholder name is a required field
+,,fromRegex,Incorrectly formatted cardholder name,^\s*$,required_field_empty,Cardholder name is a required field
+cardNumberSearch,,fromRegex,Invalid card number,\s,invalid_card_number_has_spaces,No spaces are allowed in the card number
+,,fromErrorCode,Invalid card number,,required_field_empty,Card number is a required field
+expiryMonth,,fromErrorCode,Expiration month is a required field,,required_field_empty,Expiration month is a required field
+expiryYear,,fromErrorCode,Expiration year is a required field,,required_field_empty,Expiration year is a required field
+addressLine1,,fromErrorCode,Incorrectly formatted address,,required_field_empty,Address line 1 is a required field
+addressLine2,,fromErrorCode,Incorrectly formatted address,,required_field_empty,Address line 2 is a required field
+addressCity,,fromErrorCode,Incorrectly formatted city,,required_field_empty,City is a required field
+addressState,,fromErrorCode,Incorrectly formatted state,,required_field_empty,State is a required field
+addressCounty,,fromErrorCode,Incorrectly formatted state,,required_field_empty,A required field is empty
+addressProvince,,fromErrorCode,Incorrectly formatted state,,required_field_empty,Province is a required field
+addressPostalCode,,fromErrorCode,Incorrectly formatted postal code,,required_field_empty,Postal Code is a required field
+addressPostalCode,US,fromErrorCode,Incorrectly formatted zip code,,required_field_empty,ZIP Code is a required field
+addressCountry,,fromErrorCode,Incorrectly formatted country,,required_field_empty,Country/Region is a required field
+orgAddressModern_addressLine1,,fromErrorCode,Incorrectly formatted address,,required_field_empty,Address line 1 is a required field
+orgAddressModern_city,,fromErrorCode,Incorrectly formatted address,,required_field_empty,City is a required field
+orgAddressModern_region,,fromErrorCode,Incorrectly formatted address,,required_field_empty,State is a required field
+orgAddressModern_postalCode,,fromErrorCode,Incorrectly formatted address,,required_field_empty,Postal code is a required field
+orgAddressModern_postalCode,us,fromErrorCode,Incorrectly formatted address,,required_field_empty,Zip is a required field
+orgAddressModern_country,,fromErrorCode,Incorrectly formatted address,,required_field_empty,Country/Region is a required field
+orgAddressModern_email,,fromErrorCode,Incorrectly formatted Email Address,,required_field_empty,Email address is a required field
+orgAddressModern_phoneNumber,,fromErrorCode,Incorrectly formatted phone number,,required_field_empty,Phone number is a required field

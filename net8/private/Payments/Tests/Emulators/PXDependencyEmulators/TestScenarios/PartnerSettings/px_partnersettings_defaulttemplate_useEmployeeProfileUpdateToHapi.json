@@ -1,0 +1,44 @@
+{
+  "testScenarioName": "px.partnersettings.defaulttemplate.useEmployeeProfileUpdateToHapi",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "add": {
+          "template": "defaulttemplate",
+          "redirectionPattern": "fullPage",
+          "resources": {
+            "profile": {
+              "employee": {
+                "template": "defaulttemplate",
+                "redirectionPattern": "fullPage"
+              }
+            }
+          },
+          "features": {
+            "useEmployeeProfileUpdateToHapi": {
+              "applicableMarkets": []
+            }
+          }
+        },
+        "update": {
+          "template": "defaulttemplate",
+          "redirectionPattern": "fullPage",
+          "resources": {
+            "profile": {
+              "employee": {
+                "template": "defaulttemplate",
+                "redirectionPattern": "fullPage"
+              }
+            }
+          },
+          "features": {
+            "useEmployeeProfileUpdateToHapi": {
+              "applicableMarkets": []
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,78 @@
+[
+  {
+    "version": "1.0",
+    "id": "70140AAA-7FDF-4B47-92C4-3A417E090DCF",
+    "bucketId": "70",
+    "product": {
+      "version": "1.0",
+      "title": "CRM QuickStart: 10-Day Implementation",
+      "subtitle": "A QuickStart package for implementing Microsoft Dynamics 365 Customer Engagement.",
+      "image": "/images/stoneridge_crm_quickstart.png",
+      "description": "This QuickStart from Stoneridge Software gets you up and running on Microsoft's Dynamics 365 Customer Engagement quickly.  We get your system provisioned; and set up your business units, users, and security. While deploying the Outlook client connecting Outlook to Customer Engagement, we import master data, customize your system - adding fields and personal views; and build you a custom report.  Finally, we provide training on your configured system and go-live support.",
+      "seller": {
+        "id": "13F108EF-AAEA-4836-8F9C-D1E84EBAAE5F"
+      }
+    },
+    "skus": [
+      {
+        "version": "1.0",
+        "id": "001",
+        "title": "Buy",
+        "image": null,
+        "paymentType": "Immediate",
+        "price": 18000
+      }
+    ]
+  },
+  {
+    "version": "1.0",
+    "id": "865ff097-3be9-421f-b8f1-bd27166bfce4",
+    "bucketId": "86",
+    "product": {
+      "version": "1.0",
+      "title": "DefensePro Setup",
+      "subtitle": "Professional service to install and configure a Radware DefensePro device",
+      "image": "/images/radware_defensepro.svg",
+      "description": "Professional service engineers provide installation and configuration services from a DefensePro device in your production environment. The team works with your organization's staff to optimize setup of DefensePro and ensure the product implementation supports your organization's application infrastructure and business goals. This service also includes assistance for migration from other vendors.",
+      "seller": {
+        "id": "F765A697-A3A1-49C8-B277-283E59D6FB29"
+      }
+    },
+    "skus": [
+      {
+        "version": "1.0",
+        "id": "001",
+        "title": "Buy",
+        "image": null,
+        "paymentType": "Immediate",
+        "price": 20000
+      }
+    ]
+  }
+  //,
+  //{
+  //  "version": "1.0",
+  //  "id": "796E4D2C-F6B9-43DA-8C74-56982928DDD0",
+  //  "bucketId": "79",
+  //  "product": {
+  //    "version": "1.0",
+  //    "title": "Emergency Response Team",
+  //    "subtitle": "DDoS Attack Mitigation and Defense Provided by our Emergency Response Team",
+  //    "image": "/images/radware_ert.svg",
+  //    "description": "The Radware Emergency Response Team (ERT) is a group of security experts that provides 24x7 support and mitigation services for customers facing a broad array of application and network-layer DDoS attacks. The ERT features experienced security engineers that provide immediate assistance and specialized mitigation techniques for organizations facing denial-of-service (DoS) or distributed denial-of-service (DDoS) attacks or malware outbreaks. The ERT compliments an organization's ability to deal with cyber-attacks by leveraging both security expertise and real-time threat intelligence services.",
+  //    "seller": {
+  //      "id": "F765A697-A3A1-49C8-B277-283E59D6FB29"
+  //    }
+  //  },
+  //  "skus": [
+  //    {
+  //      "version": "1.0",
+  //      "id": "001",
+  //      "title": "Subscribe",
+  //      "image": null,
+  //      "paymentType": "Recurring",
+  //      "price": 16000
+  //    }
+  //  ]
+  //}
+]

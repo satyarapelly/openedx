@@ -1,0 +1,163 @@
+{
+  "settings": {
+    "workloadName": "px-int",
+    "networkworkloadName": "px-int-network",
+    "environment": "int",
+    "deploymentIdentityName": "PaymentExperienceService-INT-Deployment", // Follow naming convention: "<Service>-<Environment>-Deployment". I want to force create new. so,going with this.
+    "deploymentIdentityDisplayName": "PX INT Deployment",
+    "deploymentIdentityOwnerObjectId": "13b9c6c3-02af-4b7d-93e4-5b7ad4161792", // wwei's objectid for assisted id AAD application
+    "deploymentIdentityCertificateName": "DeploymentIdentityCertificate",
+    "deploymentIdentityCertificateSubjectName": "deployment.px-int.azclient.ms",
+    "deploymentIdentityKeyVaultLocation": "eastus2",
+    "deploymentIdentityKeyVaultName": "kv-px-int-deploy",
+    "deploymentIdentityKeyVaultResourceGroup": "rg-px-int-deploy-global",
+    "userAssignedManagedIdentityName": "PXService-INT",
+    "userAssignedManagedIdentityResourceGroup": "PX-Infra-INT-CentralUS",
+    "subscriptionKey": "STORECORE-PST-PX-INT",
+    "environmentProper": "integration",
+    "selectedRegions": [
+      "westus"
+    ],
+    "selectedGlobalRegion": "westus",
+    "privateCA": "OneCertV2-PrivateCA",
+    "publicCA": "OneCertV2-PublicCA",
+    "certificates": {
+      "px": {
+        "tls": {
+          "certName": "px-int-paymentexperience-tls",
+          "subjectName": "paymentexperience-test.cp.microsoft-int.com",
+          "dnsNames": "[\\\"paymentexperience-test.cp.microsoft-int.com\\\"]",
+          "issuerProvider": "OneCertV2-PublicCA"
+        },
+        "geneva": {
+          "certName": "PX-GenevaLogsCerts",
+          "subjectName": "MA.GENEVA.KEYVAULT.PAYMENTEXPERIENCE.AZCLIENT-INT.MS",
+          "dnsNames": "[\\\"MA.GENEVA.KEYVAULT.PAYMENTEXPERIENCE.AZCLIENT-INT.MS\\\"]",
+          "issuerProvider": "OneCertV2-PrivateCA"
+        },
+        "aad": {
+          "certName": "aad-pxclientauth-paymentexperience-azclient-int-ms",
+          "subjectName": "aad-pxclientauth.paymentexperience.azclient-int.ms",
+          "dnsNames": "[\\\"aad-pxclientauth.paymentexperience.azclient-int.ms\\\"]",
+          "issuerProvider": "OneCertV2-PrivateCA"
+        },
+        "ctp": {
+          "certName": "ctpcommerce-pxclientauth-paymentexperience-azclient-int-ms",
+          "subjectName": "ctpcommerce-pxclientauth.paymentexperience.azclient-int.ms",
+          "dnsNames": "[\\\"ctpcommerce-pxclientauth.paymentexperience.azclient-int.ms\\\"]",
+          "issuerProvider": "OneCertV2-PrivateCA"
+        },
+        "clientauth": {
+          "certName": "px-pxclientauth-paymentexperience-azclient-int-ms",
+          "subjectName": "px-pxclientauth.paymentexperience.azclient-int.ms",
+          "dnsNames": "[\\\"px-pxclientauth.paymentexperience.azclient-int.ms\\\"]",
+          "issuerProvider": "OneCertV2-PrivateCA"
+        }
+      }
+    },
+    "azureFrontDoor": {
+      "originEndpoint": "agw-px-int-wus2-1.westus2.cloudapp.azure.com"
+    },
+    "appGatewayListeners": {
+      "px": {
+        "hostName": "paymentexperience-test.cp.microsoft-int.com"
+      },
+      "pxStaging": {
+        "hostName": "staging.paymentexperience-test.cp.microsoft-int.com"
+      }
+    },
+    "database": {
+      "name": "px-shorturl-db-int",
+      "locations": "[{\"location\":\"westus\",\"failoverPriority\":0}]",
+      "resourceGroup": "rg-px-int-global",
+      "location": "westus",
+      "dataContributorPrincipalIds": "[\"29e1c5da-1c8c-4ef3-83e3-2742a3a2839d\"]"
+    },
+    "appGatewayPrivateDnsRecords": {
+      "zones": "[\"private.microsoft-int.com\"]",
+      "records": "[{\"dnsZoneName\":\"private.microsoft-int.com\",\"recordName\":\"px\"}]"
+    },
+    "appServiceConfigs": {
+      "px": {
+        "publicAccess": "false",
+        "certAuthOn": "false",
+        "clientId": "bd11e518-82c4-438f-898b-585a8cc3da0d",
+        "environmentName": "STORECORE-PST-PX-INT",
+        "healthCheckPath": "/probe",
+        "deployStagingSlot": "true",
+        "swapSlots": "true"
+      },
+      "emulator": {
+        "publicAccess": "false",
+        "certAuthOn": "false",
+        "clientId": "bd11e518-82c4-438f-898b-585a8cc3da0d",
+        "environmentName": "STORECORE-PST-PX-INT",
+        "healthCheckPath": "/",
+        "deployStagingSlot": "false",
+        "swapSlots": "false"
+      }
+    },
+    "serviceTags": {
+      "outgoingIPFirstPartyServiceTag": "GPCPXINT"
+    },
+    "emulatorAppServicePlan": {
+      "appServicePlanSkuTier": "PremiumV3",
+      "appServicePlanSkuName": "P0V3",
+      "appServicePlanMinCapacity": "1",
+      "appServicePlanMaxCapacity": "1",
+      "appServicePlanDefaultCapacity": "1"
+    },
+    "stampConfigs": "[{\"location\":\"westus\",\"shortLocation\":\"wus\",\"stamp\":\"1\"}]",
+    "geneva": {
+      "monitoringGcsEnvironment": "Diagnostics PROD",
+      "monitoringGcsAccount": "paymentexperiencelogsint",
+      "monitoringGcsNamespace": "paymentexperiencelogsint",
+      "monitoringGcsAuthId": "MA.GENEVA.KEYVAULT.PAYMENTEXPERIENCE.AZCLIENT-INT.MS",
+      "monitoringConfigVersion": "3.0",
+      "monitoringRole": "PxAppService",
+      "monitoringTenant": "msdp",
+      "monitoringGenevaCertSecretName": "PX-GenevaLogsCerts"
+    }
+  },
+  "geographies": [
+    {
+      "name": "NorthAmerica",
+      "regions": [
+        {
+          "name": "westus",
+          "settings": {
+            "stampCount": 1,
+            "shortLocation": "wus",
+            "stamp_1": {
+              "vnetAddressPrefix16Apps": "10.2",
+              "vnetAddressPrefix16Firewall": "10.3",
+              "availabilityZones": "[]",
+              "appServicePlanSkuTier": "PremiumV3",
+              "appServicePlanSkuName": "P1v3",
+              "appServicePlanMinCapacity": "2",
+              "appServicePlanMaxCapacity": "4",
+              "appServicePlanDefaultCapacity": "2"
+            }
+          }
+        },
+        {
+          "name": "westus2",
+          "settings": {
+            "stampCount": 1,
+            "shortLocation": "wus2",
+            "stamp_1": {
+              "vnetAddressPrefix16Apps": "10.4",
+              "vnetAddressPrefix16Firewall": "10.5",
+              "availabilityZones": "[]",
+              "appServicePlanSkuTier": "PremiumV3",
+              "appServicePlanSkuName": "P1v3",
+              "appServicePlanMinCapacity": "2",
+              "appServicePlanMaxCapacity": "4",
+              "appServicePlanDefaultCapacity": "2"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

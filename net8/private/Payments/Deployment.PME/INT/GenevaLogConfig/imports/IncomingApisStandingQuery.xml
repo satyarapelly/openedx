@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MonitoringManagement version="1.0" namespace="Ma" timestamp="2020-01-23T18:44:15.6734441Z">
+  <TaggedData name="IncomingApisStandingQuery">
+    <Data>
+      <StandingQueries>
+        <StandingQuery>
+          <Id>300C92FA-A527-43DA-8792-163BD56B3765</Id>
+          <Query>
+            <![CDATA[
+                            SELECT Average(@requestStatus <= 4 ? 100.0 : 0) AS SLIIncomingApiReliability 
+                            WHERE (@baseType == "IncomingServiceRequest" || @baseType == "Ms.Qos.IncomingServiceRequest") 
+                            GROUPBY @operationName AS OperationName 
+                            GROUPBY @"ext.cloud.location" AS LocationId
+                        ]]>
+          </Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery>
+          <Id>317341F7-B729-4529-BD3F-BEE73EE52842</Id>
+          <Query>
+            <![CDATA[
+                LET granularity = 100.0 
+                LET bucketedLatency = Math.Ceiling(@latencyMs / granularity) * granularity 
+                  SELECT DistributionDigest(bucketedLatency) AS SLIIncomingApiSuccessLatencyPercentile 
+                          WHERE (@baseType == "IncomingServiceRequest" || @baseType == "Ms.Qos.IncomingServiceRequest") && @requestStatus <= 3 
+                          GROUPBY @operationName AS OperationName 
+                          GROUPBY @"ext.cloud.location" AS LocationId
+                        ]]>
+          </Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery>
+          <Id>7888746D-7BDA-4C15-96A2-4E7F6688A95A</Id>
+          <Query><![CDATA[
+                            SELECT Average(100.0) AS IncomingApiReliability
+                            WHERE (@baseType == "IncomingServiceRequest" || @baseType == "Ms.Qos.IncomingServiceRequest") && (@requestStatus == 3 || @requestStatus == 4)
+                            GROUPBY @operationName AS OperationName
+                            GROUPBY @callerName AS CallerName
+                            GROUPBY @role AS Role
+                            GROUPBY @roleInstance AS RoleInstance
+                            GROUPBY @tenant AS Tenant
+                            GROUPBY @"ext.cloud.name" AS CloudName
+                            GROUPBY @"ext.cloud.role" AS CloudRole
+                            GROUPBY @"ext.cloud.location" AS CloudLocation
+                            GROUPBY @"ext.cloud.roleInstance" AS CloudRoleInstance
+                        ]]>
+          </Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery>
+          <Id>976064D5-DEC8-4B46-8D54-AE63F1AF7837</Id>
+          <Query><![CDATA[
+                            SELECT Average(0.0) AS IncomingApiReliability
+                            WHERE (@baseType == "IncomingServiceRequest" || @baseType == "Ms.Qos.IncomingServiceRequest") && (@requestStatus == 5 || @requestStatus == 6)
+                            GROUPBY @operationName AS OperationName
+                            GROUPBY @callerName AS CallerName
+                            GROUPBY @role AS Role
+                            GROUPBY @roleInstance AS RoleInstance
+                            GROUPBY @tenant AS Tenant
+                            GROUPBY @"ext.cloud.name" AS CloudName
+                            GROUPBY @"ext.cloud.role" AS CloudRole
+                            GROUPBY @"ext.cloud.location" AS CloudLocation
+                            GROUPBY @"ext.cloud.roleInstance" AS CloudRoleInstance
+                        ]]>
+          </Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery>
+          <Id>7E5F0653-776C-4346-AA66-24B13AA96BC0</Id>
+          <Query><![CDATA[
+                            SELECT Average(@latencyMs) AS IncomingApiSuccessLatency
+                            WHERE (@baseType == "IncomingServiceRequest" || @baseType == "Ms.Qos.IncomingServiceRequest") && (@requestStatus == 3)
+                            GROUPBY @operationName AS OperationName
+                            GROUPBY @callerName AS CallerName
+                            GROUPBY @role AS Role
+                            GROUPBY @roleInstance AS RoleInstance
+                            GROUPBY @tenant AS Tenant
+                            GROUPBY @"ext.cloud.name" AS CloudName
+                            GROUPBY @"ext.cloud.role" AS CloudRole
+                            GROUPBY @"ext.cloud.location" AS CloudLocation
+                            GROUPBY @"ext.cloud.roleInstance" AS CloudRoleInstance
+                        ]]>
+          </Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery>
+          <Id>B8C3A6D9-D466-4A72-968B-A91E7C53A1B3</Id>
+          <Query><![CDATA[
+                            SELECT Rate(1.0) AS IncomingApiRequests
+                            WHERE (@baseType == "IncomingServiceRequest" || @baseType == "Ms.Qos.IncomingServiceRequest")
+                            GROUPBY @operationName AS OperationName
+                            GROUPBY @callerName AS CallerName
+                            GROUPBY @role AS Role
+                            GROUPBY @roleInstance AS RoleInstance
+                            GROUPBY @tenant AS Tenant
+                            GROUPBY @"ext.cloud.name" AS CloudName
+                            GROUPBY @"ext.cloud.role" AS CloudRole
+                            GROUPBY @"ext.cloud.location" AS CloudLocation
+                            GROUPBY @"ext.cloud.roleInstance" AS CloudRoleInstance
+                        ]]>
+          </Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery>
+          <Id>91DA5521-D8FF-4BA8-BBEB-44053F7263D9</Id>
+          <Query>
+            <![CDATA[
+                            SELECT    
+                               COUNT() AS IncomingTotalSuccesses
+                            WHERE (@succeeded == "true" AND (@baseType == "IncomingServiceRequest" || @baseType == "Ms.Qos.IncomingServiceRequest"))
+                            GROUPBY @operationName AS OperationName
+                            GROUPBY @PaymentMethodFamily As PaymentMethodFamily
+                            GROUPBY @PaymentMethodType As PaymentMethodType
+                            GROUPBY @role AS Role
+                            GROUPBY @roleInstance AS RoleInstance
+                            GROUPBY @tenant AS Tenant
+                            GROUPBY @"ext.cloud.role" AS CloudRole
+                            GROUPBY @"ext.cloud.location" AS CloudLocation
+                            GROUPBY @"ext.cloud.roleInstance" AS CloudRoleInstance
+                        ]]>
+          </Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+	    	<StandingQuery>
+          <Id>97ae77d4-6862-4a7f-8528-9151c2f37dfd</Id>
+          <Query>
+            <![CDATA[
+                            SELECT    
+                               COUNT() AS IncomingTotalSuccessesWithPartner
+                            WHERE (@succeeded == "true" AND (@baseType == "IncomingServiceRequest" || @baseType == "Ms.Qos.IncomingServiceRequest"))
+                            GROUPBY @operationName AS OperationName
+                            GROUPBY @Partner As Partner
+                            GROUPBY @role AS Role
+                            GROUPBY @roleInstance AS RoleInstance
+                            GROUPBY @tenant AS Tenant
+                            GROUPBY @"ext.cloud.role" AS CloudRole
+                            GROUPBY @"ext.cloud.location" AS CloudLocation
+                            GROUPBY @"ext.cloud.roleInstance" AS CloudRoleInstance
+                        ]]>
+          </Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery>
+          <Id>C07D7F74-A505-4F1E-A3A2-656D943B20E8</Id>
+          <Query>
+            <![CDATA[
+                            SELECT    
+                               COUNT() AS IncomingTotalUserErrors
+                            WHERE (@succeeded == "false" AND @protocolStatusCode.StartsWith("4") AND (@baseType == "IncomingServiceRequest" || @baseType == "Ms.Qos.IncomingServiceRequest"))
+                            GROUPBY @operationName AS OperationName
+                            GROUPBY @PaymentMethodFamily As PaymentMethodFamily
+                            GROUPBY @PaymentMethodType As PaymentMethodType
+                            GROUPBY @role AS Role
+                            GROUPBY @roleInstance AS RoleInstance
+                            GROUPBY @tenant AS Tenant
+                            GROUPBY @"ext.cloud.role" AS CloudRole
+                            GROUPBY @"ext.cloud.location" AS CloudLocation
+                            GROUPBY @"ext.cloud.roleInstance" AS CloudRoleInstance
+                        ]]>
+          </Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+		    <StandingQuery>
+          <Id>d1c9cc3b-2867-41d1-a45c-b2c552437e5e</Id>
+          <Query>
+            <![CDATA[
+                            SELECT    
+                               COUNT() AS IncomingTotalUserErrorsWithPartner
+                            WHERE (@succeeded == "false" AND @protocolStatusCode.StartsWith("4") AND (@baseType == "IncomingServiceRequest" || @baseType == "Ms.Qos.IncomingServiceRequest"))
+                            GROUPBY @operationName AS OperationName
+                            GROUPBY @Partner As Partner
+                            GROUPBY @role AS Role
+                            GROUPBY @roleInstance AS RoleInstance
+                            GROUPBY @tenant AS Tenant
+                            GROUPBY @"ext.cloud.role" AS CloudRole
+                            GROUPBY @"ext.cloud.location" AS CloudLocation
+                            GROUPBY @"ext.cloud.roleInstance" AS CloudRoleInstance
+                        ]]>
+          </Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery>
+          <Id>2424C987-CA98-4072-A349-85B58AF2A40B</Id>
+          <Query>
+            <![CDATA[
+                            SELECT    
+                               COUNT() AS IncomingTotalSystemErrors
+                            WHERE (@succeeded == "false" AND @protocolStatusCode.StartsWith("5") AND (@baseType == "IncomingServiceRequest" || @baseType == "Ms.Qos.IncomingServiceRequest"))
+                            GROUPBY @operationName AS OperationName
+                            GROUPBY @PaymentMethodFamily As PaymentMethodFamily
+                            GROUPBY @PaymentMethodType As PaymentMethodType
+                            GROUPBY @role AS Role
+                            GROUPBY @roleInstance AS RoleInstance
+                            GROUPBY @tenant AS Tenant
+                            GROUPBY @"ext.cloud.role" AS CloudRole
+                            GROUPBY @"ext.cloud.location" AS CloudLocation
+                            GROUPBY @"ext.cloud.roleInstance" AS CloudRoleInstance
+                        ]]>
+          </Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+		    <StandingQuery>
+          <Id>c7420bd0-e476-4378-84f7-3b1662c91a37</Id>
+          <Query>
+            <![CDATA[
+                            SELECT    
+                               COUNT() AS IncomingTotalSystemErrorsWithPartner
+                            WHERE (@succeeded == "false" AND @protocolStatusCode.StartsWith("5") AND (@baseType == "IncomingServiceRequest" || @baseType == "Ms.Qos.IncomingServiceRequest"))
+                            GROUPBY @operationName AS OperationName
+                            GROUPBY @Partner As Partner
+                            GROUPBY @role AS Role
+                            GROUPBY @roleInstance AS RoleInstance
+                            GROUPBY @tenant AS Tenant
+                            GROUPBY @"ext.cloud.role" AS CloudRole
+                            GROUPBY @"ext.cloud.location" AS CloudLocation
+                            GROUPBY @"ext.cloud.roleInstance" AS CloudRoleInstance
+                        ]]>
+          </Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>      
+        <StandingQuery>
+          <Id>1E32BD7D-B990-4E65-B416-05CFB7D54C9C</Id>
+          <Query>
+            <![CDATA[
+                      LET granularity = 100.0
+                      LET bucketedLatency = Math.Ceiling(@latencyMs / granularity) * granularity
+
+                      SELECT 
+                        DistributionDigest(bucketedLatency) AS IncomingApiSuccessLatencyPercentile
+                      WHERE (@baseType == "IncomingServiceRequest" || @baseType == "Ms.Qos.IncomingServiceRequest") && (@requestStatus == 3)
+                      GROUPBY @operationName AS OperationName
+                      GROUPBY @role AS Role
+                      GROUPBY @roleInstance AS RoleInstance
+                      GROUPBY @tenant AS Tenant
+                      GROUPBY @"ext.cloud.role" AS CloudRole
+                      GROUPBY @"ext.cloud.location" AS CloudLocation
+                      GROUPBY @"ext.cloud.roleInstance" AS CloudRoleInstance      
+              ]]>
+          </Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery> 
+        <StandingQuery>
+          <Id>73148696-16db-49bf-a6f4-888e64af95c8</Id>
+          <Query>
+            <![CDATA[
+                            SELECT Average(@requestStatus <= 4 ? 100.0 : 0) AS SLIIncomingApiReliabilityWithPartner
+                            WHERE (@baseType == "IncomingServiceRequest" || @baseType == "Ms.Qos.IncomingServiceRequest") 
+                            GROUPBY @operationName AS OperationName 
+                            GROUPBY @Partner As Partner
+                            GROUPBY @"ext.cloud.location" AS LocationId
+                        ]]>
+          </Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery>
+          <Id>1714c1d1-cb0f-4e19-9248-ee0d1395578f</Id>
+          <Query>
+            <![CDATA[
+                LET granularity = 100.0 
+                LET bucketedLatency = Math.Ceiling(@latencyMs / granularity) * granularity 
+                  SELECT DistributionDigest(bucketedLatency) AS SLIIncomingApiSuccessLatencyPercentileWithPartner
+                          WHERE (@baseType == "IncomingServiceRequest" || @baseType == "Ms.Qos.IncomingServiceRequest") && @requestStatus <= 3 
+                          GROUPBY @operationName AS OperationName 
+                          GROUPBY @Partner As Partner
+                          GROUPBY @"ext.cloud.location" AS LocationId
+                        ]]>
+          </Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery>
+          <Id>a4c1682f-541e-4e68-9d58-da196aefa9ec</Id>
+          <Query>
+            <![CDATA[
+                            SELECT Average(100.0) AS IncomingApiReliabilityWithPartner
+                            WHERE (@baseType == "IncomingServiceRequest" || @baseType == "Ms.Qos.IncomingServiceRequest") && (@requestStatus == 3 || @requestStatus == 4)
+                            GROUPBY @operationName AS OperationName
+                            GROUPBY @Partner As Partner
+                            GROUPBY @role AS Role
+                            GROUPBY @roleInstance AS RoleInstance
+                            GROUPBY @tenant AS Tenant
+                            GROUPBY @"ext.cloud.name" AS CloudName
+                            GROUPBY @"ext.cloud.role" AS CloudRole
+                            GROUPBY @"ext.cloud.location" AS CloudLocation
+                            GROUPBY @"ext.cloud.roleInstance" AS CloudRoleInstance
+                        ]]>
+          </Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery>
+          <Id>d3e61e25-dcaf-4e3f-b472-c5aa915bc0a9</Id>
+          <Query>
+            <![CDATA[
+                            SELECT Average(0.0) AS IncomingApiReliabilityWithPartner
+                            WHERE (@baseType == "IncomingServiceRequest" || @baseType == "Ms.Qos.IncomingServiceRequest") && (@requestStatus == 5 || @requestStatus == 6)
+                            GROUPBY @operationName AS OperationName
+                            GROUPBY @Partner As Partner
+                            GROUPBY @role AS Role
+                            GROUPBY @roleInstance AS RoleInstance
+                            GROUPBY @tenant AS Tenant
+                            GROUPBY @"ext.cloud.name" AS CloudName
+                            GROUPBY @"ext.cloud.role" AS CloudRole
+                            GROUPBY @"ext.cloud.location" AS CloudLocation
+                            GROUPBY @"ext.cloud.roleInstance" AS CloudRoleInstance
+                        ]]>
+          </Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery>
+          <Id>7d4fadd5-1a8e-45d9-82e8-e4eaf260f7f8</Id>
+          <Query>
+            <![CDATA[
+                            SELECT Average(@latencyMs) AS IncomingApiSuccessLatencyWithPartner
+                            WHERE (@baseType == "IncomingServiceRequest" || @baseType == "Ms.Qos.IncomingServiceRequest") && (@requestStatus == 3)
+                            GROUPBY @operationName AS OperationName
+                            GROUPBY @Partner As Partner
+                            GROUPBY @role AS Role
+                            GROUPBY @roleInstance AS RoleInstance
+                            GROUPBY @tenant AS Tenant
+                            GROUPBY @"ext.cloud.name" AS CloudName
+                            GROUPBY @"ext.cloud.role" AS CloudRole
+                            GROUPBY @"ext.cloud.location" AS CloudLocation
+                            GROUPBY @"ext.cloud.roleInstance" AS CloudRoleInstance
+                        ]]>
+          </Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery>
+          <Id>58ea00b4-4238-4761-808d-fd4be8a4bcd7</Id>
+          <Query>
+            <![CDATA[
+                            SELECT Rate(1.0) AS IncomingApiRequestsWithPartner
+                            WHERE (@baseType == "IncomingServiceRequest" || @baseType == "Ms.Qos.IncomingServiceRequest")
+                            GROUPBY @operationName AS OperationName
+                            GROUPBY @Partner As Partner
+                            GROUPBY @role AS Role
+                            GROUPBY @roleInstance AS RoleInstance
+                            GROUPBY @tenant AS Tenant
+                            GROUPBY @"ext.cloud.name" AS CloudName
+                            GROUPBY @"ext.cloud.role" AS CloudRole
+                            GROUPBY @"ext.cloud.location" AS CloudLocation
+                            GROUPBY @"ext.cloud.roleInstance" AS CloudRoleInstance
+                        ]]>
+          </Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+      </StandingQueries>
+    </Data>
+  </TaggedData>
+</MonitoringManagement>

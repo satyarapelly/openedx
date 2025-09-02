@@ -1,0 +1,46 @@
+﻿Input,Country,ExpectedTransformedValue,Notes
+us,206 555 1212,
+us,206-555-1212,
+us,206.555.1212,
+us,1(206) 555 1212,
+us,1(206)-555.1212,
+us,(206)-555.1212,
+us,+1(206)-555-1212,
+us,206-555.1212,
+us,206.555-1212,
+us,+12065551212,
+gb,+442012345678,London is (020) + 8 digits 
+gb,00442012345678
+de,+493012345678,Phone Number in Berlin (030) + 8 digits 
+de,+49(30)12345678
+br,+558522222222,Phone Number in Fortaleza (85) using carrier code from Oi (31) in Brazil -- Removes the leading zero and carrier code 31 (Oi) as expected
+br,55 85 3533-6100,
+za,+27211234567,Phone Number in Cape Town 
+za,+27 21 406 1911
+il,+972501234567,Cellular phone number
+il,+972-3-7408966
+au,+61212345678,Phone number in Sydney
+au,+61 2 9696 2500  
+fr,+33951234567,
+fr,+33 1 78 90 15 50
+es,+34800123456,
+es,+34 914 531 900
+tw,+886912345678,Mobile Phone number
+tw,+886 2 7703 8888
+kr,+8221233456,Phone number in Seoul
+kr,+82 2-771-1000
+it,+393123456789,
+it,+39 06 45661661 
+in,+919398987070,
+in,+91-761 4046001 
+id,+623160123456,
+id,+62 852 60449718 
+ru,+74991234567,
+ru,+7 (495) 931-90-00
+ae,+97143230116,
+ae,+971 4 323 0111
+us,+12069650137,This test case was shared by Robert Pollard.
+us,12069650137,This test case was shared by Robert Pollard.
+us,2069650137,This test case was shared by Robert Pollard.
+fi,+358notaMSISDN,This test case was shared by Robert Pollard.  Although it seems like an invalid number the library considers its numberical equivalent and hence is valid.
+de,2069650137,This test case was shared by Robert Pollard.  Although it seems like a US number and so, should fail in Germany, it passes because its valid format in Germany.

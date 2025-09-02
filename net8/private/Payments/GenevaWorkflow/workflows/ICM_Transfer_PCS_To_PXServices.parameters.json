@@ -1,0 +1,10 @@
+{
+  "$connections": {
+    "value": {
+      "IcM_1": {
+        "id": "/customApis/GenevaAuto.Connectors/IcM",
+        "connectionId": "IcM-1"
+      }
+    }
+  }
+}

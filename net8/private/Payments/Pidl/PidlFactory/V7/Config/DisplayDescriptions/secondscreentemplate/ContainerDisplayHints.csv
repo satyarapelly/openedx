@@ -1,0 +1,40 @@
+ContainerHintId,CountryIds,DisplaySequenceId,DisplayType,DisplayName,LayoutOrientation,LayoutAlignment,ShowDisplayName,IsSubmitGroup,Extend,FirstButtonGroup,ExtendButtonGroup,ContainerDescription,DisplayConditionFunctionName,DataCollectionSource,DataCollectionFilterFunctionName,StyleHints
+expiryGroup,,expirySequence,group,,inline,,FALSE,,,,,,,,,"gap-small, width-fill"
+cancelNextGroup,,cancelNextGroupSequence,group,,inline,,,TRUE,,,,,,,,"gap-medium, padding-top-small"
+closeAnonymousSaveGroup,,closeAnonymousSaveGroupSequence,group,,inline,,,TRUE,,,,,,,,"padding-vertical-medium, gap-medium, width-fill"
+microsoftPrivacyTextGroup,,microsoftPrivacyTextGroupSequence,textgroup,,,,,,,,,,,,,gap-small
+creditCardVisaAddPage,,creditCardVisaAddPageSequence,page,AccountDetailsPage,,,,,,,,,,,,gap-small
+creditCardMCAddPage,,creditCardMCAddPageSequence,page,AccountDetailsPage,,,,,,,,,,,,gap-small
+creditCardAmexAddPage,,creditCardAmexAddPageSequence,page,AccountDetailsPage,,,,,,,,,,,,gap-small
+creditCardDiscoverAddPage,,creditCardDiscoverAddPageSequence,page,AccountDetailsPage,,,,,,,,,,,,gap-small
+creditCardJCBAddPage,,creditCardJCBAddPageSequence,page,AccountDetailsPage,,,,,,,,,,,,gap-small
+creditCardEloAddPage,,creditCardEloAddPageSequence,page,AccountDetailsPage,,,,,,,,,,,,gap-small
+creditCardHipercardAddPage,,creditCardHipercardAddPageSequence,page,AccountDetailsPage,,,,,,,,,,,,gap-small
+creditCardVerveAddPage,,creditCardVerveAddPageSequence,page,AccountDetailsPage,,,,,,,,,,,,gap-small
+acceptedEloCardGroup,,acceptedEloCardGroupSequence,group,,,,FALSE,,,,,,,,,gap-small
+acceptedHipercardCardGroup,,acceptedHipercardCardGroupSequence,group,,,,FALSE,,,,,,,,,gap-small
+acceptedVerveCardGroup,,acceptedVerveCardGroupSequence,group,,,,FALSE,,,,,,,,,gap-small
+addressGroup,,addressGroupSequence,group,,,,,,,,,,,,,
+addressStatePostalCodeGroup,,addressStatePostalCodeGroupSequence,group,,inline,,FALSE,,,,,,,,,gap-small
+addressPostalCodeStateGroup,,addressPostalCodeStateGroupSequence,group,,inline,,FALSE,,,,,,,,,gap-small
+addressProvincePostalCodeGroup,,addressProvincePostalCodeGroupSequence,group,,inline,,FALSE,,,,,,,,,gap-small
+addressPostalCodeProvinceGroup,,addressPostalCodeProvinceGroupSequence,group,,inline,,FALSE,,,,,,,,,gap-small
+starRequiredTextGroup,,starRequiredTextGroupSequence,textgroup,,,,,,,,,,,,,
+acceptedVisaCardGroup,,acceptedVisaCardGroupSequence,group,,,,FALSE,,,,,,,,,
+acceptedAmexCardGroup,,acceptedAmexCardGroupSequence,group,,,,FALSE,,,,,,,,,
+acceptedMCCardGroup,,acceptedMCCardGroupSequence,group,,,,FALSE,,,,,,,,,
+acceptedDiscoverCardGroup,,acceptedDiscoverCardGroupSequence,group,,,,FALSE,,,,,,,,,
+acceptedJCBCardGroup,,acceptedJCBCardGroupSequence,group,,,,FALSE,,,,,,,,,
+expiryMonthGroup,,expiryMonthGroupSequence,group,,,,,,,,,,,,,
+expiryYearGroup,,expiryYearGroupSequence,group,,,,,,,,,,,,,
+cvvGroup,,cvvGroupSequence,group,,,,,,,,,,,,,
+billingAddressShowAddForConditionalFieldsGroup,,billingAddressShowAddForConditionalFieldsGroupSequence,group,,,,,,,,,,,,,
+billingGroupItemGroup,,billingGroupItemGroupSequence,group,,,,,,,,,,,,,
+billingGroupPrimaryPIGroup,,billingGroupPrimaryPIGroupSequence,group,,,,,,,,,,,,,
+billingGroupBackupPIGroup,,billingGroupBackupPIGroupSequence,group,,,,,,,,,,hasBGBackupPI,,,
+billingGroupPrimaryPICCGroup,,billingGroupPrimaryPICCGroupSequence,group,,inline,,,,,,,,isBGPrimaryPICreditCard,,,
+billingGroupPrimaryPICheckGroup,,billingGroupPrimaryPICheckGroupSequence,group,,inline,,,,,,,,isBGPrimaryPICheck,,,
+billingGroupPrimaryPINonCCNonCheckGroup,,billingGroupPrimaryPINonCCNonCheckGroupSequence,group,,inline,,,,,,,,isBGPrimaryPINonCCNonCheck,,,
+billingGroupBackupPICCGroup,,billingGroupBackupPICCGroupSequence,group,,inline,,,,,,,,isBGBackupPICreditCard,,,
+billingGroupBackupPICheckGroup,,billingGroupBackupPICheckGroupSequence,group,,inline,,,,,,,,isBGBackupPICheck,,,
+billingGroupBackupPINonCCNonCheckGroup,,billingGroupBackupPINonCCNonCheckGroupSequence,group,,inline,,,,,,,,isBGBackupPINonCCNonCheck,,,

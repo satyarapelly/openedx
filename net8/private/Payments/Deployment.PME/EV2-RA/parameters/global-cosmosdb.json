@@ -1,0 +1,24 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "value": "__COSMOS_DB_LOCATION__"
+    },
+    "stampConfigs": {
+      "value": "__STAMP_CONFIGS__"
+    },
+    "networkWorkloadName": {
+      "value": "__WORKLOAD_NAME_NETWORK__"
+    },
+    "cosmosDbName": {
+      "value": "__COSMOS_DB_NAME__"
+    },
+    "cosmosDbLocations": {
+      "value": "__COSMOSDB_LOCATIONS__"
+    },
+    "cosmosdbDataContributorPrincipalIds": {
+      "value": "__COSMOSDB_DATA_CONTRIBUTOR_PRINCIPAL_IDS__"
+    }
+  }
+}

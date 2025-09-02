@@ -1,0 +1,24 @@
+{
+  "testScenarioName": "px.partnersettings.listpidropdown.skipSelectInstanceNoPI.backupPI.triggeredBy",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "selectinstance": {
+          "template": "listpidropdown",
+          "features": {
+            "skipSelectInstanceNoPI": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "addTriggeredByForSkipSelectInstanceNoPI": true,
+                  "enableBackupPICheckForSkipSelectInstanceNoPI": true
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

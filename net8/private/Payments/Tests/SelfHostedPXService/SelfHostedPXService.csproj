@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), build.root))\msbuild\Environment.props" />
+	<Import Project="$(INETROOT)\private\Payments\tests\Test.targets" />
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net8.0</TargetFramework>
+		<RootNamespace>SelfHostedPXService</RootNamespace>
+		<AssemblyName>SelfHostedPXService</AssemblyName>
+		<OutDir>$(DropRoot)\UnitTests\$(AssemblyName)\</OutDir>
+		<GenerateDocumentationFile>false</GenerateDocumentationFile>
+		<CreateTestResourcePathFromLinkPath>true</CreateTestResourcePathFromLinkPath>
+		<!-- Keep your custom drop path; MSBuild will still nest by TFM -->
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+		<WarningLevel>4</WarningLevel>
+		<OutputPath>..\..\..\..\Drop\Debug\UnitTests\SelfHostedPXService\</OutputPath>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<!-- REMOVE test SDK; this is an app, not a test project -->
+		<!-- <PackageReference Include="Microsoft.NET.Test.Sdk" /> -->
+		<PackageReference Include="Newtonsoft.Json" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Console" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\SelfHostedPXServiceCore\SelfHostedPXServiceCore.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<TestDependency Include="$(INETROOT)\private\Payments\Tests\Payments.Common.Config">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+			<Link>Payments.Common.Config</Link>
+		</TestDependency>
+	</ItemGroup>
+	<ItemGroup>
+		<Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+	</ItemGroup>
+
+	<Target Name="RenameAppHost" AfterTargets="Build">
+		<Exec Command="if exist &quot;$(MSBuildProjectDirectory)\obj\$(Configuration)\$(TargetFramework)\apphost.exe&quot; ren &quot;$(MSBuildProjectDirectory)\obj\$(Configuration)\$(TargetFramework)\apphost.exe&quot; SelfHostedPXService.exe" ContinueOnError="true" />
+	</Target>
+</Project>

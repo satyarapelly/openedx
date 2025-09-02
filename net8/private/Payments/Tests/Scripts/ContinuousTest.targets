@@ -1,0 +1,14 @@
+<!-- Common settings used for Test projects. -->
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(INETROOT)\private\Payments\Payments.targets" />
+  <PropertyGroup>
+    <StyleCopOverrideSettingsFile>$(INETROOT)\private\Payments\Tests\PXService\Settings.StyleCop</StyleCopOverrideSettingsFile>
+    <OacrDisabled>true</OacrDisabled>
+  </PropertyGroup>
+  <ItemGroup>
+    <Robocopy Include="$(OutDir)">
+      <DestinationFolder>$(DropRoot)\Payments\Autopilot\PXServiceSystemTestRunnerService\ContinuousTests</DestinationFolder>
+    </Robocopy>
+  </ItemGroup>
+</Project>

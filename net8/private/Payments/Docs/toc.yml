@@ -1,0 +1,22 @@
+- name: Home
+  href: index.md
+- name: Partner Onboarding
+  href: partnerOnboarding/
+- name: Partners
+  href: partners/
+- name: Scenarios
+  href: scenarios/  
+- name: System
+  href: system/
+- name: Development
+  href: development/
+- name: Operations
+  href: operations/
+- name: Engineering
+  href: engineering/
+- name: Contributing
+  href: contribution-guidelines.md
+- name: Glossary
+  href: glossary.md
+- name: Livesite
+  href: livesite/

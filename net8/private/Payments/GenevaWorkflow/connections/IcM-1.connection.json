@@ -1,0 +1,9 @@
+{
+  "properties": {
+    "api": {
+      "id": "/customApis/GenevaAuto.Connectors/IcM"
+    },
+    "displayName": "PXIcMConnect",
+    "parameterValues": {}
+  }
+}

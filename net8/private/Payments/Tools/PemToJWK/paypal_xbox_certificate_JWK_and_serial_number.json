@@ -1,0 +1,9 @@
+﻿{
+	"serialNumber": "0095CF87644F053566",
+	"publicKey": {
+		"kty": "RSA",
+		"extractable": true,
+		"n": "0U4bvZJh74ELmXWh4EkTF6OzS72fQdweaOkzIRIYwqFk0Hb1Nb+zJx7oedoRuQQMjq037bp0WlkyxiZo1vf6SA/ABsHaAyQUpOA0sseQGbGqT4EPyStC36uCUSSdLMlWxWDgpCwaOSW9U3F5t85cUBMRI7RycZbcKatIgAZcgZ+BGbu2tOivNyqH8oJC9lJ4ycfMlqAdhcQHRyy1IL3R/Wp0a0gzrz2nUHVLjliWAviSW1ptYPyxfYDclSh5hXPU4Uj59UjVxsbL4BhTGMJPm9tKO8mvSch0P5vQtExW8FCACX7Enx3JwN6suaxsruF5oCiYrcJMhr73UPn/776/jw==",
+		"e": "AQAB"
+	}
+}

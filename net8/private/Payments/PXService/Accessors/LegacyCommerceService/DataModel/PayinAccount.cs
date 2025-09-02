@@ -1,0 +1,104 @@
+﻿// <copyright file="PayinAccount.cs" company="Microsoft">Copyright (c) Microsoft. All rights reserved.</copyright>
+
+namespace Microsoft.Commerce.Payments.PXService.Accessors.LegacyCommerceService.DataModel
+{
+    using System.Collections.Generic;
+    using System.Runtime.Serialization;
+    using System.ComponentModel.DataAnnotations;
+
+    [DataContract(Namespace = NamespaceConstants.Namespace)]
+    public enum CustomerType
+    {
+        [EnumMember]
+        Personal = 1,
+        [EnumMember]
+        Business = 2,
+        [EnumMember]
+        Corporate = 3,
+        //This value is PCS internal used and it should not be passed to API
+        [EnumMember]
+        Unknown = 4,
+    }
+
+    [DataContract(Namespace = NamespaceConstants.Namespace)]
+    public class PayinAccount : Account, IExtensibleDataObject
+    {
+        [DataMember]
+        public CustomerType? CustomerType { get; set; }
+
+
+        [StringLength(64)]
+        [RegularExpression(RegexConstants.XmlString)]
+        [DataMember]
+        public string FirstName { get; set; }
+
+        [StringLength(64)]
+        [RegularExpression(RegexConstants.XmlString)]
+        [DataMember]
+        public string FirstNamePronunciation { get; set; }
+
+        [StringLength(64)]
+        [RegularExpression(RegexConstants.XmlString)]
+        [DataMember]
+        public string LastName { get; set; }
+
+        [StringLength(64)]
+        [RegularExpression(RegexConstants.XmlString)]
+        [DataMember]
+        public string LastNamePronunciation { get; set; }
+
+        [StringLength(64)]
+        [RegularExpression(RegexConstants.XmlString)]
+        [DataMember]
+        public string CompanyName { get; set; }
+
+        [StringLength(64)]
+        [RegularExpression(RegexConstants.XmlString)]
+        [DataMember]
+        public string CompanyNamePronunciation { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227", Justification = "Legacy code. Should be thrown away once modernAPI is available")]
+        [Required]
+        [ElementNotNull]
+        [ValidateComplexType]
+        [DataMember]
+        public List<Address> AddressSet { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227", Justification = "Legacy code. Should be thrown away once modernAPI is available")]
+        [Required]
+        [ElementNotNull]
+        [ValidateComplexType]
+        [DataMember]
+        public List<Phone> PhoneSet { get; set; }
+
+        [OutputProperty]
+        [DataMember]
+        public int AnniversaryDate { get; set; }
+
+        [OutputProperty]
+        [DataMember]
+        public string DefaultAddressID { get; set; }
+
+        [OutputProperty]
+        [DataMember]
+        public string CorporateIdentity { get; set; }
+
+        [OutputProperty]
+        [DataMember]
+        public string CorporateLegalEntity { get; set; }
+
+        [OutputProperty]
+        [DataMember]
+        public string CorporateVatId { get; set; }
+
+        [OutputProperty]
+        [DataMember]
+        public Address CorporateAddress { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227", Justification = "Legacy code. Should be thrown away once modernAPI is available")]
+        [ElementNotNull]
+        [ValidateComplexType]
+        [DataMember]
+        public List<TaxExemption> TaxExemptionSet { get; set; }
+    }
+}

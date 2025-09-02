@@ -1,0 +1,13 @@
+DisplayStringId,CountryIds,Type,Code,Value,Target
+closeButtonAccessiblityName,,constant,closeButtonAccessiblityName,Close,
+invalidExpiryDate,,errorCode,InvalidExpiryDate,Expiry date is invalid.,
+tooManyOperations,,errorCode,TooManyOperations,Maximum retry exceeded.,
+invalidChallengeCode,,errorCode,InvalidChallengeCode,Challenge code is invalid.,
+paymentInstrumentAlreadyAdded,,errorCode,PaymentInstrumentAddAlready,This Payment Instrument is already added.,
+challengeCodeExpired,,errorCode,ChallengeCodeExpired,The challenge code has expired.,
+validationFailed,,errorCode,ValidationFailed,"Incorrect data. Please, check your info and try again.",
+InvalidProperty,,serverErrorCode,InvalidAddressFieldsCombination,"Check your address. There appears to be an error in it.", "postal_code,city,region"
+InvalidProperty_invalid_address_fields_combination,,serverErrorCode,InvalidProperty.invalid_address_fields_combination,"Check your address. There appears to be an error in it.", "postal_code,city,region"
+InvalidProperty_postal_code,,serverErrorCode,InvalidProperty.postal_code,"Check the Zip or Postal code in your address. There appears to be an error in it.", "postal_code"
+singleFieldErrorMessage,,constant,singleFieldErrorMessage,"There is 1 field in the form that requires your attention",
+multipleFieldsErrorMessage,,constant,multipleFieldsErrorMessage,"There are {n} fields in the form that require your attention",

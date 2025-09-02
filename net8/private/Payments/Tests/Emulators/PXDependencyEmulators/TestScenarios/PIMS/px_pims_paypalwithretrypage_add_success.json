@@ -1,0 +1,200 @@
+{
+	"testScenarioName": "px.pims.paypalwithretrypage.add.success",
+	"responsesPerApiCall": {
+		"addPI": {
+			"statusCode": 200,
+			"content": {
+				"id": "9igMnQAAAABJAACA",
+				"accountId": "e0ac2a98-9473-4a32-bfe9-ee7b1dce16c0",
+				"paymentMethod": {
+					"paymentMethodType": "paypal",
+					"properties": {
+						"offlineRecurring": true,
+						"userManaged": true,
+						"soldToAddressRequired": true,
+						"splitPaymentSupported": true,
+						"supportedOperations": [ "authorize", "charge", "refund", "chargeback" ],
+						"taxable": false,
+						"providerRemittable": false,
+						"isNonStoredPaymentMethod": false
+					},
+					"paymentMethodGroup": "ewallet",
+					"groupDisplayName": "eWallet",
+					"exclusionTags": [ "XBOXLegacySubscriptions" ],
+					"paymentMethodFamily": "ewallet",
+					"display": {
+						"name": "PayPal",
+						"logo": "https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_paypal_rect.png",
+						"logos": [
+							{
+								"mimeType": "image/png",
+								"url": "https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_paypal_rect.png"
+							},
+							{
+								"mimeType": "image/svg+xml",
+								"url": "https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_paypal.svg"
+							}
+						]
+					}
+				},
+				"status": "Pending",
+				"creationDateTime": "2024-01-18T10:02:58.0948625Z",
+				"lastUpdatedDateTime": "2024-01-18T10:02:58.11",
+				"details": {
+					"exportable": false,
+					"isIndiaExpiryGroupDeleteFlighted": false,
+					"redirectUrl": "https://paymentsredirectionservice.cp.microsoft.com/RedirectionService/CoreRedirection/Redirect/a7fe54ab-32f1-34ff-3087-023777d55449",
+					"billingAgreementType": "ChannelInitiatedBilling",
+					"picvRequired": false,
+					"balance": 0.0
+				}
+			}
+		},
+		"getPI": {
+			"statusCode": 200,
+			"content": {
+				"id": "9igMnQAAAABJAACA",
+				"accountId": "e0ac2a98-9473-4a32-bfe9-ee7b1dce16c0",
+				"paymentMethod": {
+					"paymentMethodType": "paypal",
+					"properties": {
+						"offlineRecurring": true,
+						"userManaged": true,
+						"soldToAddressRequired": true,
+						"splitPaymentSupported": true,
+						"supportedOperations": [ "authorize", "charge", "refund", "chargeback" ],
+						"taxable": false,
+						"providerRemittable": false,
+						"isNonStoredPaymentMethod": false
+					},
+					"paymentMethodGroup": "ewallet",
+					"groupDisplayName": "eWallet",
+					"exclusionTags": [ "XBOXLegacySubscriptions" ],
+					"paymentMethodFamily": "ewallet",
+					"display": {
+						"name": "PayPal",
+						"logo": "https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_paypal_rect.png",
+						"logos": [
+							{
+								"mimeType": "image/png",
+								"url": "https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_paypal_rect.png"
+							},
+							{
+								"mimeType": "image/svg+xml",
+								"url": "https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_paypal.svg"
+							}
+						]
+					}
+				},
+				"status": "Pending",
+				"creationDateTime": "2024-01-18T10:02:58.0948625Z",
+				"lastUpdatedDateTime": "2024-01-18T10:02:58.11",
+				"details": {
+					"exportable": false,
+					"isIndiaExpiryGroupDeleteFlighted": false,
+					"billingAgreementType": "ChannelInitiatedBilling",
+					"picvRequired": false,
+					"balance": 0.0
+				}
+			}
+		},
+		"getPM": {
+			"statusCode": 200,
+			"content": [
+				{
+					"paymentMethodFamily": "ewallet",
+					"paymentMethodType": "paypal",
+					"paymentMethodGroup": "ewallet",
+					"groupDisplayName": "eWallet",
+					"display": {
+						"name": "PayPal",
+						"logo": "https://pmservices.cp.microsoft.com/staticresourceservice/images/v3/logo_paypal.png",
+						"logos": [
+							{
+								"mimeType": "image/png",
+								"url": "https://pmservices.cp.microsoft.com/staticresourceservice/images/v3/logo_paypal.png"
+							},
+							{
+								"mimeType": "image/svg+xml",
+								"url": "https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_paypal.svg"
+							}
+						]
+					},
+					"properties": {
+						"offlineRecurring": true,
+						"userManaged": true,
+						"soldToAddressRequired": true,
+						"supportedOperations": [ "authorize", "charge", "refund", "chargeback" ],
+						"taxable": false,
+						"providerRemittable": false,
+						"moBillingIdentityUrl": "",
+						"riskyPaymentMethod": false,
+						"authWindow": 4320,
+						"fundsAvailabilityWindow": 0,
+						"multipleLineItemsSupported": true,
+						"splitPaymentSupported": true,
+						"purchaseWaitTime": 0
+					},
+					"exclusionTags": [ "XBOXLegacySubscriptions" ]
+				}
+			]
+		},
+		"listPI": {
+			"statusCode": 200,
+			"content": [
+				{
+					"id": "9igMnQAAAABJAACA",
+					"accountId": "e0ac2a98-9473-4a32-bfe9-ee7b1dce16c0",
+					"paymentMethod": {
+						"paymentMethodType": "paypal",
+						"properties": {
+							"offlineRecurring": true,
+							"userManaged": true,
+							"soldToAddressRequired": true,
+							"splitPaymentSupported": true,
+							"supportedOperations": [ "authorize", "charge", "refund", "chargeback" ],
+							"taxable": false,
+							"providerRemittable": false,
+							"isNonStoredPaymentMethod": false
+						},
+						"paymentMethodGroup": "ewallet",
+						"groupDisplayName": "eWallet",
+						"exclusionTags": [ "XBOXLegacySubscriptions" ],
+						"paymentMethodFamily": "ewallet",
+						"display": {
+							"name": "PayPal",
+							"logo": "https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_paypal_rect.png",
+							"logos": [
+								{
+									"mimeType": "image/png",
+									"url": "https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_paypal_rect.png"
+								},
+								{
+									"mimeType": "image/svg+xml",
+									"url": "https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_paypal.svg"
+								}
+							]
+						}
+					},
+					"status": "Active",
+					"details": {
+						"exportable": false,
+						"picvRequired": false
+					}
+				}
+			]
+		},
+		"getSessionDetails": {
+			"statusCode": 200,
+			"content": {
+				"id": "123",
+				"accountId": "345",
+				"status": "Success",
+				"details": {
+					"paymentInstrumentId": "678",
+					"error": null
+				}
+			}
+		}
+	}
+}

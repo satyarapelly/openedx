@@ -1,0 +1,4 @@
+- name: App Service Restart
+  href: App-Service-Restart.md
+- name: Remove bad instance
+  href: Remove-bad-instance.md

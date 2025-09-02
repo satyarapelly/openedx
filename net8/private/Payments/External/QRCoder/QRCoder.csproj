@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\Payments.targets" />
+  <PropertyGroup>
+    <ProjectGuid>{8792CC93-AC1C-4E1D-AF35-9C21990A26F6}</ProjectGuid>
+    <TargetFramework>net8.0</TargetFramework>
+    <OutputType>Library</OutputType>
+    <RootNamespace>QRCoder</RootNamespace>
+    <AssemblyName>QRCoder</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Drawing.Common" />
+  </ItemGroup>
+</Project>

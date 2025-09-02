@@ -1,0 +1,24 @@
+{
+  "name": "PX.StageMap",
+  "version": "1.0.0.0",
+  "stages": [
+    {
+      "Sequence": 1,
+      "name": "West US",
+      "regions": [
+        {
+          "Region": "westus"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "name": "West US 2",
+      "regions": [
+        {
+          "Region": "westuss"
+        }
+      ]
+    }
+  ]
+}

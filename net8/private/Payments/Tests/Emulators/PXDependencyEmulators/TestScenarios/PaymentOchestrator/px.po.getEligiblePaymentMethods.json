@@ -1,0 +1,283 @@
+﻿{
+  "testScenarioName": "px.po.getEligiblePaymentMethods",
+  "responsesPerApiCall": {
+    "getEligiblePaymentMethods": {
+      "statusCode": 200,
+      "content": {
+        "paymentMethods": [
+          {
+            "paymentMethodType": "visa",
+            "paymentMethodFamily": "credit_card",
+            "display": {
+              "name": "Visa",
+              "logo": "http://localhost/staticresourceservice/images/v4/logo_visa_rect.png",
+              "logos": [
+                {
+                  "mimeType": "image/png",
+                  "url": "http://localhost/staticresourceservice/images/v4/logo_visa_rect.png"
+                },
+                {
+                  "mimeType": "image/svg+xml",
+                  "url": "http://localhost/staticresourceservice/images/v4/logo_visa.svg"
+                }
+              ]
+            },
+            "properties": {
+              "offlineRecurring": true,
+              "userManaged": true,
+              "soldToAddressRequired": true,
+              "chargeThresholds": null,
+              "supportedOperations": [
+                "authorize",
+                "capture",
+                "refund"
+              ],
+              "taxable": false,
+              "providerRemittable": false,
+              "moBillingIdentityUrl": "",
+              "riskyPaymentMethod": false,
+              "authWindow": 10080,
+              "fundsAvailabilityWindow": 0,
+              "multipleLineItemsSupported": true,
+              "splitPaymentSupported": true,
+              "purchaseWaitTime": 0,
+              "redirectRequired": null,
+              "reAuthWindows": [
+                129600
+              ]
+            },
+            "exclusionTags": null,
+            "paymentMethodGroup": "credit_or_debit_card",
+            "groupDisplayName": "Credit or debit Card"
+          },
+          {
+            "paymentMethodType": "jcb",
+            "paymentMethodFamily": "credit_card",
+            "display": {
+              "name": "JCB",
+              "logo": "http://localhost/staticresourceservice/images/v4/Logo_jcb_rect.png",
+              "logos": [
+                {
+                  "mimeType": "image/png",
+                  "url": "http://localhost/staticresourceservice/images/v4/Logo_jcb_rect.png"
+                },
+                {
+                  "mimeType": "image/svg+xml",
+                  "url": "http://localhost/staticresourceservice/images/v4/logo_jcb.svg"
+                }
+              ]
+            },
+            "properties": {
+              "offlineRecurring": true,
+              "userManaged": true,
+              "soldToAddressRequired": true,
+              "chargeThresholds": null,
+              "supportedOperations": [
+                "authorize",
+                "capture",
+                "refund"
+              ],
+              "taxable": false,
+              "providerRemittable": false,
+              "moBillingIdentityUrl": "",
+              "riskyPaymentMethod": false,
+              "authWindow": 10080,
+              "fundsAvailabilityWindow": 0,
+              "multipleLineItemsSupported": true,
+              "splitPaymentSupported": true,
+              "purchaseWaitTime": 0,
+              "redirectRequired": null,
+              "reAuthWindows": [
+                129600
+              ]
+            },
+            "exclusionTags": null,
+            "paymentMethodGroup": "credit_or_debit_card",
+            "groupDisplayName": "Credit or debit Card"
+          },
+          {
+            "paymentMethodType": "unionpay_international",
+            "paymentMethodFamily": "credit_card",
+            "display": {
+              "name": "UnionPay",
+              "logo": "http://localhost/staticresourceservice/images/v3/logo_unionpay.png",
+              "logos": [
+                {
+                  "mimeType": "image/png",
+                  "url": "http://localhost/staticresourceservice/images/v3/logo_unionpay.png"
+                },
+                {
+                  "mimeType": "image/svg+xml",
+                  "url": "http://localhost/staticresourceservice/images/v3/logo_unionpay.svg"
+                }
+              ]
+            },
+            "properties": {
+              "offlineRecurring": true,
+              "userManaged": true,
+              "soldToAddressRequired": true,
+              "chargeThresholds": null,
+              "supportedOperations": [
+                "authorize",
+                "capture",
+                "refund"
+              ],
+              "taxable": false,
+              "providerRemittable": false,
+              "moBillingIdentityUrl": "",
+              "riskyPaymentMethod": false,
+              "authWindow": 10080,
+              "fundsAvailabilityWindow": 0,
+              "multipleLineItemsSupported": true,
+              "splitPaymentSupported": true,
+              "purchaseWaitTime": 0,
+              "redirectRequired": null,
+              "reAuthWindows": [
+                129600
+              ]
+            },
+            "exclusionTags": null,
+            "paymentMethodGroup": "credit_or_debit_card",
+            "groupDisplayName": "Credit or debit Card"
+          },
+          {
+            "paymentMethodType": "mc",
+            "paymentMethodFamily": "credit_card",
+            "display": {
+              "name": "MasterCard",
+              "logo": "http://localhost/staticresourceservice/images/v4/logo_mc_rect.png",
+              "logos": [
+                {
+                  "mimeType": "image/png",
+                  "url": "http://localhost/staticresourceservice/images/v4/logo_mc_rect.png"
+                },
+                {
+                  "mimeType": "image/svg+xml",
+                  "url": "http://localhost/staticresourceservice/images/v4/logo_mc.svg"
+                }
+              ]
+            },
+            "properties": {
+              "offlineRecurring": true,
+              "userManaged": true,
+              "soldToAddressRequired": true,
+              "chargeThresholds": null,
+              "supportedOperations": [
+                "authorize",
+                "capture",
+                "refund"
+              ],
+              "taxable": false,
+              "providerRemittable": false,
+              "moBillingIdentityUrl": "",
+              "riskyPaymentMethod": false,
+              "authWindow": 10080,
+              "fundsAvailabilityWindow": 0,
+              "multipleLineItemsSupported": true,
+              "splitPaymentSupported": true,
+              "purchaseWaitTime": 0,
+              "redirectRequired": null,
+              "reAuthWindows": [
+                129600
+              ]
+            },
+            "exclusionTags": null,
+            "paymentMethodGroup": "credit_or_debit_card",
+            "groupDisplayName": "Credit or debit Card"
+          },
+          {
+            "paymentMethodType": "amex",
+            "paymentMethodFamily": "credit_card",
+            "display": {
+              "name": "Visa",
+              "logo": "http://localhost/staticresourceservice/images/v4/logo_visa_rect.png",
+              "logos": [
+                {
+                  "mimeType": "image/png",
+                  "url": "http://localhost/staticresourceservice/images/v4/logo_visa_rect.png"
+                },
+                {
+                  "mimeType": "image/svg+xml",
+                  "url": "http://localhost/staticresourceservice/images/v4/logo_visa.svg"
+                }
+              ]
+            },
+            "properties": {
+              "offlineRecurring": true,
+              "userManaged": true,
+              "soldToAddressRequired": true,
+              "chargeThresholds": null,
+              "supportedOperations": [
+                "authorize",
+                "capture",
+                "refund"
+              ],
+              "taxable": false,
+              "providerRemittable": false,
+              "moBillingIdentityUrl": "",
+              "riskyPaymentMethod": false,
+              "authWindow": 10080,
+              "fundsAvailabilityWindow": 0,
+              "multipleLineItemsSupported": true,
+              "splitPaymentSupported": true,
+              "purchaseWaitTime": 0,
+              "redirectRequired": null,
+              "reAuthWindows": [
+                129600
+              ]
+            },
+            "exclusionTags": null,
+            "paymentMethodGroup": "credit_or_debit_card",
+            "groupDisplayName": "Credit or debit Card"
+          },
+          {
+            "paymentMethodType": "discover",
+            "paymentMethodFamily": "credit_card",
+            "display": {
+              "name": "Discover Network",
+              "logo": "http://localhost/staticresourceservice/images/v4/logo_mc_rect.png",
+              "logos": [
+                {
+                  "mimeType": "image/png",
+                  "url": "http://localhost/staticresourceservice/images/v4/logo_discover_rect.png"
+                },
+                {
+                  "mimeType": "image/svg+xml",
+                  "url": "http://localhost/staticresourceservice/images/v4/logo_discover.svg"
+                }
+              ]
+            },
+            "properties": {
+              "offlineRecurring": true,
+              "userManaged": true,
+              "soldToAddressRequired": true,
+              "chargeThresholds": null,
+              "supportedOperations": [
+                "authorize",
+                "capture",
+                "refund"
+              ],
+              "taxable": false,
+              "providerRemittable": false,
+              "moBillingIdentityUrl": "",
+              "riskyPaymentMethod": false,
+              "authWindow": 10080,
+              "fundsAvailabilityWindow": 0,
+              "multipleLineItemsSupported": true,
+              "splitPaymentSupported": true,
+              "purchaseWaitTime": 0,
+              "redirectRequired": null,
+              "reAuthWindows": [
+                129600
+              ]
+            },
+            "exclusionTags": null,
+            "paymentMethodGroup": "credit_or_debit_card",
+            "groupDisplayName": "Credit or debit Card"
+          }
+        ],
+        "paymentInstruments": []
+      }    
+    }
+  }
+}

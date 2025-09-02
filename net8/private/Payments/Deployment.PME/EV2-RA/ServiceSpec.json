@@ -1,0 +1,8 @@
+{
+  "providerType": "ServiceTree",
+  "identifier": "e50abb8e-e976-4311-b12b-85156f4abc0e",
+  "description": "Payment Experience Service",
+  "ownerGroupContactEmail": "kowshikpfte@microsoft.com",
+  "policyCheckEnabled": true,
+  "contentVersion": "1.0.0.0"
+}

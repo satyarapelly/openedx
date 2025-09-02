@@ -1,0 +1,14 @@
+- name: Latest Query
+  href: Latest-Query/toc.yml
+  topicHref: Latest-Query.md
+- name: Partner Telemetry Framework and PIDL SDK Usage
+  href: Partner-Telemetry-Framework-and-PIDL-SDK-Usage.md
+- name: Telemetry Dashboard
+  href: Telemetry-Dashboard.md
+- name: 'Referrer Domains having 100% Service Only Telemetry (from PIFD logs)'
+  href: Referrer-Domains-having-100-Service-Only-Telemetry-from-PIFD-logs.md
+- name: Getting Partner info
+  href: Getting-Partner-info.md
+- name: Conclusion and next Steps
+  href: Conclusion-and-next-Steps/toc.yml
+  topicHref: Conclusion-and-next-Steps.md

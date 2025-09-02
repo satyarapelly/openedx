@@ -1,0 +1,13 @@
+{
+  "testScenarioName": "px.partnersettings.listpibuttonlist",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "selectinstance": {
+          "template": "listpibuttonlist"
+        }
+      }
+    }
+  }
+}

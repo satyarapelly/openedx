@@ -1,0 +1,79 @@
+<!DOCTYPE HTML>
+
+<html>
+<head>
+    <title>3DS - Single Select</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+	<link rel="stylesheet" href="/css/webstyles.css">
+
+</head>
+<body class="">
+<div id="page-wrapper">
+    <!-- Header Section -->
+    <header id="header" class="canvas">
+        <span class="logo-ul"></span>
+        <span class="logo-bank"></span>
+    </header>
+
+    <!-- Main Content Section -->
+    <section id="content" class="canvas">
+        <div class="row">
+            <h2>Payment Security</h2>
+            <p>Hi Steve, your online payment is being secured using Card Network. Please select where you would like to
+                receive the code from YourBank: Amount: @@amount@@</p>
+        </div>
+
+        <div class="row">
+            <form action="challenge" method="post" name="cardholderInput">
+				<input type="hidden" name="x-ms-test" value="@@mstestheader@@"/>
+				<input type="hidden" name="threeDSSessionData" value="@@threeDSSessionData@@">
+                <input type="radio" class="form-check" name="challengeDataEntry" value="sms" checked> Mobile
+                ********321<br>
+                <input type="radio" class="form-check" name="challengeDataEntry" value="email"> Email
+                **********@g****.com<br>
+                <input type="submit" class="button primary" name="next" value="Next">
+                <input type="submit" class="button" name="cancel" value="Cancel">                
+            </form>
+        </div>
+    </section>
+
+    <!-- Help Section -->
+    <script type="text/javascript">
+        function toggleInfo(divId) {
+           var divElement = document.getElementById(divId);
+           var style = divElement.style;
+           if (!style || style.display == "none")
+                divElement.style.display = "inline-block";
+           else
+             divElement.style.display = "none";
+        }
+    </script>     
+    <section id="help" class="container">
+		<table>
+			<tr>
+				<td height="15px">
+					<label class="summaryLabel" onClick="toggleInfo('helpDiv')">Need some help?</label></br>
+					<div class="summaryContent" id="helpDiv" style="display:none">Help content will be displayed here.</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label class="summaryLabel" onClick="toggleInfo('moreDiv')">Learn more about authentication</label></br>
+					<div class="summaryContent" id="moreDiv" style="display:none">Authentication information will be displayed here.</div>
+				</td>
+			</tr>
+		</table>
+    </section>
+
+    <!-- Footer -->
+    <footer id="footer">
+        <ul class="copyright">
+            <li>&copy; UL . All rights reserved.</li>
+            </li>
+        </ul>
+    </footer>
+</div>
+</body>
+</html>

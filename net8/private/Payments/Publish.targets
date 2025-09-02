@@ -1,0 +1,13 @@
+<!-- Create WebSite Zip files for Azure Web App Deployment -->
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Target Name="PublishToDeployment" AfterTargets="Build" DependsOnTargets="Package">
+    <Message Text="Copy package from '$(PackageDestinationRoot)' to '$(DropRoot)\Deployment\WebSites\$(MSBuildProjectName).zip'." Importance="High" />
+    <Copy SourceFiles="$(PackageDestinationRoot)" DestinationFiles="$(DropRoot)\Deployment\WebSites\$(MSBuildProjectName).zip" />
+  </Target>
+  <Target Name="PublishToDeploymentPME" AfterTargets="Build" DependsOnTargets="Package">
+    <Message Text="Copy package from '$(PackageDestinationRoot)' to '$(DropRoot)\Deployment.PME\WebSites\$(MSBuildProjectName).zip'." Importance="High" />
+    <Copy SourceFiles="$(PackageDestinationRoot)" DestinationFiles="$(DropRoot)\Deployment.PME\WebSites\$(MSBuildProjectName).zip" />
+  </Target>
+</Project>
+

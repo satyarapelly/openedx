@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), build.root))\msbuild\Environment.props" />
+	<Import Project="..\..\Payments.targets" />
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ProjectGuid>{B9DA0893-6419-46FE-9FA9-6EBF61D9F0C0}</ProjectGuid>
+		<OutputType>Library</OutputType>
+		<AppDesignerFolder>Properties</AppDesignerFolder>
+		<RootNamespace>Microsoft.Commerce.Payments.PimsModel</RootNamespace>
+		<AssemblyName>Microsoft.Commerce.Payments.PimsModel</AssemblyName>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Newtonsoft.Json" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\PXCommon\PXCommon.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="app.config" />
+	</ItemGroup>
+</Project>

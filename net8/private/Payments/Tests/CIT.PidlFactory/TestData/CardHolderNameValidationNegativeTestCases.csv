@@ -1,0 +1,5 @@
+﻿Value,Notes
+.- 0123456789,This name only contains non-letter accepted characters, which are only permitted when accompanied with other valid letters
+,This name is empty
+!@#abc,This name contains letter characters, but the additional non-letter characters are not accepted
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa,This name contains more than the allowed 64 character limit

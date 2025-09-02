@@ -1,0 +1,3 @@
+PropertyDescriptionId,CountryIds,PropertyType,DataType,DisplayProperty,IsKey,IsOptional,IsUpdatable,DataProtection,DefaultValue,PossibleValues,PidlDownloadEnabled,PidlDownloadParameter,DisplayOnly,Scenario
+address_first_name,,userData,string,,,,TRUE,,,,,,,
+address_last_name,,userData,string,,,,TRUE,,,,,,,

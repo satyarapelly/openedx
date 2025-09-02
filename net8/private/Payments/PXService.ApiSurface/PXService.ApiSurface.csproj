@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Microsoft.Commerce.Payments.PXService.ApiSurface</RootNamespace>
+    <AssemblyName>Microsoft.Commerce.Payments.PXService.ApiSurface</AssemblyName>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Newtonsoft.Json" />
+		<PackageReference Include="Microsoft.Extensions.Configuration" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" />
+	</ItemGroup>
+
+	<ItemGroup>
+    <Content Include="..\Tests\Emulators\PIMS\TestScenarios\**\*.json">
+      <Link>DiffTest\ConfigFiles\scenarios\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Tests\Emulators\PXDependencyEmulators\TestScenarios\IssuerService\px_issuerservice_default.json">
+      <Link>DiffTest\ConfigFiles\scenarios\px_issuerservice_default.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Tests\Emulators\PXDependencyEmulators\TestScenarios\TokenPolicy\px_tops_csvtoken_success.json">
+      <Link>DiffTest\ConfigFiles\scenarios\px_tops_csvtoken_success.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="PSSFeatureDiffTest\pss_feature_diff_tests.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="DiffTest\ConfigFiles\scenarios.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

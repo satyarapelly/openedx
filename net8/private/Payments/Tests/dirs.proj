@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), build.root))\msbuild\Environment.props" />
+  <ItemGroup>
+    <ProjectFile Include="Test.Common\Test.Common.csproj" />
+    <ProjectFile Include="PidlTest.JsonDiff\PidlTest.JsonDiff.csproj" />
+    <ProjectFile Include="PidlTest\PidlTest.csproj" />
+    <ProjectFile Include="Emulators\dirs.proj" />
+    <ProjectFile Include="CIT.Payments.Common\CIT.Payments.Common.csproj" />
+    <ProjectFile Include="CIT.PidlFactory\CIT.PidlFactory.csproj" />
+    <ProjectFile Include="CIT.PXService\CIT.PXService.csproj" />
+    <ProjectFile Include="CIT.PXService.ApiSurface\CIT.PXService.ApiSurface.csproj" />
+    <ProjectFile Include="CIT.PidlTest\CIT.PidlTest.csproj" />
+    <ProjectFile Include="CIT.PimsModel\CIT.PimsModel.csproj" />
+    <ProjectFile Include="COT.PXService\COT.PXService.csproj" />
+  </ItemGroup>
+  <Import Project="$(ExtendedTargetsPath)\Traversal.targets" />
+</Project>

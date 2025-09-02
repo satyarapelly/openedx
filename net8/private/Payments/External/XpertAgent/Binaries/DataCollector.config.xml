@@ -1,0 +1,7 @@
+﻿<DataCollectorConfig xmlns="http://www.microsoft.com/xpert/2012/march/data/agent" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+  <ConfigIdentifier>Bootstrap-v2.0.00R</ConfigIdentifier>
+  <GenerateVisibleWindows>false</GenerateVisibleWindows>
+  <Items>
+  </Items>
+  <MaxLeaseTime>PT15M</MaxLeaseTime>
+</DataCollectorConfig>

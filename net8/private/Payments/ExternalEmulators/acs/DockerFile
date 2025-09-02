@@ -1,0 +1,7 @@
+FROM mcr.microsoft.com/cbl-mariner/base/nodejs:16
+RUN mkdir -p /usr/src/app
+COPY . /usr/src/app/
+WORKDIR /usr/src/app
+RUN npm install
+CMD node /usr/src/app/app.js
+EXPOSE 3000

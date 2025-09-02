@@ -1,0 +1,54 @@
+﻿@using Newtonsoft.Json
+@section Scripts
+{
+    <script src="https://js.stripe.com/v3/"></script>
+}
+
+@{
+    ViewData["Title"] = "Checkout";
+}
+<h4>Checkout</h4>
+<form id="payment-form" action='@Url.Action("CheckWire", "api")' method='GET'>
+    <p><mark>Todo: Buyers' payment data to be sent to Stripe via backend calls instead of stripe elements.</mark></p>
+    <br />
+    <div class="container">
+        <div class="col-sm-4">
+            <div>
+                <input type="hidden" name="description" value="@ViewBag.Description" />
+                <input type="hidden" name="seller" value="@ViewBag.Seller" />
+                <input type="hidden" name="ru" value="@ViewBag.Ru" />
+                <input type="hidden" name="rx" value="@ViewBag.Rx" />
+                <input type="hidden" name="orderId" value="@ViewBag.OrderId" />
+                <input type="radio" name="pi" id="card-radio" value="card" />
+                <label for="card-radio">Credit Card</label>
+                <div id="card-element">
+                </div>
+            </div>
+            <div id="card-errors" role="alert">
+            </div>
+            <br />
+            <div>
+                <input type="radio" name="pi" id="cw-radio" value="cw" />
+                <label for="cw-radio">Invoice</label>
+                <div id="cw-element">
+                </div>
+            </div>
+            <br />
+            <button id="cancel" class="btn btn-secondary">Cancel</button>
+            <button id="submit" class="btn btn-primary">
+                Purchase
+            </button>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript">
+    window.onload = function() {
+        var stripePublishableKey = '@Html.Raw(ViewBag.StripePublishableKey)';
+        var stripeClientSecret = '@Html.Raw(ViewBag.StripeClientSecret)';
+        var ru = '@Html.Raw(ViewBag.Ru)';
+        var rx = '@Html.Raw(ViewBag.Rx)';
+
+        renderStripeCardForm(stripeClientSecret, stripePublishableKey, ru, rx);
+    };
+</script>

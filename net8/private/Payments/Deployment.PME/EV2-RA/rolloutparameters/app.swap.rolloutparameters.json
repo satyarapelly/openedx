@@ -1,0 +1,24 @@
+{
+  "$schema": "http://schema.express.azure.com/schemas/2015-01-01-alpha/RolloutParameters.json",
+  "contentVersion": "1.0.0.0",
+  "wait": [
+    {
+      "name": "manualApproval",
+      "properties": {
+        "duration": "PT72H",
+        "description": "Validate staging slot before swap. Click 'End Wait' to continue deployment.",
+        "category": "Buildout and Deployment",
+        "topic": "Ev2",
+        "completeOn": {
+          "triggerOnAny": [
+            "manual"
+          ]
+        },
+        "notification": {
+          "title": "Payment Experience Service - Manual Approval pending",
+          "content": "Please validate the staging slot before continuing. Click 'End Wait' in EV2 portal to continue."
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+﻿@using ThirdParty.Model
+@model Order
+
+@{
+    ViewData["Title"] = "Cart";
+}
+
+@*<p class="text-md-left"><b>@ViewData["Title"]</b></p>*@
+<h4>@ViewData["Title"]</h4>
+
+<div class="container" style="margin:20px 0px 20px; padding:0px">
+
+    @if (@Model != null)
+    {
+        <div class="card shadow w-100">
+            <div class="card-header">
+                Total @Html.DisplayFor(m => m.Total)
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    @foreach (var item in @Model.Items)
+                    {
+                        <li class="list-group-item">
+                            <img src="@item.Product.Image" class="rounded float-left" style="width: 80px; margin: 0px 10px 10px 0px" />
+                            <b>@item.Product.Title</b>
+                            <br />
+                            <span style="font-size:80%">
+                                @item.Product.Subtitle
+                                <br />
+                                Pricing @Html.DisplayFor(m => @item.Sku.Price)
+                            </span>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+
+        <button id="cancel" class="btn btn-secondary" style="width:140px; margin:20px 10px 0px 0px">
+            Cancel
+        </button>
+
+        <button type="button" id="checkout-button" class="btn btn-primary" style="width:140px; margin:20px 10px 0px 0px"
+            onclick="location.href='@Url.Action("Index", "Checkout", new {orderId = @Model.Id})'">
+            Checkout
+        </button>
+
+    }
+    else
+    {
+        <p>
+            There are no items in the cart.  Shop for <a asp-controller="Home" asp-action="Index">products and services here</a>.
+        </p>
+    }
+</div>

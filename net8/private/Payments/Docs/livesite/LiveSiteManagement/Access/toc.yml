@@ -1,0 +1,12 @@
+- name: JIT Access Prerequisite
+  href: JIT-Access-Prerequisite.md
+- name: Kusto Access
+  href: Kusto-Access.md
+- name: JIT Access
+  href: JIT-Access.md
+- name: Portal Access
+  href: Portal-Access.md
+- name: 'ATM Access (Azure Traffic Manager)'
+  href: ATM-Access-Azure-Traffic-Manager.md
+- name: Applens access
+  href: Applens-access.md

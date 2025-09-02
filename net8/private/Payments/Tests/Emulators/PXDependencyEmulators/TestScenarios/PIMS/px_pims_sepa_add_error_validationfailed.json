@@ -1,0 +1,13 @@
+{
+	"testScenarioName": "px.pims.sepa.add.error.validationfailed",
+	"responsesPerApiCall": {
+		"addPI": {
+			"statusCode": 400,
+			"content": {"CorrelationId":"3e7b82e9-7a98-4435-8644-32d9aa53686d","ErrorCode":"ValidationFailed","Message":"The payment instrument cannot be validated. Please contact the payment processor for help.","Details":[{"ErrorCode":"BDK_E_AUTHORIZATION_FAILED","Message":"Call legacy payment instrument service failed with error (ErrorCode: 30225. ErrorShortMessage: BDK_E_AUTHORIZATION_FAILED. ErrorLongMessage: Payment Instrument authorization failed.. SCS tracking GUID: b6f8810e-46c2-4faa-9d94-d24aaef247d3)","Target":""}]}
+		},
+		"getPM": {
+			"statusCode": 200,
+			"content": [{"paymentMethodFamily":"direct_debit","paymentMethodType":"sepa","display":{"name":"Sepa","logo":"https://pmservices.cp.microsoft.com/staticresourceservice/images/V4/Logo_SEPA.png","logos":[{"mimeType":"image/png","url":"https://pmservices.cp.microsoft.com/staticresourceservice/images/V4/Logo_SEPA.png"},{"mimeType":"image/svg+xml","url":"https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_sepa.svg"}]},"properties":{"offlineRecurring":true,"userManaged":true,"soldToAddressRequired":true,"supportedOperations":["charge","refund","chargeback","credit","settlementReversal"],"taxable":false,"providerRemittable":false,"moBillingIdentityUrl":"","riskyPaymentMethod":true,"fundsAvailabilityWindow":14400,"multipleLineItemsSupported":true,"splitPaymentSupported":false,"purchaseWaitTime":0,"redirectRequired":["Add"]},"exclusionTags":["LegacySubscriptions","Perpetual","PhysicalGoods"]}]
+		}
+	}
+}

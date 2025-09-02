@@ -1,0 +1,10 @@
+<!-- Common settings used for Test projects. -->
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(INETROOT)\private\Payments\Payments.targets" />
+  <PropertyGroup>
+    <StyleCopOverrideSettingsFile>$(INETROOT)\private\Payments\test\Settings.StyleCop</StyleCopOverrideSettingsFile>
+    <OacrDisabled>true</OacrDisabled>
+  </PropertyGroup>
+</Project>
+

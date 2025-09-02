@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.6.3">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="CMS_Create_Get">
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+    </TestPlan>
+    <hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="ChallengeManagement">
+        <intProp name="ThreadGroup.num_threads">90</intProp>
+        <intProp name="ThreadGroup.ramp_time">1</intProp>
+        <longProp name="ThreadGroup.duration">1200</longProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+        <boolProp name="ThreadGroup.scheduler">true</boolProp>
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller">
+          <intProp name="LoopController.loops">-1</intProp>
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+        </elementProp>
+      </ThreadGroup>
+      <hashTree>
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+          <collectionProp name="HeaderManager.headers">
+            <elementProp name="" elementType="Header">
+              <stringProp name="Header.name">Authorization</stringProp>
+              <stringProp name="Header.value"></stringProp>
+            </elementProp>
+            <elementProp name="" elementType="Header">
+              <stringProp name="Header.name">x-ms-flight</stringProp>
+              <stringProp name="Header.value">LoadTest</stringProp>
+            </elementProp>
+          </collectionProp>
+        </HeaderManager>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP Request - POSTPI">
+          <stringProp name="HTTPSampler.domain">paymentinstruments.mp.microsoft.com</stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.path">/v6.0/users/me/paymentInstrumentsEx?country=us&amp;language=en-US&amp;partner=oxowebdirect</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&quot;paymentMethodFamily&quot;:&quot;credit_card&quot;,&quot;paymentMethodType&quot;:&quot;visa&quot;,&quot;paymentMethodOperation&quot;:&quot;add&quot;,&quot;paymentMethodCountry&quot;:&quot;us&quot;,&quot;paymentMethodResource_id&quot;:&quot;credit_card.visa&quot;,&quot;sessionId&quot;:&quot;759db1bc-2784-0e87-987a-ea55853e9e6e&quot;,&quot;context&quot;:&quot;purchase&quot;,&quot;riskData&quot;:{&quot;dataType&quot;:&quot;payment_method_riskData&quot;,&quot;dataOperation&quot;:&quot;add&quot;,&quot;dataCountry&quot;:&quot;us&quot;},&quot;details&quot;:{&quot;dataType&quot;:&quot;credit_card_visa_details&quot;,&quot;dataOperation&quot;:&quot;add&quot;,&quot;dataCountry&quot;:&quot;us&quot;,&quot;accountHolderName&quot;:&quot;Subramanian Harikrishnan&quot;,&quot;accountToken&quot;:&quot;tc.pan.zNmioblmcIA2lPC2uj4ccnAufrdAIcgDJgblvvvt3Eg&quot;,&quot;expiryMonth&quot;:&quot;1&quot;,&quot;expiryYear&quot;:&quot;2025&quot;,&quot;cvvToken&quot;:&quot;tc.cvv.60OkryqCPTYA4x_Y7fUCiNNq0m2yg1vEuFzmvvvt3Eg&quot;,&quot;address&quot;:{&quot;addressType&quot;:&quot;billing&quot;,&quot;addressOperation&quot;:&quot;add&quot;,&quot;addressCountry&quot;:&quot;us&quot;,&quot;address_line1&quot;:&quot;1 Microsoft Way&quot;,&quot;city&quot;:&quot;Redmond&quot;,&quot;region&quot;:&quot;wa&quot;,&quot;postal_code&quot;:&quot;98052-6462&quot;,&quot;country&quot;:&quot;us&quot;},&quot;permission&quot;:{&quot;dataType&quot;:&quot;permission_details&quot;,&quot;dataOperation&quot;:&quot;add&quot;,&quot;dataCountry&quot;:&quot;us&quot;,&quot;hmac&quot;:{&quot;algorithm&quot;:&quot;hmacsha256&quot;,&quot;keyToken&quot;:&quot;tc.piAuthKey.P0JcyS5O8GgYEKwuA0rbC0aWVJYJYACQz-rlvvvt3Eg&quot;,&quot;data&quot;:&quot;2eu9hAfwZOaJatW89rYDiSbxdUi9ml//aB3BytHBlrg=&quot;},&quot;userCredential&quot;:&quot;WLID1.0=\&quot;GABOAgMAAAAMgAAAogAgIZ/GQ3zLM+kbshOp57RgjYJ6izqPtPByDInBuUQDZSMAAdtETId24AgJ+uhgCkzeqEmY7fuYpv2iX5k4BcEujZhq0xp4OgT/Sxt87gME3SvEm6uXlOsbSRvhfC2Cdr5Fmg9YpqpXXZMWJIFaeUj7Tu5OOdU9vWbqICo3KKjqmky0FmGJB3RiQJbMVnwCdJg9zKhjJZyoewKy4JwFr/2Ogc5TdMvzyWNbxkFHweZw398XHXzpPJhQUMBG1MJboKLKNOP0zGA2yh5wgzIOSn8yHjYDe4vRjPb9ub0bUWl+o3HMuYP2HBnB4GCGjEP1mSSVxESJw/wdTMiRx7DtRAQ8hi6C/Sxx5T5nimPs173MD7Nq0vZZ++mN4VUEt5RTqKlrYDEbAX4AGwEAAAMA2A4PcMHiD2fB4g9nXyIBAAoRIIAQGQBtc3Rlc3RfYXJjb3NAb3V0bG9vay5jb20AXQAAJW1zdGVzdF9hcmNvcyVvdXRsb29rLmNvbUBwYXNzcG9ydC5jb20AAAAMVVMAAAAAAAAECQIAAILLVUAABkMABUFyY29zAAVBcmNvcwAAAAAAAAAAAAAAAAAAAAAAAM+XC96R4jsVAADB4g9nwYmGZwAAAAAAAAAAAAAAAA0AMjAuMTI1LjE2LjQyAAUBAAAAAAAAAAAAAAAAAQQAAAAAAAAAAAAAAAAAAAAFo3Z6HZurkgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAA=\&quot;&quot;},&quot;currentContext&quot;:&quot;{\&quot;propertyValue\&quot;:null,\&quot;propertyName\&quot;:null,\&quot;id\&quot;:\&quot;credit_card.\&quot;,\&quot;instance\&quot;:null,\&quot;paymentInstrumentId\&quot;:null,\&quot;backupId\&quot;:null,\&quot;backupInstance\&quot;:null,\&quot;action\&quot;:\&quot;addResource\&quot;,\&quot;paymentMethodFamily\&quot;:\&quot;credit_card\&quot;,\&quot;paymentMethodType\&quot;:null,\&quot;isSelectPMSkipped\&quot;:null,\&quot;resourceActionContext\&quot;:{\&quot;action\&quot;:\&quot;addResource\&quot;,\&quot;pidlDocInfo\&quot;:{\&quot;anonymousPidl\&quot;:false,\&quot;resourceType\&quot;:\&quot;paymentMethod\&quot;,\&quot;parameters\&quot;:{\&quot;partner\&quot;:\&quot;oxowebdirect\&quot;,\&quot;operation\&quot;:\&quot;Add\&quot;,\&quot;country\&quot;:\&quot;US\&quot;,\&quot;language\&quot;:\&quot;en-US\&quot;,\&quot;family\&quot;:\&quot;credit_card\&quot;,\&quot;currency\&quot;:\&quot;USD\&quot;}},\&quot;pidlIdentity\&quot;:null,\&quot;resourceInfo\&quot;:null,\&quot;resourceObjPath\&quot;:null,\&quot;resource\&quot;:null,\&quot;prefillData\&quot;:null},\&quot;partnerHints\&quot;:null,\&quot;prefillData\&quot;:null,\&quot;targetIdentity\&quot;:null}&quot;}}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor-SessionID">
+            <stringProp name="JSONPostProcessor.referenceNames">pidlParameter</stringProp>
+            <stringProp name="JSONPostProcessor.jsonPathExprs">$..pxChallengeSessionId</stringProp>
+            <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+          </JSONPostProcessor>
+          <hashTree/>
+          <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer">
+            <stringProp name="ConstantTimer.delay">300</stringProp>
+          </ConstantTimer>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP Request-GetChallenge">
+          <stringProp name="HTTPSampler.domain">paymentinstruments.mp.microsoft.com</stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.path">/v6.0/users/me/paymentMethodDescriptions</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="pxChallengeSessionId" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">${pidlParameter}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">pxChallengeSessionId</stringProp>
+              </elementProp>
+              <elementProp name="type" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">amex,visa,mc,discover,jcb</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">type</stringProp>
+              </elementProp>
+              <elementProp name="showChallenge" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">True</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">showChallenge</stringProp>
+              </elementProp>
+              <elementProp name="partner" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">oxowebdirect</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">partner</stringProp>
+              </elementProp>
+              <elementProp name="operation" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">Add</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">operation</stringProp>
+              </elementProp>
+              <elementProp name="language" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">en-US</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">language</stringProp>
+              </elementProp>
+              <elementProp name="family" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">credit_card</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">family</stringProp>
+              </elementProp>
+              <elementProp name="currency" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">USD</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">currency</stringProp>
+              </elementProp>
+              <elementProp name="country" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">US</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">country</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+        </HTTPSamplerProxy>
+        <hashTree/>
+        <ConstantThroughputTimer guiclass="TestBeanGUI" testclass="ConstantThroughputTimer" testname="Constant Throughput Timer">
+          <intProp name="calcMode">2</intProp>
+          <doubleProp>
+            <name>throughput</name>
+            <value>5400.0</value>
+            <savedValue>0.0</savedValue>
+          </doubleProp>
+        </ConstantThroughputTimer>
+        <hashTree/>
+        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>true</label>
+              <code>true</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>true</dataType>
+              <encoding>false</encoding>
+              <assertions>true</assertions>
+              <subresults>true</subresults>
+              <responseData>false</responseData>
+              <samplerData>false</samplerData>
+              <xml>false</xml>
+              <fieldNames>true</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+              <sentBytes>true</sentBytes>
+              <url>true</url>
+              <threadCounts>true</threadCounts>
+              <idleTime>true</idleTime>
+              <connectTime>true</connectTime>
+            </value>
+          </objProp>
+          <stringProp name="filename"></stringProp>
+        </ResultCollector>
+        <hashTree/>
+      </hashTree>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>

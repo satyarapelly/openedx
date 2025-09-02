@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\..\..\..\Payments\Payments.targets" />
+	<PropertyGroup>
+		<ProjectGuid>{1119DB17-363F-4116-A026-1256B18E7843}</ProjectGuid>
+		<TargetFrameworks>net8.0</TargetFrameworks>
+		<RootNamespace>Microsoft.Commerce.Tracing.Sll</RootNamespace>
+		<AssemblyName>Microsoft.Commerce.Tracing.Sll</AssemblyName>
+		<OutputType>Library</OutputType>
+		<LangVersion>latest</LangVersion>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<RestoreDisablePackageVulnerabilityChecks>true</RestoreDisablePackageVulnerabilityChecks>
+		<ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
+		<SignAssembly>True</SignAssembly>
+		<AssemblyOriginatorKeyFile>..\..\..\..\..\msbuild\OCPKey.snk</AssemblyOriginatorKeyFile>
+	</PropertyGroup>
+	<ItemGroup>
+		<Content Include="TraceEvent.ReadMe.txt" />
+		<Content Include="TraceEvent.ReleaseNotes.txt" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Bond.Core.CSharp" />
+		<PackageReference Include="Bond.CSharp" />
+		<PackageReference Include="Bond.Runtime.CSharp" />
+		<PackageReference Include="Microsoft.CommonSchema.Bond" />
+		<PackageReference Include="Microsoft.CommonSchema.Services" />
+		<PackageReference Include="Microsoft.CommonSchema.Services.Autopilot" />
+		<PackageReference Include="Microsoft.CSharp" />
+		<PackageReference Include="Microsoft.Diagnostics.Tracing.TraceEvent" />
+		<PackageReference Include="Microsoft.NETCore.Platforms" />
+		<PackageReference Include="Ms.Qos" />
+		<PackageReference Include="Ms.Qos.IncomingServiceRequest" />
+		<PackageReference Include="Ms.Qos.OutgoingServiceRequest" />
+		<PackageReference Include="Newtonsoft.Json" />
+		<PackageReference Include="System.ComponentModel.Composition" />
+		<PackageReference Include="System.Threading.Tasks.Dataflow" />
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Remove="objd\amd64\PXServiceEvents_types.cs" />
+	</ItemGroup>
+	</Project>

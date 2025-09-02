@@ -1,0 +1,21 @@
+[
+  {
+    "version": "1.0",
+    "id": "3c6a9153-8048-4728-8b11-babbf8b965d4",
+    "bucketId": "3c",
+    "firstName": "Rory",
+    "lastName": "Nguyen",
+    "email": null,
+    "phone": null,
+    "address": {
+      "version": "1.0",
+      "addressLine1": "1 Microsoft Way",
+      "addressLine2": null,
+      "addressLine3": null,
+      "city": "Redmond",
+      "state": "WA",
+      "region": null,
+      "zipCode": "98052"
+    }
+  }
+]

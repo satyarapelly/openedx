@@ -1,0 +1,258 @@
+{
+  "properties": {
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        }
+      },
+      "triggers": {
+        "When_an_IcM_incident_is_created": {
+          "type": "ApiConnectionWebhook",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['icm']['connectionId']"
+              }
+            },
+            "body": {
+              "OwningService": "Payment Services - ICM Tenant",
+              "Severity": "3;4",
+              "OwningTeam": "StoreCore-PST-PXService",
+              "IncidentEnvironment": "PPE",
+              "WorkflowCallbackUrl": "@listCallbackUrl()",
+              "MonitorId": " 79a26793-41bb-4dad-b396-a36aeec82875"
+            },
+            "path": "/api/v1/subscriptions/created"
+          }
+        }
+      },
+      "actions": {
+        "Get_an_IcM_incident": {
+          "runAfter": {},
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['icm']['connectionId']"
+              }
+            },
+            "method": "get",
+            "path": "/api/v1/incidents/@{encodeURIComponent(triggerBody()['IncidentId'])}"
+          }
+        },
+        "Initialize_variable": {
+          "runAfter": {
+            "Get_an_IcM_incident": [
+              "Succeeded"
+            ]
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "endTime",
+                "type": "string",
+                "value": "@body('Get_an_IcM_incident')['CreatedDate']"
+              }
+            ]
+          }
+        },
+        "Run_KQL_query_for_unVerifiedCount": {
+          "runAfter": {
+            "Initialize_variable": [
+              "Succeeded"
+            ]
+          },
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['kusto']['connectionId']"
+              }
+            },
+            "method": "post",
+            "body": {
+              "cluster": "https://pst.kusto.windows.net",
+              "db": "Prod",
+              "csl": "let unit = 1m;\nlet ImpactEndDate = bin(datetime(@{variables('endTime')}), unit);\nlet ImpactStartDate =bin(ImpactEndDate -60m, unit);\nlet start = ImpactStartDate;\nlet end = ImpactEndDate;\nPSD2AuthStatusRequests(start, end, summarize=true, summaryRoundTo=1h)\n| summarize unVerifiedCount = sumif(RequestCount, verified == false) by timeCategory, requestPartner\n|where unVerifiedCount!=0"
+            },
+            "path": "/ListKustoResults/false"
+          }
+        },
+        "Create_HTML_table": {
+          "runAfter": {
+            "Initialize_variable_requestPartner": [
+              "Succeeded"
+            ]
+          },
+          "type": "Table",
+          "inputs": {
+            "from": "@body('Run_KQL_query_for_unVerifiedCount')?['value']",
+            "format": "HTML"
+          }
+        },
+        "Add_new_IcM_Discussion_entry": {
+          "runAfter": {
+            "Create_HTML_table": [
+              "Succeeded"
+            ]
+          },
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['icm']['connectionId']"
+              }
+            },
+            "method": "post",
+            "body": {
+              "DiscussionText": "<h3>Get PSD2 Authstatus failure details as below</h3>\n@{body('Create_HTML_table')}",
+              "RenderType": "Html"
+            },
+            "path": "/api/v1/incidents/@{encodeURIComponent(body('Get_an_IcM_incident')['IncidentId'])}/discussion"
+          }
+        },
+        "Delay": {
+          "runAfter": {
+            "Add_new_IcM_Discussion_entry": [
+              "Succeeded"
+            ]
+          },
+          "type": "Wait",
+          "inputs": {
+            "interval": {
+              "count": 30,
+              "unit": "Minute"
+            }
+          }
+        },
+        "Condition": {
+          "actions": {},
+          "runAfter": {
+            "Delay": [
+              "Succeeded"
+            ]
+          },
+          "else": {
+            "actions": {
+              "Resolve_an_IcM_incident": {
+                "runAfter": {
+                  "Edit_an_IcM_incident": [
+                    "Succeeded"
+                  ]
+                },
+                "type": "ApiConnection",
+                "inputs": {
+                  "host": {
+                    "connection": {
+                      "name": "@parameters('$connections')['icm']['connectionId']"
+                    }
+                  },
+                  "method": "post",
+                  "body": {
+                    "DiscussionText": "Auto Resolving incident as It is by design."
+                  },
+                  "path": "/api/v1/incidents/@{encodeURIComponent(body('Get_an_IcM_incident')['IncidentId'])}/resolve"
+                }
+              },
+              "Edit_an_IcM_incident": {
+                "type": "ApiConnection",
+                "inputs": {
+                  "host": {
+                    "connection": {
+                      "name": "@parameters('$connections')['icm']['connectionId']"
+                    }
+                  },
+                  "method": "post",
+                  "body": {
+                    "Title": "[Auto-Resolve] - @{body('Get_an_IcM_incident')['Title']}",
+                    "Keywords": "AutoResolved_GPShield;Auto-analyzing_GPShield",
+                    "HowFixed": "Fixed with TSG"
+                  },
+                  "path": "/api/v1/incidents/@{encodeURIComponent(body('Get_an_IcM_incident')['IncidentId'])}/edit"
+                }
+              }
+            }
+          },
+          "expression": {
+            "and": [
+              {
+                "not": {
+                  "contains": [
+                    "@variables('requestPartner')",
+                    "xbox"
+                  ]
+                }
+              },
+              {
+                "not": {
+                  "contains": [
+                    "@variables('requestPartner')",
+                    "MdollarPurchase"
+                  ]
+                }
+              }
+            ]
+          },
+          "type": "If"
+        },
+        "Run_KQL_query_": {
+          "runAfter": {
+            "Run_KQL_query_for_unVerifiedCount": [
+              "Succeeded"
+            ]
+          },
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['kusto']['connectionId']"
+              }
+            },
+            "method": "post",
+            "body": {
+              "cluster": "https://pst.kusto.windows.net",
+              "db": "Prod",
+              "csl": "let unit = 1m;\nlet ImpactEndDate = bin(datetime(@{variables('endTime')}), unit);\nlet ImpactStartDate =bin(ImpactEndDate -60m, unit);\nlet start = ImpactStartDate;\nlet end = ImpactEndDate;\nPSD2AuthStatusRequests(start, end, summarize=true, summaryRoundTo=1h)\n| summarize unVerifiedCount = sumif(RequestCount, verified == false) by timeCategory, requestPartner\n|where unVerifiedCount!=0\n| where requestPartner !in ('xbox','MdollarPurchase')\n| distinct requestPartner\n|summarize make_list(requestPartner) "
+            },
+            "path": "/ListKustoResults/false"
+          }
+        },
+        "Initialize_variable_requestPartner": {
+          "runAfter": {
+            "Run_KQL_query_": [
+              "Succeeded"
+            ]
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "requestPartner",
+                "type": "array",
+                "value": "@body('Run_KQL_query_')?['value']"
+              }
+            ]
+          }
+        }
+      },
+      "description": ""
+    },
+    "runtimeConfiguration": {
+      "lifetime": {
+        "unit": "Day",
+        "count": 25
+      }
+    },
+    "state": "Enabled",
+    "metadata": {
+      "dataClassifications": [
+        "AccessControlData"
+      ]
+    }
+  }
+}

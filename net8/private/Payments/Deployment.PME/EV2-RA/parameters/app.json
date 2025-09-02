@@ -1,0 +1,90 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "workloadName": {
+      "value": "__WORKLOAD_NAME__"
+    },
+    "networkWorkloadName": {
+      "value": "__WORKLOAD_NAME_NETWORK__"
+    },
+    "shortLocation": {
+      "value": "__SHORT_LOCATION__"
+    },
+    "stamp": {
+      "value": "__STAMP__"
+    },
+    "appServiceKeyword": {
+      "value": "__APP_SERVICE_KEY_WORD__"
+    },
+    "subnetName": {
+      "value": "__APP_SUBNET_NAME__"
+    },
+    "appServicePlanSkuTier": {
+      "value": "__APP_SERVICE_PLAN_SKU_TIER__"
+    },
+    "appServicePlanSkuName": {
+      "value": "__APP_SERVICE_PLAN_SKU_NAME__"
+    },
+    "appServicePlanMinCapacity": {
+      "value": "__APP_SERVICE_PLAN_MIN_CAPACITY__"
+    },
+    "appServicePlanMaxCapacity": {
+      "value": "__APP_SERVICE_PLAN_MAX_CAPACITY__"
+    },
+    "appServicePlanDefaultCapacity": {
+      "value": "__APP_SERVICE_PLAN_DEFAULT_CAPACITY__"
+    },
+    "publicAccessEnabled": {
+      "value": "__APP_SERVICE_PUBLIC_ACCESS__"
+    },
+    "certificateAuthEnabled": {
+      "value": "__APP_SERVICE_CERT_AUTH_ON__"
+    },
+    "userAssignedMIName" :{
+      "value": "__UAMI_GBL_NAME__"
+    },
+    "userAssignedMIRG" :{
+      "value": "__UAMI_GBL_RG__"
+    },
+    "monitoringGcsEnvironment": {
+      "value": "__MONITORING_GCS_ENVIRONMENT__"
+    },
+    "monitoringGcsAccount": {
+      "value": "__MONITORING_GCS_ACCOUNT__"
+    },
+    "monitoringGcsNamespace": {
+      "value": "__MONITORING_GCS_NAMESPACE__"
+    },
+    "monitoringGcsAuthId": {
+      "value": "__MONITORING_GCS_AUTH_ID__"
+    },
+    "monitoringConfigVersion": {
+      "value": "__MONITORING_CONFIG_VERSION__"
+    },
+    "monitoringRole": {
+      "value": "__MONITORING_ROLE__"
+    },
+    "monitoringGenevaCertSecretName": {
+      "value": "__MONITORING_GENEVA_CERT_SECRET_NAME__"
+    },
+    "healthCheckPath": {
+      "value": "__HEALTH_CHECK_PATH__"
+    },
+    "commerceAccountClientCertificateSecret": {
+      "value": "__COMMERCE_ACCOUNT_CLIENT_CERTIFICATE_SECRET__"
+    },
+    "pxClientCertificateSecret": {
+      "value": "__PX_CLIENT_CERTIFICATE_SECRET__"
+    },
+    "aadAMEClientCertificateSecret": {
+      "value": "__AAD_AME_CLIENT_CERTIFICATE_SECRET__"
+    },
+    "genevaCertificateSecret": {
+      "value": "__GENEVA_CERTIFICATE_SECRET__"
+    },
+    "deployPXCertificates": {
+      "value": "__DEPLOY_PX_PLAN_CERTIFICATES__"
+    }
+  }
+}

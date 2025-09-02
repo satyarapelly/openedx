@@ -1,0 +1,2745 @@
+﻿CollectionName,Key,Name
+MarketsAll,af,Afghanistan
+,ax,Åland Islands
+,al,Albania
+,dz,Algeria
+,as,American Samoa
+,ad,Andorra
+,ao,Angola
+,ai,Anguilla
+,aq,Antarctica
+,ag,Antigua and Barbuda
+,ar,Argentina
+,am,Armenia
+,aw,Aruba
+,au,Australia
+,at,Austria
+,az,Azerbaijan
+,bs,Bahamas
+,bh,Bahrain
+,bd,Bangladesh
+,bb,Barbados
+,by,Belarus
+,be,Belgium
+,bz,Belize
+,bj,Benin
+,bm,Bermuda
+,bt,Bhutan
+,bo,Bolivia
+,bq,Bonaire
+,ba,Bosnia and Herzegovina
+,bw,Botswana
+,bv,Bouvet Island
+,br,Brazil
+,io,British Indian Ocean Territory
+,bn,Brunei
+,bg,Bulgaria
+,bf,Burkina Faso
+,bi,Burundi
+,kh,Cambodia
+,cm,Cameroon
+,ca,Canada
+,cv,Cabo Verde
+,ky,Cayman Islands
+,cf,Central African Republic
+,td,Chad
+,gg,Guernsey
+,je,Jersey
+,cl,Chile
+,cn,China
+,cx,Christmas Island
+,cc,Cocos (Keeling) Islands
+,co,Colombia
+,km,Comoros
+,cd,Congo (DRC)
+,cg,Congo
+,ck,Cook Islands
+,cr,Costa Rica
+,ci,Côte d’Ivoire
+,hr,Croatia
+,cw,Curaçao
+,cy,Cyprus
+,cz,Czechia
+,dk,Denmark
+,dj,Djibouti
+,dm,Dominica
+,do,Dominican Republic
+,ec,Ecuador
+,eg,Egypt
+,sv,El Salvador
+,gq,Equatorial Guinea
+,er,Eritrea
+,ee,Estonia
+,et,Ethiopia
+,fk,Falkland Islands
+,fo,Faroe Islands
+,fj,Fiji
+,fi,Finland
+,fr,France
+,gf,French Guiana
+,pf,French Polynesia
+,ga,Gabon
+,gm,Gambia
+,ge,Georgia
+,de,Germany
+,gh,Ghana
+,gi,Gibraltar
+,gr,Greece
+,gl,Greenland
+,gd,Grenada
+,gp,Guadeloupe
+,gu,Guam
+,gt,Guatemala
+,gn,Guinea
+,gw,Guinea-Bissau
+,gy,Guyana
+,ht,Haiti
+,hm,Heard Island and McDonald Islands
+,hn,Honduras
+,hk,Hong Kong SAR
+,hu,Hungary
+,is,Iceland
+,in,India
+,id,Indonesia
+,iq,Iraq
+,ie,Ireland
+,im,Isle of Man
+,il,Israel
+,it,Italy
+,jm,Jamaica
+,jp,Japan
+,jo,Jordan
+,kz,Kazakhstan
+,ke,Kenya
+,ki,Kiribati
+,kr,Korea
+,xk,Kosovo
+,kw,Kuwait
+,kg,Kyrgyzstan
+,la,Laos
+,lv,Latvia
+,lb,Lebanon
+,ls,Lesotho
+,lr,Liberia
+,ly,Libya
+,li,Liechtenstein
+,lt,Lithuania
+,lu,Luxembourg
+,mo,Macao SAR
+,mk,North Macedonia
+,mg,Madagascar
+,mw,Malawi
+,my,Malaysia
+,mv,Maldives
+,ml,Mali
+,mt,Malta
+,mh,Marshall Islands
+,mq,Martinique
+,mr,Mauritania
+,mu,Mauritius
+,yt,Mayotte
+,mx,Mexico
+,fm,Micronesia
+,md,Moldova
+,mc,Monaco
+,mn,Mongolia
+,me,Montenegro
+,ms,Montserrat
+,ma,Morocco
+,mz,Mozambique
+,mm,Myanmar
+,na,Namibia
+,nr,Nauru
+,np,Nepal
+,nl,Netherlands
+,nc,New Caledonia
+,nz,New Zealand
+,ni,Nicaragua
+,ne,Niger
+,ng,Nigeria
+,nu,Niue
+,nf,Norfolk Island
+,mp,Northern Mariana Islands
+,no,Norway
+,om,Oman
+,pk,Pakistan
+,pw,Palau
+,ps,Palestinian Authority
+,pa,Panama
+,pg,Papua New Guinea
+,py,Paraguay
+,pe,Peru
+,ph,Philippines
+,pn,Pitcairn Islands
+,pl,Poland
+,pt,Portugal
+,pr,Puerto Rico
+,qa,Qatar
+,re,Réunion
+,ro,Romania
+,ru,Russia
+,rw,Rwanda
+,bl,Saint Barthélemy
+,sh,"St Helena, Ascension, Tristan da Cunha"
+,kn,Saint Kitts and Nevis
+,lc,Saint Lucia
+,mf,Saint Martin
+,pm,Saint Pierre and Miquelon
+,vc,Saint Vincent and the Grenadines
+,ws,Samoa
+,sm,San Marino
+,st,São Tomé and Príncipe
+,sa,Saudi Arabia
+,sn,Senegal
+,rs,Serbia
+,sc,Seychelles
+,sl,Sierra Leone
+,sg,Singapore
+,sx,Sint Maarten
+,sk,Slovakia
+,si,Slovenia
+,sb,Solomon Islands
+,so,Somalia
+,za,South Africa
+,gs,South Georgia and South Sandwich Islands
+,ss,South Sudan
+,es,Spain
+,lk,Sri Lanka
+,sr,Suriname
+,sj,Svalbard
+,sz,Eswatini
+,se,Sweden
+,ch,Switzerland
+,tw,Taiwan
+,tj,Tajikistan
+,tz,Tanzania
+,th,Thailand
+,tl,Timor-Leste
+,tg,Togo
+,tk,Tokelau
+,to,Tonga
+,tt,Trinidad and Tobago
+,tn,Tunisia
+,tr,Turkey
+,tm,Turkmenistan
+,tc,Turks and Caicos Islands
+,tv,Tuvalu
+,ug,Uganda
+,ua,Ukraine
+,ae,United Arab Emirates
+,gb,United Kingdom
+,us,United States
+,um,U.S. Outlying Islands
+,uy,Uruguay
+,uz,Uzbekistan
+,vu,Vanuatu
+,va,Vatican City
+,ve,Venezuela
+,vn,Vietnam
+,vg,British Virgin Islands
+,vi,U.S. Virgin Islands
+,wf,Wallis and Futuna
+,ye,Yemen
+,zm,Zambia
+,zw,Zimbabwe
+MarketsEU,at,Austria
+,be,Belgium
+,bg,Bulgaria
+,hr,Croatia
+,cy,Cyprus
+,cz,Czechia
+,dk,Denmark
+,ee,Estonia
+,fi,Finland
+,fr,France
+,de,Germany
+,gr,Greece
+,hu,Hungary
+,ie,Ireland
+,it,Italy
+,lv,Latvia
+,lt,Lithuania
+,lu,Luxembourg
+,mt,Malta
+,nl,Netherlands
+,pl,Poland
+,pt,Portugal
+,ro,Romania
+,sk,Slovakia
+,si,Slovenia
+,es,Spain
+,se,Sweden
+,gb,United Kingdom
+MarketsEUSMD,at,Austria
+,be,Belgium
+,bg,Bulgaria
+,hr,Croatia
+,cy,Cyprus
+,cz,Czechia
+,dk,Denmark
+,ee,Estonia
+,fi,Finland
+,fr,France
+,de,Germany
+,gr,Greece
+,hu,Hungary
+,is,Iceland
+,ie,Ireland
+,it,Italy
+,lv,Latvia
+,li,Liechtenstein
+,lt,Lithuania
+,lu,Luxembourg
+,mt,Malta
+,nl,Netherlands
+,no,Norway
+,pl,Poland
+,pt,Portugal
+,ro,Romania
+,sk,Slovakia
+,si,Slovenia
+,es,Spain
+,se,Sweden
+,ch,Switzerland
+,gb,United Kingdom
+Months,1,01
+,2,02
+,3,03
+,4,04
+,5,05
+,6,06
+,7,07
+,8,08
+,9,09
+,10,10
+,11,11
+,12,12
+MonthsNames,1,January
+,2,February
+,3,March
+,4,April
+,5,May
+,6,June
+,7,July
+,8,August
+,9,September
+,10,October
+,11,November
+,12,December
+YearsExpiry,2025,25
+,2026,26
+,2027,27
+,2028,28
+,2029,29
+,2030,30
+,2031,31
+,2032,32
+,2033,33
+,2034,34
+,2035,35
+,2036,36
+,2037,37
+,2038,38
+,2039,39
+,2040,40
+,2041,41
+,2042,42
+,2043,43
+,2044,44
+,2045,45
+,2046,46
+,2047,47
+,2048,48
+,2049,49
+YearsExpiry4,2025,2025
+,2026,2026
+,2027,2027
+,2028,2028
+,2029,2029
+,2030,2030
+,2031,2031
+,2032,2032
+,2033,2033
+,2034,2034
+,2035,2035
+,2036,2036
+,2037,2037
+,2038,2038
+,2039,2039
+,2040,2040
+,2041,2041
+,2042,2042
+,2043,2043
+,2044,2044
+,2045,2045
+,2046,2046
+,2047,2047
+,2048,2048
+,2049,2049
+A1A2A3CtStPcCo,in,India
+A1A2CtCnPcCo,gb,United Kingdom
+A1A2CtCo,ao,Angola
+,mr,Mauritania
+,qa,Qatar
+,tl,Timor-Leste
+,vg,British Virgin Islands
+,ye,Yemen
+A1A2CtDtPcCo,bq,Bonaire
+,ie,Ireland
+,ly,Libya
+A1A2CtPcCo,ad,Andorra
+,af,Afghanistan
+,ag,Antigua and Barbuda
+,ai,Anguilla
+,aq,Antarctica
+,as,American Samoa
+,aw,Aruba
+,ax,Åland Islands
+,bb,Barbados
+,bf,Burkina Faso
+,bh,Bahrain
+,bi,Burundi
+,bj,Benin
+,bl,Saint Barthélemy
+,bm,Bermuda
+,bo,Bolivia
+,bt,Bhutan
+,bv,Bouvet Island
+,bw,Botswana
+,cc,Cocos (Keeling) Islands
+,cd,Congo (DRC)
+,cf,Central African Republic
+,cg,Congo
+,ci,Côte d’Ivoire
+,ck,Cook Islands
+,cm,Cameroon
+,co,Colombia
+,cv,Cabo Verde
+,cw,Curaçao
+,cx,Christmas Island
+,cy,Cyprus
+,dj,Djibouti
+,dk,Denmark
+,dm,Dominica
+,do,Dominican Republic
+,ec,Ecuador
+,eg,Egypt
+,er,Eritrea
+,et,Ethiopia
+,fi,Finland
+,fj,Fiji
+,fk,Falkland Islands
+,fm,Micronesia
+,fo,Faroe Islands
+,ga,Gabon
+,gd,Grenada
+,ge,Georgia
+,gf,French Guiana
+,gg,Guernsey
+,gh,Ghana
+,gi,Gibraltar
+,gl,Greenland
+,gm,Gambia
+,gn,Guinea
+,gp,Guadeloupe
+,gq,Equatorial Guinea
+,gs,South Georgia and South Sandwich Islands
+,gu,Guam
+,gw,Guinea-Bissau
+,gy,Guyana
+,hm,Heard Island and McDonald Islands
+,ht,Haiti
+,il,Israel
+,im,Isle of Man
+,io,British Indian Ocean Territory
+,is,Iceland
+,je,Jersey
+,jo,Jordan
+,ke,Kenya
+,ki,Kiribati
+,km,Comoros
+,kn,Saint Kitts and Nevis
+,kw,Kuwait
+,ky,Cayman Islands
+,la,Laos
+,lb,Lebanon
+,lc,Saint Lucia
+,li,Liechtenstein
+,lk,Sri Lanka
+,lr,Liberia
+,ls,Lesotho
+,lt,Lithuania
+,lv,Latvia
+,mc,Monaco
+,mf,Saint Martin
+,mg,Madagascar
+,mh,Marshall Islands
+,ml,Mali
+,mp,Northern Mariana Islands
+,mq,Martinique
+,ms,Montserrat
+,mt,Malta
+,mu,Mauritius
+,mv,Maldives
+,mw,Malawi
+,mz,Mozambique
+,na,Namibia
+,nc,New Caledonia
+,ne,Niger
+,nf,Norfolk Island
+,no,Norway
+,nr,Nauru
+,nu,Niue
+,nz,New Zealand
+,pe,Peru
+,pf,French Polynesia
+,pg,Papua New Guinea
+,pk,Pakistan
+,pm,Saint Pierre and Miquelon
+,pn,Pitcairn Islands
+,pr,Puerto Rico
+,ps,Palestinian Authority
+,pt,Portugal
+,pw,Palau
+,py,Paraguay
+,re,Réunion
+,rw,Rwanda
+,sb,Solomon Islands
+,sc,Seychelles
+,se,Sweden
+,sg,Singapore
+,sh,"St Helena, Ascension, Tristan da Cunha"
+,si,Slovenia
+,sj,Svalbard
+,sk,Slovakia
+,sl,Sierra Leone
+,sm,San Marino
+,sn,Senegal
+,so,Somalia
+,sr,Suriname
+,st,São Tomé and Príncipe
+,sx,Sint Maarten
+,sz,Eswatini
+,tc,Turks and Caicos Islands
+,td,Chad
+,tg,Togo
+,tk,Tokelau
+,tm,Turkmenistan
+,tn,Tunisia
+,to,Tonga
+,tt,Trinidad and Tobago
+,tv,Tuvalu
+,tw,Taiwan
+,tz,Tanzania
+,ug,Uganda
+,um,U.S. Outlying Islands
+,uy,Uruguay
+,va,Vatican City
+,vc,Saint Vincent and the Grenadines
+,vi,U.S. Virgin Islands
+,vu,Vanuatu
+,wf,Wallis and Futuna
+,ws,Samoa
+,yt,Mayotte
+,zm,Zambia
+,zw,Zimbabwe
+A1A2CtPcStCo,ng,Nigeria
+,ae,United Arab Emirates
+A1A2PcPvCtCo,fr,France
+A1A2CtPvPcCo,az,Azerbaijan
+,bn,Brunei
+,bs,Bahamas
+,by,Belarus
+,bz,Belize
+,ca,Canada
+,cr,Costa Rica
+,es,Spain
+,hn,Honduras
+,hu,Hungary
+,jm,Jamaica
+,kg,Kyrgyzstan
+,kh,Cambodia
+,kz,Kazakhstan
+,md,Moldova
+,mm,Myanmar
+,np,Nepal
+,ph,Philippines
+,ss,South Sudan
+,th,Thailand
+,tj,Tajikistan
+,tr,Turkey
+,uz,Uzbekistan
+,ve,Venezuela
+,vn,Vietnam
+,za,South Africa
+A1A2PcStCtCo,nl,Netherlands
+A1A2CtStPcCo,am,Armenia
+,ar,Argentina
+,au,Australia
+,bd,Bangladesh
+,bg,Bulgaria
+,br,Brazil
+,cl,Chile
+,ch,Switzerland
+,cz,Czechia
+,ee,Estonia
+,gr,Greece
+,gt,Guatemala
+,id,Indonesia
+,it,Italy
+,ni,Nicaragua
+,mx,Mexico
+,my,Malaysia
+,pa,Panama
+,pl,Poland
+,ro,Romania
+,ru,Russia
+,sa,Saudi Arabia
+,sv,El Salvador
+,ua,Ukraine
+,us,United States
+A1A2DtCtStPcCo,iq,Iraq
+A1A2PcCtCo,al,Albania
+,at,Austria
+,ba,Bosnia and Herzegovina
+,dz,Algeria
+,de,Germany
+,hr,Croatia
+,lu,Luxembourg
+,ma,Morocco
+,me,Montenegro
+,mk,North Macedonia
+,mn,Mongolia
+,om,Oman
+,rs,Serbia
+A1CtPcCo,be,Belgium
+A1CtPcStCo,xk,Kosovo
+CoCtA1A2,hk,Hong Kong SAR
+,mo,Macao SAR
+CoPcStCtA1A2,kr,Korea
+CoPvCtDtA1A2Pc,cn,China
+PcStCtA1A2Co,jp,Japan
+AddressLine1M,af,Afghanistan
+,ax,Åland Islands
+,al,Albania
+,dz,Algeria
+,as,American Samoa
+,ad,Andorra
+,ao,Angola
+,ai,Anguilla
+,aq,Antarctica
+,ag,Antigua and Barbuda
+,ar,Argentina
+,am,Armenia
+,aw,Aruba
+,au,Australia
+,at,Austria
+,az,Azerbaijan
+,bs,Bahamas
+,bh,Bahrain
+,bd,Bangladesh
+,bb,Barbados
+,by,Belarus
+,be,Belgium
+,bz,Belize
+,bj,Benin
+,bm,Bermuda
+,bt,Bhutan
+,bo,Bolivia
+,bq,Bonaire
+,ba,Bosnia and Herzegovina
+,bw,Botswana
+,bv,Bouvet Island
+,br,Brazil
+,io,British Indian Ocean Territory
+,bn,Brunei
+,bg,Bulgaria
+,bf,Burkina Faso
+,bi,Burundi
+,kh,Cambodia
+,cm,Cameroon
+,ca,Canada
+,cv,Cabo Verde
+,ky,Cayman Islands
+,cf,Central African Republic
+,td,Chad
+,gg,Guernsey
+,je,Jersey
+,cl,Chile
+,cn,China
+,cx,Christmas Island
+,cc,Cocos (Keeling) Islands
+,co,Colombia
+,km,Comoros
+,cd,Congo (DRC)
+,cg,Congo
+,ck,Cook Islands
+,cr,Costa Rica
+,ci,Côte d’Ivoire
+,hr,Croatia
+,cw,Curaçao
+,cy,Cyprus
+,cz,Czechia
+,dk,Denmark
+,dj,Djibouti
+,dm,Dominica
+,do,Dominican Republic
+,ec,Ecuador
+,eg,Egypt
+,sv,El Salvador
+,gq,Equatorial Guinea
+,er,Eritrea
+,ee,Estonia
+,et,Ethiopia
+,fk,Falkland Islands
+,fo,Faroe Islands
+,fj,Fiji
+,fi,Finland
+,fr,France
+,gf,French Guiana
+,pf,French Polynesia
+,ga,Gabon
+,gm,Gambia
+,ge,Georgia
+,de,Germany
+,gh,Ghana
+,gi,Gibraltar
+,gr,Greece
+,gl,Greenland
+,gd,Grenada
+,gp,Guadeloupe
+,gu,Guam
+,gt,Guatemala
+,gn,Guinea
+,gw,Guinea-Bissau
+,gy,Guyana
+,ht,Haiti
+,hm,Heard Island and McDonald Islands
+,hn,Honduras
+,hk,Hong Kong SAR
+,hu,Hungary
+,is,Iceland
+,in,India
+,id,Indonesia
+,iq,Iraq
+,ie,Ireland
+,im,Isle of Man
+,il,Israel
+,it,Italy
+,jm,Jamaica
+,jp,Japan
+,jo,Jordan
+,kz,Kazakhstan
+,ke,Kenya
+,ki,Kiribati
+,kr,Korea
+,xk,Kosovo
+,kw,Kuwait
+,kg,Kyrgyzstan
+,la,Laos
+,lv,Latvia
+,lb,Lebanon
+,ls,Lesotho
+,lr,Liberia
+,ly,Libya
+,li,Liechtenstein
+,lt,Lithuania
+,lu,Luxembourg
+,mo,Macao SAR
+,mk,North Macedonia
+,mg,Madagascar
+,mw,Malawi
+,my,Malaysia
+,mv,Maldives
+,ml,Mali
+,mt,Malta
+,mh,Marshall Islands
+,mq,Martinique
+,mr,Mauritania
+,mu,Mauritius
+,yt,Mayotte
+,mx,Mexico
+,fm,Micronesia
+,md,Moldova
+,mc,Monaco
+,mn,Mongolia
+,me,Montenegro
+,ms,Montserrat
+,ma,Morocco
+,mz,Mozambique
+,mm,Myanmar
+,na,Namibia
+,nr,Nauru
+,np,Nepal
+,nl,Netherlands
+,nc,New Caledonia
+,nz,New Zealand
+,ni,Nicaragua
+,ne,Niger
+,ng,Nigeria
+,nu,Niue
+,nf,Norfolk Island
+,mp,Northern Mariana Islands
+,no,Norway
+,om,Oman
+,pk,Pakistan
+,pw,Palau
+,ps,Palestinian Authority
+,pa,Panama
+,pg,Papua New Guinea
+,py,Paraguay
+,pe,Peru
+,ph,Philippines
+,pn,Pitcairn Islands
+,pl,Poland
+,pt,Portugal
+,pr,Puerto Rico
+,qa,Qatar
+,re,Réunion
+,ro,Romania
+,ru,Russia
+,rw,Rwanda
+,bl,Saint Barthélemy
+,sh,"St Helena, Ascension, Tristan da Cunha"
+,kn,Saint Kitts and Nevis
+,lc,Saint Lucia
+,mf,Saint Martin
+,pm,Saint Pierre and Miquelon
+,vc,Saint Vincent and the Grenadines
+,ws,Samoa
+,sm,San Marino
+,st,São Tomé and Príncipe
+,sa,Saudi Arabia
+,sn,Senegal
+,rs,Serbia
+,sc,Seychelles
+,sl,Sierra Leone
+,sg,Singapore
+,sx,Sint Maarten
+,sk,Slovakia
+,si,Slovenia
+,sb,Solomon Islands
+,so,Somalia
+,za,South Africa
+,gs,South Georgia and South Sandwich Islands
+,ss,South Sudan
+,es,Spain
+,lk,Sri Lanka
+,sr,Suriname
+,sj,Svalbard
+,sz,Eswatini
+,se,Sweden
+,ch,Switzerland
+,tw,Taiwan
+,tj,Tajikistan
+,tz,Tanzania
+,th,Thailand
+,tl,Timor-Leste
+,tg,Togo
+,tk,Tokelau
+,to,Tonga
+,tt,Trinidad and Tobago
+,tn,Tunisia
+,tr,Turkey
+,tm,Turkmenistan
+,tc,Turks and Caicos Islands
+,tv,Tuvalu
+,ug,Uganda
+,ua,Ukraine
+,ae,United Arab Emirates
+,gb,United Kingdom
+,us,United States
+,um,U.S. Outlying Islands
+,uy,Uruguay
+,uz,Uzbekistan
+,vu,Vanuatu
+,va,Vatican City
+,ve,Venezuela
+,vn,Vietnam
+,vg,British Virgin Islands
+,vi,U.S. Virgin Islands
+,wf,Wallis and Futuna
+,ye,Yemen
+,zm,Zambia
+,zw,Zimbabwe
+AddressLine2O,af,Afghanistan
+,ax,Åland Islands
+,al,Albania
+,dz,Algeria
+,as,American Samoa
+,ad,Andorra
+,ao,Angola
+,ai,Anguilla
+,aq,Antarctica
+,ag,Antigua and Barbuda
+,ar,Argentina
+,am,Armenia
+,aw,Aruba
+,au,Australia
+,at,Austria
+,az,Azerbaijan
+,bs,Bahamas
+,bh,Bahrain
+,bd,Bangladesh
+,bb,Barbados
+,by,Belarus
+,bz,Belize
+,bj,Benin
+,bm,Bermuda
+,bt,Bhutan
+,bo,Bolivia
+,bq,Bonaire
+,ba,Bosnia and Herzegovina
+,bw,Botswana
+,bv,Bouvet Island
+,br,Brazil
+,io,British Indian Ocean Territory
+,bn,Brunei
+,bg,Bulgaria
+,bf,Burkina Faso
+,bi,Burundi
+,kh,Cambodia
+,cm,Cameroon
+,ca,Canada
+,cv,Cabo Verde
+,ky,Cayman Islands
+,cf,Central African Republic
+,td,Chad
+,gg,Guernsey
+,je,Jersey
+,cl,Chile
+,cn,China
+,cx,Christmas Island
+,cc,Cocos (Keeling) Islands
+,co,Colombia
+,km,Comoros
+,cd,Congo (DRC)
+,cg,Congo
+,ck,Cook Islands
+,cr,Costa Rica
+,ci,Côte d’Ivoire
+,hr,Croatia
+,cw,Curaçao
+,cy,Cyprus
+,cz,Czechia
+,dj,Djibouti
+,dk,Denmark
+,dm,Dominica
+,do,Dominican Republic
+,ec,Ecuador
+,eg,Egypt
+,sv,El Salvador
+,gq,Equatorial Guinea
+,er,Eritrea
+,ee,Estonia
+,et,Ethiopia
+,fi,Finland
+,fk,Falkland Islands
+,fo,Faroe Islands
+,fj,Fiji
+,fr,France
+,gf,French Guiana
+,pf,French Polynesia
+,ga,Gabon
+,gm,Gambia
+,ge,Georgia
+,de,Germany
+,gh,Ghana
+,gi,Gibraltar
+,gr,Greece
+,gl,Greenland
+,gd,Grenada
+,gp,Guadeloupe
+,gu,Guam
+,gt,Guatemala
+,gn,Guinea
+,gw,Guinea-Bissau
+,gy,Guyana
+,ht,Haiti
+,hm,Heard Island and McDonald Islands
+,hn,Honduras
+,hk,Hong Kong SAR
+,hu,Hungary
+,is,Iceland
+,in,India
+,id,Indonesia
+,ie,Ireland
+,im,Isle of Man
+,il,Israel
+,iq,Iraq
+,it,Italy
+,jm,Jamaica
+,jp,Japan
+,jo,Jordan
+,kz,Kazakhstan
+,ke,Kenya
+,ki,Kiribati
+,kr,Korea
+,kw,Kuwait
+,kg,Kyrgyzstan
+,la,Laos
+,lv,Latvia
+,lb,Lebanon
+,ls,Lesotho
+,lr,Liberia
+,ly,Libya
+,li,Liechtenstein
+,lt,Lithuania
+,lu,Luxembourg
+,mo,Macao SAR
+,mk,North Macedonia
+,mg,Madagascar
+,mw,Malawi
+,my,Malaysia
+,mv,Maldives
+,ml,Mali
+,mt,Malta
+,mh,Marshall Islands
+,mq,Martinique
+,mr,Mauritania
+,mu,Mauritius
+,yt,Mayotte
+,mx,Mexico
+,fm,Micronesia
+,md,Moldova
+,mc,Monaco
+,mn,Mongolia
+,me,Montenegro
+,ms,Montserrat
+,ma,Morocco
+,mz,Mozambique
+,mm,Myanmar
+,na,Namibia
+,nr,Nauru
+,np,Nepal
+,nl,Netherlands
+,nc,New Caledonia
+,nz,New Zealand
+,ni,Nicaragua
+,ne,Niger
+,ng,Nigeria
+,nu,Niue
+,nf,Norfolk Island
+,mp,Northern Mariana Islands
+,no,Norway
+,om,Oman
+,pk,Pakistan
+,pw,Palau
+,ps,Palestinian Authority
+,pa,Panama
+,pg,Papua New Guinea
+,pt,Portugal
+,py,Paraguay
+,pe,Peru
+,ph,Philippines
+,pn,Pitcairn Islands
+,pl,Poland
+,pr,Puerto Rico
+,qa,Qatar
+,re,Réunion
+,ro,Romania
+,ru,Russia
+,rw,Rwanda
+,bl,Saint Barthélemy
+,sh,"St Helena, Ascension, Tristan da Cunha"
+,kn,Saint Kitts and Nevis
+,lc,Saint Lucia
+,mf,Saint Martin
+,pm,Saint Pierre and Miquelon
+,vc,Saint Vincent and the Grenadines
+,ws,Samoa
+,sm,San Marino
+,st,São Tomé and Príncipe
+,sa,Saudi Arabia
+,sn,Senegal
+,rs,Serbia
+,sc,Seychelles
+,sl,Sierra Leone
+,sg,Singapore
+,sx,Sint Maarten
+,sk,Slovakia
+,si,Slovenia
+,sb,Solomon Islands
+,so,Somalia
+,za,South Africa
+,gs,South Georgia and South Sandwich Islands
+,ss,South Sudan
+,es,Spain
+,lk,Sri Lanka
+,sr,Suriname
+,sj,Svalbard
+,sz,Eswatini
+,se,Sweden
+,ch,Switzerland
+,tw,Taiwan
+,tj,Tajikistan
+,tz,Tanzania
+,th,Thailand
+,tl,Timor-Leste
+,tg,Togo
+,tk,Tokelau
+,to,Tonga
+,tt,Trinidad and Tobago
+,tn,Tunisia
+,tr,Turkey
+,tm,Turkmenistan
+,tc,Turks and Caicos Islands
+,tv,Tuvalu
+,ug,Uganda
+,ua,Ukraine
+,ae,United Arab Emirates
+,gb,United Kingdom
+,us,United States
+,um,U.S. Outlying Islands
+,uy,Uruguay
+,uz,Uzbekistan
+,vu,Vanuatu
+,va,Vatican City
+,ve,Venezuela
+,vn,Vietnam
+,vg,British Virgin Islands
+,vi,U.S. Virgin Islands
+,wf,Wallis and Futuna
+,ye,Yemen
+,zm,Zambia
+,zw,Zimbabwe
+AddressLine3O,in,India
+AddressCityM,af,Afghanistan
+,ax,Åland Islands
+,al,Albania
+,dz,Algeria
+,as,American Samoa
+,ad,Andorra
+,ao,Angola
+,ai,Anguilla
+,aq,Antarctica
+,ag,Antigua and Barbuda
+,ar,Argentina
+,am,Armenia
+,aw,Aruba
+,au,Australia
+,at,Austria
+,az,Azerbaijan
+,bs,Bahamas
+,bh,Bahrain
+,bd,Bangladesh
+,bb,Barbados
+,by,Belarus
+,be,Belgium
+,bz,Belize
+,bj,Benin
+,bm,Bermuda
+,bt,Bhutan
+,bo,Bolivia
+,bq,Bonaire
+,ba,Bosnia and Herzegovina
+,bw,Botswana
+,bv,Bouvet Island
+,br,Brazil
+,io,British Indian Ocean Territory
+,bn,Brunei
+,bg,Bulgaria
+,bf,Burkina Faso
+,bi,Burundi
+,kh,Cambodia
+,cm,Cameroon
+,ca,Canada
+,cv,Cabo Verde
+,ky,Cayman Islands
+,cf,Central African Republic
+,td,Chad
+,gg,Guernsey
+,je,Jersey
+,cl,Chile
+,cn,China
+,cx,Christmas Island
+,cc,Cocos (Keeling) Islands
+,co,Colombia
+,km,Comoros
+,cd,Congo (DRC)
+,cg,Congo
+,ck,Cook Islands
+,cr,Costa Rica
+,ci,Côte d’Ivoire
+,hr,Croatia
+,cw,Curaçao
+,cy,Cyprus
+,cz,Czechia
+,dk,Denmark
+,dj,Djibouti
+,dm,Dominica
+,do,Dominican Republic
+,ec,Ecuador
+,eg,Egypt
+,sv,El Salvador
+,gq,Equatorial Guinea
+,er,Eritrea
+,ee,Estonia
+,et,Ethiopia
+,fk,Falkland Islands
+,fo,Faroe Islands
+,fj,Fiji
+,fi,Finland
+,fr,France
+,gf,French Guiana
+,pf,French Polynesia
+,ga,Gabon
+,gm,Gambia
+,ge,Georgia
+,de,Germany
+,gh,Ghana
+,gi,Gibraltar
+,gr,Greece
+,gl,Greenland
+,gd,Grenada
+,gp,Guadeloupe
+,gu,Guam
+,gt,Guatemala
+,gn,Guinea
+,gw,Guinea-Bissau
+,gy,Guyana
+,ht,Haiti
+,hm,Heard Island and McDonald Islands
+,hn,Honduras
+,hk,Hong Kong SAR
+,hu,Hungary
+,is,Iceland
+,in,India
+,id,Indonesia
+,iq,Iraq
+,ie,Ireland
+,im,Isle of Man
+,il,Israel
+,it,Italy
+,jm,Jamaica
+,jp,Japan
+,jo,Jordan
+,kz,Kazakhstan
+,ke,Kenya
+,ki,Kiribati
+,kr,Korea
+,xk,Kosovo
+,kw,Kuwait
+,kg,Kyrgyzstan
+,la,Laos
+,lv,Latvia
+,lb,Lebanon
+,ls,Lesotho
+,lr,Liberia
+,li,Liechtenstein
+,lt,Lithuania
+,lu,Luxembourg
+,ly,Libya
+,mo,Macao SAR
+,mk,North Macedonia
+,mg,Madagascar
+,mw,Malawi
+,my,Malaysia
+,mv,Maldives
+,ml,Mali
+,mt,Malta
+,mh,Marshall Islands
+,mq,Martinique
+,mr,Mauritania
+,mu,Mauritius
+,yt,Mayotte
+,mx,Mexico
+,fm,Micronesia
+,md,Moldova
+,mc,Monaco
+,mn,Mongolia
+,me,Montenegro
+,ms,Montserrat
+,ma,Morocco
+,mz,Mozambique
+,mm,Myanmar
+,na,Namibia
+,nr,Nauru
+,np,Nepal
+,nl,Netherlands
+,nc,New Caledonia
+,nz,New Zealand
+,ni,Nicaragua
+,ne,Niger
+,ng,Nigeria
+,nu,Niue
+,nf,Norfolk Island
+,mp,Northern Mariana Islands
+,no,Norway
+,om,Oman
+,pk,Pakistan
+,pw,Palau
+,ps,Palestinian Authority
+,pa,Panama
+,pg,Papua New Guinea
+,py,Paraguay
+,pe,Peru
+,ph,Philippines
+,pn,Pitcairn Islands
+,pl,Poland
+,pt,Portugal
+,pr,Puerto Rico
+,qa,Qatar
+,re,Réunion
+,ro,Romania
+,ru,Russia
+,rw,Rwanda
+,bl,Saint Barthélemy
+,sh,"St Helena, Ascension, Tristan da Cunha"
+,kn,Saint Kitts and Nevis
+,lc,Saint Lucia
+,mf,Saint Martin
+,pm,Saint Pierre and Miquelon
+,vc,Saint Vincent and the Grenadines
+,ws,Samoa
+,sm,San Marino
+,st,São Tomé and Príncipe
+,sa,Saudi Arabia
+,sn,Senegal
+,rs,Serbia
+,sc,Seychelles
+,sl,Sierra Leone
+,sg,Singapore
+,sx,Sint Maarten
+,sk,Slovakia
+,si,Slovenia
+,sb,Solomon Islands
+,so,Somalia
+,za,South Africa
+,gs,South Georgia and South Sandwich Islands
+,ss,South Sudan
+,es,Spain
+,lk,Sri Lanka
+,sr,Suriname
+,sj,Svalbard
+,sz,Eswatini
+,se,Sweden
+,ch,Switzerland
+,tw,Taiwan
+,tj,Tajikistan
+,tz,Tanzania
+,th,Thailand
+,tl,Timor-Leste
+,tg,Togo
+,tk,Tokelau
+,to,Tonga
+,tt,Trinidad and Tobago
+,tn,Tunisia
+,tr,Turkey
+,tm,Turkmenistan
+,tc,Turks and Caicos Islands
+,tv,Tuvalu
+,ug,Uganda
+,ua,Ukraine
+,ae,United Arab Emirates
+,gb,United Kingdom
+,us,United States
+,um,U.S. Outlying Islands
+,uy,Uruguay
+,uz,Uzbekistan
+,vu,Vanuatu
+,va,Vatican City
+,ve,Venezuela
+,vn,Vietnam
+,vg,British Virgin Islands
+,vi,U.S. Virgin Islands
+,wf,Wallis and Futuna
+,ye,Yemen
+,zm,Zambia
+,zw,Zimbabwe
+AddressCountyO,gb,United Kingdom
+AddressProvinceM,bz,Belize
+,ca,Canada
+,cn,China
+,cr,Costa Rica
+,hn,Honduras
+,jm,Jamaica
+,ph,Philippines
+,es,Spain
+AddressProvinceO,az,Azerbaijan
+,bn,Brunei
+,bs,Bahamas
+,by,Belarus
+,fr,France
+,hu,Hungary
+,kg,Kyrgyzstan
+,kh,Cambodia
+,kz,Kazakhstan
+,md,Moldova
+,mm,Myanmar
+,np,Nepal
+,ss,South Sudan
+,th,Thailand
+,tj,Tajikistan
+,tr,Turkey
+,uz,Uzbekistan
+,ve,Venezuela
+,vn,Vietnam
+,za,South Africa
+AddressStateM,ar,Argentina
+,ae,United Arab Emirates
+,au,Australia
+,br,Brazil
+,ee,Estonia
+,gr,Greece
+,in,India
+,iq,Iraq
+,it,Italy
+,jp,Japan
+,kr,Korea
+,xk,Kosovo
+,my,Malaysia
+,mx,Mexico
+,ng,Nigeria
+,pa,Panama
+,ro,Romania
+,us,United States
+AddressStateO,am,Armenia
+,bd,Bangladesh
+,bg,Bulgaria
+,ch,Switzerland
+,cl,Chile
+,cz,Czechia
+,gt,Guatemala
+,id,Indonesia
+,nl,Netherlands
+,ni,Nicaragua
+,pl,Poland
+,ru,Russia
+,sa,Saudi Arabia
+,sv,El Salvador
+,ua,Ukraine
+AddressRegionO,am,Armenia
+,bd,Bangladesh
+,bg,Bulgaria
+,bn,Brunei
+,bs,Bahamas
+,ch,Switzerland
+,cl,Chile
+,cr,Costa Rica
+,cz,Czechia
+,gb,United Kingdom
+,gt,Guatemala
+,hn,Honduras
+,id,Indonesia
+,jm,Jamaica
+,kh,Cambodia
+,ni,Nicaragua
+,nl,Netherlands
+,np,Nepal
+,pa,Panama
+,pl,Poland
+,ru,Russia
+,sa,Saudi Arabia
+,sv,El Salvador
+,th,Thailand
+,tr,Turkey
+,ua,Ukraine
+,ve,Venezuela
+AddressRegionM,ae,United Arab Emirates
+,ar,Argentina
+,au,Australia
+,br,Brazil
+,bz,Belize
+,ca,Canada
+,cn,China
+,ee,Estonia
+,es,Spain
+,gr,Greece
+,in,India
+,iq,Iraq
+,it,Italy
+,jp,Japan
+,kr,Korea
+,xk,Kosovo
+,mx,Mexico
+,my,Malaysia
+,ng,Nigeria
+,ph,Philippines
+,ro,Romania
+,us,United States
+AddressPostalCodeM,af,Afghanistan
+,al,Albania
+,dz,Algeria
+,ad,Andorra
+,ar,Argentina
+,am,Armenia
+,au,Australia
+,at,Austria
+,az,Azerbaijan
+,bh,Bahrain
+,bd,Bangladesh
+,bb,Barbados
+,by,Belarus
+,be,Belgium
+,bm,Bermuda
+,ba,Bosnia and Herzegovina
+,br,Brazil
+,bn,Brunei
+,bg,Bulgaria
+,cv,Cabo Verde
+,ca,Canada
+,ky,Cayman Islands
+,je,Jersey
+,cn,China
+,cr,Costa Rica
+,hr,Croatia
+,cy,Cyprus
+,cz,Czechia
+,dk,Denmark
+,do,Dominican Republic
+,ec,Ecuador
+,eg,Egypt
+,sv,El Salvador
+,ee,Estonia
+,fo,Faroe Islands
+,fi,Finland
+,fr,France
+,ge,Georgia
+,de,Germany
+,gr,Greece
+,gt,Guatemala
+,hn,Honduras
+,hu,Hungary
+,is,Iceland
+,in,India
+,id,Indonesia
+,iq,Iraq
+,il,Israel
+,it,Italy
+,jp,Japan
+,jo,Jordan
+,kz,Kazakhstan
+,ke,Kenya
+,kr,Korea
+,xk,Kosovo
+,kw,Kuwait
+,kg,Kyrgyzstan
+,lv,Latvia
+,lb,Lebanon
+,li,Liechtenstein
+,lt,Lithuania
+,lu,Luxembourg
+,mk,North Macedonia
+,my,Malaysia
+,mt,Malta
+,mx,Mexico
+,md,Moldova
+,mc,Monaco
+,mn,Mongolia
+,me,Montenegro
+,ma,Morocco
+,np,Nepal
+,nl,Netherlands
+,nz,New Zealand
+,ni,Nicaragua
+,ng,Nigeria
+,no,Norway
+,om,Oman
+,pa,Panama
+,pk,Pakistan
+,py,Paraguay
+,ph,Philippines
+,pl,Poland
+,pt,Portugal
+,pr,Puerto Rico
+,ro,Romania
+,ru,Russia
+,sa,Saudi Arabia
+,rs,Serbia
+,sg,Singapore
+,sk,Slovakia
+,si,Slovenia
+,za,South Africa
+,es,Spain
+,lk,Sri Lanka
+,se,Sweden
+,ch,Switzerland
+,tw,Taiwan
+,th,Thailand
+,tn,Tunisia
+,tr,Turkey
+,tm,Turkmenistan
+,vi,U.S. Virgin Islands
+,ua,Ukraine
+,gb,United Kingdom
+,us,United States
+,uy,Uruguay
+,uz,Uzbekistan
+,ve,Venezuela
+,vn,Vietnam
+,zm,Zambia
+AddressPostalCodeO,ax,Åland Islands
+,as,American Samoa
+,ai,Anguilla
+,aq,Antarctica
+,ag,Antigua and Barbuda
+,aw,Aruba
+,bs,Bahamas
+,bz,Belize
+,bj,Benin
+,bt,Bhutan
+,bo,Bolivia
+,bq,Bonaire
+,bw,Botswana
+,bv,Bouvet Island
+,io,British Indian Ocean Territory
+,bf,Burkina Faso
+,bi,Burundi
+,kh,Cambodia
+,cm,Cameroon
+,cf,Central African Republic
+,td,Chad
+,gg,Guernsey
+,cl,Chile
+,cx,Christmas Island
+,cc,Cocos (Keeling) Islands
+,co,Colombia
+,km,Comoros
+,cd,Congo (DRC)
+,cg,Congo
+,ck,Cook Islands
+,ci,Côte d’Ivoire
+,cw,Curaçao
+,dj,Djibouti
+,dm,Dominica
+,ss,South Sudan
+,gq,Equatorial Guinea
+,er,Eritrea
+,et,Ethiopia
+,fk,Falkland Islands
+,fj,Fiji
+,gf,French Guiana
+,pf,French Polynesia
+,ga,Gabon
+,gm,Gambia
+,gh,Ghana
+,gi,Gibraltar
+,gl,Greenland
+,gd,Grenada
+,gp,Guadeloupe
+,gu,Guam
+,gn,Guinea
+,gw,Guinea-Bissau
+,gy,Guyana
+,ht,Haiti
+,hm,Heard Island and McDonald Islands
+,ie,Ireland
+,im,Isle of Man
+,jm,Jamaica
+,ki,Kiribati
+,la,Laos
+,ls,Lesotho
+,lr,Liberia
+,ly,Libya
+,mg,Madagascar
+,mw,Malawi
+,mv,Maldives
+,ml,Mali
+,mh,Marshall Islands
+,mq,Martinique
+,mu,Mauritius
+,yt,Mayotte
+,fm,Micronesia
+,ms,Montserrat
+,mz,Mozambique
+,mm,Myanmar
+,na,Namibia
+,nr,Nauru
+,nc,New Caledonia
+,ne,Niger
+,nu,Niue
+,nf,Norfolk Island
+,mp,Northern Mariana Islands
+,pw,Palau
+,ps,Palestinian Authority
+,pg,Papua New Guinea
+,pe,Peru
+,pn,Pitcairn Islands
+,re,Réunion
+,rw,Rwanda
+,bl,Saint Barthélemy
+,sh,"St Helena, Ascension, Tristan da Cunha"
+,kn,Saint Kitts and Nevis
+,lc,Saint Lucia
+,mf,Saint Martin
+,pm,Saint Pierre and Miquelon
+,vc,Saint Vincent and the Grenadines
+,ws,Samoa
+,sm,San Marino
+,st,São Tomé and Príncipe
+,sn,Senegal
+,sc,Seychelles
+,sl,Sierra Leone
+,sx,Sint Maarten
+,sb,Solomon Islands
+,so,Somalia
+,gs,South Georgia and South Sandwich Islands
+,sr,Suriname
+,sj,Svalbard
+,sz,Eswatini
+,tj,Tajikistan
+,tz,Tanzania
+,tg,Togo
+,tk,Tokelau
+,to,Tonga
+,tt,Trinidad and Tobago
+,tc,Turks and Caicos Islands
+,tv,Tuvalu
+,ug,Uganda
+,ae,United Arab Emirates
+,um,U.S. Outlying Islands
+,vu,Vanuatu
+,va,Vatican City
+,wf,Wallis and Futuna
+,zw,Zimbabwe
+DiscoverSupportedMarkets,us,United States
+,vi,U.S. Virgin Islands
+JCBSupportedMarkets,id,Indonesia
+,jp,Japan
+,ph,Philippines
+,tw,Taiwan
+,th,Thailand
+,vn,Vietnam
+USStates,AL,Alabama
+,AK,Alaska
+,AZ,Arizona
+,AR,Arkansas
+,AA,Armed Forces (AA)
+,AE,Armed Forces (AE)
+,AP,Armed Forces (AP)
+,CA,California
+,CO,Colorado
+,CT,Connecticut
+,DE,Delaware
+,DC,District of Columbia
+,FL,Florida
+,GA,Georgia
+,HI,Hawaii
+,ID,Idaho
+,IL,Illinois
+,IN,Indiana
+,IA,Iowa
+,KS,Kansas
+,KY,Kentucky
+,LA,Louisiana
+,ME,Maine
+,MD,Maryland
+,MA,Massachusetts
+,MI,Michigan
+,MN,Minnesota
+,MS,Mississippi
+,MO,Missouri
+,MT,Montana
+,NE,Nebraska
+,NV,Nevada
+,NH,New Hampshire
+,NJ,New Jersey
+,NM,New Mexico
+,NY,New York
+,NC,North Carolina
+,ND,North Dakota
+,OH,Ohio
+,OK,Oklahoma
+,OR,Oregon
+,PA,Pennsylvania
+,PR,Puerto Rico
+,RI,Rhode Island
+,SC,South Carolina
+,SD,South Dakota
+,TN,Tennessee
+,TX,Texas
+,UT,Utah
+,VT,Vermont
+,VA,Virginia
+,WA,Washington
+,WV,West Virginia
+,WI,Wisconsin
+,WY,Wyoming
+US50States,AL,Alabama
+,AK,Alaska
+,AZ,Arizona
+,AR,Arkansas
+,CA,California
+,CO,Colorado
+,CT,Connecticut
+,DE,Delaware
+,DC,District of Columbia
+,FL,Florida
+,GA,Georgia
+,HI,Hawaii
+,ID,Idaho
+,IL,Illinois
+,IN,Indiana
+,IA,Iowa
+,KS,Kansas
+,KY,Kentucky
+,LA,Louisiana
+,ME,Maine
+,MD,Maryland
+,MA,Massachusetts
+,MI,Michigan
+,MN,Minnesota
+,MS,Mississippi
+,MO,Missouri
+,MT,Montana
+,NE,Nebraska
+,NV,Nevada
+,NH,New Hampshire
+,NJ,New Jersey
+,NM,New Mexico
+,NY,New York
+,NC,North Carolina
+,ND,North Dakota
+,OH,Ohio
+,OK,Oklahoma
+,OR,Oregon
+,PA,Pennsylvania
+,PR,Puerto Rico
+,RI,Rhode Island
+,SC,South Carolina
+,SD,South Dakota
+,TN,Tennessee
+,TX,Texas
+,UT,Utah
+,VT,Vermont
+,VA,Virginia
+,WA,Washington
+,WV,West Virginia
+,WI,Wisconsin
+,WY,Wyoming
+CAProvinces,AB,Alberta
+,BC,British Columbia
+,MB,Manitoba
+,NB,New Brunswick
+,NL,Newfoundland and Labrador
+,NS,Nova Scotia
+,ON,Ontario
+,PE,Prince Edward Island
+,QC,Quebec
+,SK,Saskatchewan
+,NT,Northwest Territories
+,NU,Nunavut
+,YT,Yukon
+CNProvinces,AH,Anhui
+,BJ,Beijing
+,CQ,Chongqing
+,FJ,Fujian
+,GS,Gansu
+,GD,Guangdong
+,GX,Guangxi Zhuang
+,GZ,Guizhou
+,HI,Hainan
+,HE,Hebei
+,HL,Heilongjiang
+,HA,Henan
+,HB,Hubei
+,HN,Hunan
+,NM,Inner Mongolia
+,JS,Jiangsu
+,JX,Jiangxi
+,JL,Jilin
+,LN,Liaoning
+,NX,Ningxia
+,QH,Qinghai
+,SN,Shaanxi
+,SD,Shandong
+,SH,Shanghai
+,SX,Shanxi
+,SC,Sichuan
+,TJ,Tianjin
+,XJ,Xinjiang
+,XZ,Xizang
+,YN,Yunnan
+,ZJ,Zhejiang
+ESProvinces,Álava,Álava
+,Albacete,Albacete
+,Alicante,Alicante
+,Almería,Almería
+,Asturias,Asturias
+,Ávila,Ávila
+,Badajoz,Badajoz
+,Baleares,Balearic Islands
+,Barcelona,Barcelona
+,Burgos,Burgos
+,Cáceres,Cáceres
+,Cádiz,Cádiz
+,Cantabria,Cantabria
+,Castellón,Castellón
+,Ceuta,Ceuta
+,Ciudad Real,Ciudad Real
+,Córdoba,Córdoba
+,A Coruña,A Coruña
+,Cuenca,Cuenca
+,Girona,Girona
+,Granada,Granada
+,Guadalajara,Guadalajara
+,Guipúzcoa,Gipuzkoa
+,Huelva,Huelva
+,Huesca,Huesca
+,Jaén,Jaén
+,La Rioja,La Rioja
+,Las Palmas,Las Palmas
+,León,León
+,Lleida,Lleida
+,Lugo,Lugo
+,Madrid,Madrid
+,Málaga,Málaga
+,Melilla,Melilla
+,Murcia,Murcia
+,Navarra,Navarre
+,Ourense,Ourense
+,Palencia,Palencia
+,Pontevedra,Pontevedra
+,Salamanca,Salamanca
+,Santa Cruz de Tenerife,Santa Cruz de Tenerife
+,Segovia,Segovia
+,Sevilla,Seville
+,Soria,Soria
+,Tarragona,Tarragona
+,Teruel,Teruel
+,Toledo,Toledo
+,Valencia,Valencia
+,Valladolid,Valladolid
+,Vizcaya,Biscay
+,Zamora,Zamora
+,Zaragoza,Zaragoza
+BSProvinces,Acklins,Acklins
+,Berry Islands,Berry Islands
+,Bimini,Bimini
+,Black Point,Black Point
+,Cat Island,Cat Island
+,Central Abaco,Central Abaco
+,Central Andros,Central Andros
+,Central Eleuthera,Central Eleuthera
+,City of Freeport,City of Freeport
+,Crooked Island,Crooked Island
+,East Grand Bahama,East Grand Bahama
+,Exuma,Exuma
+,Grand Cay,Grand Cay
+,Green Turtle Cay,Green Turtle Cay
+,Harbour Island,Harbour Island
+,Hope Town,Hope Town
+,Inagua,Inagua
+,Long Island,Long Island
+,Mangrove Cay,Mangrove Cay
+,Mayaguana,Mayaguana
+,Moore's Island,Moore's Island
+,New Providence,New Providence
+,North Abaco,North Abaco
+,North Andros,North Andros
+,North Eleuthera,North Eleuthera
+,Ragged Island,Ragged Island
+,Rum Cay,Rum Cay
+,San Salvador,San Salvador
+,South Abaco,South Abaco
+,South Andros,South Andros
+,South Eleuthera,South Eleuthera
+,"Spanish Wells, Eleuthera","Spanish Wells, Eleuthera"
+,West Grand Bahama,West Grand Bahama
+BZProvinces,BZ,Belize
+,CY,Cayo
+,CZ,Corozal
+,OW,Orange Walk
+,SC,Stann Creek
+,TO,Toledo
+CRProvinces,CR-A,Alajuela
+,CR-C,Cartago
+,CR-G,Guanacaste
+,CR-H,Heredia
+,CR-L,Limón
+,CR-P,Puntarenas
+,CR-SJ,San José
+HNProvinces,Atlántida,Atlántida
+,Choluteca,Choluteca
+,Colón,Colón
+,Comayagua,Comayagua
+,Copán,Copán
+,Cortés,Cortés
+,El Paraíso,El Paraíso
+,Francisco Morazán,Francisco Morazán
+,Gracias a Dios,Gracias a Dios
+,Intibucá,Intibucá
+,Islas de la Bahía,Islas de la Bahía
+,La Paz,La Paz
+,Lempira,Lempira
+,Ocotepeque,Ocotepeque
+,Olancho,Olancho
+,Santa Bárbara,Santa Bárbara
+,Velle,Velle
+,Yoro,Yoro
+JMProvinces,Clarendon,Clarendon
+,Hanover,Hanover
+,Kingston,Kingston
+,Manchester,Manchester
+,Portland,Portland
+,Saint Andrew,Saint Andrew
+,Saint Ann,Saint Ann
+,Saint Catherine,Saint Catherine
+,Saint Elizabeth,Saint Elizabeth
+,Saint James,Saint James
+,Saint Mary,Saint Mary
+,Saint Thomas,Saint Thomas
+,Trelawny,Trelawny
+,Westmoreland,Westmoreland
+TRProvinces,01,Adana
+,02,Adiyaman
+,03,Afyon
+,04,Ağrı
+,05,Amasya
+,06,Ankara
+,07,Antalya
+,08,Artvin
+,09,Aydin
+,10,Balikesir
+,11,Bilecik
+,12,Bingöl
+,13,Bitlis
+,14,Bolu
+,15,Burdur
+,16,Bursa
+,17,Canakkale
+,18,Cankırı
+,19,Corum
+,20,Denizli
+,21,Diyarbakir
+,22,Edirne
+,23,Elazig
+,24,Erzincan
+,25,Erzurum
+,26,Eskisehir
+,27,Gaziantep
+,28,Giresun
+,29,Guemueshane
+,30,Hakkari
+,31,Hatay
+,32,Isparta
+,33,Mersin
+,34,Istanbul
+,35,Izmir
+,36,Kars
+,37,Kastamonu
+,38,Kayseri
+,39,Kırklareli
+,40,Kırşehir
+,41,Kocaeli
+,42,Konya
+,43,Kütahya
+,44,Malatya
+,45,Manisa
+,46,Kahramanmaraş
+,47,Mardin
+,48,Muğla
+,49,Muş
+,50,Nevşehir
+,51,Niğde
+,52,Ordu
+,53,Rize
+,54,Sakarya
+,55,Samsun
+,56,Siirt
+,57,Sinop
+,58,Sivas
+,59,Tekirdağ
+,60,Tokat
+,61,Trabzon
+,62,Tunceli
+,63,Sanlıurfa
+,64,Uşak
+,65,Van
+,66,Yozgat
+,67,Zonguldak
+,68,Aksaray
+,69,Bayburt
+,70,Karaman
+,71,Kırıkkale
+,72,Batman
+,73,Şırnak
+,74,Bartin
+,75,Ardahan
+,76,Igdir
+,77,Yalova
+,80,Osmaniye
+,81,Duzce
+VEProvinces,VE-Z,Amazonas
+,VE-B,Anzoátegui
+,VE-C,Apure
+,VE-D,Aragua
+,VE-E,Barinas
+,VE-F,Bolívar
+,VE-G,Carabobo
+,VE-H,Cojedes
+,VE-Y,Delta Amacuro
+,VE-I,Falcón
+,VE-J,Guárico
+,VE-K,Lara
+,VE-L,Mérida
+,VE-M,Miranda
+,VE-N,Monagas
+,VE-O,Nueva Esparta
+,VE-P,Portuguesa
+,VE-R,Sucre
+,VE-S,Táchira
+,VE-T,Trujillo
+,VE-U,Yaracuy
+,VE-V,Zulia
+,VE-X,Vargas
+,VE-W,Dependencias Federales
+FRProvinces,Ain,Ain
+,Aisne,Aisne
+,Allier,Allier
+,Alpes-de-Haute-Provence,Alpes-de-Haute-Provence
+,Alpes-Maritimes,Alpes-Maritimes
+,Ardèche,Ardèche
+,Ardennes,Ardennes
+,Ariège,Ariège
+,Aube,Aube
+,Aude,Aude
+,Aveyron,Aveyron
+,Bas-Rhin,Bas-Rhin
+,Bouches-du-Rhône,Bouches-du-Rhône
+,Calvados,Calvados
+,Cantal,Cantal
+,Charente,Charente
+,Charente-Maritime,Charente-Maritime
+,Cher,Cher
+,Corrèze,Corrèze
+,Corse-du-Sud,Corse-du-Sud
+,Côte-d'Or,Côte-d'Or
+,Côtes-d'Armor,Côtes-d'Armor
+,Creuse,Creuse
+,Deux-Sèvres,Deux-Sèvres
+,Dordogne,Dordogne
+,Doubs,Doubs
+,Drôme,Drôme
+,Essonne,Essonne
+,Eure,Eure
+,Eure-et-Loir,Eure-et-Loir
+,Finistère,Finistère
+,Gard,Gard
+,Gers,Gers
+,Gironde,Gironde
+,Haute-Corse,Haute-Corse
+,Haute-Garonne,Haute-Garonne
+,Haute-Loire,Haute-Loire
+,Haute-Marne,Haute-Marne
+,Hautes-Alpes,Hautes-Alpes
+,Haute-Saône,Haute-Saône
+,Haute-Savoie,Haute-Savoie
+,Hautes-Pyrénées,Hautes-Pyrénées
+,Haute-Vienne,Haute-Vienne
+,Haut-Rhin,Haut-Rhin
+,Hauts-de-Seine,Hauts-de-Seine
+,Hérault,Hérault
+,Ille-et-Vilaine,Ille-et-Vilaine
+,Indre,Indre
+,Indre-et-Loire,Indre-et-Loire
+,Isère,Isère
+,Jura,Jura
+,Landes,Landes
+,Loire,Loire
+,Loire-Atlantique,Loire-Atlantique
+,Loiret,Loiret
+,Loir-et-Cher,Loir-et-Cher
+,Lot,Lot
+,Lot-et-Garonne,Lot-et-Garonne
+,Lozère,Lozère
+,Maine-et-Loire,Maine-et-Loire
+,Manche,Manche
+,Marne,Marne
+,Mayenne,Mayenne
+,Métropole de Lyon,Métropole de Lyon
+,Meurthe-et-Moselle,Meurthe-et-Moselle
+,Meuse,Meuse
+,Morbihan,Morbihan
+,Moselle,Moselle
+,Nièvre,Nièvre
+,Nord,Nord
+,Oise,Oise
+,Orne,Orne
+,Paris,Paris
+,Pas-de-Calais,Pas-de-Calais
+,Puy-de-Dôme,Puy-de-Dôme
+,Pyrénées-Atlantiques,Pyrénées-Atlantiques
+,Pyrénées-Orientales,Pyrénées-Orientales
+,Rhône,Rhône
+,Saône-et-Loire,Saône-et-Loire
+,Sarthe,Sarthe
+,Savoie,Savoie
+,Seine-et-Marne,Seine-et-Marne
+,Seine-Maritime,Seine-Maritime
+,Seine-Saint-Denis,Seine-Saint-Denis
+,Somme,Somme
+,Tarn,Tarn
+,Tarn-et-Garonne,Tarn-et-Garonne
+,Territoire de Belfort,Territoire de Belfort
+,Val-de-Marne,Val-de-Marne
+,Val-d'Oise,Val-d'Oise
+,Var,Var
+,Vaucluse,Vaucluse
+,Vendée,Vendée
+,Vienne,Vienne
+,Vosges,Vosges
+,Yonne,Yonne
+,Yvelines,Yvelines
+AUStatesAndTerritories,New South Wales,New South Wales
+,Queensland,Queensland
+,South Australia,South Australia
+,Tasmania,Tasmania
+,Victoria,Victoria
+,Western Australia,Western Australia
+,Australian Capital Territory,Australian Capital Territory
+,Jervis Bay Territory,Jervis Bay Territory
+,Northern Territory,Northern Territory
+BRStates,AC,Acre
+,AL,Alagoas
+,AM,Amazonas
+,AP,Amapá
+,BA,Bahia
+,CE,Ceará
+,DF,Federal District
+,ES,Espírito Santo
+,GO,Goiás
+,MA,Maranhão
+,MG,Minas Gerais
+,MS,Mato Grosso do Sul
+,MT,Mato Grosso
+,PA,Pará
+,PB,Paraíba
+,PE,Pernambuco
+,PI,Piauí
+,PR,Paraná
+,RJ,Rio de Janeiro
+,RN,Rio Grande do Norte
+,RO,Rondônia
+,RR,Roraima
+,RS,Rio Grande do Sul
+,SC,Santa Catarina
+,SE,Sergipe
+,SP,São Paulo
+,TO,Tocantins
+INStates,Andaman and Nicobar Islands,Andaman and Nicobar Islands
+,Andhra Pradesh,Andhra Pradesh
+,Arunachal Pradesh,Arunachal Pradesh
+,Assam,Assam
+,Bihar,Bihar
+,Chandigarh,Chandigarh
+,Chhattisgarh,Chhattisgarh
+,Dadra and Nagar Haveli and Daman and Diu,Dadra and Nagar Haveli and Daman and Diu
+,Goa,Goa
+,Gujarat,Gujarat
+,Haryana,Haryana
+,Himachal Pradesh,Himachal Pradesh
+,Jammu and Kashmir,Jammu and Kashmir
+,Jharkhand,Jharkhand
+,Karnataka,Karnataka
+,Kerala,Kerala
+,Ladakh,Ladakh
+,Lakshadweep,Lakshadweep
+,Madhya Pradesh,Madhya Pradesh
+,Maharashtra,Maharashtra
+,Manipur,Manipur
+,Meghalaya,Meghalaya
+,Mizoram,Mizoram
+,Nagaland,Nagaland
+,National Capital Territory of Delhi,National Capital Territory of Delhi
+,Orissa,Odisha
+,Puducherry,Puducherry
+,Punjab,Punjab
+,Rajasthan,Rajasthan
+,Sikkim,Sikkim
+,Tamil Nadu,Tamil Nadu
+,Telangana,Telangana
+,Tripura,Tripura
+,Uttar Pradesh,Uttar Pradesh
+,Uttarakhand,Uttarakhand
+,West Bengal,West Bengal
+ITStates,Agrigento,Agrigento
+,Alessandria,Alessandria
+,Ancona,Ancona
+,Aosta,Aosta
+,Arezzo,Arezzo
+,Ascoli Piceno,Ascoli Piceno
+,Asti,Asti
+,Avellino,Avellino
+,Bari,Bari
+,Barletta-Andria-Trani,Barletta-Andria-Trani
+,Belluno,Belluno
+,Benevento,Benevento
+,Bergamo,Bergamo
+,Biella,Biella
+,Bologna,Bologna
+,Bolzano,Bolzano
+,Brescia,Brescia
+,Brindisi,Brindisi
+,Cagliari,Cagliari
+,Caltanissetta,Caltanissetta
+,Campobasso,Campobasso
+,Carbona-Iglesias,Carbona-Iglesias
+,Caserta,Caserta
+,Catania,Catania
+,Catanzaro,Catanzaro
+,Chieti,Chieti
+,Como,Como
+,Cosenza,Cosenza
+,Cremona,Cremona
+,Crotone,Crotone
+,Cuneo,Cuneo
+,Enna,Enna
+,Fermo,Fermo
+,Ferrara,Ferrara
+,Firenze,Florence
+,Foggia,Foggia
+,Forlì-Cesena,Forli-Cesena
+,Frosinone,Frosinone
+,Genova,Genoa
+,Gorizia,Gorizia
+,Grosseto,Grosseto
+,Imperia,Imperia
+,Isernia,Isernia
+,La Spezia,La Spezia
+,L'Aquila,L'Aquila
+,Latina,Latina
+,Lecce,Lecce
+,Lecco,Lecco
+,Livorno,Livorno
+,Lodi,Lodi
+,Lucca,Lucca
+,Macerata,Macerata
+,Mantova,Mantua
+,Massa Carrara,Massa and Carrara
+,Matera,Matera
+,Medio Campidano,Medio Campidano
+,Messina,Messina
+,Milano,Milan
+,Modena,Modena
+,Monza e Brianza,Monza and Brianza
+,Napoli,Naples
+,Novara,Novara
+,Nuoro,Nuoro
+,Ogliastra,Ogliastra
+,Olbia-Tempio,Olbia-Tempio
+,Oristano,Oristano
+,Padova,Padua
+,Palermo,Palermo
+,Parma,Parma
+,Pavia,Pavia
+,Perugia,Perugia
+,Pesaro e Urbino,Pesaro and Urbino
+,Pescara,Pescara
+,Prato,Prato
+,Piacenza,Piacenza
+,Pisa,Pisa
+,Pistoia,Pistoia
+,Pordenone,Pordenone
+,Potenza,Potenza
+,Ragusa,Ragusa
+,Ravenna,Ravenna
+,Reggio Calabria,Reggio Calabria
+,Reggio Emilia,Reggio Emilia
+,Rieti,Rieti
+,Rimini,Rimini
+,Roma,Rome
+,Rovigo,Rovigo
+,Salerno,Salerno
+,Sassari,Sassari
+,Savona,Savona
+,Siena,Siena
+,Sondrio,Sondrio
+,Siracusa,Syracuse
+,Taranto,Taranto
+,Teramo,Teramo
+,Terni,Terni
+,Trapani,Trapani
+,Trento,Trento
+,Treviso,Treviso
+,Trieste,Trieste
+,Torino,Turin
+,Udine,Udine
+,Varese,Varese
+,Venezia,Venice
+,Verbano-Cusio-Ossola,Verbano-Cusio-Ossola
+,Vercelli,Vercelli
+,Verona,Verona
+,Vibo Valentia,Vibo Valentia
+,Vicenza,Vicenza
+,Viterbo,Viterbo
+JPStates,Hokkaido,Hokkaido
+,Aomoriken,Aomori-ken
+,Iwateken,Iwate-ken
+,Miyagiken,Miyagi-ken
+,Akitaken,Akita-ken
+,Yamagataken,Yamagata-ken
+,Fukushimaken,Fukushima-ken
+,Ibarakiken,Ibaraki-ken
+,Tochigiken,Tochigi-ken
+,Gunmaken,Gunma-ken
+,Saitamaken,Saitama-ken
+,Chibaken,Chiba-ken
+,Tokyoto,Tokyo-to
+,Kanagawaken,Kanagawa-ken
+,Niigataken,Niigata-ken
+,Toyamaken,Toyama-ken
+,Ishikawaken,Ishikawa-ken
+,Fukuiken,Fukui-ken
+,Yamanashiken,Yamanashi-ken
+,Naganoken,Nagano-ken
+,Gifuken,Gifu-ken
+,Shizuokaken,Shizuoka-ken
+,Aichiken,Aichi-ken
+,Mieken,Mie-ken
+,Shigaken,Shiga-ken
+,Kyotofu,Kyoto-fu
+,Osakafu,Osaka-fu
+,Hyogoken,Hyogo-ken
+,Naraken,Nara-ken
+,Wakayamaken,Wakayama-ken
+,Tottoriken,Tottori-ken
+,Shimaneken,Shimane-ken
+,Okayamaken,Okayama-ken
+,Hiroshimaken,Hiroshima-ken
+,Yamaguchiken,Yamaguchi-ken
+,Tokushimaken,Tokushima-ken
+,Kagawaken,Kagawa-ken
+,Ehimeken,Ehime-ken
+,Kochiken,Kochi-ken
+,Fukuokaken,Fukuoka-ken
+,Sagaken,Saga-ken
+,Nagasakiken,Nagasaki-ken
+,Kumamotoken,Kumamoto-ken
+,Oitaken,Oita-ken
+,Miyazakiken,Miyazaki-ken
+,Kagoshimaken,Kagoshima-ken
+,Okinawaken,Okinawa-ken
+MXStates,AG,Aguascalientes
+,BC,Baja California
+,BS,Baja California Sur
+,CM,Campeche
+,CS,Chiapas
+,CH,Chihuahua
+,CO,Coahuila
+,CL,Colima
+,DF,Distrito Federal
+,DG,Durango
+,GT,Guanajuato
+,GR,Guerrero
+,HG,Hidalgo
+,JA,Jalisco
+,MX,Mexico
+,MI,Michoacan
+,MO,Morelos
+,NA,Nayarit
+,NL,Nuevo Leon
+,OA,Oaxaca
+,PU,Puebla
+,QT,Queretaro
+,QR,Quintana Roo
+,SL,San Luis Potosí
+,SI,Sinaloa
+,SO,Sonora
+,TB,Tabasco
+,TM,Tamaulipas
+,TL,Tlaxcala
+,VE,Veracruz
+,YU,Yucatan
+,ZA,Zacatecas
+MYStates,MY-01,Johor
+,MY-02,Kedah
+,MY-03,Kelantan
+,MY-04,Malacca
+,MY-05,Negeri Sembilan
+,MY-06,Pahang
+,MY-07,Penang
+,MY-08,Perak
+,MY-09,Perlis
+,MY-10,Selangor
+,MY-11,Terengganu
+,MY-12,Sabah
+,MY-13,Sarawak
+,MY-14,Federal Territory of Kuala Lumpur
+,MY-15,Federal Territory of Labuan
+,MY-16,Federal Territory of Putrajaya
+NLStates,NL-DR,Drenthe
+,NL-FL,Flevoland
+,NL-GE,Gelderland
+,NL-UT,Utrecht
+,NL-ZE,Zeeland
+,NL-ZH,Zuid-Holland
+,NL-LI,Limburg
+,NL-NB,Noord-Brabant
+,NL-NH,Noord-Holland
+,NL-OV,Overijssel
+,NL-FR,Friesland
+,NL-GR,Groningen
+UAEStates,AZ,Abu Dhabi
+,AJ,Ajman
+,FU,Fujairah
+,SH,Sharjah
+,DU,Dubai
+,RK,Ras al-Khaimah
+,UQ,Umm al-Quwain
+Languages,af,Afrikaans
+,am,አማርኛ
+,ar,العربية
+,as,অসমীয়া
+,az-cyrl,Azərbaycan (Cyrillic)
+,az-latn,Azərbaycan (Latin)
+,az,Azərbaycan
+,be,Беларуская
+,bg,български
+,bn,বাংলা (বাংলাদেশ)
+,bs-cyrl,босански (Ћирилица)
+,bs-latn,bosanski (Latinica)
+,ca-es-valencia,valencià
+,ca,Català
+,chr,ᏣᎳᎩ
+,CS,čeština
+,cy,Cymraeg
+,DA,dansk
+,DE,Deutsch
+,EL,ελληνικά
+,EN,English
+,EN-GB,English (United Kingdom)
+,ES,Español
+,et,eesti
+,eu,euskara
+,fa,فارسی
+,FI,suomi
+,fil,Filipino
+,FR,français
+,ga,Gaeilge
+,gd,Gàidhlig
+,gl,galego
+,gu,ગુજરાતી
+,ha-latn,Hausa
+,HE,עברית
+,hi,हिंदी
+,hr,hrvatski
+,hu,magyar
+,hy,Հայերեն
+,id,Bahasa Indonesia
+,ig,Ndi Igbo
+,is,íslenska
+,IT,italiano
+,iu-latn,Inuktitut
+,ja-ploc,日本語
+,JA,日本語 (にほんご)
+,ka,ქართული
+,kk,Қазақ
+,km,ខ្មែរ
+,kn,ಕನ್ನಡ
+,KO,한국어
+,kok,कोंकणी
+,ku-arab,کوردیی ناوەڕاست
+,ky,Кыргыз
+,lb,Lëtzebuergesch
+,lo,ລາວ
+,lt,lietuvių
+,lv,latviešu
+,mi,Te Reo Māori
+,mk,македонски
+,ml,മലയാളം
+,mn-cyrl,Монгол хэл
+,mn,ᠮᠤᠨᠭᠭᠤᠯ ᠬᠡᠯᠡ (ᠮᠤᠨᠭᠭᠤᠯ ᠬᠡᠯᠡ)
+,mr,मराठी
+,ms,Bahasa Melayu
+,mt,Malti
+,NB,"norsk, bokmål"
+,ne,नेपाली
+,NL,Nederlands
+,nn,norsk (nynorsk)
+,nso,Sesotho sa Leboa
+,or,ଓଡିଆ
+,pa-arab,پنجابی
+,pa,ਪੰਜਾਬੀ
+,PL,polski
+,prs,دری
+,PT-BR,Português
+,PT,português
+,qut,K'iche'
+,quz,runasimi
+,ro,română
+,RU,русский
+,rw,Kinyarwanda
+,sd-arab-pk,سنڌي
+,si,සිංහල
+,sk,slovenčina
+,sl,slovenski
+,sq,shqip
+,sr-cyrl,српски
+,sr-latn,srpski
+,SV,svenska
+,sw,Kiswahili
+,ta,தமிழ்
+,te,తెలుగు
+,tg,Тоҷикӣ
+,TH,ไทย
+,ti,ትግርኛ
+,tk,türkmençe
+,tn,Setswana
+,TR,Türkçe
+,tt,Татар
+,ug,ئۇيغۇرچە
+,uk,українська
+,ur,اردو
+,uz-cyrl,O'zbekcha (Cyrillic)
+,uz-latn,O'zbekcha
+,vi,Tiếng Việt
+,wo,Wolof
+,xh,isiXhosa
+,yo,ede Yorùbá
+,ZH-CHS,中文 (Simplified)
+,ZH-CHT,中文 (Traditional)
+,zu,isiZulu
+DigitizationChallenges,text,SMS XXX-XXX-4312
+,email,Email abby.salXXXXXXXX.com
+PaymentMethodContexts,purchase,purchase
+,manage,manage
+AlipayAccountTypes,email,Email
+,mobile,Mobile Number
+TaxIdTypes,consumer_tax_id,consumer_tax_id
+,commercial_tax_id,commercial_tax_id
+iDEALIssuers,0031,ABN Amro
+,0761,ASN Bank
+,0802,bunq
+,0721,ING
+,0801,Knab
+,0807,N26
+,0021,Rabobank
+,0771,RegioBank
+,0805,Revolut
+,0751,SNS Bank
+,0511,Triodos Bank
+,0161,Van Lanschot Bankiers
+,0806,Yoursafe
+ChallengeActivationMethods,textactivationcode,Text {0}
+,emailactivationcode,Email {0}
+,callcustomerservice,Call my card issuer
+BankAccountType,checking,Checking
+,savings,Savings
+Empty,tempkey,values will be replaced in the code
+CommercialProfileLegalTextMarkets,at,Austria
+,be,Belgium
+,bg,Bulgaria
+,hr,Croatia
+,cy,Cyprus
+,cz,Czechia
+,dk,Denmark
+,ee,Estonia
+,fi,Finland
+,fr,France
+,de,Germany
+,gr,Greece
+,hu,Hungary
+,it,Italy
+,lv,Latvia
+,lt,Lithuania
+,lu,Luxembourg
+,mt,Malta
+,nl,Netherlands
+,pl,Poland
+,pt,Portugal
+,ro,Romania
+,sk,Slovakia
+,si,Slovenia
+,es,Spain
+,se,Sweden
+,gb,United Kingdom
+,im,Isle of Man
+,mc,Monaco
+KlarnaGender,Male,Male
+,Female,Female
+KlarnaCountriesWithCheckboxAndGender,at,Austria
+,de,Germany
+KlarnaA2,de,Germany
+,nl,Netherlands
+CommercialTaxIdRequireCheckboxWithNO,tr,Turkey
+,am,Armenia
+,by,Belarus
+,no,Norway
+,bd,Bangladesh
+,cl,Chile
+,id,Indonesia
+,mx,Mexico
+,my,Malaysia
+,th,Thailand
+,bh,Bahrain
+,cm,Cameroon
+,ge,Georgia
+,gh,Ghana
+,is,Iceland
+,ke,Kenya
+,md,Moldova
+,ng,Nigeria
+,om,Oman
+,tj,Tajikistan
+,ua,Ukraine
+,uz,Uzbekistan
+,zw,Zimbabwe
+,fj,Fiji
+,gt,Guatemala
+,kh,Cambodia
+,ph,Philippines
+,vn,Vietnam
+,ae,United Arab Emirates
+,bs,Bahamas
+,co,Colombia
+,sa,Saudi Arabia
+,bb,Barbados
+,il,Israel
+,kz,Kazakhstan
+,la,Laos
+,sn,Senegal
+,zm,Zambia
+,ci,Côte d’Ivoire
+,np,Nepal
+,sg,Singapore
+,ug,Uganda
+CommercialTaxIdRequireCheckbox,tr,Turkey
+,am,Armenia
+,by,Belarus
+,bd,Bangladesh
+,cl,Chile
+,id,Indonesia
+,mx,Mexico
+,my,Malaysia
+,th,Thailand
+,bh,Bahrain
+,cm,Cameroon
+,ge,Georgia
+,gh,Ghana
+,is,Iceland
+,ke,Kenya
+,md,Moldova
+,ng,Nigeria
+,om,Oman
+,tj,Tajikistan
+,ua,Ukraine
+,uz,Uzbekistan
+,zw,Zimbabwe
+,fj,Fiji
+,gt,Guatemala
+,kh,Cambodia
+,ph,Philippines
+,vn,Vietnam
+,ae,United Arab Emirates
+,bs,Bahamas
+,co,Colombia
+,sa,Saudi Arabia
+,bb,Barbados
+,il,Israel
+,kz,Kazakhstan
+,la,Laos
+,sn,Senegal
+,zm,Zambia
+,ci,Côte d’Ivoire
+,np,Nepal
+,sg,Singapore
+,ug,Uganda
+ModerAccountV20190531AddressTypes,organization,Organization
+,individual,Individual
+HipercardAndEloSupportedMarkets,br,Brazil
+VerveSupportedMarkets,ng,Nigeria
+RupaySupportedMarkets,in,India
+redeemMSRewardsContactMethods,SMS,SMS text message
+,CALL,Phone call

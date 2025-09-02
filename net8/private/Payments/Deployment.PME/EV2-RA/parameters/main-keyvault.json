@@ -1,0 +1,27 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "workloadName": {
+      "value": "__WORKLOAD_NAME__"
+    },
+    "networkWorkloadName": {
+      "value": "__WORKLOAD_NAME_NETWORK__"
+    },
+    "shortLocation": {
+      "value": "__SHORT_LOCATION__"
+    },
+    "stamp": {
+      "value": "__STAMP__"
+    },
+    "deploymentIdentityObjectId": {
+      "value": "__DEPLOYMENT_IDENTITY_OBJECT_ID__"
+    },
+    "ev2IpAddresses": {
+      "value": "__DEPLOYMENT_EV2_IPS__"
+    },
+    "ev2KeyVaultExtensionIpAddresses": {
+      "value": "__DEPLOYMENT_EV2_KEYVAULT_IPS__"
+    }
+  }
+}

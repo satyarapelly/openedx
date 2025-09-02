@@ -1,0 +1,803 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), build.root))\msbuild\Environment.props" />
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|AnyCPU">
+      <Configuration>Debug</Configuration>
+      <Platform>AnyCPU</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|AnyCPU">
+      <Configuration>Release</Configuration>
+      <Platform>AnyCPU</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>228b3580-8665-42a2-9c13-be0e65f7038c</ProjectGuid>
+    <OutDir>$(DropRoot)\Deployment.PME\</OutDir>
+  </PropertyGroup>
+  <Import Condition=" Exists('Deployment.targets') " Project="Deployment.targets" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
+  <!-- vertag<:>start tokens<:>maj.min -->
+  <Import Condition=" Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Deployment\1.1\DeploymentProject.targets') " Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Deployment\1.1\DeploymentProject.targets" />
+  <!-- vertag<:>end -->
+  <ItemGroup>
+    <Content Include="AIRCAPI\Parameters\ManagedIdentity.Parameters.AIRCAPI.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="AIRCAPI\Parameters\PXService.AppSetting.Staging.Parameters.AIRCAPI.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="AIRCAPI\Parameters\PXService.ServerFarm.Parameters.AIRCAPI.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="AIRCAPI\Parameters\PXService.SiteSlot.Parameters.AIRCAPI.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="AIRCAPI\Parameters\PXService.Staging.Parameters.AIRCAPI.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="AIRCAPI\Parameters\PXService.Swap.Parameters.AIRCAPI.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="AIRCAPI\ScopeBindings.AIRCAPI.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="AIRCAPI\ServiceModel.AIRCAPI.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="AIRCAPI\Setup.RolloutSpec.AIRCAPI.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="AIRCAPI\RolloutSpec.AIRCAPI.Deployment.WestUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="AIRCAPI\Scripts\Add-RoleAssignmentForAppRegistration.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="AIRCAPI\Parameters\TrafficManager.Parameters.AIRCAPI.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="AIRCAPI\RolloutSpec.AIRCAPI.ServerFarm.WestUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="Deployment.PME.targets">
+      <Visible>False</Visible>
+    </None>
+    <Content Include="AIRCAPI\Parameters\KeyVault.Parameters.AIRCAPI.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\AppSettingRollouts\RolloutSpec.INT.AppSetting.Staging.WestUS2.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\AppSettingRollouts\RolloutSpec.INT.AppSetting.Staging.WestUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\Parameters\ApplicationInsights.Parameters.INT.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\Parameters\PXDependencyEmulators.Parameters.INT.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\Parameters\KeyVault.Parameters.INT.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\Parameters\ManagedIdentity.Parameters.INT.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\Parameters\PXService.Deployment.Parameters.INT.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\Parameters\PXService.SiteSlot.Parameters.INT.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\Parameters\PXService.ServerFarm.Parameters.INT.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\Parameters\TestKeyVault.Parameters.INT.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\RolloutSpec.INT.Staging.WestUS2.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\RolloutSpec.INT.Swap.WestUS2.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\RolloutSpec.INT.WestUS2.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\RolloutSpec.INT.WestUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\ServiceModel.INT.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\Setup.RolloutSpec.INT.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\AppSettingRollouts\RolloutSpec.PPE.AppSetting.Staging.WestUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\AppSettingRollouts\RolloutSpec.PPE.AppSetting.Staging.EastUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\AppSettingRollouts\RolloutSpec.PPE.AppSetting.WestCentralUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\Parameters\PXDependencyEmulators.Parameters.PPE.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\Parameters\PXService.Staging.Parameters.PPE.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\Parameters\PXService.Swap.Parameters.PPE.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\Parameters\PXService.Deployment.Parameters.PPE.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\Parameters\PXService.ServerFarm.Parameters.PPE.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\Parameters\PXService.SiteSlot.Parameters.PPE.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\RolloutSpec.PPE.Staging.NorthCentralUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\RolloutSpec.PPE.Swap.NorthCentralUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\RolloutSpec.PPE.Swap.WestCentralUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\RolloutSpec.PPE.Staging.WestCentralUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\RolloutSpec.PPE.Swap.EastUS2.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\RolloutSpec.PPE.Staging.EastUS2.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\RolloutSpec.PPE.Staging.EastUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\RolloutSpec.PPE.Swap.EastUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\RolloutSpec.PPE.Swap.WestUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\RolloutSpec.PPE.Staging.WestUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\RolloutSpec.PPE.EastUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\RolloutSpec.PPE.WestUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\ScopeBindings.PPE.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\ServiceModel.PPE.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\AppSettingRollouts\RolloutSpec.PROD.AppSetting.Staging.CentralUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\AppSettingRollouts\RolloutSpec.PROD.AppSetting.Staging.EastUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\AppSettingRollouts\RolloutSpec.PROD.AppSetting.Staging.EastUS2.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\AppSettingRollouts\RolloutSpec.PROD.AppSetting.Staging.NorthCentralUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\AppSettingRollouts\RolloutSpec.PROD.AppSetting.Staging.SouthCentralUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\AppSettingRollouts\RolloutSpec.PROD.AppSetting.Staging.WestCentralUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\AppSettingRollouts\RolloutSpec.PROD.AppSetting.Staging.WestUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\AppSettingRollouts\RolloutSpec.PROD.AppSetting.Staging.WestUS2.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\Parameters\PXDependencyEmulators.Parameters.PROD.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\Parameters\ApplicationInsights.Parameters.PROD.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\Parameters\PXService.ServerFarm.Parameters.PROD.EastUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\Parameters\PXService.ServerFarm.Parameters.PROD.EastUS2.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\Parameters\PXService.ServerFarm.Parameters.PROD.WestCentralUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\Parameters\PXService.ServerFarm.Parameters.PROD.NorthCentralUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\Parameters\PXService.ServerFarm.Parameters.PROD.CentralUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\Parameters\PXService.ServerFarm.Parameters.PROD.WestUS2.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\Parameters\PXService.Staging.Parameters.PROD.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\Parameters\PXService.Swap.Parameters.PROD.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\Parameters\KeyVault.Parameters.PROD.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\Parameters\ManagedIdentity.Parameters.PROD.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\Parameters\PXService.Deployment.Parameters.PROD.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\Parameters\PXService.ServerFarm.Parameters.PROD.WestUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\Parameters\PXService.SiteSlot.Parameters.PROD.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\Parameters\TestKeyVault.Parameters.PROD.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\RolloutSpec.PROD.Swap.WestCentralUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\RolloutSpec.PROD.Staging.WestCentralUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\RolloutSpec.PROD.Staging.WestUS2.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\RolloutSpec.PROD.Swap.EastUS2.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\RolloutSpec.PROD.Staging.EastUS2.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\RolloutSpec.PROD.Swap.WestUS2.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\RolloutSpec.PROD.Staging.EastUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\RolloutSpec.PROD.Swap.EastUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\RolloutSpec.PROD.Staging.WestUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\RolloutSpec.PROD.Swap.WestUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\RolloutSpec.PROD.Staging.SouthCentralUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\RolloutSpec.PROD.Swap.SouthCentralUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\RolloutSpec.PROD.Staging.CentralUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\RolloutSpec.PROD.Swap.CentralUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\RolloutSpec.PROD.Swap.NorthCentralUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\RolloutSpec.PROD.Staging.NorthCentralUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\RolloutSpec.PROD.SouthCentralUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\RolloutSpec.PROD.WestUS2.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\RolloutSpec.PROD.CentralUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\RolloutSpec.PROD.EastUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\RolloutSpec.PROD.WestUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\ScopeBindings.PROD.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\ServiceModel.PROD.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\Setup.RolloutSpec.PROD.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\ApplicationInsights.Template.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\PXService.Int.AppSetting.Staging.Template.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\PXService.ServerFarm.Template.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\PXService.Deployment.Template.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\PXService.SiteSlot.Template.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Emulator.Template.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\KeyVault.Template.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\ManagedIdentity.Template.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\TrafficManager.Template.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\Parameters\UpdateConfig.Parameters.INT.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\RolloutParameters\Geneva.Extenstion.RolloutParameters.UpdateExistingAccount.INT.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\GenevaLogConfig\imports\AgentStandardEvents.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\GenevaLogConfig\imports\AsmCounters.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\GenevaLogConfig\imports\AzSecMdsAntimalware.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\GenevaLogConfig\imports\AzSecMdsAppLocker.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\GenevaLogConfig\imports\AzSecMdsAsmScan.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\GenevaLogConfig\imports\AzSecMdsCodeIntegrity.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\GenevaLogConfig\imports\AzSecMdsNetIsoScan.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\GenevaLogConfig\imports\AzSecMdsSystemEvents.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\GenevaLogConfig\imports\AzSecMdsVulnScan.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\GenevaLogConfig\imports\AzSecMdsWDATP.XML">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\GenevaLogConfig\imports\AzureSecurityPackMds.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\GenevaLogConfig\imports\IFxAuditMdsEvents.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\GenevaLogConfig\imports\ProcessInvestigatorEvents.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\GenevaLogConfig\imports\ReservedEventsTeam1.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\GenevaLogConfig\imports\ReservedEventsTeam10.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\GenevaLogConfig\imports\ReservedEventsTeam2.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\GenevaLogConfig\imports\ReservedEventsTeam3.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\GenevaLogConfig\imports\ReservedEventsTeam4.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\GenevaLogConfig\imports\ReservedEventsTeam5.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\GenevaLogConfig\imports\ReservedEventsTeam6.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\GenevaLogConfig\imports\ReservedEventsTeam7.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\GenevaLogConfig\imports\ReservedEventsTeam8.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\GenevaLogConfig\imports\ReservedEventsTeam9.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\GenevaLogConfig\main.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\GenevaLogConfig\imports\AgentStandardEvents.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\GenevaLogConfig\imports\AsmCounters.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\GenevaLogConfig\imports\AzSecMdsAntimalware.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\GenevaLogConfig\imports\AzSecMdsAppLocker.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\GenevaLogConfig\imports\AzSecMdsAsmScan.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\GenevaLogConfig\imports\AzSecMdsCodeIntegrity.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\GenevaLogConfig\imports\AzSecMdsNetIsoScan.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\GenevaLogConfig\imports\AzSecMdsSystemEvents.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\GenevaLogConfig\imports\AzSecMdsVulnScan.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\GenevaLogConfig\imports\AzSecMdsWDATP.XML">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\GenevaLogConfig\imports\AzureSecurityPackMds.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\GenevaLogConfig\imports\IFxAuditMdsEvents.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\GenevaLogConfig\imports\ProcessInvestigatorEvents.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\GenevaLogConfig\imports\ReservedEventsTeam1.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\GenevaLogConfig\imports\ReservedEventsTeam10.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\GenevaLogConfig\imports\ReservedEventsTeam2.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\GenevaLogConfig\imports\ReservedEventsTeam3.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\GenevaLogConfig\imports\ReservedEventsTeam4.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\GenevaLogConfig\imports\ReservedEventsTeam5.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\GenevaLogConfig\imports\ReservedEventsTeam6.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\GenevaLogConfig\imports\ReservedEventsTeam7.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\GenevaLogConfig\imports\ReservedEventsTeam8.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\GenevaLogConfig\imports\ReservedEventsTeam9.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\GenevaLogConfig\main.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\Parameters\UpdateConfig.Parameters.PPE.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\RolloutParameters\Geneva.Extenstion.RolloutParameters.UpdateExistingAccount.PPE.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\GenevaLogConfig\imports\AgentStandardEvents.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\GenevaLogConfig\imports\AsmCounters.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\GenevaLogConfig\imports\AzSecMdsAntimalware.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\GenevaLogConfig\imports\AzSecMdsAppLocker.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\GenevaLogConfig\imports\AzSecMdsAsmScan.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\GenevaLogConfig\imports\AzSecMdsCodeIntegrity.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\GenevaLogConfig\imports\AzSecMdsNetIsoScan.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\GenevaLogConfig\imports\AzSecMdsSystemEvents.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\GenevaLogConfig\imports\AzSecMdsVulnScan.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\GenevaLogConfig\imports\AzSecMdsWDATP.XML">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\GenevaLogConfig\imports\AzureSecurityPackMds.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\GenevaLogConfig\imports\IFxAuditMdsEvents.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\GenevaLogConfig\imports\ProcessInvestigatorEvents.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\GenevaLogConfig\imports\ReservedEventsTeam1.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\GenevaLogConfig\imports\ReservedEventsTeam10.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\GenevaLogConfig\imports\ReservedEventsTeam2.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\GenevaLogConfig\imports\ReservedEventsTeam3.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\GenevaLogConfig\imports\ReservedEventsTeam4.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\GenevaLogConfig\imports\ReservedEventsTeam5.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\GenevaLogConfig\imports\ReservedEventsTeam6.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\GenevaLogConfig\imports\ReservedEventsTeam7.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\GenevaLogConfig\imports\ReservedEventsTeam8.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\GenevaLogConfig\imports\ReservedEventsTeam9.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\GenevaLogConfig\main.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\Parameters\UpdateConfig.Parameters.PROD.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\RolloutParameters\Geneva.Extenstion.RolloutParameters.UpdateExistingAccount.PROD.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="ev2-ra\app-deploy.bicep" />
+    <None Include="ev2-ra\app-rbac.bicep" />
+    <None Include="ev2-ra\app-swap.bicep" />
+    <None Include="ev2-ra\app.bicep" />
+    <None Include="EV2-RA\config\Config.Microsoft.CFS.PC.PX.Prod.json" />
+    <None Include="ev2-ra\config\Config.Microsoft.CFS.PC.PX.INT.json" />
+    <None Include="ev2-ra\config\Config.Microsoft.CFS.PC.PX.PPE.json" />
+    <None Include="ev2-ra\global.bicep" />
+    <None Include="ev2-ra\main-keyvault.bicep" />
+    <None Include="ev2-ra\main.bicep" />
+    <None Include="ev2-ra\network.bicep" />
+    <None Include="ev2-ra\parameters\app-deploy.json" />
+    <None Include="ev2-ra\parameters\app-rbac.json" />
+    <None Include="ev2-ra\parameters\app-swap.json" />
+    <None Include="ev2-ra\parameters\app.json" />
+    <None Include="ev2-ra\parameters\global.json" />
+    <None Include="ev2-ra\parameters\main-keyvault.json" />
+    <None Include="ev2-ra\parameters\main.json" />
+    <None Include="ev2-ra\parameters\network.json" />
+    <None Include="ev2-ra\RestartPolicy.json" />
+    <None Include="ev2-ra\rolloutparameters\app.swap.rolloutparameters.json" />
+    <None Include="ev2-ra\rolloutparameters\assistedidentities.rolloutparameters.json" />
+    <None Include="ev2-ra\rolloutparameters\keyvault.rolloutparameters.json" />
+    <None Include="ev2-ra\rolloutparameters\registerextension.rolloutparameters.json" />
+    <None Include="ev2-ra\RolloutSpec.RegionAgnostic.json" />
+    <None Include="ev2-ra\ScopeBindings.RegionAgnostic.json" />
+    <None Include="ev2-ra\ServiceGroupSpecINT.json" />
+    <None Include="ev2-ra\ServiceModel.RegionAgnostic.json" />
+    <None Include="ev2-ra\ServiceSpec.json" />
+    <None Include="ev2-ra\setup\setup.ev2resistrations.int.ps1" />
+    <None Include="ev2-ra\SiteMap.json" />
+    <None Include="INT\GenevaLogConfig\imports\IncomingApisStandingQuery.xml" />
+    <None Include="INT\GenevaLogConfig\imports\OutgoingApisStandingQuery.xml" />
+    <None Include="INT\Monitor.RolloutSpec.INT.json" />
+    <Content Include="INT\Parameters\PXService.AppSetting.Parameters.INT.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\AppSettingRollouts\RolloutSpec.INT.AppSetting.WestUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\AppSettingRollouts\RolloutSpec.INT.AppSetting.WestUS2.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\RolloutSpec.INT.Staging.WestUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\RolloutSpec.INT.Swap.WestUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\ScopeBindings.INT.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\Parameters\PXService.Staging.Parameters.INT.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\Parameters\PXService.Swap.Parameters.INT.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\RolloutSpec.INT.ServerFarm.WestUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\RolloutSpec.INT.ServerFarm.WestUS2.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="INT\RolloutSpec.INT.KeyVault.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="PPE\GenevaLogConfig\imports\IncomingApisStandingQuery.xml" />
+    <None Include="PPE\GenevaLogConfig\imports\OutgoingApisStandingQuery.xml" />
+    <None Include="PPE\Monitor.RolloutSpec.PPE.json" />
+    <Content Include="PPE\Parameters\PXService.AppSetting.Parameters.PPE.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\AppSettingRollouts\RolloutSpec.PPE.AppSetting.EastUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\AppSettingRollouts\RolloutSpec.PPE.AppSetting.WestUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\RolloutSpec.PPE.EastUS2.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\RolloutSpec.PPE.NorthCentralUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\RolloutSpec.PPE.WestCentralUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\AppSettingRollouts\RolloutSpec.PPE.AppSetting.EastUS2.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\AppSettingRollouts\RolloutSpec.PPE.AppSetting.NorthCentralUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\RolloutSpec.PPE.ServerFarm.EastUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\RolloutSpec.PPE.ServerFarm.EastUS2.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\RolloutSpec.PPE.ServerFarm.NorthCentralUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\RolloutSpec.PPE.ServerFarm.WestCentralUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PPE\RolloutSpec.PPE.ServerFarm.WestUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="PROD\GenevaLogConfig\imports\IncomingApisStandingQuery.xml" />
+    <None Include="PROD\GenevaLogConfig\imports\OutgoingApisStandingQuery.xml" />
+    <None Include="PROD\Monitor.RolloutSpec.PROD.json" />
+    <Content Include="Templates\PXService.Int.AppSetting.Template.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\PXService.AppSetting.Template.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\Parameters\PXService.AppSetting.Parameters.PROD.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\AppSettingRollouts\RolloutSpec.PROD.AppSetting.CentralUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\AppSettingRollouts\RolloutSpec.PROD.AppSetting.EastUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\AppSettingRollouts\RolloutSpec.PROD.AppSetting.SouthCentralUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\AppSettingRollouts\RolloutSpec.PROD.AppSetting.WestUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\AppSettingRollouts\RolloutSpec.PROD.AppSetting.WestUS2.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\Parameters\PXService.ServerFarm.Parameters.PROD.SouthCentralUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\RolloutSpec.PROD.EastUS2.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\RolloutSpec.PROD.NorthCentralUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\RolloutSpec.PROD.WestCentralUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\AppSettingRollouts\RolloutSpec.PROD.AppSetting.EastUS2.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\AppSettingRollouts\RolloutSpec.PROD.AppSetting.NorthCentralUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\AppSettingRollouts\RolloutSpec.PROD.AppSetting.WestCentralUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\PXService.Int.SiteSlot.Template.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\PXService.Staging.Template.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\PXService.Swap.Template.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\PXService.AIRCAPI.ServerFarm.Template.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\PXService.AIRCAPI.SiteSlot.Template.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\PXService.AppSetting.Staging.Template.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\RolloutSpec.PROD.ServerFarm.CentralUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\RolloutSpec.PROD.ServerFarm.EastUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\RolloutSpec.PROD.ServerFarm.EastUS2.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\RolloutSpec.PROD.ServerFarm.NorthCentralUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\RolloutSpec.PROD.ServerFarm.WestCentralUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\RolloutSpec.PROD.ServerFarm.WestUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\RolloutSpec.PROD.ServerFarm.WestUS2.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\RolloutSpec.PROD.ServerFarm.SouthCentralUS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PROD\RolloutSpec.PROD.KeyVault.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="Templates\TestRunner.Templete.json" />
+    <Content Include="Templates\UpdateConfig.Template.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="EV2-RA\rolloutparameters\" />
+    <Folder Include="EV2-RA\setup\" />
+  </ItemGroup>
+  <Target Name="GetReferenceAssemblyPaths" />
+</Project>

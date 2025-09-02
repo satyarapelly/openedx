@@ -1,0 +1,38 @@
+pay.microsoft.com Deployment Process
+Target audience
+PX Engineering team
+
+Overview
+This document describes the steps necesssary for deploying to all main regions.
+
+Follow PX deployment cadence for pay.microsoft.com deployment. 
+Deploy all changes until cut to PROD. 
+
+UI Automation:
+Automated tests (playwright) are part of the pipeline. 
+
+SOX Approvals 
+
+**Preparing SOX Approval**
+Deploy and approve the SOX prepare stage, once it has been completed, it create a service change work item. 
+- **SOX Prepare**
+![](../images/SOXPrepare.png)
+
+- **SOX Service Change Link**
+![](../images/SOXServiceChange.PNG)
+
+**Getting SOX Approvals**
+SOX approval requires a technical approval and a release approval. Usually any PX team member can do it. Kowshik or Suneetha must do the release approval.
+
+- **SOX Approvals**
+![](../images/SOXApproval.PNG)
+
+- **SOX Flow**
+![](../images/SOXFlow-ClientSide.PNG)
+
+
+Once all the approvals are done go ahead with deployment
+
+Tag Release
+After the deployment is release to the first region, tag the commit where the release was cut with the following format "release-yyyy.mm.dd"
+

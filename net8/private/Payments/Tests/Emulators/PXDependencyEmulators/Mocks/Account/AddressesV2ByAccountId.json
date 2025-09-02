@@ -1,0 +1,45 @@
+﻿{
+  "Account001": [
+    {
+      "id": "Address001001",
+      "country": "US",
+      "region": "WA",
+      "city": "Redmond",
+      "address_line1": "1 Microsoft Way",
+      "address_line2": "",
+      "address_line3": "",
+      "postal_code": "98052",
+      "links": {
+        "self": {
+          "href": "Account001/addresses/Address001001",
+          "method": "GET"
+        }
+      },
+      "object_type": "Address",
+      "contract_version": "2014-09-01",
+      "resource_status": "Active"
+    }
+  ],
+  "DiffTestUser": [
+    {
+      "id": "Address001001",
+      "country": "US",
+      "region": "WA",
+      "city": "Redmond",
+      "address_line1": "1 Microsoft Way",
+      "address_line2": "",
+      "address_line3": "",
+      "postal_code": "98052",
+      "links": {
+        "self": {
+          "href": "DiffTestUser/addresses/Address001001",
+          "method": "GET"
+        }
+      },
+      "object_type": "Address",
+      "contract_version": "2014-09-01",
+      "resource_status": "Active"
+    }
+  ],
+  "AccountNoAddress": []
+}

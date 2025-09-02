@@ -1,0 +1,69 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2019-08-01/deploymentTemplate.json",
+  "contentVersion": "0.0.0.1",
+  "parameters": {
+    "siteName": {
+      "type": "string"
+    },
+    "appInsightsKey": {
+      "type": "string",
+      "defaultValue": ""
+    },
+    "environmentName": {
+      "type": "string"
+    },
+    "resetTimpstamp": {
+      "type": "string",
+      "defaultValue": "[utcNow()]"
+    },
+    "managedIdentityClientId": {
+      "type": "string",
+      "defaultValue": ""
+    },
+    "websiteLocalCachedOption": {
+      "type": "string",
+      "defaultValue": "Never"
+    },
+    "websiteLocalCacheSize": {
+      "type": "string",
+      "defaultValue": ""
+    }
+  },
+  "variables": {
+    "resourceLocation": "[resourcegroup().location]",
+    "websiteApiVersion": "2019-08-01",
+    "resourceLocationEscapeSpace": "[replace(variables('resourceLocation'),' ','')]",
+    "fullSiteName": "[concat(parameters('siteName'), '-', variables('resourceLocationEscapeSpace'))]",
+    "fullEnvironmentName": "[concat(parameters('environmentName'), '-', variables('resourceLocationEscapeSpace'))]"
+  },
+  "resources": [
+    {
+      "apiVersion": "[variables('websiteApiVersion')]",
+      "name": "[concat(variables('fullSiteName'), '/', 'Staging', '/', 'appsettings')]",
+      "type": "Microsoft.Web/sites/slots/config",
+      "dependsOn": [],
+      "tags": {
+        "displayName": "Application Settings"
+      },
+      "properties": {
+        "WEBSITE_RECYCLE_ON_CERT_ROTATION": "1",
+        "WEBSITE_ADD_SITENAME_BINDINGS_IN_APPHOST_CONFIG": "1",
+        "WEBSITE_LOAD_CERTIFICATES": "*",
+        "APPINSIGHTS_INSTRUMENTATIONKEY": "[parameters('appInsightsKey')]",
+        "APPINSIGHTS_PROFILERFEATURE_VERSION": "1.0.0",
+        "APPINSIGHTS_SNAPSHOTFEATURE_VERSION": "1.0.0",
+        "ApplicationInsightsAgent_EXTENSION_VERSION": "~2",
+        "Environment": "[variables('fullEnvironmentName')]",
+        "WEBSITE_FIRST_PARTY_ID": "AntMDS",
+        "WEBSITE_NODE_DEFAULT_VERSION": "6.7.0",
+        "WEBSITE_SWAP_WARMUP_PING_PATH": "/probe",
+        "WEBSITE_SWAP_WARMUP_PING_STATUSES": 200,
+        "AZURE_CLIENT_ID": "[parameters('managedIdentityClientId')]",
+        "RESET_TIMESTAMP": "[parameters('resetTimpstamp')]",
+        "WEBSITE_LOCAL_CACHE_OPTION": "[parameters('websiteLocalCachedOption')]",
+        "WEBSITE_LOCAL_CACHE_SIZEINMB": "[parameters('websiteLocalCacheSize')]",
+        "WEBSITE_ADD_SITENAME_BINDINGS_IN_APPHOST_CONFIG": "1"
+      }
+    }
+  ]
+}

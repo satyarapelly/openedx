@@ -1,0 +1,60 @@
+﻿{
+    "testScenarioName": "px.pims.purchasefd.listtrx.checkpi.success",
+    "responsesPerApiCall": {
+        "listPI": {
+          "statusCode": 200,
+          "content": [
+            {
+              "id": "lchqggAAAAAIAACA",
+              "accountId": "msa:1055518870507325",
+              "paymentMethod": {
+                "paymentMethodType": "visa",
+                "properties": {
+                  "offlineRecurring": true,
+                  "userManaged": true,
+                  "soldToAddressRequired": true,
+                  "splitPaymentSupported": true,
+                  "supportedOperations": [ "authorize", "charge", "refund", "chargeback" ],
+                  "taxable": false,
+                  "providerRemittable": false
+                },
+                "paymentMethodFamily": "credit_card",
+                "display": {
+                  "name": "Visa",
+                  "logo": "https://pmservices.cp.microsoft-int.com/staticresourceservice/images/v3/logo_visa.png",
+                  "logos": [
+                    {
+                      "mimeType": "image/png",
+                      "url": "https://pmservices.cp.microsoft-int.com/staticresourceservice/images/v3/logo_visa.png"
+                    },
+                    {
+                      "mimeType": "image/svg+xml",
+                      "url": "https://pmservices.cp.microsoft-int.com/staticresourceservice/images/v4/logo_visa.svg"
+                    }
+                  ]
+                }
+              },
+              "status": "Active",
+              "creationDateTime": "2017-05-10T20:39:40.257",
+              "lastUpdatedDateTime": "2017-05-10T20:39:40.257",
+              "details": {
+                "exportable": true,
+                "accountHolderName": "John Doe",
+                "address": {
+                  "address_line1": "1 Microsoft Way",
+                  "city": "Redmond",
+                  "region": "wa",
+                  "postal_code": "98052",
+                  "country": "US"
+                },
+                "lastFourDigits": "5678",
+                "expiryYear": "2030",
+                "expiryMonth": "6",
+                "picvRequired": false,
+                "balance": 0
+              }
+            }
+          ]
+        }
+    }
+}

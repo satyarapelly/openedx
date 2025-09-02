@@ -1,0 +1,27 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentParameters.json",
+  "contentVersion": "[BUILD_VERSION]",
+  "parameters": {
+    "name": {
+      "value": "PX-INT-APAzure"
+    },
+    "azureResourceResourceGroup": {
+      "value": "PX-INT-centralus"
+    },
+    "azureResourceType": {
+      "value": "Microsoft.Web/sites"
+    },
+    "azureResourceName": {
+      "value": "PXService-INT-centralus"
+    },
+    "azureEndpoint": {
+      "value": "pxservice-int-centralus.azurewebsites.net"
+    },
+    "azureEndpointLocation": {
+      "value": "Central US"
+    },
+    "apEndpoint": {
+      "value": "px.cppaymentexperienceservice-test-co4.co4.ap.gbl"
+    }
+  }
+}

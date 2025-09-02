@@ -1,0 +1,71 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "paths": [ "sitePackageLink" ],
+  "parameters": {
+    "alwaysOn": {
+      "value": true
+    },
+    "appInsightsKey": {
+      "value": "50bd278c-1827-4339-8ac8-a85a39fe7a35"
+    },
+    "environmentName": {
+      "value": "STORECORE-PST-PX-PPE"
+    },
+    "managedIdentity": {
+      "value": "PaymentExperience-PROD"
+    },
+    "managedIdentityClientId": {
+      "value": "de6f8403-2bc1-4e12-87ce-b0a9b4397ce1"
+    },
+    "managedIdentityResourceGroup": {
+      "value": "PX-Infra-PROD-WestUS"
+    },
+    "mintlsVersion": {
+      "value": "1.2"
+    },
+    "servicePlanName": {
+      "value": "PaymentExperience-PPE"
+    },
+    "siteName": {
+      "value": "PaymentExperience-PPE"
+    },
+    "sitePackageLink": {
+      "value": "bin\\pxservice.zip"
+    },
+    "stageName": {
+      "value": "Staging"
+    },
+    "buildVersion": {
+      "value": "__BuildVersion__"
+    },
+    "autoHealEnabled": {
+      "value": true
+    },
+    "autoHealRules": {
+      "value": {
+        "triggers": {
+          "statusCodes": [
+            {
+              "status": 503,
+              "count": 20,
+              "timeInterval": "00:02:00"
+            }
+          ]
+        },
+        "actions": {
+          "actionType": "Recycle",
+          "minProcessExecutionTime": "00:10:00"
+        }
+      }
+    },
+    "websiteLocalCachedOption": {
+      // Per best practice: You typically don't set the staging slot to use Local Cache to enable a seamless build-deploy-test lifecycle for staging if you get the benefits of Local Cache for the production slot.
+      // See: https://docs.microsoft.com/en-us/azure/app-service/overview-local-cache
+      "value": "Never"
+    },
+    "websiteLocalCacheSize": {
+      "value": ""
+    }
+  }
+}

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), build.root))\msbuild\Environment.props" />
+  <ItemGroup>
+    <!--Localize.proj file has been added to run at first prior to other projects require localization output	-->
+    <ProjectFile Include="Common\Common.csproj" />
+    <ProjectFile Include="External\dirs.proj" />
+    <ProjectFile Include="LogCollector\LogCollector.csproj" />
+    <ProjectFile Include="Pidl\dirs.proj" />
+    <ProjectFile Include="PXService\PXService.csproj" />
+    <ProjectFile Include="PXService.ApiSurface\PXService.ApiSurface.csproj" />
+    <ProjectFile Include="Tests\dirs.proj" />
+    <ProjectFile Include="Tools\dirs.proj" />
+    <ProjectFile Include="ProbeService\ProbeService.csproj" />	
+    <ProjectFile Include="KustoDataLoader\KustoDataLoader.csproj" />
+  </ItemGroup>
+  <Import Project="$(ExtendedTargetsPath)\Traversal.targets" />
+</Project>

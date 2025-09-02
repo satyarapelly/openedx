@@ -1,0 +1,281 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
+  "contentVersion": "0.0.0.1",
+  "parameters": {
+    "servicePlanName": {
+      "type": "string"
+    },
+    "siteName": {
+      "type": "string"
+    },
+    "websiteSkuTier": {
+      "type": "string",
+      "defaultValue": "Shared"
+    },
+    "websiteSkuName": {
+      "type": "string",
+      "defaultValue": "D1"
+    },
+    "websiteCapacity": {
+      "type": "int",
+      "defaultValue": 1
+    },
+    "managedIdentityResourceGroup": {
+      "type": "string",
+      "defaultValue": ""
+    },
+    "managedIdentity": {
+      "type": "string",
+      "defaultValue": ""
+    },
+    "commerceAccountClientCertificateName": {
+      "type": "string"
+    },
+    "pxClientCertificateName": {
+      "type": "string"
+    },
+    "aadAMEClientCertificateName": {
+      "type": "string"
+    },
+    "keyVaultName": {
+      "type": "string"
+    },
+    "genevaCertVaultId": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The CSM ID of the KeyVault instance containing the AntMDS certificate."
+      }
+    },
+    "genevaCertSecretName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The name of the AntMDS certificate."
+      }
+    },
+    "monitoringTenant": {
+      "type": "string",
+      "metadata": {
+        "description": "Sets the MONITORING_TENANT environment variable "
+      }
+    },
+    "monitoringRole": {
+      "type": "string",
+      "metadata": {
+        "description": "Sets the MONITORING_ROLE environment variable"
+      }
+    },
+    "monitoringGcsEnvironment": {
+      "type": "string",
+      "allowedValues": [
+        "Diagnostics Prod",
+        "Test",
+        "Stage",
+        "FirstPartyProd",
+        "BillingProd",
+        "ExternalProd",
+        "CA BlackForest",
+        "CA Fairfax",
+        "CA Mooncake"
+      ],
+      "metadata": {
+        "description": "The endpoint for your Geneva Account.  Sets the MONITORING_GCS_ENVIRONMENT environment variable."
+      }
+    },
+    "monitoringGcsAccount": {
+      "type": "string",
+      "metadata": {
+        "description": "Sets the MONITORING_GCS_ACCOUNT environment variable."
+      }
+    },
+    "monitoringGcsNamespace": {
+      "type": "string",
+      "metadata": {
+        "description": "Sets the MONITORING_GCS_NAMESPACE environment variable"
+      }
+    },
+    "monitoringGcsAuthId": {
+      "type": "string",
+      "metadata": {
+        "description": "Sets the MONITORING_GCS_AUTH_ID environment variable."
+      }
+    },
+    "monitoringConfigVersion": {
+      "type": "string",
+      "metadata": {
+        "description": "Sets the MONITORING_CONFIG_VERSION environment variable."
+      }
+    }
+  },
+  "variables": {
+    "resourceLocation": "[resourcegroup().location]",
+    "websiteApiVersion": "2015-08-01",
+    "resourceLocationEscapeSpace": "[replace(variables('resourceLocation'),' ','')]",
+    "fullSiteName": "[concat(parameters('siteName'), '-', variables('resourceLocationEscapeSpace'))]",
+    "fullServicePlanName": "[concat(parameters('servicePlanName'), '-', replace(variables('resourceLocation'),' ',''))]",
+    "commerceAccountClientCertificateResourceName": "[concat(replace(variables('fullSiteName'),' ',''),'-',parameters('commerceAccountClientCertificateName'))]",
+    "pxClientCertificateResourceName": "[concat(replace(variables('fullSiteName'),' ',''),'-',parameters('pxClientCertificateName'))]",
+    "aadAMEClientCertificateResourceName": "[concat(replace(variables('fullSiteName'),' ',''),'-',parameters('aadAMEClientCertificateName'))]",
+    "configJson": {
+      "MONITORING_TENANT": "[parameters('monitoringTenant')]",
+      "MONITORING_ROLE": "[parameters('monitoringRole')]",
+      "MONITORING_XSTORE_ACCOUNTS": "GCSPlaceholder",
+      "AdditionalEnvironmentVariables": [
+        {
+          "Key": "DATACENTER",
+          "Value": "[variables('resourceLocation')]"
+        },
+        {
+          "Key": "MONITORING_GCS_ENVIRONMENT",
+          "Value": "[parameters('monitoringGcsEnvironment')]"
+        },
+        {
+          "Key": "MONITORING_GCS_ACCOUNT",
+          "Value": "[parameters('monitoringGcsAccount')]"
+        },
+        {
+          "Key": "MONITORING_GCS_NAMESPACE",
+          "Value": "[parameters('monitoringGcsNamespace')]"
+        },
+        {
+          "Key": "MONITORING_GCS_REGION",
+          "Value": "[variables('resourceLocation')]"
+        },
+        {
+          "Key": "MONITORING_GCS_AUTH_ID",
+          "Value": "[parameters('monitoringGcsAuthId')]"
+        },
+        {
+          "Key": "MONITORING_GCS_AUTH_ID_TYPE",
+          "Value": "AuthKeyVault"
+        },
+        {
+          "Key": "MONITORING_CONFIG_VERSION",
+          "Value": "[parameters('monitoringConfigVersion')]"
+        },
+        {
+          "Key": "MONITORING_USE_GENEVA_CONFIG_SERVICE",
+          "Value": "true"
+        }
+      ]
+    },
+    "configXml": "<MonitoringManagement eventVersion=\"1\" version=\"1.0\" timestamp=\"2017-12-29T00:00:00Z\" namespace=\"PlaceHolder\"></MonitoringManagement>"
+  },
+  "resources": [
+    {
+      "apiVersion": "[variables('websiteApiVersion')]",
+      "name": "[variables('fullServicePlanName')]",
+      "type": "Microsoft.Web/serverfarms",
+      "location": "[variables('resourceLocation')]",
+      "sku": {
+        "name": "[parameters('websiteSkuName')]",
+        "tier": "[parameters('websiteSkuTier')]",
+        "capacity": "[parameters('websiteCapacity')]"
+      },
+      "resources": [
+        {
+          "type": "Microsoft.Web/certificates",
+          "name": "[variables('commerceAccountClientCertificateResourceName')]",
+          "apiVersion": "[variables('websiteApiVersion')]",
+          "location": "[variables('resourceLocation')]",
+          "properties": {
+            "keyVaultId": "[resourceId(parameters('managedIdentityResourceGroup'), 'Microsoft.KeyVault/vaults', parameters('keyVaultName'))]",
+            "keyVaultSecretName": "[parameters('commerceAccountClientCertificateName')]",
+            "serverFarmId": "[resourceId('Microsoft.Web/serverFarms', variables('fullServicePlanName'))]"
+          },
+          "dependsOn": [
+            "[concat('Microsoft.Web/serverFarms/', variables('fullServicePlanName'))]"
+          ]
+        },
+        {
+          "type": "Microsoft.Web/certificates",
+          "name": "[variables('pxClientCertificateResourceName')]",
+          "apiVersion": "[variables('websiteApiVersion')]",
+          "location": "[variables('resourceLocation')]",
+          "properties": {
+            "keyVaultId": "[resourceId(parameters('managedIdentityResourceGroup'), 'Microsoft.KeyVault/vaults', parameters('keyVaultName'))]",
+            "keyVaultSecretName": "[parameters('pxClientCertificateName')]",
+            "serverFarmId": "[resourceId('Microsoft.Web/serverFarms', variables('fullServicePlanName'))]"
+          },
+          "dependsOn": [
+            "[concat('Microsoft.Web/serverFarms/', variables('fullServicePlanName'))]"
+          ]
+        },
+        {
+          "type": "Microsoft.Web/certificates",
+          "name": "[variables('aadAMEClientCertificateResourceName')]",
+          "apiVersion": "[variables('websiteApiVersion')]",
+          "location": "[variables('resourceLocation')]",
+          "properties": {
+            "keyVaultId": "[resourceId(parameters('managedIdentityResourceGroup'), 'Microsoft.KeyVault/vaults', parameters('keyVaultName'))]",
+            "keyVaultSecretName": "[parameters('aadAMEClientCertificateName')]",
+            "serverFarmId": "[resourceId('Microsoft.Web/serverFarms', variables('fullServicePlanName'))]"
+          },
+          "dependsOn": [
+            "[concat('Microsoft.Web/serverFarms/', variables('fullServicePlanName'))]"
+          ]
+        },
+        {
+          "comments": "Defines how the Geneva Monitoring Agent should be configured.",
+          "type": "Microsoft.Web/serverfarms/firstPartyApps/settings",
+          "name": "[concat(variables('fullServicePlanName'), '/AntMDS/ConfigJson')]",
+          "apiVersion": "2015-08-01",
+          "location": "[variables('resourceLocation')]",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/serverfarms',variables('fullServicePlanName'))]"
+          ],
+          "properties": {
+            "firstPartyId": "AntMDS",
+            "settingName": "ConfigJson",
+            "settingValue": "[string(variables('configJson'))]"
+          }
+        },
+        {
+          "comments": "Defines what events the Geneva Monitoring Agent should upload. This should be a placeholder configuration for services using GCS.",
+          "type": "Microsoft.Web/serverfarms/firstPartyApps/settings",
+          "name": "[concat(variables('fullServicePlanName'), '/AntMDS/MdsConfigXml')]",
+          "apiVersion": "2015-08-01",
+          "location": "[variables('resourceLocation')]",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/serverfarms', variables('fullServicePlanName'))]"
+          ],
+          "properties": {
+            "firstPartyId": "AntMDS",
+            "settingName": "MdsConfigXml",
+            "settingValue": "[variables('configXml')]"
+          }
+        },
+        {
+          "type": "Microsoft.Web/serverfarms/firstPartyApps/keyVaultSettings",
+          "name": "[concat(variables('fullServicePlanName'), '/AntMDS/CERTIFICATE_PFX_GENEVACERT')]",
+          "apiVersion": "2015-08-01",
+          "location": "[variables('resourceLocation')]",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/serverfarms', variables('fullServicePlanName'))]"
+          ],
+          "properties": {
+            "firstPartyId": "AntMDS",
+            "settingName": "CERTIFICATE_PFX_GENEVACERT",
+            "vaultId": "[parameters('genevaCertVaultId')]",
+            "secretName": "[parameters('genevaCertSecretName')]"
+          }
+        },
+        {
+          "type": "Microsoft.Web/serverfarms/firstPartyApps/settings",
+          "name": "[concat(variables('fullServicePlanName'), '/AntMDS/CERTIFICATE_PASSWORD_GENEVACERT')]",
+          "apiVersion": "2015-08-01",
+          "location": "[variables('resourceLocation')]",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/serverfarms', variables('fullServicePlanName'))]"
+          ],
+          "properties": {
+            "firstPartyId": "AntMDS",
+            "settingName": "CERTIFICATE_PASSWORD_GENEVACERT",
+            "settingValue": ""
+          }
+        }
+      ]
+    }
+  ]
+}

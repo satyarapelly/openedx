@@ -1,0 +1,5 @@
+ContainerHintId,CountryIds,DisplaySequenceId,DisplayType,DisplayName,LayoutOrientation,LayoutAlignment,ShowDisplayName,IsSubmitGroup,Extend,FirstButtonGroup,ExtendButtonGroup,ContainerDescription,DisplayConditionFunctionName,DataCollectionSource,DataCollectionFilterFunctionName,StyleHints
+expiryGroup,,expirySequence,group,Expires,inline,,TRUE,,,,,,,,,
+digitizationCancelNext,,digitizationCancelNextSequence,group,,Inline,,,TRUE,,,,,,,,
+digitizationSubmitInfo,,digitizationSubmitInfoSequence,group,,,,,TRUE,,,,,,,,
+challengeResolutionPhoneOfflineDetail,,challengeResolutionPhoneOfflineDetailSequence,group,,,Center,,TRUE,,,,,,,,

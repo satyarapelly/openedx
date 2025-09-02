@@ -1,0 +1,26 @@
+{
+  "testScenarioName": "px.msrewards.zerobalance",
+  "responsesPerApiCall": {
+    "getUserInfo": {
+      "statusCode": 200,
+      "content": {
+        "response": {
+          "balance": 0,
+          "catalog": [
+            {
+              "price": 0,
+              "provider": "csv",
+              "attributes": {
+                "isMicrosoftCSVGiftCard": "true"
+              },
+              "configuration": {
+                "amount": "0",
+                "currencyCode": "usd"
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

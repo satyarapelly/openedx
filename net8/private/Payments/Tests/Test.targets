@@ -1,0 +1,12 @@
+<!-- Common settings used for Test projects. -->
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\Payments.targets" />
+  <PropertyGroup>
+    <StyleCopOverrideSettingsFile>$(INETROOT)\private\Payments\test\Settings.StyleCop</StyleCopOverrideSettingsFile>
+    <TestEngine>MsTest</TestEngine>
+    <OacrDisabled>true</OacrDisabled>
+	<VsSdkInstall Condition="'$(VsSdkInstall)'==''">$(ExtPath)\VisualStudio\VS10SP1</VsSdkInstall>
+  </PropertyGroup>
+</Project>
+

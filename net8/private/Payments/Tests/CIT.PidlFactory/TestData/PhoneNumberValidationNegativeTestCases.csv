@@ -1,0 +1,43 @@
+﻿Country,Value,Notes
+us,+1322011238761,This number is too long for it to be valid
+us,+1206763896,This number is too short for it to be valid
+us,+22061363553,This number begins with a 2 which is not US
+us,+1206763!8962,This number has an exclamation point which causes it to be invalid
+us,+1206763@8962,This number has an at sign which causes it to be invalid
+us,+1206763#8962,This number has an pound sign which causes it to be invalid
+us,+1206763$8962,This number has a dollar sign which causes it to be invalid
+us,+1206763%8962,This number has a percentage symbol which causes it to be invalid
+us,+1206763^8962,This number has a caret which causes it to be invalid
+us,+1206763=8962,This number has an equals sign which causes it to be invalid
+us,+1206763;8962,This number has a semicolon which causes it to be invalid
+us,+1206763'8962,This number has an apostrophe which causes it to be invalid
+us,+1206763<8962,This number has a less than sign which causes it to be invalid
+us,+1206763>8962,This number has a greater than sign which causes it to be invalid
+us,+1206763|8962,This number has a pipe symbol which causes it to be invalid
+us,+1206763"8962,This number has a quote symbol which causes it to be invalid
+us,+1206763?8962,This number has a question mark which causes it to be invalid
+us,+1206763\8962,This number has a backslash which causes it to be invalid
+cn,+8611312344256,This number is not valid for China
+cn,+8611412344256,This number is not valid for China
+cn,+8611512344256,This number is not valid for China
+cn,+8611812344256,This number is not valid for China
+jp,+8181001612345678,This number is too long for it to be valid
+ae,+97141234567,This number is too long for it to be valid
+br,+551188522222222,This number is too long for it to be valid
+za,+2721119234567,This number is too long for it to be valid
+il,+97250123194567,This number is too long for it to be valid
+au,+6121231945678,This number is too long for it to be valid
+fr,+3395123194567,This number is too long for it to be valid
+es,+3480019123456,This number is too long for it to be valid
+in,+91331231945678,This number is too long for it to be valid
+tw,+88691192345678,This number is too long for it to be valid
+kr,+822123319456,This number is too long for it to be valid
+it,+39312341956789,This number is too long for it to be valid
+id,+62316019123456,This number is too long for it to be valid
+ru,+7499123419567,This number is too long for it to be valid
+de,+436766814275, This test case was shared by Robert Pollard.  This is an Austrian number and so, should fail in Germany.  This test case is important to make sure region validation works even when country code is entered by the user.
+ca,2069650137,This test case was shared by Robert Pollard.  Seems like a US number and so, should fail in Canada.
+ch,2069650137,This test case was shared by Robert Pollard.  Seems like a US number and so, should fail in Switzerland.
+us,1206965013,This test case was shared by Robert Pollard.  Seems like a US number but is missing one number at the end.
+us,20696501390,This test case was shared by Robert Pollard.  One digit too long
+us,120696501390,This test case was shared by Robert Pollard.  One digit too long

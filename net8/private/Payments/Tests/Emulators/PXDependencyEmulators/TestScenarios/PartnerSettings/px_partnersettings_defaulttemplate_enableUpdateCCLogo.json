@@ -1,0 +1,19 @@
+{
+  "testScenarioName": "px.partnersettings.defaulttemplate.enableUpdateCCLogo",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "update": {
+          "template": "defaulttemplate",
+          "features": {
+            "enableUpdateCCLogo": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": null
+            }
+          }
+        }
+      }
+    }
+  }
+}

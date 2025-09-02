@@ -1,0 +1,20 @@
+{
+  "$connections": {
+    "value": {
+      "kusto": {
+        "id": "/Microsoft.Web/managedApis/kusto",
+        "connectionId": "kusto",
+        "connectionProperties": {
+          "authentication": {
+            "identity": "/subscriptions/9b6168fd-7d68-47e1-9c71-e51828aa62c0/resourceGroups/rg-Geneva-Helper/providers/Microsoft.ManagedIdentity/userAssignedIdentities/id-geneva-workflows-identity",
+            "type": "ManagedServiceIdentity"
+          }
+        }
+      },
+      "IcM": {
+        "id": "/customApis/GenevaAuto.Connectors/IcM",
+        "connectionId": "IcM-1"
+      }
+    }
+  }
+}

@@ -1,0 +1,6 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Target Name="AfterBuild">
+    <Message Text="Creating nuget package from nuspec:" />
+    <Exec Command="$(INETROOT)\msbuild\nuget\nuget.exe pack $(OutDir)$(NuGetNuSpecFile) -OutputDirectory $(OutDir)" />
+  </Target>
+</Project>

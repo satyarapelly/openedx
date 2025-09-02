@@ -1,0 +1,15 @@
+{
+  "testScenarioName": "px.frauddetection.approved",
+  "responsesPerApiCall": {
+    "botCheck": {
+      "statusCode": 200,
+      "content": {
+        "activityId": "id12345",
+        "paymentInstrumentIds": [],
+        "riskScore": 5,
+        "recommendation": "Approved",
+        "reason": "Low risk based on transaction history"
+      }
+    }
+  }
+}

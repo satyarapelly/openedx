@@ -1,0 +1,23 @@
+{
+  "testScenarioName": "px.partnersettings.skipselectpm",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "select": {
+          "template": "selectpmbuttonlist",
+          "features": {
+            "skipSelectpm": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "enableIsSelectPMskippedValue": true
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

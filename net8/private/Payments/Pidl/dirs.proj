@@ -1,0 +1,12 @@
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), build.root))\msbuild\Environment.props" />  
+  <ItemGroup>
+    <ProjectFile Include="PXCommon\PXCommon.csproj" />
+    <ProjectFile Include="PimsModel\PimsModel.csproj" />
+    <ProjectFile Include="PidlModel\PidlModel.csproj" />
+    <ProjectFile Include="PidlFactory\PidlFactory.csproj" />
+    <ProjectFile Include="LocalizationRepository\LocalizationRepository.csproj" />
+  </ItemGroup>
+  <Import Project="$(ExtendedTargetsPath)\Traversal.targets" />
+</Project>

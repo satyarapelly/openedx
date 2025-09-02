@@ -1,0 +1,76 @@
+{
+  "properties": {
+    "state": "Enabled",
+    "metadata": {
+      "dataClassifications": [
+        "AccessControlData"
+      ]
+    },
+    "definition": {
+      "actions": {
+        "Transfer_IcM_incident": {
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['IcM_1']['connectionId']"
+              }
+            },
+            "method": "post",
+            "body": {
+              "OwningService": "Payment Services - ICM Tenant",
+              "OwningTeam": "StoreCore-PST-PXService",
+              "Discussion": {
+                "DiscussionText": "Transferring to Correct team \"StoreCore-PST-PXServices\"",
+                "RenderType": "Html"
+              }
+            },
+            "path": "/api/v1/incidents/@{encodeURIComponent(triggerBody()['IncidentId'])}/transfer"
+          },
+          "runAfter": {},
+          "trackedProperties": {
+            "ActionMethod": "@coalesce(action()?.inputs?.method, '')",
+            "ActionPath": "@coalesce(action()?.inputs?.path, '')",
+            "ActionType": "ApiConnection",
+            "ConnectionUsed": "IcM",
+            "ConnectorName": "IcM",
+            "IcMActionDetails": "@{if(not(equals(action().inputs?.path, null)), replace(action().inputs?.path,'api/v1/',''), '')}",
+            "IncidentId": "@if(and(not(equals(action().outputs?.body,null)),contains(action().outputs?.body,'IncidentId')), action().outputs?.body['IncidentId'],'')"
+          },
+          "type": "ApiConnection"
+        }
+      },
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "type": "Object",
+          "defaultValue": {}
+        }
+      },
+      "triggers": {
+        "When_an_IcM_incident_is_created_or_transferred": {
+          "type": "ApiConnectionWebhook",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['IcM_1']['connectionId']"
+              }
+            },
+            "body": {
+              "OwningService": "Payment Services - ICM Tenant",
+              "OwningTeam": "StoreCore-PST-PCS",
+              "WorkflowCallbackUrl": "@{listCallbackUrl()}"
+            },
+            "path": "/api/v1/subscriptions/createdOrTransferred"
+          }
+        }
+      }
+    },
+    "runtimeConfiguration": {
+      "lifetime": {
+        "unit": "Day",
+        "count": 25
+      }
+    }
+  }
+}

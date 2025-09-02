@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), build.root))\msbuild\Environment.props" />
+  <Import Project="$(INETROOT)\private\Payments\Payments.targets" />
+  <PropertyGroup>
+    <ProjectGuid>{707CC65B-5E27-43AA-8909-CA696896A5D6}</ProjectGuid>
+  </PropertyGroup>
+  <ItemGroup>
+    <Robocopy Include="AutoIIS.App.ini">
+      <DestinationFolder>$(TeamDropAutopilot)\PXDependencyEmulators</DestinationFolder>
+    </Robocopy>
+    <Robocopy Include="ServiceConfig.ini">
+      <DestinationFolder>$(TeamDropAutopilot)\PXDependencyEmulators</DestinationFolder>
+    </Robocopy>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Tests\Emulators\Purchase\PXDependencyEmulators.csproj">
+      <Name>PXDependencyEmulators</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(ExtendedTargetsPath)\NoTarget.targets" />
+</Project>

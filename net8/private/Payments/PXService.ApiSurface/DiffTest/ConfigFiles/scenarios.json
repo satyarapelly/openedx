@@ -1,0 +1,435 @@
+﻿{
+	"px.pims.cc.add.success": {
+		"countries": [ "us", "jp", "cn", "fi", "cz", "gb", "de", "br", "nl", "hk" ],
+		"partners": [ "webblends", "oxodime", "oxowebdirect", "webblends_inline", "xbox", "cart", "webpay", "bing", "commercialstores", "webpay", "amcweb", "amcxbox", "officeoobe", "oxooobe", "smboobe", "wallet", "xboxsettings", "storify", "default" ],
+		"body": {
+			"paymentMethodFamily": "credit_card",
+			"paymentMethodType": "amex",
+			"riskData": null
+		}
+	},
+
+	"px.pims.cc.add.error.validationfailed": {
+		"countries": [ "us", "jp", "cn", "fi", "cz", "gb", "de", "br", "nl", "hk" ],
+		"partners": [ "webblends", "oxodime", "oxowebdirect", "webblends_inline", "xbox", "cart", "webpay", "bing", "commercialstores", "webpay", "amcweb", "amcxbox", "officeoobe", "oxooobe", "smboobe", "wallet", "xboxsettings", "storify", "default" ],
+		"body": {
+			"paymentMethodFamily": "credit_card",
+			"paymentMethodType": "amex",
+			"riskData": null
+		}
+	},
+
+	"px.pims.cc.add.error.invalidzipcode": {
+		"countries": [ "us", "jp", "cn", "fi", "cz", "gb", "de", "br", "nl", "hk" ],
+		"partners": [ "webblends", "oxodime", "oxowebdirect", "webblends_inline", "xbox", "cart", "webpay", "bing", "commercialstores", "webpay", "amcweb", "amcxbox", "officeoobe", "oxooobe", "smboobe", "wallet", "xboxsettings", "storify", "default" ],
+		"body": {
+			"paymentMethodFamily": "credit_card",
+			"paymentMethodType": "amex",
+			"riskData": null
+		}
+	},
+
+	"px.pims.cc.add.error.invalidcvv": {
+		"countries": [ "us", "jp", "cn", "fi", "cz", "gb", "de", "br", "nl", "hk" ],
+		"partners": [ "webblends", "oxodime", "oxowebdirect", "webblends_inline", "xbox", "cart", "webpay", "bing", "commercialstores", "webpay", "amcweb", "amcxbox", "officeoobe", "oxooobe", "smboobe", "wallet", "xboxsettings", "storify", "default" ],
+		"body": {
+			"paymentMethodFamily": "credit_card",
+			"paymentMethodType": "amex",
+			"riskData": null
+		}
+	},
+
+	"px.pims.cc.add.error.invalidaddress": {
+		"countries": [ "us", "jp", "cn", "fi", "cz", "gb", "de", "br", "nl", "hk" ],
+		"partners": [ "webblends", "oxodime", "oxowebdirect", "webblends_inline", "xbox", "cart", "webpay", "bing", "commercialstores", "webpay", "amcweb", "amcxbox", "officeoobe", "oxooobe", "smboobe", "wallet", "xboxsettings", "storify", "default" ],
+		"body": {
+			"paymentMethodFamily": "credit_card",
+			"paymentMethodType": "amex",
+			"riskData": null
+		}
+	},
+
+	"px.pims.cc.add.error.expiredcard": {
+		"countries": [ "us", "jp", "cn", "fi", "cz", "gb", "de", "br", "nl", "hk" ],
+		"partners": [ "webblends", "oxodime", "oxowebdirect", "webblends_inline", "xbox", "cart", "webpay", "bing", "commercialstores", "webpay", "amcweb", "amcxbox", "officeoobe", "oxooobe", "smboobe", "wallet", "xboxsettings", "storify", "default" ],
+		"body": {
+			"paymentMethodFamily": "credit_card",
+			"paymentMethodType": "amex",
+			"riskData": null
+		}
+	},
+
+	"px.pims.cc.add.error.invalidpaymentinstrumentinfo": {
+		"countries": [ "us", "jp", "cn", "fi", "cz", "gb", "de", "br", "nl", "hk" ],
+		"partners": [ "webblends", "oxodime", "oxowebdirect", "webblends_inline", "xbox", "cart", "webpay", "bing", "commercialstores", "webpay", "amcweb", "amcxbox", "officeoobe", "oxooobe", "smboobe", "wallet", "xboxsettings", "storify", "default" ],
+		"body": {
+			"paymentMethodFamily": "credit_card",
+			"paymentMethodType": "amex",
+			"riskData": null
+		}
+	},
+
+	"px.pims.cc.add.error.paymentinstrumentaddalready": {
+		"countries": [ "us", "jp", "cn", "fi", "cz", "gb", "de", "br", "nl", "hk" ],
+		"partners": [ "webblends", "oxodime", "oxowebdirect", "webblends_inline", "xbox", "cart", "webpay", "bing", "commercialstores", "webpay", "amcweb", "amcxbox", "officeoobe", "oxooobe", "smboobe", "wallet", "xboxsettings", "storify", "default" ],
+		"body": {
+			"paymentMethodFamily": "credit_card",
+			"paymentMethodType": "amex",
+			"riskData": null
+		}
+	},
+
+	"px.pims.ach.add.success": {
+		"countries": [ "us", "jp", "cn", "fi", "cz", "gb", "de", "br", "nl", "hk" ],
+		"partners": [ "webblends", "oxodime", "oxowebdirect", "webblends_inline", "xbox", "cart", "commercialstores", "amcweb" ],
+		"body": {
+			"paymentMethodFamily": "direct_debit",
+			"paymentMethodType": "ach",
+			"riskData": null
+		}
+	},
+
+	"px.pims.ach.add.error.validationfailed": {
+		"countries": [ "us", "jp", "cn", "fi", "cz", "gb", "de", "br", "nl", "hk" ],
+		"partners": [ "webblends", "oxodime", "oxowebdirect", "webblends_inline", "xbox", "cart", "commercialstores", "amcweb" ],
+		"body": {
+			"paymentMethodFamily": "direct_debit",
+			"paymentMethodType": "ach",
+			"riskData": null
+		}
+	},
+
+	"px.pims.ach.add.error.invalidaddress": {
+		"countries": [ "us", "jp", "cn", "fi", "cz", "gb", "de", "br", "nl", "hk" ],
+		"partners": [ "webblends", "oxodime", "oxowebdirect", "webblends_inline", "xbox", "cart", "commercialstores", "amcweb" ],
+		"body": {
+			"paymentMethodFamily": "direct_debit",
+			"paymentMethodType": "ach",
+			"riskData": null
+		}
+	},
+
+	"px.pims.alipay.add.success": {
+		"countries": [ "cn", "hk" ],
+		"partners": [ "webblends", "oxodime", "oxowebdirect", "xbox", "amcweb", "amcxbox", "xboxsettings", "storify" ],
+		"body": {
+			"paymentMethodFamily": "ewallet",
+			"paymentMethodType": "alipay_billing_agreement",
+			"riskData": null
+		}
+	},
+
+	"px.pims.alipay.add.qrcode.pending": {
+		"countries": [ "cn" ],
+		"partners": [ "storify" ],
+		"body": {
+			"paymentMethodFamily": "ewallet",
+			"paymentMethodType": "alipay_billing_agreement",
+			"riskData": null
+		}
+	},
+
+	"px.pims.alipay.add.error.usercertnomatch": {
+		"countries": [ "cn", "hk" ],
+		"partners": [ "webblends", "oxodime", "oxowebdirect", "xbox", "amcweb", "amcxbox", "xboxsettings", "storify" ],
+		"body": {
+			"paymentMethodFamily": "ewallet",
+			"paymentMethodType": "alipay",
+			"riskData": null
+		}
+	},
+
+	"px.pims.alipay.add.error.invalidalipayaccount": {
+		"countries": [ "cn", "hk" ],
+		"partners": [ "webblends", "oxodime", "oxowebdirect", "xbox", "amcweb", "amcxbox", "officeoobe", "oxooobe", "smboobe", "xboxsettings", "storify" ],
+		"body": {
+			"paymentMethodFamily": "ewallet",
+			"paymentMethodType": "alipay_billing_agreement",
+			"riskData": null
+		}
+	},
+
+	"px.pims.sepa.add.success": {
+		"countries": [ "de", "fi" ],
+		"partners": [ "webblends", "oxodime", "oxowebdirect", "cart", "commercialstores", "amcweb" ],
+		"body": {
+			"paymentMethodFamily": "direct_debit",
+			"paymentMethodType": "sepa",
+			"riskData": null
+		}
+	},
+
+	"px.pims.sepa.add.error.validationfailed": {
+		"countries": [ "cn", "hk" ],
+		"partners": [ "webblends", "oxodime", "oxowebdirect", "cart", "commercialstores", "amcweb" ],
+		"body": {
+			"paymentMethodFamily": "direct_debit",
+			"paymentMethodType": "sepa",
+			"riskData": null
+		}
+	},
+
+	"px.pims.nsm.add.success": {
+		"countries": [ "us", "jp", "cn", "fi", "cz", "gb", "de", "br", "nl", "hk" ],
+		"partners": [ "webblends", "oxodime", "oxowebdirect", "xbox", "amcweb", "amcxbox", "xboxsettings", "storify", "default" ],
+		"body": {
+			"paymentMethodFamily": "mobile_billing_non_sim",
+			"paymentMethodType": "att-us-nonsim",
+			"riskData": null
+		}
+	},
+
+	"px.pims.nsm.resume.error.invalidchallengecode": {
+		"countries": [ "us", "jp", "cn", "fi", "cz", "gb", "de", "br", "nl", "hk" ],
+		"partners": [ "webblends", "oxodime", "oxowebdirect", "xbox", "amcweb", "amcxbox", "default", "xboxsettings", "storify" ],
+		"body": {
+			"paymentMethodFamily": "mobile_billing_non_sim",
+			"paymentMethodType": "nonsim",
+			"riskData": null
+		}
+	},
+
+	"px.pims.paypal.add.success": {
+		"countries": [ "us", "jp", "cn", "fi", "cz", "gb", "de", "br", "nl", "hk" ],
+		"partners": [ "webblends", "oxodime", "oxowebdirect", "webblends_inline", "xbox", "cart", "webpay", "bing", "amcweb", "default", "xboxsettings", "storify" ],
+		"body": {
+			"paymentMethodFamily": "ewallet",
+			"paymentMethodType": "paypal",
+			"riskData": null
+		}
+	},
+
+	"px.pims.idealba.add.success": {
+		"countries": [ "nl" ],
+		"partners": [ "webblends", "oxodime", "oxowebdirect", "cart", "amcweb" ],
+		"body": {
+			"paymentMethodFamily": "direct_debit",
+			"paymentMethodType": "ideal_billing_agreement",
+			"riskData": null
+		}
+	},
+
+	"px.pims.klarna.add.success": {
+		"countries": [ "de", "fi" ],
+		"partners": [ "webblends", "oxodime", "oxowebdirect", "xbox", "cart", "amcweb", "amcxbox", "default" ],
+		"body": {
+			"paymentMethodFamily": "ewallet",
+			"paymentMethodType": "paypal",
+			"riskData": null
+		}
+	},
+
+	"px.pims.unionpay_creditcard.sms.add.success": {
+		"countries": [ "cn" ],
+		"partners": [ "webblends", "oxodime", "oxowebdirect", "xbox", "default", "xboxsettings", "storify" ],
+		"body": {
+			"paymentMethodFamily": "credit_card",
+			"paymentMethodType": "unionpay_creditcard",
+			"riskData": null
+		}
+	},
+	"px.pims.unionpay_creditcard.sms.resume": {
+		"countries": [ "cn" ],
+		"partners": [ "xboxsettings", "storify" ],
+		"body": {
+			"paymentMethodFamily": "credit_card",
+			"paymentMethodType": "unionpay_creditcard",
+			"riskData": null,
+			"language": "en-US"
+		}
+	},
+	"px.pims.cc.3ds.consumer.add.pending.get.pending": {
+		"countries": [ "in" ],
+		"partners": [ "amcweb", "webblends", "webblends_inline", "northstarweb", "defaulttemplate" ],
+		"body": {
+			"paymentMethodFamily": "credit_card",
+			"paymentMethodType": "visa",
+			"paymentMethodOperation": "add",
+			"paymentMethodCountry": "in",
+			"paymentMethodResource_id": "credit_card.visa",
+			"sessionId": "7130c242-1df0-f127-7a0f-58e2e3dc5348",
+			"context": "purchase",
+			"riskData": {
+				"dataType": "payment_method_riskData",
+				"dataOperation": "add",
+				"dataCountry": "in"
+			},
+			"details": {
+				"dataType": "credit_card_visa_details",
+				"dataOperation": "add",
+				"dataCountry": "in",
+				"accountHolderName": "test",
+				"expiryMonth": "2",
+				"expiryYear": "2026",
+				"address": {
+					"addressType": "billing",
+					"addressOperation": "add",
+					"addressCountry": "in",
+					"address_line1": "test1",
+					"city": "test city",
+					"region": "telangana",
+					"postal_code": "500033",
+					"country": "in"
+				}
+			}
+		}
+	},
+	"px.pims.venmo.add.pending.get.pending": {
+		"countries": [ "us" ],
+		"partners": [ "storify", "xboxsettings", "defaulttemplate", "windowsstore" ],
+		"body": {
+			"paymentMethodFamily": "ewallet",
+			"paymentMethodType": "venmo",
+			"paymentMethodOperation": "add",
+			"paymentMethodCountry": "us",
+			"paymentMethodResource_id": "ewallet.venmo",
+			"sessionId": "b4f6a87a-19e9-4003-b5b0-f155d9628445",
+			"riskData": {
+				"dataType": "payment_method_riskData",
+				"dataOperation": "add",
+				"dataCountry": "us"
+			},
+			"details": {
+				"dataType": "ewallet_venmo_details",
+				"dataOperation": "add",
+				"dataCountry": "us",
+				"authenticationMode": "Redirect"
+			}
+		}
+	},
+	"px.pims.upi.commercial.add.pi": {
+		"countries": [ "in" ],
+		"partners": [ "defaulttemplate" ],
+		"body": {
+			"paymentMethodFamily": "real_time_payments",
+			"paymentMethodType": "upi_commercial",
+			"paymentMethodOperation": "add",
+			"paymentMethodCountry": "in",
+			"paymentMethodResource_id": "real_time_payments.upi_commercial",
+			"sessionId": "b4f6a87a-19e9-4003-b5b0-f155d9628445",
+			"details": {
+				"dataType": "real_time_payments_upi_commercial_details",
+				"dataOperation": "add",
+				"dataCountry": "in"
+			}
+		}
+	},
+	"px.pims.cc.rupay.3ds.consumer.add.pending.get.pending": {
+		"countries": [ "in" ],
+		"partners": [ "defaulttemplate", "webblends", "cart", "consumersupport", "northstarweb", "oxodime", "oxowebdirect", "officeoobe" ],
+		"body": {
+			"paymentMethodFamily": "credit_card",
+			"paymentMethodType": "rupay",
+			"paymentMethodOperation": "add",
+			"paymentMethodCountry": "in",
+			"paymentMethodResource_id": "credit_card.rupay",
+			"sessionId": "fab76701-fbfa-48db-9a89-b71aa9a8f65f",
+			"context": "purchase",
+			"riskData": {
+				"dataType": "payment_method_riskData",
+				"dataOperation": "add",
+				"dataCountry": "in"
+			},
+			"details": {
+				"dataType": "credit_card_rupay_details",
+				"dataOperation": "add",
+				"dataCountry": "in",
+				"accountHolderName": "test",
+				"expiryMonth": "12",
+				"expiryYear": "2026",
+				"address": {
+					"addressType": "billing",
+					"addressOperation": "add",
+					"addressCountry": "in",
+					"address_line1": "test1",
+					"city": "test city",
+					"region": "telangana",
+					"postal_code": "500033",
+					"country": "in"
+				}
+			}
+		}
+	},
+	"px.pims.cc.rupay.3ds.commercial.add.pending.get.pending": {
+		"countries": [ "in" ],
+		"partners": [ "azure", "bing", "commercialstores" ],
+		"body": {
+			"paymentMethodFamily": "credit_card",
+			"paymentMethodType": "rupay",
+			"paymentMethodOperation": "add",
+			"paymentMethodCountry": "in",
+			"paymentMethodResource_id": "credit_card.rupay",
+			"sessionId": "fab76701-fbfa-48db-9a89-b71aa9a8f65f",
+			"context": "purchase",
+			"riskData": {
+				"dataType": "payment_method_riskData",
+				"dataOperation": "add",
+				"dataCountry": "in"
+			},
+			"details": {
+				"dataType": "credit_card_rupay_details",
+				"dataOperation": "add",
+				"dataCountry": "in",
+				"accountHolderName": "test",
+				"expiryMonth": "12",
+				"expiryYear": "2026",
+				"address": {
+					"addressType": "billing",
+					"addressOperation": "add",
+					"addressCountry": "in",
+					"address_line1": "test1",
+					"city": "test city",
+					"region": "telangana",
+					"postal_code": "500033",
+					"country": "in"
+				}
+			}
+		}
+	},
+	"px.issuerservice.default": {
+		"countries": [ "us" ],
+		"partners": [ "storify", "xboxcardapp" ],
+		"body": {
+			"paymentMethodOperation": "apply",
+			"language": "en-US",
+			"sessionId": "123456789",
+			"cardProduct": "XboxCreditCard",
+			"channel": "Backend",
+			"market": "us",
+			"referrerId": "abc"
+		}
+	},
+	"px.tops.csvtoken.success": {
+		"countries": [ "us" ],
+		"partners": [ "windowsstore" ],
+		"body": {
+			"paymentMethodFamily": "ewallet",
+			"paymentMethodType": "stored_value",
+			"tokenIdentifierValue": "asdfg-asdfg-asdfg-asdfg-asdfg",
+			"actionType": "validate"
+		}
+	},
+	"px.pims.paypalwithretrypage.add.success": {
+		"countries": [ "us" ],
+		"partners": [ "defaulttemplate", "windowsstore" ],
+		"body": {
+			"paymentMethodFamily": "ewallet",
+			"paymentMethodType": "paypal",
+			"paymentMethodOperation": "add",
+			"paymentMethodCountry": "us",
+			"paymentMethodResource_id": "ewallet.paypal",
+			"sessionId": "b4f6a87a-19e9-4003-b5b0-f155d9628445",
+			"riskData": {
+				"dataType": "payment_method_riskData",
+				"dataOperation": "add",
+				"dataCountry": "us"
+			},
+			"details": {
+				"dataType": "ewallet_paypal_details",
+				"dataOperation": "add",
+				"dataCountry": "us",
+				"authenticationMode": "Redirect"
+			}
+		}
+	}
+}

@@ -1,0 +1,12 @@
+{
+  "properties": {
+    "api": {
+      "id": "/Microsoft.Web/managedApis/kusto"
+    },
+    "displayName": "Kusto_MI",
+    "parameterValueType": "Alternative",
+    "alternativeParameterValues": {
+      "privacySetting": "Public"
+    }
+  }
+}

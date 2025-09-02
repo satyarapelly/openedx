@@ -1,0 +1,306 @@
+{
+  "properties": {
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        }
+      },
+      "triggers": {
+        "When_an_IcM_incident_is_created": {
+          "type": "ApiConnectionWebhook",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['IcM']['connectionId']"
+              }
+            },
+            "body": {
+              "OwningService": "Payment Services - ICM Tenant",
+              "Severity": "3;4",
+              "OwningTeam": "StoreCore-PST-PXService",
+              "WorkflowCallbackUrl": "@{listCallbackUrl()}",
+              "MonitorId": "7b7e0817-71bb-4023-bdcc-dd15b799124b"
+            },
+            "path": "/api/v1/subscriptions/created"
+          }
+        }
+      },
+      "actions": {
+        "Run_KQL_query_(User_Error)": {
+          "runAfter": {
+            "Initialize_variable": [
+              "Succeeded"
+            ]
+          },
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['kusto']['connectionId']"
+              }
+            },
+            "method": "post",
+            "body": {
+              "cluster": "https://pst.kusto.windows.net",
+              "db": "Prod",
+              "csl": "let unit = 1m;\nlet ImpactEndDate = bin(datetime(@{variables('endTime')}) , unit);\nlet ImpactStartDate =bin(ImpactEndDate -12m, unit);\nlet start = ImpactStartDate;\nlet end = ImpactEndDate;\nlet operationName = \"PaymentMethodDescriptionsController-GET\";\nlet allrecords= GetPXReliabilityMetrics(start, end, \"\", operationName);\nlet UserErrorTable = allrecords\n| where TotalUserErrors != 0\n| top 10 by TotalUserErrors\n| project OperationName ,PartnerName,Market,ResourceFamily,ResourceType,ServiceRegion,TotalStarted,TotalSucceeded,TotalUserErrors\n| order by TotalUserErrors;\nUserErrorTable;"
+            },
+            "path": "/ListKustoResults/false"
+          }
+        },
+        "Get_an_IcM_incident": {
+          "runAfter": {},
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['IcM']['connectionId']"
+              }
+            },
+            "method": "get",
+            "path": "/api/v1/incidents/@{encodeURIComponent(triggerBody()['IncidentId'])}"
+          }
+        },
+        "Initialize_variable": {
+          "runAfter": {
+            "Get_an_IcM_incident": [
+              "Succeeded"
+            ]
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "endTime",
+                "type": "string",
+                "value": "@body('Get_an_IcM_incident')['CreatedDate']"
+              }
+            ]
+          }
+        },
+        "Create_HTML_table(User_Errors)": {
+          "runAfter": {
+            "Run_KQL_query_(System_Error)": [
+              "Succeeded"
+            ]
+          },
+          "type": "Table",
+          "inputs": {
+            "from": "@body('Run_KQL_query_(User_Error)')?['value']",
+            "format": "HTML"
+          }
+        },
+        "Add_new_IcM_Discussion_entry": {
+          "runAfter": {
+            "Data_By_BaseCv": [
+              "Succeeded"
+            ]
+          },
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['IcM']['connectionId']"
+              }
+            },
+            "method": "post",
+            "body": {
+              "DiscussionText": "<h3>Get PX TrafficDrop User Error Details as below</h3>\n@{body('Create_HTML_table(User_Errors)')}\n\n<h3>Get PX TrafficDrop System Error Details as below</h3>\n@{body('Create_HTML_table(System_Errors)')}\n\n<h3>Get User Error Details as below</h3>\n@{body('_User_errors')}\n\n<h3>Get System Error Details as below</h3>\n@{body('System_errors')}\n\n<h3>Get system error logs based on BaseCv</h3>\n@{body('Data_By_BaseCv')}",
+              "RenderType": "Html"
+            },
+            "path": "/api/v1/incidents/@{encodeURIComponent(body('Get_an_IcM_incident')['IncidentId'])}/discussion"
+          }
+        },
+        "Edit_an_IcM_incident": {
+          "runAfter": {
+            "Add_new_IcM_Discussion_entry": [
+              "Succeeded"
+            ]
+          },
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['IcM']['connectionId']"
+              }
+            },
+            "method": "post",
+            "body": {
+              "Keywords": "Auto-analyzing_GPShield"
+            },
+            "path": "/api/v1/incidents/@{encodeURIComponent(body('Get_an_IcM_incident')['IncidentId'])}/edit"
+          }
+        },
+        "Initialize_variable_Cv": {
+          "runAfter": {
+            "System_errors": [
+              "Succeeded"
+            ]
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "Cv",
+                "type": "string",
+                "value": "@body('Run_KQL_query_for_System_errors')?['value'][0]['cV']"
+              }
+            ]
+          }
+        },
+        "Run_KQL_query_by_BaseCv": {
+          "runAfter": {
+            "Initialize_variable_Cv": [
+              "Succeeded"
+            ]
+          },
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['kusto']['connectionId']"
+              }
+            },
+            "method": "post",
+            "body": {
+              "cluster": "https://pst.kusto.windows.net",
+              "db": "Prod",
+              "csl": "let unit = 1m;\nlet ImpactEndDate = bin(datetime(@{variables('endTime')}) - 2m, unit);\nlet ImpactStartDate =bin(ImpactEndDate -10m, unit);\nlet start = ImpactStartDate;\nlet end = ImpactEndDate;\nlet all_records=RequestTelemetry\n| where TIMESTAMP > start  and TIMESTAMP < end\n| where (name == \"Microsoft.Commerce.Tracing.Sll.PXServiceIncomingOperation\" or name == \"Microsoft.Commerce.Tracing.Sll.PXServiceOutgoingOperation\")\n| where cV startswith GetCVBase(\"@{variables('Cv')}\")\n| order by cV asc\n| serialize rownum = row_number();\nlet failedRow_num = toscalar(all_records\n| where data_baseData_protocolStatusCode startswith \"5\"\n| project r1=rownum\n| take 1);\nall_records\n| where rownum between (failedRow_num - 2 .. failedRow_num + 2)\n| order by rownum asc\n| project TIMESTAMP, cV, name, data_ServerTraceId, data_RequestTraceId, data_baseData_callerName, data_baseData_operationName, data_baseData_protocolStatusCode, data_baseData_dependencyName, data_baseData_dependencyOperationName, data_baseData_latencyMs, data_baseData_targetUri"
+            },
+            "path": "/ListKustoResults/false"
+          }
+        },
+        "Data_By_BaseCv": {
+          "runAfter": {
+            "Run_KQL_query_by_BaseCv": [
+              "Succeeded"
+            ]
+          },
+          "type": "Table",
+          "inputs": {
+            "from": "@body('Run_KQL_query_by_BaseCv')?['value']",
+            "format": "HTML"
+          }
+        },
+        "Run_KQL_Query_for_User_errors": {
+          "runAfter": {
+            "Create_HTML_table(System_Errors)": [
+              "Succeeded"
+            ]
+          },
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['kusto']['connectionId']"
+              }
+            },
+            "method": "post",
+            "body": {
+              "cluster": "https://pst.kusto.windows.net",
+              "db": "Prod",
+              "csl": "let unit = 1m;\nlet ImpactEndDate = bin(datetime(@{variables('endTime')}), unit);\nlet ImpactStartDate =bin(ImpactEndDate -10m, unit);\nlet start = ImpactStartDate;\nlet end = ImpactEndDate;\nRequestTelemetry\n| where TIMESTAMP > start  and TIMESTAMP < end\n| where (name == \"Microsoft.Commerce.Tracing.Sll.PXServiceIncomingOperation\" or name == \"Microsoft.Commerce.Tracing.Sll.PXServiceOutgoingOperation\")\n| where data_baseData_operationName == \"PaymentMethodDescriptionsController-GET\"\n| extend res = parse_json(data_ResponseDetails)\n| extend error = res['ErrorCode']\n| where data_baseData_protocolStatusCode startswith \"4\" //User Error\n//| where data_baseData_protocolStatusCode startswith \"5\" //System Error\n| project res['ErrorCode'],TIMESTAMP,cV, name,data_ServerTraceId,data_RequestTraceId, data_baseData_callerName, data_baseData_operationName, data_baseData_protocolStatusCode,data_baseData_dependencyName,data_baseData_dependencyOperationName, data_baseData_latencyMs, data_baseData_targetUri,data_ResponseDetails,data_AccountId,data_Country\n"
+            },
+            "path": "/ListKustoResults/false"
+          }
+        },
+        "_User_errors": {
+          "runAfter": {
+            "Run_KQL_Query_for_User_errors": [
+              "Succeeded"
+            ]
+          },
+          "type": "Table",
+          "inputs": {
+            "from": "@body('Run_KQL_Query_for_User_errors')?['value']",
+            "format": "HTML"
+          }
+        },
+        "Run_KQL_query_for_System_errors": {
+          "runAfter": {
+            "_User_errors": [
+              "Succeeded"
+            ]
+          },
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['kusto']['connectionId']"
+              }
+            },
+            "method": "post",
+            "body": {
+              "cluster": "https://pst.kusto.windows.net",
+              "db": "Prod",
+              "csl": "let unit = 1m;\nlet ImpactEndDate = bin(datetime(@{variables('endTime')}), unit);\nlet ImpactStartDate =bin(ImpactEndDate -10m, unit);\nlet start = ImpactStartDate;\nlet end = ImpactEndDate;\nRequestTelemetry\n| where TIMESTAMP > start  and TIMESTAMP < end\n| where (name == \"Microsoft.Commerce.Tracing.Sll.PXServiceIncomingOperation\" or name == \"Microsoft.Commerce.Tracing.Sll.PXServiceOutgoingOperation\")\n| where data_baseData_operationName == \"PaymentMethodDescriptionsController-GET\"\n| extend res = parse_json(data_ResponseDetails)\n| extend error = res['ErrorCode']\n//| where data_baseData_protocolStatusCode startswith \"4\" //User Error\n| where data_baseData_protocolStatusCode startswith \"5\" //System Error\n| project res['ErrorCode'],TIMESTAMP,cV, name,data_ServerTraceId,data_RequestTraceId, data_baseData_callerName, data_baseData_operationName, data_baseData_protocolStatusCode,data_baseData_dependencyName,data_baseData_dependencyOperationName, data_baseData_latencyMs, data_baseData_targetUri,data_ResponseDetails,data_AccountId,data_Country"
+            },
+            "path": "/ListKustoResults/false"
+          }
+        },
+        "System_errors": {
+          "runAfter": {
+            "Run_KQL_query_for_System_errors": [
+              "Succeeded"
+            ]
+          },
+          "type": "Table",
+          "inputs": {
+            "from": "@body('Run_KQL_query_for_System_errors')?['value']",
+            "format": "HTML"
+          }
+        },
+        "Run_KQL_query_(System_Error)": {
+          "runAfter": {
+            "Run_KQL_query_(User_Error)": [
+              "Succeeded"
+            ]
+          },
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['kusto']['connectionId']"
+              }
+            },
+            "method": "post",
+            "body": {
+              "cluster": "https://pst.kusto.windows.net",
+              "db": "Prod",
+              "csl": "let unit = 1m;\nlet ImpactEndDate = bin(datetime(@{variables('endTime')}) , unit);\nlet ImpactStartDate =bin(ImpactEndDate -12m, unit);\nlet start = ImpactStartDate;\nlet end = ImpactEndDate;\nlet operationName = \"PaymentMethodDescriptionsController-GET\";\nlet allrecords= GetPXReliabilityMetrics(start, end, \"\", operationName);\nlet SystemErrorTable = allrecords\n| where TotalSystemErrors != 0\n| top 10 by TotalSystemErrors\n| project OperationName ,PartnerName,Market,ResourceFamily,ResourceType,ServiceRegion,TotalStarted,TotalSucceeded,TotalSystemErrors\n| order by TotalSystemErrors;\nSystemErrorTable;"
+            },
+            "path": "/ListKustoResults/false"
+          }
+        },
+        "Create_HTML_table(System_Errors)": {
+          "runAfter": {
+            "Create_HTML_table(User_Errors)": [
+              "Succeeded"
+            ]
+          },
+          "type": "Table",
+          "inputs": {
+            "from": "@body('Run_KQL_query_(System_Error)')?['value']",
+            "format": "HTML"
+          }
+        }
+      }
+    },
+    "runtimeConfiguration": {
+      "lifetime": {
+        "unit": "Day",
+        "count": 25
+      }
+    },
+    "state": "Disabled",
+    "metadata": {
+      "dataClassifications": [
+        "AccessControlData"
+      ]
+    }
+  }
+}

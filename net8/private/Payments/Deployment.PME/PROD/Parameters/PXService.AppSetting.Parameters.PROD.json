@@ -1,0 +1,26 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "siteName": {
+      "value": "PaymentExperience-PROD"
+    },
+    "appInsightsKey": {
+      "value": "50bd278c-1827-4339-8ac8-a85a39fe7a35"
+    },
+    "environmentName": {
+      "value": "STORECORE-PST-PX-PROD"
+    },
+    "managedIdentityClientId": {
+      "value": "de6f8403-2bc1-4e12-87ce-b0a9b4397ce1"
+    },
+    "websiteLocalCachedOption": {
+      "value": "Never"
+    },
+    "websiteLocalCacheSize": {
+      // If there is no limit defined or the limit is set to anything lower than 2 GB and the copied files exceeds the limit, the deployment or swap may fail with an error.
+      // See: https://docs.microsoft.com/en-us/azure/app-service/overview-local-cache
+      "value": ""
+    }
+  }
+}

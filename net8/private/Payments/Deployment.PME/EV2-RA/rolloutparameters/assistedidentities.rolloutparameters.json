@@ -1,0 +1,73 @@
+{
+  "assistedIdentities": [
+    {
+      "name": "__DEPLOYMENT_IDENTITY_NAME__",
+      "type": "AADApplication",
+      "properties": {
+        "displayName": "__DEPLOYMENT_IDENTITY_DISPLAY_NAME__",
+        "ownerObjectIds": [
+          "__DEPLOYMENT_IDENTITY_OWNER_OBJECT_ID__"
+        ],
+        "trustedCertificates": [
+          {
+            "subjectName": "__DEPLOYMENT_IDENTITY_KV_CERTIFICATE_SUBJECT_NAME__",
+            "issuer": "AME"
+          }
+        ],
+        "trustedCertificateSecretProvider": {
+          "type": "AzureKeyVault",
+          "properties": {
+            "location": "__DEPLOYMENT_IDENTITY_KV_LOCATION__",
+            "subscriptionKey": "__DEPLOYMENT_IDENTITY_SUBSCRIPTION_KEY__",
+            "resourceGroup": "__DEPLOYMENT_IDENTITY_KV_RESOURCE_GROUP__",
+            "vaultName": "__DEPLOYMENT_IDENTITY_KV_NAME__",
+            "skuName": "standard",
+            "certificateIssuers": [
+              {
+                "issuerName": "OneCert-AME",
+                "issuerProvider": "OneCertV2-PrivateCA"
+              }
+            ],
+            "certificates": [
+              {
+                "name": "__DEPLOYMENT_IDENTITY_KV_CERTIFICATE_NAME__",
+                "policy": {
+                  "key_props": {
+                    "exportable": true,
+                    "kty": "RSA",
+                    "key_size": 2048
+                  },
+                  "secret_props": {
+                    "contentType": "application/x-pkcs12"
+                  },
+                  "x509_props": {
+                    "subject": "CN=__DEPLOYMENT_IDENTITY_KV_CERTIFICATE_SUBJECT_NAME__",
+                    "sans": {
+                      "dns_names": [
+                        "__DEPLOYMENT_IDENTITY_KV_CERTIFICATE_SUBJECT_NAME__"
+                      ]
+                    },
+                    "validity_months": 6
+                  },
+                  "lifetime_actions": [
+                    {
+                      "trigger": {
+                        "days_before_expiry": 95
+                      },
+                      "action": {
+                        "action_type": "AutoRenew"
+                      }
+                    }
+                  ],
+                  "issuer": {
+                    "name": "OneCert-AME"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

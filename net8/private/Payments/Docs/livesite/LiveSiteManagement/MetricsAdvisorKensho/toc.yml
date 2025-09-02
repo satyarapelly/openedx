@@ -1,0 +1,8 @@
+- name: 'Setting up MetricsAdvisor/Kensho'
+  href: Setting-up-MetricsAdvisorKensho.md
+- name: Existing data feeds and Alerts
+  href: Existing-data-feeds-and-Alerts.md
+- name: Parse Kusto data for Metric Advisor
+  href: Parse-Kusto-data-for-Metric-Advisor.md
+- name: 'ZZZ - Live Site Checklist [Panji to cleanup]'
+  href: ZZZ---Live-Site-Checklist-Panji-to-cleanup.md

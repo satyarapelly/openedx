@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MonitoringManagement version="1.0" namespace="Ma" timestamp="2020-01-23T18:44:15.6734441Z">
+  <TaggedData name="OutgoingApisStandingQuery">
+    <Data>
+      <StandingQueries>
+        <StandingQuery>
+          <Id>2E888468-91BB-4222-855A-388D4AB7D411</Id>
+          <Query><![CDATA[
+                            SELECT Average(100.0) AS OutgoingApiReliability
+                            WHERE (@baseType == "OutgoingServiceRequest" || @baseType == "Ms.Qos.OutgoingServiceRequest") && (@requestStatus == 3 || @requestStatus == 4)
+                            GROUPBY @dependencyName AS DependencyName
+                            GROUPBY @operationName AS OperationName
+                            GROUPBY @role AS Role
+                            GROUPBY @roleInstance AS RoleInstance
+                            GROUPBY @tenant AS Tenant
+                            GROUPBY @"ext.cloud.name" AS CloudName
+                            GROUPBY @"ext.cloud.role" AS CloudRole
+                            GROUPBY @"ext.cloud.location" AS CloudLocation
+                            GROUPBY @"ext.cloud.roleInstance" AS CloudRoleInstance
+                        ]]>
+          </Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery>
+          <Id>50B2E1B0-8554-4744-A85A-A2324A32F795</Id>
+          <Query><![CDATA[
+                            SELECT Average(0.0) AS OutgoingApiReliability
+                            WHERE (@baseType == "OutgoingServiceRequest" || @baseType == "Ms.Qos.OutgoingServiceRequest") && (@requestStatus == 5 || @requestStatus == 6)
+                            GROUPBY @dependencyName AS DependencyName
+                            GROUPBY @operationName AS OperationName
+                            GROUPBY @role AS Role
+                            GROUPBY @roleInstance AS RoleInstance
+                            GROUPBY @tenant AS Tenant
+                            GROUPBY @"ext.cloud.name" AS CloudName
+                            GROUPBY @"ext.cloud.role" AS CloudRole
+                            GROUPBY @"ext.cloud.location" AS CloudLocation
+                            GROUPBY @"ext.cloud.roleInstance" AS CloudRoleInstance
+                        ]]>
+          </Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+        <StandingQuery>
+          <Id>CF3140B9-ADC2-4B6E-9491-B2E66A471A4A</Id>
+          <Query><![CDATA[
+                            SELECT Average(@latencyMs) AS OutgoingApiSuccessLatency
+                            WHERE (@baseType == "OutgoingServiceRequest" || @baseType == "Ms.Qos.OutgoingServiceRequest") && (@requestStatus == 3)
+                            GROUPBY @dependencyName AS DependencyName
+                            GROUPBY @operationName AS OperationName
+                            GROUPBY @role AS Role
+                            GROUPBY @roleInstance AS RoleInstance
+                            GROUPBY @tenant AS Tenant
+                            GROUPBY @"ext.cloud.name" AS CloudName
+                            GROUPBY @"ext.cloud.role" AS CloudRole
+                            GROUPBY @"ext.cloud.location" AS CloudLocation
+                            GROUPBY @"ext.cloud.roleInstance" AS CloudRoleInstance
+                        ]]>
+          </Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+      <StandingQuery>
+          <Id>5D268F65-A251-49FC-8BBB-F910DC09D979</Id>
+          <Query>
+            <![CDATA[
+                            LET granularity = 100.0
+                            LET bucketedLatency = Math.Ceiling(@latencyMs / granularity) * granularity
+
+                            SELECT 
+                              DistributionDigest(bucketedLatency)  AS OutgoingApiSuccessLatencyPercentile
+                            WHERE (@baseType == "OutgoingServiceRequest" || @baseType == "Ms.Qos.OutgoingServiceRequest") && (@requestStatus == 3)
+                            GROUPBY @dependencyName AS DependencyName
+                            GROUPBY @operationName AS OperationName
+                            GROUPBY @role AS Role
+                            GROUPBY @roleInstance AS RoleInstance
+                            GROUPBY @tenant AS Tenant
+                            GROUPBY @"ext.cloud.name" AS CloudName
+                            GROUPBY @"ext.cloud.role" AS CloudRole
+                            GROUPBY @"ext.cloud.location" AS CloudLocation
+                            GROUPBY @"ext.cloud.roleInstance" AS CloudRoleInstance
+                        ]]>
+          </Query>
+          <DataSource>EtwLogs</DataSource>
+        </StandingQuery>
+      </StandingQueries>
+    </Data>
+  </TaggedData>
+</MonitoringManagement>

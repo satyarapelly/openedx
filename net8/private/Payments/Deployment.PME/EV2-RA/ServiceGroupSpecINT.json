@@ -1,0 +1,7 @@
+{
+  "name": "Microsoft.CFS.PC.PX.INT",
+  "description": "Payment Experience Service INT",
+  "ownerGroupDisplayName": "PME\\AP-PXService",
+  "ownerGroupContactEmail": "kowshikpfte@microsoft.com",
+  "contentVersion": "1.0.0.0"
+}

@@ -1,0 +1,23 @@
+{
+  "testScenarioName": "px.partnersettings.defaulttemplate.removeEwalletYesButtons",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "add": {
+          "template": "defaulttemplate",
+          "features": {
+            "removeElement": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "removeAddressFormHeading": true
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

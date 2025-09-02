@@ -1,0 +1,20 @@
+resourceName,family,type,country,operation,WebBlends,WebBlends_Inline,Xbox,Cart,WebPay,Bing,CommercialStores,AMCweb,AMCXbox,OfficeOOBE,OXOOobe,Skype,SmbOOBE,Wallet,MarketPlace,Azure,OxoWebDirect
+paymentMethodDescriptions,mobile_billing_non_sim,,,add,in prod,NA,in prod,NA,NA,NA,NA,in prod,pidlwork,NA,NA,TBD,,,,NA,NA
+paymentMethodDescriptions,direct_debit,ach,,add,NA,NA,NA,NA,NA,NA,NA,NA,pidlwork,TBD,TBD,TBD,,,,NA,NA
+paymentMethodDescriptions,direct_debit,ach,,update,NA,NA,NA,NA,NA,NA,NA,NA,pidlwork,,,,,,,NA,NA
+paymentMethodDescriptions,ewallet,alipay_billing_agreement,,add,in prod,NA,in prod,NA,NA,NA,NA,in prod,pidlwork,TBD,TBD,TBD,,,,NA,NA
+paymentMethodDescriptions,direct_debit,ideal_billing_agreement,,add,in prod,NA,NA,in prod,NA,NA,NA,in prod,NA,TBD,TBD,TBD,,,,NA,NA
+paymentMethodDescriptions,ewallet,paypal,,add,in prod,in prod,in prod,in prod,in prod,in prod,NA,in prod,pidlwork,TBD,TBD,TBD,,,,NA,in prod
+paymentMethodDescriptions,credit_card,,,"add,update",in prod,in prod,in prod,in prod,in prod,in prod,in prod,in prod,in prod,in prod,in prod,TBD,,,pidlwork,in prod,in prod
+paymentMethodDescriptions,credit_card,unionpay_creditcard,,"add,update",in prod,NA,in prod,NA,NA,NA,NA,pidlwork,pidlwork,TBD,TBD,TBD,,,,NA,NA
+paymentMethodDescriptions,credit_card,unionpay_debitcard,,"add,update",in prod,NA,in prod,NA,NA,NA,NA,pidlwork,pidlwork,TBD,TBD,TBD,,,,NA,NA
+paymentMethodDescriptions,direct_debit,sepa,,add,in prod,NA,NA,in prod,NA,NA,in prod,in prod,NA,TBD,TBD,TBD,,,,NA,NA
+paymentMethodDescriptions,direct_debit,sepa,,update,NA,NA,NA,NA,NA,NA,in prod,in prod,pidlwork,TBD,TBD,,,,,NA,NA
+paymentMethodDescriptions,credit_card,,kr,add,NA,NA,NA,NA,NA,NA,NA,TBD,TBD,TBD,TBD,TBD,,,,NA,NA
+paymentMethodDescriptions,credit_card,,br,add,in prod,in prod,in prod,in prod,NA,NA,NA,in prod,in prod,TBD,TBD,TBD,,,,NA,in prod
+paymentMethodDescriptions,credit_card,,br,update,,,,,,,,pidlwork,pidlwork,,,,,,,NA,
+paymentMethodDescriptions,invoice_credit,klarna,,add,in prod,pidlwork,in prod,in prod,NA,NA,NA,in prod,in prod,TBD,TBD,TBD,,,,NA,pidlwork
+paymentMethodDescriptions,credit_card,elo,,add,pidlwork,pidlwork,pidlwork,pidlwork,pidlwork,pidlwork,pidlwork,pidlwork,pidlwork,cut,cut,cut,,,,NA,pidlwork
+paymentMethodDescriptions,credit_card,elo,br,"add,update",pidlwork,pidlwork,pidlwork,pidlwork,NA,NA,NA,pidlwork,pidlwork,NA,NA,NA,,NA,,NA,pidlwork
+paymentMethodDescriptions,virtual,legacy_invoice,,add,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,,NA,,pidlwork,NA
+paymentMethodDescriptions,,,,selectinstance,TBD,TBD,TBD,TBD,TBD,TBD,pidlwork,TBD,TBD,TBD,TBD,TBD,,TBD,TBD,TBD,TBD

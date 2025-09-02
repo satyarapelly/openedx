@@ -1,0 +1,11 @@
+<EtwCollectorConfiguration xmlns="http://schemas.datacontract.org/2004/07/Microsoft.Xbox.Xpert.Agent.DataLauncher.Etw" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+  <SessionPrefixes i:type="a:ArrayOfstring" xmlns:a="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+    <a:string>AP-MonitoringAgent-live-Xpert</a:string>
+    <a:string>AP-MonitoringAgent-file+live-Xpert</a:string>
+  </SessionPrefixes>
+  <ShutdownTimeout>PT1M</ShutdownTimeout>
+  <TraceProcessors i:type="ArrayOfTraceProcessorConfiguration">
+    <TraceProcessorConfiguration i:type="IndexerProcessorConfiguration" />
+    <TraceProcessorConfiguration i:type="LevelProcessorConfiguration" />
+  </TraceProcessors>
+</EtwCollectorConfiguration>

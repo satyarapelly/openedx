@@ -1,0 +1,17 @@
+DisplayStringId,CountryIds,Type,Code,Value,Target
+closeButtonAccessiblityName,,constant,closeButtonAccessiblityName,Close,
+invalidExpiryDate,,errorCode,InvalidExpiryDate,Expiry date is invalid.,
+tooManyOperations,,errorCode,TooManyOperations,Maximum retry exceeded.,
+invalidChallengeCode,,errorCode,InvalidChallengeCode,Challenge code is invalid.,
+paymentInstrumentAlreadyAdded,,errorCode,PaymentInstrumentAddAlready,This Payment Instrument is already added.,
+challengeCodeExpired,,errorCode,ChallengeCodeExpired,The challenge code has expired.,
+validationFailed,,errorCode,ValidationFailed,"Incorrect data. Please, check your info and try again.",
+InvalidPostalCode,,serverErrorCode,InvalidPostalCode,"Invalid Zip Code", postal_code
+InvalidAddress,,serverErrorCode,InvalidAddress,"Check your address. There appears to be an error in it.", "postal_code,city,region"
+InvalidAddressFieldsCombination,,serverErrorCode,InvalidAddressFieldsCombination,"Check your address. There appears to be an error in it.", "postal_code,city,region"
+InvalidProperty,,serverErrorCode,InvalidProperty,"Check your address. There appears to be an error in it.", "address_line1,address_line2,address_line3,postal_code,city,region"
+InvalidCity,,serverErrorCode,InvalidCity,"Check the city in your address. There appears to be an error in it.", "city"
+InvalidPostalCode,,serverErrorCode,InvalidPostalCode,"Check the Zip or Postal code in your address. There appears to be an error in it.", "postal_code"
+InvalidRegion,,serverErrorCode,InvalidRegion,"Check the state in your address. There appears to be an error in it.", "region"
+singleFieldErrorMessage,,constant,singleFieldErrorMessage,"There is 1 field in the form that requires your attention",
+multipleFieldsErrorMessage,,constant,multipleFieldsErrorMessage,"There are {n} fields in the form that require your attention",

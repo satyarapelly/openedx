@@ -1,0 +1,377 @@
+{
+  "$schema": "https://ev2schema.azure.net/schemas/2020-04-01/RegionAgnosticServiceModel.json",
+  "contentVersion": "1.0.0",
+  "serviceMetadata": {
+    "serviceIdentifier": "e50abb8e-e976-4311-b12b-85156f4abc0e",
+    "serviceGroup": "Microsoft.CFS.PC.PX.INT",
+    "displayName": "Payment Experience Service Rollout",
+    "environment": "$config(environment)",
+    "tenantId": "975f013f-7f24-47e8-a7d3-abc4752bf346",
+    "serviceSpecificationPath": "ServiceSpec.json"
+  },
+  "assistedIdentity": {
+    "rolloutParametersPath": "rolloutparameters\\assistedidentities.rolloutparameters.json",
+    "scopeTags": [
+      {
+        "name": "assistedIdentities"
+      }
+    ]
+  },
+  "serviceResourceGroupDefinitions": [
+    {
+      "name": "PaymentExperience.Global",
+      "azureResourceGroupName": "rg-$config(workloadName)-global",
+      "subscriptionKey": "$config(subscriptionKey)",
+      "stamps": {
+        "count": "$config(stampCount)"
+      },
+      "executionConstraint": {
+        "quantifier": "Always",
+        "level": "Cloud",
+        "regions": [
+          "$config(selectedGlobalRegion)"
+        ]
+      },
+      "scopeTags": [
+        {
+          "name": "subscription"
+        },
+        {
+          "name": "pxapp"
+        }
+      ],
+      "serviceResourceDefinitions": [
+        {
+          "name": "GlobalResources",
+          "composedOf": {
+            "arm": {
+              "templatePath": "templates\\global.json",
+              "parametersPath": "parameters\\global.json",
+              "deploymentLevel": "ResourceGroup",
+              "deploymentMode": "incremental"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "PaymentExperience.Global.ShortUrlCosmosDb",
+      "azureResourceGroupName": "$config(database.resourceGroup)",
+      "subscriptionKey": "$config(subscriptionKey)",
+      "stamps": {
+        "count": "$config(stampCount)"
+      },
+      "executionConstraint": {
+        "quantifier": "Always",
+        "level": "Cloud",
+        "regions": [
+          "$config(database.location)"
+        ]
+      },
+      "scopeTags": [
+        {
+          "name": "subscription"
+        },
+        {
+          "name": "px-shorturl-database"
+        }
+      ],
+      "serviceResourceDefinitions": [
+        {
+          "name": "GlobalResources.ShortUrlCosmosDb",
+          "composedOf": {
+            "arm": {
+              "templatePath": "templates\\global-cosmosdb.json",
+              "parametersPath": "parameters\\global-cosmosdb.json",
+              "deploymentLevel": "ResourceGroup",
+              "deploymentMode": "incremental"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "PaymentExperience.Network",
+      "azureResourceGroupName": "rg-$config(networkworkloadName)-$location()-$stamp()",
+      "subscriptionKey": "$config(subscriptionKey)",
+      "stamps": {
+        "count": "$config(stampCount)"
+      },
+      "executionConstraint": {
+        "quantifier": "Always",
+        "level": "Region",
+        "regions": "$config(selectedRegions)"
+      },
+      "scopeTags": [
+        {
+          "name": "subscription"
+        },
+        {
+          "name": "virtual-network"
+        }
+      ],
+      "serviceResourceDefinitions": [
+        {
+          "name": "Network",
+          "composedOf": {
+            "arm": {
+              "templatePath": "templates\\network.json",
+              "parametersPath": "parameters\\network.json",
+              "deploymentLevel": "ResourceGroup",
+              "deploymentMode": "incremental"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "PaymentExperienceService",
+      "azureResourceGroupName": "rg-$config(workloadName)-$location()-$stamp()",
+      "subscriptionKey": "$config(subscriptionKey)",
+      "stamps": {
+        "count": "$config(stampCount)"
+      },
+      "executionConstraint": {
+        "quantifier": "Always",
+        "level": "Region",
+        "regions": "$config(selectedRegions)"
+      },
+      "scopeTags": [
+        {
+          "name": "subscription"
+        },
+        {
+          "name": "assistedIdentities"
+        },
+        {
+          "name": "pxapp"
+        }
+      ],
+      "serviceResourceDefinitions": [
+        {
+          "name": "Main-KeyVault-Creation",
+          "composedOf": {
+            "arm": {
+              "templatePath": "templates\\main-keyvault.json",
+              "parametersPath": "parameters\\main-keyvault.json",
+              "deploymentLevel": "ResourceGroup",
+              "deploymentMode": "incremental"
+            },
+            "extension": {
+              "rolloutParametersPath": "rolloutparameters\\keyvault.rolloutparameters.json",
+              "allowedTypes": [
+                {
+                  "Type": "{Microsoft.KeyVault.DataPlane/SetCertificateIssuer}"
+                },
+                {
+                  "Type": "{Microsoft.KeyVault.DataPlane/CreateCertificate}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Main-KeyVault-CreateCert-PXTLS",
+          "composedOf": {
+            "extension": {
+              "rolloutParametersPath": "RolloutParameters\\keyvault.rolloutparameters.json",
+              "allowedTypes": [
+                {
+                  "Type": "{Microsoft.KeyVault.DataPlane/CreateCertificate}"
+                }
+              ]
+            }
+          },
+          "scopeTags": [
+            {
+              "name": "certs-px-tls"
+            }
+          ]
+        },
+        {
+          "name": "Main-KeyVault-CreateCert-PXGeneva",
+          "composedOf": {
+            "extension": {
+              "rolloutParametersPath": "RolloutParameters\\keyvault.rolloutparameters.json",
+              "allowedTypes": [
+                {
+                  "Type": "{Microsoft.KeyVault.DataPlane/CreateCertificate}"
+                }
+              ]
+            }
+          },
+          "scopeTags": [
+            {
+              "name": "certs-px-geneva"
+            }
+          ]
+        },
+        {
+          "name": "Main-KeyVault-CreateCert-PXAAD",
+          "composedOf": {
+            "extension": {
+              "rolloutParametersPath": "RolloutParameters\\keyvault.rolloutparameters.json",
+              "allowedTypes": [
+                {
+                  "Type": "{Microsoft.KeyVault.DataPlane/CreateCertificate}"
+                }
+              ]
+            }
+          },
+          "scopeTags": [
+            {
+              "name": "certs-px-aad"
+            }
+          ]
+        },
+        {
+          "name": "Main-KeyVault-CreateCert-PXCTP",
+          "composedOf": {
+            "extension": {
+              "rolloutParametersPath": "RolloutParameters\\keyvault.rolloutparameters.json",
+              "allowedTypes": [
+                {
+                  "Type": "{Microsoft.KeyVault.DataPlane/CreateCertificate}"
+                }
+              ]
+            }
+          },
+          "scopeTags": [
+            {
+              "name": "certs-px-ctp"
+            }
+          ]
+        },
+        {
+          "name": "Main-KeyVault-CreateCert-PXClientAuth",
+          "composedOf": {
+            "extension": {
+              "rolloutParametersPath": "RolloutParameters\\keyvault.rolloutparameters.json",
+              "allowedTypes": [
+                {
+                  "Type": "{Microsoft.KeyVault.DataPlane/CreateCertificate}"
+                }
+              ]
+            }
+          },
+          "scopeTags": [
+            {
+              "name": "certs-px-clientauth"
+            }
+          ]
+        },
+        {
+          "name": "Main",
+          "composedOf": {
+            "arm": {
+              "templatePath": "templates\\main.json",
+              "parametersPath": "parameters\\main.json",
+              "deploymentLevel": "ResourceGroup",
+              "deploymentMode": "incremental"
+            }
+          },
+          "scopeTags": [
+            {
+              "name": "app-gateway-listeners"
+            }
+          ]
+        },
+        {
+          "name": "App-PX",
+          "composedOf": {
+            "arm": {
+              "templatePath": "templates\\app.json",
+              "parametersPath": "parameters\\app.json",
+              "deploymentLevel": "ResourceGroup",
+              "deploymentMode": "incremental"
+            }
+          }
+        },
+        {
+          "name": "App-PX-Rbac",
+          "composedOf": {
+            "arm": {
+              "templatePath": "templates\\app-rbac.json",
+              "parametersPath": "parameters\\app-rbac.json",
+              "deploymentLevel": "ResourceGroup",
+              "deploymentMode": "incremental"
+            }
+          }
+        },
+        {
+          "name": "App-PX-Deploy",
+          "composedOf": {
+            "arm": {
+              "templatePath": "templates\\app-deploy.json",
+              "parametersPath": "parameters\\app-deploy.json",
+              "deploymentLevel": "ResourceGroup",
+              "deploymentMode": "incremental"
+            }
+          }
+        },
+        {
+          "name": "App-PX-Swap",
+          "composedOf": {
+            "arm": {
+              "templatePath": "templates\\app-swap.json",
+              "parametersPath": "parameters\\app-swap.json",
+              "deploymentLevel": "ResourceGroup",
+              "deploymentMode": "incremental"
+            },
+            "extension": {
+              "rolloutParametersPath": "RolloutParameters\\App.Swap.RolloutParameters.json"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "PaymentExperience.Emulator",
+      "azureResourceGroupName": "rg-$config(workloadName)-$location()-$stamp()",
+      "subscriptionKey": "$config(subscriptionKey)",
+      "stamps": {
+        "count": "$config(stampCount)"
+      },
+      "executionConstraint": {
+        "quantifier": "Always",
+        "level": "Region",
+        "regions": "$config(selectedRegions)"
+      },
+      "scopeTags": [
+        {
+          "name": "subscription"
+        },
+        {
+          "name": "assistedIdentities"
+        },
+        {
+          "name": "px-dependencyemulators"
+        }
+      ],
+      "serviceResourceDefinitions": [
+        {
+          "name": "App-PX-DependencyEmulators",
+          "composedOf": {
+            "arm": {
+              "templatePath": "templates\\app.json",
+              "parametersPath": "parameters\\app.json",
+              "deploymentLevel": "ResourceGroup",
+              "deploymentMode": "incremental"
+            }
+          }
+        },
+        {
+          "name": "App-PX-DependencyEmulators-Deploy",
+          "composedOf": {
+            "arm": {
+              "templatePath": "templates\\app-deploy.json",
+              "parametersPath": "parameters\\app-deploy.json",
+              "deploymentLevel": "ResourceGroup",
+              "deploymentMode": "incremental"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

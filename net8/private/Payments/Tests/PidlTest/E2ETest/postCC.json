@@ -1,0 +1,34 @@
+﻿{
+  "paymentMethodFamily": "credit_card",
+  "paymentMethodType": "amex",
+  "paymentMethodOperation": "add",
+  "paymentMethodCountry": "us",
+  "paymentMethodResource_id": "credit_card.amex",
+  "sessionId": "01ec1270-88dc-c72d-45a4-e44f73ec6a32",
+  "context": "purchase",
+  "riskData": {
+    "dataType": "payment_method_riskData",
+    "dataOperation": "add",
+    "dataCountry": "us"
+  },
+  "details": {
+    "dataType": "credit_card_amex_details",
+    "dataOperation": "add",
+    "dataCountry": "us",
+    "accountHolderName": "Ernest Baskink",
+    "accountToken": "placeholder",
+    "expiryMonth": "9",
+    "expiryYear": "2019",
+    "cvvToken": "placeholder",
+    "address": {
+      "addressType": "billing",
+      "addressOperation": "add",
+      "addressCountry": "us",
+      "address_line1": "6100 City Ave Apt 1611",
+      "city": "Philadelphia",
+      "region": "pa",
+      "postal_code": "19131",
+      "country": "us"
+    }
+  }  
+}

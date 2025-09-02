@@ -1,0 +1,1777 @@
+﻿[
+    {
+        "identity": {
+            "description_type": "address",
+            "type": "shipping_v3",
+            "country": "us"
+        },
+        "displayDescription": [
+            {
+                "displayName": "AddressDetailsPage",
+                "members": [
+                    {
+                        "displayName": "First name",
+                        "showDisplayName": "true",
+                        "displayErrorMessages": {
+                            "defaultErrorMessage": "Incorrectly formatted first name",
+                            "fromErrorCode": [
+                                {
+                                    "errorCode": "required_field_empty",
+                                    "errorMessage": "First name is a required field"
+                                }
+                            ]
+                        },
+                        "displayId": "addressFirstName",
+                        "displayType": "property",
+                        "propertyName": "first_name",
+                        "tags": {
+                            "accessibilityName": "First name"
+                        }
+                    },
+                    {
+                        "displayName": "Last name",
+                        "showDisplayName": "true",
+                        "displayErrorMessages": {
+                            "defaultErrorMessage": "Incorrectly formatted last name",
+                            "fromErrorCode": [
+                                {
+                                    "errorCode": "required_field_empty",
+                                    "errorMessage": "Last name is a required field"
+                                }
+                            ]
+                        },
+                        "displayId": "addressLastName",
+                        "displayType": "property",
+                        "propertyName": "last_name",
+                        "tags": {
+                            "accessibilityName": "Last name"
+                        }
+                    },
+                    {
+                        "displayName": "Address line 1",
+                        "displayPropertyDescription": "i.e. Street and number or P.O. Box #",
+                        "showDisplayName": "true",
+                        "minLength": 25,
+                        "maxLength": 30,
+                        "displayErrorMessages": {
+                            "defaultErrorMessage": "Incorrectly formatted address",
+                            "fromErrorCode": [
+                                {
+                                    "errorCode": "required_field_empty",
+                                    "errorMessage": "Enter the first line of your address"
+                                }
+                            ]
+                        },
+                        "displayId": "shippingAddressLine1",
+                        "displayType": "property",
+                        "propertyName": "address_line1",
+                        "tags": {
+                            "accessibilityName": "Address line 1"
+                        }
+                    },
+                    {
+                        "displayName": "Address line 2 (Optional)",
+                        "displayPropertyDescription": "i.e. Apt #, Suite, Floor",
+                        "showDisplayName": "true",
+                        "minLength": 25,
+                        "maxLength": 30,
+                        "displayErrorMessages": {
+                            "defaultErrorMessage": "Incorrectly formatted address",
+                            "fromErrorCode": [
+                                {
+                                    "errorCode": "required_field_empty",
+                                    "errorMessage": "Enter the second line of your address"
+                                }
+                            ]
+                        },
+                        "displayId": "shippingAddressLine2",
+                        "displayType": "property",
+                        "propertyName": "address_line2",
+                        "tags": {
+                            "accessibilityName": "Address line 2 (Optional)"
+                        }
+                    },
+                    {
+                        "displayName": "City",
+                        "showDisplayName": "true",
+                        "maxLength": 26,
+                        "displayErrorMessages": {
+                            "defaultErrorMessage": "Incorrectly formatted city",
+                            "fromErrorCode": [
+                                {
+                                    "errorCode": "required_field_empty",
+                                    "errorMessage": "Enter your city"
+                                }
+                            ]
+                        },
+                        "displayId": "addressCity",
+                        "displayType": "property",
+                        "propertyName": "city",
+                        "tags": {
+                            "accessibilityName": "City"
+                        }
+                    },
+                    {
+                        "displayName": "State",
+                        "showDisplayName": "true",
+                        "possibleValues": {
+                            "al": "Alabama",
+                            "ak": "Alaska",
+                            "az": "Arizona",
+                            "ar": "Arkansas",
+                            "ca": "California",
+                            "co": "Colorado",
+                            "ct": "Connecticut",
+                            "de": "Delaware",
+                            "dc": "District of Columbia",
+                            "fl": "Florida",
+                            "ga": "Georgia",
+                            "hi": "Hawaii",
+                            "id": "Idaho",
+                            "il": "Illinois",
+                            "in": "Indiana",
+                            "ia": "Iowa",
+                            "ks": "Kansas",
+                            "ky": "Kentucky",
+                            "la": "Louisiana",
+                            "me": "Maine",
+                            "md": "Maryland",
+                            "ma": "Massachusetts",
+                            "mi": "Michigan",
+                            "mn": "Minnesota",
+                            "ms": "Mississippi",
+                            "mo": "Missouri",
+                            "mt": "Montana",
+                            "ne": "Nebraska",
+                            "nv": "Nevada",
+                            "nh": "New Hampshire",
+                            "nj": "New Jersey",
+                            "nm": "New Mexico",
+                            "ny": "New York",
+                            "nc": "North Carolina",
+                            "nd": "North Dakota",
+                            "oh": "Ohio",
+                            "ok": "Oklahoma",
+                            "or": "Oregon",
+                            "pa": "Pennsylvania",
+                            "pr": "Puerto Rico",
+                            "ri": "Rhode Island",
+                            "sc": "South Carolina",
+                            "sd": "South Dakota",
+                            "tn": "Tennessee",
+                            "tx": "Texas",
+                            "ut": "Utah",
+                            "vt": "Vermont",
+                            "va": "Virginia",
+                            "wa": "Washington",
+                            "wv": "West Virginia",
+                            "wi": "Wisconsin",
+                            "wy": "Wyoming"
+                        },
+                        "possibleOptions": {
+                            "al": {
+                                "displayText": "Alabama",
+                                "isDisabled": false
+                            },
+                            "ak": {
+                                "displayText": "Alaska",
+                                "isDisabled": false
+                            },
+                            "az": {
+                                "displayText": "Arizona",
+                                "isDisabled": false
+                            },
+                            "ar": {
+                                "displayText": "Arkansas",
+                                "isDisabled": false
+                            },
+                            "ca": {
+                                "displayText": "California",
+                                "isDisabled": false
+                            },
+                            "co": {
+                                "displayText": "Colorado",
+                                "isDisabled": false
+                            },
+                            "ct": {
+                                "displayText": "Connecticut",
+                                "isDisabled": false
+                            },
+                            "de": {
+                                "displayText": "Delaware",
+                                "isDisabled": false
+                            },
+                            "dc": {
+                                "displayText": "District of Columbia",
+                                "isDisabled": false
+                            },
+                            "fl": {
+                                "displayText": "Florida",
+                                "isDisabled": false
+                            },
+                            "ga": {
+                                "displayText": "Georgia",
+                                "isDisabled": false
+                            },
+                            "hi": {
+                                "displayText": "Hawaii",
+                                "isDisabled": false
+                            },
+                            "id": {
+                                "displayText": "Idaho",
+                                "isDisabled": false
+                            },
+                            "il": {
+                                "displayText": "Illinois",
+                                "isDisabled": false
+                            },
+                            "in": {
+                                "displayText": "Indiana",
+                                "isDisabled": false
+                            },
+                            "ia": {
+                                "displayText": "Iowa",
+                                "isDisabled": false
+                            },
+                            "ks": {
+                                "displayText": "Kansas",
+                                "isDisabled": false
+                            },
+                            "ky": {
+                                "displayText": "Kentucky",
+                                "isDisabled": false
+                            },
+                            "la": {
+                                "displayText": "Louisiana",
+                                "isDisabled": false
+                            },
+                            "me": {
+                                "displayText": "Maine",
+                                "isDisabled": false
+                            },
+                            "md": {
+                                "displayText": "Maryland",
+                                "isDisabled": false
+                            },
+                            "ma": {
+                                "displayText": "Massachusetts",
+                                "isDisabled": false
+                            },
+                            "mi": {
+                                "displayText": "Michigan",
+                                "isDisabled": false
+                            },
+                            "mn": {
+                                "displayText": "Minnesota",
+                                "isDisabled": false
+                            },
+                            "ms": {
+                                "displayText": "Mississippi",
+                                "isDisabled": false
+                            },
+                            "mo": {
+                                "displayText": "Missouri",
+                                "isDisabled": false
+                            },
+                            "mt": {
+                                "displayText": "Montana",
+                                "isDisabled": false
+                            },
+                            "ne": {
+                                "displayText": "Nebraska",
+                                "isDisabled": false
+                            },
+                            "nv": {
+                                "displayText": "Nevada",
+                                "isDisabled": false
+                            },
+                            "nh": {
+                                "displayText": "New Hampshire",
+                                "isDisabled": false
+                            },
+                            "nj": {
+                                "displayText": "New Jersey",
+                                "isDisabled": false
+                            },
+                            "nm": {
+                                "displayText": "New Mexico",
+                                "isDisabled": false
+                            },
+                            "ny": {
+                                "displayText": "New York",
+                                "isDisabled": false
+                            },
+                            "nc": {
+                                "displayText": "North Carolina",
+                                "isDisabled": false
+                            },
+                            "nd": {
+                                "displayText": "North Dakota",
+                                "isDisabled": false
+                            },
+                            "oh": {
+                                "displayText": "Ohio",
+                                "isDisabled": false
+                            },
+                            "ok": {
+                                "displayText": "Oklahoma",
+                                "isDisabled": false
+                            },
+                            "or": {
+                                "displayText": "Oregon",
+                                "isDisabled": false
+                            },
+                            "pa": {
+                                "displayText": "Pennsylvania",
+                                "isDisabled": false
+                            },
+                            "pr": {
+                                "displayText": "Puerto Rico",
+                                "isDisabled": false
+                            },
+                            "ri": {
+                                "displayText": "Rhode Island",
+                                "isDisabled": false
+                            },
+                            "sc": {
+                                "displayText": "South Carolina",
+                                "isDisabled": false
+                            },
+                            "sd": {
+                                "displayText": "South Dakota",
+                                "isDisabled": false
+                            },
+                            "tn": {
+                                "displayText": "Tennessee",
+                                "isDisabled": false
+                            },
+                            "tx": {
+                                "displayText": "Texas",
+                                "isDisabled": false
+                            },
+                            "ut": {
+                                "displayText": "Utah",
+                                "isDisabled": false
+                            },
+                            "vt": {
+                                "displayText": "Vermont",
+                                "isDisabled": false
+                            },
+                            "va": {
+                                "displayText": "Virginia",
+                                "isDisabled": false
+                            },
+                            "wa": {
+                                "displayText": "Washington",
+                                "isDisabled": false
+                            },
+                            "wv": {
+                                "displayText": "West Virginia",
+                                "isDisabled": false
+                            },
+                            "wi": {
+                                "displayText": "Wisconsin",
+                                "isDisabled": false
+                            },
+                            "wy": {
+                                "displayText": "Wyoming",
+                                "isDisabled": false
+                            }
+                        },
+                        "displaySelectionText": "--Select--",
+                        "displayErrorMessages": {
+                            "defaultErrorMessage": "Incorrectly formatted state",
+                            "fromErrorCode": [
+                                {
+                                    "errorCode": "required_field_empty",
+                                    "errorMessage": "Enter your state"
+                                }
+                            ]
+                        },
+                        "displayId": "shippingAddressState",
+                        "displayType": "property",
+                        "propertyName": "region",
+                        "tags": {
+                            "theme": "windows",
+                            "accessibilityName": "State"
+                        }
+                    },
+                    {
+                        "displayName": "ZIP code",
+                        "showDisplayName": "true",
+                        "displayExample": [
+                            "20001"
+                        ],
+                        "displayErrorMessages": {
+                            "defaultErrorMessage": "Incorrectly formatted ZIP code",
+                            "fromErrorCode": [
+                                {
+                                    "errorCode": "required_field_empty",
+                                    "errorMessage": "Enter your zip code"
+                                }
+                            ]
+                        },
+                        "displayId": "addressPostalCode",
+                        "displayType": "property",
+                        "propertyName": "postal_code",
+                        "tags": {
+                            "accessibilityName": "ZIP code"
+                        }
+                    },
+                    {
+                        "displayName": "Country/Region",
+                        "showDisplayName": "true",
+                        "possibleValues": {
+                          "af": "Afghanistan",
+                          "ax": "Åland Islands",
+                          "al": "Albania",
+                          "dz": "Algeria",
+                          "as": "American Samoa",
+                          "ad": "Andorra",
+                          "ao": "Angola",
+                          "ai": "Anguilla",
+                          "aq": "Antarctica",
+                          "ag": "Antigua and Barbuda",
+                          "ar": "Argentina",
+                          "am": "Armenia",
+                          "aw": "Aruba",
+                          "au": "Australia",
+                          "at": "Austria",
+                          "az": "Azerbaijan",
+                          "bs": "Bahamas",
+                          "bh": "Bahrain",
+                          "bd": "Bangladesh",
+                          "bb": "Barbados",
+                          "by": "Belarus",
+                          "be": "Belgium",
+                          "bz": "Belize",
+                          "bj": "Benin",
+                          "bm": "Bermuda",
+                          "bt": "Bhutan",
+                          "bo": "Bolivia",
+                          "bq": "Bonaire",
+                          "ba": "Bosnia and Herzegovina",
+                          "bw": "Botswana",
+                          "bv": "Bouvet Island",
+                          "br": "Brazil",
+                          "io": "British Indian Ocean Territory",
+                          "bn": "Brunei",
+                          "bg": "Bulgaria",
+                          "bf": "Burkina Faso",
+                          "bi": "Burundi",
+                          "kh": "Cambodia",
+                          "cm": "Cameroon",
+                          "ca": "Canada",
+                          "cv": "Cabo Verde",
+                          "ky": "Cayman Islands",
+                          "cf": "Central African Republic",
+                          "td": "Chad",
+                          "gg": "Guernsey",
+                          "je": "Jersey",
+                          "cl": "Chile",
+                          "cn": "China",
+                          "cx": "Christmas Island",
+                          "cc": "Cocos (Keeling) Islands",
+                          "co": "Colombia",
+                          "km": "Comoros",
+                          "cd": "Congo (DRC)",
+                          "cg": "Congo",
+                          "ck": "Cook Islands",
+                          "cr": "Costa Rica",
+                          "ci": "Côte d’Ivoire",
+                          "hr": "Croatia",
+                          "cw": "Curaçao",
+                          "cy": "Cyprus",
+                          "cz": "Czechia",
+                          "dk": "Denmark",
+                          "dj": "Djibouti",
+                          "dm": "Dominica",
+                          "do": "Dominican Republic",
+                          "ec": "Ecuador",
+                          "eg": "Egypt",
+                          "sv": "El Salvador",
+                          "gq": "Equatorial Guinea",
+                          "er": "Eritrea",
+                          "ee": "Estonia",
+                          "et": "Ethiopia",
+                          "fk": "Falkland Islands",
+                          "fo": "Faroe Islands",
+                          "fj": "Fiji",
+                          "fi": "Finland",
+                          "fr": "France",
+                          "gf": "French Guiana",
+                          "pf": "French Polynesia",
+                          "ga": "Gabon",
+                          "gm": "Gambia",
+                          "ge": "Georgia",
+                          "de": "Germany",
+                          "gh": "Ghana",
+                          "gi": "Gibraltar",
+                          "gr": "Greece",
+                          "gl": "Greenland",
+                          "gd": "Grenada",
+                          "gp": "Guadeloupe",
+                          "gu": "Guam",
+                          "gt": "Guatemala",
+                          "gn": "Guinea",
+                          "gw": "Guinea-Bissau",
+                          "gy": "Guyana",
+                          "ht": "Haiti",
+                          "hm": "Heard Island and McDonald Islands",
+                          "hn": "Honduras",
+                          "hk": "Hong Kong SAR",
+                          "hu": "Hungary",
+                          "is": "Iceland",
+                          "in": "India",
+                          "id": "Indonesia",
+                          "iq": "Iraq",
+                          "ie": "Ireland",
+                          "im": "Isle of Man",
+                          "il": "Israel",
+                          "it": "Italy",
+                          "jm": "Jamaica",
+                          "jp": "Japan",
+                          "jo": "Jordan",
+                          "kz": "Kazakhstan",
+                          "ke": "Kenya",
+                          "ki": "Kiribati",
+                          "kr": "Korea",
+                          "kw": "Kuwait",
+                          "kg": "Kyrgyzstan",
+                          "la": "Laos",
+                          "lv": "Latvia",
+                          "lb": "Lebanon",
+                          "ls": "Lesotho",
+                          "lr": "Liberia",
+                          "ly": "Libya",
+                          "li": "Liechtenstein",
+                          "lt": "Lithuania",
+                          "lu": "Luxembourg",
+                          "mo": "Macao SAR",
+                          "mk": "North Macedonia",
+                          "mg": "Madagascar",
+                          "mw": "Malawi",
+                          "my": "Malaysia",
+                          "mv": "Maldives",
+                          "ml": "Mali",
+                          "mt": "Malta",
+                          "mh": "Marshall Islands",
+                          "mq": "Martinique",
+                          "mr": "Mauritania",
+                          "mu": "Mauritius",
+                          "yt": "Mayotte",
+                          "mx": "Mexico",
+                          "fm": "Micronesia",
+                          "md": "Moldova",
+                          "mc": "Monaco",
+                          "mn": "Mongolia",
+                          "me": "Montenegro",
+                          "ms": "Montserrat",
+                          "ma": "Morocco",
+                          "mz": "Mozambique",
+                          "mm": "Myanmar",
+                          "na": "Namibia",
+                          "nr": "Nauru",
+                          "np": "Nepal",
+                          "nl": "Netherlands",
+                          "nc": "New Caledonia",
+                          "nz": "New Zealand",
+                          "ni": "Nicaragua",
+                          "ne": "Niger",
+                          "ng": "Nigeria",
+                          "nu": "Niue",
+                          "nf": "Norfolk Island",
+                          "mp": "Northern Mariana Islands",
+                          "no": "Norway",
+                          "om": "Oman",
+                          "pk": "Pakistan",
+                          "pw": "Palau",
+                          "ps": "Palestinian Authority",
+                          "pa": "Panama",
+                          "pg": "Papua New Guinea",
+                          "py": "Paraguay",
+                          "pe": "Peru",
+                          "ph": "Philippines",
+                          "pn": "Pitcairn Islands",
+                          "pl": "Poland",
+                          "pt": "Portugal",
+                          "pr": "Puerto Rico",
+                          "qa": "Qatar",
+                          "re": "Réunion",
+                          "ro": "Romania",
+                          "ru": "Russia",
+                          "rw": "Rwanda",
+                          "bl": "Saint Barthélemy",
+                          "sh": "St Helena, Ascension, Tristan da Cunha",
+                          "kn": "Saint Kitts and Nevis",
+                          "lc": "Saint Lucia",
+                          "mf": "Saint Martin",
+                          "pm": "Saint Pierre and Miquelon",
+                          "vc": "Saint Vincent and the Grenadines",
+                          "ws": "Samoa",
+                          "sm": "San Marino",
+                          "st": "São Tomé and Príncipe",
+                          "sa": "Saudi Arabia",
+                          "sn": "Senegal",
+                          "rs": "Serbia",
+                          "sc": "Seychelles",
+                          "sl": "Sierra Leone",
+                          "sg": "Singapore",
+                          "sx": "Sint Maarten",
+                          "sk": "Slovakia",
+                          "si": "Slovenia",
+                          "sb": "Solomon Islands",
+                          "so": "Somalia",
+                          "za": "South Africa",
+                          "gs": "South Georgia and South Sandwich Islands",
+                          "es": "Spain",
+                          "lk": "Sri Lanka",
+                          "sr": "Suriname",
+                          "sj": "Svalbard",
+                          "sz": "Eswatini",
+                          "se": "Sweden",
+                          "ch": "Switzerland",
+                          "tw": "Taiwan",
+                          "tj": "Tajikistan",
+                          "tz": "Tanzania",
+                          "th": "Thailand",
+                          "tl": "Timor-Leste",
+                          "tg": "Togo",
+                          "tk": "Tokelau",
+                          "to": "Tonga",
+                          "tt": "Trinidad and Tobago",
+                          "tn": "Tunisia",
+                          "tr": "Turkey",
+                          "tm": "Turkmenistan",
+                          "tc": "Turks and Caicos Islands",
+                          "tv": "Tuvalu",
+                          "ug": "Uganda",
+                          "ua": "Ukraine",
+                          "ae": "United Arab Emirates",
+                          "gb": "United Kingdom",
+                          "us": "United States",
+                          "um": "U.S. Outlying Islands",
+                          "uy": "Uruguay",
+                          "uz": "Uzbekistan",
+                          "vu": "Vanuatu",
+                          "va": "Vatican City",
+                          "ve": "Venezuela",
+                          "vn": "Vietnam",
+                          "vg": "British Virgin Islands",
+                          "vi": "U.S. Virgin Islands",
+                          "wf": "Wallis and Futuna",
+                          "ye": "Yemen",
+                          "zm": "Zambia",
+                          "zw": "Zimbabwe"
+                        },
+                        "possibleOptions": {
+                            "af": {
+                                "displayText": "Afghanistan",
+                                "isDisabled": false
+                            },
+                            "ax": {
+                                "displayText": "Åland Islands",
+                                "isDisabled": false
+                            },
+                            "al": {
+                                "displayText": "Albania",
+                                "isDisabled": false
+                            },
+                            "dz": {
+                                "displayText": "Algeria",
+                                "isDisabled": false
+                            },
+                            "as": {
+                                "displayText": "American Samoa",
+                                "isDisabled": false
+                            },
+                            "ad": {
+                                "displayText": "Andorra",
+                                "isDisabled": false
+                            },
+                            "ao": {
+                                "displayText": "Angola",
+                                "isDisabled": false
+                            },
+                            "ai": {
+                                "displayText": "Anguilla",
+                                "isDisabled": false
+                            },
+                            "aq": {
+                                "displayText": "Antarctica",
+                                "isDisabled": false
+                            },
+                            "ag": {
+                                "displayText": "Antigua and Barbuda",
+                                "isDisabled": false
+                            },
+                            "ar": {
+                                "displayText": "Argentina",
+                                "isDisabled": false
+                            },
+                            "am": {
+                                "displayText": "Armenia",
+                                "isDisabled": false
+                            },
+                            "aw": {
+                                "displayText": "Aruba",
+                                "isDisabled": false
+                            },
+                            "au": {
+                                "displayText": "Australia",
+                                "isDisabled": false
+                            },
+                            "at": {
+                                "displayText": "Austria",
+                                "isDisabled": false
+                            },
+                            "az": {
+                                "displayText": "Azerbaijan",
+                                "isDisabled": false
+                            },
+                            "bs": {
+                                "displayText": "Bahamas",
+                                "isDisabled": false
+                            },
+                            "bh": {
+                                "displayText": "Bahrain",
+                                "isDisabled": false
+                            },
+                            "bd": {
+                                "displayText": "Bangladesh",
+                                "isDisabled": false
+                            },
+                            "bb": {
+                                "displayText": "Barbados",
+                                "isDisabled": false
+                            },
+                            "by": {
+                                "displayText": "Belarus",
+                                "isDisabled": false
+                            },
+                            "be": {
+                                "displayText": "Belgium",
+                                "isDisabled": false
+                            },
+                            "bz": {
+                                "displayText": "Belize",
+                                "isDisabled": false
+                            },
+                            "bj": {
+                                "displayText": "Benin",
+                                "isDisabled": false
+                            },
+                            "bm": {
+                                "displayText": "Bermuda",
+                                "isDisabled": false
+                            },
+                            "bt": {
+                                "displayText": "Bhutan",
+                                "isDisabled": false
+                            },
+                            "bo": {
+                                "displayText": "Bolivia",
+                                "isDisabled": false
+                            },
+                            "bq": {
+                                "displayText": "Bonaire",
+                                "isDisabled": false
+                            },
+                            "ba": {
+                                "displayText": "Bosnia and Herzegovina",
+                                "isDisabled": false
+                            },
+                            "bw": {
+                                "displayText": "Botswana",
+                                "isDisabled": false
+                            },
+                            "bv": {
+                                "displayText": "Bouvet Island",
+                                "isDisabled": false
+                            },
+                            "br": {
+                                "displayText": "Brazil",
+                                "isDisabled": false
+                            },
+                            "io": {
+                                "displayText": "British Indian Ocean Territory",
+                                "isDisabled": false
+                            },
+                            "bn": {
+                                "displayText": "Brunei",
+                                "isDisabled": false
+                            },
+                            "bg": {
+                                "displayText": "Bulgaria",
+                                "isDisabled": false
+                            },
+                            "bf": {
+                                "displayText": "Burkina Faso",
+                                "isDisabled": false
+                            },
+                            "bi": {
+                                "displayText": "Burundi",
+                                "isDisabled": false
+                            },
+                            "kh": {
+                                "displayText": "Cambodia",
+                                "isDisabled": false
+                            },
+                            "cm": {
+                                "displayText": "Cameroon",
+                                "isDisabled": false
+                            },
+                            "ca": {
+                                "displayText": "Canada",
+                                "isDisabled": false
+                            },
+                            "cv": {
+                                "displayText": "Cabo Verde",
+                                "isDisabled": false
+                            },
+                            "ky": {
+                                "displayText": "Cayman Islands",
+                                "isDisabled": false
+                            },
+                            "cf": {
+                                "displayText": "Central African Republic",
+                                "isDisabled": false
+                            },
+                            "td": {
+                                "displayText": "Chad",
+                                "isDisabled": false
+                            },
+                            "gg": {
+                                "displayText": "Guernsey",
+                                "isDisabled": false
+                            },
+                            "je": {
+                                "displayText": "Jersey",
+                                "isDisabled": false
+                            },
+                            "cl": {
+                                "displayText": "Chile",
+                                "isDisabled": false
+                            },
+                            "cn": {
+                                "displayText": "China",
+                                "isDisabled": false
+                            },
+                            "cx": {
+                                "displayText": "Christmas Island",
+                                "isDisabled": false
+                            },
+                            "cc": {
+                                "displayText": "Cocos (Keeling) Islands",
+                                "isDisabled": false
+                            },
+                            "co": {
+                                "displayText": "Colombia",
+                                "isDisabled": false
+                            },
+                            "km": {
+                                "displayText": "Comoros",
+                                "isDisabled": false
+                            },
+                            "cd": {
+                                "displayText": "Congo (DRC)",
+                                "isDisabled": false
+                            },
+                            "cg": {
+                                "displayText": "Congo",
+                                "isDisabled": false
+                            },
+                            "ck": {
+                                "displayText": "Cook Islands",
+                                "isDisabled": false
+                            },
+                            "cr": {
+                                "displayText": "Costa Rica",
+                                "isDisabled": false
+                            },
+                            "ci": {
+                              "displayText": "Côte d’Ivoire",
+                              "isDisabled": false
+                            },
+                            "hr": {
+                                "displayText": "Croatia",
+                                "isDisabled": false
+                            },
+                            "cw": {
+                                "displayText": "Curaçao",
+                                "isDisabled": false
+                            },
+                            "cy": {
+                                "displayText": "Cyprus",
+                                "isDisabled": false
+                            },
+                            "cz": {
+                                "displayText": "Czechia",
+                                "isDisabled": false
+                            },
+                            "dk": {
+                                "displayText": "Denmark",
+                                "isDisabled": false
+                            },
+                            "dj": {
+                                "displayText": "Djibouti",
+                                "isDisabled": false
+                            },
+                            "dm": {
+                                "displayText": "Dominica",
+                                "isDisabled": false
+                            },
+                            "do": {
+                                "displayText": "Dominican Republic",
+                                "isDisabled": false
+                            },
+                            "ec": {
+                                "displayText": "Ecuador",
+                                "isDisabled": false
+                            },
+                            "eg": {
+                                "displayText": "Egypt",
+                                "isDisabled": false
+                            },
+                            "sv": {
+                                "displayText": "El Salvador",
+                                "isDisabled": false
+                            },
+                            "gq": {
+                                "displayText": "Equatorial Guinea",
+                                "isDisabled": false
+                            },
+                            "er": {
+                                "displayText": "Eritrea",
+                                "isDisabled": false
+                            },
+                            "ee": {
+                                "displayText": "Estonia",
+                                "isDisabled": false
+                            },
+                            "et": {
+                                "displayText": "Ethiopia",
+                                "isDisabled": false
+                            },
+                            "fk": {
+                                "displayText": "Falkland Islands",
+                                "isDisabled": false
+                            },
+                            "fo": {
+                                "displayText": "Faroe Islands",
+                                "isDisabled": false
+                            },
+                            "fj": {
+                                "displayText": "Fiji",
+                                "isDisabled": false
+                            },
+                            "fi": {
+                                "displayText": "Finland",
+                                "isDisabled": false
+                            },
+                            "fr": {
+                                "displayText": "France",
+                                "isDisabled": false
+                            },
+                            "gf": {
+                                "displayText": "French Guiana",
+                                "isDisabled": false
+                            },
+                            "pf": {
+                                "displayText": "French Polynesia",
+                                "isDisabled": false
+                            },
+                            "ga": {
+                                "displayText": "Gabon",
+                                "isDisabled": false
+                            },
+                            "gm": {
+                                "displayText": "Gambia",
+                                "isDisabled": false
+                            },
+                            "ge": {
+                                "displayText": "Georgia",
+                                "isDisabled": false
+                            },
+                            "de": {
+                                "displayText": "Germany",
+                                "isDisabled": false
+                            },
+                            "gh": {
+                                "displayText": "Ghana",
+                                "isDisabled": false
+                            },
+                            "gi": {
+                                "displayText": "Gibraltar",
+                                "isDisabled": false
+                            },
+                            "gr": {
+                                "displayText": "Greece",
+                                "isDisabled": false
+                            },
+                            "gl": {
+                                "displayText": "Greenland",
+                                "isDisabled": false
+                            },
+                            "gd": {
+                                "displayText": "Grenada",
+                                "isDisabled": false
+                            },
+                            "gp": {
+                                "displayText": "Guadeloupe",
+                                "isDisabled": false
+                            },
+                            "gu": {
+                                "displayText": "Guam",
+                                "isDisabled": false
+                            },
+                            "gt": {
+                                "displayText": "Guatemala",
+                                "isDisabled": false
+                            },
+                            "gn": {
+                                "displayText": "Guinea",
+                                "isDisabled": false
+                            },
+                            "gw": {
+                                "displayText": "Guinea-Bissau",
+                                "isDisabled": false
+                            },
+                            "gy": {
+                                "displayText": "Guyana",
+                                "isDisabled": false
+                            },
+                            "ht": {
+                                "displayText": "Haiti",
+                                "isDisabled": false
+                            },
+                            "hm": {
+                                "displayText": "Heard Island and McDonald Islands",
+                                "isDisabled": false
+                            },
+                            "hn": {
+                                "displayText": "Honduras",
+                                "isDisabled": false
+                            },
+                            "hk": {
+                                "displayText": "Hong Kong SAR",
+                                "isDisabled": false
+                            },
+                            "hu": {
+                                "displayText": "Hungary",
+                                "isDisabled": false
+                            },
+                            "is": {
+                                "displayText": "Iceland",
+                                "isDisabled": false
+                            },
+                            "in": {
+                                "displayText": "India",
+                                "isDisabled": false
+                            },
+                            "id": {
+                                "displayText": "Indonesia",
+                                "isDisabled": false
+                            },
+                            "iq": {
+                                "displayText": "Iraq",
+                                "isDisabled": false
+                            },
+                            "ie": {
+                                "displayText": "Ireland",
+                                "isDisabled": false
+                            },
+                            "im": {
+                                "displayText": "Isle of Man",
+                                "isDisabled": false
+                            },
+                            "il": {
+                                "displayText": "Israel",
+                                "isDisabled": false
+                            },
+                            "it": {
+                                "displayText": "Italy",
+                                "isDisabled": false
+                            },
+                            "jm": {
+                                "displayText": "Jamaica",
+                                "isDisabled": false
+                            },
+                            "jp": {
+                                "displayText": "Japan",
+                                "isDisabled": false
+                            },
+                            "jo": {
+                                "displayText": "Jordan",
+                                "isDisabled": false
+                            },
+                            "kz": {
+                                "displayText": "Kazakhstan",
+                                "isDisabled": false
+                            },
+                            "ke": {
+                                "displayText": "Kenya",
+                                "isDisabled": false
+                            },
+                            "ki": {
+                                "displayText": "Kiribati",
+                                "isDisabled": false
+                            },
+                            "kr": {
+                                "displayText": "Korea",
+                                "isDisabled": false
+                            },
+                            "kw": {
+                                "displayText": "Kuwait",
+                                "isDisabled": false
+                            },
+                            "kg": {
+                                "displayText": "Kyrgyzstan",
+                                "isDisabled": false
+                            },
+                            "la": {
+                                "displayText": "Laos",
+                                "isDisabled": false
+                            },
+                            "lv": {
+                                "displayText": "Latvia",
+                                "isDisabled": false
+                            },
+                            "lb": {
+                                "displayText": "Lebanon",
+                                "isDisabled": false
+                            },
+                            "ls": {
+                                "displayText": "Lesotho",
+                                "isDisabled": false
+                            },
+                            "lr": {
+                                "displayText": "Liberia",
+                                "isDisabled": false
+                            },
+                            "ly": {
+                                "displayText": "Libya",
+                                "isDisabled": false
+                            },
+                            "li": {
+                                "displayText": "Liechtenstein",
+                                "isDisabled": false
+                            },
+                            "lt": {
+                                "displayText": "Lithuania",
+                                "isDisabled": false
+                            },
+                            "lu": {
+                                "displayText": "Luxembourg",
+                                "isDisabled": false
+                            },
+                            "mo": {
+                                "displayText": "Macao SAR",
+                                "isDisabled": false
+                            },
+                            "mk": {
+                                "displayText": "North Macedonia",
+                                "isDisabled": false
+                            },
+                            "mg": {
+                                "displayText": "Madagascar",
+                                "isDisabled": false
+                            },
+                            "mw": {
+                                "displayText": "Malawi",
+                                "isDisabled": false
+                            },
+                            "my": {
+                                "displayText": "Malaysia",
+                                "isDisabled": false
+                            },
+                            "mv": {
+                                "displayText": "Maldives",
+                                "isDisabled": false
+                            },
+                            "ml": {
+                                "displayText": "Mali",
+                                "isDisabled": false
+                            },
+                            "mt": {
+                                "displayText": "Malta",
+                                "isDisabled": false
+                            },
+                            "mh": {
+                                "displayText": "Marshall Islands",
+                                "isDisabled": false
+                            },
+                            "mq": {
+                                "displayText": "Martinique",
+                                "isDisabled": false
+                            },
+                            "mr": {
+                                "displayText": "Mauritania",
+                                "isDisabled": false
+                            },
+                            "mu": {
+                                "displayText": "Mauritius",
+                                "isDisabled": false
+                            },
+                            "yt": {
+                                "displayText": "Mayotte",
+                                "isDisabled": false
+                            },
+                            "mx": {
+                                "displayText": "Mexico",
+                                "isDisabled": false
+                            },
+                            "fm": {
+                                "displayText": "Micronesia",
+                                "isDisabled": false
+                            },
+                            "md": {
+                                "displayText": "Moldova",
+                                "isDisabled": false
+                            },
+                            "mc": {
+                                "displayText": "Monaco",
+                                "isDisabled": false
+                            },
+                            "mn": {
+                                "displayText": "Mongolia",
+                                "isDisabled": false
+                            },
+                            "me": {
+                                "displayText": "Montenegro",
+                                "isDisabled": false
+                            },
+                            "ms": {
+                                "displayText": "Montserrat",
+                                "isDisabled": false
+                            },
+                            "ma": {
+                                "displayText": "Morocco",
+                                "isDisabled": false
+                            },
+                            "mz": {
+                                "displayText": "Mozambique",
+                                "isDisabled": false
+                            },
+                            "mm": {
+                                "displayText": "Myanmar",
+                                "isDisabled": false
+                            },
+                            "na": {
+                                "displayText": "Namibia",
+                                "isDisabled": false
+                            },
+                            "nr": {
+                                "displayText": "Nauru",
+                                "isDisabled": false
+                            },
+                            "np": {
+                                "displayText": "Nepal",
+                                "isDisabled": false
+                            },
+                            "nl": {
+                                "displayText": "Netherlands",
+                                "isDisabled": false
+                            },
+                            "nc": {
+                                "displayText": "New Caledonia",
+                                "isDisabled": false
+                            },
+                            "nz": {
+                                "displayText": "New Zealand",
+                                "isDisabled": false
+                            },
+                            "ni": {
+                                "displayText": "Nicaragua",
+                                "isDisabled": false
+                            },
+                            "ne": {
+                                "displayText": "Niger",
+                                "isDisabled": false
+                            },
+                            "ng": {
+                                "displayText": "Nigeria",
+                                "isDisabled": false
+                            },
+                            "nu": {
+                                "displayText": "Niue",
+                                "isDisabled": false
+                            },
+                            "nf": {
+                                "displayText": "Norfolk Island",
+                                "isDisabled": false
+                            },
+                            "mp": {
+                                "displayText": "Northern Mariana Islands",
+                                "isDisabled": false
+                            },
+                            "no": {
+                                "displayText": "Norway",
+                                "isDisabled": false
+                            },
+                            "om": {
+                                "displayText": "Oman",
+                                "isDisabled": false
+                            },
+                            "pk": {
+                                "displayText": "Pakistan",
+                                "isDisabled": false
+                            },
+                            "pw": {
+                                "displayText": "Palau",
+                                "isDisabled": false
+                            },
+                            "ps": {
+                                "displayText": "Palestinian Authority",
+                                "isDisabled": false
+                            },
+                            "pa": {
+                                "displayText": "Panama",
+                                "isDisabled": false
+                            },
+                          "pg": {
+                            "displayText": "Papua New Guinea",
+                            "isDisabled": false
+                          },
+                            "py": {
+                                "displayText": "Paraguay",
+                                "isDisabled": false
+                            },
+                            "pe": {
+                                "displayText": "Peru",
+                                "isDisabled": false
+                            },
+                            "ph": {
+                                "displayText": "Philippines",
+                                "isDisabled": false
+                            },
+                            "pn": {
+                                "displayText": "Pitcairn Islands",
+                                "isDisabled": false
+                            },
+                            "pl": {
+                                "displayText": "Poland",
+                                "isDisabled": false
+                            },
+                            "pt": {
+                                "displayText": "Portugal",
+                                "isDisabled": false
+                            },
+                            "pr": {
+                                "displayText": "Puerto Rico",
+                                "isDisabled": false
+                            },
+                            "qa": {
+                                "displayText": "Qatar",
+                                "isDisabled": false
+                            },
+                            "re": {
+                                "displayText": "Réunion",
+                                "isDisabled": false
+                            },
+                            "ro": {
+                                "displayText": "Romania",
+                                "isDisabled": false
+                            },
+                            "ru": {
+                                "displayText": "Russia",
+                                "isDisabled": false
+                            },
+                            "rw": {
+                                "displayText": "Rwanda",
+                                "isDisabled": false
+                            },
+                            "bl": {
+                                "displayText": "Saint Barthélemy",
+                                "isDisabled": false
+                            },
+                            "sh": {
+                                "displayText": "St Helena, Ascension, Tristan da Cunha",
+                                "isDisabled": false
+                            },
+                            "kn": {
+                                "displayText": "Saint Kitts and Nevis",
+                                "isDisabled": false
+                            },
+                            "lc": {
+                                "displayText": "Saint Lucia",
+                                "isDisabled": false
+                            },
+                            "mf": {
+                                "displayText": "Saint Martin",
+                                "isDisabled": false
+                            },
+                            "pm": {
+                                "displayText": "Saint Pierre and Miquelon",
+                                "isDisabled": false
+                            },
+                            "vc": {
+                                "displayText": "Saint Vincent and the Grenadines",
+                                "isDisabled": false
+                            },
+                            "ws": {
+                                "displayText": "Samoa",
+                                "isDisabled": false
+                            },
+                            "sm": {
+                                "displayText": "San Marino",
+                                "isDisabled": false
+                            },
+                            "st": {
+                                "displayText": "São Tomé and Príncipe",
+                                "isDisabled": false
+                            },
+                            "sa": {
+                                "displayText": "Saudi Arabia",
+                                "isDisabled": false
+                            },
+                            "sn": {
+                                "displayText": "Senegal",
+                                "isDisabled": false
+                            },
+                            "rs": {
+                                "displayText": "Serbia",
+                                "isDisabled": false
+                            },
+                            "sc": {
+                                "displayText": "Seychelles",
+                                "isDisabled": false
+                            },
+                            "sl": {
+                                "displayText": "Sierra Leone",
+                                "isDisabled": false
+                            },
+                            "sg": {
+                                "displayText": "Singapore",
+                                "isDisabled": false
+                            },
+                            "sx": {
+                                "displayText": "Sint Maarten",
+                                "isDisabled": false
+                            },
+                            "sk": {
+                                "displayText": "Slovakia",
+                                "isDisabled": false
+                            },
+                            "si": {
+                                "displayText": "Slovenia",
+                                "isDisabled": false
+                            },
+                            "sb": {
+                                "displayText": "Solomon Islands",
+                                "isDisabled": false
+                            },
+                            "so": {
+                                "displayText": "Somalia",
+                                "isDisabled": false
+                            },
+                            "za": {
+                                "displayText": "South Africa",
+                                "isDisabled": false
+                            },
+                            "gs": {
+                                "displayText": "South Georgia and South Sandwich Islands",
+                                "isDisabled": false
+                            },
+                            "es": {
+                                "displayText": "Spain",
+                                "isDisabled": false
+                            },
+                            "lk": {
+                                "displayText": "Sri Lanka",
+                                "isDisabled": false
+                            },
+                            "sr": {
+                                "displayText": "Suriname",
+                                "isDisabled": false
+                            },
+                            "sj": {
+                                "displayText": "Svalbard",
+                                "isDisabled": false
+                            },
+                            "sz": {
+                                "displayText": "Eswatini",
+                                "isDisabled": false
+                            },
+                            "se": {
+                                "displayText": "Sweden",
+                                "isDisabled": false
+                            },
+                            "ch": {
+                                "displayText": "Switzerland",
+                                "isDisabled": false
+                            },
+                            "tw": {
+                                "displayText": "Taiwan",
+                                "isDisabled": false
+                            },
+                            "tj": {
+                                "displayText": "Tajikistan",
+                                "isDisabled": false
+                            },
+                            "tz": {
+                                "displayText": "Tanzania",
+                                "isDisabled": false
+                            },
+                            "th": {
+                                "displayText": "Thailand",
+                                "isDisabled": false
+                            },
+                            "tl": {
+                                "displayText": "Timor-Leste",
+                                "isDisabled": false
+                            },
+                            "tg": {
+                                "displayText": "Togo",
+                                "isDisabled": false
+                            },
+                            "tk": {
+                                "displayText": "Tokelau",
+                                "isDisabled": false
+                            },
+                            "to": {
+                                "displayText": "Tonga",
+                                "isDisabled": false
+                            },
+                            "tt": {
+                                "displayText": "Trinidad and Tobago",
+                                "isDisabled": false
+                            },
+                            "tn": {
+                                "displayText": "Tunisia",
+                                "isDisabled": false
+                            },
+                            "tr": {
+                                "displayText": "Turkey",
+                                "isDisabled": false
+                            },
+                            "tm": {
+                                "displayText": "Turkmenistan",
+                                "isDisabled": false
+                            },
+                            "tc": {
+                                "displayText": "Turks and Caicos Islands",
+                                "isDisabled": false
+                            },
+                            "tv": {
+                                "displayText": "Tuvalu",
+                                "isDisabled": false
+                            },
+                            "ug": {
+                                "displayText": "Uganda",
+                                "isDisabled": false
+                            },
+                            "ua": {
+                                "displayText": "Ukraine",
+                                "isDisabled": false
+                            },
+                            "ae": {
+                                "displayText": "United Arab Emirates",
+                                "isDisabled": false
+                            },
+                            "gb": {
+                                "displayText": "United Kingdom",
+                                "isDisabled": false
+                            },
+                            "us": {
+                                "displayText": "United States",
+                                "isDisabled": false
+                            },
+                            "um": {
+                                "displayText": "U.S. Outlying Islands",
+                                "isDisabled": false
+                            },
+                            "uy": {
+                                "displayText": "Uruguay",
+                                "isDisabled": false
+                            },
+                            "uz": {
+                                "displayText": "Uzbekistan",
+                                "isDisabled": false
+                            },
+                            "vu": {
+                                "displayText": "Vanuatu",
+                                "isDisabled": false
+                            },
+                            "va": {
+                                "displayText": "Vatican City",
+                                "isDisabled": false
+                            },
+                            "ve": {
+                                "displayText": "Venezuela",
+                                "isDisabled": false
+                            },
+                            "vn": {
+                                "displayText": "Vietnam",
+                                "isDisabled": false
+                            },
+                            "vg": {
+                                "displayText": "British Virgin Islands",
+                                "isDisabled": false
+                            },
+                            "vi": {
+                                "displayText": "U.S. Virgin Islands",
+                                "isDisabled": false
+                            },
+                            "wf": {
+                                "displayText": "Wallis and Futuna",
+                                "isDisabled": false
+                            },
+                            "ye": {
+                                "displayText": "Yemen",
+                                "isDisabled": false
+                            },
+                            "zm": {
+                                "displayText": "Zambia",
+                                "isDisabled": false
+                            },
+                            "zw": {
+                                "displayText": "Zimbabwe",
+                                "isDisabled": false
+                            }
+                        },
+                        "displaySelectionText": "--Select--",
+                        "displayErrorMessages": {
+                            "defaultErrorMessage": "Incorrectly formatted country",
+                            "fromErrorCode": [
+                                {
+                                    "errorCode": "required_field_empty",
+                                    "errorMessage": "Pick your country/region"
+                                }
+                            ]
+                        },
+                        "displayId": "addressCountry",
+                        "displayType": "property",
+                        "isDisabled": true,
+                        "propertyName": "country",
+                        "tags": {
+                            "theme": "windows",
+                            "accessibilityName": "Country/Region"
+                        }
+                    },
+                    {
+                        "displayName": "Phone number (for shipping-related issues)",
+                        "showDisplayName": "true",
+                        "displayErrorMessages": {
+                            "defaultErrorMessage": "Incorrectly formatted phone number",
+                            "fromErrorCode": [
+                                {
+                                    "errorCode": "required_field_empty",
+                                    "errorMessage": "Phone number is required."
+                                }
+                            ]
+                        },
+                        "displayId": "addressPhoneNumberWithExplanation",
+                        "displayType": "property",
+                        "propertyName": "phone_number",
+                        "tags": {
+                            "accessibilityName": "Phone number (for shipping-related issues)"
+                        }
+                    },
+                    {
+                        "members": [
+                            {
+                                "displayContent": "Microsoft respects your privacy. See our ",
+                                "displayId": "microsoft_privacy_static_text",
+                                "displayType": "text"
+                            },
+                            {
+                                "sourceUrl": "https://go.microsoft.com/fwlink/?LinkId=248681",
+                                "displayContent": "privacy statement",
+                                "displayId": "privacyStatement",
+                                "displayType": "hyperlink",
+                                "pidlAction": {
+                                    "type": "navigate",
+                                    "context": "https://go.microsoft.com/fwlink/?LinkId=248681"
+                                }
+                            },
+                            {
+                                "displayContent": ".",
+                                "displayId": "privacyTextStaticPeriodText",
+                                "displayType": "text"
+                            }
+                        ],
+                        "displayId": "microsoftPrivacyTextGroup",
+                        "displayType": "textgroup",
+                        "tags": {
+                            "privacy-text-group": "privacy-text-group"
+                        }
+                    },
+                    {
+                        "isSubmitGroup": true,
+                        "layoutOrientation": "inline",
+                        "members": [
+                            {
+                                "displayContent": "Cancel",
+                                "displayId": "cancelButton",
+                                "displayType": "button",
+                                "isBack": true,
+                                "pidlAction": {
+                                    "type": "gohome",
+                                    "context": ""
+                                },
+                                "tags": {
+                                    "accessibilityName": "Cancel"
+                                }
+                            },
+                            {
+                                "displayContent": "Save",
+                                "displayId": "saveButton",
+                                "displayType": "button",
+                                "isHighlighted": true,
+                                "pidlAction": {
+                                    "type": "submit",
+                                    "isDefault": true,
+                                    "context": {
+                                        "href": "https://{jarvis-endpoint}/JarvisCM/{userId}/addresses",
+                                        "method": "POST",
+                                        "headers": {
+                                            "api-version": "2015-03-31",
+                                            "x-ms-correlation-id": "1a78f4b1-baf4-4267-8e99-9cb96df9d270",
+                                            "x-ms-tracking-id": "0a368946-39a2-492d-9ce7-4f8c9110a0ac"
+                                        }
+                                    }
+                                },
+                                "tags": {
+                                    "accessibilityName": "Save"
+                                }
+                            }
+                        ],
+                        "displayId": "cancelSaveGroup",
+                        "displayType": "group"
+                    }
+                ],
+                "displayId": "addressV3A1A2CtStPcCoWithButtonPage",
+                "displayType": "page"
+            }
+        ],
+        "strings": {
+            "constants": {
+                "singleFieldErrorMessage": "There is 1 field in the form that requires your attention",
+                "multipleFieldsErrorMessage": "There are {n} fields in the form that require your attention"
+            },
+            "serverErrorCodes": {
+                "InvalidAddress": {
+                    "ErrorMessage": "Check your address. There appears to be an error in it.",
+                    "Target": "postal_code,city,region"
+                },
+                "InvalidAddressFieldsCombination": {
+                    "ErrorMessage": "Check your address. There appears to be an error in it.",
+                    "Target": "postal_code,city,region"
+                },
+                "InvalidCity": {
+                    "ErrorMessage": "Check your city in address. There appears to be an error in it.",
+                    "Target": "city"
+                },
+                "InvalidPostalCode": {
+                    "ErrorMessage": "Check the Zip or Postal code in your address. There appears to be an error in it.",
+                    "Target": "postal_code"
+                },
+                "InvalidRegion": {
+                    "ErrorMessage": "Check the state in your address. There appears to be an error in it.",
+                    "Target": "region"
+                }
+            }
+        }
+    }
+]

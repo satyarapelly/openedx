@@ -1,0 +1,179 @@
+<instrumentationManifest xmlns="http://schemas.microsoft.com/win/2004/08/events">
+ <instrumentation xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:win="http://manifests.microsoft.com/win/2004/08/windows/events">
+  <events xmlns="http://schemas.microsoft.com/win/2004/08/events">
+<provider name="Microsoft-CommonSchema-ServiceLogging-EtwEvents" guid="{4df70947-988d-5aa7-6059-8d957fad613a}" resourceFileName="C:\a\bin\Release\CommonSchema\Microsoft.CommonSchema.Services.Logging.Microsoft-CommonSchema-ServiceLogging-EtwEvents.etwManifest.dll" messageFileName="C:\a\bin\Release\CommonSchema\Microsoft.CommonSchema.Services.Logging.Microsoft-CommonSchema-ServiceLogging-EtwEvents.etwManifest.dll" symbol="MicrosoftCommonSchemaServiceLoggingEtwEvents">
+ <tasks>
+  <task name="Message" value="1"/>
+ </tasks>
+ <opcodes>
+  <opcode name="General"  message="$(string.opcode_General)" value="11"/>
+  <opcode name="Sensitive"  message="$(string.opcode_Sensitive)" value="12"/>
+ </opcodes>
+ <keywords>
+  <keyword name="General"  message="$(string.keyword_General)" mask="0x1"/>
+  <keyword name="Realtime"  message="$(string.keyword_Realtime)" mask="0x2"/>
+  <keyword name="Sensitive"  message="$(string.keyword_Sensitive)" mask="0x4"/>
+ </keywords>
+ <events>
+  <event value="1" version="1" level="win:Informational" keywords="General" opcode="General" task="Message" template="LogInformationGeneralArgs"/>
+  <event value="2" version="1" level="win:Warning" keywords="General" opcode="General" task="Message" template="LogWarningGeneralArgs"/>
+  <event value="3" version="1" level="win:Error" keywords="General" opcode="General" task="Message" template="LogErrorGeneralArgs"/>
+  <event value="4" version="1" level="win:Critical" keywords="General" opcode="General" task="Message" template="LogCriticalGeneralArgs"/>
+  <event value="5" version="1" level="win:Verbose" keywords="General" opcode="General" task="Message" template="LogVerboseGeneralArgs"/>
+  <event value="6" version="1" level="win:LogAlways" keywords="General" opcode="General" task="Message" template="LogAlwaysGeneralArgs"/>
+  <event value="7" version="1" level="win:Informational" keywords="General Realtime" opcode="General" task="Message" template="LogInformationGeneralRealtimeArgs"/>
+  <event value="8" version="1" level="win:Warning" keywords="General Realtime" opcode="General" task="Message" template="LogWarningGeneralRealtimeArgs"/>
+  <event value="9" version="1" level="win:Error" keywords="General Realtime" opcode="General" task="Message" template="LogErrorGeneralRealtimeArgs"/>
+  <event value="10" version="1" level="win:Critical" keywords="General Realtime" opcode="General" task="Message" template="LogCriticalGeneralRealtimeArgs"/>
+  <event value="11" version="1" level="win:Verbose" keywords="General Realtime" opcode="General" task="Message" template="LogVerboseGeneralRealtimeArgs"/>
+  <event value="12" version="1" level="win:LogAlways" keywords="General Realtime" opcode="General" task="Message" template="LogAwaysGeneralRealtimeArgs"/>
+  <event value="13" version="0" level="win:Informational" keywords="Sensitive" opcode="Sensitive" task="Message" template="LogInformationSensitiveArgs"/>
+  <event value="14" version="0" level="win:Warning" keywords="Sensitive" opcode="Sensitive" task="Message" template="LogWarningSensitiveArgs"/>
+  <event value="15" version="0" level="win:Error" keywords="Sensitive" opcode="Sensitive" task="Message" template="LogErrorSensitiveArgs"/>
+  <event value="16" version="0" level="win:Critical" keywords="Sensitive" opcode="Sensitive" task="Message" template="LogCriticalSensitiveArgs"/>
+  <event value="17" version="0" level="win:Verbose" keywords="Sensitive" opcode="Sensitive" task="Message" template="LogVerboseSensitiveArgs"/>
+  <event value="18" version="0" level="win:LogAlways" keywords="Sensitive" opcode="Sensitive" task="Message" template="LogAlwaysSensitiveArgs"/>
+  <event value="19" version="0" level="win:Informational" keywords="Realtime Sensitive" opcode="Sensitive" task="Message" template="LogInformationSensitiveRealtimeArgs"/>
+  <event value="20" version="0" level="win:Warning" keywords="Realtime Sensitive" opcode="Sensitive" task="Message" template="LogWarningSensitiveRealtimeArgs"/>
+  <event value="21" version="0" level="win:Error" keywords="Realtime Sensitive" opcode="Sensitive" task="Message" template="LogErrorSensitiveRealtimeArgs"/>
+  <event value="22" version="0" level="win:Critical" keywords="Realtime Sensitive" opcode="Sensitive" task="Message" template="LogCriticalSensitiveRealtimeArgs"/>
+  <event value="23" version="0" level="win:Verbose" keywords="Realtime Sensitive" opcode="Sensitive" task="Message" template="LogVerboseSensitiveRealtimeArgs"/>
+  <event value="24" version="0" level="win:LogAlways" keywords="Realtime Sensitive" opcode="Sensitive" task="Message" template="LogAwaysSensitiveRealtimeArgs"/>
+ </events>
+ <templates>
+  <template tid="LogInformationGeneralArgs">
+   <data name="inheritancePath" inType="win:UnicodeString"/>
+   <data name="dateTime" inType="win:UnicodeString"/>
+   <data name="commonSchemaEvent" inType="win:UnicodeString"/>
+  </template>
+  <template tid="LogWarningGeneralArgs">
+   <data name="inheritancePath" inType="win:UnicodeString"/>
+   <data name="dateTime" inType="win:UnicodeString"/>
+   <data name="commonSchemaEvent" inType="win:UnicodeString"/>
+  </template>
+  <template tid="LogErrorGeneralArgs">
+   <data name="inheritancePath" inType="win:UnicodeString"/>
+   <data name="dateTime" inType="win:UnicodeString"/>
+   <data name="commonSchemaEvent" inType="win:UnicodeString"/>
+  </template>
+  <template tid="LogCriticalGeneralArgs">
+   <data name="inheritancePath" inType="win:UnicodeString"/>
+   <data name="dateTime" inType="win:UnicodeString"/>
+   <data name="commonSchemaEvent" inType="win:UnicodeString"/>
+  </template>
+  <template tid="LogVerboseGeneralArgs">
+   <data name="inheritancePath" inType="win:UnicodeString"/>
+   <data name="dateTime" inType="win:UnicodeString"/>
+   <data name="commonSchemaEvent" inType="win:UnicodeString"/>
+  </template>
+  <template tid="LogAlwaysGeneralArgs">
+   <data name="inheritancePath" inType="win:UnicodeString"/>
+   <data name="dateTime" inType="win:UnicodeString"/>
+   <data name="commonSchemaEvent" inType="win:UnicodeString"/>
+  </template>
+  <template tid="LogInformationGeneralRealtimeArgs">
+   <data name="inheritancePath" inType="win:UnicodeString"/>
+   <data name="dateTime" inType="win:UnicodeString"/>
+   <data name="commonSchemaEvent" inType="win:UnicodeString"/>
+  </template>
+  <template tid="LogWarningGeneralRealtimeArgs">
+   <data name="inheritancePath" inType="win:UnicodeString"/>
+   <data name="dateTime" inType="win:UnicodeString"/>
+   <data name="commonSchemaEvent" inType="win:UnicodeString"/>
+  </template>
+  <template tid="LogErrorGeneralRealtimeArgs">
+   <data name="inheritancePath" inType="win:UnicodeString"/>
+   <data name="dateTime" inType="win:UnicodeString"/>
+   <data name="commonSchemaEvent" inType="win:UnicodeString"/>
+  </template>
+  <template tid="LogCriticalGeneralRealtimeArgs">
+   <data name="inheritancePath" inType="win:UnicodeString"/>
+   <data name="dateTime" inType="win:UnicodeString"/>
+   <data name="commonSchemaEvent" inType="win:UnicodeString"/>
+  </template>
+  <template tid="LogVerboseGeneralRealtimeArgs">
+   <data name="inheritancePath" inType="win:UnicodeString"/>
+   <data name="dateTime" inType="win:UnicodeString"/>
+   <data name="commonSchemaEvent" inType="win:UnicodeString"/>
+  </template>
+  <template tid="LogAwaysGeneralRealtimeArgs">
+   <data name="inheritancePath" inType="win:UnicodeString"/>
+   <data name="dateTime" inType="win:UnicodeString"/>
+   <data name="commonSchemaEvent" inType="win:UnicodeString"/>
+  </template>
+  <template tid="LogInformationSensitiveArgs">
+   <data name="inheritancePath" inType="win:UnicodeString"/>
+   <data name="dateTime" inType="win:UnicodeString"/>
+   <data name="commonSchemaEvent" inType="win:UnicodeString"/>
+  </template>
+  <template tid="LogWarningSensitiveArgs">
+   <data name="inheritancePath" inType="win:UnicodeString"/>
+   <data name="dateTime" inType="win:UnicodeString"/>
+   <data name="commonSchemaEvent" inType="win:UnicodeString"/>
+  </template>
+  <template tid="LogErrorSensitiveArgs">
+   <data name="inheritancePath" inType="win:UnicodeString"/>
+   <data name="dateTime" inType="win:UnicodeString"/>
+   <data name="commonSchemaEvent" inType="win:UnicodeString"/>
+  </template>
+  <template tid="LogCriticalSensitiveArgs">
+   <data name="inheritancePath" inType="win:UnicodeString"/>
+   <data name="dateTime" inType="win:UnicodeString"/>
+   <data name="commonSchemaEvent" inType="win:UnicodeString"/>
+  </template>
+  <template tid="LogVerboseSensitiveArgs">
+   <data name="inheritancePath" inType="win:UnicodeString"/>
+   <data name="dateTime" inType="win:UnicodeString"/>
+   <data name="commonSchemaEvent" inType="win:UnicodeString"/>
+  </template>
+  <template tid="LogAlwaysSensitiveArgs">
+   <data name="inheritancePath" inType="win:UnicodeString"/>
+   <data name="dateTime" inType="win:UnicodeString"/>
+   <data name="commonSchemaEvent" inType="win:UnicodeString"/>
+  </template>
+  <template tid="LogInformationSensitiveRealtimeArgs">
+   <data name="inheritancePath" inType="win:UnicodeString"/>
+   <data name="dateTime" inType="win:UnicodeString"/>
+   <data name="commonSchemaEvent" inType="win:UnicodeString"/>
+  </template>
+  <template tid="LogWarningSensitiveRealtimeArgs">
+   <data name="inheritancePath" inType="win:UnicodeString"/>
+   <data name="dateTime" inType="win:UnicodeString"/>
+   <data name="commonSchemaEvent" inType="win:UnicodeString"/>
+  </template>
+  <template tid="LogErrorSensitiveRealtimeArgs">
+   <data name="inheritancePath" inType="win:UnicodeString"/>
+   <data name="dateTime" inType="win:UnicodeString"/>
+   <data name="commonSchemaEvent" inType="win:UnicodeString"/>
+  </template>
+  <template tid="LogCriticalSensitiveRealtimeArgs">
+   <data name="inheritancePath" inType="win:UnicodeString"/>
+   <data name="dateTime" inType="win:UnicodeString"/>
+   <data name="commonSchemaEvent" inType="win:UnicodeString"/>
+  </template>
+  <template tid="LogVerboseSensitiveRealtimeArgs">
+   <data name="inheritancePath" inType="win:UnicodeString"/>
+   <data name="dateTime" inType="win:UnicodeString"/>
+   <data name="commonSchemaEvent" inType="win:UnicodeString"/>
+  </template>
+  <template tid="LogAwaysSensitiveRealtimeArgs">
+   <data name="inheritancePath" inType="win:UnicodeString"/>
+   <data name="dateTime" inType="win:UnicodeString"/>
+   <data name="commonSchemaEvent" inType="win:UnicodeString"/>
+  </template>
+ </templates>
+</provider>
+</events>
+</instrumentation>
+<localization>
+ <resources culture="en-US">
+  <stringTable>
+   <string id="keyword_General" value="General"/>
+   <string id="keyword_Realtime" value="Realtime"/>
+   <string id="keyword_Sensitive" value="Sensitive"/>
+   <string id="opcode_General" value="General"/>
+   <string id="opcode_Sensitive" value="Sensitive"/>
+  </stringTable>
+ </resources>
+</localization>
+</instrumentationManifest>

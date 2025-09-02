@@ -1,0 +1,56 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "paths": [
+    {
+      "parameterReference": "servicePackageLink"
+    }
+  ],
+  "parameters": {
+    "servicePackageLink": {
+      "value": "__APP_SERVICE_PACKAGE_LINK__"
+    },
+    "workloadName": {
+      "value": "__WORKLOAD_NAME__"
+    },
+    "appServiceKeyword": {
+      "value": "__APP_SERVICE_KEY_WORD__"
+    },
+    "buildVersion": {
+      "value": "__APP_BUILD_VERSION__"
+    },
+    "shortLocation": {
+      "value": "__SHORT_LOCATION__"
+    },
+    "stamp": {
+      "value": "__STAMP__"
+    },
+    "environment": {
+      "value": "__ENVIRONMENT_NAME__"
+    },
+    "MonitoringRole": {
+      "value": "__MONITORING_ROLE__"
+    },
+    "MonitoringTenant": {
+      "value": "__MONITORING_TENANT__"
+    },
+    "monitoringGcsAccount": {
+      "value": "__MONITORING_GCS_ACCOUNT__"
+    },
+    "ClientId": {
+      "value": "__CLIENT_ID__"
+    },
+    "EnvironmentName": {
+      "value": "__Enrionment_Name__"
+    },
+    "healthCheckPath": {
+      "value": "__HEALTH_CHECK_PATH__"
+    },
+    "deployStagingSlot": {
+      "value": "__DEPLOY_STAGING_SLOT__"
+    },
+    "swapSlots": {
+      "value": "__SWAP_SLOTS__"
+    }
+  }
+}

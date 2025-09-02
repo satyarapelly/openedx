@@ -1,0 +1,7 @@
+﻿ResourceType,ResourceIdentity,Country,Language,Partner,Operation,Scenario,DeltaType,BaselineJPath,NewJPath,NewValue
+profileDescriptions,,,,,,,delete,$..data_description.first_name.default_value,,
+profileDescriptions,,,,,,,delete,$..data_description.last_name.default_value,,
+profileDescriptions,,,,,,,delete,$..data_description.email_address.default_value,,
+paymentMethodDescriptions,,,,,,,delete,$..clientContext.MsaProfile,,
+paymentMethodDescriptions,,,,,,,delete,$..clientContext.DeviceInfo,,
+paymentMethodDescriptions,,,,,,,edit,$..members[?(@.displayContent == 'You can use this payment option to buy Microsoft products and services anywhere you sign in with theawesomedifftest@outlook.com.')].displayContent,,You can use this payment option to buy Microsoft products and services anywhere you sign in with Email address

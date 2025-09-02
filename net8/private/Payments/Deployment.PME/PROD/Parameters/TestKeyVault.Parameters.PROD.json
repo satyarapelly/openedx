@@ -1,0 +1,66 @@
+﻿{
+  "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentParameters.json",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "name": {
+      "value": "PX-TestKV-PROD"
+    },
+    "accessPolicies": {
+      "value": [
+        {
+          "_id": "PX-COT-PROD-PME",
+          "tenantId": "975f013f-7f24-47e8-a7d3-abc4752bf346",
+          "objectId": "540da0a9-ca96-4056-b379-d0d9fe8e715e",
+          "permissions": {
+            "keys": [
+              "Get"
+            ],
+            "secrets": [
+              "Get"
+            ],
+            "certificates": [
+              "Get"
+            ]
+          }
+        },
+        {
+          "_id": "Azure Service Deployment",
+          "tenantId": "975f013f-7f24-47e8-a7d3-abc4752bf346",
+          "objectId": "5810296a-6b23-4f68-b9c2-5bc0c7f02256",
+          "permissions": {
+            "keys": [
+              "Get"
+            ],
+            "secrets": [
+              "Get"
+            ],
+            "certificates": [
+              "Get"
+            ]
+          }
+        },
+        {
+          "_id": "Payments_Scanner-PME",
+          "tenantId": "975f013f-7f24-47e8-a7d3-abc4752bf346",
+          "objectId": "c89a03e6-9565-4f74-8807-7e9ca6e52e68",
+          "permissions": {
+            "keys": [
+              "Get",
+              "List"
+            ],
+            "secrets": [
+              "Get",
+              "List"
+            ],
+            "certificates": [
+              "Get",
+              "List",
+              "GetIssuers",
+              "ListIssuers"
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,3 @@
+ContainerHintId,CountryIds,DisplaySequenceId,DisplayType,DisplayName,LayoutOrientation,LayoutAlignment,ShowDisplayName,IsSubmitGroup,Extend,FirstButtonGroup,ExtendButtonGroup,ContainerDescription,DisplayConditionFunctionName,DataCollectionSource,DataCollectionFilterFunctionName,StyleHints
+paymentMethodSelectPage,,paymentMethodSelectPageSequence,page,PaymentMethodSelectionPage,,,,,,,,,,,,"gap-small"
+cancelSelectPMGroup,,cancelSelectPMGroupSequence,group,,inline,,,TRUE,,,,,,,,"padding-vertical-medium,gap-medium,width-fill"

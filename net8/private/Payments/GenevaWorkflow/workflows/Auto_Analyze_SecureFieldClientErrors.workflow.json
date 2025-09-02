@@ -1,0 +1,157 @@
+{
+  "properties": {
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        }
+      },
+      "triggers": {
+        "When_an_IcM_incident_is_created": {
+          "type": "ApiConnectionWebhook",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['icm']['connectionId']"
+              }
+            },
+            "body": {
+              "OwningService": "Payment Services - ICM Tenant",
+              "Severity": "3;4",
+              "OwningTeam": "StoreCore-PST-PXService",
+              "Title": "SecureField",
+              "WorkflowCallbackUrl": "@listCallbackUrl()",
+              "MonitorId": " f79e515c-04af-4ca8-bf78-7c0236bdee81"
+            },
+            "path": "/api/v1/subscriptions/created"
+          }
+        }
+      },
+      "actions": {
+        "Get_an_IcM_incident": {
+          "runAfter": {},
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['icm']['connectionId']"
+              }
+            },
+            "method": "get",
+            "path": "/api/v1/incidents/@{encodeURIComponent(triggerBody()['IncidentId'])}"
+          }
+        },
+        "Initialize_variable": {
+          "runAfter": {
+            "Get_an_IcM_incident": [
+              "Succeeded"
+            ]
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "endTime",
+                "type": "string",
+                "value": "@body('Get_an_IcM_incident')['CreatedDate']"
+              }
+            ]
+          }
+        },
+        "Run_KQL_query": {
+          "runAfter": {
+            "Initialize_variable": [
+              "Succeeded"
+            ]
+          },
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['kusto']['connectionId']"
+              }
+            },
+            "method": "post",
+            "body": {
+              "cluster": "https://pst.kusto.windows.net",
+              "db": "Prod",
+              "csl": "let unit = 1m;\nlet ImpactEndDate = bin(datetime(@{variables('endTime')}), unit);\nlet ImpactStartDate =bin(ImpactEndDate -32m, unit);\nlet start = ImpactStartDate;\nlet end = ImpactEndDate;\nSecurePXTelemetry\n| where ['time'] between (start .. end) //\n| extend originalMessage = parse_json(original_message)\n| extend Cv = originalMessage.data.Cv\n| extend d_device = tostring(originalMessage.ext.device.deviceClass)\n| extend d_deviceMake = tostring(originalMessage.ext.device.make)\n| extend d_deviceModel = tostring(originalMessage.ext.device.model)\n| extend d_os = tostring(originalMessage.ext.os.name)\n| extend d_browser = tostring(originalMessage.ext.web.browser)\n| extend d_browserVer = tostring(originalMessage.ext.web.browserVer)\n| extend d_clientIp = tostring(originalMessage.ext.ingest.clientIp)\n| extend TIMESTAMP = todatetime(['time'])\n| extend eventName = tolower(originalMessage.data.eventName)\n| extend errorMessage = tolower(originalMessage.data.eventProperties.message)\n| where tolower(eventName) contains \"error\" or tolower(eventName) contains \"failure\"\n| project ext_ingest_time,iKey,name,original_message,Cv,eventName\n|top 10 by ext_ingest_time desc"
+            },
+            "path": "/ListKustoResults/false"
+          }
+        },
+        "Create_HTML_table": {
+          "runAfter": {
+            "Run_KQL_query": [
+              "Succeeded"
+            ]
+          },
+          "type": "Table",
+          "inputs": {
+            "from": "@body('Run_KQL_query')?['value']",
+            "format": "HTML"
+          }
+        },
+        "Add_new_IcM_Discussion_entry": {
+          "runAfter": {
+            "Create_HTML_table": [
+              "Succeeded"
+            ]
+          },
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['icm']['connectionId']"
+              }
+            },
+            "method": "post",
+            "body": {
+              "DiscussionText": "<h3>Get SecureField Client failure details as below</h3>\n@{body('Create_HTML_table')}",
+              "RenderType": "Html"
+            },
+            "path": "/api/v1/incidents/@{encodeURIComponent(body('Get_an_IcM_incident')['IncidentId'])}/discussion"
+          }
+        },
+        "Edit_an_IcM_incident": {
+          "runAfter": {
+            "Add_new_IcM_Discussion_entry": [
+              "Succeeded"
+            ]
+          },
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['icm']['connectionId']"
+              }
+            },
+            "method": "post",
+            "body": {
+              "Keywords": "Auto-analyzing_GPShield",
+              "Tags": "#PX",
+              "HowFixed": "Fixed with TSG"
+            },
+            "path": "/api/v1/incidents/@{encodeURIComponent(body('Get_an_IcM_incident')['IncidentId'])}/edit"
+          }
+        }
+      },
+      "description": ""
+    },
+    "runtimeConfiguration": {
+      "lifetime": {
+        "unit": "Day",
+        "count": 25
+      }
+    },
+    "state": "Enabled",
+    "metadata": {
+      "dataClassifications": [
+        "AccessControlData"
+      ]
+    }
+  }
+}

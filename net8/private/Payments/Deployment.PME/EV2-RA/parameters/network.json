@@ -1,0 +1,30 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "workloadName": {
+      "value": "__WORKLOAD_NAME_NETWORK__"
+    },
+    "shortLocation": {
+      "value": "__SHORT_LOCATION__"
+    },
+    "stamp": {
+      "value": "__STAMP__"
+    },
+    "vnetAddressPrefix16Apps": {
+      "value": "__VIRTUAL_NETWORK_ADDRESS_PREFIX16_APPS__"
+    },
+    "vnetAddressPrefix16Firewall": {
+      "value": "__VIRTUAL_NETWORK_ADDRESS_PREFIX16_FIREWALL__"
+    },
+    "availabilityZones": {
+      "value": "__AVAILABILITY_ZONES__"
+    },
+    "additionalPrivateDnsZones": {
+      "value": "__VIRTUAL_NETWORK_ADDITIONAL_APGW_DNS_ZONES__"
+    },
+    "outgoingIPFirstPartyServiceTag": {
+      "value": "__OUTGOING_IP_FIRST_PARTY_SERVICE_TAG__"
+    }
+  }
+}

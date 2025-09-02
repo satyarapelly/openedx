@@ -1,0 +1,354 @@
+﻿{
+  "$schema": "https://ev2schema.azure.net/schemas/2020-01-01/serviceModel.json",
+  "contentVersion": "1.0.0.0",
+  "ServiceMetadata": {
+    "ServiceGroup": "PX",
+    "Environment": "PPE"
+  },
+  "ServiceResourceGroupDefinitions": [
+    {
+      "Name": "PX",
+      "ServiceResourceDefinitions": [
+        {
+          "Name": "GenevaLogConfig",
+          "ComposedOf": {
+            "Arm": {
+              "TemplatePath": "Templates\\UpdateConfig.Template.json"
+            }
+          }
+        },
+        {
+          "Name": "PXService.ServerFarm",
+          "ArmTemplatePath": "Templates\\PXService.ServerFarm.Template.json"
+        },
+        {
+          "Name": "PXService.SiteSlot",
+          "ArmTemplatePath": "Templates\\PXService.SiteSlot.Template.json"
+        },
+        {
+          "Name": "PXService.Staging",
+          "ArmTemplatePath": "Templates\\PXService.Staging.Template.json"
+        },
+        {
+          "Name": "PXService.Swap",
+          "ArmTemplatePath": "Templates\\PXService.Swap.Template.json"
+        },
+        {
+          "Name": "PXService.Deployment",
+          "ArmTemplatePath": "Templates\\PXService.Deployment.Template.json"
+        },
+        {
+          "Name": "PXService.AppSetting",
+          "ArmTemplatePath": "Templates\\PXService.AppSetting.Template.json"
+        },
+        {
+          "Name": "PXService.AppSetting.Staging",
+          "ArmTemplatePath": "Templates\\PXService.AppSetting.Staging.Template.json"
+        },
+        {
+          "Name": "PXDependencyEmulators",
+          "ArmTemplatePath": "Templates\\Emulator.Template.json"
+        }
+      ]
+    }
+  ],
+  "ServiceResourceGroups": [
+    {
+      "AzureResourceGroupName": "PX-Services-PPE-EastUS",
+      "Location": "East US",
+      "InstanceOf": "PX",
+      "AzureSubscriptionId": "9b6168fd-7d68-47e1-9c71-e51828aa62c0",
+      "ServiceResources": [
+        {
+          "Name": "PXService.ServerFarm.EastUS",
+          "InstanceOf": "PXService.ServerFarm",
+          "ArmParametersPath": "PPE\\Parameters\\PXService.ServerFarm.Parameters.PPE.json"
+        },
+        {
+          "Name": "PXService.SiteSlot.EastUS",
+          "InstanceOf": "PXService.SiteSlot",
+          "ArmParametersPath": "PPE\\Parameters\\PXService.SiteSlot.Parameters.PPE.json"
+        },
+        {
+          "Name": "PXService.Deployment.EastUS",
+          "InstanceOf": "PXService.Deployment",
+          "ArmParametersPath": "PPE\\Parameters\\PXService.Deployment.Parameters.PPE.json"
+        },
+        {
+          "Name": "PXService.Staging.EastUS",
+          "InstanceOf": "PXService.Staging",
+          "ArmParametersPath": "PPE\\Parameters\\PXService.Staging.Parameters.PPE.json",
+          "scopeTags": [
+            {
+              "name": "Environment.Constants"
+            }
+          ]
+        },
+        {
+          "Name": "PXService.Swap.EastUS",
+          "InstanceOf": "PXService.Swap",
+          "ArmParametersPath": "PPE\\Parameters\\PXService.Swap.Parameters.PPE.json",
+          "scopeTags": [
+            {
+              "name": "Environment.Constants"
+            }
+          ]
+        },
+        {
+          "Name": "PXService.AppSetting.EastUS",
+          "InstanceOf": "PXService.AppSetting",
+          "ArmParametersPath": "PPE\\Parameters\\PXService.AppSetting.Parameters.PPE.json"
+        },
+        {
+          "Name": "PXService.AppSetting.Staging.EastUS",
+          "InstanceOf": "PXService.AppSetting.Staging",
+          "ArmParametersPath": "PPE\\Parameters\\PXService.AppSetting.Parameters.PPE.json"
+        },
+        {
+          "Name": "PXDependencyEmulators.EastUS",
+          "InstanceOf": "PXDependencyEmulators",
+          "ArmParametersPath": "PPE\\Parameters\\PXDependencyEmulators.Parameters.PPE.json"
+        }
+      ]
+    },
+    {
+      "AzureResourceGroupName": "PX-Services-PPE-WestUS",
+      "Location": "West US",
+      "InstanceOf": "PX",
+      "AzureSubscriptionId": "9b6168fd-7d68-47e1-9c71-e51828aa62c0",
+      "ServiceResources": [
+        {
+          "Name": "MonitoringPrerequisites.Global",
+          "InstanceOf": "GenevaLogConfig",
+          "ArmParametersPath": "PPE\\Parameters\\UpdateConfig.Parameters.PPE.json",
+          "RolloutParametersPath": "PPE\\RolloutParameters\\Geneva.Extenstion.RolloutParameters.UpdateExistingAccount.PPE.json"
+        },
+        {
+          "Name": "PXService.ServerFarm.WestUS",
+          "InstanceOf": "PXService.ServerFarm",
+          "ArmParametersPath": "PPE\\Parameters\\PXService.ServerFarm.Parameters.PPE.json"
+        },
+        {
+          "Name": "PXService.SiteSlot.WestUS",
+          "InstanceOf": "PXService.SiteSlot",
+          "ArmParametersPath": "PPE\\Parameters\\PXService.SiteSlot.Parameters.PPE.json"
+        },
+        {
+          "Name": "PXService.Deployment.WestUS",
+          "InstanceOf": "PXService.Deployment",
+          "ArmParametersPath": "PPE\\Parameters\\PXService.Deployment.Parameters.PPE.json"
+        },
+        {
+          "Name": "PXService.Staging.WestUS",
+          "InstanceOf": "PXService.Staging",
+          "ArmParametersPath": "PPE\\Parameters\\PXService.Staging.Parameters.PPE.json",
+          "scopeTags": [
+            {
+              "name": "Environment.Constants"
+            }
+          ]
+        },
+        {
+          "Name": "PXService.Swap.WestUS",
+          "InstanceOf": "PXService.Swap",
+          "ArmParametersPath": "PPE\\Parameters\\PXService.Swap.Parameters.PPE.json",
+          "scopeTags": [
+            {
+              "name": "Environment.Constants"
+            }
+          ]
+        },
+        {
+          "Name": "PXService.AppSetting.WestUS",
+          "InstanceOf": "PXService.AppSetting",
+          "ArmParametersPath": "PPE\\Parameters\\PXService.AppSetting.Parameters.PPE.json"
+        },
+        {
+          "Name": "PXService.AppSetting.Staging.WestUS",
+          "InstanceOf": "PXService.AppSetting.Staging",
+          "ArmParametersPath": "PPE\\Parameters\\PXService.AppSetting.Parameters.PPE.json"
+        },
+        {
+          "Name": "PXDependencyEmulators.WestUS",
+          "InstanceOf": "PXDependencyEmulators",
+          "ArmParametersPath": "PPE\\Parameters\\PXDependencyEmulators.Parameters.PPE.json"
+        }
+      ]
+    },
+    {
+      "AzureResourceGroupName": "PX-Services-PPE-EastUS2",
+      "Location": "East US 2",
+      "InstanceOf": "PX",
+      "AzureSubscriptionId": "9b6168fd-7d68-47e1-9c71-e51828aa62c0",
+      "ServiceResources": [
+        {
+          "Name": "PXService.ServerFarm.EastUS2",
+          "InstanceOf": "PXService.ServerFarm",
+          "ArmParametersPath": "PPE\\Parameters\\PXService.ServerFarm.Parameters.PPE.json"
+        },
+        {
+          "Name": "PXService.SiteSlot.EastUS2",
+          "InstanceOf": "PXService.SiteSlot",
+          "ArmParametersPath": "PPE\\Parameters\\PXService.SiteSlot.Parameters.PPE.json"
+        },
+        {
+          "Name": "PXService.Deployment.EastUS2",
+          "InstanceOf": "PXService.Deployment",
+          "ArmParametersPath": "PPE\\Parameters\\PXService.Deployment.Parameters.PPE.json"
+        },
+        {
+          "Name": "PXService.Staging.EastUS2",
+          "InstanceOf": "PXService.Staging",
+          "ArmParametersPath": "PPE\\Parameters\\PXService.Staging.Parameters.PPE.json",
+          "scopeTags": [
+            {
+              "name": "Environment.Constants"
+            }
+          ]
+        },
+        {
+          "Name": "PXService.Swap.EastUS2",
+          "InstanceOf": "PXService.Swap",
+          "ArmParametersPath": "PPE\\Parameters\\PXService.Swap.Parameters.PPE.json",
+          "scopeTags": [
+            {
+              "name": "Environment.Constants"
+            }
+          ]
+        },
+        {
+          "Name": "PXService.AppSetting.EastUS2",
+          "InstanceOf": "PXService.AppSetting",
+          "ArmParametersPath": "PPE\\Parameters\\PXService.AppSetting.Parameters.PPE.json"
+        },
+        {
+          "Name": "PXService.AppSetting.Staging.EastUS2",
+          "InstanceOf": "PXService.AppSetting.Staging",
+          "ArmParametersPath": "PPE\\Parameters\\PXService.AppSetting.Parameters.PPE.json"
+        },
+        {
+          "Name": "PXDependencyEmulators.EastUS2",
+          "InstanceOf": "PXDependencyEmulators",
+          "ArmParametersPath": "PPE\\Parameters\\PXDependencyEmulators.Parameters.PPE.json"
+        }
+      ]
+    },
+    {
+      "AzureResourceGroupName": "PX-Services-PPE-NorthCentralUS",
+      "Location": "North Central US",
+      "InstanceOf": "PX",
+      "AzureSubscriptionId": "9b6168fd-7d68-47e1-9c71-e51828aa62c0",
+      "ServiceResources": [
+        {
+          "Name": "PXService.ServerFarm.NorthCentralUS",
+          "InstanceOf": "PXService.ServerFarm",
+          "ArmParametersPath": "PPE\\Parameters\\PXService.ServerFarm.Parameters.PPE.json"
+        },
+        {
+          "Name": "PXService.SiteSlot.NorthCentralUS",
+          "InstanceOf": "PXService.SiteSlot",
+          "ArmParametersPath": "PPE\\Parameters\\PXService.SiteSlot.Parameters.PPE.json"
+        },
+        {
+          "Name": "PXService.Deployment.NorthCentralUS",
+          "InstanceOf": "PXService.Deployment",
+          "ArmParametersPath": "PPE\\Parameters\\PXService.Deployment.Parameters.PPE.json"
+        },
+        {
+          "Name": "PXService.Staging.NorthCentralUS",
+          "InstanceOf": "PXService.Staging",
+          "ArmParametersPath": "PPE\\Parameters\\PXService.Staging.Parameters.PPE.json",
+          "scopeTags": [
+            {
+              "name": "Environment.Constants"
+            }
+          ]
+        },
+        {
+          "Name": "PXService.Swap.NorthCentralUS",
+          "InstanceOf": "PXService.Swap",
+          "ArmParametersPath": "PPE\\Parameters\\PXService.Swap.Parameters.PPE.json",
+          "scopeTags": [
+            {
+              "name": "Environment.Constants"
+            }
+          ]
+        },
+        {
+          "Name": "PXService.AppSetting.NorthCentralUS",
+          "InstanceOf": "PXService.AppSetting",
+          "ArmParametersPath": "PPE\\Parameters\\PXService.AppSetting.Parameters.PPE.json"
+        },
+        {
+          "Name": "PXService.AppSetting.Staging.NorthCentralUS",
+          "InstanceOf": "PXService.AppSetting.Staging",
+          "ArmParametersPath": "PPE\\Parameters\\PXService.AppSetting.Parameters.PPE.json"
+        },
+        {
+          "Name": "PXDependencyEmulators.NorthCentralUS",
+          "InstanceOf": "PXDependencyEmulators",
+          "ArmParametersPath": "PPE\\Parameters\\PXDependencyEmulators.Parameters.PPE.json"
+        }
+      ]
+    },
+
+    {
+      "AzureResourceGroupName": "PX-Services-PPE-WestCentralUS",
+      "Location": "West Central US",
+      "InstanceOf": "PX",
+      "AzureSubscriptionId": "9b6168fd-7d68-47e1-9c71-e51828aa62c0",
+      "ServiceResources": [
+        {
+          "Name": "PXService.ServerFarm.WestCentralUS",
+          "InstanceOf": "PXService.ServerFarm",
+          "ArmParametersPath": "PPE\\Parameters\\PXService.ServerFarm.Parameters.PPE.json"
+        },
+        {
+          "Name": "PXService.SiteSlot.WestCentralUS",
+          "InstanceOf": "PXService.SiteSlot",
+          "ArmParametersPath": "PPE\\Parameters\\PXService.SiteSlot.Parameters.PPE.json"
+        },
+        {
+          "Name": "PXService.Staging.WestCentralUS",
+          "InstanceOf": "PXService.Staging",
+          "ArmParametersPath": "PPE\\Parameters\\PXService.Staging.Parameters.PPE.json",
+          "scopeTags": [
+            {
+              "name": "Environment.Constants"
+            }
+          ]
+        },
+        {
+          "Name": "PXService.Swap.WestCentralUS",
+          "InstanceOf": "PXService.Swap",
+          "ArmParametersPath": "PPE\\Parameters\\PXService.Swap.Parameters.PPE.json",
+          "scopeTags": [
+            {
+              "name": "Environment.Constants"
+            }
+          ]
+        },
+        {
+          "Name": "PXService.Deployment.WestCentralUS",
+          "InstanceOf": "PXService.Deployment",
+          "ArmParametersPath": "PPE\\Parameters\\PXService.Deployment.Parameters.PPE.json"
+        },
+        {
+          "Name": "PXService.AppSetting.WestCentralUS",
+          "InstanceOf": "PXService.AppSetting",
+          "ArmParametersPath": "PPE\\Parameters\\PXService.AppSetting.Parameters.PPE.json"
+        },
+        {
+          "Name": "PXService.AppSetting.Staging.WestCentralUS",
+          "InstanceOf": "PXService.AppSetting.Staging",
+          "ArmParametersPath": "PPE\\Parameters\\PXService.AppSetting.Parameters.PPE.json"
+        },
+        {
+          "Name": "PXDependencyEmulators.WestCentralUS",
+          "InstanceOf": "PXDependencyEmulators",
+          "ArmParametersPath": "PPE\\Parameters\\PXDependencyEmulators.Parameters.PPE.json"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "testScenarioName": "px.partnersettings.selectpmradiobuttonlist",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "select": {
+          "template": "selectpmradiobuttonlist"
+        }
+      }
+    }
+  }
+}

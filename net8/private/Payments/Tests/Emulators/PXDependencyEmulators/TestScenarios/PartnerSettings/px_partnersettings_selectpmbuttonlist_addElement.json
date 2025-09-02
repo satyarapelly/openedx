@@ -1,0 +1,25 @@
+{
+  "testScenarioName": "px.partnersettings.selectpmbuttonlist.addElement",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "select": {
+          "template": "selectpmbuttonlist",
+          "redirectionPattern": null,
+          "resources": null,
+          "features": {
+            "addElement": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "addCancelButton": true
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

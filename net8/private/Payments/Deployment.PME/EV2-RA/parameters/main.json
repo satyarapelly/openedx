@@ -1,0 +1,33 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "workloadName": {
+      "value": "__WORKLOAD_NAME__"
+    },
+    "networkWorkloadName": {
+      "value": "__WORKLOAD_NAME_NETWORK__"
+    },
+    "shortLocation": {
+      "value": "__SHORT_LOCATION__"
+    },
+    "stamp": {
+      "value": "__STAMP__"
+    },
+    "appGwListenerHostNamePXTls": {
+      "value": "__APP_GATEWAY_LISTENER_HOST_PX_TLS__"
+    },
+    "appGwListenerHostNamePXStagingTls": {
+      "value": "__APP_GATEWAY_LISTENER_HOST_PX_STAGING_TLS__"
+    },
+    "webAppRPServicePrincipalId": {
+      "value": "__AZURE_APP_SERVICE_SP_PRINCIPAL_ID__"
+    },
+    "availabilityZones": {
+      "value": "__AVAILABILITY_ZONES__"
+    },
+    "appServiceKeyword": {
+      "value": "__APP_SERVICE_KEY_WORD__"
+    }
+  }
+}

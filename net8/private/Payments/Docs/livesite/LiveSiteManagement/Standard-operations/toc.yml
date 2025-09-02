@@ -1,0 +1,15 @@
+- name: Bring DC offline
+  href: Bring-DC-offline.md
+- name: Bring DC Online
+  href: Bring-DC-Online.md
+- name: How to roll back
+  href: How-to-roll-back.md
+- name: Flighting change
+  href: Flighting-change.md
+- name: Update COTs passwords
+  href: Update-COTs-passwords.md
+- name: Operations that could be done using Pipeline
+  href: Operations-that-could-be-done-using-Pipeline/toc.yml
+  topicHref: Operations-that-could-be-done-using-Pipeline.md
+- name: Create Ticket with Azure app service team
+  href: Create-Ticket-with-Azure-app-service-team.md

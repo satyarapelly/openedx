@@ -1,0 +1,20 @@
+{
+  "testScenarioName": "px.partnersettings.defaulttemplate.showCardInformationInChallenge",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "handlePurchaseRiskChallenge": {
+          "template": "defaulttemplate",
+          "redirectionPattern": "inline",
+          "features": {
+            "showCardInformationInChallenge": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": null
+            }
+          }
+        }
+      }
+    }
+  }
+}

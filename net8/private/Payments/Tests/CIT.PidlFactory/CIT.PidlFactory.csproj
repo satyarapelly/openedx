@@ -1,0 +1,51 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), build.root))\msbuild\Environment.props" />
+  <Import Project="..\..\..\Payments\tests\Test.targets" />
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ProjectGuid>{67126A6F-925B-4349-A192-C8642926990B}</ProjectGuid>
+	  <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CIT.PidlFactory</RootNamespace>
+    <AssemblyName>CIT.PidlFactory</AssemblyName>
+    <CreateTestResourcePathFromLinkPath>true</CreateTestResourcePathFromLinkPath>
+    <OutDir>$(DropRoot)\UnitTests\$(AssemblyName)\</OutDir>
+	  <IsTestProject>true</IsTestProject>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CommonSchema.Services" />
+	  <PackageReference Include="Microsoft.NET.Test.Sdk" />
+	  <PackageReference Include="MSTest.TestAdapter" />
+    <PackageReference Include="MSTest.TestFramework" />
+    <PackageReference Include="Newtonsoft.Json" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\Common.csproj" />
+    <ProjectReference Include="..\..\Pidl\PidlFactory\PidlFactory.csproj" />
+    <ProjectReference Include="..\..\Pidl\PidlModel\PidlModel.csproj" />
+    <ProjectReference Include="..\..\Pidl\PimsModel\PimsModel.csproj" />
+    <ProjectReference Include="..\..\Pidl\PXCommon\PXCommon.csproj" />
+    <ProjectReference Include="..\PidlTest.JsonDiff\PidlTest.JsonDiff.csproj" />
+    <ProjectReference Include="..\Test.Common\Test.Common.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="TestData\**\*.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\..\Payments\Tests\Payments.Common.Config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Pidl\PidlFactory\V7\Config\**\*.*">
+      <Link>V7\Config\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="..\..\Pidl\PidlFactory\V7\Config\DomainDictionaries.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+</Project>

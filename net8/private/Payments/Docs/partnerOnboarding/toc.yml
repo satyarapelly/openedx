@@ -1,0 +1,4 @@
+- name: Onboarding
+  href: onboarding.md
+- name: Troubleshoot / FAQ
+  href: faq.md

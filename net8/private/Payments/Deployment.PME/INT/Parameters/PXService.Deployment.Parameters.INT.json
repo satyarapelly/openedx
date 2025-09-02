@@ -1,0 +1,19 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json",
+  "contentVersion": "1.0.0.0",
+  "paths": [ "sitePackageLink" ],
+  "parameters": {
+    "siteName": {
+      "value": "PaymentExperience-INT"
+    },
+    "sitePackageLink": {
+      "value": "bin\\pxservice.zip"
+    },
+    "stageName": {
+      "value": "Staging"
+    },
+    "swapSlotAfterDeployment": {
+      "value": true
+    }
+  }
+}

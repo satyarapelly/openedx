@@ -1,0 +1,558 @@
+{
+  "$schema": "https://ev2schema.azure.net/schemas/2020-01-01/scopeBindings.json",
+  "contentVersion": "1.0.0.0",
+  "scopeBindings": [
+    {
+      "scopeTagName": "assistedIdentities",
+      "bindings": [
+        {
+          "find": "__EV2_ROLLOUT_APP_ID__",
+          "replaceWith": "$config(ev2.rolloutAppId)"
+        },
+        {
+          "find": "__EV2_BUILDOUT_APP_ID__",
+          "replaceWith": "$config(ev2.buildoutAppId)"
+        },
+        {
+          "find": "__DEPLOYMENT_IDENTITY_SUBSCRIPTION_KEY__",
+          "replaceWith": "$config(subscriptionKey)"
+        },
+        {
+          "find": "__DEPLOYMENT_IDENTITY_NAME__",
+          "replaceWith": "$config(deploymentIdentityName)"
+        },
+        {
+          "find": "__DEPLOYMENT_IDENTITY_DISPLAY_NAME__",
+          "replaceWith": "$config(deploymentIdentityDisplayName)"
+        },
+        {
+          "find": "__DEPLOYMENT_IDENTITY_OWNER_OBJECT_ID__",
+          "replaceWith": "$config(deploymentIdentityOwnerObjectId)"
+        },
+        {
+          "find": "__DEPLOYMENT_IDENTITY_KV_CERTIFICATE_NAME__",
+          "replaceWith": "$config(deploymentIdentityCertificateName)"
+        },
+        {
+          "find": "__DEPLOYMENT_IDENTITY_KV_CERTIFICATE_SUBJECT_NAME__",
+          "replaceWith": "$config(deploymentIdentityCertificateSubjectName)"
+        },
+        {
+          "find": "__DEPLOYMENT_IDENTITY_KV_LOCATION__",
+          "replaceWith": "$config(deploymentIdentityKeyVaultLocation)"
+        },
+        {
+          "find": "__DEPLOYMENT_IDENTITY_KV_NAME__",
+          "replaceWith": "$config(deploymentIdentityKeyVaultName)"
+        },
+        {
+          "find": "__DEPLOYMENT_IDENTITY_KV_RESOURCE_GROUP__",
+          "replaceWith": "$config(deploymentIdentityKeyVaultResourceGroup)"
+        },
+        {
+          "find": "__DEPLOYMENT_IDENTITY_APP_ID__",
+          "replaceWith": "$assistedIdentityAppId()"
+        },
+        {
+          "find": "__DEPLOYMENT_IDENTITY_OBJECT_ID__",
+          "replaceWith": "$assistedIdentityServicePrincipalObjectId()"
+        },
+        {
+          "find": "\"__DEPLOYMENT_EV2_IPS__\"",
+          "replaceWith": "$config(ev2.ipAddresses)"
+        },
+        {
+          "find": "\"__DEPLOYMENT_EV2_KEYVAULT_IPS__\"",
+          "replaceWith": "$config(keyVault.extensionIpAddresses)"
+        }
+      ]
+    },
+    {
+      "scopeTagName": "subscription",
+      "bindings": [
+        {
+          "find": "__AZURE_APP_SERVICE_SP_PRINCIPAL_ID__",
+          "replaceWith": "$config(aad.tenants.PME.webAppRPServicePrincipalId)"
+        },
+        {
+          "find": "__SUBSCRIPTION_OWNER_PRINCIPAL_ID__",
+          "replaceWith": "$config(subscriptionOwnerPrincipalId)"
+        },
+        {
+          "find": "__WORKLOAD_NAME__",
+          "replaceWith": "$config(workloadName)"
+        },
+        {
+          "find": "__WORKLOAD_NAME_NETWORK__",
+          "replaceWith": "$config(networkworkloadName)"
+        },
+        {
+          "find": "__LOCATION__",
+          "replaceWith": "$location()"
+        },
+        {
+          "find": "__SHORT_LOCATION__",
+          "replaceWith": "$config(shortLocation)"
+        },
+        {
+          "find": "__STAMP__",
+          "replaceWith": "$stamp()"
+        },
+        {
+          "find": "\"__AVAILABILITY_ZONES__\"",
+          "replaceWith": "$config(stamp_$stamp().availabilityZones)"
+        },
+        {
+          "find": "__CERTIFICATE_PRIVATE_PROVIDER__",
+          "replaceWith": "$config(privateCA)"
+        },
+        {
+          "find": "__CERTIFICATE_PUBLIC_PROVIDER__",
+          "replaceWith": "$config(publicCA)"
+        },
+        {
+          "find": "\"__STAMP_CONFIGS__\"",
+          "replaceWith": "$config(stampConfigs)"
+        },
+        {
+          "find": "__ENVIRONMENT_NAME__",
+          "replaceWith": "$config(environmentProper)"
+        },
+        {
+          "find": "__OUTGOING_IP_FIRST_PARTY_SERVICE_TAG__",
+          "replaceWith": "$config(serviceTags.outgoingIPFirstPartyServiceTag)"
+        }
+      ]
+    },
+    {
+      "scopeTagName": "app-gateway-listeners",
+      "bindings": [
+        {
+          "find": "__APP_GATEWAY_LISTENER_HOST_PX_TLS__",
+          "replaceWith": "$config(appGatewayListeners.px.hostName)"
+        },
+        {
+          "find": "__APP_GATEWAY_LISTENER_HOST_PX_STAGING_TLS__",
+          "replaceWith": "$config(appGatewayListeners.pxStaging.hostName)"
+        }
+      ]
+    },
+    {
+      "scopeTagName": "certs-px-tls",
+      "bindings": [
+        {
+          "find": "__CERTIFICATE_CERT_NAME__",
+          "replaceWith": "$config(certificates.px.tls.certName)"
+        },
+        {
+          "find": "__CERTIFICATE_SUBJECT_NAME__",
+          "replaceWith": "$config(certificates.px.tls.subjectName)"
+        },
+        {
+          "find": "__CERTIFICATE_DNS_NAMES__",
+          "replaceWith": "$config(certificates.px.tls.dnsNames)"
+        },
+        {
+          "find": "__CERTIFICATE_ISSUER_PROVIDER__",
+          "replaceWith": "$config(certificates.px.tls.issuerProvider)"
+        }
+      ]
+    },
+    {
+      "scopeTagName": "certs-px-geneva",
+      "bindings": [
+        {
+          "find": "__CERTIFICATE_CERT_NAME__",
+          "replaceWith": "$config(certificates.px.geneva.certName)"
+        },
+        {
+          "find": "__CERTIFICATE_SUBJECT_NAME__",
+          "replaceWith": "$config(certificates.px.geneva.subjectName)"
+        },
+        {
+          "find": "__CERTIFICATE_DNS_NAMES__",
+          "replaceWith": "$config(certificates.px.geneva.dnsNames)"
+        },
+        {
+          "find": "__CERTIFICATE_ISSUER_PROVIDER__",
+          "replaceWith": "$config(certificates.px.geneva.issuerProvider)"
+        }
+      ]
+    },
+    {
+      "scopeTagName": "certs-px-aad",
+      "bindings": [
+        {
+          "find": "__CERTIFICATE_CERT_NAME__",
+          "replaceWith": "$config(certificates.px.aad.certName)"
+        },
+        {
+          "find": "__CERTIFICATE_SUBJECT_NAME__",
+          "replaceWith": "$config(certificates.px.aad.subjectName)"
+        },
+        {
+          "find": "__CERTIFICATE_DNS_NAMES__",
+          "replaceWith": "$config(certificates.px.aad.dnsNames)"
+        },
+        {
+          "find": "__CERTIFICATE_ISSUER_PROVIDER__",
+          "replaceWith": "$config(certificates.px.aad.issuerProvider)"
+        }
+      ]
+    },
+    {
+      "scopeTagName": "certs-px-ctp",
+      "bindings": [
+        {
+          "find": "__CERTIFICATE_CERT_NAME__",
+          "replaceWith": "$config(certificates.px.ctp.certName)"
+        },
+        {
+          "find": "__CERTIFICATE_SUBJECT_NAME__",
+          "replaceWith": "$config(certificates.px.ctp.subjectName)"
+        },
+        {
+          "find": "__CERTIFICATE_DNS_NAMES__",
+          "replaceWith": "$config(certificates.px.ctp.dnsNames)"
+        },
+        {
+          "find": "__CERTIFICATE_ISSUER_PROVIDER__",
+          "replaceWith": "$config(certificates.px.ctp.issuerProvider)"
+        }
+      ]
+    },
+    {
+      "scopeTagName": "certs-px-clientauth",
+      "bindings": [
+        {
+          "find": "__CERTIFICATE_CERT_NAME__",
+          "replaceWith": "$config(certificates.px.clientauth.certName)"
+        },
+        {
+          "find": "__CERTIFICATE_SUBJECT_NAME__",
+          "replaceWith": "$config(certificates.px.clientauth.subjectName)"
+        },
+        {
+          "find": "__CERTIFICATE_DNS_NAMES__",
+          "replaceWith": "$config(certificates.px.clientauth.dnsNames)"
+        },
+        {
+          "find": "__CERTIFICATE_ISSUER_PROVIDER__",
+          "replaceWith": "$config(certificates.px.clientauth.issuerProvider)"
+        }
+      ]
+    },
+    {
+      "scopeTagName": "virtual-network",
+      "bindings": [
+        {
+          "find": "__VIRTUAL_NETWORK_ADDRESS_PREFIX16_APPS__",
+          "replaceWith": "$config(stamp_$stamp().vnetAddressPrefix16Apps)"
+        },
+        {
+          "find": "__VIRTUAL_NETWORK_ADDRESS_PREFIX16_FIREWALL__",
+          "replaceWith": "$config(stamp_$stamp().vnetAddressPrefix16Firewall)"
+        },
+        {
+          "find": "\"__VIRTUAL_NETWORK_ADDITIONAL_APGW_DNS_ZONES__\"",
+          "replaceWith": "$config(appGatewayPrivateDnsRecords.zones)"
+        },
+        {
+          "find": "\"__VIRTUAL_NETWORK_ADDITIONAL_APGW_DNS_ZONE_RECORDS__\"",
+          "replaceWith": "$config(appGatewayPrivateDnsRecords.records)"
+        },
+        {
+          "find": "\"__FQDN_ALLOW_LIST__\"",
+          "replaceWith": "$config(firewall.fqdnAllowList)"
+        }
+      ]
+    },
+    {
+      "scopeTagName": "pxapp",
+      "bindings": [
+        {
+          "find": "__APP_BUILD_VERSION__",
+          "replaceWith": "$buildVersion()"
+        },
+        {
+          "find": "__APP_SERVICE_KEY_WORD__",
+          "replaceWith": "px"
+        },
+        {
+          "find": "__APP_SUBNET_NAME__",
+          "replaceWith": "px"
+        },
+        {
+          "find": "__APP_SERVICE_PACKAGE_LINK__",
+          "replaceWith": "bin\\\\pxservice.zip"
+        },
+        {
+          "find": "__APP_SERVICE_EXECUTABLE_FILENAME__",
+          "replaceWith": "PaymentExperience.Service.API.dll"
+        },
+        {
+          "find": "__APP_SERVICE_PLAN_SKU_TIER__",
+          "replaceWith": "$config(stamp_$stamp().appServicePlanSkuTier)"
+        },
+        {
+          "find": "__APP_SERVICE_PLAN_SKU_NAME__",
+          "replaceWith": "$config(stamp_$stamp().appServicePlanSkuName)"
+        },
+        {
+          "find": "__APP_SERVICE_PLAN_MIN_CAPACITY__",
+          "replaceWith": "$config(stamp_$stamp().appServicePlanMinCapacity)"
+        },
+        {
+          "find": "__APP_SERVICE_PLAN_MAX_CAPACITY__",
+          "replaceWith": "$config(stamp_$stamp().appServicePlanMaxCapacity)"
+        },
+        {
+          "find": "__APP_SERVICE_PLAN_DEFAULT_CAPACITY__",
+          "replaceWith": "$config(stamp_$stamp().appServicePlanDefaultCapacity)"
+        },
+        {
+          "find": "__HEALTH_CHECK_PATH__",
+          "replaceWith": "$config(appServiceConfigs.px.healthCheckPath)"
+        },
+        {
+          "find": "__DEPLOY_STAGING_SLOT__",
+          "replaceWith": "$config(appServiceConfigs.px.deployStagingSlot)"
+        },
+        {
+          "find": "__SWAP_SLOTS__",
+          "replaceWith": "$config(appServiceConfigs.px.swapSlots)"
+        },
+        {
+          "find": "__APP_SERVICE_PUBLIC_ACCESS__",
+          "replaceWith": "$config(appServiceConfigs.px.publicAccess)"
+        },
+        {
+          "find": "__APP_SERVICE_CERT_AUTH_ON__",
+          "replaceWith": "$config(appServiceConfigs.px.certAuthOn)"
+        },
+        {
+          "find": "__MONITORING_ROLE__",
+          "replaceWith": "$config(geneva.monitoringRole)"
+        },
+        {
+          "find": "__MONITORING_TENANT__",
+          "replaceWith": "$config(geneva.monitoringTenant)"
+        },
+        {
+          "find": "__UAMI_GBL_NAME__",
+          "replaceWith": "$config(userAssignedManagedIdentityName)"
+        },
+        {
+          "find": "__Front_Door_Host_Name__",
+          "replaceWith": "$config(certificates.px.tls.subjectName)"
+        },
+        {
+          "find": "__Front_Door_Origin_End_Point__",
+          "replaceWith": "$config(azureFrontDoor.originEndpoint)"
+        },
+        {
+          "find": "__UAMI_GBL_RG__",
+          "replaceWith": "$config(userAssignedManagedIdentityResourceGroup)"
+        },
+        {
+          "find": "__CLIENT_ID__",
+          "replaceWith": "$config(appServiceConfigs.px.clientId)"
+        },
+        {
+          "find": "__Enrionment_Name__",
+          "replaceWith": "$config(appServiceConfigs.px.environmentName)"
+        },
+        {
+          "find": "__MONITORING_GCS_ENVIRONMENT__",
+          "replaceWith": "$config(geneva.monitoringGcsEnvironment)"
+        },
+        {
+          "find": "__MONITORING_GCS_ACCOUNT__",
+          "replaceWith": "$config(geneva.monitoringGcsAccount)"
+        },
+        {
+          "find": "__MONITORING_GCS_NAMESPACE__",
+          "replaceWith": "$config(geneva.monitoringGcsNamespace)"
+        },
+        {
+          "find": "__MONITORING_GCS_AUTH_ID__",
+          "replaceWith": "$config(geneva.monitoringGcsAuthId)"
+        },
+        {
+          "find": "__MONITORING_CONFIG_VERSION__",
+          "replaceWith": "$config(geneva.monitoringConfigVersion)"
+        },
+        {
+          "find": "__MONITORING_GENEVA_CERT_SECRET_NAME__",
+          "replaceWith": "$config(geneva.monitoringGenevaCertSecretName)"
+        },
+        {
+          "find": "__COMMERCE_ACCOUNT_CLIENT_CERTIFICATE_SECRET__",
+          "replaceWith": "$config(certificates.px.ctp.certName)"
+        },
+        {
+          "find": "__PX_CLIENT_CERTIFICATE_SECRET__",
+          "replaceWith": "$config(certificates.px.clientauth.certName)"
+        },
+        {
+          "find": "__AAD_AME_CLIENT_CERTIFICATE_SECRET__",
+          "replaceWith": "$config(certificates.px.aad.certName)"
+        },
+        {
+          "find": "__GENEVA_CERTIFICATE_SECRET__",
+          "replaceWith": "$config(certificates.px.geneva.certName)"
+        },
+        {
+          "find": "__DEPLOY_PX_PLAN_CERTIFICATES__",
+          "replaceWith": "true"
+        }
+      ]
+    },
+    {
+      "scopeTagName": "px-shorturl-database",
+      "bindings": [
+        {
+          "find": "\"__COSMOSDB_LOCATIONS__\"",
+          "replaceWith": "$config(database.locations)"
+        },
+        {
+          "find": "__COSMOS_DB_NAME__",
+          "replaceWith": "$config(database.name)"
+        },
+        {
+          "find": "__COSMOS_DB_LOCATION__",
+          "replaceWith": "$config(database.location)"
+        },
+        {
+          "find": "\"__COSMOSDB_DATA_CONTRIBUTOR_PRINCIPAL_IDS__\"",
+          "replaceWith": "$config(database.dataContributorPrincipalIds)"
+        }
+      ]
+    },
+    {
+      "scopeTagName": "px-dependencyemulators",
+      "bindings": [
+        {
+          "find": "__APP_BUILD_VERSION__",
+          "replaceWith": "$buildVersion()"
+        },
+        {
+          "find": "__APP_SERVICE_KEY_WORD__",
+          "replaceWith": "px-dependencyemulators"
+        },
+        {
+          "find": "__APP_SUBNET_NAME__",
+          "replaceWith": "pxEmulator"
+        },
+        {
+          "find": "__APP_SERVICE_PACKAGE_LINK__",
+          "replaceWith": "bin\\\\pxdependencyemulators.zip"
+        },
+        {
+          "find": "__APP_SERVICE_EXECUTABLE_FILENAME__",
+          "replaceWith": "Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.dll"
+        },
+        {
+          "find": "__APP_SERVICE_PLAN_SKU_TIER__",
+          "replaceWith": "$config(emulatorAppServicePlan.appServicePlanSkuTier)"
+        },
+        {
+          "find": "__APP_SERVICE_PLAN_SKU_NAME__",
+          "replaceWith": "$config(emulatorAppServicePlan.appServicePlanSkuName)"
+        },
+        {
+          "find": "__APP_SERVICE_PLAN_MIN_CAPACITY__",
+          "replaceWith": "$config(emulatorAppServicePlan.appServicePlanMinCapacity)"
+        },
+        {
+          "find": "__APP_SERVICE_PLAN_MAX_CAPACITY__",
+          "replaceWith": "$config(emulatorAppServicePlan.appServicePlanMaxCapacity)"
+        },
+        {
+          "find": "__APP_SERVICE_PLAN_DEFAULT_CAPACITY__",
+          "replaceWith": "$config(emulatorAppServicePlan.appServicePlanDefaultCapacity)"
+        },
+        {
+          "find": "__HEALTH_CHECK_PATH__",
+          "replaceWith": "$config(appServiceConfigs.emulator.healthCheckPath)"
+        },
+        {
+          "find": "__DEPLOY_STAGING_SLOT__",
+          "replaceWith": "$config(appServiceConfigs.emulator.deployStagingSlot)"
+        },
+        {
+          "find": "__SWAP_SLOTS__",
+          "replaceWith": "$config(appServiceConfigs.emulator.swapSlots)"
+        },
+        {
+          "find": "__APP_SERVICE_PUBLIC_ACCESS__",
+          "replaceWith": "$config(appServiceConfigs.emulator.publicAccess)"
+        },
+        {
+          "find": "__APP_SERVICE_CERT_AUTH_ON__",
+          "replaceWith": "$config(appServiceConfigs.emulator.certAuthOn)"
+        },
+        {
+          "find": "__MONITORING_ROLE__",
+          "replaceWith": "$config(geneva.monitoringRole)"
+        },
+        {
+          "find": "__MONITORING_TENANT__",
+          "replaceWith": "$config(geneva.monitoringTenant)"
+        },
+        {
+          "find": "__UAMI_GBL_NAME__",
+          "replaceWith": "$config(userAssignedManagedIdentityName)"
+        },
+        {
+          "find": "__Front_Door_Host_Name__",
+          "replaceWith": "$config(certificates.px.tls.subjectName)"
+        },
+        {
+          "find": "__Front_Door_Origin_End_Point__",
+          "replaceWith": "$config(azureFrontDoor.originEndpoint)"
+        },
+        {
+          "find": "__UAMI_GBL_RG__",
+          "replaceWith": "$config(userAssignedManagedIdentityResourceGroup)"
+        },
+        {
+          "find": "__CLIENT_ID__",
+          "replaceWith": "$config(appServiceConfigs.emulator.clientId)"
+        },
+        {
+          "find": "__Enrionment_Name__",
+          "replaceWith": "$config(appServiceConfigs.emulator.environmentName)"
+        },
+        {
+          "find": "__MONITORING_GCS_ENVIRONMENT__",
+          "replaceWith": "$config(geneva.monitoringGcsEnvironment)"
+        },
+        {
+          "find": "__MONITORING_GCS_ACCOUNT__",
+          "replaceWith": "$config(geneva.monitoringGcsAccount)"
+        },
+        {
+          "find": "__MONITORING_GCS_NAMESPACE__",
+          "replaceWith": "$config(geneva.monitoringGcsNamespace)"
+        },
+        {
+          "find": "__MONITORING_GCS_AUTH_ID__",
+          "replaceWith": "$config(geneva.monitoringGcsAuthId)"
+        },
+        {
+          "find": "__MONITORING_CONFIG_VERSION__",
+          "replaceWith": "$config(geneva.monitoringConfigVersion)"
+        },
+        {
+          "find": "__MONITORING_GENEVA_CERT_SECRET_NAME__",
+          "replaceWith": "$config(geneva.monitoringGenevaCertSecretName)"
+        },
+        {
+          "find": "__DEPLOY_PX_PLAN_CERTIFICATES__",
+          "replaceWith": "false"
+        }
+      ]
+    }
+  ]
+}

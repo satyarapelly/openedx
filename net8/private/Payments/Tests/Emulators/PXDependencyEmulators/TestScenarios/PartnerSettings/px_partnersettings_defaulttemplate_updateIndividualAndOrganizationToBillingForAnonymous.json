@@ -1,0 +1,50 @@
+{
+  "testScenarioName": "px.partnersettings.defaulttemplate.updateIndividualAndOrganizationToBillingForAnonymous",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "add": {
+          "template": "defaulttemplate",
+          "features": {
+            "customizeAddressForm": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "addressType": "individual",
+                  "DataSource": "jarvisBilling",
+                  "fieldsToBeEnabled": [ "country" ]
+                },
+                {
+                  "addressType": "organization",
+                  "DataSource": "jarvisBilling",
+                  "fieldsToBeEnabled": [ "country" ]
+                }
+              ]
+            }
+          }
+        },
+        "update": {
+          "template": "defaulttemplate",
+          "features": {
+            "customizeAddressForm": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "addressType": "individual",
+                  "DataSource": "jarvisBilling",
+                  "fieldsToBeEnabled": [ "country" ]
+                },
+                {
+                  "addressType": "organization",
+                  "DataSource": "jarvisBilling",
+                  "fieldsToBeEnabled": [ "country" ]
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

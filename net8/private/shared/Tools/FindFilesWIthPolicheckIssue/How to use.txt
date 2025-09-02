@@ -1,0 +1,5 @@
+1) Download the policheck result (policheck.xml) from building pipeline published artifact
+2) Organize the plicheck.xml so that it has the same structure as newPoliCheckIssue file.
+3) run filter.py (python filter.py)
+4) change the "\" symbol to "/" in the output file
+5) Copy and paste the files name the in output file to "pipeline.user.all_os.all_buildtype.all_tag.__SourceAnalysis__.yml"

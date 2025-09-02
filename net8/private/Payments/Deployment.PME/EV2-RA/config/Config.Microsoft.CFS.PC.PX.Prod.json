@@ -1,0 +1,262 @@
+{
+	"settings": {
+		"workloadName": "px-prod",
+		"networkworkloadName": "px-prod-network",
+		"environment": "prod",
+		"deploymentIdentityName": "PaymentExperienceService-PROD-Deployment", // Follow naming convention: "<Service>-<Environment>-Deployment". I want to force create new. so,going with this.
+		"deploymentIdentityDisplayName": "PX PROD Deployment",
+		"deploymentIdentityOwnerObjectId": "13b9c6c3-02af-4b7d-93e4-5b7ad4161792", // wwei's objectid for assisted id AAD application
+		"deploymentIdentityCertificateName": "DeploymentIdentityCertificate",
+		"deploymentIdentityCertificateSubjectName": "deployment.px-prod.azclient.ms",
+		"deploymentIdentityKeyVaultLocation": "eastus2",
+		"deploymentIdentityKeyVaultName": "kv-px-prod-deploy",
+		"deploymentIdentityKeyVaultResourceGroup": "rg-px-prod-deploy-global",
+		"userAssignedManagedIdentityName": "PaymentExperience-PROD",
+		"userAssignedManagedIdentityResourceGroup": "PX-Infra-PROD-WestUS",
+		"subscriptionKey": "STORECORE-PST-PX-PROD",
+		"environmentProper": "prod",
+		"selectedRegions": [
+			"eastus",
+			"eastus2",
+			"westus",
+			"westus3",
+			"centralus",
+			"westcentralus",
+			"southcentralus",
+			"northcentralus"
+		],
+		"selectedGlobalRegion": "westus",
+		"privateCA": "OneCertV2-PrivateCA",
+		"publicCA": "OneCertV2-PublicCA",
+		"certificates": {
+			"px": {
+				"tls": {
+					"certName": "px-prod-paymentexperience-tls",
+					"subjectName": "paymentexperience.cp.microsoft.com",
+					"dnsNames": "[\\\"paymentexperience.cp.microsoft.com\\\"]",
+					"issuerProvider": "OneCertV2-PublicCA"
+				},
+				"geneva": {
+					"certName": "PX-GenevaLogsCerts",
+					"subjectName": "ma.geneva.keyvault.paymentexperience.azclient.ms",
+					"dnsNames": "[\\\"ma.geneva.keyvault.paymentexperience.azclient.ms\\\"]",
+					"issuerProvider": "OneCertV2-PrivateCA"
+				},
+				"aad": {
+					"certName": "aad-pxclientauth-paymentexperience-azclient-ms",
+					"subjectName": "aad-pxclientauth.paymentexperience.azclient.ms",
+					"dnsNames": "[\\\"aad-pxclientauth.paymentexperience.azclient.ms\\\"]",
+					"issuerProvider": "OneCertV2-PrivateCA"
+				},
+				"ctp": {
+					"certName": "ctpcommerce-pxclientauth-paymentexperience-azclient-ms",
+					"subjectName": "ctpcommerce-pxclientauth.paymentexperience.azclient.ms",
+					"dnsNames": "[\\\"ctpcommerce-pxclientauth.paymentexperience.azclient.ms\\\"]",
+					"issuerProvider": "OneCertV2-PrivateCA"
+				}
+			}
+		},
+		"azureFrontDoor": {
+			"originEndpoint": "agw-px-prod-eus-1.eastus.cloudapp.azure.com"
+		},
+		"appGatewayListeners": {
+			"px": {
+				"hostName": "paymentexperience.cp.microsoft.com"
+			},
+			"pxStaging": {
+				"hostName": "staging.paymentexperience.cp.microsoft.com"
+			}
+		},
+		"database": {
+			"name": "px-shorturl-db-prod",
+            "locations": "[{\"location\":\"westus\",\"failoverPriority\":0},{\"location\":\"eastus\",\"failoverPriority\":1},{\"location\":\"westus3\",\"failoverPriority\":2},{\"location\":\"northcentralus\",\"failoverPriority\":3},{\"location\":\"southcentralus\",\"failoverPriority\":4}]",
+			"resourceGroup": "rg-px-prod-global",
+			"location": "westus",
+			"dataContributorPrincipalIds": "[\"255d327f0-3443-459b-be5c-8c057ddb3cbd\"]"
+		},
+		"appGatewayPrivateDnsRecords": {
+			"zones": "[\"private.microsoft-prod.com\"]",
+			"records": "[{\"dnsZoneName\":\"private.microsoft-prod.com\",\"recordName\":\"px\"}]"
+		},
+		"appServiceConfigs": {
+			"px": {
+				"publicAccess": "false",
+				"certAuthOn": "false",
+				"monitoringRole": "AppService",
+				"monitoringTenant": "PME",
+				"monitoringAccountName": "paymentexperiencelogsppe",
+				"clientId": "bd11e518-82c4-438f-898b-585a8cc3da0d",
+				"environmentName": "STORECORE-PST-PX-PROD",
+				"healthCheckPath": "/probe",
+				"deployStagingSlot": "true",
+				"swapSlots": "false"
+			},
+			"emulator": {
+				"publicAccess": "false",
+				"certAuthOn": "false",
+				"clientId": "bd11e518-82c4-438f-898b-585a8cc3da0d",
+				"environmentName": "STORECORE-PST-PX-PROD",
+				"healthCheckPath": "/",
+				"deployStagingSlot": "false",
+				"swapSlots": "false"
+			}
+		},
+		"serviceTags": {
+			"outgoingIPFirstPartyServiceTag": "GPCPXPROD"
+		},
+		"stampConfigs": "[{\"location\":\"centralus\",\"shortLocation\":\"cus\",\"stamp\":\"1\"},{\"location\":\"westcentralus\",\"shortLocation\":\"wcus\",\"stamp\":\"1\"},{\"location\":\"southcentralus\",\"shortLocation\":\"scus\",\"stamp\":\"1\"},{\"location\":\"eastus\",\"shortLocation\":\"eus\",\"stamp\":\"1\"},{\"location\":\"westus\",\"shortLocation\":\"wus\",\"stamp\":\"1\"},{\"location\":\"westus2\",\"shortLocation\":\"wus2\",\"stamp\":\"1\"},{\"location\":\"eastus2\",\"shortLocation\":\"eus2\",\"stamp\":\"1\"},{\"location\":\"northcentralus\",\"shortLocation\":\"ncus\",\"stamp\":\"1\"}]",
+		"geneva": {
+			"monitoringGcsEnvironment": "Diagnostics PROD",
+			"monitoringGcsAccount": "paymentexperiencelogprod",
+			"monitoringGcsNamespace": "paymentexperiencelogsprod",
+			"monitoringGcsAuthId": "ma.geneva.keyvault.paymentexperience.azclient.ms",
+			"monitoringConfigVersion": "1.0",
+			"monitoringRole": "PxAppService",
+			"monitoringTenant": "pme",
+			"monitoringGenevaCertSecretName": "PX-GenevaLogsCerts"
+		}
+	},
+	"geographies": [
+		{
+			"name": "NorthAmerica",
+			"regions": [
+				{
+					"name": "eastus",
+					"settings": {
+						"stampCount": 1,
+						"shortLocation": "eus",
+						"stamp_1": {
+							"vnetAddressPrefix16Apps": "10.2",
+							"vnetAddressPrefix16Firewall": "10.3",
+							"availabilityZones": "[]",
+							"appServicePlanSkuTier": "PremiumV2",
+							"appServicePlanSkuName": "P3v2",
+							"appServicePlanMinCapacity": "1",
+							"appServicePlanMaxCapacity": "1",
+							"appServicePlanDefaultCapacity": "1"
+						}
+					}
+				},
+				{
+					"name": "westus",
+					"settings": {
+						"stampCount": 1,
+						"shortLocation": "wus",
+						"stamp_1": {
+							"vnetAddressPrefix16Apps": "10.4",
+							"vnetAddressPrefix16Firewall": "10.5",
+							"availabilityZones": "[]",
+							"appServicePlanSkuTier": "PremiumV2",
+							"appServicePlanSkuName": "P3v2",
+							"appServicePlanMinCapacity": "1",
+							"appServicePlanMaxCapacity": "1",
+							"appServicePlanDefaultCapacity": "1"
+						}
+					}
+				},
+				{
+					"name": "westus3",
+					"settings": {
+						"stampCount": 1,
+						"shortLocation": "wus3",
+						"stamp_1": {
+							"vnetAddressPrefix16Apps": "10.5",
+							"vnetAddressPrefix16Firewall": "10.6",
+							"availabilityZones": "[]",
+							"appServicePlanSkuTier": "PremiumV3",
+							"appServicePlanSkuName": "P1v3",
+							"appServicePlanMinCapacity": "1",
+							"appServicePlanMaxCapacity": "1",
+							"appServicePlanDefaultCapacity": "1"
+						}
+					}
+				},
+				{
+					"name": "centralus",
+					"settings": {
+						"stampCount": 1,
+						"shortLocation": "cus",
+						"stamp_1": {
+							"vnetAddressPrefix16Apps": "10.7",
+							"vnetAddressPrefix16Firewall": "10.8",
+							"availabilityZones": "[]",
+							"appServicePlanSkuTier": "PremiumV2",
+							"appServicePlanSkuName": "P3v2",
+							"appServicePlanMinCapacity": "1",
+							"appServicePlanMaxCapacity": "1",
+							"appServicePlanDefaultCapacity": "1"
+						}
+					}
+				},
+				{
+					"name": "westcentralus",
+					"settings": {
+						"stampCount": 1,
+						"shortLocation": "wcus",
+						"stamp_1": {
+							"vnetAddressPrefix16Apps": "10.9",
+							"vnetAddressPrefix16Firewall": "10.10",
+							"availabilityZones": "[]",
+							"appServicePlanSkuTier": "PremiumV3",
+							"appServicePlanSkuName": "P1v3",
+							"appServicePlanMinCapacity": "1",
+							"appServicePlanMaxCapacity": "1",
+							"appServicePlanDefaultCapacity": "1"
+						}
+					}
+				},
+				{
+					"name": "southcentralus",
+					"settings": {
+						"stampCount": 1,
+						"shortLocation": "scus",
+						"stamp_1": {
+							"vnetAddressPrefix16Apps": "10.11",
+							"vnetAddressPrefix16Firewall": "10.12",
+							"availabilityZones": "[]",
+							"appServicePlanSkuTier": "PremiumV3",
+							"appServicePlanSkuName": "P1v3",
+							"appServicePlanMinCapacity": "1",
+							"appServicePlanMaxCapacity": "1",
+							"appServicePlanDefaultCapacity": "1"
+						}
+					}
+				},
+				{
+					"name": "eastus2",
+					"settings": {
+						"stampCount": 1,
+						"shortLocation": "eus2",
+						"stamp_1": {
+							"vnetAddressPrefix16Apps": "10.13",
+							"vnetAddressPrefix16Firewall": "10.14",
+							"availabilityZones": "[]",
+							"appServicePlanSkuTier": "PremiumV3",
+							"appServicePlanSkuName": "P1v3",
+							"appServicePlanMinCapacity": "1",
+							"appServicePlanMaxCapacity": "1",
+							"appServicePlanDefaultCapacity": "1"
+						}
+					}
+				},
+				{
+					"name": "northcentralus",
+					"settings": {
+						"stampCount": 1,
+						"shortLocation": "ncus",
+						"stamp_1": {
+							"vnetAddressPrefix16Apps": "10.15",
+							"vnetAddressPrefix16Firewall": "10.16",
+							"availabilityZones": "[]",
+							"appServicePlanSkuTier": "PremiumV3",
+							"appServicePlanSkuName": "P1v3",
+							"appServicePlanMinCapacity": "1",
+							"appServicePlanMaxCapacity": "1",
+							"appServicePlanDefaultCapacity": "1"
+						}
+					}
+				}
+			]
+		}
+	]
+}

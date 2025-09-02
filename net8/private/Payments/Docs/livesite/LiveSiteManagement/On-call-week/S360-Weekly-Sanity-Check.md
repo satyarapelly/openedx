@@ -1,0 +1,5 @@
+# S360 Weekly Sanity Check
+
+**On Call should check each of these dashboards (**[Fundamentals S360 Dashboards](onenote:..\Run-The-Business\S360-FUN.one#Fundamentals%20S360%20Dashboards&amp;section-id={3B313DB0-3CE3-4080-B92D-B94B5BE832A4}&amp;page-id={29A5D3AF-0D86-41DE-96BE-5B2AEEDDEB5B}&amp;end&amp;base-path=https://microsoft.sharepoint.com/teams/PaymentExperience/SiteAssets/Payment%20Experience) **) each week as a "sanity check" to make sure there is nothing that we are unaware of being past SLA.**
+
+If you see any red / past-SLA /non-compliant items please report them to S360 area owners as per [Area Ownership](onenote:..\Run-The-Business\S360.one#Area%20Ownership&amp;section-id={3B313DB0-3CE3-4080-B92D-B94B5BE832A4}&amp;page-id={C39EDAAE-F1DD-43F2-AAEB-18539A3F1D82}&amp;end&amp;base-path=https://microsoft.sharepoint.com/teams/PaymentExperience/SiteAssets/Payment%20Experience) . When in doubt, reach out to mccordmatt@microsoft.com

@@ -1,0 +1,41 @@
+{
+    "itemcode":"{{This placeholder should have been replaced}}",
+    "objectid":"authentication",
+    "authenticationid":"{{This placeholder should have been replaced}}",
+    "authentication_date":"{{This placeholder should have been replaced}}",
+    "amount":"{{This placeholder should have been replaced}}",
+    "currency":"{{This placeholder should have been replaced}}",
+    "mercid":"{{This placeholder should have been replaced}}",
+    "bankid":"{{This placeholder should have been replaced}}",
+    "payment_method_type":"{{This placeholder should have been replaced}}",
+    "authentication_type":"{{This placeholder should have been replaced}}",
+    "authentication_status":"{{This placeholder should have been replaced}}",
+    "orderid":"{{This placeholder should have been replaced}}",
+    "eci":"05",
+    "pares":"{{This placeholder should have been replace}}",
+    "authentication_error_code":"AUS0000",
+    "authentication_error_type":"success",
+    "authentication_error_desc":"Authentication Successful",
+    "additional_info":{
+    "additional_info1":"Details1",
+    "additional_info2":"Details2",
+    "additional_info3":"Details3",
+    "additional_info4":"Details4",
+    "additional_info5":"Details5",
+    "additional_info6":"Details6",
+    "additional_info7":"Details7",
+    "additional_info8":"Details8",
+    "additional_info9":"Details9",
+    "additional_info10":"Details10"
+    },
+    "card":{
+    "masked_value":"{{This placeholder should have been replaced}}",
+    "type":"{{This placeholder should have been replaced}}"
+    },
+    "xid":"ABXcpervt=",
+    "enrolled":"Y",
+    "cavv":"CGtpseerccma==",
+    "cavvAlgorithm":"2",
+    "3ds_status":"Y"
+}
+    

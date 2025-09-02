@@ -1,0 +1,171 @@
+{
+  "properties": {
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        }
+      },
+      "triggers": {
+        "When_an_IcM_incident_is_created": {
+          "type": "ApiConnectionWebhook",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['IcM']['connectionId']"
+              }
+            },
+            "body": {
+              "OwningService": "Payment Services - ICM Tenant",
+              "Severity": "3;4",
+              "OwningTeam": "StoreCore-PST-PXService",
+              "WorkflowCallbackUrl": "@{listCallbackUrl()}",
+              "MonitorId": "87c4d304-bfa7-494f-80ed-bd5b64894686"
+            },
+            "path": "/api/v1/subscriptions/created"
+          }
+        }
+      },
+      "actions": {
+        "Run_KQL_query": {
+          "runAfter": {
+            "Initialize_variable": [
+              "Succeeded"
+            ]
+          },
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['kusto']['connectionId']"
+              }
+            },
+            "method": "post",
+            "body": {
+              "cluster": "https://pst.kusto.windows.net",
+              "db": "Prod",
+              "csl": "let unit = 1m;\nlet ImpactEndDate = bin(datetime(@{variables('endTime')}) +45m, unit);\nlet ImpactStartDate =  bin(datetime(@{variables('endTime')}) -15m, unit);\nlet start = ImpactStartDate;\nlet end = ImpactEndDate;\nRequestTelemetry\n| where TIMESTAMP > start  and TIMESTAMP < end\nand data_baseData_operationName startswith \"PartnerSettings\"\nand name in (\"Microsoft.Commerce.Tracing.Sll.PXServiceIncomingOperation\", \"Microsoft.Commerce.Tracing.Sll.PXServiceOutgoingOperation\")\n| project TIMESTAMP, cV, data_baseData_operationName, data_baseData_targetUri, data_baseData_protocolStatusCode, data_RequestHeader, data_RequestDetails, data_ResponseDetails, data_RequestTraceId, data_ServerTraceId, data_AccountId\n| parse kind = regex flags = Ui data_baseData_targetUri with \"/partnersettings/\" partnerName \"settingsType=PaymentExperience\" *\n| where data_baseData_protocolStatusCode startswith \"500\"\n| summarize count() by partnerName, data_baseData_protocolStatusCode, data_ResponseDetails"
+            },
+            "path": "/ListKustoResults/false"
+          }
+        },
+        "Get_an_IcM_incident": {
+          "runAfter": {},
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['IcM']['connectionId']"
+              }
+            },
+            "method": "get",
+            "path": "/api/v1/incidents/@{encodeURIComponent(triggerBody()['IncidentId'])}"
+          }
+        },
+        "Initialize_variable": {
+          "runAfter": {
+            "Get_an_IcM_incident": [
+              "Succeeded"
+            ]
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "endTime",
+                "type": "string",
+                "value": "@body('Get_an_IcM_incident')['CreatedDate']"
+              }
+            ]
+          }
+        },
+        "Create_HTML_table": {
+          "runAfter": {
+            "Run_KQL_query": [
+              "Succeeded"
+            ]
+          },
+          "type": "Table",
+          "inputs": {
+            "from": "@body('Run_KQL_query')?['value']",
+            "format": "HTML"
+          }
+        },
+        "Add_new_IcM_Discussion_entry": {
+          "runAfter": {
+            "Initialize_variable_ErrorCode": [
+              "Succeeded"
+            ]
+          },
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['IcM']['connectionId']"
+              }
+            },
+            "method": "post",
+            "body": {
+              "DiscussionText": "<h3>Get PSS 5XX Error Details as below</h3>\n@{body('Create_HTML_table')}\n\n",
+              "RenderType": "Html"
+            },
+            "path": "/api/v1/incidents/@{encodeURIComponent(body('Get_an_IcM_incident')['IncidentId'])}/discussion"
+          }
+        },
+        "Edit_an_IcM_incident": {
+          "runAfter": {
+            "Add_new_IcM_Discussion_entry": [
+              "Succeeded"
+            ]
+          },
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['IcM']['connectionId']"
+              }
+            },
+            "method": "post",
+            "body": {
+              "Title": "@{body('Get_an_IcM_incident')['Title']} - @{variables('ErrorCode')}",
+              "Keywords": "Auto-analyzing_GPShield"
+            },
+            "path": "/api/v1/incidents/@{encodeURIComponent(body('Get_an_IcM_incident')['IncidentId'])}/edit"
+          }
+        },
+        "Initialize_variable_ErrorCode": {
+          "runAfter": {
+            "Create_HTML_table": [
+              "Succeeded"
+            ]
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "ErrorCode",
+                "type": "string",
+                "value": "@{body('Run_KQL_query')?['value'][0]['data_baseData_protocolStatusCode']}"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "runtimeConfiguration": {
+      "lifetime": {
+        "unit": "Day",
+        "count": 25
+      }
+    },
+    "state": "Enabled",
+    "metadata": {
+      "dataClassifications": [
+        "AccessControlData"
+      ]
+    }
+  }
+}

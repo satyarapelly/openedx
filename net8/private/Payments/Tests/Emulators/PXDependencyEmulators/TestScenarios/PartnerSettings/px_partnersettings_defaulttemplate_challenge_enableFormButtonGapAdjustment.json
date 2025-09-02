@@ -1,0 +1,22 @@
+{
+  "testScenarioName": "px.partnersettings.defaulttemplate.challenge.enableFormButtonGapAdjustment",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "handlePurchaseRiskChallenge": {
+          "template": "defaulttemplate",
+          "features": {
+            "enableFormButtonGapAdjustment": {
+              "displayCustomizationDetail": [
+                {
+                  "usePSSForPXFeatureFlighting": true
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

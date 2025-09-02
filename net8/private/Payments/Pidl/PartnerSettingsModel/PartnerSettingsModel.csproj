@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), build.root))\msbuild\Environment.props" />
+	<Import Project="..\..\Payments.targets" />
+	<PropertyGroup>
+		<ProjectGuid>{980463C7-08F0-4383-93D7-E541CDD4F051}</ProjectGuid>
+		<TargetFramework>net8.0</TargetFramework>
+		<OutputType>Library</OutputType>
+		<AppDesignerFolder>Properties</AppDesignerFolder>
+		<RootNamespace>Microsoft.Commerce.Payments.PartnerSettingsModel</RootNamespace>
+		<AssemblyName>Microsoft.Commerce.Payments.PartnerSettingsModel</AssemblyName>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Newtonsoft.Json" />
+	</ItemGroup>
+</Project>

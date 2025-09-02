@@ -1,0 +1,6 @@
+ResourceType,ResourceIdentity,Country,Language,Partner,Operation,Scenario,DeltaType,BaselineJPath,NewJPath,NewValue
+profileDescriptions,,,,,,,edit,$.[0].data_description.email_address.default_value,,theawesomedifftest@outlook-int.com
+paymentMethodDescriptions,,,,,,,edit,$..clientContext.MsaProfile.PUID,,844427417367384
+paymentMethodDescriptions,,,,,,,edit,$..clientContext.MsaProfile.emailAddress,,theawesomedifftest@outlook-int.com
+paymentMethodDescriptions,,,,,,,edit,$..members[?(@.displayContent == 'You can use this payment option to buy Microsoft products and services anywhere you sign in with theawesomedifftest@outlook.com.')].displayContent,,You can use this payment option to buy Microsoft products and services anywhere you sign in with theawesomedifftest@outlook-int.com.
+paymentMethodDescriptions,,,,,,,edit,$..members[?(@.displayContent == 'Sign in with theawesomedifftest@outlook.com anytime to use this payment method to buy digital content from Windows 10 Store.')].displayContent,,Sign in with theawesomedifftest@outlook-int.com anytime to use this payment method to buy digital content from Windows 10 Store.

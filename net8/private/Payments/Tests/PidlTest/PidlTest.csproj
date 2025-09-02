@@ -1,0 +1,58 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), build.root))\msbuild\Environment.props" />
+  <Import Project="..\..\..\Payments\Payments.targets" />
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>PidlTest</RootNamespace>
+    <AssemblyName>PidlTest</AssemblyName>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <Platforms>AnyCPU</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\PXService.ApiSurface\PXService.ApiSurface.csproj" />
+    <ProjectReference Include="..\PidlTest.JsonDiff\PidlTest.JsonDiff.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" />
+    <PackageReference Include="Microsoft.Identity.Client" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="App.config" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="packages.config" />
+  </ItemGroup>
+
+  <!-- Optional: Include legacy config/test data files -->
+  <ItemGroup>
+    <Content Include="DiffTest\ConfigFiles\**\*.*" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="E2ETest\postCC.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Microsoft.WindowsLive.Test.WinLiveUser.AuthInterface.dll.config" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="bin\Debug\" />
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DiffTest\ConfigFiles\KnownDiffs\Test_PROD_AgainstBaseline_PROD.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

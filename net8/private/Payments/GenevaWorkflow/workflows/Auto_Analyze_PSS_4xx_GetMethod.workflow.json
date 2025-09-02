@@ -1,0 +1,222 @@
+{
+  "properties": {
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        }
+      },
+      "triggers": {
+        "When_an_IcM_incident_is_created": {
+          "type": "ApiConnectionWebhook",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['IcM']['connectionId']"
+              }
+            },
+            "body": {
+              "OwningService": "Payment Services - ICM Tenant",
+              "Severity": "3;4",
+              "OwningTeam": "StoreCore-PST-PXService",
+              "WorkflowCallbackUrl": "@{listCallbackUrl()}",
+              "MonitorId": "1ca5c264-aa57-4a14-bab2-78f23829bda6"
+            },
+            "path": "/api/v1/subscriptions/created"
+          }
+        }
+      },
+      "actions": {
+        "Run_KQL_query": {
+          "runAfter": {
+            "Initialize_variable": [
+              "Succeeded"
+            ]
+          },
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['kusto']['connectionId']"
+              }
+            },
+            "method": "post",
+            "body": {
+              "cluster": "https://pst.kusto.windows.net",
+              "db": "Prod",
+              "csl": "let unit = 1m;\nlet ImpactEndDate = bin(datetime(@{variables('endTime')}) - 2m, unit);\nlet ImpactStartDate =bin(ImpactEndDate -10m, unit);\nlet start = ImpactStartDate;\nlet end = ImpactEndDate;\nRequestTelemetry\n| where TIMESTAMP > start  and TIMESTAMP < end\n| where name == \"Microsoft.Commerce.Tracing.Sll.PXServiceOutgoingOperation\" and data_baseData_operationName contains \"partnersettings\"\n| where data_baseData_protocolStatusCode != 404 and toint(data_baseData_protocolStatusCode) > 399\n| project-reorder TIMESTAMP,cV,data_RequestHeader,data_ResponseHeader,data_ServiceName,data_baseData_operationName,data_baseData_protocolStatusCode,data_baseData_requestMethod, data_baseData_targetUri"
+            },
+            "path": "/ListKustoResults/false"
+          }
+        },
+        "Get_an_IcM_incident": {
+          "runAfter": {},
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['IcM']['connectionId']"
+              }
+            },
+            "method": "get",
+            "path": "/api/v1/incidents/@{encodeURIComponent(triggerBody()['IncidentId'])}"
+          }
+        },
+        "Initialize_variable": {
+          "runAfter": {
+            "Get_an_IcM_incident": [
+              "Succeeded"
+            ]
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "endTime",
+                "type": "string",
+                "value": "@body('Get_an_IcM_incident')['CreatedDate']"
+              }
+            ]
+          }
+        },
+        "Create_HTML_table": {
+          "runAfter": {
+            "Run_KQL_query": [
+              "Succeeded"
+            ]
+          },
+          "type": "Table",
+          "inputs": {
+            "from": "@body('Run_KQL_query')?['value']",
+            "format": "HTML"
+          }
+        },
+        "Add_new_IcM_Discussion_entry": {
+          "runAfter": {
+            "Data_By_BaseCv": [
+              "Succeeded"
+            ]
+          },
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['IcM']['connectionId']"
+              }
+            },
+            "method": "post",
+            "body": {
+              "DiscussionText": "<h3>Get PSS 4XX Error Details as below</h3>\n@{body('Create_HTML_table')}\n\n<h3>Get error logs based on BaseCv</h3>\n@{body('Data_By_BaseCv')}",
+              "RenderType": "Html"
+            },
+            "path": "/api/v1/incidents/@{encodeURIComponent(body('Get_an_IcM_incident')['IncidentId'])}/discussion"
+          }
+        },
+        "Edit_an_IcM_incident": {
+          "runAfter": {
+            "Add_new_IcM_Discussion_entry": [
+              "Succeeded"
+            ]
+          },
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['IcM']['connectionId']"
+              }
+            },
+            "method": "post",
+            "body": {
+              "Title": "@{body('Get_an_IcM_incident')['Title']} - @{variables('ErrorCode')}",
+              "Keywords": "Auto-analyzing_GPShield"
+            },
+            "path": "/api/v1/incidents/@{encodeURIComponent(body('Get_an_IcM_incident')['IncidentId'])}/edit"
+          }
+        },
+        "Initialize_variable_ErrorCode": {
+          "runAfter": {
+            "Create_HTML_table": [
+              "Succeeded"
+            ]
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "ErrorCode",
+                "type": "string",
+                "value": "@{body('Run_KQL_query')?['value'][0]['data_baseData_protocolStatusCode']}"
+              }
+            ]
+          }
+        },
+        "Initialize_variable_Cv": {
+          "runAfter": {
+            "Initialize_variable_ErrorCode": [
+              "Succeeded"
+            ]
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "Cv",
+                "type": "string",
+                "value": "@{body('Run_KQL_query')?['value'][0]['cV']}"
+              }
+            ]
+          }
+        },
+        "Run_KQL_query_by_BaseCv": {
+          "runAfter": {
+            "Initialize_variable_Cv": [
+              "Succeeded"
+            ]
+          },
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['kusto']['connectionId']"
+              }
+            },
+            "method": "post",
+            "body": {
+              "cluster": "https://pst.kusto.windows.net",
+              "db": "Prod",
+              "csl": "let unit = 1m;\nlet ImpactEndDate = bin(datetime(@{variables('endTime')}) - 2m, unit);\nlet ImpactStartDate =bin(ImpactEndDate -10m, unit);\nlet start = ImpactStartDate;\nlet end = ImpactEndDate;\nRequestTelemetry\n| where TIMESTAMP > start  and TIMESTAMP < end\n| where (name == \"Microsoft.Commerce.Tracing.Sll.PXServiceIncomingOperation\" or name == \"Microsoft.Commerce.Tracing.Sll.PXServiceOutgoingOperation\")\n| where cV startswith GetCVBase(\"@{variables('Cv')}\")\n| project TIMESTAMP,cV, name,data_ServerTraceId,data_RequestTraceId, data_baseData_callerName,  data_baseData_operationName, data_baseData_protocolStatusCode,data_baseData_dependencyName,data_baseData_dependencyOperationName, data_baseData_targetUri"
+            },
+            "path": "/ListKustoResults/false"
+          }
+        },
+        "Data_By_BaseCv": {
+          "runAfter": {
+            "Run_KQL_query_by_BaseCv": [
+              "Succeeded"
+            ]
+          },
+          "type": "Table",
+          "inputs": {
+            "from": "@body('Run_KQL_query_by_BaseCv')?['value']",
+            "format": "HTML"
+          }
+        }
+      }
+    },
+    "runtimeConfiguration": {
+      "lifetime": {
+        "unit": "Day",
+        "count": 25
+      }
+    },
+    "state": "Enabled",
+    "metadata": {
+      "dataClassifications": [
+        "AccessControlData"
+      ]
+    }
+  }
+}

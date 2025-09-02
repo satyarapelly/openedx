@@ -1,0 +1,16 @@
+{
+  "contentVersion": "1.0.0.0",
+  "name": "DefaultAutoRestartPolicy",
+  "version": "1.0.0",
+  "autoRestart": {
+    "maxRestartAttempts": "3",
+    "waitDurationAfterFailure": "PT2M",
+    "skipSucceeded": true,
+    "resetAttemptOnManualRestart": false,
+    "restartOnConditions": {
+      "errorsContainAny": [
+        "Problem occured while accessing and validating KeyVault Secrets associated with Application Gateway"
+      ]
+    }
+  }
+}

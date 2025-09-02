@@ -1,0 +1,6 @@
+{
+  "type": "UserAssigned",
+  "userAssignedIdentities": {
+    "@parameters('WorkflowIdentity')": {}
+  }
+}

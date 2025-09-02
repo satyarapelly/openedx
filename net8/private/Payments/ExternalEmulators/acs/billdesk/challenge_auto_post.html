@@ -1,0 +1,15 @@
+<html>
+  <head>
+	<script>
+	  function autoPost() {
+		document.forms['otp'].submit();
+	  }
+	</script>
+  </head>
+  <body onload="autoPost()">
+     <form name="otp" method="POST" action="@@redirectUrl@@">
+		<input type="hidden" name="PaRes" value="@@PaRes@@"/>
+		<input type="hidden" name="x-ms-test" value="@@mstestheader@@"/>
+	 </form>
+  </body>
+</html>
