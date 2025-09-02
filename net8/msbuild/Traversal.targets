@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <!--
+    * Don't include _BeforeAll.targets or _AfterAll.targets here.  It kills extensibility, but really
+    * traversal targets shouldn't need all that extra stuff, and having it just makes it harder to use
+    * BeforeTargets and AfterTargets since most generic targets don't exist for this project type
+  -->
+
+  <PropertyGroup>
+    <MsBuildAllProjects>$(MsBuildAllProjects);$(MsBuildThisFileFullPath)</MsBuildAllProjects>
+    <IsTraversalProject>true</IsTraversalProject>
+  </PropertyGroup>
+
+  <!-- 
+   * Declare specifically where the MSBuild task should come from so that build with any ToolsVersion
+   * will pick the MSBuild task up from the same location.
+  -->
+  <!--UsingTask TaskName="MSBuild" AssemblyName="Microsoft.Build.Tasks.v4.0, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"/>
+
+  <UsingTask TaskName="GetEnabledProjectFiles" AssemblyFile="$(MsBuildExtensionsPath)\Override\Microsoft.Build.Common.Tasks.dll" /-->
+
+  <PropertyGroup>
+    <!--
+      * Whether we should skip, rather than error, for projects listed in dirs.proj files that don't exist on disk.
+      * By default we error out, to catch typos. Override with 'true' for partial-tree enlistments.
+    -->
+        <SkipNonexistentProjectsInTraversal Condition="'$(SkipNonexistentProjectsInTraversal)' == ''">false</SkipNonexistentProjectsInTraversal>
+        <BuildInParallel Condition="'$(BuildInParallel)' == ''">true</BuildInParallel>
+        <UnloadProjectsOnCompletion Condition="'$(UnloadProjectsOnCompletion)' == ''">false</UnloadProjectsOnCompletion>
+    </PropertyGroup>
+
+    <!-- 
+      ============================================================
+      ** TrimTraversalProjects : Trim the ToBuild list based on the environment and project metadata
+      ** [IN]
+      ** @(ProjectFile)      : Projects to build
+      **   %(OnlyIfExists)   : Only build if this project exists
+      **   %(OnlyIfArch)     : Only build if the BuildArchitecture is in this comma delimited list
+      **   %(OnlyIfConfig)   : Only build if the Configuration is in this comma delimited list
+      **   %(OnlyIfDefined)  : Only build if the comma delimited variables are set (or not set if !foo) 
+      **
+      ** [OUT]
+      ** @(DisabledProjectFile) : Projects that should not be built
+      ** @(EnabledProjectFile)  : Projects that should be built
+    -->
+    <Target Name="TrimTraversalProjects"
+            Condition="'@(ProjectFile)' != ''">
+
+      <!--GetEnabledProjectFiles
+          Projects="@(ProjectFile)"
+          BuildArchitecture="$(BuildArchitecture)">
+            <Output TaskParameter="DisabledProjects" ItemName="DisabledProjectFile" />
+            <Output TaskParameter="EnabledProjects" ItemName="EnabledProjectFile" />
+      </GetEnabledProjectFiles-->
+	  
+	  <ItemGroup>
+		<EnabledProjectFile Include="@(ProjectFile)" />
+	  </ItemGroup>
+
+      <Message
+          Text="Skipping Projects from $(MSBuildProjectFullPath) : [@(DisabledProjectFile -> '%(Identity)', ' ')]"
+          Condition="'@(DisabledProjectFile)' != ''" />
+
+    </Target>
+
+
+    <!-- 
+      ============================================================
+      ** SplitTraversalProjects : Split into parallel and serial projects (parallel runs before serial) to help build the single run-at-end project without ProjectReferences
+      ** [IN]
+      ** @(EnabledProjectFile) : Project files to build (See TrimTraversalProjects)
+      **   %(BuildInParallel)  : True/False if this project should have a non-default parallel build behavior
+      ** $(BuildInParallel)    : True/False for the default parallel build behavior
+      **
+      ** [OUT]
+      ** @(EnabledProjectSerial)   : Projects that should be built sequentially
+      ** @(EnabledProjectParallel) : Projects that should be built in parallel
+    -->
+    <Target Name="SplitTraversalProjects"
+            DependsOnTargets="TrimTraversalProjects">
+
+        <ItemGroup>
+            <EnabledProjectSerial Include="@(EnabledProjectFile)" Condition="'%(EnabledProjectFile.BuildInParallel)'=='false' OR ('%(EnabledProjectFile.BuildInParallel)'=='' AND '$(BuildInParallel)'=='false')" />
+            <EnabledProjectParallel Include="@(EnabledProjectFile)" Exclude="@(EnabledProjectSerial)" />
+        </ItemGroup>
+
+        <Message Text="Serial(@(EnabledProjectSerial)) Parallel(@(EnabledProjectParallel))" Importance="low" />
+
+    </Target>
+
+    <!-- 
+      ============================================================
+      ** Build : Build all active ProjectFiles
+      ** [IN]
+      ** @(EnabledProjectParallel) : Project files to build in parallel (See SplitTraversalProjects)
+      ** @(EnabledProjectSerial)   : Project files to build sequentially (See SplitTraversalProjects)
+    -->
+    <Target Name="Build" DependsOnTargets="SplitTraversalProjects">
+    
+        <MSBuild Projects="@(EnabledProjectParallel)" Targets="VerifyAlteredTargetsUsed;Build" Properties="BuildingTraversal=$(BuildingTraversal)"  BuildInParallel="true"  SkipNonexistentProjects="$(SkipNonexistentProjectsInTraversal)" UnloadProjectsOnCompletion="$(UnloadProjectsOnCompletion)" Condition="'@(EnabledProjectParallel)'!=''" />
+        <MSBuild Projects="@(EnabledProjectSerial)"   Targets="VerifyAlteredTargetsUsed;Build" Properties="BuildingTraversal=$(BuildingTraversal)" BuildInParallel="false" SkipNonexistentProjects="$(SkipNonexistentProjectsInTraversal)" UnloadProjectsOnCompletion="$(UnloadProjectsOnCompletion)" Condition="'@(EnabledProjectSerial)'!=''"/>
+    
+    </Target>
+
+
+    <!-- 
+      ============================================================
+      ** Clean : Clean all active ProjectFiles
+      ** [IN]
+      ** @(EnabledProjectParallel) : Project files to build in parallel (See SplitTraversalProjects)
+      ** @(EnabledProjectSerial)   : Project files to build sequentially (See SplitTraversalProjects)
+    -->
+    <Target Name="Clean" DependsOnTargets="SplitTraversalProjects">
+    
+        <MSBuild Projects="@(EnabledProjectParallel)" Targets="VerifyAlteredTargetsUsed;Clean" Properties="BuildingTraversal=$(BuildingTraversal)"  BuildInParallel="true"  SkipNonexistentProjects="$(SkipNonexistentProjectsInTraversal)" UnloadProjectsOnCompletion="$(UnloadProjectsOnCompletion)" Condition="'@(EnabledProjectParallel)'!=''" />
+        <MSBuild Projects="@(EnabledProjectSerial)"   Targets="VerifyAlteredTargetsUsed;Clean" Properties="BuildingTraversal=$(BuildingTraversal)" BuildInParallel="false" SkipNonexistentProjects="$(SkipNonexistentProjectsInTraversal)" UnloadProjectsOnCompletion="$(UnloadProjectsOnCompletion)" Condition="'@(EnabledProjectSerial)'!=''"/>
+    
+    </Target>
+    
+    <Target Name="Rebuild" DependsOnTargets="Clean;Build" />
+
+
+</Project>

@@ -1,0 +1,139 @@
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<!--
+[ Winter 2016 ] The Robocopy task did not port well from the older MSBUILD tools into the v14.0 world.
+Rather than rip up the existing Robocopy references in the CSPROJ files to replace them with some new thing, 
+the approach here allows them to remain intact.
+
+Usage
+=============================================================
+In a project file, add the following:
+
+<Robocopy Include="file.txt">
+    <DestinationFolder>$(SolutionDir)\foldername</DestinationFolder>
+
+	[ Optional inputs ]
+
+	<FileMatch>*.cmd *.txt</FileMatch>
+	<IsRecursive>true</IsRecursive>
+</Robocopy>
+
+-->
+	
+  <PropertyGroup>
+    <RobocopyRetryCount Condition="'$(RobocopyRetryCount)'==''">0</RobocopyRetryCount>
+    <RobocopyRetryWait Condition="'$(RobocopyRetryWait)'==''">400</RobocopyRetryWait>
+    <RobocopyShowDiagnosticTrace Condition="'$(RobocopyShowDiagnosticTrace)'==''">false</RobocopyShowDiagnosticTrace>
+    <RobocopyShowErrorOnRetry Condition="'$(RobocopyShowErrorOnRetry)'==''">true</RobocopyShowErrorOnRetry>
+  </PropertyGroup>
+
+	<PropertyGroup>
+      <BuildDependsOn>$(BuildDependsOn);RobocopyDeploy</BuildDependsOn>
+    </PropertyGroup>
+
+	<UsingTask TaskName="ExecRobocopy" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+		<ParameterGroup>
+			<Files ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
+		</ParameterGroup>
+		<Task>
+			<Using Namespace="System" />
+			<Using Namespace="System.IO" />
+			<Using Namespace="System.Diagnostics" />
+			<Using Namespace="System.Globalization" />
+			<Using Namespace="Microsoft.Build.Framework" />
+			<Using Namespace="Microsoft.Build.Utilities" />
+			<Code Type="Fragment" Language="cs">
+<![CDATA[
+
+if(Files.Length > 0)
+{
+	foreach(ITaskItem item in Files)
+	{
+		string strInclude	= item.GetMetadata("FullPath").TrimEnd(new char [] {'\\'});
+		string strTarget	= item.GetMetadata("DestinationFolder");
+		string strRecurse	= item.GetMetadata("IsRecursive") ?? String.Empty;
+		string strSource	= null;
+		string strSearch	= null;
+
+		if(strInclude.EndsWith("*.*"))
+		{
+			strSource = Path.GetDirectoryName(strInclude);
+			strSearch = "*.*";
+		}
+		else if(Directory.Exists(strInclude))
+		{
+			string strMatch = item.GetMetadata("FileMatch");
+
+			strSource = strInclude;
+			strRecurse = "true";
+			strSearch = String.IsNullOrWhiteSpace(strMatch) ? "*" : strMatch;
+		}
+		else if(File.Exists(strInclude))
+		{
+			strSource = Path.GetDirectoryName(strInclude);
+			strSearch = Path.GetFileName(strInclude);	
+		}
+
+		ConsoleColor colorInst	= Console.ForegroundColor;
+		Console.ForegroundColor = ConsoleColor.DarkGray;
+
+		if(String.IsNullOrWhiteSpace(strSource))
+		{
+			Log.LogMessage(string.Format("  Skipping \"{0}\" because the source does not exist",strInclude));
+		}
+		else
+		{
+			bool fRecurse;
+
+			string	strFile	= String.IsNullOrWhiteSpace(strSearch) ? "*" : strSearch;
+			string  strArgs = Boolean.TryParse(strRecurse,out fRecurse) ? "/S" : String.Empty;
+			string	strCmd	= String.Format
+			(
+				CultureInfo.InvariantCulture,
+
+				"\"{0}\" \"{1}\" {2} {3}",
+
+				strSource	,
+				strTarget	,
+				strFile		,
+				strArgs
+			);
+
+			ProcessStartInfo procinfo = new ProcessStartInfo("robocopy.exe")
+			{
+				Arguments   = strCmd,
+				WindowStyle = ProcessWindowStyle.Hidden
+			};
+
+			Process p = Process.Start(procinfo);
+			Log.LogMessage(string.Format("  Exec robocopy command \"{0}\"",strCmd));
+			p.WaitForExit();
+			if (p.ExitCode <= 7)
+			{
+				Log.LogMessage(string.Format("  Done executing robocopy. Exit code: {0}. Command \"{1}\"", p.ExitCode, strCmd));
+			}
+			else
+			{
+				Log.LogError(string.Format("  Done executing robocopy. Exit code: {0}. Command \"{1}\"", p.ExitCode, strCmd));
+			}
+            p.Close();
+		}
+
+		Console.ForegroundColor = colorInst;
+	}
+}
+
+]]>
+			</Code>
+		</Task>
+	</UsingTask>
+
+    <ItemGroup>
+		<AvailableItemName Include="Robocopy" />
+    </ItemGroup>
+
+	<Target Name="RobocopyDeploy" Condition="@(Robocopy) != ''">
+		<Message Text="Starting Robocopy" />
+		<ExecRobocopy Files="@(Robocopy)" />
+	</Target>
+
+</Project>

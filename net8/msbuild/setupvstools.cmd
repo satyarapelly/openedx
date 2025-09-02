@@ -1,0 +1,1 @@
+"%VS140COMNTOOLS%VsDevCmd.bat"
