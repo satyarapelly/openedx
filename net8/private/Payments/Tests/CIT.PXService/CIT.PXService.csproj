@@ -20,6 +20,7 @@
     <PackageReference Include="Newtonsoft.Json" />
 	  <PackageReference Include="Moq" />
 	  <PackageReference Include="Microsoft.Extensions.ObjectPool" />
+
   </ItemGroup>
     <ItemGroup>
       <Reference Include="Microsoft.Xbox.Experimentation.Contracts">
