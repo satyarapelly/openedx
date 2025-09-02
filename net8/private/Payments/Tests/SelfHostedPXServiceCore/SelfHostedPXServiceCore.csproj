@@ -32,6 +32,11 @@
                         <HintPath>..\..\..\nugets\net8.0\Microsoft.Commerce.Payments.Authentication.dll</HintPath>
                         <Private>true</Private>
                 </Reference>
+                <Reference Include="CertificateVerificationCore">
+                        <HintPath>..\..\..\nugets\net8.0\microsoft.commerce.payments.management.certificateverificationcore\1.3.34\lib\netstandard2.0\CertificateVerificationCore.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+
         </ItemGroup>
 
 	<ItemGroup>
