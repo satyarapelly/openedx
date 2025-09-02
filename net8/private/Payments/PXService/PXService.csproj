@@ -20,21 +20,42 @@
 		<PackageReference Include="System.ServiceModel.Primitives" />
 		<PackageReference Include="Yarp.ReverseProxy" />
 		<PackageReference Include="Microsoft.Identity.Web" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" />
-		<PackageReference Include="Microsoft.Commerce.Payments.Authentication" />
-		<PackageReference Include="Azure.Analytics.Experimentation.AspNetCore" />
-		<PackageReference Include="Azure.Analytics.Experimentation.VariantAssignment" />
-		<PackageReference Include="Azure.Analytics.Experimentation.VariantAssignment.Client" />
-		<PackageReference Include="Azure.Analytics.Experimentation.VariantAssignment.Contract" />
+                <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" />
 		<PackageReference Include="Azure.Identity" />
-		<PackageReference Include="Microsoft.Commerce.Payments.Management.CertificateVerificationCore" />
 		<PackageReference Include="OpenTelemetry" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" />
 		<PackageReference Include="Newtonsoft.Json" />
 		<PackageReference Include="Azure.Storage.Blobs" />
-		<PackageReference Include="Microsoft.Azure.Cosmos" />
-		<PackageReference Include="UAParser" />
-	</ItemGroup>
+                <PackageReference Include="Microsoft.Azure.Cosmos" />
+                <PackageReference Include="UAParser" />
+        </ItemGroup>
+
+        <ItemGroup>
+                <Reference Include="Microsoft.Commerce.Payments.Authentication">
+                        <HintPath>..\..\nugets\net8.0\Microsoft.Commerce.Payments.Authentication.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+                <Reference Include="Azure.Analytics.Experimentation.AspNetCore">
+                        <HintPath>..\..\nugets\net8.0\Azure.Analytics.Experimentation.AspNetCore.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+                <Reference Include="Azure.Analytics.Experimentation.VariantAssignment">
+                        <HintPath>..\..\nugets\net8.0\Azure.Analytics.Experimentation.VariantAssignment.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+                <Reference Include="Azure.Analytics.Experimentation.VariantAssignment.Client">
+                        <HintPath>..\..\nugets\net8.0\Azure.Analytics.Experimentation.VariantAssignment.Client.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+                <Reference Include="Azure.Analytics.Experimentation.VariantAssignment.Contract">
+                        <HintPath>..\..\nugets\net8.0\Azure.Analytics.Experimentation.VariantAssignment.Contract.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+                <Reference Include="CertificateVerificationCore">
+                        <HintPath>..\..\nugets\net8.0\microsoft.commerce.payments.management.certificateverificationcore\1.3.34\lib\netstandard2.0\CertificateVerificationCore.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+        </ItemGroup>
 
 	<!-- Bring along the WCF configuration file at build time -->
 	<ItemGroup>

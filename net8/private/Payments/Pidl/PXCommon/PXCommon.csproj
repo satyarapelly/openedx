@@ -14,7 +14,15 @@
 
 	<ItemGroup>
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
-	</ItemGroup>
+                <Reference Include="Microsoft.CommonSchema.Services">
+                        <HintPath>..\..\..\nugets\net8.0\Microsoft.CommonSchema.Services.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+                <Reference Include="Microsoft.CommonSchema.Bond">
+                        <HintPath>..\..\..\nugets\net8.0\Microsoft.CommonSchema.Bond.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+        </ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.Logging" />
@@ -26,28 +34,84 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" />
-		<PackageReference Include="Microsoft.IdentityModel.S2S" />
 		<PackageReference Include="Microsoft.IdentityModel.Tokens" />
 		<PackageReference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" />
-		<PackageReference Include="Microsoft.IdentityModel.S2S.Tokens" />
 		<PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" />
 		<PackageReference Include="Microsoft.IdentityModel.Validators" />
 		<PackageReference Include="Microsoft.IdentityModel.Abstractions" />
 		<PackageReference Include="Microsoft.Identity.Abstractions" />
-		<PackageReference Include="OpenTelemetry.Exporter.Geneva" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="Microsoft.Identity.ServiceEssentials.Caching" />
-		<PackageReference Include="Microsoft.Identity.ServiceEssentials.Core" />
-		<PackageReference Include="Microsoft.Identity.ServiceEssentials.Extensions.AspNetCoreMiddleware.S2SWeb" />
-		<PackageReference Include="Microsoft.Identity.ServiceEssentials.Modules.TrV2Module" />
-		<PackageReference Include="Microsoft.Identity.ServiceEssentials.Standard" />
-		<PackageReference Include="Microsoft.Identity.ServiceEssentials.Telemetry.Abstractions" />
-		<PackageReference Include="Microsoft.Identity.ServiceEssentials.Telemetry.OneCollector" />
-		<PackageReference Include="Microsoft.Identity.ServiceEssentials.TokenAcquisitionIdWeb" />
-		<PackageReference Include="Microsoft.Identity.ServiceEssentials.TokenAcquisition" />
-	</ItemGroup>
+        <ItemGroup>
+                <Reference Include="Microsoft.IdentityModel.S2S">
+                        <HintPath>..\\..\\..\\nugets\\net8.0\\Microsoft.IdentityModel.S2S.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+                <Reference Include="Microsoft.IdentityModel.S2S.Configuration">
+                        <HintPath>..\\..\\..\\nugets\\net8.0\\Microsoft.IdentityModel.S2S.Configuration.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+                <Reference Include="Microsoft.IdentityModel.S2S.DstsExtensions">
+                        <HintPath>..\\..\\..\\nugets\\net8.0\\Microsoft.IdentityModel.S2S.DstsExtensions.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+                <Reference Include="Microsoft.IdentityModel.S2S.Extensions.AspNetCore">
+                        <HintPath>..\\..\\..\\nugets\\net8.0\\Microsoft.IdentityModel.S2S.Extensions.AspNetCore.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+                <Reference Include="Microsoft.IdentityModel.S2S.ServerAuthorizationExtensions">
+                        <HintPath>..\\..\\..\\nugets\\net8.0\\Microsoft.IdentityModel.S2S.ServerAuthorizationExtensions.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+                <Reference Include="Microsoft.IdentityModel.S2S.Tokens">
+                        <HintPath>..\\..\\..\\nugets\\net8.0\\Microsoft.IdentityModel.S2S.Tokens.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+                <Reference Include="OpenTelemetry.Exporter.Geneva">
+                        <HintPath>..\\..\\..\\nugets\\net8.0\\OpenTelemetry.Exporter.Geneva.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+                <Reference Include="Microsoft.Identity.ServiceEssentials.Authentication">
+                        <HintPath>..\..\..\nugets\net8.0\Microsoft.Identity.ServiceEssentials.Authentication.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+                <Reference Include="Microsoft.Identity.ServiceEssentials.Caching">
+                        <HintPath>..\..\..\nugets\net8.0\Microsoft.Identity.ServiceEssentials.Caching.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+                <Reference Include="Microsoft.Identity.ServiceEssentials.Core">
+                        <HintPath>..\..\..\nugets\net8.0\Microsoft.Identity.ServiceEssentials.Core.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+                <Reference Include="Microsoft.Identity.ServiceEssentials.Extensions.AspNetCoreMiddleware.S2SWeb">
+                        <HintPath>..\..\..\nugets\net8.0\Microsoft.Identity.ServiceEssentials.Extensions.AspNetCoreMiddleware.S2SWeb.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+                <Reference Include="Microsoft.Identity.ServiceEssentials.Modules.TrV2Module">
+                        <HintPath>..\..\..\nugets\net8.0\Microsoft.Identity.ServiceEssentials.Modules.TrV2Module.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+                <Reference Include="Microsoft.Identity.ServiceEssentials.Standard">
+                        <HintPath>..\..\..\nugets\net8.0\Microsoft.Identity.ServiceEssentials.Standard.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+                <Reference Include="Microsoft.Identity.ServiceEssentials.Telemetry.Abstractions">
+                        <HintPath>..\..\..\nugets\net8.0\Microsoft.Identity.ServiceEssentials.Telemetry.Abstractions.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+                <Reference Include="Microsoft.Identity.ServiceEssentials.Telemetry.OneCollector">
+                        <HintPath>..\..\..\nugets\net8.0\Microsoft.Identity.ServiceEssentials.Telemetry.OneCollector.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+                <Reference Include="Microsoft.Identity.ServiceEssentials.TokenAcquisitionIdWeb">
+                        <HintPath>..\..\..\nugets\net8.0\Microsoft.Identity.ServiceEssentials.TokenAcquisitionIdWeb.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+                <Reference Include="Microsoft.Identity.ServiceEssentials.TokenAcquisition">
+                        <HintPath>..\..\..\nugets\net8.0\Microsoft.Identity.ServiceEssentials.TokenAcquisition.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\Common\Common.csproj" />

@@ -1,0 +1,5 @@
+<Project>
+  <PropertyGroup>
+    <DropRoot>$(MSBuildThisFileDirectory)..\out</DropRoot>
+  </PropertyGroup>
+</Project>

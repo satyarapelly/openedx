@@ -19,13 +19,24 @@
 		<ProjectReference Include="..\Test.Common\Test.Common.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="Microsoft.Extensions.Hosting" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Console" />
-		<PackageReference Include="Castle.Core" />
-		<PackageReference Include="Newtonsoft.Json" />
-		<PackageReference Include="Microsoft.AspNetCore.TestHost" />
-	</ItemGroup>
+        <ItemGroup>
+                <PackageReference Include="Microsoft.Extensions.Hosting" />
+                <PackageReference Include="Microsoft.Extensions.Logging.Console" />
+                <PackageReference Include="Castle.Core" />
+                <PackageReference Include="Newtonsoft.Json" />
+                <PackageReference Include="Microsoft.AspNetCore.TestHost" />
+        </ItemGroup>
+
+        <ItemGroup>
+                <Reference Include="Microsoft.Commerce.Payments.Authentication">
+                        <HintPath>..\..\..\nugets\net8.0\Microsoft.Commerce.Payments.Authentication.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+                <Reference Include="CertificateVerificationCore">
+                        <HintPath>..\..\..\nugets\net8.0\microsoft.commerce.payments.management.certificateverificationcore\1.3.34\lib\netstandard2.0\CertificateVerificationCore.dll</HintPath>
+                        <Private>true</Private>
+                </Reference>
+        </ItemGroup>
 
 	<ItemGroup>
 		<Content Include="$(INETROOT)\private\Payments\Pidl\PidlFactory\V7\Config\**\**\*.*">
