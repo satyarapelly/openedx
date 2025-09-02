@@ -18,8 +18,9 @@
     <PackageReference Include="MSTest.TestAdapter" />
     <PackageReference Include="MSTest.TestFramework" />
     <PackageReference Include="Newtonsoft.Json" />
-	  <PackageReference Include="Moq" />
-	  <PackageReference Include="Microsoft.Extensions.ObjectPool" />
+          <PackageReference Include="Moq" />
+          <PackageReference Include="Microsoft.Extensions.ObjectPool" />
+          <PackageReference Include="Microsoft.Diagnostics.Tracing.TraceEvent" />
 
   </ItemGroup>
     <ItemGroup>
@@ -43,6 +44,11 @@
     <ProjectReference Include="..\..\Pidl\PidlModel\PidlModel.csproj" />
     <ProjectReference Include="..\..\Pidl\PimsModel\PimsModel.csproj" />
     <ProjectReference Include="..\Emulators\PXDependencyEmulators\PXDependencyEmulators.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+      <Reference Include="Microsoft.CommonSchema.Services">
+        <HintPath>..\..\..\nugets\net8.0\Microsoft.CommonSchema.Services.dll</HintPath>
+      </Reference>
     </ItemGroup>
     <ItemGroup>
     <Content Include="..\..\PXService\App_Data\ClientActionConfig.csv">
