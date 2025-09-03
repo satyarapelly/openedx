@@ -353,19 +353,34 @@ namespace Microsoft.Commerce.Payments.PXService.Settings
 
         protected static LocalFeatureConfigs FetchStaticFeatureConfigs(string featureconfigPath, string testAccountConfigPath, string testGroup)
         {
-            var rawFeatureConfigs = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(
-                File.ReadAllText(
-                    Path.Combine(
-                        AppDomain.CurrentDomain.BaseDirectory,
-                        featureconfigPath)));
+            string NormalizePath(string relativePath)
+            {
+                return Path.Combine(
+                    AppDomain.CurrentDomain.BaseDirectory,
+                    relativePath.Replace('\\', Path.DirectorySeparatorChar));
+            }
 
-            var testAccounts = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(
-                File.ReadAllText(
-                    Path.Combine(
-                        AppDomain.CurrentDomain.BaseDirectory,
-                        testAccountConfigPath)));
+            var rawFeatureConfigs = default(Dictionary<string, Dictionary<string, string>>);
+            string featureConfigFullPath = NormalizePath(featureconfigPath);
+            if (File.Exists(featureConfigFullPath))
+            {
+                rawFeatureConfigs = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(File.ReadAllText(featureConfigFullPath));
+            }
 
-            return new LocalFeatureConfigs(rawFeatureConfigs, testAccounts[testGroup]);
+            var testAccounts = default(Dictionary<string, List<string>>);
+            string testAccountConfigFullPath = NormalizePath(testAccountConfigPath);
+            if (File.Exists(testAccountConfigFullPath))
+            {
+                testAccounts = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(File.ReadAllText(testAccountConfigFullPath));
+            }
+
+            List<string> testGroupAccounts = null;
+            if (testAccounts != null && testGroup != null)
+            {
+                testAccounts.TryGetValue(testGroup, out testGroupAccounts);
+            }
+
+            return new LocalFeatureConfigs(rawFeatureConfigs, testGroupAccounts);
         }
 
         protected static AzureActiveDirectoryTokenLoaderOption BuildAADTokenLoaderOption(string serviceName, string clientId, string resource, bool isMI)

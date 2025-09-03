@@ -64,7 +64,7 @@ namespace CIT.PXService.Tests
         [AssemblyCleanup]
         public static void Cleanup()
         {
-            SelfHostedPxService.Dispose();
+            SelfHostedPxService?.Dispose();
         }
 
         public static string GetPXServiceUrl(string relativePath)
