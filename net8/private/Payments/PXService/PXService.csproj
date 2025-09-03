@@ -55,6 +55,22 @@
                         <HintPath>..\..\nugets\net8.0\Azure.Analytics.Experimentation.VariantAssignment.Contract.dll</HintPath>
                         <Private>true</Private>
                 </Reference>
+			<Reference Include="Azure.Analytics.Experimentation.VariantAssignment.Contract">
+				<HintPath>..\..\nugets\net8.0\Microsoft.IdentityModel.S2S.dll</HintPath>
+				<Private>true</Private>
+			</Reference>
+			<Reference Include="Azure.Analytics.Experimentation.VariantAssignment.Contract">
+				<HintPath>..\..\nugets\net8.0\Microsoft.CommonSchema.Services.dll</HintPath>
+				<Private>true</Private>
+			</Reference>
+			<Reference Include="Azure.Analytics.Experimentation.VariantAssignment.Contract">
+				<HintPath>..\..\nugets\net8.0\Microsoft.IdentityModel.S2S.Configuration.dll</HintPath>
+				<Private>true</Private>
+			</Reference>
+			<Reference Include="Azure.Analytics.Experimentation.VariantAssignment.Contract">
+				<HintPath>..\..\nugets\net8.0\CertificateVerificationCore.dll</HintPath>
+				<Private>true</Private>
+			</Reference>
         </ItemGroup>
 
 	<!-- Bring along the WCF configuration file at build time -->
