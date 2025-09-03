@@ -31,7 +31,9 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Mock
                 var challengePidl = File.ReadAllText(
                 Path.Combine(
                     AppDomain.CurrentDomain.BaseDirectory,
-                    string.Format(@"Mocks\ChallengeManagement\ArkoseChallenge.json")));
+                    "Mocks",
+                    "ChallengeManagement",
+                    "ArkoseChallenge.json"));
 
                 responseMessage = new HttpResponseMessage(HttpStatusCode.OK)
                 {

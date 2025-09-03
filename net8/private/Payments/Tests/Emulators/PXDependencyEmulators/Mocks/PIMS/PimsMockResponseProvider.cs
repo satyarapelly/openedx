@@ -22,7 +22,9 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Mock
             var pmsByCountryJson = File.ReadAllText(
                 Path.Combine(
                     AppDomain.CurrentDomain.BaseDirectory,
-                    @"Mocks\PIMS\PaymentMethodsByCountry.json"));
+                    "Mocks",
+                    "PIMS",
+                    "PaymentMethodsByCountry.json"));
 
             PaymentMethodsByCountry = JsonConvert.DeserializeObject<Dictionary<string, List<PaymentMethod>>>(
                 pmsByCountryJson);
@@ -30,7 +32,9 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Mock
             var paymentInstrumentsJson = File.ReadAllText(
                 Path.Combine(
                     AppDomain.CurrentDomain.BaseDirectory,
-                    @"Mocks\PIMS\PaymentInstruments.json"));
+                    "Mocks",
+                    "PIMS",
+                    "PaymentInstruments.json"));
 
             PaymentInstruments = JsonConvert.DeserializeObject<List<PaymentInstrument>>(
                 paymentInstrumentsJson);
@@ -38,7 +42,9 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Mock
             var pmsByProviderJson = File.ReadAllText(
                 Path.Combine(
                     AppDomain.CurrentDomain.BaseDirectory,
-                    @"Mocks\PIMS\PaymentMethodsByProvider.json"));
+                    "Mocks",
+                    "PIMS",
+                    "PaymentMethodsByProvider.json"));
 
             PaymentMethodsByProvider = JsonConvert.DeserializeObject<Dictionary<string, List<PaymentMethod>>>(
                 pmsByProviderJson);

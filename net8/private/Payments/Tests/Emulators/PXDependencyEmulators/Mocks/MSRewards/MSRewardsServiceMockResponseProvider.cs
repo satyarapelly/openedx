@@ -23,7 +23,9 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Mock
             { 
                 return JObject.Parse(File.ReadAllText(Path.Combine(
                         AppDomain.CurrentDomain.BaseDirectory,
-                        @"Mocks\MSRewards\MSRewardsByOperation.json"))); 
+                        "Mocks",
+                        "MSRewards",
+                        "MSRewardsByOperation.json")));
             } 
         }
 
