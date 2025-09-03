@@ -18,28 +18,36 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Mock
             var riskEligibilityCheckApprovedJson = File.ReadAllText(
                  Path.Combine(
                      AppDomain.CurrentDomain.BaseDirectory,
-                     @"TestScenarios\Risk\px.risk.approved.success.json"));
+                     "TestScenarios",
+                     "Risk",
+                     "px.risk.approved.success.json"));
 
             RiskEligibilityCheckApprovedResponse = JsonConvert.DeserializeObject<TestScenario>(riskEligibilityCheckApprovedJson);
 
             var riskEligibilityCheckRejectedJson = File.ReadAllText(
                 Path.Combine(
                     AppDomain.CurrentDomain.BaseDirectory,
-                    @"TestScenarios\Risk\px.risk.rejected.success.json"));
+                    "TestScenarios",
+                    "Risk",
+                    "px.risk.rejected.success.json"));
 
             RiskEligibilityCheckRejectedResponse = JsonConvert.DeserializeObject<TestScenario>(riskEligibilityCheckRejectedJson);
 
             var riskEligibilityCheckFailedJson = File.ReadAllText(
                 Path.Combine(
                     AppDomain.CurrentDomain.BaseDirectory,
-                    @"TestScenarios\Risk\px.risk.badrequest.failed.json"));
+                    "TestScenarios",
+                    "Risk",
+                    "px.risk.badrequest.failed.json"));
 
             RiskEligibilityCheckFailedResponse = JsonConvert.DeserializeObject<TestScenario>(riskEligibilityCheckFailedJson);
 
             var riskEligibilityCheckServerErrorJson = File.ReadAllText(
                 Path.Combine(
                     AppDomain.CurrentDomain.BaseDirectory,
-                    @"TestScenarios\Risk\px.risk.servererror.failed.json"));
+                    "TestScenarios",
+                    "Risk",
+                    "px.risk.servererror.failed.json"));
 
             RiskEligibilityCheckServerErrorResponse = JsonConvert.DeserializeObject<TestScenario>(riskEligibilityCheckServerErrorJson);
         }

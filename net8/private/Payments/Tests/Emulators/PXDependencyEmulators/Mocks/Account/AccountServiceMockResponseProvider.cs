@@ -23,21 +23,27 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Mock
             var profilesJson = File.ReadAllText(
                 Path.Combine(
                     AppDomain.CurrentDomain.BaseDirectory,
-                    @"Mocks\Account\ProfilesV2ByAccountId.json"));
+                    "Mocks",
+                    "Account",
+                    "ProfilesV2ByAccountId.json"));
 
             ProfileV2ByAccountId = JsonConvert.DeserializeObject<Dictionary<string, List<ProfileV2>>>(profilesJson);
 
             var addressesJson = File.ReadAllText(
                 Path.Combine(
                     AppDomain.CurrentDomain.BaseDirectory,
-                    @"Mocks\Account\AddressesV2ByAccountId.json"));
+                    "Mocks",
+                    "Account",
+                    "AddressesV2ByAccountId.json"));
 
             AddressV2ByAccountId = JsonConvert.DeserializeObject<Dictionary<string, List<AddressV2>>>(addressesJson);
 
             var profilesV3Json = File.ReadAllText(
                 Path.Combine(
                     AppDomain.CurrentDomain.BaseDirectory,
-                    @"Mocks\Account\ProfilesV3ByAccountId.json"));
+                    "Mocks",
+                    "Account",
+                    "ProfilesV3ByAccountId.json"));
 
             ProfileV3ByAccountId = JsonConvert.DeserializeObject<Dictionary<string, List<ProfileV3>>>(
                 profilesV3Json,
@@ -49,13 +55,17 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Mock
             var addressesV3Json = File.ReadAllText(
                 Path.Combine(
                     AppDomain.CurrentDomain.BaseDirectory,
-                    @"Mocks\Account\AddressesV3ByAccountId.json"));
+                    "Mocks",
+                    "Account",
+                    "AddressesV3ByAccountId.json"));
             AddressV3ByAccountId = JsonConvert.DeserializeObject<Dictionary<string, List<AddressV3>>>(addressesV3Json);
 
             var customerV3Json = File.ReadAllText(
                 Path.Combine(
                     AppDomain.CurrentDomain.BaseDirectory,
-                    @"Mocks\Account\CustomersV3ByAccountId.json"));
+                    "Mocks",
+                    "Account",
+                    "CustomersV3ByAccountId.json"));
 
             CustomerByAccountId = JsonConvert.DeserializeObject<Dictionary<string, List<CustomerInfo>>>(customerV3Json);
         }
