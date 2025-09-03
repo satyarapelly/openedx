@@ -19,7 +19,11 @@ namespace SelfHostedPXServiceCore.Mocks
 
         public async Task<HttpResponseMessage> GetMatchedMockResponse(HttpRequestMessage request)
         {
-            var response = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Mocks\NetworkTokenizationServiceMockResponse.json"));
+            var response = File.ReadAllText(
+                Path.Combine(
+                    AppDomain.CurrentDomain.BaseDirectory,
+                    "Mocks",
+                    "NetworkTokenizationServiceMockResponse.json"));
 
             if (request.RequestUri.ToString().Contains("/tokens?externalCardReference"))
             {

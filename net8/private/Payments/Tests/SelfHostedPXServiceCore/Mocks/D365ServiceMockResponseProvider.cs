@@ -26,7 +26,8 @@ namespace SelfHostedPXServiceCore.Mocks
             var paymentInstrumentCheckResponsesJson = File.ReadAllText(
                 Path.Combine(
                     AppDomain.CurrentDomain.BaseDirectory,
-                    @"Mocks\PaymentInstrumentCheckResponses.json"));
+                    "Mocks",
+                    "PaymentInstrumentCheckResponses.json"));
 
             PaymentInstrumentCheckResponses = JsonConvert.DeserializeObject<List<MockD365CheckPiResult>>(
                 paymentInstrumentCheckResponsesJson);
@@ -34,7 +35,8 @@ namespace SelfHostedPXServiceCore.Mocks
             var ordersJson = File.ReadAllText(
                 Path.Combine(
                     AppDomain.CurrentDomain.BaseDirectory,
-                    @"Mocks\D365OrdersResponse.json"));
+                    "Mocks",
+                    "D365OrdersResponse.json"));
 
             Orders = JsonConvert.DeserializeObject<List<MockD365OrdersResponse>>(
                 ordersJson);
@@ -42,7 +44,8 @@ namespace SelfHostedPXServiceCore.Mocks
             var cartJson = File.ReadAllText(
                 Path.Combine(
                     AppDomain.CurrentDomain.BaseDirectory,
-                    @"Mocks\D365CartResponse.json"));
+                    "Mocks",
+                    "D365CartResponse.json"));
 
             Carts = JsonConvert.DeserializeObject<List<Cart>>(
                 cartJson);

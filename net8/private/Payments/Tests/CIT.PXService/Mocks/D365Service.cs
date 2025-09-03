@@ -24,13 +24,25 @@ namespace CIT.PXService.Mocks
             ResetToDefaults();
 
             PaymentInstrumentCheckResponses = JsonConvert.DeserializeObject<List<MockD365CheckPiResult>>(
-                File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Mocks\PaymentInstrumentCheckResponses.json")));
+                File.ReadAllText(
+                    Path.Combine(
+                        AppDomain.CurrentDomain.BaseDirectory,
+                        "Mocks",
+                        "PaymentInstrumentCheckResponses.json")));
 
             Orders = JsonConvert.DeserializeObject<List<MockD365OrdersResponse>>(
-                File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Mocks\D365OrdersResponse.json")));
+                File.ReadAllText(
+                    Path.Combine(
+                        AppDomain.CurrentDomain.BaseDirectory,
+                        "Mocks",
+                        "D365OrdersResponse.json")));
 
             Carts = JsonConvert.DeserializeObject<List<Cart>>(
-                File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Mocks\D365CartResponse.json")));
+                File.ReadAllText(
+                    Path.Combine(
+                        AppDomain.CurrentDomain.BaseDirectory,
+                        "Mocks",
+                        "D365CartResponse.json")));
         }
 
         public void ResetToDefaults()

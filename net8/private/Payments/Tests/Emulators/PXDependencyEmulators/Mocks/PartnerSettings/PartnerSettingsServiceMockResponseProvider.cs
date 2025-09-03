@@ -27,7 +27,9 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Mock
             {
                 return JObject.Parse(File.ReadAllText(Path.Combine(
                         AppDomain.CurrentDomain.BaseDirectory,
-                        @"Mocks\PartnerSettings\PartnerSettingsByPartner.json")));
+                        "Mocks",
+                        "PartnerSettings",
+                        "PartnerSettingsByPartner.json")));
             }
         }
 
@@ -38,7 +40,9 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Mock
             {
                 return JArray.Parse(File.ReadAllText(Path.Combine(
                                         AppDomain.CurrentDomain.BaseDirectory,
-                                        @"Mocks\PartnerSettings\PSSTestSettingsById.json")));
+                                        "Mocks",
+                                        "PartnerSettings",
+                                        "PSSTestSettingsById.json")));
             }
         }
 

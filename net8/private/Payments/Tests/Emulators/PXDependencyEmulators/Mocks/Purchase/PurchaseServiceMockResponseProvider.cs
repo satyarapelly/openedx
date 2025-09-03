@@ -23,7 +23,9 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Mock
             var mockCheckPiResultJson = File.ReadAllText(
                 Path.Combine(
                     AppDomain.CurrentDomain.BaseDirectory,
-                    @"Mocks\Purchase\CheckPiResults.json"));
+                    "Mocks",
+                    "Purchase",
+                    "CheckPiResults.json"));
 
             MockCheckPiResults = JsonConvert.DeserializeObject<List<MockCheckPiResult>>(
                 mockCheckPiResultJson);
@@ -31,7 +33,9 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Mock
             var subscriptionsJson = File.ReadAllText(
                 Path.Combine(
                     AppDomain.CurrentDomain.BaseDirectory,
-                    @"Mocks\Purchase\Subscriptions.json"));
+                    "Mocks",
+                    "Purchase",
+                    "Subscriptions.json"));
 
             Subscriptions = JsonConvert.DeserializeObject<List<Subscription>>(
                 subscriptionsJson);
@@ -39,7 +43,9 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Mock
             var ordersJson = File.ReadAllText(
                 Path.Combine(
                     AppDomain.CurrentDomain.BaseDirectory,
-                    @"Mocks\Purchase\Orders.json"));
+                    "Mocks",
+                    "Purchase",
+                    "Orders.json"));
 
             Orders = JsonConvert.DeserializeObject<List<Order>>(
                 ordersJson);

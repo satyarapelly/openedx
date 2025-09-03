@@ -17,7 +17,9 @@ namespace Microsoft.Commerce.Payments.Tests.Emulators.PXDependencyEmulators.Mock
             var pmsByCountryJson = File.ReadAllText(
                 Path.Combine(
                     AppDomain.CurrentDomain.BaseDirectory,
-                    @"Mocks\PIMS\PaymentMethodsByCountryAugmented.json"));
+                    "Mocks",
+                    "PIMS",
+                    "PaymentMethodsByCountryAugmented.json"));
 
             var paymentMethodsByCountryAugmented = JsonConvert.DeserializeObject<Dictionary<string, List<PaymentMethod>>>(
                 pmsByCountryJson);
