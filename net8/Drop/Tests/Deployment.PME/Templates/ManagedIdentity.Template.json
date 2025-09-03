@@ -1,0 +1,21 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
+  "contentVersion": "4.6.19127.1",
+  "parameters": {
+    "name": {
+      "type": "string"
+    }
+  },
+  "variables": {
+    "resourceLocation": "[resourcegroup().location]",
+    "apiVersion": "2018-11-30"
+  },
+  "resources": [
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
+      "name": "[parameters('name')]",
+      "location": "[variables('resourceLocation')]"
+    }
+  ]
+}

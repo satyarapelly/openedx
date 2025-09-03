@@ -1,0 +1,37 @@
+﻿{
+  "$schema": "http://schema.express.azure.com/schemas/2015-01-01-alpha/RolloutSpec.json",
+  "contentVersion": "1.0.0.0",
+  "RolloutMetadata": {
+    "ServiceModelPath": "INT\\ServiceModel.INT.json",
+    "Name": "PX Deployment INT 4.6.19127.1 (Global)",
+    "RolloutType": "Major",
+    "BuildSource": {
+      "BuildSourceType": "SmbShare",
+      "Parameters": {
+        "ServiceGroupRoot": "ServiceGroupRoot",
+        "VersionFile": "BuildVer.txt"
+      }
+    },
+  "Notification": {
+    "email": {
+      "to": "pxdevs@microsoft.com",
+      "options": {
+        "when": [
+          "onError",
+          "onComplete"
+        ]
+      }
+    }
+	}
+  },
+  "OrchestratedSteps": [
+    {
+      "Name": "RolloutStamp-PX-PXService-AppSetting-Staging-WestUS2",
+      "TargetType": "ServiceResource",
+      "TargetName": "PXService.AppSetting.Staging.WestUS2",
+      "Actions": [ "Deploy" ],
+      "DependsOn": [
+      ]
+    }
+  ]
+}

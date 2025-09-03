@@ -1,0 +1,125 @@
+<MonitoringManagement eventVersion="1" version="1.0" timestamp="2018-05-07T00:00:00Z" namespace="paymentexperiencelogsprod">
+  <Imports>
+    <!-- Imports documentation: https://jarvis.dc.ad.msft.net/?page=documents&section=9c95f4eb-8689-4c9f-81bf-82d688e860fd&id=15b0c8c4-c82f-4659-a4c8-52f153879a03   -->
+    <!-- You can import other files.  The AgentStandardEvents.xml emits metrics about the agent -->
+    <Import file="AgentStandardEvents.xml" />
+    <Import file="AzureSecurityPackMds.xml" />
+    <Import file="IncomingApisStandingQuery.xml" />
+    <Import file="OutgoingApisStandingQuery.xml" />
+  </Imports>
+  <Accounts>
+    <Account moniker="paymentexperiencelogsproddiag" isDefault="true" />
+    <Account moniker="paymentexperiencelogsprodsecurity" alias="AzSecurityStore" />
+    <Account moniker="paymentexperiencelogsprodaudit" alias="AuditStore" />
+  </Accounts>
+  <!-- Management documentation: https://jarvis.dc.ad.msft.net/?page=documents&section=9c95f4eb-8689-4c9f-81bf-82d688e860fd&id=8794f47e-d1b2-4538-8f31-839c41c1710a  -->
+  <Management eventVolume="Medium" onDemandRequestFlags="tablesearch,process" defaultRetentionInDays="29">
+    <!--
+      The identity TenantRole means MONITORING_IDENTITY, MONITORING_ROLE, and MONITORING_ROLE_INSTANCE will
+      uniquely identify any of your instances
+    -->
+    <Identity type="TenantRole" />
+    <!--
+      The diskQuotaInMB is a required parameter.  For 10,000 MB there should be 15,000 MB available on the disk  The CPU, memory and network can also be limited in the
+      AgentResourceUsage element's attributes.
+    -->
+    <AgentResourceUsage diskQuotaInMB="10000" cpuPercentUsage="50" />
+    <AgentMetrics mdmMonitoringAccount="paymentexperience-metrics-prod" />
+  </Management>
+  <!-- Events documentation: https://jarvis.dc.ad.msft.net/?page=documents&section=9c95f4eb-8689-4c9f-81bf-82d688e860fd&id=ac0084ad-5065-4b16-8f7d-0a5193143378   -->
+  <!--
+      Events can contain one or more Event elements.  The Event elements each describe a different kind of collector.
+      Events must be defined in the order of the mds2.xsd.
+    -->
+  <Sources>
+    <!-- QoS Events -->
+    <Source name="RequestTelemetry" storeType="CentralBond" duration="PT60S" type="Pipe" streamName="SLLTelemetryIn" />
+    <!-- NonQoS/Custom Events -->
+    <Source name="CustomEvents" storeType="CentralBond" duration="PT60S" type="Pipe" streamName="SLLTelemetryIn" />
+    <!--SLL Events -->
+    <Source name="RequestEvents" storeType="CentralBond" duration="PT60S" type="Pipe" streamName="SLLTelemetryIn" />
+    <Source name="SLLTelemetry" storeType="CentralBond" duration="PT60S" type="Pipe" streamName="SLLTelemetryIn" />
+    <Source name="SLLColumnNameHash" storeType="CentralBond" duration="PT60S" type="Pipe" streamName="SLLTelemetryIn" />
+  </Sources>
+  <Events>
+    <EventDeclarations storeType="CentralBond">
+      <Declaration eventName="RequestEvents" storeType="CentralBond" />
+      <Declaration eventName="CustomEvents" storeType="CentralBond" />
+      <Declaration eventName="RequestTelemetry" storeType="CentralBond" />
+      <Declaration eventName="SLLTelemetry" storeType="CentralBond" />
+      <Declaration eventName="SLLColumnNameHash" storeType="CentralBond" />
+    </EventDeclarations>
+    <CounterSets mdmMonitoringAccount="paymentexperience-metrics-prod" format="Factored">
+      <CounterSet eventName="CounterEvent" sampleRateInSeconds="5" storeType="Local">
+        <Counter>\Memory\Available MBytes</Counter>
+        <Counter>\Processor(_Total)\% Processor Time</Counter>
+      </CounterSet>
+    </CounterSets>
+    <Extensions>
+      <Extension extensionName="StandingQueryExtension">
+        <CommandLine><![CDATA[StandingQueryExtension.exe +debug]]></CommandLine>
+      </Extension>
+    </Extensions>
+  </Events>
+  <EventStreamingAnnotations>
+    <!-- Required - Send events processed by the extension to DGrep-->
+    <EventStreamingAnnotation name="^SLLTelemetry.*">
+      <DGrep>
+        <Content><![CDATA[]]></Content>
+      </DGrep>
+    </EventStreamingAnnotation>
+    <!-- Optional - Event outputs i.e. data streams out from MA to a pipe. This can be used when you want to send events from geneva to be processed by Standing Queries. The stream is referenced in the Settings section of the Standing Query extension configuration as shown below. -->
+    <EventStreamingAnnotation name="SLLTelemetry.*">
+      <OutputStreams>
+        <Stream streamName="SLLTelemetryOut" type="Pipe" />
+      </OutputStreams>
+    </EventStreamingAnnotation>
+    <EventStreamingAnnotation name="^RequestTelemetry$">
+      <Cosmos>
+        <Content>
+          <![CDATA[
+        <Config>
+         <CosmosDumperPath>https://cosmos15.osdinfra.net/cosmos/cp.prod.Payments/shares/Cp.prod.payments/PX/prod/GenevaStructuredStreamSchema2/</CosmosDumperPath>
+        </Config>
+        ]]>
+        </Content>
+      </Cosmos>
+      <LogAnalytics>
+        <Content>LogAnalyticsContent</Content>
+      </LogAnalytics>
+    </EventStreamingAnnotation>
+    <EventStreamingAnnotation name="^CustomEvents$">
+      <LogAnalytics>
+        <Content>LogAnalyticsContent</Content>
+      </LogAnalytics>
+    </EventStreamingAnnotation>
+  </EventStreamingAnnotations>
+  <TaggedData name="StandingQueryExtension">
+    <Data>
+      <Settings>
+        <Source>
+          <SLLStreamName>SLLTelemetryIn</SLLStreamName>
+        </Source>
+        <EventStreamingAnnotations>
+          <StreamNames>
+            <StreamName>SLLTelemetryOut</StreamName>
+          </StreamNames>
+          <SLLEventNames>
+            <SLLEventName>SLLTelemetryDefault</SLLEventName>
+          </SLLEventNames>
+        </EventStreamingAnnotations>
+        <EnableHttpListener>false</EnableHttpListener>
+      </Settings>
+      <Environment>
+        <Roles>
+          <Role name="PxAppService" namespace="paymentexperiencelogsprod">
+            <Templates>
+              <Include name="IncomingApisStandingQuery" />
+              <Include name="OutgoingApisStandingQuery" />
+            </Templates>
+          </Role>
+        </Roles>
+      </Environment>
+    </Data>
+  </TaggedData>
+</MonitoringManagement>

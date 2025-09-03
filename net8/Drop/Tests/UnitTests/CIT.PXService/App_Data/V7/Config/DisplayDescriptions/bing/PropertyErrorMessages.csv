@@ -1,0 +1,25 @@
+PropertyHintId,CountryIds,MessageSource,DefaultErrorMessage,ErrorRegEx,ErrorCode,ErrorMessage
+cardNumber,,fromRegex,Please check and reenter your card number.,\s,invalid_card_number_has_spaces,Please enter your card number with no spaces.
+,,fromRegex,,\-,invalid_card_number_has_dashes,Please enter your card number with no dashes.
+,,fromErrorCode,,,required_field_empty,Please fill in the card number.
+cardNumberAmex,,fromRegex,Please check and reenter your card number.,\s,invalid_card_number_has_spaces,Please enter your card number with no spaces.
+,,fromRegex,,\-,invalid_card_number_has_dashes,Please enter your card number with no dashes.
+,,fromErrorCode,,,required_field_empty,Please fill in the card number.
+cardholderName,,fromErrorCode,Please check and reenter your name.,,required_field_empty,Please fill in the name on card.
+expiryMonth,,fromErrorCode,Incorrectly formatted Expiry month,,required_field_empty,Please select the expiration month.
+expiryYear,,fromErrorCode,Incorrectly formatted Expiry year,,required_field_empty,Please select the expiration year.
+cvv,,fromErrorCode,Please check and reenter your CVV.,,required_field_empty,Please fill in the security code.
+addressLine1,,fromErrorCode,Please correct your address line 1.,,required_field_empty,Please fill in address line 1.
+addressCity,,fromErrorCode,Please correct your address city.,,required_field_empty,Please fill in city.
+addressState,,fromErrorCode,Incorrectly formatted address,,required_field_empty,Please select state.
+addressCounty,,fromErrorCode,Incorrectly formatted address,,required_field_empty,Please select state.
+addressProvince,,fromErrorCode,Incorrectly formatted address,,required_field_empty,Please select state.
+addressPostalCode,,fromErrorCode,Please correct your postal code.,,required_field_empty,Please fill in postal code.
+addressCountry,,fromErrorCode,Incorrectly formatted address,,required_field_empty,Country/Region is a required field
+directDebitSepaChallengeAmount,,fromErrorCode,"Check the format of the amount you entered. For example 0.40 or 0,40.",,required_field_empty,A required field is empty
+directDebitSepaAccountholderName,,fromErrorCode,Incorrectly formatted name on account,,required_field_empty,Name on account is a required field
+directDebitSepaBankCode,,fromErrorCode,Incorrectly formatted BIC,,required_field_empty,BIC is a required field
+directDebitSepaBankName,,fromErrorCode,Incorrectly formatted Bank name,,required_field_empty,Bank name is a required field
+,,fromRegex,Incorrectly formatted Bank name,^\s*$,required_field_empty,Bank name is a required field
+directDebitSepaAccount,,fromRegex,Incorrectly formatted IBAN number,\s,invalid_account_number_has_spaces,No spaces are allowed in the IBAN number
+,,fromErrorCode,Incorrectly formatted IBAN number,,required_field_empty,IBAN Number is a required field

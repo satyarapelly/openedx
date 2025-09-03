@@ -1,0 +1,124 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "keyVaultName": {
+      "value": "PX-TestKV-INT"
+    },
+    "keyVaultLocation": {
+      "value": "centralus"
+    },
+    "managedIdentity": {
+      "value": "PXService-INT"
+    },
+    "enableRbacAuthorization": {
+      "value": true
+    },
+    "keyVaultRbacPermissions": {
+      "value": [
+        {
+          //PX-COT-INT-PME (Enterprise Application)
+          "objectId": "678fbbfa-e27e-4013-af37-f31d89afefb4",
+          "keyVaultRbacRoleType": "KeyVaultCryptoUser"
+        },
+        {
+          "objectId": "678fbbfa-e27e-4013-af37-f31d89afefb4",
+          "keyVaultRbacRoleType": "KeyVaultSecretsUser"
+        },
+
+        {
+          //PX-Deployment-INT-PME (Enterprise Application)
+          "objectId": "8ddbf4ea-0392-4edc-b953-f36b3fb92adb",
+          "keyVaultRbacRoleType": "Contributor"
+        },
+        {
+          "objectId": "8ddbf4ea-0392-4edc-b953-f36b3fb92adb",
+          "keyVaultRbacRoleType": "KeyVaultCryptoUser"
+        },
+        {
+          "objectId": "8ddbf4ea-0392-4edc-b953-f36b3fb92adb",
+          "keyVaultRbacRoleType": "KeyVaultSecretsUser"
+        },
+
+        {
+          //Payments_Scanner-PME (Enterprise Application)
+          "objectId": "c89a03e6-9565-4f74-8807-7e9ca6e52e68",
+          "keyVaultRbacRoleType": "KeyVaultCertificatesOfficer"
+        },
+        {
+          "objectId": "c89a03e6-9565-4f74-8807-7e9ca6e52e68",
+          "keyVaultRbacRoleType": "KeyVaultCryptoUser"
+        },
+        {
+          "objectId": "c89a03e6-9565-4f74-8807-7e9ca6e52e68",
+          "keyVaultRbacRoleType": "KeyVaultReader"
+        },
+        {
+          "objectId": "c89a03e6-9565-4f74-8807-7e9ca6e52e68",
+          "keyVaultRbacRoleType": "KeyVaultSecretsUser"
+        },
+        {
+          "objectId": "c89a03e6-9565-4f74-8807-7e9ca6e52e68",
+          "keyVaultRbacRoleType": "Reader"
+        }
+      ]
+    },
+    "accessPolicies": {
+      "value": [
+        {
+          "_id": "PX-COT-INT-PME",
+          "tenantId": "975f013f-7f24-47e8-a7d3-abc4752bf346",
+          "objectId": "678fbbfa-e27e-4013-af37-f31d89afefb4",
+          "permissions": {
+            "keys": [
+              "Get"
+            ],
+            "secrets": [
+              "Get"
+            ],
+            "certificates": [
+              "Get"
+            ]
+          }
+        },
+        {
+          "_id": "PX-Deployment-INT-PME",
+          "tenantId": "975f013f-7f24-47e8-a7d3-abc4752bf346",
+          "objectId": "8ddbf4ea-0392-4edc-b953-f36b3fb92adb",
+          "permissions": {
+            "keys": [
+              "Get"
+            ],
+            "secrets": [
+              "Get"
+            ],
+            "certificates": [
+              "Get"
+            ]
+          }
+        },
+        {
+          "_id": "Payments_Scanner-PME",
+          "tenantId": "975f013f-7f24-47e8-a7d3-abc4752bf346",
+          "objectId": "c89a03e6-9565-4f74-8807-7e9ca6e52e68",
+          "permissions": {
+            "keys": [
+              "Get",
+              "List"
+            ],
+            "secrets": [
+              "Get",
+              "List"
+            ],
+            "certificates": [
+              "Get",
+              "List",
+              "GetIssuers",
+              "ListIssuers"
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

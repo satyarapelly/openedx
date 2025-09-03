@@ -1,0 +1,112 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
+  "contentVersion": "4.6.19127.1",
+  "parameters": {
+    "deploymentLabel": {
+      "type": "string"
+    },
+    "servicePlanName": {
+      "type": "string"
+    },
+    "siteName": {
+      "type": "string"
+    },
+    "sitePackageLink": {
+      "type": "string"
+    },
+    "websiteSkuTier": {
+      "type": "string",
+      "defaultValue": "Basic"
+    },
+    "websiteSkuName": {
+      "type": "string",
+      "defaultValue": "S2"
+    },
+    "websiteCapacity": {
+      "type": "int",
+      "defaultValue": 1
+    },
+    "alwaysOn": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "mintlsVersion": {
+      "type": "string",
+      "defaultValue": "1.2",
+      "allowedValues": [
+        "1.0",
+        "1.1",
+        "1.2"
+      ]
+    }
+  },
+  "variables": {
+    "resourceLocation": "[resourcegroup().location]",
+    "websiteApiVersion": "2015-08-01",
+    "fullSiteName": "[concat(parameters('siteName'), '-', replace(variables('resourceLocation'),' ',''))]",
+    "fullServicePlanName": "[concat(parameters('servicePlanName'), '-', replace(variables('resourceLocation'),' ',''))]",
+  },
+  "resources": [
+    {
+      "apiVersion": "[variables('websiteApiVersion')]",
+      "name": "[variables('fullServicePlanName')]",
+      "type": "Microsoft.Web/serverfarms",
+      "location": "[variables('resourceLocation')]",
+      "sku": {
+        "name": "[parameters('websiteSkuName')]",
+        "tier": "[parameters('websiteSkuTier')]",
+        "capacity": "[parameters('websiteCapacity')]"
+      }
+    },
+    {
+      "apiVersion": "[variables('websiteApiVersion')]",
+      "name": "[variables('fullSiteName')]",
+      "type": "Microsoft.Web/sites",
+      "location": "[variables('resourceLocation')]",
+      "dependsOn": [
+        "[concat('Microsoft.Web/serverFarms/', variables('fullServicePlanName'))]"
+      ],
+      "properties": {
+        "name": "[variables('fullSiteName')]",
+        "deploymentLabel": "[parameters('deploymentLabel')]",
+        "deploymentOptions": "StartDeployment",
+        "serverFarmId": "[resourceId('Microsoft.Web/serverFarms/', variables('fullServicePlanName'))]",
+        "httpsOnly": true
+      },
+      "resources": [
+        {
+          "apiVersion": "[variables('websiteApiVersion')]",
+          "name": "MSDeploy",
+          "type": "extensions",
+          "location": "[variables('resourceLocation')]",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/sites', variables('fullSiteName'))]"
+          ],
+          "properties": {
+            "packageUri": "[parameters('sitePackageLink')]",
+            "dbType": "None",
+            "connectionString": "",
+          }
+        },
+        {
+          "apiVersion": "[variables('websiteApiVersion')]",
+          "name": "web",
+          "type": "config",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/sites', variables('fullSiteName'))]",
+            "MSDeploy"
+          ],
+          "tags": {
+            "displayName": "WebAppSettings"
+          },
+          "properties": {
+            "alwaysOn": "[parameters('alwaysOn')]",
+            "mintlsVersion": "[parameters('mintlsVersion')]",
+            "use32BitWorkerProcess": false,
+            "ftpsState": "FtpsOnly"
+          }
+        }
+      ]      
+    }
+  ]
+}

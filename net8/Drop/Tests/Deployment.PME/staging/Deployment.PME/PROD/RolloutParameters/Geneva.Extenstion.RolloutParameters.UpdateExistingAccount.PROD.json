@@ -1,0 +1,101 @@
+﻿{
+  "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json",
+  "contentVersion": "1.0.0.0",
+  "extensions": [
+    {
+      "Name": "ProvisionGenevaAccount",
+
+      // For test/stage/canary endpoints, the type is "Microsoft.Geneva.Logs/ConfigureLogsTestAccount
+      "Type": "Microsoft.Geneva.Logs/ConfigureLogsAccount",
+      "Version": "2016-1-1",
+      "ConnectionProperties": {
+        "MaxExecutionTime": "PT30M",
+        "Authentication": {
+          "Type": "CertificateAuthentication",
+          "Reference": {
+            "Provider": "AzureKeyVault",
+            "Parameters": {
+              "SecretId": "https://px-testkv-prod.vault.azure.net/secrets/pxtest-pxclientauth-paymentexperience-azclient-ms"
+            }
+          }
+        }
+      },
+      // The extension supports a property bag. Some fields are required and some are optional, depending on the operation performed.
+      // The extension's semantics are "create or update". Optional fields may be omitted entirely by removing the entire property. Do not
+      // specify a null/empty string as a value in an effort to remove the field.
+      // All accounts created by the extension are GSM-only. Non GSM accounts will not work with the extension.
+      // 
+      // Just because most fields are optional does not mean that all combinations are valid.
+      // For example, a net-new logs account requires certain information about security groups, contact emails, admin aliases, etc.
+      // A namespace may not be created until there is a subscription registered on the account.
+      // The error messages are generally indicative of what is going on.
+      //
+      // Keep in mind that some of these fields are singletons. You can always invoke the extension multiple times in a deployment.
+      // The semantics are create-or-update, so changes are usually done with "append" semantics. This allows specifying multiple
+      // key vault certs, etc.
+      "Payloadproperties": {
+        // REQUIRED
+        // Other endpoints: BillingProd, FirstPartyProd, ExternalProd, CaFairfax, UsNat, UsSec, Test, Stage, Canary. Blackforest and Mooncake not yet supported.
+        "mdsEnvironment": { "Value": "DiagnosticsProd" },
+
+        // REQUIRED
+        // This is the name of the Warm Path account in the environment specified above. IMPORTANT:
+        // If the account already exists, the certificate referenced above under "ConnectionProperties.Authentication" MUST be added by
+        // thumbprint as an unmanaged certificate as an account administrator on the warm path account. This is to ACL your cert
+        // to the account and prevent other services from incidentally making changes to your configuration. Thumbprints are not ideal,
+        // and we are working on SNI auth.
+        "accountName": { "Value": "paymentexperiencelogsprod" },
+
+        // OPTIONAL on update
+        // The name of the MDM account. If creating a net-new account this is required.
+        // "metricsAccountName": { "Value": "paymentexperience-metrics-int" },
+
+        // OPTIONAL on update
+        // The contact email for the account. If creating a net-new account this is required.
+        // "contactEmail": { "Value": "pxdevs@microsoft.com" },
+
+        // OPTIONAL on update
+        // A list of administrators for the account. If creating a net-new account this is required.
+        // "administratorAliases": { "Value": "jiefan;wwei" },
+
+        // OPTIONAL on update
+        // A security group for the account.  If creating a net-new account this is required.
+        // "administratorSecurityGroup": { "Value": "redmond\\PXDevsLocalGroup" },
+
+        // OPTIONAL
+        // The name of the namespace you are configuring. Each invocation of the extension allows you to modify one namespace,
+        // but each EV2 rollout allows you to invoke the extension as many times as you wish.
+        "namespaceName": { "Value": "paymentexperiencelogsprod" },
+
+        // OPTIONAL
+        // An Azure subscription to use for GSM provisioning. You may use a semicolon-delimited list here.
+        // Each subscription in the list must have granted Geneva access via RBAC. More information here: 
+        // https://genevamondocs.azurewebsites.net/logs/manage/references/subscriptionpermissions.html
+        // "subscriptionIds": { "Value": "86facc56-d6cb-484f-bc4e-9a7a7a848266" },
+
+        // OPTIONAL
+        // The default region to use for provisioning new GSM resources. Defaults to westus.
+        // "defaultAzureRegion": { "Value": "westus2" },
+
+        // OPTIONAL
+        // A DSMS certificate reference to add to the MACommunication role on the account. This certificate need not be the same one you use above
+        // for invoking the extension. The component parts are: <san name>;<dsms path>
+        // If you do not use DSMS, then you may omit this entirely.
+        // "dsmsCertificate"            : { "Value": "7DEBD5259B67190B2AA4B519943049C9.METRICSCLIENT.GENEVA.CORE.WINDOWS.NET;/genevacustomers/monitoring/warmpath/public/diagnosticsprod/genevalogs/certificates/chained/genevalogsprodma.pfx" },
+
+        // OPTIONAL
+        // Your service tree ID.
+        // "serviceTreeId": { "Value": "e50abb8e-e976-4311-b12b-85156f4abc0e" },
+
+        // OPTIONAL
+        // A new configuration to upload. Important: this configuration's namespace must match the "namespaceName" property.
+        // When specified, this also makes the "namespaceName" property REQUIRED. The format of this zip file is:
+        // root
+        //   - main.xml (your main config file)
+        //   imports/
+        //      - all imported XML files
+        "namespaceConfig": { "Reference": { "Path": "PROD\\GenevaLogConfig\\ConfigPackage.zip" } }
+      }
+    }
+  ]
+}

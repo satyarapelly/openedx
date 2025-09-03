@@ -1,0 +1,105 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "4.6.19127.1",
+  "parameters": {
+    "keyVaultName": {
+      "type": "string"
+    },
+    "keyVaultLocation": {
+      "type": "string"
+    },
+    "vaultSku": {
+      "type": "string",
+      "defaultValue": "Premium",
+      "allowedValues": [
+        "Standard",
+        "Premium"
+      ]
+    },
+    "managedIdentity": {
+      "type": "string",
+      "defaultValue": ""
+    },
+    "accessPolicies": {
+      "type": "array",
+      "defaultValue": []
+    },
+    "enableRbacAuthorization": {
+      "type": "bool",
+      "defaultValue": false,
+      "metadata": {
+        "description": "Property that controls how data actions are authorized. When true, the key vault will use Role Based Access Control (RBAC) for authorization of data actions, and the access policies specified in vault properties will be ignored."
+      }
+    },
+    "keyVaultRbacPermissions": {
+      "type": "array",
+      "defaultValue": [],
+      "metadata": {
+        "description": "RBAC role to assign for KeyVault Access"
+      }
+    }
+  },
+  "variables": {
+    "keyVaultApiVersion": "2016-10-01",
+    "managedIdentityApiVersion": "2018-11-30",
+    "managedIdentityResourceId": "[concat(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('managedIdentity')))]",
+
+    //Role Definitions. Below Ids are common across azure.
+    "ContributorRoleDefinition": "b24988ac-6180-42a0-ab88-20f7382dd24c",
+    "KeyVaultCryptoUserRoleDefinition": "12338af0-0e69-4776-bea7-57ae8d297424",
+    "KeyVaultSecretsUserRoleDefinition": "4633458b-17de-408a-b874-0445c86b69e6",
+    "KeyVaultCertificatesOfficerRoleDefinition": "a4417e6f-fecd-4de8-b567-7b0420556985",
+    "KeyVaultReaderRoleDefinition": "21090545-7ca7-4776-b22c-e363652d74d2",
+    "ReaderRoleDefinition": "acdd72a7-3385-48ef-bd42-f606fba81ae7",
+    "UserAccessAdministratorRoleDefinition": "18d7d88d-d35e-4fb5-a5c3-7773c20a72d9",
+
+    "Contributor": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', variables('ContributorRoleDefinition'))]",
+    "KeyVaultCryptoUser": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', variables('KeyVaultCryptoUserRoleDefinition'))]",
+    "KeyVaultSecretsUser": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', variables('KeyVaultSecretsUserRoleDefinition'))]",
+    "KeyVaultCertificatesOfficer": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', variables('KeyVaultCertificatesOfficerRoleDefinition'))]",
+    "KeyVaultReader": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', variables('KeyVaultReaderRoleDefinition'))]",
+    "Reader": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', variables('ReaderRoleDefinition'))]",
+    "UserAccessAdministrator": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', variables('UserAccessAdministratorRoleDefinition'))]",
+    "KeyVaultNameGuid": "[guid(subscription().subscriptionId, parameters('keyVaultName'), parameters('keyVaultLocation'))]"
+  },
+  "resources": [
+    {
+      "name": "[parameters('keyVaultName')]",
+      "type": "Microsoft.KeyVault/vaults",
+      "apiVersion": "[variables('keyVaultApiVersion')]",
+      "location": "[parameters('keyVaultLocation')]",
+      "properties": {
+        "sku": {
+          "family": "A",
+          "name": "[parameters('vaultSku')]"
+        },
+        "tenantId": "975f013f-7f24-47e8-a7d3-abc4752bf346",
+        "accessPolicies": "[if(equals(parameters('managedIdentity'), ''), parameters('accessPolicies'), union(parameters('accessPolicies'), array(json(concat('{\"tenantId\":\"', reference(variables('managedIdentityResourceId'), variables('managedIdentityApiVersion')).tenantId, '\",\"objectId\":\"', reference(variables('managedIdentityResourceId'), variables('managedIdentityApiVersion')).principalId, '\",\"permissions\":{\"keys\":[\"Get\"],\"secrets\":[\"Get\"],\"certificates\":[\"Get\"]}}')))))]",
+        "enabledForDeployment": true,
+        "enabledForDiskEncryption": false,
+        "enabledForTemplateDeployment": true,
+        "enableRbacAuthorization": "[parameters('enableRbacAuthorization')]"
+      },
+      "dependsOn": []
+    },
+    {
+      //Assigning RBAC Roles
+      "condition": "[greater(length(parameters('keyVaultRbacPermissions')), 0)]",
+      "type": "Microsoft.Authorization/roleAssignments",
+      "apiVersion": "2020-04-01-preview",
+      "name": "[guid(parameters('keyVaultRbacPermissions')[copyIndex()].objectId, variables(parameters('keyVaultRbacPermissions')[copyIndex()].keyVaultRbacRoleType), variables('keyVaultNameGuid'))]",
+      "scope": "[concat('Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]",
+      "dependsOn": [
+        "[concat('Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
+      ],
+      "properties": {
+        "roledefinitionId": "[variables(parameters('keyVaultRbacPermissions')[copyIndex()].keyVaultRbacRoleType)]",
+        "principalId": "[parameters('keyVaultRbacPermissions')[copyIndex()].objectId]"
+      },
+      "copy": {
+        "name": "keyVaultRbacPermissionsCopy",
+        "count": "[length(parameters('keyVaultRbacPermissions'))]"
+      }
+    }
+  ]
+}

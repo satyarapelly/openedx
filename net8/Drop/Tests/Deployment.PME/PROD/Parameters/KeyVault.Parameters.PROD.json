@@ -1,0 +1,90 @@
+﻿{
+  "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentParameters.json",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "name": {
+      "value": "PX-KV-PROD"
+    },
+    "managedIdentity": {
+      "value": "PaymentExperience-PROD"
+    },
+    "accessPolicies": {
+      "value": [
+        {
+          "_id": "PX-Deployment-PROD-PME",
+          "tenantId": "975f013f-7f24-47e8-a7d3-abc4752bf346",
+          "objectId": "75e724ec-afbc-4226-b861-5ffe67b52f80",
+          "permissions": {
+            "keys": [
+              "Get"
+            ],
+            "secrets": [
+              "Get"
+            ],
+            "certificates": [
+              "Get"
+            ]
+          }
+        },
+        {
+          "_id": "Microsoft Azure App Service",
+          "tenantId": "975f013f-7f24-47e8-a7d3-abc4752bf346",
+          "objectId": "b453993d-81d4-41a7-be3a-549bc2435ffa",
+          "permissions": {
+            "keys": [
+              "Get"
+            ],
+            "secrets": [
+              "Get",
+              "List"
+            ],
+            "certificates": [
+              "Get"
+            ]
+          }
+        },
+        {
+          "_id": "PX-Service-PROD-PME",
+          "tenantId": "975f013f-7f24-47e8-a7d3-abc4752bf346",
+          "objectId": "732d2306-ad14-4521-8e44-8e2977332105",
+          "permissions": {
+            "secrets": [
+              "Get"
+            ]
+          }
+        },
+        {
+          "_id": "PaymentExperience-PROD",
+          "tenantId": "975f013f-7f24-47e8-a7d3-abc4752bf346",
+          "objectId": "55d327f0-3443-459b-be5c-8c057ddb3cbd",
+          "permissions": {
+            "secrets": [
+              "Get"
+            ]
+          }
+        },
+        {
+          "_id": "Payments_Scanner-PME",
+          "tenantId": "975f013f-7f24-47e8-a7d3-abc4752bf346",
+          "objectId": "c89a03e6-9565-4f74-8807-7e9ca6e52e68",
+          "permissions": {
+            "keys": [
+              "Get",
+              "List"
+            ],
+            "secrets": [
+              "Get",
+              "List"
+            ],
+            "certificates": [
+              "Get",
+              "List",
+              "GetIssuers",
+              "ListIssuers"
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

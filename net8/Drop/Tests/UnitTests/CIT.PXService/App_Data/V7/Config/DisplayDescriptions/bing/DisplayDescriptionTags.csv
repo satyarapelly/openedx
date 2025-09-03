@@ -1,0 +1,115 @@
+PropertyHintId,CountryIds,TagKey,TagValue
+expiryMonth,,accessibilityName,Expiration month
+,,col-2,col-2
+,,float-left,float-left
+expiryYear,,accessibilityName,Expiration year
+,,col-2,col-2
+,,float-left,float-left
+addressState,,accessibilityName,State
+,,col-9,col-9
+addressProvince,{}AddressProvinceM,accessibilityName,Province
+,{}AddressProvinceM,col-9,col-9
+addressProvince,{}AddressProvinceO,accessibilityName,Province (Optional)
+,{}AddressProvinceO,col-9,col-9
+addressProvince,CA,accessibilityName,Province
+,CA,col-9,col-9
+addressProvince,fr,accessibilityName,Department (Optional)
+,fr,col-9,col-9
+addressProvince,CN,accessibilityName,Province
+,CN,col-9,col-9
+addressProvince,ES,accessibilityName,Province
+,ES,col-9,col-9
+addressProvince,bs,accessibilityName,Province (Optional)
+,bs,col-9,col-9
+addressProvince,bz,accessibilityName,Province
+,bz,col-9,col-9
+addressProvince,cr,accessibilityName,Province
+,cr,col-9,col-9
+addressProvince,hn,accessibilityName,Province
+,hn,col-9,col-9
+addressProvince,jm,accessibilityName,Province
+,jm,col-9,col-9
+addressProvince,tr,accessibilityName,Province (Optional)
+,tr,col-9,col-9
+addressProvince,ve,accessibilityName,Province (Optional)
+,ve,col-9,col-9
+addressCountry,,accessibilityName,Country/Region
+,,col-9,col-9
+creditCardVisaLogo,,accessibilityName,Visa
+creditCardAmexLogo,,accessibilityName,American Express
+creditCardMCLogo,,accessibilityName,MasterCard
+creditCardDiscoverLogo,,accessibilityName,Discover Network
+creditCardJCBLogo,,accessibilityName,JCB
+creditCardRupayLogo,,accessibilityName,Rupay
+paypalLogo,,accessibilityName,Paypal
+attLogo,,accessibilityName,AT&T
+sptLogo,,accessibilityName,Sprint
+directDebitSepaAccountholderName,,accessibilityName,Name on account
+directDebitSepaAccount,,accessibilityName,IBAN
+lastFourDigitsSepa,,accessibilityName,IBAN
+directDebitSepaBankCode,,accessibilityName,BIC
+directDebitSepaBankName,,accessibilityName,Bank name
+directDebitSepaChallengeAmount,,accessibilityName,Enter the deposit amount
+yesNextButton,,accessibilityName,Next
+saveNextButton,,accessibilityName,Next
+cardholderName,,accessibilityName,Name on card
+,,col-9,col-9
+cardNumber,,accessibilityName,Card number
+,,col-9,col-9
+,,maxLengthMessage,Maximum length for card number field reached.
+cardNumberAmex,,accessibilityName,Card number
+,,col-9,col-9
+,,maxLengthMessage,Maximum length for card number field reached.
+cardNumberCup,,accessibilityName,Card number
+,,col-9,col-9
+,,maxLengthMessage,Maximum length for card number field reached.
+lastFourDigitsVisa,,accessibilityName,Last four digits
+,,col-9,col-9
+lastFourDigitsAmex,,accessibilityName,Last four digits
+,,col-9,col-9
+lastFourDigitsMC,,accessibilityName,Last four digits
+,,col-9,col-9
+lastFourDigitsDiscover,,accessibilityName,Last four digits
+,,col-9,col-9
+lastFourDigitsJCB,,accessibilityName,Last four digits
+,,col-9,col-9
+lastFourDigitsRupay,,accessibilityName,Last four digits
+,,col-9,col-9
+cvv,,accessibilityName,CVV
+,,col-4,col-4
+,,float-left,float-left
+,,maxLengthMessage,Maximum length for CVV field reached.
+,,help.closeButtonAccessibilityName,"CVV is the Card Verification Value on your credit or debit card. On Visa, MasterCard and Discover cards, CVV is the last 3 numbers on the back of your card. On American Express cards, CVV is a 4 digit number on the front of the card, above the main card number. Close."
+,,help.accessibilityName,''
+phoneNumber,,accessibilityName,Mobile Number
+,,col-9,col-9
+microsoft_privacy_link,,accessibilityName,privacy statement
+addressGroup,,address-group,address-group
+addressUpdateGroup,,address-group,address-group
+addressLine1,,accessibilityName,Address line 1
+,,col-9,col-9
+addressLine2,,accessibilityName,Address line 2 (Optional)
+,,col-9,col-9
+addressLine3,,accessibilityName,Address line 3
+,,col-9,col-9
+addressCity,,accessibilityName,City
+,,col-9,col-9
+addressCounty,,accessibilityName,County (Optional)
+,,col-9,col-9
+addressPostalCode,{}AddressPostalCodeM,accessibilityName,Postal Code
+,{}AddressPostalCodeM,col-9,col-9
+addressPostalCode,{}AddressPostalCodeO,accessibilityName,Postal Code (Optional)
+,{}AddressPostalCodeO,col-9,col-9
+submitButton,,accessibilityName,Next
+verifyPicvButton,,accessibilityName,Next
+saveButton,,accessibilityName,Save
+cancelButton,,accessibilityName,Cancel
+nextButton,,accessibilityName,Next
+previousButton,,accessibilityName,Previous
+successButton,,accessibilityName,Next
+yesButton,,accessibilityName,Yes
+okButton,,accessibilityName,Ok
+prefillAddressDropdown,,accessibilityName,"Choose a billing address..."
+saveWithValidationButton,,accessibilityName,Save
+creditCardsCVV3Image,,accessibilityName,Card verification code location image
+creditCardsCVV4Image,,accessibilityName,Card verification code location image for Amex card

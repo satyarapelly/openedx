@@ -1,0 +1,6 @@
+DisplaySequenceId,CountryIds,FlightName,HintId
+paymentMethodSelect,,,paymentMethodSelectPMGroupingPage
+paymentMethodSelectPMGroupingPageSequence,,,paymentMethodSelectHeading
+,,,paymentMethod
+paymentOptionDisplayGroupSequence,,,PaymentOptionTextGroup
+paymentOptionTextGroupSequence,,,paymentOptionText

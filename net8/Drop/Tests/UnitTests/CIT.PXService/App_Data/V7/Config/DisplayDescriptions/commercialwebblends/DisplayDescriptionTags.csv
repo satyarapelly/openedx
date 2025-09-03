@@ -1,0 +1,66 @@
+PropertyHintId,CountryIds,TagKey,TagValue
+expiryMonth,,accessibilityName,Expiration month
+expiryYear,,accessibilityName,Expiration year
+addressState,,accessibilityName,State
+addressProvince,,accessibilityName,Province
+addressProvince,fr,accessibilityName,Department (Optional)
+addressCountry,,accessibilityName,Country/region
+idealBillingAgreementSelectBank,,accessibilityName,Select Bank
+creditCardVisaLogo,,accessibilityName,Visa
+creditCardAmexLogo,,accessibilityName,American Express
+creditCardMCLogo,,accessibilityName,MasterCard
+creditCardDiscoverLogo,,accessibilityName,Discover Network
+creditCardJCBLogo,,accessibilityName,JCB
+paypalLogo,,accessibilityName,Paypal
+attLogo,,accessibilityName,AT&T
+sptLogo,,accessibilityName,Sprint
+cardholderName,,accessibilityName,Cardholder name
+cardNumber,,accessibilityName,Card number
+,,maxLengthMessage,Maximum length for card number field reached.
+cardNumberAmex,,accessibilityName,Card number
+,,maxLengthMessage,Maximum length for card number field reached.
+cardNumberCup,,accessibilityName,Card number
+,,maxLengthMessage,Maximum length for card number field reached.
+lastFourDigits,,accessibilityName,Last four digits of card number
+cvv,,accessibilityName,CVV
+,,maxLengthMessage,Maximum length for CVV field reached.
+,,help.closeButtonAccessibilityName,"CVV is the Card Verification Value on your credit or debit card. On Visa, MasterCard and Discover cards, CVV is the last 3 numbers on the back of your card. On American Express cards, CVV is a 4 digit number on the front of the card, above the main card number. Close."
+,,help.accessibilityName,''
+cvvCup,,accessibilityName,CV/N2
+,,maxLengthMessage,Maximum length for field reached.
+,,help.closeButtonAccessibilityName,Close
+,,help.accessibilityName,CV/N2
+phoneNumber,,accessibilityName,Mobile Number
+smsNewCodeLink,,accessibilityName,Send me a new code
+microsoft_privacy_link,,accessibilityName,privacy statement
+paymentChangeLink,,accessibilityName,Change
+paymentAccountsLink,,accessibilityName,account.microsoft.com
+addressLine1,,accessibilityName,Address line 1
+addressLine2,,accessibilityName,Address line 2 (Optional)
+addressLine3,,accessibilityName,Address line 3
+addressCity,,accessibilityName,City
+addressCounty,,accessibilityName,County
+addressPostalCode,,accessibilityName,Postal Code
+submitButton,,accessibilityName,Next
+saveButton,,accessibilityName,Save
+cancelButton,,accessibilityName,Cancel
+nextButton,,accessibilityName,Next
+previousButton,,accessibilityName,Previous
+successButton,,accessibilityName,Next
+yesButton,,accessibilityName,Yes
+okButton,,accessibilityName,Ok
+taxCpfProperty,,accessibilityName,CPF
+taxCnpjProperty,,accessibilityName,CNPJ
+taxVatIdProperty,,accessibilityName,Tax ID
+taxIndiaStateCstIdProperty,,accessibilityName,CST ID
+taxIndiaStateVatIdProperty,,accessibilityName,VAT ID
+taxIndiaStateGstIdProperty,,accessibilityName,GST ID
+taxIndiaPanIdProperty,,accessibilityName,PAN ID
+taxVatIdProperty,,accessibilityName,VAT ID
+taxCanadianFederalExemptProperty,,accessibilityName,Canadian Federal Tax Exempt Certificate No.
+taxCanadianProvinceExemptProperty,,accessibilityName,Canadian Province Tax Exempt Certificate No.
+taxUsExemptProperty,,accessibilityName,US Tax Exempt Certificate No.
+taxVatIdProperty,au,accessibilityName,ABN
+taxVatIdProperty,nz,accessibilityName,GST Registration No.
+creditCardsCVV3Image,,accessibilityName,Card verification code location image
+creditCardsCVV4Image,,accessibilityName,Card verification code location image for Amex card

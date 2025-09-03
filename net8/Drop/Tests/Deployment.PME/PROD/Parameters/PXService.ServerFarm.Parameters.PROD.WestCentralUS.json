@@ -1,0 +1,66 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "aadAMEClientCertificateName": {
+      "value": "aad-pxclientauth-paymentexperience-azclient-ms"
+    },
+    "commerceAccountClientCertificateName": {
+      "value": "ctpcommerce-pxclientauth-paymentexperience-azclient-ms"
+    },
+    "pxClientCertificateName": {
+      "value": "px-pxclientauth-paymentexperience-azclient-ms"
+    },
+    "keyVaultName": {
+      "value": "PX-KV-PROD"
+    },
+    "managedIdentity": {
+      "value": "PaymentExperience-PROD"
+    },
+    "managedIdentityResourceGroup": {
+      "value": "PX-Infra-PROD-WestUS"
+    },
+    "monitoringConfigVersion": {
+      "value": "1.29"
+    },
+    "monitoringGcsAccount": {
+      "value": "paymentexperiencelogsprod"
+    },
+    "monitoringGcsEnvironment": {
+      "value": "Diagnostics Prod"
+    },
+    "monitoringGcsNamespace": {
+      "value": "paymentexperiencelogsprod"
+    },
+    "monitoringGcsAuthId": {
+      "value": "ma.geneva.keyvault.paymentexperience.azclient.ms"
+    },
+    "monitoringRole": {
+      "value": "PxAppService"
+    },
+    "monitoringTenant": {
+      "value": "pme"
+    },
+    "genevaCertVaultId": {
+      "value": "/subscriptions/9b6168fd-7d68-47e1-9c71-e51828aa62c0/resourceGroups/PX-Infra-PROD-WestUS/providers/Microsoft.KeyVault/vaults/PX-KV-PROD"
+    },
+    "genevaCertSecretName": {
+      "value": "ma-geneva-keyvault-paymentexperience-azclient-ms"
+    },
+    "servicePlanName": {
+      "value": "PaymentExperience-PROD"
+    },
+    "siteName": {
+      "value": "PaymentExperience-PROD"
+    },
+    "websiteSkuTier": {
+      "value": "PremiumV3"
+    },
+    "websiteSkuName": {
+      "value": "P2V3"
+    },
+    "websiteCapacity": {
+      "value": 10
+    }
+  }
+}

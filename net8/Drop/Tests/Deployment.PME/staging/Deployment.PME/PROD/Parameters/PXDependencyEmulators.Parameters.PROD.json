@@ -1,0 +1,31 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentParameters.json",
+  "contentVersion": "1.0.0.0",
+  "paths": [ "sitePackageLink" ],
+  "parameters": {
+    "deploymentLabel": {
+      "value": "PX-PXDependencyEmulators-PROD[BUILD_VERSION]"
+    },
+    "siteName": {
+      "value": "PX-PXDependencyEmulators-PROD"
+    },
+    "servicePlanName": {
+      "value": "PX-Emulator-PROD"
+    },
+    "sitePackageLink": {
+      "value": "bin\\PXDependencyEmulators.zip"
+    },
+    "mintlsVersion": {
+      "value": "1.2"
+    },
+    "websiteSkuTier": {
+      "value": "PremiumV3"
+    },
+    "websiteSkuName": {
+      "value": "P0V3"
+    },
+    "websiteCapacity": {
+      "value": 2
+    }
+  }
+}

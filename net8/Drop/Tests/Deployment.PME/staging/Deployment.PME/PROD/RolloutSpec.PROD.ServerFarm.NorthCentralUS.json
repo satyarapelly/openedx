@@ -1,0 +1,35 @@
+﻿{
+  "$schema": "http://schema.express.azure.com/schemas/2015-01-01-alpha/RolloutSpec.json",
+  "ContentVersion": "4.6.19127.1",
+  "RolloutMetadata": {
+    "ServiceModelPath": "PROD\\ServiceModel.PROD.json",
+    "Name": "PX Deployment PROD 4.6.19127.1 (Global)",
+    "RolloutType": "Major",
+    "BuildSource": {
+      "BuildSourceType": "SmbShare",
+      "Parameters": {
+        "ServiceGroupRoot": "ServiceGroupRoot",
+        "VersionFile": "BuildVer.txt"
+      }
+    },
+    "Notification": {
+      "email": {
+        "to": "pxdevs@microsoft.com",
+        "options": {
+          "when": [
+            "onError",
+            "onComplete"
+          ]
+        }
+      }
+    }
+  },
+  "OrchestratedSteps": [
+    {
+      "Name": "RolloutStamp-PX-PXService-ServerFarm-NorthCentralUS",
+      "TargetType": "ServiceResource",
+      "TargetName": "PXService.ServerFarm.NorthCentralUS",
+      "Actions": [ "Deploy" ]
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "siteName": {
+      "type": "string"
+    },
+    "sitePackageLink": {
+      "type": "string"
+    },
+    "stageName": {
+      "type": "string"
+    },
+    "swapSlotAfterDeployment": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "buildVersion": {
+      "defaultValue": "[concat(utcNow(), '_', deployment().name)]",
+      "type": "string"
+    }
+  },
+  "variables": {
+    "resourceLocation": "[resourcegroup().location]",
+    "fullSiteName": "[concat(parameters('siteName'), '-', replace(variables('resourceLocation'),' ',''))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Web/sites/slots",
+      "apiVersion": "2018-02-01",
+      "location": "[variables('resourceLocation')]",
+      "name": "[concat(variables('fullSiteName'), '/',parameters('stageName'))]",
+      "properties": {
+        "buildVersion": "[parameters('buildVersion')]"
+      },
+      "resources": [
+        {
+          "apiVersion": "2018-02-01",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/sites/slots', variables('fullSiteName'), parameters('stageName'))]"
+          ],
+          "name": "MSDeploy",
+          "properties": {
+            "packageUri": "[parameters('sitePackageLink')]",
+            "appOffline": true
+          },
+          "type": "extensions"
+        }
+      ]
+    },
+    {
+      "apiVersion": "2018-02-01",
+      "condition": "[parameters('swapSlotAfterDeployment')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites/slots', variables('fullSiteName'), parameters('stageName'))]",
+        "[resourceId('Microsoft.Web/sites/slots/Extensions', variables('fullSiteName'), parameters('stageName'), 'MSDeploy')]"
+      ],
+      "location": "[variables('resourceLocation')]",
+      "name": "[variables('fullSiteName')]",
+      "properties": {
+        "targetBuildVersion": "[parameters('buildVersion')]"
+      },
+      "type": "Microsoft.Web/sites"
+    }
+  ],
+  "outputs": {
+    "buildVersion": {
+      "type": "string",
+      "value": "[parameters('buildVersion')]"
+    }
+  }
+}

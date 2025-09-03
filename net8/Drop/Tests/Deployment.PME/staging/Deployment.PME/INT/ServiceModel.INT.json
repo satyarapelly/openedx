@@ -1,0 +1,224 @@
+﻿{
+  "$schema": "https://ev2schema.azure.net/schemas/2020-01-01/serviceModel.json",
+  "contentVersion": "1.0.0.0",
+  "ServiceMetadata": {
+    "ServiceGroup": "PX",
+    "Environment": "INT"
+  },
+  "ServiceResourceGroupDefinitions": [
+    {
+      "Name": "PX-Infra",
+      "ServiceResourceDefinitions": [
+        {
+          "Name": "GenevaLogConfig",
+          "ComposedOf": {
+            "Arm": {
+              "TemplatePath": "Templates\\UpdateConfig.Template.json"
+            }
+          }
+        },
+        {
+          "Name": "KeyVault",
+          "ArmTemplatePath": "Templates\\KeyVault.Template.json"
+        },
+        {
+          "Name": "PXService.ManagedIdentity",
+          "ArmTemplatePath": "Templates\\ManagedIdentity.Template.json"
+        },
+        {
+          "Name": "PXService.ApplicationInsights",
+          "ArmTemplatePath": "Templates\\ApplicationInsights.Template.json"
+        }
+      ]
+    },
+    {
+      "Name": "PX",
+      "ServiceResourceDefinitions": [
+        {
+          "Name": "PXService.ServerFarm",
+          "ArmTemplatePath": "Templates\\PXService.ServerFarm.Template.json"
+        },
+        {
+          "Name": "PXService.SiteSlot",
+          "ArmTemplatePath": "Templates\\PXService.Int.SiteSlot.Template.json"
+        },
+        {
+          "Name": "PXService.Deployment",
+          "ArmTemplatePath": "Templates\\PXService.Deployment.Template.json"
+        },
+        {
+          "Name": "PXService.Staging",
+          "ArmTemplatePath": "Templates\\PXService.Staging.Template.json"
+        },
+        {
+          "Name": "PXService.Swap",
+          "ArmTemplatePath": "Templates\\PXService.Swap.Template.json"
+        },
+        {
+          "Name": "PXService.AppSetting",
+          "ArmTemplatePath": "Templates\\PXService.Int.AppSetting.Template.json"
+        },
+        {
+          "Name": "PXService.AppSetting.Staging",
+          "ArmTemplatePath": "Templates\\PXService.Int.AppSetting.Staging.Template.json"
+        },
+        {
+          "Name": "PXDependencyEmulators",
+          "ArmTemplatePath": "Templates\\Emulator.Template.json"
+        }
+      ]
+    }
+  ],
+  "ServiceResourceGroups": [
+    {
+      "AzureResourceGroupName": "PX-Services-INT-WestUS",
+      "Location": "West US",
+      "InstanceOf": "PX",
+      "AzureSubscriptionId": "230ef3cc-8fdd-4f26-bf9c-10131b4080e5",
+      "ServiceResources": [
+        {
+          "Name": "PXService.ServerFarm.WestUS",
+          "InstanceOf": "PXService.ServerFarm",
+          "ArmParametersPath": "INT\\Parameters\\PXService.ServerFarm.Parameters.INT.json"
+        },
+        {
+          "Name": "PXService.SiteSlot.WestUS",
+          "InstanceOf": "PXService.SiteSlot",
+          "ArmParametersPath": "INT\\Parameters\\PXService.SiteSlot.Parameters.INT.json"
+        },
+        {
+          "Name": "PXService.Staging.WestUS",
+          "InstanceOf": "PXService.Staging",
+          "ArmParametersPath": "INT\\Parameters\\PXService.Staging.Parameters.INT.json",
+          "scopeTags": [
+            {
+              "name": "Environment.Constants"
+            }
+          ]
+        },
+        {
+          "Name": "PXService.Swap.WestUS",
+          "InstanceOf": "PXService.Swap",
+          "ArmParametersPath": "INT\\Parameters\\PXService.Swap.Parameters.INT.json",
+          "scopeTags": [
+            {
+              "name": "Environment.Constants"
+            }
+          ]
+        },
+        {
+          "Name": "PXService.Deployment.WestUS",
+          "InstanceOf": "PXService.Deployment",
+          "ArmParametersPath": "INT\\Parameters\\PXService.Deployment.Parameters.INT.json"
+        },
+        {
+          "Name": "PXService.AppSetting.WestUS",
+          "InstanceOf": "PXService.AppSetting",
+          "ArmParametersPath": "INT\\Parameters\\PXService.AppSetting.Parameters.INT.json"
+        },
+        {
+          "Name": "PXService.AppSetting.Staging.WestUS",
+          "InstanceOf": "PXService.AppSetting.Staging",
+          "ArmParametersPath": "INT\\Parameters\\PXService.AppSetting.Parameters.INT.json"
+        },
+        {
+          "Name": "PXDependencyEmulators.WestUS",
+          "InstanceOf": "PXDependencyEmulators",
+          "ArmParametersPath": "INT\\Parameters\\PXDependencyEmulators.Parameters.INT.json"
+        }
+      ]
+    },
+    {
+      "AzureResourceGroupName": "PX-Services-INT-WestUS2",
+      "Location": "West US 2",
+      "InstanceOf": "PX",
+      "AzureSubscriptionId": "230ef3cc-8fdd-4f26-bf9c-10131b4080e5",
+      "ServiceResources": [
+        {
+          "Name": "PXService.ServerFarm.WestUS2",
+          "InstanceOf": "PXService.ServerFarm",
+          "ArmParametersPath": "INT\\Parameters\\PXService.ServerFarm.Parameters.INT.json"
+        },
+        {
+          "Name": "PXService.SiteSlot.WestUS2",
+          "InstanceOf": "PXService.SiteSlot",
+          "ArmParametersPath": "INT\\Parameters\\PXService.SiteSlot.Parameters.INT.json"
+        },
+        {
+          "Name": "PXService.Staging.WestUS2",
+          "InstanceOf": "PXService.Staging",
+          "ArmParametersPath": "INT\\Parameters\\PXService.Staging.Parameters.INT.json",
+          "scopeTags": [
+            {
+              "name": "Environment.Constants"
+            }
+          ]
+        },
+        {
+          "Name": "PXService.Swap.WestUS2",
+          "InstanceOf": "PXService.Swap",
+          "ArmParametersPath": "INT\\Parameters\\PXService.Swap.Parameters.INT.json",
+          "scopeTags": [
+            {
+              "name": "Environment.Constants"
+            }
+          ]
+        },
+        {
+          "Name": "PXService.Deployment.WestUS2",
+          "InstanceOf": "PXService.Deployment",
+          "ArmParametersPath": "INT\\Parameters\\PXService.Deployment.Parameters.INT.json"
+        },
+        {
+          "Name": "PXService.AppSetting.WestUS2",
+          "InstanceOf": "PXService.AppSetting",
+          "ArmParametersPath": "INT\\Parameters\\PXService.AppSetting.Parameters.INT.json"
+        },
+        {
+          "Name": "PXService.AppSetting.Staging.WestUS2",
+          "InstanceOf": "PXService.AppSetting.Staging",
+          "ArmParametersPath": "INT\\Parameters\\PXService.AppSetting.Parameters.INT.json"
+        },
+        {
+          "Name": "PXDependencyEmulators.WestUS2",
+          "InstanceOf": "PXDependencyEmulators",
+          "ArmParametersPath": "INT\\Parameters\\PXDependencyEmulators.Parameters.INT.json"
+        }
+      ]
+    },
+    {
+      "AzureResourceGroupName": "PX-Infra-INT-CentralUS",
+      "Location": "Central US",
+      "InstanceOf": "PX-Infra",
+      "AzureSubscriptionId": "230ef3cc-8fdd-4f26-bf9c-10131b4080e5",
+      "ServiceResources": [
+        {
+          "Name": "MonitoringPrerequisites.Global",
+          "InstanceOf": "GenevaLogConfig",
+          "ArmParametersPath": "INT\\Parameters\\UpdateConfig.Parameters.INT.json",
+          "RolloutParametersPath": "INT\\RolloutParameters\\Geneva.Extenstion.RolloutParameters.UpdateExistingAccount.INT.json"
+        },
+        {
+          "Name": "KeyVault.Global",
+          "InstanceOf": "KeyVault",
+          "ArmParametersPath": "INT\\Parameters\\KeyVault.Parameters.INT.json"
+        },
+        {
+          "Name": "PXService.ManagedIdentity.Global",
+          "InstanceOf": "PXService.ManagedIdentity",
+          "ArmParametersPath": "INT\\Parameters\\ManagedIdentity.Parameters.INT.json"
+        },
+        {
+          "Name": "TestKeyVault.Global",
+          "InstanceOf": "KeyVault",
+          "ArmParametersPath": "INT\\Parameters\\TestKeyVault.Parameters.INT.json"
+        },
+        {
+          "Name": "PXService.ApplicationInsights.Global",
+          "InstanceOf": "PXService.ApplicationInsights",
+          "ArmParametersPath": "INT\\Parameters\\ApplicationInsights.Parameters.INT.json"
+        }
+      ]
+    }
+  ]
+}

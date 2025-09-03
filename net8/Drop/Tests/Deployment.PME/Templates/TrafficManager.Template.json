@@ -1,0 +1,65 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "name": {
+      "type": "String"
+    },
+    "resourceGroup": {
+      "type": "String"
+    },
+    "resourceType": {
+      "type": "String"
+    },
+    "resourceName": {
+      "type": "String"
+    },
+    "azureEndpoint": {
+      "type": "String"
+    },
+    "azureEndpointLocation": {
+      "type": "String"
+    }
+  },
+  "variables": {},
+  "resources": [
+    {
+      "type": "Microsoft.Network/trafficManagerProfiles",
+      "apiVersion": "2018-04-01",
+      "name": "[parameters('name')]",
+      "location": "global",
+      "properties": {
+        "profileStatus": "Enabled",
+        "trafficRoutingMethod": "Weighted",
+        "dnsConfig": {
+          "relativeName": "[parameters('name')]",
+          "ttl": 60
+        },
+        "monitorConfig": {
+          "protocol": "HTTPS",
+          "port": 443,
+          "path": "/probe",
+          "intervalInSeconds": 30,
+          "toleratedNumberOfFailures": 3,
+          "timeoutInSeconds": 10
+        },
+        "endpoints": [
+          {
+            "id": "[concat(resourceId('Microsoft.Network/trafficManagerProfiles', parameters('name')), concat('/azureEndpoints/Azure-', parameters('name')))]",
+            "name": "[concat('Azure-', parameters('name'))]",
+            "type": "Microsoft.Network/trafficManagerProfiles/azureEndpoints",
+            "properties": {
+              "endpointStatus": "Enabled",
+              "targetResourceId": "[resourceId(parameters('resourceGroup'), parameters('resourceType'), parameters('resourceName'))]",
+              "target": "[parameters('azureEndpoint')]",
+              "weight": 1,
+              "priority": 1,
+              "endpointLocation": "[parameters('azureEndpointLocation')]"
+            }
+          }
+        ],
+        "trafficViewEnrollmentStatus": "Enabled"
+      }
+    }
+  ]
+}

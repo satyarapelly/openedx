@@ -1,0 +1,54 @@
+﻿{
+  "$schema": "http://schema.express.azure.com/schemas/2015-01-01-alpha/RolloutSpec.json",
+  "ContentVersion": "4.6.19127.1",
+  "RolloutMetadata": {
+    "ServiceModelPath": "AIRCAPI\\ServiceModel.AIRCAPI.json",
+    "Name": "PX Deployment AIRCAPI 4.6.19127.1 (Global)",
+    "RolloutType": "Major",
+    "BuildSource": {
+      "BuildSourceType": "SmbShare",
+      "Parameters": {
+        "ServiceGroupRoot": "ServiceGroupRoot",
+        "VersionFile": "BuildVer.txt"
+      }
+    }
+  },
+  "OrchestratedSteps": [
+    {
+      "Name": "RolloutStamp-PX-PXService-ManagedIdentity-Global",
+      "TargetType": "ServiceResource",
+      "TargetName": "PXService.ManagedIdentity.Global",
+      "Actions": [ "Deploy" ]
+    },
+    {
+      "Name": "RolloutStamp-PX-KeyVault-Global",
+      "TargetType": "ServiceResource",
+      "TargetName": "KeyVault.Global",
+      "Actions": [ "Deploy" ],
+      "DependsOn": [
+        "RolloutStamp-PX-PXService-ManagedIdentity-Global"
+      ]
+    },
+    {
+      "Name": "RolloutStamp-PX-PXService-TrafficManager-Global",
+      "TargetType": "ServiceResource",
+      "TargetName": "PXService.TrafficManager.Global",
+      "Actions": [ "Deploy" ]
+    },
+    {
+      "Name": "RolloutStamp-PX-PXService-ServerFarm-WestUS",
+      "TargetType": "ServiceResource",
+      "TargetName": "PXService.ServerFarm.WestUS",
+      "Actions": [ "Deploy" ]
+    },
+    {
+      "Name": "RolloutStamp-PX-PXService-SiteSlot-WestUS",
+      "TargetType": "ServiceResource",
+      "TargetName": "PXService.SiteSlot.WestUS",
+      "Actions": [ "Deploy" ],
+      "DependsOn": [
+        "RolloutStamp-PX-PXService-ServerFarm-WestUS"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-08-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "siteName": {
+      "type": "string"
+    },
+    "stageName": {
+      "type": "string"
+    },
+    "swapSlotAfterDeployment": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "buildVersion": {
+      "type": "string"
+    }
+  },
+  "variables": {
+    "resourceLocation": "[resourcegroup().location]",
+    "fullSiteName": "[concat(parameters('siteName'), '-', replace(variables('resourceLocation'),' ',''))]"
+  },
+  "resources": [
+    {
+      "apiVersion": "2019-08-01",
+      "condition": "[parameters('swapSlotAfterDeployment')]",
+      "location": "[variables('resourceLocation')]",
+      "name": "[variables('fullSiteName')]",
+      "properties": {
+        "targetBuildVersion": "[parameters('buildVersion')]"
+      },
+      "type": "Microsoft.Web/sites"
+    }
+  ],
+  "outputs": {
+    "buildVersion": {
+      "type": "string",
+      "value": "[parameters('buildVersion')]"
+    }
+  }
+}

@@ -1,0 +1,141 @@
+﻿{
+  "Account001": [
+    {
+      "first_name": "FirstName001",
+      "last_name": "LastName001",
+      "birth_date": "11/30/1995",
+      "email_address": "test@email.com",
+      "culture": "en-US",
+      "account_id": "Account001",
+      "id": "Profile001001",
+      "snapshot_id": "Snapshot001001",
+      "type": "consumer",
+      "default_address_id": "Address001001",
+      "links": {
+        "self": {
+          "href": "Account001/profiles/Profile001001",
+          "method": "GET"
+        },
+        "snapshot": {
+          "href": "Account001/profiles/Snapshot001001",
+          "method": "GET"
+        },
+        "update": {
+          "href": "Account001/profiles/Profile001001",
+          "method": "POST"
+        },
+        "default_address": {
+          "href": "Account001/addresses/Address001001",
+          "method": "GET"
+        }
+      },
+      "object_type": "ConsumerProfile",
+      "contract_version": "2014-09-01",
+      "resource_status": "Active"
+    }
+  ],
+  "Account003": [
+    {
+      "first_name": "FirstName003",
+      "last_name": "LastName003",
+      "birth_date": "11/30/1995",
+      "email_address": "test@email.com",
+      "culture": "en-US",
+      "account_id": "Account003",
+      "id": "Profile001001",
+      "snapshot_id": "Snapshot001001",
+      "type": "consumer",
+      "default_address_id": "Address001003",
+      "links": {
+        "self": {
+          "href": "Account003/profiles/Profile001001",
+          "method": "GET"
+        },
+        "snapshot": {
+          "href": "Account003/profiles/Snapshot001001",
+          "method": "GET"
+        },
+        "update": {
+          "href": "Account003/profiles/Profile001001",
+          "method": "POST"
+        },
+        "default_address": {
+          "href": "Account003/addresses/Address001001",
+          "method": "GET"
+        }
+      },
+      "object_type": "ConsumerProfile",
+      "contract_version": "2014-09-01",
+      "resource_status": "Active"
+    }
+  ],
+  "DiffTestUser": [
+    {
+      "first_name": "FirstName001",
+      "last_name": "LastName001",
+      "birth_date": "11/30/1995",
+      "email_address": "test@email.com",
+      "culture": "en-US",
+      "account_id": "DiffTestUser",
+      "id": "Profile001001",
+      "snapshot_id": "Snapshot001001",
+      "type": "consumer",
+      "default_address_id": "Address001001",
+      "links": {
+        "self": {
+          "href": "DiffTestUser/profiles/Profile001001",
+          "method": "GET"
+        },
+        "snapshot": {
+          "href": "DiffTestUser/profiles/Snapshot001001",
+          "method": "GET"
+        },
+        "update": {
+          "href": "DiffTestUser/profiles/Profile001001",
+          "method": "POST"
+        },
+        "default_address": {
+          "href": "DiffTestUser/addresses/Address001001",
+          "method": "GET"
+        }
+      },
+      "object_type": "ConsumerProfile",
+      "contract_version": "2014-09-01",
+      "resource_status": "Active"
+    }
+  ],
+  "AccountNoAddress": [
+    {
+      "first_name": "FirstName002",
+      "last_name": "LastName002",
+      "birth_date": "11/30/1995",
+      "email_address": "test@email.com",
+      "culture": "en-US",
+      "account_id": "Account002",
+      "id": "Profile002002",
+      "snapshot_id": "Snapshot002002",
+      "type": "consumer",
+      "links": {
+        "self": {
+          "href": "Account002/profiles/Profile002002",
+          "method": "GET"
+        },
+        "snapshot": {
+          "href": "Account002/profiles/Snapshot002002",
+          "method": "GET"
+        },
+        "update": {
+          "href": "Account002/profiles/Profile002002",
+          "method": "POST"
+        },
+        "default_address": {
+          "href": "Account002/addresses/Address002002",
+          "method": "GET"
+        }
+      },
+      "object_type": "ConsumerProfile",
+      "contract_version": "2014-09-01",
+      "resource_status": "Active"
+    }
+  ]
+}

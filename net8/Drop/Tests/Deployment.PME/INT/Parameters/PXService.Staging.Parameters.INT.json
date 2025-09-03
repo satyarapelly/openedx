@@ -1,0 +1,77 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "paths": [ "sitePackageLink" ],
+  "parameters": {
+    "alwaysOn": {
+      "value": true
+    },
+    "appInsightsKey": {
+      "value": "2ed96f11-45dc-458c-b1a8-0b9ac631c22e"
+    },
+    "environmentName": {
+      "value": "STORECORE-PST-PX-INT"
+    },
+    "managedIdentity": {
+      "value": "PXService-INT"
+    },
+    "managedIdentityClientId": {
+      "value": "bd11e518-82c4-438f-898b-585a8cc3da0d"
+    },
+    "managedIdentityResourceGroup": {
+      "value": "PX-Infra-INT-CentralUS"
+    },
+    "mintlsVersion": {
+      "value": "1.2"
+    },
+    "servicePlanName": {
+      "value": "PaymentExperience-INT"
+    },
+    "siteName": {
+      "value": "PaymentExperience-INT"
+    },
+    "sitePackageLink": {
+      "value": "bin\\pxservice.zip"
+    },
+    "stageName": {
+      "value": "Staging"
+    },
+    "buildVersion": {
+      "value": "__BuildVersion__"
+    },
+    "autoHealEnabled": {
+      "value": true
+    },
+    "autoHealRules": {
+      "value": {
+        "triggers": {
+          // auto heal will be triggered when 15 503 returns with 5 mins per instance
+          "statusCodes": [
+            {
+              "status": 503,
+              "count": 15,
+              "timeInterval": "00:05:00"
+            }
+          ]
+        },
+        "actions": {
+          // start the instance
+          "actionType": "Recycle",
+          // Let's say the app triggers the metric you configured it to, 
+          // but it has been just a minute since the last autohealing action took place, 
+          // so now the Autohealing will need to wait the ammount of time you configure in there to perform another action,
+          // for the app to startup and let it get ready before restarting it again 
+          "minProcessExecutionTime": "00:10:00"
+        }
+      }
+    },
+    "websiteLocalCachedOption": {
+      // Per best practice: You typically don't set the staging slot to use Local Cache to enable a seamless build-deploy-test lifecycle for staging if you get the benefits of Local Cache for the production slot.
+      // See: https://docs.microsoft.com/en-us/azure/app-service/overview-local-cache
+      "value": "Never"
+    },
+    "websiteLocalCacheSize": {
+      "value": ""
+    }
+  }
+}

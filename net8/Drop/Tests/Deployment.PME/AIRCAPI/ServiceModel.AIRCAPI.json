@@ -1,0 +1,120 @@
+﻿{
+  "$schema": "https://ev2schema.azure.net/schemas/2020-01-01/serviceModel.json",
+  "contentVersion": "1.0.0.0",
+  "ServiceMetadata": {
+    "ServiceGroup": "PX",
+    "Environment": "AIRCAPI"
+  },
+  "ServiceResourceGroupDefinitions": [
+    {
+      "Name": "PX-Infra",
+      "ServiceResourceDefinitions": [
+        {
+          "Name": "KeyVault",
+          "ArmTemplatePath": "Templates\\KeyVault.Template.json"
+        },
+        {
+          "Name": "PXService.ManagedIdentity",
+          "ArmTemplatePath": "Templates\\ManagedIdentity.Template.json"
+        },
+        {
+          "Name": "PXService.TrafficManager",
+          "ArmTemplatePath": "Templates\\TrafficManager.Template.json"
+        }
+      ]
+    },
+    {
+      "Name": "PX",
+      "ServiceResourceDefinitions": [
+        {
+          "Name": "PXService.ServerFarm",
+          "ArmTemplatePath": "Templates\\PXService.AIRCAPI.ServerFarm.Template.json"
+        },
+        {
+          "Name": "PXService.Staging",
+          "ArmTemplatePath": "Templates\\PXService.Staging.Template.json"
+        },
+        {
+          "Name": "PXService.SiteSlot",
+          "ArmTemplatePath": "Templates\\PXService.AIRCAPI.SiteSlot.Template.json"
+        },
+        {
+          "Name": "PXService.Swap",
+          "ArmTemplatePath": "Templates\\PXService.Swap.Template.json"
+        },
+        {
+          "Name": "PXService.AppSetting.Staging",
+          "ArmTemplatePath": "Templates\\PXService.AppSetting.Staging.Template.json"
+        }
+      ]
+    }
+  ],
+  "ServiceResourceGroups": [
+    {
+      "AzureResourceGroupName": "PX-Services-AIRCAPI-WestUS",
+      "Location": "West US",
+      "InstanceOf": "PX",
+      "AzureSubscriptionId": "df2299f6-d601-43d9-8db1-d12ac93e535a",
+      "ServiceResources": [
+        {
+          "Name": "PXService.ServerFarm.WestUS",
+          "InstanceOf": "PXService.ServerFarm",
+          "ArmParametersPath": "AIRCAPI\\Parameters\\PXService.ServerFarm.Parameters.AIRCAPI.json"
+        },
+        {
+          "Name": "PXService.Staging.WestUS",
+          "InstanceOf": "PXService.Staging",
+          "ArmParametersPath": "AIRCAPI\\Parameters\\PXService.Staging.Parameters.AIRCAPI.json",
+          "scopeTags": [
+            {
+              "name": "Environment.Constants"
+            }
+          ]
+        },
+        {
+          "Name": "PXService.Swap.WestUS",
+          "InstanceOf": "PXService.Swap",
+          "ArmParametersPath": "AIRCAPI\\Parameters\\PXService.Swap.Parameters.AIRCAPI.json",
+          "scopeTags": [
+            {
+              "name": "Environment.Constants"
+            }
+          ]
+        },
+        {
+          "Name": "PXService.SiteSlot.WestUS",
+          "InstanceOf": "PXService.SiteSlot",
+          "ArmParametersPath": "AIRCAPI\\Parameters\\PXService.SiteSlot.Parameters.AIRCAPI.json"
+        },
+        {
+          "Name": "PXService.AppSetting.Staging.WestUS",
+          "InstanceOf": "PXService.AppSetting.Staging",
+          "ArmParametersPath": "AIRCAPI\\Parameters\\PXService.AppSetting.Staging.Parameters.AIRCAPI.json"
+        }
+      ]
+    },
+    {
+      "AzureResourceGroupName": "PX-Infra-AIRCAPI-CentralUS",
+      "Location": "Central US",
+      "InstanceOf": "PX-Infra",
+      "AzureSubscriptionId": "df2299f6-d601-43d9-8db1-d12ac93e535a",
+      "ServiceResources": [
+        {
+          "Name": "KeyVault.Global",
+          "InstanceOf": "KeyVault",
+          "ArmParametersPath": "AIRCAPI\\Parameters\\KeyVault.Parameters.AIRCAPI.json"
+        },
+        {
+          "Name": "PXService.ManagedIdentity.Global",
+          "InstanceOf": "PXService.ManagedIdentity",
+          "ArmParametersPath": "AIRCAPI\\Parameters\\ManagedIdentity.Parameters.AIRCAPI.json"
+        },
+        {
+          "Name": "PXService.TrafficManager.Global",
+          "InstanceOf": "PXService.TrafficManager",
+          "ArmParametersPath": "AIRCAPI\\Parameters\\TrafficManager.Parameters.AIRCAPI.json"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,906 @@
+﻿{
+  "Account001": [
+    {
+      "first_name": "FirstName001",
+      "last_name": "LastName001",
+      "birth_date": "11/30/1995",
+      "email_address": "test@email.com",
+      "culture": "en-US",
+      "account_id": "Account001",
+      "id": "Profile001001",
+      "snapshot_id": "Snapshot001001",
+      "type": "consumer",
+      "default_address_id": "Address001001",
+      "links": {
+        "self": {
+          "href": "Account001/profiles/Profile001001",
+          "method": "GET"
+        },
+        "snapshot": {
+          "href": "Account001/profiles/Snapshot001001",
+          "method": "GET"
+        },
+        "update": {
+          "href": "Account001/profiles/Profile001001",
+          "method": "POST"
+        },
+        "default_address": {
+          "href": "Account001/addresses/Address001001",
+          "method": "GET"
+        }
+      },
+      "object_type": "ConsumerProfile",
+      "contract_version": "2014-09-01",
+      "resource_status": "Active"
+    }
+  ],
+  "DiffTestUser": [
+    {
+      "first_name": "FirstName001",
+      "last_name": "LastName001",
+      "birth_date": "11/30/1995",
+      "email_address": "test@email.com",
+      "culture": "en-US",
+      "account_id": "DiffTestUser",
+      "id": "Profile001001",
+      "snapshot_id": "Snapshot001001",
+      "type": "consumer",
+      "default_address_id": "Address001001",
+      "links": {
+        "self": {
+          "href": "DiffTestUser/profiles/Profile001001",
+          "method": "GET"
+        },
+        "snapshot": {
+          "href": "DiffTestUser/profiles/Snapshot001001",
+          "method": "GET"
+        },
+        "update": {
+          "href": "DiffTestUser/profiles/Profile001001",
+          "method": "POST"
+        },
+        "default_address": {
+          "href": "DiffTestUser/addresses/Address001001",
+          "method": "GET"
+        }
+      },
+      "object_type": "ConsumerProfile",
+      "contract_version": "2014-09-01",
+      "resource_status": "Active"
+    }
+  ],
+  "OrgAccount001": [
+    {
+      "object_type": "Profile",
+      "customer_id": "OrgAccount001",
+      "culture": "en-US",
+      "first_name": "Contoso",
+      "last_name": "Ltd",
+      "company_name": "Contoso",
+      "language": "en",
+      "email": "email@contoso.com",
+      "default_address_id": "OrgAccount001-Address001",
+      "default_address": {
+        "customer_id": "AccountOrg001",
+        "id": "OrgAccount001-Address001",
+        "country": "US",
+        "region": "WA",
+        "district": null,
+        "city": "Redmond",
+        "address_line1": "Some Street 1",
+        "address_line2": null,
+        "address_line3": null,
+        "postal_code": "98052",
+        "first_name": "Contoso",
+        "first_name_pronunciation": null,
+        "last_name": "Ltd",
+        "last_name_pronunciation": null,
+        "correspondence_name": null,
+        "phone_number": "1002003000",
+        "mobile": null,
+        "fax": null,
+        "telex": null,
+        "email_address": null,
+        "web_site_url": null,
+        "street_supplement": null,
+        "is_within_city_limits": null,
+        "form_of_address": null,
+        "address_notes": null,
+        "time_zone": null,
+        "latitude": null,
+        "longitude": null,
+        "is_avs_validated": null,
+        "validate": false,
+        "validation_stamp": null,
+        "is_address_standardized": null,
+        "standardized_address": null,
+        "etag": "-2670179658912512562",
+        "is_light_weight": false,
+        "links": {
+          "self": {
+            "href": "AccountOrg001/addresses/OrgAccount001-Address001",
+            "method": "GET"
+          },
+          "delete": {
+            "href": "AccountOrg001/addresses/OrgAccount001-Address001",
+            "method": "DELETE"
+          }
+        },
+        "object_type": "Address",
+        "contract_version": null,
+        "resource_status": "Active"
+      },
+      "links": {
+        "self": {
+          "href": "AccountOrg001/profiles/OrgAccount001-OrgProfile001",
+          "method": "GET"
+        },
+        "snapshot": {
+          "href": "AccountOrg001/profiles/OrgAccount001-OrgProfile001/1",
+          "method": "GET"
+        },
+        "update": {
+          "href": "AccountOrg001/profiles/OrgAccount001-OrgProfile001",
+          "method": "PUT"
+        },
+        "delete": {
+          "href": "AccountOrg001/profiles/OrgAccount001-OrgProfile001",
+          "method": "DELETE"
+        },
+        "default_address": {
+          "href": "AccountOrg001/addresses/OrgAccount001-Address001",
+          "method": "GET"
+        }
+      },
+      "id": "OrgAccount001-OrgProfile001",
+      "etag": "-5128657532260017592",
+      "snapshot_id": "OrgAccount001-OrgProfile001/1",
+      "resource_status": "Active",
+      "type": "organization"
+    }
+  ],
+  "DiffOrgUser": [
+    {
+      "object_type": "Profile",
+      "customer_id": "DiffOrgUser",
+      "culture": "en-US",
+      "first_name": "Contoso",
+      "last_name": "Ltd",
+      "company_name": "Contoso",
+      "language": "en",
+      "email": "email@contoso.com",
+      "default_address_id": "DiffOrgUser-Address001",
+      "default_address": {
+        "customer_id": "AccountDiffOrgUser",
+        "id": "DiffOrgUser-Address001",
+        "country": "US",
+        "region": "WA",
+        "district": null,
+        "city": "Redmond",
+        "address_line1": "Some Street 1",
+        "address_line2": null,
+        "address_line3": null,
+        "postal_code": "98052",
+        "first_name": "Contoso",
+        "first_name_pronunciation": null,
+        "last_name": "Ltd",
+        "last_name_pronunciation": null,
+        "correspondence_name": null,
+        "phone_number": "1002003000",
+        "mobile": null,
+        "fax": null,
+        "telex": null,
+        "email_address": null,
+        "web_site_url": null,
+        "street_supplement": null,
+        "is_within_city_limits": null,
+        "form_of_address": null,
+        "address_notes": null,
+        "time_zone": null,
+        "latitude": null,
+        "longitude": null,
+        "is_avs_validated": null,
+        "validate": false,
+        "validation_stamp": null,
+        "is_address_standardized": null,
+        "standardized_address": null,
+        "etag": "-2670179658912512562",
+        "is_light_weight": false,
+        "links": {
+          "self": {
+            "href": "AccountDiffOrgUser/addresses/DiffOrgUser-Address001",
+            "method": "GET"
+          },
+          "delete": {
+            "href": "AccountDiffOrgUser/addresses/DiffOrgUser-Address001",
+            "method": "DELETE"
+          }
+        },
+        "object_type": "Address",
+        "contract_version": null,
+        "resource_status": "Active"
+      },
+      "links": {
+        "self": {
+          "href": "AccountDiffOrgUser/profiles/DiffOrgUser-OrgProfile001",
+          "method": "GET"
+        },
+        "snapshot": {
+          "href": "AccountDiffOrgUser/profiles/DiffOrgUser-OrgProfile001/1",
+          "method": "GET"
+        },
+        "update": {
+          "href": "AccountDiffOrgUser/profiles/DiffOrgUser-OrgProfile001",
+          "method": "PUT"
+        },
+        "delete": {
+          "href": "AccountDiffOrgUser/profiles/DiffOrgUser-OrgProfile001",
+          "method": "DELETE"
+        },
+        "default_address": {
+          "href": "AccountDiffOrgUser/addresses/DiffOrgUser-Address001",
+          "method": "GET"
+        }
+      },
+      "id": "DiffOrgUser-OrgProfile001",
+      "etag": "-5128657532260017592",
+      "snapshot_id": "DiffOrgUser-OrgProfile001/1",
+      "resource_status": "Active",
+      "type": "organization"
+    }
+  ],
+  "EmpAccount001": [
+    {
+      "object_type": "Profile",
+      "customer_id": "EmpAccount001",
+      "culture": "en-US",
+      "first_name": "EmployeeFirstName",
+      "last_name": "EmployeeLastName",
+      "company_name": "Company Name",
+      "language": "en",
+      "email": "employee@company.com",
+      "default_address_id": "EmpAccount001-Address001",
+      "billing_anniversary": "21",
+      "default_address": {
+        "customer_id": "EmpAccount001",
+        "id": "EmpAccount001-Address001",
+        "country": "US",
+        "region": "WA",
+        "district": null,
+        "city": "Redmond",
+        "address_line1": "Some Street 1",
+        "address_line2": null,
+        "address_line3": null,
+        "postal_code": "98052",
+        "first_name": "EmployeeFirstName",
+        "first_name_pronunciation": null,
+        "last_name": "EmployeeLastName",
+        "last_name_pronunciation": null,
+        "correspondence_name": null,
+        "phone_number": null,
+        "mobile": null,
+        "fax": null,
+        "telex": null,
+        "email_address": null,
+        "web_site_url": null,
+        "street_supplement": null,
+        "is_within_city_limits": null,
+        "form_of_address": null,
+        "address_notes": null,
+        "time_zone": null,
+        "latitude": null,
+        "longitude": null,
+        "is_avs_validated": null,
+        "validate": false,
+        "validation_stamp": null,
+        "is_address_standardized": null,
+        "standardized_address": null,
+        "etag": "-5128001690829449283",
+        "is_light_weight": false,
+        "links": {
+          "self": {
+            "href": "EmpAccount001/addresses/EmpAccount001-Address001",
+            "method": "GET"
+          },
+          "delete": {
+            "href": "EmpAccount001/addresses/EmpAccount001-Address001",
+            "method": "DELETE"
+          }
+        },
+        "object_type": "Address",
+        "contract_version": null,
+        "resource_status": "Active"
+      },
+      "links": {
+        "self": {
+          "href": "EmpAccount001/profiles/EmpAccount001-EmpProfile001",
+          "method": "GET"
+        },
+        "snapshot": {
+          "href": "EmpAccount001/profiles/EmpAccount001-EmpProfile001/2",
+          "method": "GET"
+        },
+        "update": {
+          "href": "EmpAccount001/profiles/EmpAccount001-EmpProfile001",
+          "method": "PUT"
+        },
+        "delete": {
+          "href": "EmpAccount001/profiles/EmpAccount001-EmpProfile001",
+          "method": "DELETE"
+        },
+        "default_address": {
+          "href": "EmpAccount001/addresses/EmpAccount001-Address001",
+          "method": "GET"
+        }
+      },
+      "id": "EmpAccount001-EmpProfile001",
+      "etag": "1877491905292942251",
+      "snapshot_id": "EmpAccount001-EmpProfile001/2",
+      "resource_status": "Active",
+      "type": "employee"
+    }
+  ],
+  "EmpAccountNoAddress": [
+    {
+      "object_type": "Profile",
+      "customer_id": "EmpAccountNoAddress",
+      "culture": "en-US",
+      "first_name": "EmployeeFirstName",
+      "last_name": "EmployeeLastName",
+      "company_name": "Company Name",
+      "language": "en",
+      "email": "employee@company.com",
+      "billing_anniversary": "21",
+      "links": {
+        "self": {
+          "href": "EmpAccountNoAddress/profiles/EmpAccountNoAddress-EmpProfile001",
+          "method": "GET"
+        },
+        "snapshot": {
+          "href": "EmpAccountNoAddress/profiles/EmpAccountNoAddress-EmpProfile001/2",
+          "method": "GET"
+        },
+        "update": {
+          "href": "EmpAccountNoAddress/profiles/EmpAccountNoAddress-EmpProfile001",
+          "method": "PUT"
+        },
+        "delete": {
+          "href": "EmpAccountNoAddress/profiles/EmpAccountNoAddress-EmpProfile001",
+          "method": "DELETE"
+        }
+      },
+      "id": "EmpAccountNoAddress-EmpProfile002",
+      "etag": "1877491905292942251",
+      "snapshot_id": "EmpAccountNoAddress-EmpProfile002/2",
+      "resource_status": "Active",
+      "type": "employee"
+    }
+  ],
+  "EmpAccountNoAddressName": [
+    {
+      "object_type": "Profile",
+      "customer_id": "EmpAccountNoAddressName",
+      "culture": "en-US",
+      "first_name": "EmployeeFirstName",
+      "last_name": "EmployeeLastName",
+      "company_name": "Company Name",
+      "language": "en",
+      "email": "employee@company.com",
+      "default_address_id": "EmpAccountNoAddressName-Address001",
+      "billing_anniversary": "21",
+      "default_address": {
+        "customer_id": "EmpAccountNoAddressName",
+        "id": "EmpAccountNoAddressName-Address001",
+        "country": "US",
+        "region": "WA",
+        "district": null,
+        "city": "Redmond",
+        "address_line1": "1 Microsoft Way",
+        "address_line2": null,
+        "address_line3": null,
+        "postal_code": "98052",
+        "first_name": "",
+        "first_name_pronunciation": null,
+        "last_name": "",
+        "last_name_pronunciation": null,
+        "correspondence_name": null,
+        "phone_number": null,
+        "mobile": null,
+        "fax": null,
+        "telex": null,
+        "email_address": null,
+        "web_site_url": null,
+        "street_supplement": null,
+        "is_within_city_limits": null,
+        "form_of_address": null,
+        "address_notes": null,
+        "time_zone": null,
+        "latitude": null,
+        "longitude": null,
+        "is_avs_validated": null,
+        "validate": false,
+        "validation_stamp": null,
+        "is_address_standardized": null,
+        "standardized_address": null,
+        "etag": "-5128001690829449283",
+        "is_light_weight": false,
+        "links": {
+          "self": {
+            "href": "EmpAccountNoAddressName/addresses/EmpAccountNoAddressName-Address001",
+            "method": "GET"
+          },
+          "delete": {
+            "href": "EmpAccountNoAddressName/addresses/EmpAccountNoAddressName-Address001",
+            "method": "DELETE"
+          }
+        },
+        "object_type": "Address",
+        "contract_version": null,
+        "resource_status": "Active"
+      },
+      "links": {
+        "self": {
+          "href": "EmpAccountNoAddressName/profiles/EmpAccountNoAddressName-EmpProfile001",
+          "method": "GET"
+        },
+        "snapshot": {
+          "href": "EmpAccountNoAddressName/profiles/EmpAccountNoAddressName-EmpProfile001/2",
+          "method": "GET"
+        },
+        "update": {
+          "href": "EmpAccountNoAddressName/profiles/EmpAccountNoAddressName-EmpProfile001",
+          "method": "PUT"
+        },
+        "delete": {
+          "href": "EmpAccountNoAddressName/profiles/EmpAccountNoAddressName-EmpProfile001",
+          "method": "DELETE"
+        },
+        "default_address": {
+          "href": "EmpAccountNoAddressName/addresses/EmpAccountNoAddressName-Address001",
+          "method": "GET"
+        }
+      },
+      "id": "EmpAccountNoAddressName-EmpProfile001",
+      "etag": "1877491905292942251",
+      "snapshot_id": "EmpAccountNoAddressName-EmpProfile001/2",
+      "resource_status": "Active",
+      "type": "employee"
+    }
+  ],
+  "EmpAccountNoAddressNameFR": [
+    {
+      "object_type": "Profile",
+      "customer_id": "EmpAccountNoAddressNameFR",
+      "culture": "en-US",
+      "first_name": "EmployeeFirstName",
+      "last_name": "EmployeeLastName",
+      "company_name": "Company Name",
+      "language": "en",
+      "email": "employee@company.com",
+      "default_address_id": "EmpAccountNoAddressNameFR-Address001",
+      "billing_anniversary": "21",
+      "default_address": {
+        "customer_id": "EmpAccountNoAddressNameFR",
+        "id": "EmpAccountNoAddressNameFR-Address001",
+        "country": "FR",
+        "region": "WA",
+        "district": null,
+        "city": "Redmond",
+        "address_line1": "1 Microsoft Way",
+        "address_line2": null,
+        "address_line3": null,
+        "postal_code": "98052",
+        "first_name": "",
+        "first_name_pronunciation": null,
+        "last_name": "",
+        "last_name_pronunciation": null,
+        "correspondence_name": null,
+        "phone_number": null,
+        "mobile": null,
+        "fax": null,
+        "telex": null,
+        "email_address": null,
+        "web_site_url": null,
+        "street_supplement": null,
+        "is_within_city_limits": null,
+        "form_of_address": null,
+        "address_notes": null,
+        "time_zone": null,
+        "latitude": null,
+        "longitude": null,
+        "is_avs_validated": null,
+        "validate": false,
+        "validation_stamp": null,
+        "is_address_standardized": null,
+        "standardized_address": null,
+        "etag": "-5128001690829449283",
+        "is_light_weight": false,
+        "links": {
+          "self": {
+            "href": "EmpAccountNoAddressNameFR/addresses/EmpAccountNoAddressNameFR-Address001",
+            "method": "GET"
+          },
+          "delete": {
+            "href": "EmpAccountNoAddressNameFR/addresses/EmpAccountNoAddressNameFR-Address001",
+            "method": "DELETE"
+          }
+        },
+        "object_type": "Address",
+        "contract_version": null,
+        "resource_status": "Active"
+      },
+      "links": {
+        "self": {
+          "href": "EmpAccountNoAddressNameFR/profiles/EmpAccountNoAddressNameFR-EmpProfile001",
+          "method": "GET"
+        },
+        "snapshot": {
+          "href": "EmpAccountNoAddressNameFR/profiles/EmpAccountNoAddressNameFR-EmpProfile001/2",
+          "method": "GET"
+        },
+        "update": {
+          "href": "EmpAccountNoAddressNameFR/profiles/EmpAccountNoAddressNameFR-EmpProfile001",
+          "method": "PUT"
+        },
+        "delete": {
+          "href": "EmpAccountNoAddressNameFR/profiles/EmpAccountNoAddressNameFR-EmpProfile001",
+          "method": "DELETE"
+        },
+        "default_address": {
+          "href": "EmpAccountNoAddressNameFR/addresses/EmpAccountNoAddressNameFR-Address001",
+          "method": "GET"
+        }
+      },
+      "id": "EmpAccountNoAddressNameFR-EmpProfile001",
+      "etag": "1877491905292942251",
+      "snapshot_id": "EmpAccountNoAddressNameFR-EmpProfile001/2",
+      "resource_status": "Active",
+      "type": "employee"
+    }
+  ],
+  "EmpAccountNoAddressNameFI": [
+    {
+      "object_type": "Profile",
+      "customer_id": "EmpAccountNoAddressNameFI",
+      "culture": "en-US",
+      "first_name": "EmployeeFirstName",
+      "last_name": "EmployeeLastName",
+      "company_name": "Company Name",
+      "language": "en",
+      "email": "employee@company.com",
+      "default_address_id": "EmpAccountNoAddressNameFI-Address001",
+      "billing_anniversary": "21",
+      "default_address": {
+        "customer_id": "EmpAccountNoAddressNameFI",
+        "id": "EmpAccountNoAddressNameFI-Address001",
+        "country": "FI",
+        "region": "WA",
+        "district": null,
+        "city": "Redmond",
+        "address_line1": "1 Microsoft Way",
+        "address_line2": null,
+        "address_line3": null,
+        "postal_code": "98052",
+        "first_name": "",
+        "first_name_pronunciation": null,
+        "last_name": "",
+        "last_name_pronunciation": null,
+        "correspondence_name": null,
+        "phone_number": null,
+        "mobile": null,
+        "fax": null,
+        "telex": null,
+        "email_address": null,
+        "web_site_url": null,
+        "street_supplement": null,
+        "is_within_city_limits": null,
+        "form_of_address": null,
+        "address_notes": null,
+        "time_zone": null,
+        "latitude": null,
+        "longitude": null,
+        "is_avs_validated": null,
+        "validate": false,
+        "validation_stamp": null,
+        "is_address_standardized": null,
+        "standardized_address": null,
+        "etag": "-5128001690829449283",
+        "is_light_weight": false,
+        "links": {
+          "self": {
+            "href": "EmpAccountNoAddressNameFI/addresses/EmpAccountNoAddressNameFI-Address001",
+            "method": "GET"
+          },
+          "delete": {
+            "href": "EmpAccountNoAddressNameFI/addresses/EmpAccountNoAddressNameFI-Address001",
+            "method": "DELETE"
+          }
+        },
+        "object_type": "Address",
+        "contract_version": null,
+        "resource_status": "Active"
+      },
+      "links": {
+        "self": {
+          "href": "EmpAccountNoAddressNameFI/profiles/EmpAccountNoAddressNameFI-EmpProfile001",
+          "method": "GET"
+        },
+        "snapshot": {
+          "href": "EmpAccountNoAddressNameFI/profiles/EmpAccountNoAddressNameFI-EmpProfile001/2",
+          "method": "GET"
+        },
+        "update": {
+          "href": "EmpAccountNoAddressNameFI/profiles/EmpAccountNoAddressNameFI-EmpProfile001",
+          "method": "PUT"
+        },
+        "delete": {
+          "href": "EmpAccountNoAddressNameFI/profiles/EmpAccountNoAddressNameFI-EmpProfile001",
+          "method": "DELETE"
+        },
+        "default_address": {
+          "href": "EmpAccountNoAddressNameFI/addresses/EmpAccountNoAddressNameFI-Address001",
+          "method": "GET"
+        }
+      },
+      "id": "EmpAccountNoAddressNameFI-EmpProfile001",
+      "etag": "1877491905292942251",
+      "snapshot_id": "EmpAccountNoAddressNameFI-EmpProfile001/2",
+      "resource_status": "Active",
+      "type": "employee"
+    }
+  ],
+  "EmpAccountInvalidAddress": [
+    {
+      "object_type": "Profile",
+      "customer_id": "EmpAccountInvalidAddress",
+      "culture": "en-US",
+      "first_name": "EmployeeFirstName",
+      "last_name": "EmployeeLastName",
+      "company_name": "Company Name",
+      "language": "en",
+      "email": "employee@company.com",
+      "default_address_id": "EmpAccountInvalidAddress-Address001",
+      "billing_anniversary": "21",
+      "default_address": {
+        "customer_id": "EmpAccountInvalidAddress",
+        "id": "EmpAccountInvalidAddress-Address001",
+        "country": "US",
+        "region": "WA",
+        "district": null,
+        "city": "Redmond",
+        "address_line1": "",
+        "address_line2": null,
+        "address_line3": null,
+        "postal_code": "98052",
+        "first_name": "EmployeeFirstName",
+        "first_name_pronunciation": null,
+        "last_name": "EmployeeLastName",
+        "last_name_pronunciation": null,
+        "correspondence_name": null,
+        "phone_number": null,
+        "mobile": null,
+        "fax": null,
+        "telex": null,
+        "email_address": null,
+        "web_site_url": null,
+        "street_supplement": null,
+        "is_within_city_limits": null,
+        "form_of_address": null,
+        "address_notes": null,
+        "time_zone": null,
+        "latitude": null,
+        "longitude": null,
+        "is_avs_validated": null,
+        "validate": false,
+        "validation_stamp": null,
+        "is_address_standardized": null,
+        "standardized_address": null,
+        "etag": "-5128001690829449283",
+        "is_light_weight": false,
+        "links": {
+          "self": {
+            "href": "EmpAccountInvalidAddress/addresses/EmpAccountInvalidAddress-Address001",
+            "method": "GET"
+          },
+          "delete": {
+            "href": "EmpAccountInvalidAddress/addresses/EmpAccountInvalidAddress-Address001",
+            "method": "DELETE"
+          }
+        },
+        "object_type": "Address",
+        "contract_version": null,
+        "resource_status": "Active"
+      },
+      "links": {
+        "self": {
+          "href": "EmpAccountInvalidAddress/profiles/EmpAccountInvalidAddress-EmpProfile001",
+          "method": "GET"
+        },
+        "snapshot": {
+          "href": "EmpAccountInvalidAddress/profiles/EmpAccountInvalidAddress-EmpProfile001/2",
+          "method": "GET"
+        },
+        "update": {
+          "href": "EmpAccountInvalidAddress/profiles/EmpAccountInvalidAddress-EmpProfile001",
+          "method": "PUT"
+        },
+        "delete": {
+          "href": "EmpAccountInvalidAddress/profiles/EmpAccountInvalidAddress-EmpProfile001",
+          "method": "DELETE"
+        },
+        "default_address": {
+          "href": "EmpAccountInvalidAddress/addresses/EmpAccountInvalidAddress-Address001",
+          "method": "GET"
+        }
+      },
+      "id": "EmpAccountInvalidAddress-EmpProfile001",
+      "etag": "1877491905292942251",
+      "snapshot_id": "EmpAccountInvalidAddress-EmpProfile001/2",
+      "resource_status": "Active",
+      "type": "employee"
+    }
+  ],
+  "EmpAccountInvalidAddressNameAndInvalidAddress": [
+    {
+      "object_type": "Profile",
+      "customer_id": "EmpAccountInvalidAddressNameAndInvalidAddress",
+      "culture": "en-US",
+      "first_name": "EmployeeFirstName",
+      "last_name": "EmployeeLastName",
+      "company_name": "Company Name",
+      "language": "en",
+      "email": "employee@company.com",
+      "default_address_id": "EmpAccountInvalidAddressNameAndInvalidAddress-Address001",
+      "billing_anniversary": "21",
+      "default_address": {
+        "customer_id": "EmpAccountInvalidAddressNameAndInvalidAddress",
+        "id": "EmpAccountInvalidAddressNameAndInvalidAddress-Address001",
+        "country": "US",
+        "region": "WA",
+        "district": null,
+        "city": "Redmond",
+        "address_line1": "",
+        "address_line2": null,
+        "address_line3": null,
+        "postal_code": "98052",
+        "first_name": "775fe554-8e9f-4055-abde-47fd56348a1d",
+        "first_name_pronunciation": null,
+        "last_name": "test@microsoft.com",
+        "last_name_pronunciation": null,
+        "correspondence_name": null,
+        "phone_number": null,
+        "mobile": null,
+        "fax": null,
+        "telex": null,
+        "email_address": null,
+        "web_site_url": null,
+        "street_supplement": null,
+        "is_within_city_limits": null,
+        "form_of_address": null,
+        "address_notes": null,
+        "time_zone": null,
+        "latitude": null,
+        "longitude": null,
+        "is_avs_validated": null,
+        "validate": false,
+        "validation_stamp": null,
+        "is_address_standardized": null,
+        "standardized_address": null,
+        "etag": "-5128001690829449283",
+        "is_light_weight": false,
+        "links": {
+          "self": {
+            "href": "EmpAccountInvalidAddressNameAndInvalidAddress/addresses/EmpAccountInvalidAddressNameAndInvalidAddress-Address001",
+            "method": "GET"
+          },
+          "delete": {
+            "href": "EmpAccountInvalidAddressNameAndInvalidAddress/addresses/EmpAccountInvalidAddressNameAndInvalidAddress-Address001",
+            "method": "DELETE"
+          }
+        },
+        "object_type": "Address",
+        "contract_version": null,
+        "resource_status": "Active"
+      },
+      "links": {
+        "self": {
+          "href": "EmpAccountInvalidAddressNameAndInvalidAddress/profiles/EmpAccountInvalidAddressNameAndInvalidAddress-EmpProfile001",
+          "method": "GET"
+        },
+        "snapshot": {
+          "href": "EmpAccountInvalidAddressNameAndInvalidAddress/profiles/EmpAccountInvalidAddressNameAndInvalidAddress-EmpProfile001/2",
+          "method": "GET"
+        },
+        "update": {
+          "href": "EmpAccountInvalidAddressNameAndInvalidAddress/profiles/EmpAccountInvalidAddressNameAndInvalidAddress-EmpProfile001",
+          "method": "PUT"
+        },
+        "delete": {
+          "href": "EmpAccountInvalidAddressNameAndInvalidAddress/profiles/EmpAccountInvalidAddressNameAndInvalidAddress-EmpProfile001",
+          "method": "DELETE"
+        },
+        "default_address": {
+          "href": "EmpAccountInvalidAddressNameAndInvalidAddress/addresses/EmpAccountInvalidAddressNameAndInvalidAddress-Address001",
+          "method": "GET"
+        }
+      },
+      "id": "EmpAccountInvalidAddressNameAndInvalidAddress-EmpProfile001",
+      "etag": "1877491905292942251",
+      "snapshot_id": "EmpAccountInvalidAddressNameAndInvalidAddress-EmpProfile001/2",
+      "resource_status": "Active",
+      "type": "employee"
+    }
+  ],
+  // the account in INT has all the features in local config
+  "62dc8681-6753-484a-981a-128f82a43d25": [
+    {
+      "first_name": "FirstName",
+      "last_name": "LastName",
+      "birth_date": "11/30/1995",
+      "email_address": "test@email.com",
+      "culture": "en-US",
+      "account_id": "62dc8681-6753-484a-981a-128f82a43d25",
+      "id": "profile-62dc8681-6753-484a-981a-128f8",
+      "snapshot_id": "SnapshotWithAllFeaturesInLocalConfig",
+      "type": "consumer",
+      "default_address_id": "address-62dc8681-6753-484a-981a-128f8",
+      "links": {
+        "self": {
+          "href": "62dc8681-6753-484a-981a-128f82a43d25/profiles/profile-62dc8681-6753-484a-981a-128f8",
+          "method": "GET"
+        },
+        "snapshot": {
+          "href": "62dc8681-6753-484a-981a-128f82a43d25/profiles/profile-62dc8681-6753-484a-981a-128f8",
+          "method": "GET"
+        },
+        "update": {
+          "href": "62dc8681-6753-484a-981a-128f82a43d25/profiles/profile-62dc8681-6753-484a-981a-128f8",
+          "method": "POST"
+        },
+        "default_address": {
+          "href": "62dc8681-6753-484a-981a-128f82a43d25/addresses/profile-62dc8681-6753-484a-981a-128f8",
+          "method": "GET"
+        }
+      },
+      "object_type": "ConsumerProfile",
+      "contract_version": "2014-09-01",
+      "resource_status": "Active"
+    }
+  ],
+  "EmpAccountNoProfile": [],
+  "ConsumerAccountNoAddress": [
+    {
+      "object_type": "Profile",
+      "customer_id": "ConsumerAccountNoAddress",
+      "culture": "en-US",
+      "first_name": "FirstName",
+      "last_name": "LastName",
+      "language": "en",
+      "email": "consumer@outlook.com",
+      "billing_anniversary": "21",
+      "links": {
+        "self": {
+          "href": "ConsumerAccountNoAddress/profiles/ConsumerAccountNoAddress-ConsumerProfile001",
+          "method": "GET"
+        },
+        "snapshot": {
+          "href": "ConsumerAccountNoAddress/profiles/ConsumerAccountNoAddress-ConsumerProfile001/1",
+          "method": "GET"
+        },
+        "update": {
+          "href": "ConsumerAccountNoAddress/profiles/ConsumerAccountNoAddress-ConsumerProfile001",
+          "method": "PUT"
+        },
+        "delete": {
+          "href": "ConsumerAccountNoAddress/profiles/ConsumerAccountNoAddress-ConsumerProfile001",
+          "method": "DELETE"
+        }
+      },
+      "id": "ConsumerAccountNoAddress-ConsumerProfile001",
+      "etag": "1877491905532942251",
+      "snapshot_id": "ConsumerAccountNoAddress-ConsumerProfile001/1",
+      "resource_status": "Active",
+      "type": "consumer"
+    }
+  ]
+}

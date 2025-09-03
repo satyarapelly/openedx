@@ -1,0 +1,73 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "servicePlanName": {
+      "value": "PaymentExperience-PROD"
+    },
+    "siteName": {
+      "value": "PaymentExperience-PROD"
+    },
+    "stageName": {
+      "value": "Staging"
+    },
+    "mintlsVersion": {
+      "value": "1.2"
+    },
+    "managedIdentityResourceGroup": {
+      "value": "PX-Infra-PROD-WestUS"
+    },
+    "managedIdentity": {
+      "value": "PaymentExperience-PROD"
+    },
+    "managedIdentityClientId": {
+      "value": "de6f8403-2bc1-4e12-87ce-b0a9b4397ce1"
+    },
+    "keyVaultName": {
+      "value": "PX-KV-PROD"
+    },
+    "alwaysOn": {
+      "value": true
+    },
+    "appInsightsKey": {
+      "value": "50bd278c-1827-4339-8ac8-a85a39fe7a35"
+    },
+    "environmentName": {
+      "value": "STORECORE-PST-PX-PROD"
+    },
+    "sslClientCertificateName": {
+      "value": "SslProdCertificate"
+    },
+    "customHostname": {
+      "value": "paymentexperience.cp.microsoft.com"
+    },
+    "autoHealEnabled": {
+      "value": true
+    },
+    "autoHealRules": {
+      "value": {
+        "triggers": {
+          "statusCodes": [
+            {
+              "status": 503,
+              "count": 20,
+              "timeInterval": "00:02:00"
+            }
+          ]
+        },
+        "actions": {
+          "actionType": "Recycle",
+          "minProcessExecutionTime": "00:10:00"
+        }
+      }
+    },
+    "websiteLocalCachedOption": {
+      // Per best practice: You typically don't set the staging slot to use Local Cache to enable a seamless build-deploy-test lifecycle for staging if you get the benefits of Local Cache for the production slot.
+      // See: https://docs.microsoft.com/en-us/azure/app-service/overview-local-cache
+      "value": "Never"
+    },
+    "websiteLocalCacheSize": {
+      "value": ""
+    }
+  }
+}

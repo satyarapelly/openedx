@@ -1,0 +1,13 @@
+PropertyDescriptionId,CountryIds,PropertyType,DataType,DisplayProperty,IsKey,IsOptional,IsUpdatable,DataProtection,DefaultValue,PossibleValues,PidlDownloadEnabled,PidlDownloadParameter,DisplayOnly,Scenario
+cvv_3_update,,userData,string,,,,TRUE,cvv,,,,,,includecvv
+cvv_4_update,,userData,string,,,,TRUE,cvv,,,,,,includecvv
+address_zip_postalcode,tj,userData,string,,,FALSE,TRUE,,,,,,,
+address_state_province,tr,userData,string,,,,TRUE,,,{}TRProvinces,,,,
+address_state_province,ve,userData,string,,,,TRUE,,,{}VEProvinces,,,,
+address_state_province,by,userData,string,,,,TRUE,,,,,,,
+address_state_province,kz,userData,string,,,,TRUE,,,,,,,
+address_state_province,cr,userData,string,,,,TRUE,,,{}CRProvinces,,,,
+address_state_province,hn,userData,string,,,,TRUE,,,{}HNProvinces,,,,
+address_state_province,jm,userData,string,,,,TRUE,,,{}JMProvinces,,,,
+address_state_state,pa,userData,string,,,,TRUE,,,,,,,
+address_zip_postalcode,sv,userData,string,,,,TRUE,,,,,,,
