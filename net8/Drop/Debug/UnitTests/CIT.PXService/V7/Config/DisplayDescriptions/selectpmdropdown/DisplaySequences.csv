@@ -1,0 +1,7 @@
+DisplaySequenceId,CountryIds,FlightName,HintId
+paymentMethodSelect,,,paymentMethodSelectPage
+paymentMethodSelectPageSequence,,,paymentMethodSelectHeading
+,,,paymentMethod
+,,,cancelSelectPMGroup
+cancelSelectPMGroupSequence,,,cancelButton
+,,,selectButtonPidlPayload

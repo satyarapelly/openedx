@@ -1,0 +1,12 @@
+﻿PropertyHintId,CountryIds,TagKey,TagValue
+expiryMonth,,col-6,col-6
+expiryYear,,col-6,col-6
+addressProvince,,accessibilityName,Province
+addressProvince,fr,accessibilityName,Department (Optional)
+cvv,,col-4,col-4
+,,help.closeButtonAccessibilityName,"CVV is the Card Verification Value on your credit or debit card. On Visa, MasterCard and Discover cards, CVV is the last 3 numbers on the back of your card. On American Express cards, CVV is a 4 digit number on the front of the card, above the main card number. Close."
+,,help.accessibilityName,''
+,,accessibilityName,CVV
+creditCardsCVV3Image,,accessibilityName,Card verification code location image
+creditCardsCVV4Image,,accessibilityName,Card verification code location image for Amex card
+lastFourDigits,,accessibilityName,Last four digits of card number

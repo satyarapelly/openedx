@@ -1,0 +1,29 @@
+{
+  "testScenarioName": "px.partnersettings.defaulttemplate.SelectSingleInstance",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "selectSingleInstance": {
+          "template": "defaulttemplate",
+          "features": {
+            "enableSelectSingleInstancePiDisplay": {
+              "applicableMarkets": []
+            }
+          }
+        },
+        "selectInstance": {
+          "template": "defaulttemplate",
+          "features": {
+            "useDisabledPIsForSelectInstance": {
+              "applicableMarkets": []
+            },
+            "enableSingleInstancePidls": {
+              "applicableMarkets": []
+            }
+          }
+        }
+      }
+    }
+  }
+}

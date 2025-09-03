@@ -1,0 +1,104 @@
+PropertyHintId,CountryIds,MessageSource,DefaultErrorMessage,ErrorRegEx,ErrorCode,ErrorMessage
+cardNumber,,fromRegex,Invalid card number,\s,invalid_card_number_has_spaces,No spaces are allowed in the card number
+,,fromErrorCode,Invalid card number,,required_field_empty,Enter your card number
+cardNumberAmex,,fromRegex,Invalid card number,\s,invalid_card_number_has_spaces,No spaces are allowed in the card number
+,,fromErrorCode,Invalid card number,,required_field_empty,Enter your card number
+cardNumberCup,,fromRegex,Invalid card number,\s,invalid_card_number_has_spaces,No spaces are allowed in the card number
+,,fromErrorCode,Invalid card number,,required_field_empty,A required field is empty
+cardholderName,,fromErrorCode,Incorrectly formatted cardholder name,,required_field_empty,Enter your cardholder name
+,,fromRegex,Incorrectly formatted cardholder name,^\s*$,required_field_empty,Enter your cardholder name
+directDebitAchAccountholderName,,fromErrorCode,Incorrectly formatted name on account,,required_field_empty,A required field is empty
+,,fromRegex,Incorrectly formatted name on account,^\s*$,required_field_empty,A required field is empty
+directDebitSepaAccountholderName,,fromErrorCode,Incorrectly formatted name on account,,required_field_empty,A required field is empty
+,,fromRegex,Incorrectly formatted name on account,^\s*$,required_field_empty,A required field is empty
+expiryMonth,,fromErrorCode,A required field is empty,,required_field_empty,Pick your expiration month
+expiryYear,,fromErrorCode,A required field is empty,,required_field_empty,Pick your expiration year
+cvv,,fromErrorCode,Invalid card verification code,,required_field_empty,Enter your security code
+cvvCup,,fromErrorCode,Invalid card verification code,,required_field_empty,A required field is empty
+phone,,fromErrorCode,Incorrectly formatted phone number,,required_field_empty,A required field is empty
+cupPhoneNumber,,fromRegex,Mobile number must be 11 digits,^.{11}$,invalid_phone_number,Check the phone number.
+,,fromErrorCode,,,required_field_empty,A required field is empty
+non_sim_mobi_phone_operator,,fromErrorCode,A required field is empty,,required_field_empty,A required field is empty
+non_sim_mobi_phone_number,,fromErrorCode,Incorrectly formatted phone number,,required_field_empty,A required field is empty
+addressline1,,fromErrorCode,Incorrectly formatted address,,required_field_empty,Enter the first line of your address
+addressline2,,fromErrorCode,Incorrectly formatted address,,required_field_empty,Enter the second line of your address
+addressCity,,fromErrorCode,Incorrectly formatted city,,required_field_empty,Enter your city
+addressState,,fromErrorCode,Incorrectly formatted state,,required_field_empty,Enter your state
+addressCounty,,fromErrorCode,Incorrectly formatted state,,required_field_empty,A required field is empty
+addressProvince,,fromErrorCode,Incorrectly formatted state,,required_field_empty,Enter your province
+addressPostalCode,,fromErrorCode,Incorrectly formatted postal code,,required_field_empty,Enter your postal code
+addressPostalCode,US,fromErrorCode,Incorrectly formatted zip code,,required_field_empty,Enter your zip code
+addressCountry,,fromErrorCode,Incorrectly formatted country,,required_field_empty,Pick your country/region
+idealBillingAgreementSelectBank,,fromErrorCode,Incorrectly formatted Bank name,,required_field_empty,A required field is empty
+smsChallengeCode,,fromErrorCode,Check and re-enter the code. The code you entered is not valid.,,required_field_empty,A required field is empty
+firstName,,fromErrorCode,"Invalid first name, please correct your first name.",,required_field_empty,A required field is empty
+,,fromRegex,"Invalid first name, please correct your first name.",^\s*$,required_field_empty,A required field is empty
+,,fromRegex,"Invalid first name, please correct your first name.",^\s*$,required_field_empty,A required field is empty
+lastName,,fromErrorCode,"Invalid last name, please correct your last name.",,required_field_empty,A required field is empty
+,,fromRegex,"Invalid last name, please correct your last name.",^\s*$,required_field_empty,A required field is empty
+,,fromRegex,"Invalid last name, please correct your last name.",^\s*$,required_field_empty,A required field is empty
+emailAddress,,fromErrorCode,Incorrectly formatted Email Address,,required_field_empty,A required field is empty
+nationality,,fromErrorCode,Incorrectly formatted Nationality,,required_field_empty,A required field is empty
+birthday,,fromErrorCode,Incorrectly formatted Birthday,,required_field_empty,A required field is empty
+curp_id,,fromErrorCode,Incorrectly formatted CURP ID,,required_field_empty,A required field is empty
+directDebitAchBankCode,,fromErrorCode,Incorrectly formatted Routing number,,required_field_empty,A required field is empty
+directDebitAchAccount,,fromRegex,Incorrectly formatted Account number,\s,invalid_account_number_has_spaces,No spaces are allowed in the Account number
+,,fromErrorCode,Incorrectly formatted Account number,,required_field_empty,A required field is empty
+directDebitSepaChallengeAmount,,fromErrorCode,"Check the format of the amount you entered. For example 0.40 or 0,40.",,required_field_empty,A required field is empty
+achTermCheckbox,,fromErrorCode,,,required_field_empty,You have to accept the authorization for setting up the account.
+directDebitSepaBankCode,,fromErrorCode,Incorrectly formatted BIC,,required_field_empty,A required field is empty
+directDebitSepaBankName,,fromErrorCode,Incorrectly formatted Bank name,,required_field_empty,A required field is empty
+,,fromRegex,Incorrectly formatted Bank name,^\s*$,required_field_empty,A required field is empty
+directDebitSepaAccount,,fromRegex,Incorrectly formatted IBAN number,\s,invalid_account_number_has_spaces,No spaces are allowed in the IBAN number
+,,fromErrorCode,Incorrectly formatted IBAN number,,required_field_empty,A required field is empty
+alipayBillingAgreementAccountId,,fromErrorCode,Incorrectly formatted Alipay account,,required_field_empty,A required field is empty
+alipayBillingAgreementPhone,,fromRegex,Your mobile number should be 11 digits,^\d{11}$,invalid_phone_number,Check the phone number.
+,,fromErrorCode,,,required_field_empty,A required field is empty
+alipayBillingAgreementLastFiveCertNo,,fromErrorCode,Incorrectly formatted Last 5 digits of your national Id,,required_field_empty,A required field is empty
+taxCpfProperty,,fromErrorCode,"Invalid CPF. Please, use the format xxx.xxx.xxx-xx, adding the points and hyphen",,required_field_empty,A required field is empty
+profileEmployeeEmailAddressProperty,,fromErrorCode,Invalid Email Address.,,required_field_empty,A required field is empty
+profileOrganizationEmailAddressProperty,,fromErrorCode,Invalid Email Address.,,required_field_empty,A required field is empty
+profileOrganizationLoveCodeProperty,,fromErrorCode,Love code is 3-7 digits long and limited to numbers.,,required_field_empty,A required field is empty
+profileOrganizationMobileBarcodeProperty,,fromErrorCode,"Mobile barcode is 8 digits beginning with ""/"", and the remaining 7 codes are limited to numbers, capitals, plus and minus signs.",,required_field_empty,A required field is empty
+taxIndiaStateGstIdProperty,,fromErrorCode,Invalid India State GST ID,,invalid_india_state_gst_id_format,Invalid India State GST ID
+taxIndiaPanIdProperty,,fromErrorCode,Invalid India PAN ID,,invalid_india_pan_id_format,Invalid India PAN ID
+hapiTaxIndiaStateGstIdProperty,,fromErrorCode,Invalid India State GST ID,,invalid_india_state_gst_id_format,Invalid India State GST ID
+hapiTaxIndiaPanIdProperty,,fromErrorCode,Invalid India PAN ID,,invalid_india_pan_id_format,Invalid India PAN ID
+hapiTaxVatIdProperty,,fromErrorCode,Invalid Vat ID,,invalid_tax_vat_id_format,Invalid Vat ID
+hapiTaxVatIdProperty,eg,fromErrorCode,Invalid Tax Number,,invalid_tax_vat_id_format,Invalid Tax Number
+hapiTaxVatIdProperty,tr,fromErrorCode,Invalid Vat ID,,required_field_empty,A required field is empty
+hapiTaxCnpjProperty,,fromErrorCode,Invalid CNPJ,,invalid_tax_cnpj_id_format,Invalid CNPJ
+addressFirstName,,fromErrorCode,"Invalid first name, please correct your first name.",,required_field_empty,A required field is empty
+addressLastName,,fromErrorCode,"Invalid last name, please correct your last name.",,required_field_empty,A required field is empty
+billingGroupListSIBGs,,fromErrorCode,A required field is empty,,required_field_empty,A required field is empty
+updateLegalEntityAddressLine1,,fromErrorCode,Incorrectly formatted address,,required_field_empty,Enter the first line of your address
+updateLegalEntityAddressLine2,,fromErrorCode,Incorrectly formatted address,,required_field_empty,Enter the second line of your address
+updateLegalEntityAddressPostalCode,,fromErrorCode,Incorrectly formatted postal code,,required_field_empty,Enter your postal code
+updateLegalEntityAddressPostalCode,US,fromErrorCode,Incorrectly formatted zip code,,required_field_empty,Enter your zip code
+updateProfileAddressline1,,fromErrorCode,Incorrectly formatted address,,required_field_empty,Enter the first line of your address
+updateProfileAddressline2,,fromErrorCode,Incorrectly formatted address,,required_field_empty,Enter the second line of your address
+updateProfileAddressCity,,fromErrorCode,Incorrectly formatted city,,required_field_empty,Enter your city
+updateProfileAddressState,,fromErrorCode,Incorrectly formatted state,,required_field_empty,Enter your state
+updateProfileAddressCounty,,fromErrorCode,Incorrectly formatted state,,required_field_empty,A required field is empty
+updateProfileAddressProvince,,fromErrorCode,Incorrectly formatted state,,required_field_empty,Enter your province
+updateProfileAddressPostalCode,,fromErrorCode,Incorrectly formatted postal code,,required_field_empty,Enter your postal code
+updateProfileAddressPostalCode,US,fromErrorCode,Incorrectly formatted zip code,,required_field_empty,Enter your zip code
+updateProfileAddressMobileProperty,,fromErrorCode,Incorrectly formatted phone number,,required_field_empty,Enter your phone number
+updateProfileAddressFirstNameProperty,,fromErrorCode,"Invalid first name, please correct your first name.",,required_field_empty,A required field is empty
+,,fromRegex,"Invalid first name, please correct your first name.",^\s*$,required_field_empty,A required field is empty
+updateProfileAddressLastNameProperty,,fromErrorCode,"Invalid last name, please correct your last name.",,required_field_empty,A required field is empty
+,,fromRegex,"Invalid last name, please correct your last name.",^\s*$,required_field_empty,A required field is empty
+updateSoldToProfileCompanyNameProperty,,fromErrorCode,Incorrectly formatted company name,,required_field_empty,Enter your company name
+updateSoldToProfileEmailAddressProperty,,fromErrorCode,Incorrectly formatted Email address,,required_field_empty,Enter your Email address
+updateSoldToLegalEntityProfilePhoneNumberProperty,,fromErrorCode,Incorrectly formatted phone number,,required_field_empty,Enter your phone number
+updateSoldToLegalEntityProfileFirstNameProperty,,fromErrorCode,"Invalid first name, please correct your first name.",,required_field_empty,A required field is empty
+,,fromRegex,"Invalid first name, please correct your first name.",^\s*$,required_field_empty,A required field is empty
+updateSoldToLegalEntityProfileLastNameProperty,,fromErrorCode,"Invalid last name, please correct your last name.",,required_field_empty,A required field is empty
+,,fromRegex,"Invalid last name, please correct your last name.",^\s*$,required_field_empty,A required field is empty
+updateSoldToLegalEntityProfileCompanyNameProperty,,fromErrorCode,Incorrectly formatted company name,,required_field_empty,Enter your company name
+updateSoldToLegalEntityProfileEmailAddressProperty,,fromErrorCode,Incorrectly formatted Email address,,required_field_empty,Enter your Email address
+billingGroupLightWeightAddDescription,,fromErrorCode,Incorrectly formatted billing profile name,,required_field_empty,Enter the billing profile name
+,,fromRegex,Incorrectly formatted billing profile name,^\s*$,required_field_empty,Incorrectly formatted billing profile name
+billingGroupLightWeightAddSelectPi,,fromErrorCode,A required field is empty,,required_field_empty,Pick your payment method
+billingGroupPONumber,,fromRegex,Incorrectly formatted P.O. number,^\s*$,invalid_po_number,Incorrectly formatted P.O. number
+,,fromErrorCode,Incorrectly formatted P.O. number,,invalid_po_number,Incorrectly formatted P.O. number

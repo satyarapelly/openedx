@@ -1,0 +1,25 @@
+{
+  "testScenarioName": "px.partnersettings.defaulttemplate",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "add": {
+          "template": "defaulttemplate"
+        },
+        "update": {
+          "template": "defaulttemplate"
+        },
+        "apply": {
+          "template": "defaulttemplate"
+        },
+        "validateinstance": {
+          "template": "defaulttemplate"
+        },
+        "addSecondScreen": {
+          "template": "defaulttemplate"
+        }
+      }
+    }
+  }
+}

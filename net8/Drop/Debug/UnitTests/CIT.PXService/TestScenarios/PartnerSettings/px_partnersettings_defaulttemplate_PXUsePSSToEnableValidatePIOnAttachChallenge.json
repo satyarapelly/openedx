@@ -1,0 +1,24 @@
+{
+  "testScenarioName": "px.partnersettings.defaulttemplate.PXUsePSSToEnableValidatePIOnAttachChallenge",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "handlePaymentChallenge": {
+          "template": "defaulttemplate",
+          "redirectionPattern": "inline",
+          "features": {
+            "PXUsePSSToEnableValidatePIOnAttachChallenge": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "usePSSForPXFeatureFlighting": true
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,138 @@
+PropertyHintId,CountryIds,TagKey,TagValue
+expiryMonth,,theme,windows
+,,accessibilityName,Expiration month
+expiryYear,,theme,windows
+,,accessibilityName,Expiration year
+addressState,,theme,windows
+,,accessibilityName,State
+addressProvince,{}AddressProvinceM,accessibilityName,Province
+,{}AddressProvinceM,theme,windows
+addressProvince,{}AddressProvinceO,accessibilityName,Province (Optional)
+,{}AddressProvinceO,theme,windows
+addressProvince,CA,accessibilityName,Province
+,CA,theme,windows
+addressProvince,fr,accessibilityName,Department (Optional)
+,fr,theme,windows
+addressProvince,CN,accessibilityName,Province
+,CN,theme,windows
+addressProvince,ES,accessibilityName,Province
+,ES,theme,windows
+addressProvince,bs,accessibilityName,Province (Optional)
+,bs,theme,windows
+addressProvince,bz,accessibilityName,Province
+,bz,theme,windows
+addressProvince,cr,accessibilityName,Province
+,cr,theme,windows
+addressProvince,hn,accessibilityName,Province
+,hn,theme,windows
+addressProvince,jm,accessibilityName,Province
+,jm,theme,windows
+addressProvince,tr,accessibilityName,Province (Optional)
+,tr,theme,windows
+addressProvince,ve,accessibilityName,Province (Optional)
+,ve,theme,windows
+addressStateInline,,theme,windows
+,,accessibilityName,State
+addressProvinceInline,{}AddressProvinceM,accessibilityName,Province
+,{}AddressProvinceM,theme,windows
+addressProvinceInline,{}AddressProvinceO,accessibilityName,Province (Optional)
+,{}AddressProvinceO,theme,windows
+addressProvinceInline,CA,accessibilityName,Province
+,CA,theme,windows
+addressProvinceInline,fr,accessibilityName,Department (Optional)
+,fr,theme,windows
+addressProvinceInline,CN,accessibilityName,Province
+,CN,theme,windows
+addressProvinceInline,ES,accessibilityName,Province
+,ES,theme,windows
+addressProvinceInline,bs,accessibilityName,Province (Optional)
+,bs,theme,windows
+addressProvinceInline,bz,accessibilityName,Province
+,bz,theme,windows
+addressProvinceInline,cr,accessibilityName,Province
+,cr,theme,windows
+addressProvinceInline,hn,accessibilityName,Province
+,hn,theme,windows
+addressProvinceInline,jm,accessibilityName,Province
+,jm,theme,windows
+addressProvinceInline,tr,accessibilityName,Province (Optional)
+,tr,theme,windows
+addressProvinceInline,ve,accessibilityName,Province (Optional)
+,ve,theme,windows
+addressCountry,,theme,windows
+,,accessibilityName,Country/Region
+creditCardVisaLogo,,accessibilityName,Visa
+,,logoBlock,logoBlock
+,,help.closeButtonAccessibilityName,Close
+,,help.accessibilityName,Card Logos
+creditCardAmexLogo,,accessibilityName,American Express
+,,logoBlock,logoBlock
+,,help.closeButtonAccessibilityName,Close
+,,help.accessibilityName,Card Logos
+creditCardMCLogo,,accessibilityName,MasterCard
+,,logoBlock,logoBlock
+,,help.closeButtonAccessibilityName,Close
+,,help.accessibilityName,Card Logos
+creditCardDiscoverLogo,,accessibilityName,Discover Network
+,,logoBlock,logoBlock
+,,help.closeButtonAccessibilityName,Close
+,,help.accessibilityName,Card Logos
+creditCardJCBLogo,,accessibilityName,JCB
+,,logoBlock,logoBlock
+,,help.closeButtonAccessibilityName,Close
+,,help.accessibilityName,Card Logos
+creditCardHiperLogo,,accessibilityName,Hipercard
+,,logoBlock,logoBlock
+,,help.closeButtonAccessibilityName,Close
+,,help.accessibilityName,Card Logos
+creditCardEloLogo,,accessibilityName,Elo
+,,logoBlock,logoBlock
+,,help.closeButtonAccessibilityName,Close
+,,help.accessibilityName,Card Logos
+creditCardVerveLogo,,accessibilityName,Verve
+,,logoBlock,logoBlock
+,,help.closeButtonAccessibilityName,Close
+,,help.accessibilityName,Card Logos
+cardholderName,,accessibilityName,Name on card
+cardNumber,,accessibilityName,Card number
+,,maxLengthMessage,Maximum length for card number field reached.
+cardNumberAmex,,accessibilityName,Card number
+,,maxLengthMessage,Maximum length for card number field reached.
+lastFourDigits,,accessibilityName,Last four digits of card number
+cvv,,accessibilityName,CVV
+,,col-3,col-3
+,,help.dialog-large,dialog-large
+,,maxLengthMessage,Maximum length for CVV field reached.
+,,help.closeButtonAccessibilityName,"CVV is the Card Verification Value on your credit or debit card. On Visa, MasterCard and Discover cards, CVV is the last 3 numbers on the back of your card. On American Express cards, CVV is a 4 digit number on the front of the card, above the main card number. Close."
+,,help.accessibilityName,''
+,,help.linkAccessibilityName,What is a CVV?
+creditCardsCVV3Image,,accessibilityName,Card verification code location image
+creditCardsCVV4Image,,accessibilityName,Card verification code location image for Amex card
+addressLine1,,accessibilityName,Address line 1
+addressLine2,,accessibilityName,Address line 2 (Optional)
+addressLine3,,accessibilityName,Address line 3
+addressCity,,accessibilityName,City
+addressCounty,,accessibilityName,County (Optional)
+addressPostalCode,{}AddressPostalCodeM,accessibilityName,Postal Code
+addressPostalCode,{}AddressPostalCodeO,accessibilityName,Postal Code (Optional)
+addressPostalCode,US,accessibilityName,Zip
+saveButton,,accessibilityName,Save
+cancelButton,,accessibilityName,Cancel
+nextButton,,accessibilityName,Next
+backButton,,accessibilityName,Back
+cancelBackButton,,accessibilityName,Back
+microsoftPrivacyTextGroup,,privacy-text-group,privacy-text-group
+noProfileAddressText,,bold,text-bold
+paymentUpdateAddressEnabled,,accessibilityName,Address of my company is same as above
+paymentUpdateAddressDisabled,,accessibilityName,Address of my company is same as above
+starLabel,,starLabel,starLabel
+cvvGroup,,pidlReact.fluent-ui.width.25%,pidlReact.fluent-ui.width.25%
+addressStateGroup,,pidlReact.fluent-ui.width.50%,pidlReact.fluent-ui.width.50%
+addressPostalCodeGroup,,pidlReact.fluent-ui.width.25%,pidlReact.fluent-ui.width.25%
+expiryYearGroup,,pidlReact.fluent-ui.width.125%,pidlReact.fluent-ui.width.125%
+expiryMonthGroup,,pidlReact.fluent-ui.width.105%,pidlReact.fluent-ui.width.105%
+expiryGroup,,pidlReact.fluent-ui.columnGap.15,pidlReact.fluent-ui.columnGap.15
+addressStatePostalCodeGroup,,zipcode-state-group,zipcode-state-group
+addressPostalCodeStateGroup,,zipcode-state-group,zipcode-state-group
+addressProvincePostalCodeGroup,,zipcode-state-group,zipcode-state-group
+addressPostalCodeProvinceGroup,,zipcode-state-group,zipcode-state-group

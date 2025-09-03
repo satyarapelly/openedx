@@ -1,0 +1,162 @@
+﻿{
+  "testScenarioName": "px.pims.3pp.stripe.guestcheckout.success",
+  "responsesPerApiCall": {    
+    "getPM": {
+      "statusCode": 200,
+      "content": [
+        {
+          "paymentMethodFamily": "credit_card",
+          "paymentMethodType": "visa",
+          "display": {
+            "name": "Visa",
+            "logo": "https://pmservices.cp.microsoft-int.com/staticresourceservice/images/v4/logo_visa_rect.png",
+            "logos": [
+              {
+                "mimeType": "image/png",
+                "url": "https://pmservices.cp.microsoft-int.com/staticresourceservice/images/v4/logo_visa_rect.png"
+              },
+              {
+                "mimeType": "image/svg+xml",
+                "url": "https://pmservices.cp.microsoft-int.com/staticresourceservice/images/v4/logo_visa.svg"
+              }
+            ]
+          },
+          "properties": {
+            "offlineRecurring": true,
+            "userManaged": true,
+            "soldToAddressRequired": true,
+            "supportedOperations": [
+              "authorize",
+              "charge",
+              "refund",
+              "chargeback"
+            ],
+            "taxable": false,
+            "providerRemittable": false,
+            "moBillingIdentityUrl": "",
+            "riskyPaymentMethod": false,
+            "authWindow": 10080,
+            "fundsAvailabilityWindow": 0,
+            "multipleLineItemsSupported": true,
+            "splitPaymentSupported": true,
+            "purchaseWaitTime": 0
+          }
+        },
+        {
+          "paymentMethodFamily": "credit_card",
+          "paymentMethodType": "amex",
+          "display": {
+            "name": "American Express",
+            "logo": "https://pmservices.cp.microsoft-int.com/staticresourceservice/images/v4/logo_amex_rect.png",
+            "logos": [
+              {
+                "mimeType": "image/png",
+                "url": "https://pmservices.cp.microsoft-int.com/staticresourceservice/images/v4/logo_amex_rect.png"
+              },
+              {
+                "mimeType": "image/svg+xml",
+                "url": "https://pmservices.cp.microsoft-int.com/staticresourceservice/images/v4/logo_amex.svg"
+              }
+            ]
+          },
+          "properties": {
+            "offlineRecurring": true,
+            "userManaged": true,
+            "soldToAddressRequired": true,
+            "supportedOperations": [
+              "authorize",
+              "charge",
+              "refund",
+              "chargeback"
+            ],
+            "taxable": false,
+            "providerRemittable": false,
+            "moBillingIdentityUrl": "",
+            "riskyPaymentMethod": false,
+            "authWindow": 10080,
+            "fundsAvailabilityWindow": 0,
+            "multipleLineItemsSupported": true,
+            "splitPaymentSupported": true,
+            "purchaseWaitTime": 0
+          }
+        },
+        {
+          "paymentMethodFamily": "credit_card",
+          "paymentMethodType": "mc",
+          "display": {
+            "name": "MasterCard",
+            "logo": "https://pmservices.cp.microsoft-int.com/staticresourceservice/images/v4/logo_mc_rect.png",
+            "logos": [
+              {
+                "mimeType": "image/png",
+                "url": "https://pmservices.cp.microsoft-int.com/staticresourceservice/images/v4/logo_mc_rect.png"
+              },
+              {
+                "mimeType": "image/svg+xml",
+                "url": "https://pmservices.cp.microsoft-int.com/staticresourceservice/images/v4/logo_mc.svg"
+              }
+            ]
+          },
+          "properties": {
+            "offlineRecurring": true,
+            "userManaged": true,
+            "soldToAddressRequired": true,
+            "supportedOperations": [
+              "authorize",
+              "charge",
+              "refund",
+              "chargeback"
+            ],
+            "taxable": false,
+            "providerRemittable": false,
+            "moBillingIdentityUrl": "",
+            "riskyPaymentMethod": false,
+            "authWindow": 10080,
+            "fundsAvailabilityWindow": 0,
+            "multipleLineItemsSupported": true,
+            "splitPaymentSupported": true,
+            "purchaseWaitTime": 0
+          }
+        },
+        {
+          "paymentMethodFamily": "credit_card",
+          "paymentMethodType": "discover",
+          "display": {
+            "name": "Discover Network",
+            "logo": "https://pmservices.cp.microsoft-int.com/staticresourceservice/images/v4/logo_discover_rect.png",
+            "logos": [
+              {
+                "mimeType": "image/png",
+                "url": "https://pmservices.cp.microsoft-int.com/staticresourceservice/images/v4/logo_discover_rect.png"
+              },
+              {
+                "mimeType": "image/svg+xml",
+                "url": "https://pmservices.cp.microsoft-int.com/staticresourceservice/images/v4/logo_discover.svg"
+              }
+            ]
+          },
+          "properties": {
+            "offlineRecurring": true,
+            "userManaged": true,
+            "soldToAddressRequired": true,
+            "supportedOperations": [
+              "authorize",
+              "charge",
+              "refund",
+              "chargeback"
+            ],
+            "taxable": false,
+            "providerRemittable": false,
+            "moBillingIdentityUrl": "",
+            "riskyPaymentMethod": false,
+            "authWindow": 10080,
+            "fundsAvailabilityWindow": 0,
+            "multipleLineItemsSupported": true,
+            "splitPaymentSupported": true,
+            "purchaseWaitTime": 0
+          }
+        }
+      ]
+    }  
+  }
+}

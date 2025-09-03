@@ -1,0 +1,34 @@
+{
+  "testScenarioName": "px.partnersettings.defaulttemplate.challenge.enableChallengeCvvValidation",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "add": {
+          "template": "defaulttemplate",
+          "features": {
+            "PXEnableChallengeCvvValidation": {
+              "displayCustomizationDetail": [
+                {
+                  "usePSSForPXFeatureFlighting": true
+                }
+              ]
+            }
+          }
+        },
+        "handlePurchaseRiskChallenge": {
+          "template": "defaulttemplate",
+          "features": {
+            "PXEnableChallengeCvvValidation": {
+              "displayCustomizationDetail": [
+                {
+                  "usePSSForPXFeatureFlighting": true
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

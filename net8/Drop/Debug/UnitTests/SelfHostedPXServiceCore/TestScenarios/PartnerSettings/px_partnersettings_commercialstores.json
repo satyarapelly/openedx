@@ -1,0 +1,143 @@
+{
+  "testScenarioName": "px.partnersettings.commercialstores",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "add": {
+          "template": "defaulttemplate",
+          "redirectionPattern": "inline",
+          "resources": {
+            "billingGroup": {
+              "lightweight": {
+                "template": "defaulttemplate",
+                "redirectionPattern": "inline"
+              }
+            },
+            "paymentMethod": {
+              "credit_card": {
+                "template": "onepage",
+                "redirectionPattern": "inline"
+              }
+            }
+          },
+          "features": {
+            "addPartnerActionToBillingGroupAddAndUpdate": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": null
+            },
+            "chinaAllowVisaMasterCard": {
+              "applicableMarkets": [
+                "cn"
+              ],
+              "displayCustomizationDetail": null
+            },
+            "customizeTaxIdForm": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "disableCountryDropdown": true
+                }
+              ]
+            }
+          }
+        },
+        "update": {
+          "template": "defaulttemplate",
+          "redirectionPattern": "inline",
+          "resources": {
+            "billingGroup": {
+              "credit_card": {
+                "template": "defaulttemplate",
+                "redirectionPattern": "inline"
+              }
+            },
+            "paymentMethod": {
+              "credit_card": {
+                "template": "onepage",
+                "redirectionPattern": "inline"
+              }
+            },
+            "features": {
+              "chinaAllowVisaMasterCard": {
+                "applicableMarkets": [
+                  "cn"
+                ],
+                "displayCustomizationDetail": null
+              },
+              "customizeTaxIdForm": {
+                "applicableMarkets": [],
+                "displayCustomizationDetail": [
+                  {
+                    "disableCountryDropdown": true
+                  }
+                ]
+              },
+              "customizeProfileForm": {
+                "applicableMarkets": [],
+                "displayCustomizationDetail": [
+                  {
+                    "fieldsToBeDisabled": [ "company_name" ],
+                    "profileType": "organization"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "selectInstance": {
+          "template": "defaulttemplate",
+          "redirectionPattern": "inline",
+          "resources": {
+            "billingGroup": {
+              "lightweight": {
+                "template": "defaulttemplate",
+                "redirectionPattern": "inline"
+              }
+            }
+          },
+          "features": {
+            "addSelectResourcePartnerActionToBillingGroupAddPi": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": null
+            }
+          }
+        },
+        "select": {
+          "template": "defaulttemplate",
+          "redirectionPattern": "inline",
+          "features": {
+            "overrideCheckDisplayNameToWireTransfer": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": null
+            }
+          }
+        },
+        "show": {
+          "template": "defaulttemplate",
+          "redirectionPattern": "inline",
+          "resources": {
+            "profile": {
+              "legalentity": {
+                "template": "defaulttemplate",
+                "redirectionPattern": "inline"
+              }
+            }
+          },
+          "features": {
+            "addUpdatePartnerActionToEditProfileHyperlink": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": null
+            }
+          }
+        },
+        "default": {
+          "template": "commercialstores",
+          "redirectionPattern": null,
+          "resources": null,
+          "features": null
+        }
+      }
+    }
+  }
+}

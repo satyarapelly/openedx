@@ -1,0 +1,32 @@
+{
+  "testScenarioName": "px.partnersettings.defaulttemplate.updatePrefillCheckboxText",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "add": {
+          "template": "defaulttemplate",
+          "features": {
+            "addPrefillAddressCheckbox": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "usePSSForPXFeatureFlighting": true
+                }
+              ]
+            },
+            "customizeDisplayContent": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "updatePrefillCheckboxText": true,
+                  "prefillCheckboxText": "Billing Address same as Shipping"
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

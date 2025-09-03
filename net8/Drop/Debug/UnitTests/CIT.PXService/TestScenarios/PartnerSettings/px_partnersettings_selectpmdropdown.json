@@ -1,0 +1,13 @@
+{
+  "testScenarioName": "px.partnersettings.selectpmdropdown",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "select": {
+          "template": "selectpmdropdown"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+PropertyHintId,CountryIds,TagKey,TagValue
+hiddenCancelBackButton,,accessibilityName,Back
+newPaymentMethodLink,,accessibilityName,Add a new payment method
+,,action-trigger,action-trigger
+,,button-full-width,button-full-width
+paymentInstrument,,accessibilityName,Payment Instruments
+chooseNewPaymentMethodLink,,accessibilityName,Choose a different way to pay
+,,action-trigger,action-trigger
+paymentInstrumentListPi,,theme,windows
+,,accessibilityName,Payment methods
+paymentInstrumentItemEwalletPayPalLogo,,accessibilityName,Paypal
+paymentInstrumentItemCheckGroup,,pidlReact.office-fabric.columnGap.10,pidlReact.office-fabric.columnGap.10
+paymentInstrumentItemNonCCNonCheckGroup,,pidlReact.office-fabric.columnGap.10,pidlReact.office-fabric.columnGap.10
+paymentInstrumentItemCCLogo,,accessibilityName,({contextData.paymentMethod.display.name})
+paymentInstrumentItemBasicLayoutLogo,,accessibilityName,({contextData.paymentMethod.display.name})
+paymentInstrumentItemCCExpiredLabel,,warning,text-warning

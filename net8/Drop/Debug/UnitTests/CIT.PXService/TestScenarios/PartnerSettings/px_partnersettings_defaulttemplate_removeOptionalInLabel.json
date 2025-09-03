@@ -1,0 +1,36 @@
+{
+  "testScenarioName": "px.partnersettings.defaulttemplate.removeOptionalInLabel",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "add": {
+          "template": "defaulttemplate",
+          "features": {
+            "removeOptionalInLabel": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "usePSSForPXFeatureFlighting": true
+                }
+              ]
+            },
+            "customizeAddressForm": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "addressType": "hapiV1SoldToIndividual",
+                  "dataSource": "hapi"
+                },
+                {
+                  "addressType": "hapiV1BillToIndividual",
+                  "dataSource": "hapi"
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

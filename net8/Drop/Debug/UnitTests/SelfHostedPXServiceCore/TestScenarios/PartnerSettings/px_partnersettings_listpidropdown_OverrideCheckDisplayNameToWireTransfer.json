@@ -1,0 +1,19 @@
+{
+  "testScenarioName": "px.partnersettings.listpidropdown.OverrideCheckDisplayNameToWireTransfer",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "selectinstance": {
+          "template": "listpidropdown",
+          "features": {
+            "OverrideCheckDisplayNameToWireTransfer": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": null
+            }
+          }
+        }
+      }
+    }
+  }
+}

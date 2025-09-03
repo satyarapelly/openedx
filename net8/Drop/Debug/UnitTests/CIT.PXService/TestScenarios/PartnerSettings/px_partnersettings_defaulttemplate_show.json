@@ -1,0 +1,13 @@
+{
+  "testScenarioName": "px.partnersettings.defaulttemplate.show",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "show": {
+          "template": "defaulttemplate"
+        }
+      }
+    }
+  }
+}

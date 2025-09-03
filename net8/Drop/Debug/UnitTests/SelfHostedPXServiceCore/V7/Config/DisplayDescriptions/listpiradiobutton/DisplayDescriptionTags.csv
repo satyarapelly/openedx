@@ -1,0 +1,18 @@
+PropertyHintId,CountryIds,TagKey,TagValue
+paymentInstrumentDisplay,,paymentInstrumentDisplay,payment-instrument-display
+newPaymentMethodLink,,accessibilityName,Add a way to pay
+,,action-trigger,action-trigger
+,,button-full-width,button-full-width
+usePaymentInstrumentButton,,accessibilityName,Use this payment method
+paymentInstrument,,accessibilityName,Pick a way to pay
+remainingBalanceText,,font,paragraph-5
+paymentInstrumentSelection,,font,paragraph-5
+paymentInstrumentBalance,,font,paragraph-5
+backupPaymentInstrumentSelection,,font,paragraph-5
+backupPaymentInstrumentBalance,,font,paragraph-5
+backupPaymentSelectHeading,,font,heading-5
+changeInstanceButton,,accessibilityName,Change
+,,action-trigger,action-trigger
+paymentSelectionChangeGroup,,pi-container,pi-container
+backupSelectionGroup,,pi-container,pi-container
+selectPaymentMethodLink,,accessibilityName,Select a payment method

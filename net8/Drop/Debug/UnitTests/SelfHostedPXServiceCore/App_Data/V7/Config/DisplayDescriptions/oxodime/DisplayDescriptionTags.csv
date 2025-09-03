@@ -1,0 +1,339 @@
+PropertyHintId,CountryIds,TagKey,TagValue
+expiryMonth,,theme,windows
+,,accessibilityName,Expiration month
+expiryYear,,theme,windows
+,,accessibilityName,Expiration year
+addressState,,theme,windows
+,,accessibilityName,State
+addressProvince,{}AddressProvinceM,accessibilityName,Province
+,{}AddressProvinceM,theme,windows
+addressProvince,{}AddressProvinceO,accessibilityName,Province (Optional)
+,{}AddressProvinceO,theme,windows
+addressProvince,CA,accessibilityName,Province
+,CA,theme,windows
+addressProvince,fr,accessibilityName,Department (Optional)
+,fr,theme,windows
+addressProvince,CN,accessibilityName,Province
+,CN,theme,windows
+addressProvince,ES,accessibilityName,Province
+,ES,theme,windows
+addressProvince,bs,accessibilityName,Province (Optional)
+,bs,theme,windows
+addressProvince,bz,accessibilityName,Province
+,bz,theme,windows
+addressProvince,cr,accessibilityName,Province
+,cr,theme,windows
+addressProvince,hn,accessibilityName,Province
+,hn,theme,windows
+addressProvince,jm,accessibilityName,Province
+,jm,theme,windows
+addressProvince,tr,accessibilityName,Province (Optional)
+,tr,theme,windows
+addressProvince,ve,accessibilityName,Province (Optional)
+,ve,theme,windows
+addressCountry,,theme,windows
+,,accessibilityName,Country/Region
+idealBillingAgreementSelectBank,,theme,windows
+,,full-height,full-height
+creditCardVisaLogo,,accessibilityName,Visa
+,,logoBlock,logoBlock
+,,help.closeButtonAccessibilityName,Close
+,,help.accessibilityName,Card Logos
+creditCardAmexLogo,,accessibilityName,American Express
+,,logoBlock,logoBlock
+,,help.closeButtonAccessibilityName,Close
+,,help.accessibilityName,Card Logos
+creditCardMCLogo,,accessibilityName,MasterCard
+,,logoBlock,logoBlock
+,,help.closeButtonAccessibilityName,Close
+,,help.accessibilityName,Card Logos
+creditCardDiscoverLogo,,accessibilityName,Discover Network
+,,logoBlock,logoBlock
+,,help.closeButtonAccessibilityName,Close
+,,help.accessibilityName,Card Logos
+creditCardJCBLogo,,accessibilityName,JCB
+,,logoBlock,logoBlock
+,,help.closeButtonAccessibilityName,Close
+,,help.accessibilityName,Card Logos
+creditCardHiperLogo,,accessibilityName,Hipercard
+,,logoBlock,logoBlock
+,,help.closeButtonAccessibilityName,Close
+,,help.accessibilityName,Card Logos
+creditCardShinhanLogo,,accessibilityName,Shinhan
+,,logoBlock,logoBlock
+,,help.closeButtonAccessibilityName,Close
+,,help.accessibilityName,Card Logos
+creditCardBCLogo,,accessibilityName,BC
+,,logoBlock,logoBlock
+,,help.closeButtonAccessibilityName,Close
+,,help.accessibilityName,Card Logos
+creditCardKBKook-minLogo,,accessibilityName,KB Kook-min
+,,logoBlock,logoBlock
+,,help.closeButtonAccessibilityName,Close
+,,help.accessibilityName,Card Logos
+creditCardSamsungLogo,,accessibilityName,Samsung
+,,logoBlock,logoBlock
+,,help.closeButtonAccessibilityName,Close
+,,help.accessibilityName,Card Logos
+creditCardHyundaiLogo,,accessibilityName,Hyundai
+,,logoBlock,logoBlock
+,,help.closeButtonAccessibilityName,Close
+,,help.accessibilityName,Card Logos
+creditCardLotteLogo,,accessibilityName,Lotte
+,,logoBlock,logoBlock
+,,help.closeButtonAccessibilityName,Close
+,,help.accessibilityName,Card Logos
+creditCardNHLogo,,accessibilityName,NH
+,,logoBlock,logoBlock
+,,help.closeButtonAccessibilityName,Close
+,,help.accessibilityName,Card Logos
+creditCardHanaLogo,,accessibilityName,Hana
+,,logoBlock,logoBlock
+,,help.closeButtonAccessibilityName,Close
+,,help.accessibilityName,Card Logos
+creditCardCITILogo,,accessibilityName,CITI
+,,logoBlock,logoBlock
+,,help.closeButtonAccessibilityName,Close
+,,help.accessibilityName,Card Logos
+creditCardJejuLogo,,accessibilityName,Jeju
+,,logoBlock,logoBlock
+,,help.closeButtonAccessibilityName,Close
+,,help.accessibilityName,Card Logos
+creditCardWooriLogo,,accessibilityName,Woori
+,,logoBlock,logoBlock
+,,help.closeButtonAccessibilityName,Close
+,,help.accessibilityName,Card Logos
+creditCardSuhyupLogo,,accessibilityName,Suhyup
+,,logoBlock,logoBlock
+,,help.closeButtonAccessibilityName,Close
+,,help.accessibilityName,Card Logos
+creditCardJeonbokLogo,,accessibilityName,Jeonbok
+,,logoBlock,logoBlock
+,,help.closeButtonAccessibilityName,Close
+,,help.accessibilityName,Card Logos
+creditCardKwangjuLogo,,accessibilityName,Kwangju
+,,logoBlock,logoBlock
+,,help.closeButtonAccessibilityName,Close
+,,help.accessibilityName,Card Logos
+creditCardShinhyupLogo,,accessibilityName,Shinhyup
+,,logoBlock,logoBlock
+,,help.closeButtonAccessibilityName,Close
+,,help.accessibilityName,Card Logos
+creditCardEloLogo,,accessibilityName,Elo
+,,logoBlock,logoBlock
+,,help.closeButtonAccessibilityName,Close
+,,help.accessibilityName,Card Logos
+creditCardVerveLogo,,accessibilityName,Verve
+,,logoBlock,logoBlock
+,,help.closeButtonAccessibilityName,Close
+,,help.accessibilityName,Card Logos
+creditCardRupayLogo,,accessibilityName,Rupay
+,,logoBlock,logoBlock
+,,help.closeButtonAccessibilityName,Close
+,,help.accessibilityName,Card Logos
+paypalLogo,,accessibilityName,Paypal
+,,parent.floatX-right,floatX-right
+paypalQrCodeSignInButton,,accessibilityName,"Sign in to PayPal"
+paypalQrCodeHeadingGroup,,paypalQrCode-HeadingGroup,paypalQrCode-HeadingGroup
+paypalQrCodeImage,,accessibilityName,PayPal QR code image
+,,image-qrCode,image-qrCode
+,,image-large,image-large
+paypalQrCodeChallengeLoginRedirectionLink,,accessibilityName,"Login to PayPal"
+paypalQrCodeChallengePageBackButton,,accessibilityName,Back
+paypalQrCodeChallengePage2SignInButton,,accessibilityName,"Sign in to PayPal"
+cardholderName,,accessibilityName,Cardholder Name
+cardNumber,,accessibilityName,Card number
+,,maxLengthMessage,Maximum length for card number field reached.
+cardNumberAmex,,accessibilityName,Card number
+,,maxLengthMessage,Maximum length for card number field reached.
+cardNumberCup,,accessibilityName,Card number
+,,maxLengthMessage,Maximum length for card number field reached.
+lastFourDigits,,accessibilityName,Last four digits of card number
+cvv,,accessibilityName,CVV
+,,col-3,col-3
+,,help.dialog-large,dialog-large
+,,maxLengthMessage,Maximum length for CVV field reached.
+,,help.closeButtonAccessibilityName,"CVV is the Card Verification Value on your credit or debit card. On Visa, MasterCard and Discover cards, CVV is the last 3 numbers on the back of your card. On American Express cards, CVV is a 4 digit number on the front of the card, above the main card number. Close."
+,,help.accessibilityName,''
+,,help.linkAccessibilityName,What is a CVV?
+cvvCup,,accessibilityName,CV/N2
+,,col-3,col-3
+,,help.dialog-medium,dialog-medium
+,,maxLengthMessage,Maximum length for field reached.
+,,help.closeButtonAccessibilityName,Close
+,,help.accessibilityName,CV/N2
+cvv3,,accessibilityName,CVV
+,,col-3,col-3
+,,maxLengthMessage,Maximum length for CVV field reached.
+,,help.closeButtonAccessibilityName,Close
+,,help.accessibilityName,CVV
+cvv4,,accessibilityName,CVV
+,,col-3,col-3
+,,maxLengthMessage,Maximum length for CVV field reached.
+,,help.closeButtonAccessibilityName,Close
+,,help.accessibilityName,CVV
+creditCardsCVV3Image,,accessibilityName,Card verification code location image
+creditCardsCVV4Image,,accessibilityName,Card verification code location image for Amex card
+cupPhoneNumber,,accessibilityName,Bank associated Mobile Number
+smsChallengeCode,,accessibilityName,Enter the code
+smsChallengeCodeOtp,,accessibilityName,Enter the code
+smsNewCodeLink,,accessibilityName,Send me a new code
+paymentChangeButton,,accessibilityName,Change
+,,action-trigger,action-trigger
+addressLine1,,accessibilityName,Address line 1
+addressLine2,,accessibilityName,Address line 2 (Optional)
+addressLine3,,accessibilityName,Address line 3
+addressCity,,accessibilityName,City
+addressCounty,,accessibilityName,County (Optional)
+addressPostalCode,{}AddressPostalCodeM,accessibilityName,Postal Code
+addressPostalCode,{}AddressPostalCodeO,accessibilityName,Postal Code (Optional)
+addressPostalCode,US,accessibilityName,ZIP code
+addressPostalCode,SE,accessibilityName,Postal Code
+addressPostalCode,BR,accessibilityName,Postal Code
+submitButton,,accessibilityName,Next
+saveButton,,accessibilityName,Save
+cancelButton,,accessibilityName,Cancel
+nextButton,,accessibilityName,Next
+okButton,,accessibilityName,Ok
+okNextButton,,accessibilityName,Ok
+taxCpfProperty,,accessibilityName,CPF
+taxCnpjProperty,,accessibilityName,CNPJ
+taxVatIdProperty,,accessibilityName,Tax ID
+taxIndiaStateGstIdProperty,,accessibilityName,GST ID
+taxIndiaPanIdProperty,,accessibilityName,PAN ID
+taxVatIdProperty,,accessibilityName,VAT ID
+taxCanadianFederalExemptProperty,,accessibilityName,Canadian Federal Tax Exempt Certificate No.
+taxCanadianProvinceExemptProperty,,accessibilityName,Canadian Province Tax Exempt Certificate No.
+taxUsExemptProperty,,accessibilityName,US Tax Exempt Certificate No.
+taxVatIdProperty,au,accessibilityName,ABN
+taxVatIdProperty,nz,accessibilityName,GST Registration No.
+directDebitAchAccountholderName,,accessibilityName,Name on account
+directDebitAchAccountType,,theme,windows
+,,accessibilityName,Type
+directDebitAchAccount,,accessibilityName,Account number
+,,col-6,col-6
+,,help.closeButtonAccessibilityName,This is the account number on the check. Close.
+,,help.accessibilityName,''
+,,help.linkAccessibilityName,What is an account number?
+directDebitAchBankCode,,accessibilityName,Routing number
+,,col-6,col-6
+,,help.closeButtonAccessibilityName,This is the routing number on the check. Close.
+,,help.accessibilityName,''
+,,help.linkAccessibilityName,What is a routing number?
+achAccountNumberImage,,accessibilityName,Account number
+achRoutingNumberImage,,accessibilityName,Routing number
+achTermCheckbox,,accessibilityName,"By registering or selecting your bank account as your payment method, you authorize Microsoft (or its agent) to initiate one or more debits for the total amount (including applicable taxes, fees and shipping costs) of your purchase or subscription charge (in accordance with the terms of your subscription service) from your bank account (and, if necessary, initiate one or more credits to your bank account to correct errors, issue a refund or similar purpose), and you authorize the financial institution that holds your bank account to deduct such debits or accept such credits.  You understand that this authorization will remain in full force and effect until you remove your bank account information from your Microsoft account or Skype account."
+directDebitAchChallengeAmount,,accessibilityName,Enter the deposit amount
+directDebitSepaAccountholderName,,accessibilityName,Name on account
+directDebitSepaAccount,,accessibilityName,IBAN number
+directDebitSepaBankCode,,accessibilityName,BIC
+directDebitSepaBankName,,accessibilityName,Bank name
+directDebitSepaPopupText,,bold,text-bold
+directDebitSepaChallengeAmount,,accessibilityName,Enter the deposit amount
+yesNextButton,,accessibilityName,Next
+saveNextButton,,accessibilityName,Next
+creditCardsummaryGroup,,summary-group,summary-group
+creditCardUpdatesummaryGroup,,summary-group,summary-group
+creditCardCupsummaryGroup,,summary-group,summary-group
+debitCardCupsummaryGroup,,summary-group,summary-group
+creditCardCupUpdatesummaryGroup,,summary-group,summary-group
+debitCardCupUpdatesummaryGroup,,summary-group,summary-group
+directDebitAchsummaryGroup,,summary-group,summary-group
+directDebitSepasummaryGroup,,summary-group,summary-group
+klarnaAddSummaryGroup,,summary-group,summary-group
+addressSummaryGroup,,summary-group,summary-group
+idealBillingAgreementText2,,bold,text-bold
+idealredirectMessageLine2Text2,,bold,text-bold
+modernIdealLogo,,accessibilityName,iDEAL
+idealSelectBankDescriptionText2,,bold,text-bold
+modernIdealBillingAgreementTextGroup,,bottom-text,bottom-text
+paypalText2,,bold,text-bold
+paypalSignInText,,text-align-center,text-align-center
+idealBillingAgreementTextGroup,,bottom-text,bottom-text
+directDebitChallengeSubheading,,subheading-text,subheading-text
+microsoftPrivacyTextGroup,,privacy-text-group,privacy-text-group
+modernMicrosoftPrivacyTextGroup,,privacy-text-group,privacy-text-group
+paypalSignInButton,,accessibilityName,"Sign in to PayPal (new browser window)"
+,,button-full-width,button-full-width
+cancelButtonFullSize,,accessibilityName,Cancel
+,,button-full-width,button-full-width
+paypalTryAnotherWayButton,,accessibilityName,"I'll use another way to pay"
+,,button-full-width,button-full-width
+paypalTryAgainButton,,accessibilityName,"I'll try signing in again"
+,,button-full-width,button-full-width
+paypalYesButton,,accessibilityName,"Yes, let's wrap things up"
+,,button-full-width,button-full-width
+paypalNoButton,,accessibilityName,"No, I want to try again"
+,,button-full-width,button-full-width
+idealYesButton,,accessibilityName,Yes
+sepaYesButton,,accessibilityName,"Yes, let's wrap things up"
+,,button-full-width,button-full-width
+sepaTryAgainButton,,accessibilityName,"No, I want to try again"
+,,button-full-width,button-full-width
+non_sim_mobi_phone_operator,,accessibilityName,Pick your mobile operator
+,,theme,windows
+non_sim_mobi_phone_number,,accessibilityName,Your Phone Number
+alipayBillingAgreementAccountType,,accessibilityName,Alipay account type
+,,theme,windows
+alipayBillingAgreementAccountId,,accessibilityName,Alipay account
+alipayBillingAgreementPhone,,accessibilityName,Alipay associated mobile number
+alipayBillingAgreementLastFiveCertNo,,accessibilityName,National ID last 5 digits
+alipayBillingAgreementTOULink,,accessibilityName,Alipay Terms Of Use
+alipayBillingAgreementFooterStaticText2,,bold,text-bold
+alipayQrCodeChallengeImage,,image-large,image-large
+alipayQrCodeChallengeImage,,accessibilityName,Alipay QR code
+,,image-qrCode,image-qrCode
+,,image-alipayQrCode,image-alipayQrCode
+alipayContinueButton,,accessibilityName,Continue
+non_sim_mobi_footer2,,bold,text-bold
+noProfileAddressText,,bold,text-bold
+newPaymentMethodLink,,accessibilityName,Add a new payment method
+,,action-trigger,action-trigger
+,,button-full-width,button-full-width
+firstName,,accessibilityName,First name
+lastName,,accessibilityName,Last name
+klarnaFirstName,,accessibilityName,First name
+klarnaLastName,,accessibilityName,Last name
+klarnaLogo,,accessibilityName,Klarna
+,,logoBlock,logoBlock
+klarnaCheckoutNextString,,bold,text-bold
+emailAddress,,accessibilityName,Email address
+klarnaPersonalNumber,,accessibilityName,Personal number
+klarnaPersonalNumber,{}KlarnaCountriesWithCheckboxAndGender,accessibilityName,Date of birth
+klarnaPersonalNumber,nl,accessibilityName,Date of birth
+klarnaPhoneNumber,,accessibilityName,Phone number
+klarnaEmailAddress,,accessibilityName,Email
+klarnaGender,,accessibilityName,Gender
+,,theme,windows
+klarnaAddressLine1,,accessibilityName,Street name
+klarnaAddressLine2,,accessibilityName,House number
+klarnaAddressPostalCode,,accessibilityName,ZIP code
+klarnaTermCheckbox,,accessibilityName,"I agree to the transfer of Klarna of the data required for processing the selected Klarna payment method and an identity and creditworthiness check. I can revoke my consent at any time with effect for the future. The terms and conditions of the dealer apply."
+klarnaTermsLink,,accessibilityName,Klarna Terms and Conditions
+klarnaConsentLink,,accessibilityName,Klarna consent
+addKlarnaSubHeading1,,bold,text-bold
+3dsChallengeText2,,bold,text-bold
+3dsPickAnotherWayText2,,bold,text-bold
+idealBillingAgreementSelectBank,,accessibilityName,Choose your bank
+idealLogo,,accessibilityName,iDeal
+paymentMethodSelectHeading,,accessibilityName,Pick a payment method
+paymentMethod,,accessibilityName,Payment Methods
+paymentMethodDropdown,,accessibilityName,Payment Methods
+paymentInstrument,,accessibilityName,Payment Instruments
+backupPaymentInstrument,,accessibilityName,Payment Instruments
+paymentInstrumentSelection,,accessibilityName,Payment Selection
+backupPaymentInstrumentSelection,,accessibilityName,Backup Payment Selection
+cancelBackButton,,accessibilityName,Back
+okActionButton,,accessibilityName,Ok
+continueRedirectButton,,accessibilityName,Continue
+continueSubmitButton,,accessibilityName,Continue
+hiddenBuyButton,,accessibilityName,Buy
+addressGroup,,accessibilityName,AddressGroup
+cvv3DSSubmitButton,,accessibilityName,Submit
+cc3DSGoToBankButton,,accessibilityName,"Open bank's website"
+cc3DSCancelButton,,accessibilityName,Cancel
+cc3DSYesButton,,accessibilityName,"Yes, I am done with the bank verification"
+cc3DSTryAgainButton,,accessibilityName,"No, I want to try again"
+cc3DSYesVerificationButton,,accessibilityName,"I have verified my card"
+cc3DSRetryButton,,accessibilityName,"Try again"
+cc3DSCancelVerificationButton,,accessibilityName,"Cancel verification"

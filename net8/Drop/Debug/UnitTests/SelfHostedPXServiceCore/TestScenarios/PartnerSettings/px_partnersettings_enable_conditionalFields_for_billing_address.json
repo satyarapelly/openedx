@@ -1,0 +1,24 @@
+{
+  "testScenarioName": "px.partnersettings.enable.conditionalfields.for.billingaddress",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "add": {
+          "template": "defaultTemplate",
+          "redirectionPattern": "fullPage",
+          "features": {
+            "enableConditionalFieldsForBillingAddress": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "usePSSForPXFeatureFlighting": true
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

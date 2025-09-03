@@ -1,0 +1,18 @@
+{
+  "testScenarioName": "px.partnersettings.selectpmbuttonlist.enablevirtualfamilypm",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "select": {
+          "template": "selectpmbuttonlist",
+          "features": {
+            "enableVirtualFamilyPM": {
+              "applicableMarkets": []
+            }
+          }
+        }
+      }
+    }
+  }
+}

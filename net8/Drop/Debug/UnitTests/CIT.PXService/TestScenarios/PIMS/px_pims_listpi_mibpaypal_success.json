@@ -1,0 +1,13 @@
+{
+	"testScenarioName": "px.pims.listpi.mibpaypal.success",
+	"responsesPerApiCall": {
+		"getPM": {
+			"statusCode": 200,
+			"content": [{"paymentMethodFamily":"ewallet","paymentMethodType":"paypal","display":{"name":"PayPal","logo":"https://pmservices.cp.microsoft.com/staticresourceservice/images/v3/logo_paypal.png","logos":[{"mimeType":"image/png","url":"https://pmservices.cp.microsoft.com/staticresourceservice/images/v3/logo_paypal.png"},{"mimeType":"image/svg+xml","url":"https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_paypal.svg"}]},"properties":{"offlineRecurring":true,"userManaged":true,"soldToAddressRequired":true,"supportedOperations":["authorize","charge","refund","chargeback"],"taxable":false,"providerRemittable":false,"moBillingIdentityUrl":"","riskyPaymentMethod":false,"authWindow":4320,"fundsAvailabilityWindow":0,"multipleLineItemsSupported":true,"splitPaymentSupported":true,"purchaseWaitTime":0},"exclusionTags":["XBOXLegacySubscriptions"]}]
+		},
+		"listPI": {
+			"statusCode": 200,
+			"content": [{"id":"j-X3BAAAAAAQAACA","accountId":"e7b83ff8-9363-430f-924f-ff5d784800ff","status":"active","paymentMethod":{"paymentMethodFamily":"ewallet","paymentMethodType":"paypal","display":{"name":"PayPal","logo":"https://pmservices.cp.microsoft.com/staticresourceservice/images/v3/logo_paypal.png","logos":[{"mimeType":"image/png","url":"https://pmservices.cp.microsoft.com/staticresourceservice/images/v3/logo_paypal.png"},{"mimeType":"image/svg+xml","url":"https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_paypal.svg"}]},"properties":{"offlineRecurring":true,"userManaged":true,"soldToAddressRequired":true,"supportedOperations":["authorize","charge","refund","chargeback"],"taxable":false,"providerRemittable":false,"moBillingIdentityUrl":"","riskyPaymentMethod":false,"authWindow":4320,"fundsAvailabilityWindow":0,"multipleLineItemsSupported":true,"splitPaymentSupported":true,"purchaseWaitTime":0},"exclusionTags":["XBOXLegacySubscriptions"]},"details":{"email":"pawisesa@outlook.com","billingAgreementType":"MerchantInitiatedBilling"},"creationDateTime":"2017-11-02T00:10:59.577","lastUpdatedDateTime":"2017-11-02T00:11:23.443"}]
+		}
+	}
+}

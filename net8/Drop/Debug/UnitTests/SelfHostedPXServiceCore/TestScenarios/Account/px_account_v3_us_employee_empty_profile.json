@@ -1,0 +1,13 @@
+{
+    "testScenarioName": "px.account.v3.us.employee.empty.profile",
+    "responsesPerApiCall": {
+        "getProfiles": {
+            "statusCode": 200,
+            "content": {"total_count":0,"items":[],"links":{"add":{"href":"8268fa0a-5224-4c76-ba2a-fa65bbc48c4d/profiles","method":"POST"}},"object_type":"Profiles","resource_status":"Active"}
+        },
+        "legacyValidateAddress": {
+            "statusCode": 200,
+            "content": { "result":  "Valid"} // legacy validation return text "Valid", due to limitation of emulator to handle text, return json object to emulate the flow
+        }
+    }
+}

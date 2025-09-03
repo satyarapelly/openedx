@@ -1,0 +1,20 @@
+﻿[
+	{
+        "paymentInstrumentId": "lchqggAAAAAHAACA",
+        "orderIds": ["f5598585-7340-4c5b-b41e-3df950c4925e","fc30a4ba-ba2c-46a3-acec-fe81ca5e92e2"],
+        "paymentInstrumentInUse": true,
+        "recurrenceIds": ["mdr:1055518870507325:1277730306f34c3998bbc89b759e95a5:2c1bcc81-9d16-4473-8549-13302c38f132"]
+    }, 
+	{
+        "paymentInstrumentId": "lchqggAAAAABAACA",
+        "orderIds": [],
+        "paymentInstrumentInUse": false,
+        "recurrenceIds": []
+    }, 
+	{
+        "paymentInstrumentId": "lchqggAAAAAIAACA",
+        "orderIds": [],
+        "paymentInstrumentInUse": true,
+        "recurrenceIds": ["mdr:1055518870507325:e4e59792df594f0c959cb7ac0ad9f0bd:365bf870-ad8d-44e7-a0d6-2d94c6dbb93e"]
+    }
+]

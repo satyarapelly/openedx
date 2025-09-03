@@ -1,0 +1,17 @@
+DisplayStringId,CountryIds,Type,Code,Value,Target
+closeButtonAccessiblityName,,constant,closeButtonAccessiblityName,Close,
+invalidExpiryDate,,errorCode,InvalidExpiryDate,Expiry date is invalid.,
+tooManyOperations,,errorCode,TooManyOperations,Maximum retry exceeded.,
+invalidChallengeCode,,errorCode,InvalidChallengeCode,Challenge code is invalid.,
+paymentInstrumentAlreadyAdded,,errorCode,PaymentInstrumentAddAlready,This Payment Instrument is already added.,
+challengeCodeExpired,,errorCode,ChallengeCodeExpired,The challenge code has expired.,
+validationFailed,,errorCode,ValidationFailed,"Incorrect data. Please, check your info and try again.",
+singleFieldErrorMessage,,constant,singleFieldErrorMessage,"There is 1 field in the form that requires your attention",
+multipleFieldsErrorMessage,,constant,multipleFieldsErrorMessage,"There are {n} fields in the form that require your attention",
+ModernAddress_AddressInvalid,,serverErrorCode,InteractionRequired,"Check your address. There appears to be an error in it.","city,region,postal_code"
+ModernAddress_None,,serverErrorCode,None,"Check your address. There appears to be an error in it.","city,region,postal_code"
+ModernAddress_StreetPartial,,serverErrorCode,StreetPartial,"Check your address. There appears to be an error in it.","city,region,postal_code"
+ModernAddress_PremisesPartial,,serverErrorCode,PremisesPartial,"Check your address. There appears to be an error in it.","city,region,postal_code"
+ModernAddress_Multiple,,serverErrorCode,Multiple,"Check your address. There appears to be an error in it.","city,region,postal_code"
+ModernAddress_AddressInvalidStreet,,serverErrorCode,InvalidStreet,"Check your address. There appears to be an error in it.","address_line1,address_line2,address_line3"
+ModernAddress_AddressInvalidCityRegionPostalCode,,serverErrorCode,InvalidCityRegionPostalCode,"Check your address. There appears to be an error in it.","city,region,postal_code"

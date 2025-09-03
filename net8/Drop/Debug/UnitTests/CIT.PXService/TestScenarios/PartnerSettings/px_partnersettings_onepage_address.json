@@ -1,0 +1,56 @@
+{
+  "testScenarioName": "px.partnersettings.onepage.address",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "add": {
+          "template": "onepage",
+          "features": {
+            "customizeAddressForm": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "addressType": "hapiV1SoldToIndividual",
+                  "dataSource": "hapi",
+                  "fieldsToBeHidden": [ "companyName", "email", "phoneNumber" ]
+                },
+                {
+                  "addressType": "hapiV1BillToIndividual",
+                  "dataSource": "hapi",
+                  "fieldsToBeHidden": [ "firstName", "lastName", "companyName", "email", "phoneNumber" ]
+                }
+              ]
+            },
+            "addressValidation": {
+              "applicableMarkets": []
+            }
+          }
+        },
+        "update": {
+          "template": "onepage",
+          "features": {
+            "customizeAddressForm": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "addressType": "hapiV1SoldToIndividual",
+                  "dataSource": "hapi",
+                  "fieldsToBeHidden": [ "companyName", "email", "phoneNumber" ]
+                },
+                {
+                  "addressType": "hapiV1BillToIndividual",
+                  "dataSource": "hapi",
+                  "fieldsToBeHidden": [ "firstName", "lastName", "companyName", "email", "phoneNumber" ]
+                }
+              ]
+            },
+            "addressValidation": {
+              "applicableMarkets": []
+            }
+          }
+        }
+      }
+    }
+  }
+}

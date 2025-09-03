@@ -1,0 +1,107 @@
+﻿{
+  "testScenarioName": "px.pims.unionpay_creditcard.update.error.invalidrequestdata",
+  "responsesPerApiCall": {
+    "updatePI": {
+      "statusCode": 400,
+      "content": {
+        "CorrelationId": "c9ee0c26-1b00-48ea-a89e-6bd1666a88fa",
+        "ErrorCode": "InvalidRequestData",
+        "Message": "Invalid request errors arise when your request has invalid parameters.",
+        "Details": []
+      }
+    },
+    "getPI": {
+      "statusCode": 200,
+      "content": {
+        "id": "0b87aea5-6b76-4ee6-8784-f9be24989b87",
+        "accountId": "6b83d6b9-1d56-4fa9-830f-0a11ed1038cd",
+        "paymentMethod": {
+          "paymentMethodType": "unionpay_creditcard",
+          "properties": {
+            "offlineRecurring": true,
+            "userManaged": true,
+            "soldToAddressRequired": true,
+            "supportedOperations": [ "authorize", "charge", "refund" ],
+            "taxable": false,
+            "providerRemittable": false,
+            "moBillingIdentityUrl": "",
+            "riskyPaymentMethod": false,
+            "authWindow": 10080,
+            "fundsAvailabilityWindow": 0,
+            "multipleLineItemsSupported": true,
+            "splitPaymentSupported": true,
+            "purchaseWaitTime": 0
+          },
+          "exclusionTags": [ "LegacySubscriptions" ],
+          "paymentMethodFamily": "credit_card",
+          "display": {
+            "name": "银...(5)",
+            "logo": "https://pmservices.cp.microsoft.com/staticresourceservice/images/v3/logo_unionpay.png",
+            "logos": [
+              {
+                "mimeType": "image/png",
+                "url": "https://pmservices.cp.microsoft.com/staticresourceservice/images/v3/logo_unionpay.png"
+              },
+              {
+                "mimeType": "image/svg+xml",
+                "url": "https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_unionpay.svg"
+              }
+            ]
+          }
+        },
+        "status": "Active",
+        "creationDateTime": "2017-04-13T17:03:08.663",
+        "lastUpdatedDateTime": "2017-04-13T17:03:08.663",
+        "details": {
+          "exportable": false,
+          "accountHolderName": "Xi Ji",
+          "lastFourDigits": "0258",
+          "expiryMonth": "11",
+          "expiryYear": "2023",
+          "phone": "18411631100",
+          "picvRequired": false,
+          "balance": 0
+        }
+      }
+    },
+    "getPM": {
+      "statusCode": 200,
+      "content": [
+        {
+          "paymentMethodFamily": "credit_card",
+          "paymentMethodType": "unionpay_creditcard",
+          "display": {
+            "name": "银...(5)",
+            "logo": "https://pmservices.cp.microsoft.com/staticresourceservice/images/v3/logo_unionpay.png",
+            "logos": [
+              {
+                "mimeType": "image/png",
+                "url": "https://pmservices.cp.microsoft.com/staticresourceservice/images/v3/logo_unionpay.png"
+              },
+              {
+                "mimeType": "image/svg+xml",
+                "url": "https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_unionpay.svg"
+              }
+            ]
+          },
+          "properties": {
+            "offlineRecurring": true,
+            "userManaged": true,
+            "soldToAddressRequired": true,
+            "supportedOperations": [ "authorize", "charge", "refund" ],
+            "taxable": false,
+            "providerRemittable": false,
+            "moBillingIdentityUrl": "",
+            "riskyPaymentMethod": false,
+            "authWindow": 10080,
+            "fundsAvailabilityWindow": 0,
+            "multipleLineItemsSupported": true,
+            "splitPaymentSupported": true,
+            "purchaseWaitTime": 0
+          },
+          "exclusionTags": [ "LegacySubscriptions" ]
+        }
+      ]
+    }
+  }
+}

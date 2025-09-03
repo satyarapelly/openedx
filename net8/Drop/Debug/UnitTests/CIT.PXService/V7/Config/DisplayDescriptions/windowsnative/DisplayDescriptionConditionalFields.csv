@@ -1,0 +1,11 @@
+PropertyHintId,ConditionalFieldKey,ConditionalFieldValue
+useCsv,isDisabled,{useRedeemPoints}
+useCsv,value,<|or|{useRedeemPoints};{useCsv}|>
+useCsvNegativeFormattedCsvTotalExpression,isHidden,{useCsv}
+useCsvNegativeFormattedCsvTotalAccentedExpression,isHidden,<|not|{useCsv}|>
+pointsRedemptionNegativeFormattedPointsValueTotalExpression,isHidden,{useRedeemPoints}
+pointsRedemptionNegativeFormattedPointsValueTotalAccentedExpression,isHidden,<|not|{useRedeemPoints}|>
+csvTotal,value,<|ternary|{{useRedeemPoints}};{0};{1}|>
+formattedCsvTotal,value,<|ternary|{{useRedeemPoints}};{0};{1}|>
+pointsValueTotal,value,{0}
+formattedPointsValueTotal,value,{0}

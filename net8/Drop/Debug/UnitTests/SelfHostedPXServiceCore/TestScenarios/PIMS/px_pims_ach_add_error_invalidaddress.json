@@ -1,0 +1,13 @@
+{
+    "testScenarioName": "px.pims.ach.add.error.invalidaddress",
+    "responsesPerApiCall": {
+        "addPI": {
+            "statusCode": 400,
+            "content": {"CorrelationId":"0f5952c3-3c09-4749-8079-ecedfd8f8814","ErrorCode":"InvalidAddress","Message":"The input address is invalid.","Details":[{"ErrorCode":"BDK_E_STATE_ZIP_CITY_INVALID","Message":"Call legacy payment instrument service failed with error (ErrorCode: 60016. ErrorShortMessage: BDK_E_STATE_ZIP_CITY_INVALID. ErrorLongMessage: VERAZIP: Invalid state code/ZIP code/city name combinations. Both state code/ZIP code and state code/city name were incorrect.. SCS tracking GUID: 2e1cf6e2-d131-4118-aebc-503e20b34a84)","Target":""}]}
+        },
+        "getPM": {
+            "statusCode": 200,
+            "content": [{"paymentMethodFamily":"direct_debit","paymentMethodType":"ach","display":{"name":"Bank Account","logo":"https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_ach.png","logos":[{"mimeType":"image/png","url":"https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_ach.png"},{"mimeType":"image/svg+xml","url":"https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_ach.svg"}]},"properties":{"offlineRecurring":true,"userManaged":true,"soldToAddressRequired":true,"supportedOperations":["charge","refund","chargeback","credit","settlementReversal"],"taxable":false,"providerRemittable":false,"moBillingIdentityUrl":"","riskyPaymentMethod":true,"fundsAvailabilityWindow":14400,"multipleLineItemsSupported":true,"splitPaymentSupported":false,"purchaseWaitTime":0},"exclusionTags":["LegacySubscriptions","Perpetual","PhysicalGoods"]}]
+        }
+    }
+}

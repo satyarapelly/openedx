@@ -1,0 +1,19 @@
+{
+  "testScenarioName": "px.issuerservice.initialize.failure",
+  "responsesPerApiCall": {
+    "initialize": {
+      "statusCode": 500,
+      "content": {
+        "sessionId": ""
+      }
+    },
+    "applyEligibility": {
+      "statusCode": 200,
+      "content": {
+        "status": "None",
+        "eligibleToApply": true,
+        "prescreened": true
+      }
+    }
+  }
+}

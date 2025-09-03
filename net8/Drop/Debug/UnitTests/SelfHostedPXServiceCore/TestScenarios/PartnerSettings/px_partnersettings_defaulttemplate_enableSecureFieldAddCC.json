@@ -1,0 +1,23 @@
+{
+  "testScenarioName": "px.partnersettings.defaulttemplate.enableSecureFieldAddCC",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "add": {
+          "template": "defaulttemplate",
+          "features": {
+            "enableSecureField": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "enableSecureFieldAddCC": true
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

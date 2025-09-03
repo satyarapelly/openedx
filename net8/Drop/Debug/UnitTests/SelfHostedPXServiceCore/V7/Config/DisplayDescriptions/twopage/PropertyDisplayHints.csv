@@ -1,0 +1,129 @@
+PropertyHintId,CountryIds,FeatureNames,DisplayType,PropertyName,DependentPropertyName,DependentPropertyValueRegex,DisplayName,DisplayDescription,IsHidden,IsDisabled,IsHighlighted,IsDefault,IsBack,InputScope,MaskInput,ShowDisplayName,DisplayFormat,DisplayExample,MinLength,MaxLength,DisplayContent,DisplayContentDescription,DisplayHelpSequenceId,DisplayHelpSequenceText,ClientAction,Context,DestinationId,PossibleValues,DisplaySelectionText,SourceUrl,DisplayLogo,SelectType,MaskDisplay,DisplayConditionFunctionName,DataCollectionSource,DataCollectionFilterFunctionName,IsSelectFirstItem,DisplayImage,DisplayHelpPosition,StyleHints
+microsoft_privacy_static_text,,,text,,,,,,,,,,,,,,,,,,Microsoft respects your privacy. See our ,,,,,,,,,,,,,,,,,,,
+privacyStatement,,,hyperlink,,,,,,,,,,,,,,,,,,privacy statement,,,,navigate,https://go.microsoft.com/fwlink/?LinkId=521839,,,,https://go.microsoft.com/fwlink/?LinkId=521839,,,,,,,,,,
+staticPeriodText,,,text,,,,,,,,,,,,,,,,,,.,,,,,,,,,,,,,,,,,,,
+cardholderName,,,property,accountHolderName,,,Cardholder name,,,,,,,,,TRUE,,,,64,,,,,,,,,,,,,,,,,,,,
+indiaTokenConsentMessage,,,text,tokenizationConsentMessage,,,,,,,,,,,,,,,,,"By clicking the button below to continue, you consent to tokenize and save this card. You'll be redirected to your bank's website for verification.",,,,,,,,,,,,,,,,,,,
+indiaTokenConsentMessageHyperlink,,,hyperlink,tokenizationConsentMessageHyperlink,,,,,,,,,,,,,,,,,Learn more about tokenization,,,,navigate,https://go.microsoft.com/fwlink/?linkid=2206127,,,,https://go.microsoft.com/fwlink/?linkid=2206127,,,,,,,,,,
+cardNumber,,,property,accountToken,,,Card number,,,,,,,,,TRUE,,,13,19,,,,,,,,,,,,,,,,,,,,
+cardNumberAmex,,,property,accountToken,,,Card number,,,,,,,,,TRUE,,,15,17,,,,,,,,,,,,,,,,,,,,
+cardNumber,kr,,property,accountToken,,,Card number,,,,,,,,,TRUE,,,13,24,,,,,,,,,,,,,,,,,,,,
+cardNumber,br,,property,accountToken,,,Card number,,,,,,,,,TRUE,,,13,23,,,,,,,,,,,,,,,,,,,,
+lastFourDigits,,,property,lastFourDigits,,,Card number,,,,,,,,,TRUE,,,,,,,,,,,,,,,,,,,,,,,,
+expiryMonth,,,property,expiryMonth,,,"Exp. Month",,,,,,,,,TRUE,,,2,2,,,,,,,,{}Months,MM,,,,,,,,,,,
+expiryYear,,,property,expiryYear,,,"Exp. Year",,,,,,,,,TRUE,,,2,2,,,,,,,,{}YearsExpiry,YY,,,,,,,,,,,
+cvv,,,property,cvvToken,,,CVV,,,,,,,,,TRUE,,,3,4,,,cvvHelpSequence,What is a CVV?,,,,,,,,,,,,,,/staticresourceservice/images/v4/cardHints_generic.png,,
+creditCardsCVV3LocationText,,,text,,,,,,,,,,,,,,,,,,3 digit verification code,,,,,,,,,,,,,,,,,,,
+creditCardsCVV3Image,,,image,,,,,,,,,,,,,,,,,,,,,,,,,,,/staticresourceservice/images/v4/cardHints_CVV_Back.png,,,,,,,,,,
+creditCardsCVV4LocationText,,,text,,,,,,,,,,,,,,,,,,4 digit verification code,,,,,,,,,,,,,,,,,,,
+creditCardsCVV4Image,,,image,,,,,,,,,,,,,,,,,,,,,,,,,,,/staticresourceservice/images/v4/cardHints_CVV_Front.png,,,,,,,,,,
+addressLine1,,,property,address_line1,,,Address line 1,,,,,,,,,TRUE,,,25,30,,,,,,,,,,,,,,,,,,,,
+addressLine2,,,property,address_line2,,,Address line 2 (Optional),,,,,,,,,TRUE,,,25,30,,,,,,,,,,,,,,,,,,,,
+addressLine2,,removeOptionalInLabel,property,address_line2,,,Address line 2,,,,,,,,,TRUE,,,25,30,,,,,,,,,,,,,,,,,,,,
+addressLine3,,,property,address_line3,,,Address line 3 (Optional),,,,,,,,,TRUE,,,,,,,,,,,,,,,,,,,,,,,,
+addressLine3,,removeOptionalInLabel,property,address_line3,,,Address line 3,,,,,,,,,TRUE,,,,,,,,,,,,,,,,,,,,,,,,
+addressCity,{}AddressCityM,,property,city,,,City,,,,,,,,,TRUE,,,,26,,,,,,,,,,,,,,,,,,,,
+addressState,{}AddressStateM,,property,region,,,State,,,,,,,,,TRUE,,,,,,,,,,,,,,,,,,,,,,,,
+addressState,{}AddressStateO,,property,region,,,State (Optional),,,,,,,,,TRUE,,,,,,,,,,,,,,,,,,,,,,,,
+addressState,{}AddressStateO,removeOptionalInLabel,property,region,,,State,,,,,,,,,TRUE,,,,,,,,,,,,,,,,,,,,,,,,
+addressState,US,,property,region,,,State,,,,,,,,,TRUE,,,,,,,,,,,,{}USStates,--Select--,,,,,,,,,,,
+addressState,AU,,property,region,,,State,,,,,,,,,TRUE,,,,,,,,,,,,{}AUStatesAndTerritories,--Select--,,,,,,,,,,,
+addressState,BR,,property,region,,,State,,,,,,,,,TRUE,,,,,,,,,,,,{}BRStates,--Select--,,,,,,,,,,,
+addressState,IN,,property,region,,,State,,,,,,,,,TRUE,,,,,,,,,,,,{}INStates,--Select--,,,,,,,,,,,
+addressState,IT,,property,region,,,State,,,,,,,,,TRUE,,,,,,,,,,,,{}ITStates,--Select--,,,,,,,,,,,
+addressState,JP,,property,region,,,State,,,,,,,,,TRUE,,,,,,,,,,,,{}JPStates,--Select--,,,,,,,,,,,
+addressState,NL,,property,region,,,State,,,,,,,,,TRUE,,,,,,,,,,,,{}NLStates,--Select--,,,,,,,,,,,
+addressState,MX,,property,region,,,State,,,,,,,,,TRUE,,,,,,,,,,,,{}MXStates,--Select--,,,,,,,,,,,
+addressState,MY,,property,region,,,State,,,,,,,,,TRUE,,,,,,,,,,,,{}MYStates,--Select--,,,,,,,,,,,
+addressState,AE,,property,region,,,State,,,,,,,,,TRUE,,,,,,,,,,,,{}UAEStates,--Select--,,,,,,,,,,,
+addressCounty,,,property,region,,,County (Optional),,,,,,,,,TRUE,,,,,,,,,,,,,,,,,,,,,,,,
+addressCounty,,removeOptionalInLabel,property,region,,,County,,,,,,,,,TRUE,,,,,,,,,,,,,,,,,,,,,,,,
+addressProvince,{}AddressProvinceM,,property,region,,,Province,,,,,,,,,TRUE,,,,,,,,,,,,,,,,,,,,,,,,
+addressProvince,{}AddressProvinceO,,property,region,,,Province (Optional),,,,,,,,,TRUE,,,,,,,,,,,,,,,,,,,,,,,,
+addressProvince,{}AddressProvinceO,removeOptionalInLabel,property,region,,,Province,,,,,,,,,TRUE,,,,,,,,,,,,,,,,,,,,,,,,
+addressProvince,CA,,property,region,,,Province,,,,,,,,,TRUE,,,,,,,,,,,,{}CAProvinces,--Select--,,,,,,,,,,,
+addressProvince,CN,,property,region,,,Province,,,,,,,,,TRUE,,,,,,,,,,,,{}CNProvinces,--Select--,,,,,,,,,,,
+addressProvince,ES,,property,region,,,Province,,,,,,,,,TRUE,,,,,,,,,,,,{}ESProvinces,--Select--,,,,,,,,,,,
+addressProvince,bs,,property,region,,,Province (Optional),,,,,,,,,TRUE,,,,,,,,,,,,{}BSProvinces,--Select--,,,,,,,,,,,
+addressProvince,bs,removeOptionalInLabel,property,region,,,Province,,,,,,,,,TRUE,,,,,,,,,,,,{}BSProvinces,--Select--,,,,,,,,,,,
+addressProvince,bz,,property,region,,,Province,,,,,,,,,TRUE,,,,,,,,,,,,{}BZProvinces,--Select--,,,,,,,,,,,
+addressProvince,cr,,property,region,,,Province,,,,,,,,,TRUE,,,,,,,,,,,,{}CRProvinces,--Select--,,,,,,,,,,,
+addressProvince,fr,,property,region,,,Department (Optional),,,,,,,,,TRUE,,,,,,,,,,,,{}FRProvinces,--Select--,,,,,,,,,,,
+addressProvince,fr,removeOptionalInLabel,property,region,,,Department,,,,,,,,,TRUE,,,,,,,,,,,,{}FRProvinces,--Select--,,,,,,,,,,,
+addressProvince,hn,,property,region,,,Province,,,,,,,,,TRUE,,,,,,,,,,,,{}HNProvinces,--Select--,,,,,,,,,,,
+addressProvince,jm,,property,region,,,Province,,,,,,,,,TRUE,,,,,,,,,,,,{}JMProvinces,--Select--,,,,,,,,,,,
+addressProvince,tr,,property,region,,,Province,,,,,,,,,TRUE,,,,,,,,,,,,{}TRProvinces,--Select--,,,,,,,,,,,
+addressProvince,ve,,property,region,,,Province,,,,,,,,,TRUE,,,,,,,,,,,,{}VEProvinces,--Select--,,,,,,,,,,,
+addressStateInline,{}AddressStateM,,property,region,,,State,,,,,,,,,TRUE,,,,,,,,,,,,,,,,,,,,,,,,width-fill
+addressStateInline,{}AddressStateO,,property,region,,,State (Optional),,,,,,,,,TRUE,,,,,,,,,,,,,,,,,,,,,,,,width-fill
+addressStateInline,{}AddressStateO,removeOptionalInLabel,property,region,,,State,,,,,,,,,TRUE,,,,,,,,,,,,,,,,,,,,,,,,width-fill
+addressStateInline,US,,property,region,,,State,,,,,,,,,TRUE,,,,,,,,,,,,{}USStates,--Select--,,,,,,,,,,,width-fill
+addressStateInline,AU,,property,region,,,State,,,,,,,,,TRUE,,,,,,,,,,,,{}AUStatesAndTerritories,--Select--,,,,,,,,,,,width-fill
+addressStateInline,BR,,property,region,,,State,,,,,,,,,TRUE,,,,,,,,,,,,{}BRStates,--Select--,,,,,,,,,,,width-fill
+addressStateInline,IN,,property,region,,,State,,,,,,,,,TRUE,,,,,,,,,,,,{}INStates,--Select--,,,,,,,,,,,width-fill
+addressStateInline,IT,,property,region,,,State,,,,,,,,,TRUE,,,,,,,,,,,,{}ITStates,--Select--,,,,,,,,,,,width-fill
+addressStateInline,JP,,property,region,,,State,,,,,,,,,TRUE,,,,,,,,,,,,{}JPStates,--Select--,,,,,,,,,,,width-fill
+addressStateInline,NL,,property,region,,,State,,,,,,,,,TRUE,,,,,,,,,,,,{}NLStates,--Select--,,,,,,,,,,,width-fill
+addressStateInline,MX,,property,region,,,State,,,,,,,,,TRUE,,,,,,,,,,,,{}MXStates,--Select--,,,,,,,,,,,width-fill
+addressStateInline,MY,,property,region,,,State,,,,,,,,,TRUE,,,,,,,,,,,,{}MYStates,--Select--,,,,,,,,,,,width-fill
+addressStateInline,AE,,property,region,,,State,,,,,,,,,TRUE,,,,,,,,,,,,{}UAEStates,--Select--,,,,,,,,,,,width-fill
+addressProvinceInline,{}AddressProvinceM,,property,region,,,Province,,,,,,,,,TRUE,,,,,,,,,,,,,,,,,,,,,,,,width-fill
+addressProvinceInline,{}AddressProvinceO,,property,region,,,Province (Optional),,,,,,,,,TRUE,,,,,,,,,,,,,,,,,,,,,,,,width-fill
+addressProvinceInline,{}AddressProvinceO,removeOptionalInLabel,property,region,,,Province,,,,,,,,,TRUE,,,,,,,,,,,,,,,,,,,,,,,,width-fill
+addressProvinceInline,CA,,property,region,,,Province,,,,,,,,,TRUE,,,,,,,,,,,,{}CAProvinces,--Select--,,,,,,,,,,,width-fill
+addressProvinceInline,CN,,property,region,,,Province,,,,,,,,,TRUE,,,,,,,,,,,,{}CNProvinces,--Select--,,,,,,,,,,,width-fill
+addressProvinceInline,ES,,property,region,,,Province,,,,,,,,,TRUE,,,,,,,,,,,,{}ESProvinces,--Select--,,,,,,,,,,,width-fill
+addressProvinceInline,bs,,property,region,,,Province (Optional),,,,,,,,,TRUE,,,,,,,,,,,,{}BSProvinces,--Select--,,,,,,,,,,,width-fill
+addressProvinceInline,bs,removeOptionalInLabel,property,region,,,Province,,,,,,,,,TRUE,,,,,,,,,,,,{}BSProvinces,--Select--,,,,,,,,,,,width-fill
+addressProvinceInline,bz,,property,region,,,Province,,,,,,,,,TRUE,,,,,,,,,,,,{}BZProvinces,--Select--,,,,,,,,,,,width-fill
+addressProvinceInline,cr,,property,region,,,Province,,,,,,,,,TRUE,,,,,,,,,,,,{}CRProvinces,--Select--,,,,,,,,,,,width-fill
+addressProvinceInline,fr,,property,region,,,Department (Optional),,,,,,,,,TRUE,,,,,,,,,,,,{}FRProvinces,--Select--,,,,,,,,,,,width-fill
+addressProvinceInline,fr,removeOptionalInLabel,property,region,,,Department,,,,,,,,,TRUE,,,,,,,,,,,,{}FRProvinces,--Select--,,,,,,,,,,,width-fill
+addressProvinceInline,hn,,property,region,,,Province,,,,,,,,,TRUE,,,,,,,,,,,,{}HNProvinces,--Select--,,,,,,,,,,,width-fill
+addressProvinceInline,jm,,property,region,,,Province,,,,,,,,,TRUE,,,,,,,,,,,,{}JMProvinces,--Select--,,,,,,,,,,,width-fill
+addressProvinceInline,tr,,property,region,,,Province,,,,,,,,,TRUE,,,,,,,,,,,,{}TRProvinces,--Select--,,,,,,,,,,,width-fill
+addressProvinceInline,ve,,property,region,,,Province,,,,,,,,,TRUE,,,,,,,,,,,,{}VEProvinces,--Select--,,,,,,,,,,,width-fill
+addressPostalCode,{}AddressPostalCodeM,,property,postal_code,,,Postal code,,,,,,,,,TRUE,,,,,,,,,,,,,,,,,,,,,,,,
+addressPostalCode,{}AddressPostalCodeO,,property,postal_code,,,Postal code (Optional),,,,,,,,,TRUE,,,,,,,,,,,,,,,,,,,,,,,,
+addressPostalCode,{}AddressPostalCodeO,removeOptionalInLabel,property,postal_code,,,Postal code,,,,,,,,,TRUE,,,,,,,,,,,,,,,,,,,,,,,,
+addressPostalCode,US,,property,postal_code,,,Zip,,,,,,,,,TRUE,,,,,,,,,,,,,,,,,,,,,,,,
+addressPostalCode,am,,property,postal_code,,,Postal Code,,,,,,,,,TRUE,,,4,4,,,,,,,,,,,,,,,,,,,,
+addressPostalCode,az,,property,postal_code,,,Postal Code,,,,,,,,,TRUE,,,4,7,,,,,,,,,,,,,,,,,,,,
+addressPostalCode,by,,property,postal_code,,,Postal Code,,,,,,,,,TRUE,,,6,6,,,,,,,,,,,,,,,,,,,,
+addressPostalCode,hu,,property,postal_code,,,Postal Code,,,,,,,,,TRUE,,,4,4,,,,,,,,,,,,,,,,,,,,
+addressPostalCode,kz,,property,postal_code,,,Postal Code,,,,,,,,,TRUE,,,6,7,,,,,,,,,,,,,,,,,,,,
+addressPostalCode,kg,,property,postal_code,,,Postal Code,,,,,,,,,TRUE,,,6,6,,,,,,,,,,,,,,,,,,,,
+addressPostalCode,md,,property,postal_code,,,Postal Code,,,,,,,,,TRUE,,,4,7,,,,,,,,,,,,,,,,,,,,
+addressPostalCode,tj,,property,postal_code,,,Postal Code,,,,,,,,,TRUE,,,6,6,,,,,,,,,,,,,,,,,,,,
+addressPostalCode,ua,,property,postal_code,,,Postal Code,,,,,,,,,TRUE,,,5,5,,,,,,,,,,,,,,,,,,,,
+addressPostalCode,uz,,property,postal_code,,,Postal Code,,,,,,,,,TRUE,,,6,6,,,,,,,,,,,,,,,,,,,,
+addressCountry,,,property,country,,,Country/Region,,,TRUE,,,,,,TRUE,,,,,,,,,,,,{}MarketsAll,,,,,,,,,,,,
+backButton,,,button,,,,,,,,,,,,,,,,,,Back,,,,movePrevious,,,,,,,,,,,,,,,width-fill
+saveButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,Save,,,,submit,,,,,,,,,,,,,,,width-fill
+cancelBackButton,,,button,,,,,,,,,,TRUE,,,,,,,,Back,,,,gohome,,,,,,,,,,,,,,,width-fill
+cancelButton,,,button,,,,,,,,,,TRUE,,,,,,,,Cancel,,,,gohome,,,,,,,,,,,,,,,width-fill
+nextButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,Next,,,,moveNext,,,,,,,,,,,,,,,width-fill
+pidlContainer,,,pidlContainer,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+paymentUpdateAddressEnabled,,,property,update_address_enabled,,,Address of my company is same as above,,,,,,,,,FALSE,,,,,,,,,,,,,,,,,,,,,,,,
+paymentUpdateAddressDisabled,,,property,update_address_enabled,,,Address of my company is same as above,,,,,,,,,FALSE,,,,,,,,,,,,,,,,,,,,,,,,
+accept_card_message,,,text,,,,,,,,,,,,,,,,,,We accept the following cards,,,,,,,,,,,,,,,,,,,
+creditCardVisaLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_visa.svg,,,,,,,,,,
+creditCardAmexLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_amex.svg,,,,,,,,,,
+creditCardMCLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_mc.svg,,,,,,,,,,
+creditCardDiscoverLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_discover.svg,,,,,,,,,,
+creditCardJCBLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_jcb.svg,,,,,,,,,,
+creditCardHiperLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_hipercard.svg,,,,,,,,,,
+creditCardEloLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_elo.svg,,,,,,,,,,
+creditCardVerveLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_verve.svg,,,,,,,,,,
+add_credit_debit_heading,,,heading,,,,,,,,,,,,,,,,,,Add a credit or debit card,,,,,,,,,,,,,,,,,,,
+add_credit_debit_heading,br,,heading,,,,,,,,,,,,,,,,,,Add a credit card,,,,,,,,,,,,,,,,,,,
+add_credit_debit_heading,se,,heading,,,,,,,,,,,,,,,,,,Add a debit or credit card,,,,,,,,,,,,,,,,,,,
+update_credit_debit_heading,,,heading,,,,,,,,,,,,,,,,,,Edit payment method,,,,,,,,,,,,,,,,,,,
+starLabel,,,text,,,,,,,,,,,,,,,,,,*,,,,,,,,,,,,,,,,,,,text-alert
+requiredText,,,text,,,,,,,,,,,,,,,,,,Required,,,,,,,,,,,,,,,,,,,
+paymentOptionSaveText,,,text,,,,,,,,,,,,,,,,,,This payment option will be saved to your account.,,,,,,,,,,,,,,,,,,,
+creditCardAddressHeading,,,heading,,,,,,,,,,,,,,,,,,Add your billing address,,,,,,,,,,,,,,,,,,,
+noProfileAddressText,,,text,,,,,,TRUE,,,,,,,,,,,,This address will be saved with your Microsoft account.,,,,,,,,,,,,,,,,,,,
+space,,,text,,,,,,,,,,,,,,,,,, ,,,,,,,,,,,,,,,,,,,
+additionalHeaderPlaceHolder,,,text,,,,,,,,,,,,,,,,,,({partnerData.prefillData.additionalHeader}),,,,,,,,,,,,,,,,,,,
+additionalFooterPlaceHolder,,,text,,,,,,,,,,,,,,,,,,({partnerData.prefillData.additionalFooter}),,,,,,,,,,,,,,,,,,,

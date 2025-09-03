@@ -1,0 +1,75 @@
+{
+  "testScenarioName": "px.partnersettings.defaulttemplate.changePartnerNameForPims",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "add": {
+          "template": "defaulttemplate",
+          "features": {
+            "changePartnerNameForPims": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "usePSSForPXFeatureFlighting": true
+                }
+              ]
+            }
+          }
+        },
+        "update": {
+          "template": "defaulttemplate",
+          "features": {
+            "changePartnerNameForPims": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "usePSSForPXFeatureFlighting": true
+                }
+              ]
+            }
+          }
+        },
+        "select": {
+          "template": "defaulttemplate",
+          "features": {
+            "changePartnerNameForPims": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "usePSSForPXFeatureFlighting": true
+                }
+              ]
+            }
+          }
+        },
+        "selectinstance": {
+          "template": "defaulttemplate",
+          "features": {
+            "changePartnerNameForPims": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "usePSSForPXFeatureFlighting": true
+                }
+              ]
+            }
+          }
+        },
+        "selectSingleInstance": {
+          "template": "defaulttemplate",
+          "features": {
+            "changePartnerNameForPims": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "usePSSForPXFeatureFlighting": true
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

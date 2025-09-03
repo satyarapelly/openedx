@@ -1,0 +1,39 @@
+﻿{
+  "get": {
+    "response": {
+      "Balance": 0,
+      "catalog": [
+        {
+          "Price": 0,
+          "Provider": "csv",
+          "Attributes": {
+            "isMicrosoftCSVGiftCard": "true"
+          },
+          "Configuration": {
+            "amount": "0",
+            "currencyCode": "usd"
+          }
+        }
+      ]
+    }
+  },
+  "post": {
+    "response": {
+      "result_message": "OrderId d2edf745-0909-4487-839d-f8d217d18c32 processed successfully.",
+      "order": {
+        "id": "d2edf745-0909-4487-839d-f8d217d18c32",
+        "sku": "000400000253",
+        "item_snapshot": {
+          "name": "000400000253",
+          "price": 1600,
+          "config": {
+            "amount": "1.25",
+            "currencyCode": "USD"
+          }
+        }
+      }
+    },
+    "correlationId": "4b6773bf40ff45eeae08c180ac33a0c9",
+    "code": 0
+  }
+}

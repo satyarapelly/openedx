@@ -1,0 +1,228 @@
+{
+  "customers": [
+    {
+      "id": "Account001",
+      "customer_type": "individual",
+      "customer_subtype": "consumer",
+      "identity": {
+        "provider": "MSA",
+        "type": "PUID",
+        "data": { "puid": "1055518870507325" }
+      },
+      "is_test": false,
+      "etag": "9075458611847465975",
+      "links": {
+        "self": {
+          "href": "customers/99f3bd5ff8354a498f87bc3aed84daac01",
+          "method": "GET"
+        },
+        "profiles": {
+          "href": "99f3bd5ff8354a498f87bc3aed84daac01/profiles",
+          "method": "GET"
+        },
+        "addresses": {
+          "href": "99f3bd5ff8354a498f87bc3aed84daac01/addresses",
+          "method": "GET"
+        },
+        "delete": {
+          "href": "customers/99f3bd5ff8354a498f87bc3aed84daac01",
+          "method": "DELETE"
+        }
+      },
+      "object_type": "Customer",
+      "resource_status": "Active"
+    },
+    {
+      "id": "Account002",
+      "customer_type": "individual",
+      "customer_subtype": "consumer",
+      "identity": {
+        "provider": "MSA",
+        "type": "PUID",
+        "data": { "puid": "1055518870507326" }
+      },
+      "is_test": false,
+      "etag": "9075458611847465976",
+      "links": {
+        "self": {
+          "href": "customers/99f3bd5ff8354a498f87bc3aed84daac01",
+          "method": "GET"
+        },
+        "profiles": {
+          "href": "99f3bd5ff8354a498f87bc3aed84daac01/profiles",
+          "method": "GET"
+        },
+        "addresses": {
+          "href": "99f3bd5ff8354a498f87bc3aed84daac01/addresses",
+          "method": "GET"
+        },
+        "delete": {
+          "href": "customers/99f3bd5ff8354a498f87bc3aed84daac01",
+          "method": "DELETE"
+        }
+      },
+      "object_type": "Customer",
+      "resource_status": "Active"
+    },
+    {
+      "id": "Account003",
+      "customer_type": "individual",
+      "customer_subtype": "organization",
+      "identity": {
+        "provider": "ORG",
+        "type": "PUID",
+        "data": { "puid": "1055518870507325" }
+      },
+      "is_test": false,
+      "etag": "9075458611847465975",
+      "links": {
+        "self": {
+          "href": "customers/99f3bd5ff8354a498f87bc3aed84daac01",
+          "method": "GET"
+        },
+        "profiles": {
+          "href": "99f3bd5ff8354a498f87bc3aed84daac01/profiles",
+          "method": "GET"
+        },
+        "addresses": {
+          "href": "99f3bd5ff8354a498f87bc3aed84daac01/addresses",
+          "method": "GET"
+        },
+        "delete": {
+          "href": "customers/99f3bd5ff8354a498f87bc3aed84daac01",
+          "method": "DELETE"
+        }
+      },
+      "object_type": "Customer",
+      "resource_status": "Active"
+    },
+    {
+      "id": "Account006",
+      "customer_type": "individual",
+      "customer_subtype": "organization",
+      "identity": {
+        "provider": "AAD",
+        "type": "PUID",
+        "data": { "puid": "1055518870507325" }
+      },
+      "is_test": false,
+      "etag": "9075458611847465975",
+      "links": {
+        "self": {
+          "href": "customers/99f3bd5ff8354a498f87bc3aed84daac01",
+          "method": "GET"
+        },
+        "profiles": {
+          "href": "99f3bd5ff8354a498f87bc3aed84daac01/profiles",
+          "method": "GET"
+        },
+        "addresses": {
+          "href": "99f3bd5ff8354a498f87bc3aed84daac01/addresses",
+          "method": "GET"
+        },
+        "delete": {
+          "href": "customers/99f3bd5ff8354a498f87bc3aed84daac01",
+          "method": "DELETE"
+        }
+      },
+      "object_type": "Customer",
+      "resource_status": "Active"
+    },
+    {
+      "id": "Account007",
+      "customer_type": "individual",
+      "customer_subtype": "organization",
+      "identity": {
+        "provider": "BING",
+        "type": "PUID",
+        "data": { "puid": "1055518870507325" }
+      },
+      "is_test": false,
+      "etag": "9075458611847465975",
+      "links": {
+        "self": {
+          "href": "customers/99f3bd5ff8354a498f87bc3aed84daac01",
+          "method": "GET"
+        },
+        "profiles": {
+          "href": "99f3bd5ff8354a498f87bc3aed84daac01/profiles",
+          "method": "GET"
+        },
+        "addresses": {
+          "href": "99f3bd5ff8354a498f87bc3aed84daac01/addresses",
+          "method": "GET"
+        },
+        "delete": {
+          "href": "customers/99f3bd5ff8354a498f87bc3aed84daac01",
+          "method": "DELETE"
+        }
+      },
+      "object_type": "Customer",
+      "resource_status": "Active"
+    },
+    {
+      "id": "Account005",
+      "customer_type": "individual",
+      "customer_subtype": "entity",
+      "identity": {
+        "provider": "PCN",
+        "type": "PUID",
+        "data": { "puid": "1055518870507325" }
+      },
+      "is_test": false,
+      "etag": "9075458611847465975",
+      "links": {
+        "self": {
+          "href": "customers/99f3bd5ff8354a498f87bc3aed84daac01",
+          "method": "GET"
+        },
+        "profiles": {
+          "href": "99f3bd5ff8354a498f87bc3aed84daac01/profiles",
+          "method": "GET"
+        },
+        "addresses": {
+          "href": "99f3bd5ff8354a498f87bc3aed84daac01/addresses",
+          "method": "GET"
+        },
+        "delete": {
+          "href": "customers/99f3bd5ff8354a498f87bc3aed84daac01",
+          "method": "DELETE"
+        }
+      },
+      "object_type": "Customer",
+      "resource_status": "Active"
+    },
+    {
+      "id": "Account010",
+      "customer_type": "individual",
+      "customer_subtype": "entity",
+      "identity": {
+        "provider": "PCN",
+        "type": "PUID",
+        "data": { "puid": "" }
+      },
+      "is_test": false,
+      "etag": "9075458611847465975",
+      "links": {
+        "self": {
+          "href": "customers/99f3bd5ff8354a498f87bc3aed84daac01",
+          "method": "GET"
+        },
+        "profiles": {
+          "href": "99f3bd5ff8354a498f87bc3aed84daac01/profiles",
+          "method": "GET"
+        },
+        "addresses": {
+          "href": "99f3bd5ff8354a498f87bc3aed84daac01/addresses",
+          "method": "GET"
+        },
+        "delete": {
+          "href": "customers/99f3bd5ff8354a498f87bc3aed84daac01",
+          "method": "DELETE"
+        }
+      },
+      "object_type": "Customer",
+      "resource_status": "Active"
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+DisplaySequenceId,CountryIds,FlightName,HintId
+paymentMethodSelect,,,paymentMethodSelectPage
+paymentMethodSelectPageSequence,,,paymentMethodSelectHeading
+,,,paymentMethod
+,,,cancelGroup
+cancelGroupSequence,,,cancelButton

@@ -1,0 +1,13 @@
+﻿{
+  "testScenarioName": "px.issuerservice.eligibility.ineligible",
+  "responsesPerApiCall": {
+    "applyEligibility": {
+      "statusCode": 200,
+      "content": {
+        "status": "None",
+        "eligibleToApply": false,
+        "prescreened": true
+      }
+    }
+  }
+}

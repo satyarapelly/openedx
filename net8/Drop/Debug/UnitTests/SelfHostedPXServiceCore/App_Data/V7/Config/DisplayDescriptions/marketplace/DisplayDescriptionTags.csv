@@ -1,0 +1,98 @@
+PropertyHintId,CountryIds,TagKey,TagValue
+expiryMonth,,accessibilityName,Expiration month
+expiryYear,,accessibilityName,Expiration year
+addressState,,accessibilityName,State
+addressProvince,,accessibilityName,Province
+addressProvince,fr,accessibilityName,Department (Optional)
+addressCountry,,accessibilityName,Country/region
+creditCardVisaLogo,,accessibilityName,Visa
+creditCardAmexLogo,,accessibilityName,American Express
+creditCardMCLogo,,accessibilityName,MasterCard
+creditCardDiscoverLogo,,accessibilityName,Discover Network
+creditCardJCBLogo,,accessibilityName,JCB
+paypalLogo,,accessibilityName,Paypal
+attLogo,,accessibilityName,AT&T
+sptLogo,,accessibilityName,Sprint
+cardholderName,,accessibilityName,Cardholder name
+cardNumber,,accessibilityName,Card number
+,,maxLengthMessage,Maximum length for card number field reached.
+cardNumberAmex,,accessibilityName,Card number
+,,maxLengthMessage,Maximum length for card number field reached.
+cardNumberCup,,accessibilityName,Card number
+,,maxLengthMessage,Maximum length for card number field reached.
+lastFourDigits,,accessibilityName,Last four digits of card number
+cvv,,accessibilityName,CVV
+,,maxLengthMessage,Maximum length for CVV field reached.
+,,help.closeButtonAccessibilityName,"CVV is the Card Verification Value on your credit or debit card. On Visa, MasterCard and Discover cards, CVV is the last 3 numbers on the back of your card. On American Express cards, CVV is a 4 digit number on the front of the card, above the main card number. Close."
+,,help.accessibilityName,''
+cvvCup,,accessibilityName,CV/N2
+,,maxLengthMessage,Maximum length for field reached.
+,,help.closeButtonAccessibilityName,Close
+,,help.accessibilityName,CV/N2
+creditCardsCVV3Image,,accessibilityName,Card verification code location image
+creditCardsCVV4Image,,accessibilityName,Card verification code location image for Amex card
+cupPhoneNumber,,accessibilityName,Bank associated Mobile Number
+smsChallengeCode,,accessibilityName,Enter the code
+smsNewCodeLink,,accessibilityName,Send me a new code
+microsoft_privacy_link,,accessibilityName,privacy statement
+paymentChangeButton,,accessibilityName,Change
+paymentAccountsLink,,accessibilityName,account.microsoft.com
+addressLine1,,accessibilityName,Street Address
+addressLine2,,accessibilityName,Address line 2
+addressLine3,,accessibilityName,Address line 3
+addressCity,,accessibilityName,City
+addressCounty,,accessibilityName,County
+addressPostalCode,,accessibilityName,Postal Code
+addressPostalCode,US,accessibilityName,ZIP code
+addressPostalCode,SE,accessibilityName,Postal Code
+addressPostalCode,BR,accessibilityName,Postal Code
+addressFirstName,,accessibilityName,First Name
+addressLastName,,accessibilityName,Last Name
+addressPhoneNumber,,accessibilityName,Phone Number
+submitButton,,accessibilityName,Next
+saveButton,,accessibilityName,Save
+cancelButton,,accessibilityName,Cancel
+nextButton,,accessibilityName,Next
+previousButton,,accessibilityName,Previous
+successButton,,accessibilityName,Next
+yesButton,,accessibilityName,Yes
+okButton,,accessibilityName,Ok
+agreeAndPayButton,,accessibilityName,Agree and Pay
+taxCpfProperty,,accessibilityName,CPF
+taxCnpjProperty,,accessibilityName,CNPJ
+taxVatIdProperty,,accessibilityName,Tax ID
+taxIndiaStateCstIdProperty,,accessibilityName,CST ID
+taxIndiaStateVatIdProperty,,accessibilityName,VAT ID
+taxIndiaStateGstIdProperty,,accessibilityName,GST ID
+taxIndiaPanIdProperty,,accessibilityName,PAN ID
+taxVatIdProperty,,accessibilityName,VAT ID
+taxCanadianFederalExemptProperty,,accessibilityName,Canadian Federal Tax Exempt Certificate No.
+taxCanadianProvinceExemptProperty,,accessibilityName,Canadian Province Tax Exempt Certificate No.
+taxUsExemptProperty,,accessibilityName,US Tax Exempt Certificate No.
+taxVatIdProperty,au,accessibilityName,ABN
+taxVatIdProperty,nz,accessibilityName,GST Registration No.
+directDebitAchAccountholderName,,accessibilityName,Name on account
+directDebitAchAccountType,,accessibilityName,Type
+directDebitAchAccount,,accessibilityName,Account number
+,,help.closeButtonAccessibilityName,This is the account number on the check. Close.
+,,help.accessibilityName,''
+,,help.linkAccessibilityName,What is an account number?
+directDebitAchBankCode,,accessibilityName,Routing number
+,,help.closeButtonAccessibilityName,This is the routing number on the check. Close.
+,,help.accessibilityName,''
+,,help.linkAccessibilityName,What is a routing number?
+achAccountNumberImage,,accessibilityName,Account number
+achRoutingNumberImage,,accessibilityName,Routing number
+achTermCheckbox,,accessibilityName,"By registering or selecting your bank account as your payment method, you authorize Microsoft (or its agent) to initiate one or more debits for the total amount (including applicable taxes, fees and shipping costs) of your purchase or subscription charge (in accordance with the terms of your subscription service) from your bank account (and, if necessary, initiate one or more credits to your bank account to correct errors, issue a refund or similar purpose), and you authorize the financial institution that holds your bank account to deduct such debits or accept such credits.  You understand that this authorization will remain in full force and effect until you remove your bank account information from your Microsoft account or Skype account."
+directDebitAchChallengeAmount,,accessibilityName,Enter the deposit amount
+yesNextButton,,accessibilityName,Next
+saveNextButton,,accessibilityName,Next
+cancelButtonFullSize,,accessibilityName,Cancel
+,,button-full-width,button-full-width
+paypalSignInButton,,accessibilityName,"Sign in to PayPal (new browser window)"
+,,button-full-width,button-full-width
+microsoftPrivacyTextGroup,,privacy-text-group,privacy-text-group
+paypalHeadingLogo,,accessibilityName,Paypal
+,,parent.floatX-right,floatX-right
+paymentInstrumentShowPi,,theme,windows
+,,accessibilityName,Payment methods

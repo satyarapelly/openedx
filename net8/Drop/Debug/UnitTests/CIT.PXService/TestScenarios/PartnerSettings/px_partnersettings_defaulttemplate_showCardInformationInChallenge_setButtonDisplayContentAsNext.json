@@ -1,0 +1,29 @@
+{
+  "testScenarioName": "px.partnersettings.defaulttemplate.showCardInformationInChallenge.setButtonDisplayContentAsNext",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "handlePurchaseRiskChallenge": {
+          "template": "defaulttemplate",
+          "redirectionPattern": "inline",
+          "features": {
+            "customizeDisplayContent": {
+              "displayCustomizationDetail": [
+                {
+                  "setButtonDisplayContent": {
+                    "cvv3DSSubmitButton": "Next"
+                  }
+                }
+              ]
+            },
+            "showCardInformationInChallenge": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": null
+            }
+          }
+        }
+      }
+    }
+  }
+}

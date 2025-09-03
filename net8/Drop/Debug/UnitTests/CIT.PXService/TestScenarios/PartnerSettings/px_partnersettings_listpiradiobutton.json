@@ -1,0 +1,13 @@
+{
+  "testScenarioName": "px.partnersettings.listpiradiobutton",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "selectinstance": {
+          "template": "listpiradiobutton"
+        }
+      }
+    }
+  }
+}

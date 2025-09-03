@@ -1,0 +1,17 @@
+{
+	"testScenarioName": "px.pims.ach.add.success",
+	"responsesPerApiCall": {
+		"addPI": {
+			"statusCode": 200,
+			"content": {"id":"y11XCgAAAAAGAACA","accountId":"6b83d6b9-1d56-4fa9-830f-0a11ed1038cd","paymentMethod":{"paymentMethodType":"ach","properties":{"offlineRecurring":true,"userManaged":true,"soldToAddressRequired":true,"splitPaymentSupported":false,"supportedOperations":["charge","refund","chargeback","credit","settlementReversal"],"taxable":false,"providerRemittable":false},"exclusionTags":["LegacySubscriptions","Perpetual","PhysicalGoods"],"paymentMethodFamily":"direct_debit","display":{"name":"Bank account","logo":"https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_ach.png","logos":[{"mimeType":"image/png","url":"https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_ach.png"},{"mimeType":"image/svg+xml","url":"https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_ach.svg"}]}},"status":"Active","creationDateTime":"2017-04-13T17:03:08.663","lastUpdatedDateTime":"2017-04-13T17:03:08.663","details":{"exportable":false,"accountHolderName":"Swaroop Shivakumar","address":{"address_line1":"16779 NE 86th Ct","city":"Redmond","region":"wa","postal_code":"98052","country":"US"},"lastFourDigits":"0512","picvRequired":false}}
+		},
+		"getPI": {
+			"statusCode": 200,
+			"content": {"id":"y11XCgAAAAAGAACA","accountId":"6b83d6b9-1d56-4fa9-830f-0a11ed1038cd","paymentMethod":{"paymentMethodType":"ach","properties":{"offlineRecurring":true,"userManaged":true,"soldToAddressRequired":true,"splitPaymentSupported":false,"supportedOperations":["charge","refund","chargeback","credit","settlementReversal"],"taxable":false,"providerRemittable":false},"exclusionTags":["LegacySubscriptions","Perpetual","PhysicalGoods"],"paymentMethodFamily":"direct_debit","display":{"name":"Bank account","logo":"https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_ach.png","logos":[{"mimeType":"image/png","url":"https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_ach.png"},{"mimeType":"image/svg+xml","url":"https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_ach.svg"}]}},"status":"Active","creationDateTime":"2017-04-13T17:03:08.663","lastUpdatedDateTime":"2017-04-13T17:03:08.663","details":{"exportable":false,"accountHolderName":"Swaroop Shivakumar","address":{"address_line1":"16779 NE 86th Ct","city":"Redmond","region":"wa","postal_code":"98052","country":"US"},"lastFourDigits":"0512","picvRequired":false}}
+		},
+		"getPM": {
+			"statusCode": 200,
+			"content": [{"paymentMethodFamily":"direct_debit","paymentMethodType":"ach","display":{"name":"Bank Account","logo":"https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_ach.png","logos":[{"mimeType":"image/png","url":"https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_ach.png"},{"mimeType":"image/svg+xml","url":"https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_ach.svg"}]},"properties":{"offlineRecurring":true,"userManaged":true,"soldToAddressRequired":true,"supportedOperations":["charge","refund","chargeback","credit","settlementReversal"],"taxable":false,"providerRemittable":false,"moBillingIdentityUrl":"","riskyPaymentMethod":true,"fundsAvailabilityWindow":14400,"multipleLineItemsSupported":true,"splitPaymentSupported":false,"purchaseWaitTime":0},"exclusionTags":["LegacySubscriptions","Perpetual","PhysicalGoods"]}]
+		}
+	}
+}

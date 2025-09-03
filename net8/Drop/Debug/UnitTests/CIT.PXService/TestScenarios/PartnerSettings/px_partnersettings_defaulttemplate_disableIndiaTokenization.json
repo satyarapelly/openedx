@@ -1,0 +1,26 @@
+{
+  "testScenarioName": "px.partnersettings.defaulttemplate.disableIndiaTokenization",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "add": {
+          "template": "defaulttemplate",
+          "features": {
+            "disableIndiaTokenization": {
+              "applicableMarkets": []
+            }
+          }
+        },
+        "update": {
+          "template": "defaulttemplate",
+          "features": {
+            "disableIndiaTokenization": {
+              "applicableMarkets": []
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,4 @@
+PropertyHintId,CountryIds,FeatureNames,DisplayType,PropertyName,DependentPropertyName,DependentPropertyValueRegex,DisplayName,DisplayDescription,IsHidden,IsDisabled,IsHighlighted,IsDefault,IsBack,InputScope,MaskInput,ShowDisplayName,DisplayFormat,DisplayExample,MinLength,MaxLength,DisplayContent,DisplayContentDescription,DisplayHelpSequenceId,DisplayHelpSequenceText,ClientAction,Context,DestinationId,PossibleValues,DisplaySelectionText,SourceUrl,DisplayLogo,SelectType,MaskDisplay,DisplayConditionFunctionName,DataCollectionSource,DataCollectionFilterFunctionName,IsSelectFirstItem,DisplayImage,DisplayHelpPosition,StyleHints
+paymentMethod,,,property,displayId,,,Select a payment type,,,,,,,,,TRUE,,,,,,,,,,,,,,,,buttonList,,,,,,,,"gap-small"
+paymentOptionText,,,text,,,,,,,,,,,,,,,,,,Payment option placeHolder,,,,,,,,,,,,,,,,,,,
+paymentMethodSelectHeading,,,heading,,,,,,,,,,,,,,,,,,Choose a way to pay,,,,,,,,,,,,,,,,,,,

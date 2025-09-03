@@ -1,0 +1,5 @@
+DataProtectionId,CountryIds,ProtectionType,ParameterKey,ParameterValue,DataProtectionName
+paypalEncryption,,Encryption,algorithm,customePaypal,paypalEncryption
+,,,publicKey,"{""kty"":""RSA"",""extractable"":true,""n"":""5JKsI5gExaiOxUuRwT0mhdK46dyiYQOvLGFrRUmspxoRg86s3DuGlT9bIVl4UoGwANVY7xQvjlVXb7jy4sUXLeLxflHv2eBTfKrJHGXb2iTGlCsnoVx25CFUjXF68iDJWFjmItKySPS3GjYKxHYb0sAC+ymSvxDVd8cAquM3IHvF9mqJoisrIVc0H3ctWOPXfYl9RTNtdeKoPhHHLpqMthWJ2Hmth9LQvLj+9pAnz9aca8z5LmLQYPSaCHOoQikVSR4hJZZ0cyYw+stKLvWXnIovxP2bkIak99jnKzD0L6wWnkrpC2zDR5btqNdk38dJgKQ3VkUYqKy6KSqoVrdaRQ=="",""e"":""AQAB""}",
+,,,serialNumber,00C0C88DD51847D869,
+hmacSignature,,HMACSignature,,,

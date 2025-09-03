@@ -1,0 +1,5 @@
+﻿CountryId,PaymentMethodFamily,PaymentMethodType,ChallengeType
+,credit_card,visa,cvv.3
+,credit_card,mc,cvv.3
+,credit_card,discover,cvv.3
+,credit_card,amex,cvv.4

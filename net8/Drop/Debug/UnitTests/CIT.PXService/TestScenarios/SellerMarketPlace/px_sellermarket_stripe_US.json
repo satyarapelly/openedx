@@ -1,0 +1,12 @@
+{
+  "testScenarioName": "px.sellermarket.stripe.us",
+  "responsesPerApiCall": {
+    "getSeller": {
+      "statusCode": 200,
+      "content": {
+        "sellerName": "Peaceful Yoga",
+        "sellerCountry": "US"
+      }
+    }
+  }
+}

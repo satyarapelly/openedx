@@ -1,0 +1,60 @@
+{
+  "testScenarioName": "px.partnersettings.defaulttemplate.address.submitaction.jarviscm",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "add": {
+          "template": "defaulttemplate",
+          "features": {
+            "customizeAddressForm": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "addressType": "hapiV1SoldToIndividual",
+                  "dataSource": "hapi",
+                  "submitActionType": "jarvisCM"
+                },
+                {
+                  "addressType": "orgAddress",
+                  "dataSource": "jarvisOrgAddress",
+                  "submitActionType": "jarvisCM"
+                },
+                {
+                  "addressType": "hapiserviceusageaddress",
+                  "dataSource": "hapi",
+                  "submitActionType": "jarvisCM"
+                }
+              ]
+            }
+          }
+        },
+        "update": {
+          "template": "defaulttemplate",
+          "features": {
+            "customizeAddressForm": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "addressType": "hapiV1SoldToIndividual",
+                  "dataSource": "hapi",
+                  "submitActionType": "jarvisCM"
+                },
+                {
+                  "addressType": "orgAddress",
+                  "dataSource": "jarvisOrgAddress",
+                  "submitActionType": "jarvisCM"
+                },
+                {
+                  "addressType": "hapiserviceusageaddress",
+                  "dataSource": "hapi",
+                  "submitActionType": "jarvisCM"
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

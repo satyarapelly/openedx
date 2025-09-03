@@ -1,0 +1,12 @@
+DisplayStringSequenceId,CountryIds,DisplayStringId
+creditCardStrings,,closeButtonAccessiblityName
+,,invalidExpiryDate
+,,tooManyOperations
+,,invalidChallengeCode
+,,paymentInstrumentAlreadyAdded
+,,challengeCodeExpired
+,,validationFailed
+,,singleFieldErrorMessage
+,,multipleFieldsErrorMessage
+CommonStrings,,singleFieldErrorMessage
+,,multipleFieldsErrorMessage

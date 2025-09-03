@@ -1,0 +1,98 @@
+PropertyHintId,CountryIds,TagKey,TagValue
+expiryMonth,,theme,windows
+,,accessibilityName,Expiration month
+expiryYear,,theme,windows
+,,accessibilityName,Expiration year
+addressState,,theme,windows
+,,accessibilityName,State
+addressProvince,{}AddressProvinceM,accessibilityName,Province
+,{}AddressProvinceM,theme,windows
+addressProvince,{}AddressProvinceO,accessibilityName,Province (Optional)
+,{}AddressProvinceO,theme,windows
+addressProvince,CA,accessibilityName,Province
+,CA,theme,windows
+addressProvince,fr,accessibilityName,Department (Optional)
+,fr,theme,windows
+addressProvince,CN,accessibilityName,Province
+,CN,theme,windows
+addressProvince,ES,accessibilityName,Province
+,ES,theme,windows
+addressProvince,bs,accessibilityName,Province (Optional)
+,bs,theme,windows
+addressProvince,bz,accessibilityName,Province
+,bz,theme,windows
+addressProvince,cr,accessibilityName,Province
+,cr,theme,windows
+addressProvince,hn,accessibilityName,Province
+,hn,theme,windows
+addressProvince,jm,accessibilityName,Province
+,jm,theme,windows
+addressProvince,tr,accessibilityName,Province (Optional)
+,tr,theme,windows
+addressProvince,ve,accessibilityName,Province (Optional)
+,ve,theme,windows
+addressCountry,,theme,windows
+,,accessibilityName,Country/Region
+creditCardVisaLogo,,accessibilityName,Visa
+,,logoBlock,logoBlock
+,,help.closeButtonAccessibilityName,Close
+,,help.accessibilityName,Card Logos
+creditCardAmexLogo,,accessibilityName,American Express
+,,logoBlock,logoBlock
+,,help.closeButtonAccessibilityName,Close
+,,help.accessibilityName,Card Logos
+creditCardMCLogo,,accessibilityName,MasterCard
+,,logoBlock,logoBlock
+,,help.closeButtonAccessibilityName,Close
+,,help.accessibilityName,Card Logos
+creditCardDiscoverLogo,,accessibilityName,Discover Network
+,,logoBlock,logoBlock
+,,help.closeButtonAccessibilityName,Close
+,,help.accessibilityName,Card Logos
+creditCardJCBLogo,,accessibilityName,JCB
+,,logoBlock,logoBlock
+,,help.closeButtonAccessibilityName,Close
+,,help.accessibilityName,Card Logos
+cardholderName,,accessibilityName,Cardholder Name
+cardNumber,,accessibilityName,Card number
+,,maxLengthMessage,Maximum length for card number field reached.
+cardNumberAmex,,accessibilityName,Card number
+,,maxLengthMessage,Maximum length for card number field reached.
+cvv,,accessibilityName,CVV
+,,col-3,col-3
+,,help.dialog-large,dialog-large
+,,maxLengthMessage,Maximum length for CVV field reached.
+,,help.closeButtonAccessibilityName,"CVV is the Card Verification Value on your credit or debit card. On Visa, MasterCard and Discover cards, CVV is the last 3 numbers on the back of your card. On American Express cards, CVV is a 4 digit number on the front of the card, above the main card number. Close."
+,,help.accessibilityName,''
+,,help.linkAccessibilityName,What is a CVV?
+creditCardsCVV3Image,,accessibilityName,Card verification code location image
+creditCardsCVV4Image,,accessibilityName,Card verification code location image for Amex card
+addressLine1,,accessibilityName,Address line 1
+addressLine2,,accessibilityName,Address line 2 (Optional)
+addressLine3,,accessibilityName,Address line 3
+addressCity,,accessibilityName,City
+addressCounty,,accessibilityName,County (Optional)
+addressPostalCode,{}AddressPostalCodeM,accessibilityName,Postal Code
+addressPostalCode,{}AddressPostalCodeO,accessibilityName,Postal Code (Optional)
+addressPostalCode,US,accessibilityName,ZIP code
+submitButton,,accessibilityName,Next
+saveButton,,accessibilityName,Save
+cancelButton,,accessibilityName,Cancel
+taxCpfProperty,,accessibilityName,CPF
+creditCardsummaryGroup,,summary-group,summary-group
+creditCardUpdatesummaryGroup,,summary-group,summary-group
+creditCardCupsummaryGroup,,summary-group,summary-group
+debitCardCupsummaryGroup,,summary-group,summary-group
+creditCardCupUpdatesummaryGroup,,summary-group,summary-group
+debitCardCupUpdatesummaryGroup,,summary-group,summary-group
+addressSummaryGroup,,summary-group,summary-group
+microsoftPrivacyTextGroup,,privacy-text-group,privacy-text-group
+noProfileAddressText,,bold,text-bold
+newPaymentMethodLink,,accessibilityName,Add a new payment method
+,,action-trigger,action-trigger
+,,button-full-width,button-full-width
+firstName,,accessibilityName,First name
+lastName,,accessibilityName,Last name
+emailAddress,,accessibilityName,Email address
+paymentInstrumentShowPi,,theme,windows
+,,accessibilityName,Payment methods

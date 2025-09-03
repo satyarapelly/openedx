@@ -1,0 +1,43 @@
+﻿{
+  "testScenarioName": "px.pims.handlepaymentchallenge.sms.failure",
+  "responsesPerApiCall": {
+    "getPIExtendedView": {
+      "statusCode": 400,
+      "content": {
+        "CorrelationId": "dd286878-ee79-4037-bfc2-72646d27070c",
+        "ErrorCode": "InvalidChallengeIdForPi",
+        "Message": "Code: InvalidChallengeIdForPi; Message: Challenge type does not match the payment instrument type.",
+        "Details": [
+          {
+            "ErrorCode": "BDK_E_PI_VALIDATEION_FAILURE",
+            "Message": "Call legacy payment instrument service failed with error (ErrorCode: 30356. ErrorShortMessage: BDK_E_PI_VALIDATEION_FAILURE. ErrorLongMessage: Payment method validation failed.. SCS tracking GUID: 8f0e768f-8216-47b1-b5f9-583de96be7bf)",
+            "Target": ""
+          }
+        ]
+      }
+    },
+    "getPI": {
+      "statusCode": 400,
+      "content": {
+        "CorrelationId": "dd286878-ee79-4037-bfc2-72646d27070c",
+        "ErrorCode": "InvalidChallengeIdForPi",
+        "Message": "Code: InvalidChallengeIdForPi; Message: Challenge type does not match the payment instrument type.",
+        "Details": [
+          {
+            "ErrorCode": "BDK_E_PI_VALIDATEION_FAILURE",
+            "Message": "Call legacy payment instrument service failed with error (ErrorCode: 30356. ErrorShortMessage: BDK_E_PI_VALIDATEION_FAILURE. ErrorLongMessage: Payment method validation failed.. SCS tracking GUID: 8f0e768f-8216-47b1-b5f9-583de96be7bf)",
+            "Target": ""
+          }
+        ]
+      }
+    },
+    "validate": {
+      "statusCode": 200,
+      "content": {
+        "paymentMethodFamily": "credit_card",
+        "paymentMethodType": "mc",
+        "result": "Success"
+      }
+    }
+  }
+}

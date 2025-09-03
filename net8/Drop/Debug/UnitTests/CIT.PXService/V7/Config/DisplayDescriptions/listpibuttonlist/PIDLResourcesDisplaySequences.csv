@@ -1,0 +1,4 @@
+PIDLResourceType,PidlResourceIdentity,Operation,CountryIds,Scenario,DisplaySequenceId,DisplayStringSequenceId
+paymentInstrument,selectpi,selectinstance,,,paymentInstrumentSelect,CommonStrings
+paymentInstrument,selectpinone,selectinstance,,,noPaymentInstrumentSelect,CommonStrings
+paymentInstrument,list,selectinstance,,,paymentInstrumentListDisplayDescription,CommonStrings

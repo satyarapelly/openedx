@@ -1,0 +1,29 @@
+{
+  "testScenarioName": "px.partnersettings.listpiradiobutton.SelectSingleInstance",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "selectSingleInstance": {
+          "template": "listpiradiobutton",
+          "features": {
+            "enableSelectSingleInstancePiDisplay": {
+              "applicableMarkets": []
+            }
+          }
+        },
+        "selectInstance": {
+          "template": "listpiradiobutton",
+          "features": {
+            "useDisabledPIsForSelectInstance": {
+              "applicableMarkets": []
+            },
+            "enableSingleInstancePidls": {
+              "applicableMarkets": []
+            }
+          }
+        }
+      }
+    }
+  }
+}

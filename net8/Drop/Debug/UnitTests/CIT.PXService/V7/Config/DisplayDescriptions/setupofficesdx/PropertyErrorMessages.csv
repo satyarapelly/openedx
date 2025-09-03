@@ -1,0 +1,39 @@
+PropertyHintId,CountryIds,MessageSource,DefaultErrorMessage,ErrorRegEx,ErrorCode,ErrorMessage
+cardNumber,,fromRegex,Invalid card number,\s,invalid_card_number_has_spaces,No spaces are allowed in the card number
+,,fromErrorCode,Invalid card number,,required_field_empty,Card number is a required field
+cardNumberAmex,,fromRegex,Invalid card number,\s,invalid_card_number_has_spaces,No spaces are allowed in the card number
+,,fromErrorCode,Invalid card number,,required_field_empty,Card number is a required field
+cardholderName,,fromErrorCode,Incorrectly formatted cardholder name,,required_field_empty,Cardholder name is a required field
+,,fromRegex,Incorrectly formatted cardholder name,^\s*$,required_field_empty,Cardholder name is a required field
+expiryMonth,,fromErrorCode,Expiration month is a required field,,required_field_empty,Expiration month is a required field
+expiryYear,,fromErrorCode,Expiration year is a required field,,required_field_empty,Expiration year is a required field
+cvv,,fromErrorCode,Invalid card verification code,,required_field_empty,CVV is a required field
+directDebitAchAccountholderName,,fromErrorCode,Incorrectly formatted name on account,,required_field_empty,Name on account is a required field
+,,fromRegex,Incorrectly formatted name on account,^\s*$,required_field_empty,Name on account is a required field
+directDebitAchBankCode,,fromErrorCode,Incorrectly formatted Routing number,,required_field_empty,Routing number is a required field
+directDebitAchAccount,,fromRegex,Incorrectly formatted Account number,\s,invalid_account_number_has_spaces,No spaces are allowed in the Account number
+,,fromErrorCode,Incorrectly formatted Account number,,required_field_empty,Account number is a required field
+achTermCheckbox,,fromErrorCode,,,required_field_empty,Make sure you accept the authorization for setting up the account
+directDebitSepaAccountholderName,,fromErrorCode,Incorrectly formatted name on account,,required_field_empty,Name on account is a required field
+,,fromRegex,Incorrectly formatted name on account,^\s*$,required_field_empty,Name on account is a required field
+directDebitSepaBankCode,,fromErrorCode,Incorrectly formatted BIC,,required_field_empty,BIC is a required field
+directDebitSepaBankName,,fromErrorCode,Incorrectly formatted Bank name,,required_field_empty,Bank name is a required field
+,,fromRegex,Incorrectly formatted Bank name,^\s*$,required_field_empty,Bank name is a required field
+directDebitSepaAccount,,fromRegex,Incorrectly formatted IBAN number,\s,invalid_account_number_has_spaces,No spaces are allowed in the IBAN number
+,,fromErrorCode,Incorrectly formatted IBAN number,,required_field_empty,IBAN Number is a required field
+addressLine1,,fromErrorCode,Incorrectly formatted address,,required_field_empty,Address line 1 is a required field
+addressLine2,,fromErrorCode,Incorrectly formatted address,,required_field_empty,Address line 2 is a required field
+addressCity,,fromErrorCode,Incorrectly formatted city,,required_field_empty,City is a required field
+addressState,,fromErrorCode,Incorrectly formatted state,,required_field_empty,State is a required field
+addressCounty,,fromErrorCode,Incorrectly formatted state,,required_field_empty,A required field is empty
+addressProvince,,fromErrorCode,Incorrectly formatted state,,required_field_empty,Province is a required field
+addressPostalCode,,fromErrorCode,Incorrectly formatted postal code,,required_field_empty,Postal Code is a required field
+addressPostalCode,US,fromErrorCode,Incorrectly formatted zip code,,required_field_empty,ZIP Code is a required field
+addressCountry,,fromErrorCode,Incorrectly formatted country,,required_field_empty,Country/Region is a required field
+firstName,,fromErrorCode,"Invalid first name, please correct your first name.",,required_field_empty,First name is a required field
+,,fromRegex,"Invalid first name, please correct your first name.",^\s*$,required_field_empty,First name is a required field
+lastName,,fromErrorCode,"Invalid last name, please correct your last name.",,required_field_empty,Last name is a required field
+,,fromRegex,"Invalid last name, please correct your last name.",^\s*$,required_field_empty,Last name is a required field
+emailAddress,,fromErrorCode,Incorrectly formatted Email Address,,required_field_empty,Email address is a required field
+taxCpfProperty,,fromErrorCode,"Invalid CPF. Please, use the format xxx.xxx.xxx-xx, adding the points and hyphen",,required_field_empty,A required field is empty
+taxVatIdProperty,pt,fromErrorCode,"Invalid NIF.",,required_field_empty,A required field is empty

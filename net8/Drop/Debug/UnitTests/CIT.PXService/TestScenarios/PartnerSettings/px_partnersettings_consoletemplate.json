@@ -1,0 +1,13 @@
+{
+  "testScenarioName": "px.partnersettings.consoletemplate",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "add": {
+          "template": "consoletemplate"
+        }
+      }
+    }
+  }
+}

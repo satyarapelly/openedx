@@ -1,0 +1,42 @@
+{
+  "testScenarioName": "px.pims.paysafecard.success",
+  "responsesPerApiCall": {
+    "getPI": {
+      "statusCode": 200,
+      "content": {
+        "id": "384090d0-3854-424a-be16-09e79d2e07d1",
+        "accountId": "0cd561e8-0e92-4937-96f9-43b9d15b5800",
+        "paymentMethod": {
+          "paymentMethodType": "paysafecard",
+          "properties": {
+            "offlineRecurring": true,
+            "userManaged": true,
+            "soldToAddressRequired": true,
+            "splitPaymentSupported": false,
+            "supportedOperations": [ "charge", "refund" ],
+            "taxable": false,
+            "redirectRequired": [ "Purchase" ],
+            "providerRemittable": false
+          },
+          "exclusionTags": [ "Subscriptions", "PreOrderContent", "PhysicalGoods" ],
+          "paymentMethodFamily": "online_bank_transfer",
+          "display": {
+            "name": "paysafecard",
+            "logo": "https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_paysafecard.pngk",
+            "logos": [
+              {
+                "mimeType": "image/png",
+                "url": "https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_paysafecard.png"
+              },
+              {
+                "mimeType": "image/svg+xml",
+                "url": "https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_paysafecard.svg"
+              }
+            ]
+          }
+        },
+        "status": "active"
+      }
+    }
+  }
+}

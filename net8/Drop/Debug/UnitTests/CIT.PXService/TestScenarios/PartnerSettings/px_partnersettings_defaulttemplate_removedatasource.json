@@ -1,0 +1,36 @@
+{
+  "testScenarioName": "px.partnersettings.defaulttemplate.RemoveDataSource",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "add": {
+          "template": "defaulttemplate",
+          "features": {
+            "removeDataSource": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "removeDataSourceResources": [ "address", "profile", "taxId" ]
+                }
+              ]
+            }
+          }
+        },
+        "update": {
+          "template": "defaulttemplate",
+          "features": {
+            "removeDataSource": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "removeDataSourceResources": [ "address", "profile", "taxId" ]
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

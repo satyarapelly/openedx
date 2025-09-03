@@ -1,0 +1,16 @@
+PropertyHintId,CountryIds,MessageSource,DefaultErrorMessage,ErrorRegEx,ErrorCode,ErrorMessage
+cardNumber,,fromRegex,Incorrectly formatted Card number,\s,invalid_card_number_has_spaces,No spaces are allowed in the card number
+,,fromErrorCode,,,required_field_empty,Card number is a required field
+cardNumberAmex,,fromRegex,Incorrectly formatted Card number,\s,invalid_card_number_has_spaces,No spaces are allowed in the card number
+,,fromErrorCode,,,required_field_empty,Card number is a required field
+cardholderName,,fromErrorCode,Incorrectly formatted cardholder name,,required_field_empty,Cardholder name is a required field
+expiryMonth,,fromErrorCode,Incorrectly formatted Expiry month,,required_field_empty,Expiration month is a required field
+expiryYear,,fromErrorCode,Incorrectly formatted Expiry year,,required_field_empty,Expiration year is a required field
+cvv,,fromErrorCode,Invalid card verification code,,required_field_empty,CVV is a required field
+addressLine1,,fromErrorCode,Incorrectly formatted address,,required_field_empty,Address line 1 is a required field
+addressCity,,fromErrorCode,Incorrectly formatted address,,required_field_empty,City is a required field
+addressState,,fromErrorCode,Incorrectly formatted address,,required_field_empty,State is a required field
+addressCounty,,fromErrorCode,Incorrectly formatted address,,required_field_empty,A required field is empty
+addressProvince,,fromErrorCode,Incorrectly formatted address,,required_field_empty,Province is a required field
+addressPostalCode,,fromErrorCode,Incorrectly formatted address,,required_field_empty,Postal Code is a required field
+addressCountry,,fromErrorCode,Incorrectly formatted address,,required_field_empty,Country/Region is a required field

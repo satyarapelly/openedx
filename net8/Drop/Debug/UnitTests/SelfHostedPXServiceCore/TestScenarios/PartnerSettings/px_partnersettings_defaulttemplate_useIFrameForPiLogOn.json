@@ -1,0 +1,18 @@
+{
+  "testScenarioName": "px.partnersettings.defaulttemplate.useIFrameForPiLogOn",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "handlePurchaseRiskChallenge": {
+          "template": "defaulttemplate",
+          "features": {
+            "useIFrameForPiLogOn": {
+              "applicableMarkets": []
+            }
+          }
+        }
+      }
+    }
+  }
+}

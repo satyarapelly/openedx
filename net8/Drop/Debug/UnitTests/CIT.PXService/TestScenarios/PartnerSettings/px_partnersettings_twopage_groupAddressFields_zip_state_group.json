@@ -1,0 +1,42 @@
+{
+  "testScenarioName": "px.partnersettings.twopage.groupAddressFields.zip.state.group",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "add": {
+          "template": "twopage",
+          "features": {
+            "groupAddressFields": {
+              "applicableMarkets": []
+            },
+            "enableZipCodeStateGrouping": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "usePSSForPXFeatureFlighting": true
+                }
+              ]
+            }
+          }
+        },
+        "update": {
+          "template": "twopage",
+          "features": {
+            "groupAddressFields": {
+              "applicableMarkets": []
+            },
+            "enableZipCodeStateGrouping": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "usePSSForPXFeatureFlighting": true
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

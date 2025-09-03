@@ -1,0 +1,18 @@
+{
+  "testScenarioName": "px.partnersettings.selectpmbuttonlist",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "select": {
+          "template": "selectpmbuttonlist",
+          "features": {
+            "paymentMethodGrouping": {
+              "applicableMarkets": []
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,437 @@
+﻿{
+  "testScenarioName": "px.po.getClientAction",
+  "responsesPerApiCall": {
+    "clientaction": {
+      "statusCode": 200,
+      "content": {        
+          "paymentMethodResults": {
+            "paymentMethods": [
+              {
+                "paymentMethodType": "visa",
+                "paymentMethodFamily": "credit_card",
+                "display": {
+                  "name": "Visa",
+                  "logo": "https://pmservices.cp.microsoft-int.com/staticresourceservice/images/v4/logo_visa_rect.png",
+                  "logos": [
+                    {
+                      "mimeType": "image/png",
+                      "url": "https://pmservices.cp.microsoft-int.com/staticresourceservice/images/v4/logo_visa_rect.png"
+                    },
+                    {
+                      "mimeType": "image/svg+xml",
+                      "url": "https://pmservices.cp.microsoft-int.com/staticresourceservice/images/v4/logo_visa.svg"
+                    }
+                  ]
+                },
+                "properties": {
+                  "offlineRecurring": true,
+                  "userManaged": true,
+                  "soldToAddressRequired": true,
+                  "chargeThresholds": [],
+                  "supportedOperations": [
+                    "authorize",
+                    "charge",
+                    "refund",
+                    "chargeback"
+                  ],
+                  "taxable": false,
+                  "providerRemittable": false,
+                  "moBillingIdentityUrl": "",
+                  "riskyPaymentMethod": false,
+                  "authWindow": 10080,
+                  "fundsAvailabilityWindow": 0,
+                  "multipleLineItemsSupported": true,
+                  "splitPaymentSupported": true,
+                  "purchaseWaitTime": 0,
+                  "redirectRequired": [],
+                  "reAuthWindows": [
+                    129600
+                  ]
+                },
+                "exclusionTags": []
+              },
+              {
+                "paymentMethodType": "amex",
+                "paymentMethodFamily": "credit_card",
+                "display": {
+                  "name": "American Express",
+                  "logo": "https://pmservices.cp.microsoft-int.com/staticresourceservice/images/v4/logo_amex_rect.png",
+                  "logos": [
+                    {
+                      "mimeType": "image/png",
+                      "url": "https://pmservices.cp.microsoft-int.com/staticresourceservice/images/v4/logo_amex_rect.png"
+                    },
+                    {
+                      "mimeType": "image/svg+xml",
+                      "url": "https://pmservices.cp.microsoft-int.com/staticresourceservice/images/v4/logo_amex.svg"
+                    }
+                  ]
+                },
+                "properties": {
+                  "offlineRecurring": true,
+                  "userManaged": true,
+                  "soldToAddressRequired": true,
+                  "chargeThresholds": [],
+                  "supportedOperations": [
+                    "authorize",
+                    "charge",
+                    "refund",
+                    "chargeback"
+                  ],
+                  "taxable": false,
+                  "providerRemittable": false,
+                  "moBillingIdentityUrl": "",
+                  "riskyPaymentMethod": false,
+                  "authWindow": 10080,
+                  "fundsAvailabilityWindow": 0,
+                  "multipleLineItemsSupported": true,
+                  "splitPaymentSupported": true,
+                  "purchaseWaitTime": 0,
+                  "redirectRequired": [],
+                  "reAuthWindows": [
+                    10080,
+                    10080,
+                    10080,
+                    10080,
+                    10080,
+                    10080,
+                    10080,
+                    10080,
+                    10080,
+                    10080,
+                    10080,
+                    10080
+                  ]
+                },
+                "exclusionTags": []
+              },
+              {
+                "paymentMethodType": "mc",
+                "paymentMethodFamily": "credit_card",
+                "display": {
+                  "name": "MasterCard",
+                  "logo": "https://pmservices.cp.microsoft-int.com/staticresourceservice/images/v4/logo_mc_rect.png",
+                  "logos": [
+                    {
+                      "mimeType": "image/png",
+                      "url": "https://pmservices.cp.microsoft-int.com/staticresourceservice/images/v4/logo_mc_rect.png"
+                    },
+                    {
+                      "mimeType": "image/svg+xml",
+                      "url": "https://pmservices.cp.microsoft-int.com/staticresourceservice/images/v4/logo_mc.svg"
+                    }
+                  ]
+                },
+                "properties": {
+                  "offlineRecurring": true,
+                  "userManaged": true,
+                  "soldToAddressRequired": true,
+                  "chargeThresholds": [],
+                  "supportedOperations": [
+                    "authorize",
+                    "charge",
+                    "refund",
+                    "chargeback"
+                  ],
+                  "taxable": false,
+                  "providerRemittable": false,
+                  "moBillingIdentityUrl": "",
+                  "riskyPaymentMethod": false,
+                  "authWindow": 10080,
+                  "fundsAvailabilityWindow": 0,
+                  "multipleLineItemsSupported": true,
+                  "splitPaymentSupported": true,
+                  "purchaseWaitTime": 0,
+                  "redirectRequired": [],
+                  "reAuthWindows": [
+                    43200,
+                    43200,
+                    43200,
+                    43200,
+                    43200
+                  ]
+                },
+                "exclusionTags": []
+              },
+              {
+                "paymentMethodType": "discover",
+                "paymentMethodFamily": "credit_card",
+                "display": {
+                  "name": "Discover Network",
+                  "logo": "https://pmservices.cp.microsoft-int.com/staticresourceservice/images/v4/logo_discover_rect.png",
+                  "logos": [
+                    {
+                      "mimeType": "image/png",
+                      "url": "https://pmservices.cp.microsoft-int.com/staticresourceservice/images/v4/logo_discover_rect.png"
+                    },
+                    {
+                      "mimeType": "image/svg+xml",
+                      "url": "https://pmservices.cp.microsoft-int.com/staticresourceservice/images/v4/logo_discover.svg"
+                    }
+                  ]
+                },
+                "properties": {
+                  "offlineRecurring": true,
+                  "userManaged": true,
+                  "soldToAddressRequired": true,
+                  "chargeThresholds": [],
+                  "supportedOperations": [
+                    "authorize",
+                    "charge",
+                    "refund",
+                    "chargeback"
+                  ],
+                  "taxable": false,
+                  "providerRemittable": false,
+                  "moBillingIdentityUrl": "",
+                  "riskyPaymentMethod": false,
+                  "authWindow": 10080,
+                  "fundsAvailabilityWindow": 0,
+                  "multipleLineItemsSupported": true,
+                  "splitPaymentSupported": true,
+                  "purchaseWaitTime": 0,
+                  "redirectRequired": [],
+                  "reAuthWindows": []
+                },
+                "exclusionTags": []
+              }
+            ],
+            "paymentInstruments": [
+              {
+                "id": "21dd9edc-af71-4d62-80ce-37151d475326",
+                "accountId": "ac_3fecc26442b057e28286a771c7dcfdb9",
+                "status": 1,
+                "paymentMethod": {
+                  "paymentMethodType": "check",
+                  "paymentMethodFamily": "offline_bank_transfer",
+                  "properties": {
+                    "offlineRecurring": false,
+                    "userManaged": false,
+                    "soldToAddressRequired": true,
+                    "chargeThresholds": [],
+                    "supportedOperations": [
+                      "charge",
+                      "refund"
+                    ],
+                    "taxable": true,
+                    "providerRemittable": false,
+                    "providerCountry": null,
+                    "moBillingIdentityUrl": "",
+                    "authWindow": null,
+                    "reAuthWindows": []
+                  },
+                  "exclusionTags": []
+                },
+                "details": null
+              },
+              {
+                "id": "54caf9ba-184f-4d50-8728-14aa738c92ae",
+                "accountId": "ac_3fecc26442b057e28286a771c7dcfdb9",
+                "status": 1,
+                "paymentMethod": {
+                  "paymentMethodType": "visa",
+                  "paymentMethodFamily": "credit_card",
+                  "properties": {
+                    "offlineRecurring": true,
+                    "userManaged": true,
+                    "soldToAddressRequired": true,
+                    "chargeThresholds": [],
+                    "supportedOperations": [
+                      "authorize",
+                      "charge",
+                      "refund",
+                      "chargeback"
+                    ],
+                    "taxable": false,
+                    "providerRemittable": false,
+                    "providerCountry": null,
+                    "moBillingIdentityUrl": "",
+                    "authWindow": 10080,
+                    "reAuthWindows": []
+                  },
+                  "exclusionTags": []
+                },
+                "details": {
+                  "taxAmount": 15.45,
+                  "accountHolderName": "PIMS Guest Checkout COT",
+                  "expiryYear": 2050,
+                  "expiryMonth": 10,
+                  "address": {
+                    "address_line1": "One Microsoft Way",
+                    "city": "Redmond",
+                    "region": "WA",
+                    "postal_code": "98052",
+                    "country": "US"
+                  },
+                  "lastFourDigits": "1344",
+                  "exportable": false,
+                  "cardType": "debit",
+                  "validationLevel": "full",
+                  "networkTokens": [],
+                  "isXboxCoBrandedCard": false
+                },
+                "creationDateTime": "2025-01-15T22:03:22.8091668Z",
+                "lastUpdatedDateTime": "2025-01-16T00:00:17.66Z"
+              },
+              {
+                "id": "54caf9ba-184f-4d50-8728-15738c93e",
+                "accountId": "ac_3fecc26442b057e28286a771c7dcfdb9",
+                "status": 2,
+                "paymentMethod": {
+                  "paymentMethodType": "visa",
+                  "paymentMethodFamily": "credit_card",
+                  "properties": {
+                    "offlineRecurring": true,
+                    "userManaged": true,
+                    "soldToAddressRequired": true,
+                    "chargeThresholds": [],
+                    "supportedOperations": [
+                      "authorize",
+                      "charge",
+                      "refund",
+                      "chargeback"
+                    ],
+                    "taxable": false,
+                    "providerRemittable": false,
+                    "providerCountry": null,
+                    "moBillingIdentityUrl": "",
+                    "authWindow": 10080,
+                    "reAuthWindows": []
+                  },
+                  "exclusionTags": []
+                },
+                "details": {
+                  "taxAmount": 15.45,
+                  "accountHolderName": "PIMS Guest Checkout COT",
+                  "expiryYear": 2050,
+                  "expiryMonth": 10,
+                  "address": {
+                    "address_line1": "One Microsoft Way",
+                    "city": "Redmond",
+                    "region": "WA",
+                    "postal_code": "98052",
+                    "country": "US"
+                  },
+                  "lastFourDigits": "1344",
+                  "exportable": false,
+                  "cardType": "debit",
+                  "validationLevel": "full",
+                  "networkTokens": [],
+                  "isXboxCoBrandedCard": false
+                },
+                "creationDateTime": "2025-01-15T22:03:22.8091668Z",
+                "lastUpdatedDateTime": "2025-01-16T00:00:17.66Z"
+              }
+            ],
+            "defaultPaymentInstrument": {
+              "id": "21dd9edc-af71-4d62-80ce-37151d475326"
+            }
+          },
+          "profile": {
+            "soldToAddress": null,
+            "billingAddress": null,
+            "addresses": [],
+            "email": "aolivasaltam+2@microsoft.com"
+          },
+          "checkoutRequestId": "cr_5edd1d53-67e6-428e-ad8b-108c84af69c0",
+          "paymentRequestId": null,
+          "amount": 150.0,
+          "taxAmount": 0.0,
+          "subTotalAmount": 150.0,
+          "currency": "USD",
+          "country": "US",
+          "language": "en-us",
+          "partnerName": "defaulttemplate",
+          "metadata": {
+            "AdditionalProp1": null,
+            "AdditionalProp2": null,
+            "AdditionalProp3": null,
+            "id": null,
+            "updatedBy": null,
+            "lastUpdated": "2025-01-18T00:06:14.0658141Z",
+            "createdBy": null,
+            "createdDate": "2025-01-18T00:06:14.0658141Z",
+            "OrderId": "ecc0bd0a37a14490bff84d5612a1bfcb",
+            "OrderDate": "January 18 2025"
+          },
+          "lineItems": [
+            {
+              "imageUri": null,
+              "description": "Sample Item 1",
+              "itemName": "Beginner's Bundle",
+              "imageUri": "https://is2-ssl.mzstatic.com/image/thumb/Purple124/v4/cb/6b/60/cb6b606e-70c4-e5ca-742c-5b9c30a777f2/AppIcon-1x_U007emarketing-0-7-0-85-220.png/1024x1024bb.png",
+              "chargeAmount": 100.0,
+              "tax": 0.0,
+              "isTaxInclusive": false,
+              "quantity": 1,
+              "publisherName": "King store",
+              "productCode": "P001",
+              "contentType": "Digital",
+              "shipToAddress": {
+                "country": null,
+                "region": null,
+                "district": null,
+                "city": null,
+                "addressLine1": null,
+                "addressLine2": null,
+                "addressLine3": null,
+                "postalCode": null,
+                "firstName": null,
+                "lastName": null,
+                "correspondenceName": null,
+                "phoneNumber": null
+              },
+              "metadata": {
+                "AdditionalProp1": null,
+                "AdditionalProp2": null,
+                "AdditionalProp3": null,
+                "id": null,
+                "updatedBy": null,
+                "lastUpdated": "2025-01-18T00:06:14.065825Z",
+                "createdBy": null,
+                "createdDate": "2025-01-18T00:06:14.065825Z"
+              }
+            },
+            {
+              "imageUri": null,
+              "description": "Sample Item 2",
+              "itemName": "Super Sweet Deal!",
+              "imageUri": "https://is2-ssl.mzstatic.com/image/thumb/Purple124/v4/cb/6b/60/cb6b606e-70c4-e5ca-742c-5b9c30a777f2/AppIcon-1x_U007emarketing-0-7-0-85-220.png/1024x1024bb.png",
+              "chargeAmount": 50.0,
+              "tax": 0.0,
+              "isTaxInclusive": false,
+              "quantity": 2,
+              "publisherName": "Publisher2",
+              "productCode": "P002",
+              "contentType": "Physical",
+              "shipToAddress": {
+                "country": null,
+                "region": null,
+                "district": null,
+                "city": null,
+                "addressLine1": null,
+                "addressLine2": null,
+                "addressLine3": null,
+                "postalCode": null,
+                "firstName": null,
+                "lastName": null,
+                "correspondenceName": null,
+                "phoneNumber": null
+              },
+              "metadata": {
+                "AdditionalProp1": null,
+                "AdditionalProp2": null,
+                "AdditionalProp3": null,
+                "id": null,
+                "updatedBy": null,
+                "lastUpdated": "2025-01-18T00:06:14.0658517Z",
+                "createdBy": null,
+                "createdDate": "2025-01-18T00:06:14.0658518Z"
+              }
+            }
+          ],
+          "checkoutStatus": "PendingClientAction"        
+      }
+    }
+  }
+}

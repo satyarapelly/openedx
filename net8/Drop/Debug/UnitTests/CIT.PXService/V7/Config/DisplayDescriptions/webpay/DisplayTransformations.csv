@@ -1,0 +1,5 @@
+PropertyHintId,CountryIds,Target,Category,InputRegex,ReplacementPattern
+cardNumber,,forFormat,regex,\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?,$1$2$3$4 $5$6$7$8 $9$10$11$12 $13$14$15$16
+,,forModel,regex,\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?,$1$2$3$4$5$6$7$8$9$10$11$12$13$14$15$16
+cardNumberAmex,,forFormat,regex,\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?,$1$2$3$4 $5$6$7$8$9$10 $11$12$13$14$15
+,,forModel,regex,\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?\D*(\d)?,$1$2$3$4$5$6$7$8$9$10$11$12$13$14$15

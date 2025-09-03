@@ -1,0 +1,27 @@
+{
+  "testScenarioName": "px.partnersettings.defaulttemplate.addHapiSUADisabledTaxResourceId.enableAddtionalAddressHeader",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "add": {
+          "template": "defaulttemplate",
+          "features": {
+            "enableAddtionalAddressHeader": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "usePSSForPXFeatureFlighting": true
+                }
+              ]
+            },
+            "addHapiSUADisabledTaxResourceId": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": null
+            }
+          }
+        }
+      }
+    }
+  }
+}

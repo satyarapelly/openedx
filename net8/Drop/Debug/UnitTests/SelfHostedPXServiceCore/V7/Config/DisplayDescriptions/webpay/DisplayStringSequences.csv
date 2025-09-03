@@ -1,0 +1,17 @@
+DisplayStringSequenceId,CountryIds,DisplayStringId
+creditCardStrings,,closeButtonAccessiblityName
+,,invalidExpiryDate
+,,tooManyOperations
+,,invalidChallengeCode
+,,paymentInstrumentAlreadyAdded
+,,challengeCodeExpired
+,,validationFailed
+,,singleFieldErrorMessage
+,,multipleFieldsErrorMessage
+profileAddressStrings,,InvalidProperty
+profileAddressStrings,,InvalidProperty_invalid_address_fields_combination
+profileAddressStrings,,InvalidProperty_postal_code
+profileAddressStrings,,singleFieldErrorMessage
+profileAddressStrings,,multipleFieldsErrorMessage
+CommonStrings,,singleFieldErrorMessage
+,,multipleFieldsErrorMessage

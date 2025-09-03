@@ -1,0 +1,71 @@
+{
+  "testScenarioName": "px.msrewards.challenge",
+  "responsesPerApiCall": {
+    "getUserInfo": {
+      "statusCode": 200,
+      "content": {
+        "response": {
+          "balance": 10000,
+          "catalog": [
+            {
+              "name": "000400000253",
+              "price": 2000,
+              "provider": "csv",
+              "attributes": {
+                "isMicrosoftCSVGiftCard": "true"
+              },
+              "config": {
+                "amount": "2",
+                "currencyCode": "usd"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "challengeFirst": {
+      "statusCode": 200,
+      "content": {
+        "response": {
+          "result_message": "Must challenge user id: E30F394398F1DF71549020FAC562B0F63B7A9042.",
+          "msa_phone_number": "15735376488"
+        },
+        "correlationId": "4b6773bf40ff45eeae08c180ac33a0c9",
+        "code": 2007
+      }
+    },
+    "solveFirst": {
+      "statusCode": 200,
+      "content": {
+        "response": {
+          "result_message": "MjArhwDHadfasdf1AaS3Kasptd",
+          "msa_phone_number": "15735376488"
+        },
+        "correlationId": "4b6773bf40ff45eeae08c180ac33a0c9",
+        "code": 2008
+      }
+    },
+    "redeemRewards": {
+      "statusCode": 200,
+      "content": {
+        "response": {
+          "result_message": "OrderId d2edf745-0909-4487-839d-f8d217d18c32 processed successfully.",
+          "order": {
+            "id": "d2edf745-0909-4487-839d-f8d217d18c32",
+            "sku": "000400000253",
+            "item_snapshot": {
+              "name": "000400000253",
+              "price": 2000,
+              "config": {
+                "amount": "2",
+                "currencyCode": "USD"
+              }
+            }
+          }
+        },
+        "correlationId": "4b6773bf40ff45eeae08c180ac33a0c9",
+        "code": 0
+      }
+    }
+  }
+}

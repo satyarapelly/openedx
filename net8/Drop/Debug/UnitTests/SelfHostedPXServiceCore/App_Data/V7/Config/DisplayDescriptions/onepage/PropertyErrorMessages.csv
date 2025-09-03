@@ -1,0 +1,24 @@
+PropertyHintId,CountryIds,MessageSource,DefaultErrorMessage,ErrorRegEx,ErrorCode,ErrorMessage
+cardNumber,,fromRegex,Invalid card number,\s,invalid_card_number_has_spaces,No spaces are allowed in the card number
+,,fromErrorCode,Invalid card number,,required_field_empty,Enter your card number
+secureCardNumber,,fromRegex,Invalid card number,\s,invalid_card_number_has_spaces,No spaces are allowed in the card number
+,,fromErrorCode,Invalid card number,,required_field_empty,Enter your card number
+cardNumberAmex,,fromRegex,Invalid card number,\s,invalid_card_number_has_spaces,No spaces are allowed in the card number
+,,fromErrorCode,Invalid card number,,required_field_empty,Enter your card number
+secureCardNumberAmex,,fromRegex,Invalid card number,\s,invalid_card_number_has_spaces,No spaces are allowed in the card number
+,,fromErrorCode,Invalid card number,,required_field_empty,Enter your card number
+cardholderName,,fromErrorCode,Incorrectly formatted cardholder name,,required_field_empty,Enter your cardholder name
+,,fromRegex,Incorrectly formatted cardholder name,^\s*$,required_field_empty,Enter your cardholder name
+expiryMonth,,fromErrorCode,Pick your expiration month,,required_field_empty,Pick your expiration month
+expiryYear,,fromErrorCode,Pick your expiration year,,required_field_empty,Pick your expiration year
+cvv,,fromErrorCode,Invalid card verification code,,required_field_empty,Enter your security code
+secureCvv,,fromErrorCode,Invalid card verification code,,required_field_empty,Enter your security code
+addressLine1,,fromErrorCode,Incorrectly formatted address,,required_field_empty,Enter the first line of your address
+addressLine2,,fromErrorCode,Incorrectly formatted address,,required_field_empty,Enter the second line of your address
+addressCity,,fromErrorCode,Incorrectly formatted city,,required_field_empty,Enter your city
+addressState,,fromErrorCode,Incorrectly formatted state,,required_field_empty,Enter your state
+addressCounty,,fromErrorCode,Incorrectly formatted state,,required_field_empty,A required field is empty
+addressProvince,,fromErrorCode,Incorrectly formatted state,,required_field_empty,Province is a required field
+addressPostalCode,,fromErrorCode,Incorrectly formatted postal code,,required_field_empty,Enter your postal code
+addressPostalCode,US,fromErrorCode,Incorrectly formatted zip code,,required_field_empty,Enter your zip code
+addressCountry,,fromErrorCode,Incorrectly formatted country,,required_field_empty,Pick your country/region

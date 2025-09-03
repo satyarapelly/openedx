@@ -1,0 +1,358 @@
+{
+  "testScenarioName": "px.account.v3.profile.default.address",
+  "responsesPerApiCall": {
+    "getProfiles": {
+      "statusCode": 200,
+      "content": {
+        "total_count": 1,
+        "items": [
+          {
+            "culture": "en-US",
+            "name": null,
+            "email": "employee@company.com",
+            "company_name": "Company Name",
+            "language": "en",
+            "love_code": null,
+            "mobile_barcode": null,
+            "id": "EmpAccountNoAddressName-EmpProfile001",
+            "etag": null,
+            "customer_id": "EmpAccountNoAddressName",
+            "default_address_id": "273c628b-d687-5886-c0cd-a3d48f30a006",
+            "country": null,
+            "snapshot_id": "EmpAccountNoAddressName-EmpProfile001/2",
+            "links": {
+              "self": {
+                "href": "EmpAccountNoAddressName/profiles/EmpAccountNoAddressName-EmpProfile001",
+                "method": "GET"
+              },
+              "snapshot": {
+                "href": "EmpAccountNoAddressName/profiles/EmpAccountNoAddressName-EmpProfile001/2",
+                "method": "GET"
+              },
+              "update": {
+                "href": "EmpAccountNoAddressName/profiles/EmpAccountNoAddressName-EmpProfile001",
+                "method": "PUT"
+              },
+              "delete": {
+                "href": "EmpAccountNoAddressName/profiles/EmpAccountNoAddressName-EmpProfile001",
+                "method": "DELETE"
+              },
+              "default_address": {
+                "href": "EmpAccountNoAddressName/addresses/EmpAccountNoAddressName-Address001",
+                "method": "GET"
+              }
+            },
+            "object_type": "Profile",
+            "resource_status": "Active",
+            "type": "employee",
+            "first_name": "EmployeeFirstName",
+            "last_name": "EmployeeLastName"
+          }
+        ]
+      }
+    },
+    "getAddress": {
+      "statusCode": 200,
+      "content": {
+        "id": "1cf7389d-5e18-5c34-0eec-383c80105e21",
+        "country": "US",
+        "region": "tx",
+        "city": "Houston",
+        "address_line1": "MASKED(27)",
+        "address_line2": "MASKED(27)",
+        "address_line3": "MASKED(0)",
+        "postal_code": "77034",
+        "is_zip_plus_4_appended": false,
+        "links": {
+          "self": {
+            "href": "b3bafb25-48ab-4c21-b5de-91495e2ac392/addresses/1cf7389d-5e18-5c34-0eec-383c80105e21",
+            "method": "GET"
+          }
+        },
+        "object_type": "Address",
+        "contract_version": "2014-09-01",
+        "resource_status": "Active"
+      }
+    },
+    "postAddress": {
+      "statusCode": 200,
+      "content": {
+        "customer_id": "<AccountId>",
+        "id": "<AddressId>",
+        "country": "US",
+        "region": "wa",
+        "city": "redmond",
+        "address_line1": "1 Microsoft Way",
+        "postal_code": "98051",
+        "first_name": "testName",
+        "last_name": "testName",
+        "phone_number": "4255382416",
+        "validate": false,
+        "etag": "7247023615162416086",
+        "object_type": "Address",
+        "resource_status": "Active"
+      }
+    },
+    "putProfile": {
+      "statusCode": 200,
+      "content": {
+        "object_type": "Profile",
+        "customer_id": "e441d84b-3b6b-4993-961e-f7c9e04c8015",
+        "culture": "nl-NL",
+        "locale_id": 1043,
+        "email_address": "aa...f(10)@telfort.nl",
+        "first_name": "T...(3)",
+        "last_name": "N...(6)",
+        "reputation_status": null,
+        "default_address_id": "8e7b59cf-1b17-5d7a-f83c-b4f1afe68771",
+        "country": "NL",
+        "default_address": {
+          "customer_id": "e441d84b-3b6b-4993-961e-f7c9e04c8015",
+          "id": "8e7b59cf-1b17-5d7a-f83c-b4f1afe68771",
+          "country": "NL",
+          "region": "nl-ge",
+          "district": null,
+          "city": "Apeldoorn",
+          "address_line1": "MASKED(22)",
+          "address_line2": null,
+          "address_line3": null,
+          "postal_code": "7324 AV",
+          "first_name": null,
+          "first_name_pronunciation": null,
+          "middle_name": null,
+          "last_name": null,
+          "last_name_pronunciation": null,
+          "correspondence_name": null,
+          "phone_number": null,
+          "mobile": null,
+          "fax": null,
+          "telex": null,
+          "email_address": null,
+          "web_site_url": null,
+          "street_supplement": null,
+          "is_within_city_limits": null,
+          "form_of_address": null,
+          "address_notes": null,
+          "time_zone": null,
+          "latitude": null,
+          "longitude": null,
+          "is_avs_validated": null,
+          "is_avs_full_validation_succeeded": false,
+          "validate": false,
+          "validation_stamp": null,
+          "is_address_standardized": null,
+          "standardized_address": null,
+          "etag": "7186480396887217158",
+          "is_light_weight": false,
+          "is_zip_plus_4_appended": false,
+          "is_customer_consented": false,
+          "is_zip_plus_4_present": null,
+          "perform_full_address_validation": null,
+          "links": {
+            "self": {
+              "href": "e441d84b-3b6b-4993-961e-f7c9e04c8015/addresses/8e7b59cf-1b17-5d7a-f83c-b4f1afe68771",
+              "method": "GET"
+            },
+            "delete": {
+              "href": "e441d84b-3b6b-4993-961e-f7c9e04c8015/addresses/8e7b59cf-1b17-5d7a-f83c-b4f1afe68771",
+              "method": "DELETE"
+            }
+          },
+          "object_type": "Address",
+          "contract_version": null,
+          "resource_status": "Active"
+        },
+        "links": {
+          "self": {
+            "href": "e441d84b-3b6b-4993-961e-f7c9e04c8015/profiles/020a0008-c7d4-5c3a-1f66-d9dbce707370",
+            "method": "GET"
+          },
+          "snapshot": {
+            "href": "e441d84b-3b6b-4993-961e-f7c9e04c8015/profiles/020a0008-c7d4-5c3a-1f66-d9dbce707370/7",
+            "method": "GET"
+          },
+          "update": {
+            "href": "e441d84b-3b6b-4993-961e-f7c9e04c8015/profiles/020a0008-c7d4-5c3a-1f66-d9dbce707370",
+            "method": "PUT"
+          },
+          "update2": {
+            "href": "e441d84b-3b6b-4993-961e-f7c9e04c8015/profiles/020a0008-c7d4-5c3a-1f66-d9dbce707370",
+            "method": "PATCH"
+          },
+          "delete": {
+            "href": "e441d84b-3b6b-4993-961e-f7c9e04c8015/profiles/020a0008-c7d4-5c3a-1f66-d9dbce707370",
+            "method": "DELETE"
+          },
+          "default_address": {
+            "href": "e441d84b-3b6b-4993-961e-f7c9e04c8015/addresses/8e7b59cf-1b17-5d7a-f83c-b4f1afe68771",
+            "method": "GET"
+          }
+        },
+        "id": "020a0008-c7d4-5c3a-1f66-d9dbce707370",
+        "etag": "8448319496566097427",
+        "snapshot_id": "020a0008-c7d4-5c3a-1f66-d9dbce707370/7",
+        "resource_status": "Active",
+        "type": "consumer"
+      }
+    },
+    "patchProfile": {
+      "statusCode": 200,
+      "content": {
+        "object_type": "Profile",
+        "customer_id": "e441d84b-3b6b-4993-961e-f7c9e04c8015",
+        "culture": "nl-NL",
+        "locale_id": 1043,
+        "email_address": "aa...f(10)@telfort.nl",
+        "first_name": "T...(3)",
+        "last_name": "N...(6)",
+        "reputation_status": null,
+        "default_address_id": "8e7b59cf-1b17-5d7a-f83c-b4f1afe68771",
+        "country": "NL",
+        "default_address": {
+          "customer_id": "e441d84b-3b6b-4993-961e-f7c9e04c8015",
+          "id": "8e7b59cf-1b17-5d7a-f83c-b4f1afe68771",
+          "country": "NL",
+          "region": "nl-ge",
+          "district": null,
+          "city": "Apeldoorn",
+          "address_line1": "MASKED(22)",
+          "address_line2": null,
+          "address_line3": null,
+          "postal_code": "7324 AV",
+          "first_name": null,
+          "first_name_pronunciation": null,
+          "middle_name": null,
+          "last_name": null,
+          "last_name_pronunciation": null,
+          "correspondence_name": null,
+          "phone_number": null,
+          "mobile": null,
+          "fax": null,
+          "telex": null,
+          "email_address": null,
+          "web_site_url": null,
+          "street_supplement": null,
+          "is_within_city_limits": null,
+          "form_of_address": null,
+          "address_notes": null,
+          "time_zone": null,
+          "latitude": null,
+          "longitude": null,
+          "is_avs_validated": null,
+          "is_avs_full_validation_succeeded": false,
+          "validate": false,
+          "validation_stamp": null,
+          "is_address_standardized": null,
+          "standardized_address": null,
+          "etag": "7186480396887217158",
+          "is_light_weight": false,
+          "is_zip_plus_4_appended": false,
+          "is_customer_consented": false,
+          "is_zip_plus_4_present": null,
+          "perform_full_address_validation": null,
+          "links": {
+            "self": {
+              "href": "e441d84b-3b6b-4993-961e-f7c9e04c8015/addresses/8e7b59cf-1b17-5d7a-f83c-b4f1afe68771",
+              "method": "GET"
+            },
+            "delete": {
+              "href": "e441d84b-3b6b-4993-961e-f7c9e04c8015/addresses/8e7b59cf-1b17-5d7a-f83c-b4f1afe68771",
+              "method": "DELETE"
+            }
+          },
+          "object_type": "Address",
+          "contract_version": null,
+          "resource_status": "Active"
+        },
+        "links": {
+          "self": {
+            "href": "e441d84b-3b6b-4993-961e-f7c9e04c8015/profiles/020a0008-c7d4-5c3a-1f66-d9dbce707370",
+            "method": "GET"
+          },
+          "snapshot": {
+            "href": "e441d84b-3b6b-4993-961e-f7c9e04c8015/profiles/020a0008-c7d4-5c3a-1f66-d9dbce707370/7",
+            "method": "GET"
+          },
+          "update": {
+            "href": "e441d84b-3b6b-4993-961e-f7c9e04c8015/profiles/020a0008-c7d4-5c3a-1f66-d9dbce707370",
+            "method": "PUT"
+          },
+          "update2": {
+            "href": "e441d84b-3b6b-4993-961e-f7c9e04c8015/profiles/020a0008-c7d4-5c3a-1f66-d9dbce707370",
+            "method": "PATCH"
+          },
+          "delete": {
+            "href": "e441d84b-3b6b-4993-961e-f7c9e04c8015/profiles/020a0008-c7d4-5c3a-1f66-d9dbce707370",
+            "method": "DELETE"
+          },
+          "default_address": {
+            "href": "e441d84b-3b6b-4993-961e-f7c9e04c8015/addresses/8e7b59cf-1b17-5d7a-f83c-b4f1afe68771",
+            "method": "GET"
+          }
+        },
+        "id": "020a0008-c7d4-5c3a-1f66-d9dbce707370",
+        "etag": "8448319496566097427",
+        "snapshot_id": "020a0008-c7d4-5c3a-1f66-d9dbce707370/7",
+        "resource_status": "Active",
+        "type": "consumer"
+      }
+    },
+    "getAddresses": {
+      "statusCode": 200,
+      "content": {
+        "item_count": 2,
+        "items": [
+          {
+            "id": "1cf7389d-5e18-5c34-0eec-383c80105e21",
+            "country": "US",
+            "region": "tx",
+            "city": "Houston",
+            "address_line1": "MASKED(27)",
+            "address_line2": "MASKED(27)",
+            "address_line3": "MASKED(0)",
+            "postal_code": "77034",
+            "is_zip_plus_4_appended": false,
+            "links": {
+              "self": {
+                "href": "b3bafb25-48ab-4c21-b5de-91495e2ac392/addresses/1cf7389d-5e18-5c34-0eec-383c80105e21",
+                "method": "GET"
+              }
+            },
+            "object_type": "Address",
+            "contract_version": "2014-09-01",
+            "resource_status": "Active"
+          },
+          {
+            "id": "c8908680-6ebd-4482-9c0a-148d92eb10d2",
+            "country": "US",
+            "region": "FL",
+            "city": "orlando",
+            "address_line1": "MASKED(21)",
+            "address_line2": "MASKED(7)",
+            "address_line3": "MASKED(0)",
+            "postal_code": "32819",
+            "is_zip_plus_4_appended": false,
+            "links": {
+              "self": {
+                "href": "6913e850-85ad-4f25-98e3-f34e0a90f4f4/addresses/c8908680-6ebd-4482-9c0a-148d92eb10d2",
+                "method": "GET"
+              }
+            },
+            "object_type": "Address",
+            "contract_version": "2014-09-01",
+            "resource_status": "Active"
+          }
+        ],
+        "links": {
+          "add": {
+            "href": "6913e850-85ad-4f25-98e3-f34e0a90f4f4/addresses",
+            "method": "POST"
+          }
+        },
+        "object_type": "Addresses",
+        "contract_version": "2014-09-01",
+        "resource_status": "Active"
+      }
+    }
+  }
+}

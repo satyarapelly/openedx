@@ -1,0 +1,5 @@
+PropertyHintId,CountryIds,TagKey,TagValue
+paymentMethod,,accessibilityName,Select a payment type
+,,theme,windows
+paymentOptionDisplayGroup,,optionDisplayGroup_enablePaymentMethodGrouping,optionDisplayGroup_enablePaymentMethodGrouping
+paymentOptionTextGroup,,optionTextGroup_enablePaymentMethodGrouping,optionTextGroup_enablePaymentMethodGrouping

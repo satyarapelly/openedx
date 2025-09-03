@@ -1,0 +1,29 @@
+{
+  "testScenarioName": "px.partnersettings.listpidropdown.SelectSingleInstance",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "selectSingleInstance": {
+          "template": "listpidropdown",
+          "features": {
+            "enableSelectSingleInstancePiDisplay": {
+              "applicableMarkets": []
+            }
+          }
+        },
+        "selectInstance": {
+          "template": "listpidropdown",
+          "features": {
+            "useDisabledPIsForSelectInstance": {
+              "applicableMarkets": []
+            },
+            "enableSingleInstancePidls": {
+              "applicableMarkets": []
+            }
+          }
+        }
+      }
+    }
+  }
+}

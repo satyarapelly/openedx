@@ -1,0 +1,6 @@
+PropertyHintId,CountryIds,TagKey,TagValue
+paymentMethodSelectHeading,,accessibilityName,Select Payment Method
+paymentMethod,,accessibilityName,Select a payment type
+,,theme,windows
+cancelButton,,accessibilityName,Cancel
+selectButtonPidlPayload,,accessibilityName,Next

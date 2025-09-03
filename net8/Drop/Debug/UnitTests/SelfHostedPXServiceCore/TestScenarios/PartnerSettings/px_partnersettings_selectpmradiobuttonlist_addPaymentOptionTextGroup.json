@@ -1,0 +1,18 @@
+{
+  "testScenarioName": "px.partnersettings.listpibuttonlist.useTextOnlyForPaymentOption",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "select": {
+          "template": "selectpmradiobuttonlist",
+          "features": {
+            "useTextOnlyForPaymentOption": {
+              "applicableMarkets": []
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "testScenarioName": "px.tops.othertoken.success",
+  "responsesPerApiCall": {
+    "getTokenPolicyDescription": {
+      "statusCode": 200,
+      "content": {
+        "asset": {
+          "id": "X21-85015",
+          "source": "MSProduct",
+          "assetValue": {
+            "value": 10,
+            "valueMeasurement": "USD"
+          }
+        },
+        "catalogInfo": {
+          "matchingAvailabilities": [
+            {
+              "action": null,
+              "availablity": null,
+              "productId": null,
+              "skuId": null,
+              "TokenValidationpolicy": null
+            }
+          ]
+        },
+        "policyEvaluation": {
+          "isRedeemable": true
+        },
+        "state": "Active",
+        "tokenCategory": "Other"
+      }
+    }
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "testScenarioName": "px.partnersettings.webblendsFamily.familyFunding.withAVS",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "add": {
+          "template": "defaulttemplate",
+          "features": {
+            "addressValidation": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": null
+            },
+            "customizeSubmitButtonContext": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "operation": "PATCH",
+                  "endpoint": "my-family",
+                  "buttonDisplayHintId": "saveButton",
+                  "profileType": "consumerV3"
+                }
+              ]
+            },
+            "customizeProfileForm": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "dataFieldsToRemoveFromPayload": [ "profileType", "profileCountry", "profileResource_id", "profileOperation" ],
+                  "profileType": "consumerV3"
+                },
+                {
+                  "dataFieldsToRemoveFromPayload": [ "addressType", "addressCountry", "addressOperation" ],
+                  "dataFieldsToRemoveFullPath": "default_address",
+                  "profileType": "consumerV3"
+                },
+                {
+                  "profileType":  "consumerV3",
+                  "convertProfileTypeTo": "consumer"
+                }
+              ]
+            }
+          }
+        },
+        "update": {
+          "template": "defaulttemplate",
+          "features": {
+            "addressValidation": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": null
+            },
+            "customizeSubmitButtonContext": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "operation": "PATCH",
+                  "endpoint": "my-family",
+                  "profileType": "consumerV3"
+                }
+              ]
+            },
+            "customizeProfileForm": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "dataFieldsToRemoveFromPayload": [ "profileType", "profileCountry", "profileResource_id", "profileOperation" ]
+                },
+                {
+                  "dataFieldsToRemoveFromPayload": [ "addressType", "addressCountry", "addressOperation" ],
+                  "dataFieldsToRemoveFullPath": "default_address"
+                },
+                {
+                  "convertProfileTypeTo": "consumer"
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

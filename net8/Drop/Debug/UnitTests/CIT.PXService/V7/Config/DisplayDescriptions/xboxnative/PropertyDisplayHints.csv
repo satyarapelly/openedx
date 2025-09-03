@@ -1,0 +1,685 @@
+﻿PropertyHintId,CountryIds,FeatureNames,DisplayType,PropertyName,DependentPropertyName,DependentPropertyValueRegex,DisplayName,DisplayDescription,IsHidden,IsDisabled,IsHighlighted,IsDefault,IsBack,InputScope,MaskInput,ShowDisplayName,DisplayFormat,DisplayExample,MinLength,MaxLength,DisplayContent,DisplayContentDescription,DisplayHelpSequenceId,DisplayHelpSequenceText,ClientAction,Context,DestinationId,PossibleValues,DisplaySelectionText,SourceUrl,DisplayLogo,SelectType,MaskDisplay,DisplayConditionFunctionName,DataCollectionSource,DataCollectionFilterFunctionName,IsSelectFirstItem,DisplayImage,DisplayHelpPosition,StyleHints
+non_sim_mobi_heading,,,heading,,,,,,,,,,,,,,,,,,Add mobile billing,,,,,,,,,,,,,,,,,,,
+non_sim_mobi_phone_operator,,,property,paymentMethodType,,,Choose your mobile operator,,,,,,,,,FALSE,,,,,,,,,,,,{}Empty,Choose your mobile operator,,,,,,,,,,,"width-medium, margin-end-x-small-500"
+non_sim_mobi_phone_number,,,property,msisdn,,,Phone number,Phone number,,,,,,,,FALSE,,,,,,,,,,,,,,,,,,,,,,,,"width-medium, margin-top-small"
+non_sim_mobi_footer1,,,text,,,,,,,,,,,,,,,,,,When you select ,,,,,,,,,,,,,,,,,,,
+non_sim_mobi_footer2,,,text,,,,,,,,,,,,,,,,,,Next,,,,,,,,,,,,,,,,,,,
+non_sim_mobi_instructions,,,text,,,,,,,,,,,,,,,,,,We'll send a code to your phone. Enter it on the next page that way we'll know it's really you.,,,,,,,,,,,,,,,,,,,"margin-top-x-small"
+non_sim_mobi_disclaimer,,,text,,,,,,,,,,,,,,,,,,Standard message rates may apply. See your mobile operator for details.,,,,,,,,,,,,,,,,,,,
+non_sim_mobi_showInfoHeading,,,heading,,,,,,,,,,,,,,,,,,Mobile Account Information,,,,,,,,,,,,,,,,,,,
+non_sim_mobi_showAccountPhone,,,expression,,,,,,,,,,,,,,,,,,(Mobile number: {msisdn}),,,,,,,,,,,,,,,,,,,
+non_sim_mobi_showAccountProperty,,,property,msisdn,,,,,TRUE,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+non_sim_mobi_subheading,,,subheading,,,,,,,,,,,,,,,,,,When you hit "Next":,,,,,,,,,,,,,,,,,,,"margin-top-small"
+non_sim_mobi_deleteHeading,,,heading,,,,,,,,,,,,,,,,,,Delete mobile?,,,,,,,,,,,,,,,,,,,
+non_sim_mobi_deleteSubheading,,,text,,,,,,,,,,,,,,,,,,Are you sure you want to delete mobile?,,,,,,,,,,,,,,,,,,,"margin-top-small, margin-bottom-x-small"
+non_sim_mobi_deletePhoneNumber,,,expression,,,,,,,,,,,,,,,,,,({dataSources.paymentInstrument.details.msisdn}),,,,,,,,,,,,,,,,,,,
+smsChallengeHeading,,,heading,,,,,,,,,,,,,,,,,,Mobile billing verification,,,,,,,,,,,,,,,,,,,
+smsVerificationHeading,,,heading,,,,,,,,,,,,,,,,,,Additional verification needed,,,,,,,,,,,,,,,,,,,
+smsChallengeText,,,text,,,,,,,,,,,,,,,,,,"We've sent a one-time verification code to your phone number {0}",,,,,,,,,,,,,,,,,,,"margin-top-small, margin-bottom-x-small"
+smsChallengeCodeOtp,,,property,otp,,,Enter the code,,,,,,,,,FALSE,,Verification code,,,,,,,,,,,,,,,,,,,,,,
+smsChallengeCode,,,property,pin,,,Enter the code,,,,,,,,,FALSE,,Verification code,,,,,,,,,,,,,,,,,,,,,,
+smsNewCodeLink,,,button,,,,,,,,,,,,,,,,,,Resend Verification,,,,restAction,{placeholder for the sending new code sms link},,,,,,,,,,,,,,"margin-top-x-small"
+showInfoWarningText,,,text,,,,,,,,,,,,,,,,,,"This payment method is not editable.",,,,,,,,,,,,,,,,,,,"margin-top-x-small"
+alipayBillingAgreementHeading,,,heading,,,,,,,,,,,,,,,,,,Add your Alipay account,,,,,,,,,,,,,,,,,,,"margin-bottom-small"
+alipayBillingAgreementFooterStaticText1,,,subheading,,,,,,,,,,,,,,,,,,When you hit "Next":,,,,,,,,,,,,,,,,,,,
+alipayBillingAgreementFooterStaticText2,,,text,,,,,,,,,,,,,,,,,,"You'll be redirected to the Alipay app to verify your account. We'll collect your Alipay account information, but won't use it without your permission.",,,,,,,,,,,,,,,,,,,"margin-vertical-x-small"
+alipayBillingAgreementFooterStaticText3,,,text,,,,,,,,,,,,,,,,,,"You can use this payment option to buy Microsoft products and services anywhere you sign in with ()EmailAddress.",,,,,,,,,,,,,,,,,,,
+alipayQrCodeChallengeText,,,subheading,,,,,,,,,,,,,,,,,,Scan the QR code with your Alipay wallet.,,,,,,,,,,,,,,,,,,,
+alipayQrCodeChallengeImage,,,image,,,,,,,,,,,,,,,,,,,,,,,,,,,qrCode-aliPayQrCodeChallenge,,,,,,,,,,"image-large, margin-top-small"
+alipayQrCodePageLogo,,,logo,,,,,,,,,,,,,,,,,,,,,,,,,,,/staticresourceservice/images/v4/logo_alipay.svg,,,,,,,,,,"image-small-400"
+alipayShowInfoHeading,,,heading,,,,,,,,,,,,,,,,,,Alipay Account Information,,,,,,,,,,,,,,,,,,,
+alipayShowAccountPhone,,,text,,,,,,,,,,,,,,,,,,(Alipay Phone Number: {phone}),,,,,,,,,,,,,,,,,,,
+alipayShowAccountProperty,,,property,phone,,,,,TRUE,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+alipayDeleteHeading,,,heading,,,,,,,,,,,,,,,,,,Delete Alipay?,,,,,,,,,,,,,,,,,,,
+alipayDeleteSubheading,,,text,,,,,,,,,,,,,,,,,,Are you sure you want to remove your Alipay acount from Xbox?,,,,,,,,,,,,,,,,,,,"margin-top-small"
+alipayDeletePhoneNumber,,,expression,,,,,,,,,,,,,,,,,,({phone}),,,,,,,,,,,,,,,,,,,
+alipayDeletePhoneProperty,,,property,phone,,,,,TRUE,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+idealBillingAgreementHeading,,,heading,,,,,,,,,,,,,,,,,,Pay with iDEAL,,,,,,,,,,,,,,,,,,,
+idealBillingAgreementSelectBank,,,property,issuerId,,,Choose your bank,,,,,,,,,FALSE,,,,,,,,,,,,{}iDEALIssuers,Choose your bank,,,,,,,,,,,
+idealredirectHeading,,,heading,,,,,,,,,,,,,,,,,,Have you visited your bank's website?,,,,,,,,,,,,,,,,,,,
+idealredirectMessageLine1,,,text,,,,,,,,,,,,,,,,,,"If not, wait a moment or two. You'll be redirected.",,,,,,,,,,,,,,,,,,,
+idealredirectMessageLine2Text1,,,text,,,,,,,,,,,,,,,,,,"If you have, select ",,,,,,,,,,,,,,,,,,,
+idealredirectMessageLine2Text2,,,text,,,,,,,,,,,,,,,,,,Yes,,,,,,,,,,,,,,,,,,,
+idealredirectMessageLine2Text3,,,text,,,,,,,,,,,,,,,,,, to wrap things up.,,,,,,,,,,,,,,,,,,,
+idealLegalString,,,text,,,,,,,,,,,,,,,,,,"For a subscription via direct debit we will ask you to pay € 0,01 via iDEAL in order to verify your bank account. The € 0,01 will be refunded afterwards.",,,,,,,,,,,,,,,,,,,
+idealYesButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,Yes,,,,submit,,,,,,,,,,,,,,,
+modernIdealBillingAgreementHeading,,,heading,,,,,,,,,,,,,,,,,,Set up an iDEAL (Direct debit) account,,,,,,,,,,,,,,,,,,,
+modernIdealLegalString,,,text,,,,,,,,,,,,,,,,,,"For a subscription via direct debit, you will be asked to make a payment of €0,01 via iDEAL in order to verify your bank account. This €0,01 will be credited back to your account afterwards.",,,,,,,,,,,,,,,,,,,
+modernIdealLogo,,,logo,,,,,,,,,,,,,,,,,,,,,,,,,,,/staticresourceservice/images/v4/logo_ideal.svg,,,,,,,,,,
+idealSelectBankDescriptionText1,,,text,,,,,,,,,,,,,,,,,,"When you select ",,,,,,,,,,,,,,,,,,,
+idealSelectBankDescriptionText2,,,text,,,,,,,,,,,,,,,,,,Next,,,,,,,,,,,,,,,,,,,text-bold
+idealSelectBankDescriptionText3,,,text,,,,,,,,,,,,,,,,,,", you will be redirected to iDEAL to verify your account. We'll receive your bank account details, which we'll use to collect the payment in accordance with your direct debit request.",,,,,,,,,,,,,,,,,,,
+paymentOptionSaveText,,,text,,,,,,,,,,,,,,,,,,This payment option will be saved with your account.,,,,,,,,,,,,,,,,,,,
+add_address_heading,,,heading,,,,,,,,,,,,,,,,,,Add your Billing Address,,,,,,,,,,,,,,,,,,,
+requiredFieldText,,,text,,,,,,,,,,,,,,,,,,All fields are mandatory/required.,,,,,,,,,,,,,,,,,,,"margin-top-small"
+requiredFieldTextNoMargin,,,text,,,,,,,,,,,,,,,,,,All fields are mandatory/required.,,,,,,,,,,,,,,,,,,,
+add_credit_debit_heading,,,heading,,,,,,,,,,,,,,,,,,Add a credit card or debit card,,,,,,,,,,,,,,,,,,,
+add_credit_debit_heading,br,,heading,,,,,,,,,,,,,,,,,,Add a credit card,,,,,,,,,,,,,,,,,,,
+add_credit_debit_heading,se,,heading,,,,,,,,,,,,,,,,,,Add a debit card or credit card,,,,,,,,,,,,,,,,,,,
+update_credit_debit_heading,,,heading,,,,,,,,,,,,,,,,,,Update credit card,,,,,,,,,,,,,,,,,,,
+update_credit_debit_heading,se,,heading,,,,,,,,,,,,,,,,,,Update debit card or credit card,,,,,,,,,,,,,,,,,,,
+edit_visa_credit_debit_heading,,,heading,,,,,,,,,,,,,,,,,,(Edit Visa {lastFourDigits}),,,,,,,,,,,,,,,,,,,
+edit_amex_credit_debit_heading,,,heading,,,,,,,,,,,,,,,,,,(Edit Amex {lastFourDigits}),,,,,,,,,,,,,,,,,,,
+edit_discover_credit_debit_heading,,,heading,,,,,,,,,,,,,,,,,,(Edit Discover {lastFourDigits}),,,,,,,,,,,,,,,,,,,
+edit_mc_credit_debit_heading,,,heading,,,,,,,,,,,,,,,,,,(Edit Mastercard {lastFourDigits}),,,,,,,,,,,,,,,,,,,
+edit_hiper_credit_debit_heading,,,heading,,,,,,,,,,,,,,,,,,(Edit Hipercard {lastFourDigits}),,,,,,,,,,,,,,,,,,,
+edit_jcb_credit_debit_heading,,,heading,,,,,,,,,,,,,,,,,,(Edit JCB {lastFourDigits}),,,,,,,,,,,,,,,,,,,
+edit_verve_credit_debit_heading,,,heading,,,,,,,,,,,,,,,,,,(Edit Verve {lastFourDigits}),,,,,,,,,,,,,,,,,,,
+edit_elo_credit_debit_heading,,,heading,,,,,,,,,,,,,,,,,,(Edit ELO {lastFourDigits}),,,,,,,,,,,,,,,,,,,
+deleteCardholderName,,,text,,,,,,,,,,,,,,,,,,({dataSources.paymentInstrument.details.accountHolderName}),,,,,,,,,,,,,,,,,,,"margin-top-small, margin-bottom-x-small"
+deleteExpiry,,,text,,,,,,,,,,,,,,,,,,(Expires {dataSources.paymentInstrument.details.expiryMonth}/{dataSources.paymentInstrument.details.expiryYear}),,,,,,,,,,,,,,,,,,,
+delete_visa_credit_debit_heading,,,heading,,,,,,,,,,,,,,,,,,(Delete Visa **{dataSources.paymentInstrument.details.lastFourDigits}?),,,,,,,,,,,,,,,,,,,
+delete_amex_credit_debit_heading,,,heading,,,,,,,,,,,,,,,,,,(Delete Amex **{dataSources.paymentInstrument.details.lastFourDigits}?),,,,,,,,,,,,,,,,,,,
+delete_discover_credit_debit_heading,,,heading,,,,,,,,,,,,,,,,,,(Delete Discover **{dataSources.paymentInstrument.details.lastFourDigits}?),,,,,,,,,,,,,,,,,,,
+delete_mc_credit_debit_heading,,,heading,,,,,,,,,,,,,,,,,,(Delete Mastercard **{dataSources.paymentInstrument.details.lastFourDigits}?),,,,,,,,,,,,,,,,,,,
+delete_hiper_credit_debit_heading,,,heading,,,,,,,,,,,,,,,,,,(Delete Hipercard **{dataSources.paymentInstrument.details.lastFourDigits}?),,,,,,,,,,,,,,,,,,,
+delete_jcb_credit_debit_heading,,,heading,,,,,,,,,,,,,,,,,,(Delete JCB **{dataSources.paymentInstrument.details.lastFourDigits}?),,,,,,,,,,,,,,,,,,,
+delete_verve_credit_debit_heading,,,heading,,,,,,,,,,,,,,,,,,(Delete Verve **{dataSources.paymentInstrument.details.lastFourDigits}?),,,,,,,,,,,,,,,,,,,
+delete_elo_credit_debit_heading,,,heading,,,,,,,,,,,,,,,,,,(Delete ELO **{dataSources.paymentInstrument.details.lastFourDigits}?),,,,,,,,,,,,,,,,,,,
+delete_cupCC_credit_debit_heading,,,heading,,,,,,,,,,,,,,,,,,(Delete UnionPay Credit Card **{dataSources.paymentInstrument.details.lastFourDigits}?),,,,,,,,,,,,,,,,,,,
+delete_cupDC_credit_debit_heading,,,heading,,,,,,,,,,,,,,,,,,(Delete UnionPay Debit Card **{dataSources.paymentInstrument.details.lastFourDigits}?),,,,,,,,,,,,,,,,,,,
+microsoft_privacy_static_text,,,text,,,,,,,,,,,,,,,,,,Microsoft respects your privacy. See our privacy statement.,,,,,,,,,,,,,,,,,,,
+microsoft_privacy_text,,,text,,,,,,,,,,,,,,,,,,Microsoft respects your privacy. See our privacy statement.,,,,,,,,,,,,,,,,,,,"text-alignment-end"
+viewTermsButton,,,button,,,,,,,,,,,,,,,,,,View terms,,,,navigate,https://privacy.microsoft.com/en-us/privacystatement,,,,https://privacy.microsoft.com/en-us/privacystatement,,,,,,,,,,"width-lowerbound-small"
+privacyStatement,,,hyperlink,,,,,,,,,,,,,,,,,,privacy statement,,,,navigate,https://go.microsoft.com/fwlink/?LinkId=521839,,,,https://go.microsoft.com/fwlink/?LinkId=521839,,,,,,,,,,
+modern_microsoft_privacy_static_text,,,text,,,,,,,,,,,,,,,,,,Microsoft respects your privacy. See our ,,,,,,,,,,,,,,,,,,,
+modernPrivacyStatement,,,hyperlink,,,,,,,,,,,,,,,,,,privacy statement,,,,navigate,https://go.microsoft.com/fwlink/?LinkId=521839,,,,https://go.microsoft.com/fwlink/?LinkId=521839,,,,,,,,,,
+staticPeriodText,,,text,,,,,,,,,,,,,,,,,,.,,,,,,,,,,,,,,,,,,,
+changeSettingsStaticPeriodText,,,text,,,,,,,,,,,,,,,,,,.,,,,,,,,,,,,,,,,,,,
+klarnaTermsStaticPeriodText,,,text,,,,,,,,,,,,,,,,,,.,,,,,,,,,,,,,,,,,,,
+klarnaConsentStaticPeriodText,,,text,,,,,,,,,,,,,,,,,,.,,,,,,,,,,,,,,,,,,,
+accept_card_message,,,text,,,,,,,,,,,,,,,,,,We accept the following cards,,,,,,,,,,,,,,,,,,,
+creditCardVisaImage,,,image,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_visa.svg,,,,,,,,,,"image-small"
+creditCardAmexImage,,,image,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_amex.svg,,,,,,,,,,"image-small"
+creditCardMCImage,,,image,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_mc_left_aligned.svg,,,,,,,,,,"image-small"
+creditCardDiscoverImage,,,image,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_discover.svg,,,,,,,,,,"image-small"
+creditCardJCBImage,,,image,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_jcb.svg,,,,,,,,,,"image-small"
+creditCardHipercardImage,,,image,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_hipercard.svg,,,,,,,,,,"image-small"
+creditCardEloImage,,,image,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_elo.svg,,,,,,,,,,"image-small"
+creditCardVerveImage,,,image,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/v2_logo_verve.png ,,,,,,,,,,"image-small"
+creditCardVisaLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_visa.svg,,,,,,,,,,"image-small, margin-end-x-small"
+creditCardAmexLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_amex.svg,,,,,,,,,,"image-small, margin-end-x-small"
+creditCardMCLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_mc_left_aligned.svg,,,,,,,,,,"image-small, margin-end-x-small"
+creditCardDiscoverLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_discover.svg,,,,,,,,,,"image-small, margin-end-x-small"
+creditCardJCBLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_jcb.svg,,,,,,,,,,"image-small, margin-end-x-small"
+creditCardHiperLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_hipercard.svg,,,,,,,,,,"image-small, margin-end-x-small"
+creditCardVisaDeleteLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_visa.svg,,,,,,,,,,"image-small-400"
+creditCardAmexDeleteLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_amex.svg,,,,,,,,,,"image-small-400"
+creditCardMCDeleteLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_mc_left_aligned.svg,,,,,,,,,,"image-small-400"
+creditCardDiscoverDeleteLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_discover.svg,,,,,,,,,,"image-small-400"
+creditCardJCBDeleteLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_jcb.svg,,,,,,,,,,"image-small-400"
+creditCardHiperDeleteLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_hipercard.svg,,,,,,,,,,"image-small-400"
+creditCardShinhanLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_kr_shinhan.svg,,,,,,,,,,
+creditCardBCLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_kr_bc.svg,,,,,,,,,,
+creditCardKBKook-minLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_kr_kb_kook_min.svg,,,,,,,,,,
+creditCardSamsungLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_kr_samsung.svg,,,,,,,,,,
+creditCardHyundaiLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_kr_hyundai.svg,,,,,,,,,,
+creditCardLotteLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_kr_lotte.svg,,,,,,,,,,
+creditCardNHLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_kr_nh.svg,,,,,,,,,,
+creditCardHanaLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_kr_hana.svg,,,,,,,,,,
+creditCardCITILogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_citi.svg,,,,,,,,,,
+creditCardJejuLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_kr_jeju.svg,,,,,,,,,,
+creditCardWooriLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_kr_woori.svg,,,,,,,,,,
+creditCardSuhyupLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_kr_suhyup.svg,,,,,,,,,,
+creditCardJeonbokLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_kr_jeonbok.svg,,,,,,,,,,
+creditCardKwangjuLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_kr_kwangju.svg,,,,,,,,,,
+creditCardShinhyupLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_kr_shinhyup.svg,,,,,,,,,,
+creditCardEloLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_elo.svg,,,,,,,,,,"image-small, margin-end-x-small"
+creditCardVerveLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/v2_logo_verve.png ,,,,,,,,,,"image-small, margin-end-x-small"
+creditCardEloDeleteLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_elo.svg,,,,,,,,,,"image-small-400"
+creditCardVerveDeleteLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/v2_logo_verve.png ,,,,,,,,,,"image-small-400"
+alipayQrCodePageLogo,,,logo,,,,,,,,,,,,,,,,,,,,,,,,,,,/staticresourceservice/images/v4/logo_alipay.svg,,,,,,,,,,"image-small-400"
+venmoWhiteLogo,,,logo,,,,,,,,,,,,,,,,,,,,,,,,,,,/staticresourceservice/images/v4/logo_venmo_white.png,,,,,,,,,,
+venmoBlueLogo,,,logo,,,,,,,,,,,,,,,,,,,,,,,,,,,/staticresourceservice/images/v4/logo_venmo.svg,,,,,,,,,,
+kakaoLogo,,,logo,,,,,,,,,,,,,,,,,,,,,,,,,,,/staticresourceservice/images/v4/logo_kr_kakaopay.svg,,,,,,,,,,"image-small-400"
+paypalLogo,,,logo,,,,,,,,,,,,,,,,,,,,,,,,,,,/staticresourceservice/images/v4/logo_paypal.svg,,,,,,,,,,"image-small-400"
+paypalQrCodeLogo,,,logo,,,,,,,,,,,,,,,,,,,,,,,,,,,/staticresourceservice/images/v4/v2_paypal_white.svg,,,,,,,,,,
+paypalSecureLogo,,,image,,,,,,,,,,,,,,,,,,,,,,,,,,,/staticresourceservice/images/v4/PP_Badge_Opt1b_SecuredBy.svg,,,,,,,,,,
+creditCardVisaUpdateLogo,,,logo,,,,,,TRUE,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_visa.svg,,,,,,,,,,
+creditCardAmexUpdateLogo,,,logo,,,,,,TRUE,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_amex.svg,,,,,,,,,,
+creditCardMCUpdateLogo,,,logo,,,,,,TRUE,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_mc_left_aligned.svg,,,,,,,,,,
+creditCardDiscoverUpdateLogo,,,logo,,,,,,TRUE,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_discover.svg,,,,,,,,,,
+creditCardJCBUpdateLogo,,,logo,,,,,,TRUE,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_jcb.svg,,,,,,,,,,
+creditCardHiperUpdateLogo,,,logo,,,,,,TRUE,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_hipercard.svg,,,,,,,,,,
+creditCardEloUpdateLogo,,,logo,,,,,,TRUE,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_elo.svg,,,,,,,,,,
+creditCardVerveUpdateLogo,,,logo,,,,,,TRUE,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/v2_logo_verve.png ,,,,,,,,,,
+venmoLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/v2_logo_venmo.svg,,,,,,,,,,"image-small-400"
+cardholderName,,,property,accountHolderName,,,Cardholder Name,,,,,,,,,FALSE,,Cardholder Name,,64,,,,,,,,,,,,,,,,,,,,
+cardholderNameCup,,,property,accountHolderName,,,Cardholder Name,,,,,,,,,FALSE,,Cardholder Name,,64,,,,,,,,,,,,,,,,,,,,
+cardNumber,,,property,accountToken,,,Card number,,,,,,,,,FALSE,,Card number,13,19,,,,,,,,,,,,,,,,,,,,
+cardNumberAmex,,,property,accountToken,,,Card number,,,,,,,,,FALSE,,Card number,15,17,,,,,,,,,,,,,,,,,,,,
+cardNumber,kr,,property,accountToken,,,Card number,,,,,,,,,FALSE,,Card number,13,24,,,,,,,,,,,,,,,,,,,,
+cardNumber,br,,property,accountToken,,,Card number,,,,,,,,,FALSE,,Card number,13,23,,,,,,,,,,,,,,,,,,,,
+cardNumberCup,,,property,accountToken,,,Card number,,,,,,,,,FALSE,,Card number,13,19,,,,,,,,,,,,,,,,,,,,
+addCupCreditCardHeading,,,heading,,,,,,,,,,,,,,,,,,Add a UnionPay credit card,,,,,,,,,,,,,,,,,,,
+addCupDebitCardHeading,,,heading,,,,,,,,,,,,,,,,,,Add a UnionPay debit card,,,,,,,,,,,,,,,,,,,
+cardNumberCup,,,property,accountToken,,,Card number,Card Number,,,,,,,,FALSE,,,13,19,,,,,,,,,,,,,,,,,,,,
+cardholderNameCup,,,property,accountHolderName,,,Cardholder Name,Cardholder Name,,,,,,,,FALSE,,,,64,,,,,,,,,,,,,,,,,,,,
+cupPhoneNumber,,,property,phone,,,Bank Associated Mobile Number,,,,,,,,,FALSE,,Bank Associated Mobile Number,11,11,,,,,,,,,,,,,,,,,,,,
+cvvCup,,,property,cvvToken,,,CV/N2,CV/N2,,,,,,,,FALSE,,,3,3,,,,,,,,,,,,,,,,,,,,
+paymentCupSummaryText,,,text,,,,,,,,,,,,,,,,,,Sign in with ()EmailAddress anytime to use this payment method to buy digital content from Microsoft Store.,,,,,,,,,,,,,,,,,,,
+cupImage,,,image,,,,,,,,,,,,,,,,,,,,,,,,,,,/staticresourceservice/images/v4/logo_unionpay.svg,,,,,,,,,,"image-small-400"
+deleteCupDcPhoneNumber,,,expression,,,,,,,,,,,,,,,,,,(Phone: {dataSources.paymentInstrument.details.phone}),,,,,,,,,,,,,,,,,,,"margin-top-small"
+deleteCupDcPhoneNumberProperty,,,property,phone,,,,,TRUE,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+lastFourDigits,,,property,lastFourDigits,,,Card number,,,TRUE,,,,,,FALSE,,,,,,,,,,,,,,,,,,,,,,,,
+expiryMonth,,,property,expiryMonth,,,Expiration month,,,,,,,,,FALSE,,,2,2,,,,,,,,{}Months,EXP MONTH,,,,,,,,,,,
+expiryYear,,,property,expiryYear,,,Expiration year,,,,,,,,,FALSE,,,2,2,,,,,,,,{}YearsExpiry,EXP YEAR,,,,,,,,,,,
+cvv,,,property,cvvToken,,,CVV,,,,,,,,,FALSE,,CVV,3,4,,,cvvHelpSequence,What is a CVV?,,,,,,,,,,,,,,,,
+cvvWithHint,,,property,cvvToken,,,CVV,,,,,,,,,FALSE,,CVV,3,4,,,cvvHelpSequence,What is a CVV?,,,,,,,,,,,,,,,,
+cvvAmexWithHint,,,property,cvvToken,,,CVV,,,,,,,,,FALSE,,CVV,3,4,,,cvvHelpSequence,What is a CVV?,,,,,,,,,,,,,,,,
+cvv3,,,property,cvvToken,,,CVV,,,,,,,,,FALSE,,CVV,3,3,,,cvvHelpSequence,What is a CVV?,,,,,,,,,,,,,,,,
+cvv4,,,property,cvvToken,,,CVV,,,,,,,,,FALSE,,CVV,4,4,,,cvvHelpSequence,What is a CVV?,,,,,,,,,,,,,,,,
+cvvCup,,,property,cvvToken,,,CV/N2,,,,,,,,,FALSE,,CVV,3,3,,,cvvCupHelpSequence,,,,,,,,,,,,,,,/staticresourceservice/images/v4/cardHints_generic.png,,
+creditCardsWhereCVV,,,text,,,,,,,,,,,,,,,,,,Where is my CVV?,,,,,,,,,,,,,,,,,,,
+creditCardsWhereCVVNoLive,,,text,,,,,,,,,,,,,,,,,,Where is my CVV?,,,,,,,,,,,,,,,,,,,
+creditCardsCVV3Text,,,subheading,,,,,,,,,,,,,,,,,,"VISA, MasterCard:",,,,,,,,,,,,,,,,,,,
+creditCardsCVV3Text,{}DiscoverSupportedMarkets,,subheading,,,,,,,,,,,,,,,,,,"VISA, MasterCard, Discover:",,,,,,,,,,,,,,,,,,,
+creditCardsCVV3Text,{}JCBSupportedMarkets,,subheading,,,,,,,,,,,,,,,,,,"VISA, MasterCard, JCB:",,,,,,,,,,,,,,,,,,,
+creditCardsCVV3Text,{}HipercardAndEloSupportedMarkets,,subheading,,,,,,,,,,,,,,,,,,"VISA, MasterCard, Hipercard, Elo:",,,,,,,,,,,,,,,,,,,
+creditCardsCVV3Text,{}VerveSupportedMarkets,,subheading,,,,,,,,,,,,,,,,,,"VISA, MasterCard, Verve:",,,,,,,,,,,,,,,,,,,
+creditCardsCVV3Text,cn,,subheading,,,,,,,,,,,,,,,,,,UnionPay:,,,,,,,,,,,,,,,,,,,
+creditCardsCVV3LocationText,,,text,,,,,,,,,,,,,,,,,,The last 3 digits on the back.,,,,,,,,,,,,,,,,,,,
+creditCardsCVV3LocationTextNoLive,,,text,,,,,,,,,,,,,,,,,,The last 3 digits on the back.,,,,,,,,,,,,,,,,,,,
+creditCardsCVV3Image,,,image,,,,,,,,,,,,,,,,,,,,,,,,,,,/staticresourceservice/images/v4/cardHints_CVV_Back.png,,,,,,,,,,"image-small, margin-end-x-small"
+creditCardsCVV4Text,,,subheading,,,,,,,,,,,,,,,,,,American Express:,,,,,,,,,,,,,,,,,,,
+creditCardsCVV4LocationText,,,text,,,,,,,,,,,,,,,,,,The 4-digit code on the front.,,,,,,,,,,,,,,,,,,,
+creditCardsCVV4LocationTextNoLive,,,text,,,,,,,,,,,,,,,,,,The 4-digit code on the front.,,,,,,,,,,,,,,,,,,,
+creditCardsCVV4Image,,,image,,,,,,,,,,,,,,,,,,,,,,,,,,,/staticresourceservice/images/v4/cardHints_CVV_Front.png,,,,,,,,,,"image-small, margin-end-x-small"
+addCupCreditCardHeading,,,heading,,,,,,,,,,,,,,,,,,Add a UnionPay credit card,,,,,,,,,,,,,,,,,,,
+updateCupCreditCardHeading,,,heading,,,,,,,,,,,,,,,,,,Update UnionPay credit card,,,,,,,,,,,,,,,,,,,
+addCupDebitCardHeading,,,heading,,,,,,,,,,,,,,,,,,Add a UnionPay debit card,,,,,,,,,,,,,,,,,,,
+updateCupDebitCardHeading,,,heading,,,,,,,,,,,,,,,,,,Update UnionPay debit card,,,,,,,,,,,,,,,,,,,
+updateCupCreditCardHeading,,,heading,,,,,,,,,,,,,,,,,,Update UnionPay credit card,,,,,,,,,,,,,,,,,,,
+creditCardSummaryPageHeading,,,heading,,,,,,,,,,,,,,,,,,Check your info,,,,,,,,,,,,,,,,,,,
+creditCardSummaryLine1,,,expression,,,,,,,,,,,,,,,,,,({accountHolderName}),,,,,,,,,,,,,,,,,,,
+creditCardUpdateSummaryLine2,,,expression,,,,,,,,,,,,,,,,,,({lastFourDigits} )({expiryMonth}/)({expiryYear}),,,,,,,,,,,,,,,,,,,
+creditCardSummaryLine3,,,expression,,,,,,,,,,,,,,,,,,({address_line1}),,,,,,,,,,,,,,,,,,,
+creditCardSummaryLine4,,,expression,,,,,,,,,,,,,,,,,,"({address_line2}, )({city} )({region})( - {postal_code})",,,,,,,,,,,,,,,,,,,
+creditCardSummaryLine5,,,expression,,,,,,,,,,,,,,,,,,({country}),,,,,,,,,,,,,,,,,,,
+creditCardCupSummaryLine2,,,expression,,,,,,,,,,,,,,,,,,UnionPay ({accountToken} )({expiryMonth}/)({expiryYear}),,,,,,,,,,,,,,,,,,,
+creditCardCupUpdateSummaryLine2,,,expression,,,,,,,,,,,,,,,,,,UnionPay ({lastFourDigits}),,,,,,,,,,,,,,,,,,,
+creditCardCupSummaryLine3,,,expression,,,,,,,,,,,,,,,,,,({phone}),,,,,,,,,,,,,,,,,,,
+paymentSummaryText,,,text,,,,,,,,,,,,,,,,,,You can use this payment option to buy Microsoft products and services anywhere you sign in with ()EmailAddress.,,,,,,,,,,,,,,,,,,,"margin-vertical-small, width-upperbound-large"
+paymentSummaryTextNoMargin,,,text,,,,,,,,,,,,,,,,,,You can use this payment option to buy Microsoft products and services anywhere you sign in with ()EmailAddress.,,,,,,,,,,,,,,,,,,,"width-upperbound-large"
+paymentCupSummaryText,,,text,,,,,,,,,,,,,,,,,,Sign in with ()EmailAddress anytime to use this payment method to buy digital content from Microsoft Store.,,,,,,,,,,,,,,,,,,,
+paymentChangeButton,,,button,,,,,,,,,,,,,,,,,,Change,,,,movePrevious,,,,,,,,,,,,,,,
+paymentChangeSettingsStaticText,,,text,,,,,,,,,,,,,,,,,,"To change your settings, go to ",,,,,,,,,,,,,,,,,,,
+accountManagement,,,hyperlink,,,,,,,,,,,,,,,,,,account.microsoft.com,,,,navigate,https://account.microsoft.com,,,,https://account.microsoft.com,,,,,,,,,,
+addressLine1,,,property,address_line1,,,Address line 1,,,,,,,,,FALSE,,Address Line 1,25,30,,,,,,,,,,,,,,,,,,,,
+klarnaAddressLine1,,,property,address_line1,,,Street name,,,,,,,,,TRUE,,,25,30,,,,,,,,,,,,,,,,,,,,
+addressLine2,,,property,address_line2,,,Address line 2 (Optional),,,,,,,,,FALSE,,Address Line 2 (Optional),25,30,,,,,,,,,,,,,,,,,,,,
+addressLine3,,,property,address_line3,,,Address line 3 (Optional),,,,,,,,,FALSE,,Address Line 3 (Optional),25,30,,,,,,,,,,,,,,,,,,,,
+klarnaAddressLine2,,,property,address_line2,,,House number,,,,,,,,,TRUE,,,25,30,,,,,,,,,,,,,,,,,,,,
+addressCity,{}AddressCityM,,property,city,,,City,,,,,,,,,FALSE,,City,,26,,,,,,,,,,,,,,,,,,,,
+addressStandAloneCity,{}AddressCityM,,property,city,,,City,,,,,,,,,FALSE,,City,,26,,,,,,,,,,,,,,,,,,,,
+shippingAddressStandAloneCity,{}AddressCityM,,property,city,,,City,,,,,,,,,FALSE,,City,,26,,,,,,,,,,,,,,,,,,,,
+addressCitySolo,{}AddressCityM,,property,city,,,City,,,,,,,,,FALSE,,City,,26,,,,,,,,,,,,,,,,,,,,
+addressCityAfterPostal,{}AddressCityM,,property,city,,,City,,,,,,,,,FALSE,,City,,26,,,,,,,,,,,,,,,,,,,,
+addressCityBeforePostal,{}AddressCityM,,property,city,,,City,,,,,,,,,FALSE,,City,,26,,,,,,,,,,,,,,,,,,,,
+addressState,{}AddressStateM,,property,region,,,State,,,,,,,,,FALSE,,State,,,,,,,,,,,,,,,,,,,,,,
+addressState,{}AddressStateO,,property,region,,,State (Optional),,,,,,,,,FALSE,,State (Optional),,,,,,,,,,,,,,,,,,,,,,
+addressState,US,,property,region,,,State,,,,,,,,,FALSE,,,,,,,,,,,,{}USStates,State,,,,,,,,,,,
+addressState,AU,,property,region,,,State,,,,,,,,,FALSE,,,,,,,,,,,,{}AUStatesAndTerritories,State,,,,,,,,,,,
+addressState,BR,,property,region,,,State,,,,,,,,,FALSE,,,,,,,,,,,,{}BRStates,State,,,,,,,,,,,
+addressState,IN,,property,region,,,State,,,,,,,,,FALSE,,,,,,,,,,,,{}INStates,State,,,,,,,,,,,
+addressState,IT,,property,region,,,State,,,,,,,,,FALSE,,,,,,,,,,,,{}ITStates,State,,,,,,,,,,,
+addressState,JP,,property,region,,,State,,,,,,,,,FALSE,,,,,,,,,,,,{}JPStates,State,,,,,,,,,,,
+addressStateAfterPostalCode,JP,,property,region,,,State,,,,,,,,,FALSE,,,,,,,,,,,,{}JPStates,State,,,,,,,,,,,
+addressState,NL,,property,region,,,State,,,,,,,,,FALSE,,,,,,,,,,,,{}NLStates,State,,,,,,,,,,,
+addressStateAfterPostalCode,NL,,property,region,,,State,,,,,,,,,FALSE,,,,,,,,,,,,{}NLStates,State,,,,,,,,,,,
+addressState,MX,,property,region,,,State,,,,,,,,,FALSE,,,,,,,,,,,,{}MXStates,State,,,,,,,,,,,
+addressState,MY,,property,region,,,State,,,,,,,,,FALSE,,,,,,,,,,,,{}MYStates,State,,,,,,,,,,,
+addressState,AE,,property,region,,,State,,,,,,,,,FALSE,,,,,,,,,,,,{}UAEStates,State,,,,,,,,,,,
+addressCounty,,,property,region,,,County (Optional),,,,,,,,,FALSE,,County (Optional),,,,,,,,,,,,,,,,,,,,,,
+addressProvince,{}AddressProvinceM,,property,region,,,Province,,,,,,,,,FALSE,,Province,,,,,,,,,,,,,,,,,,,,,,
+addressProvince,{}AddressProvinceO,,property,region,,,Province (Optional),,,,,,,,,FALSE,,Province (Optional),,,,,,,,,,,,,,,,,,,,,,
+addressProvince,CA,,property,region,,,Province,,,,,,,,,FALSE,,,,,,,,,,,,{}CAProvinces,Province,,,,,,,,,,,
+addressProvince,CN,,property,region,,,Province,,,,,,,,,FALSE,,,,,,,,,,,,{}CNProvinces,Province,,,,,,,,,,,
+addressProvinceAfterCountry,CN,,property,region,,,Province,,,,,,,,,FALSE,,,,,,,,,,,,{}CNProvinces,Province,,,,,,,,,,,
+addressProvince,ES,,property,region,,,Province,,,,,,,,,FALSE,,,,,,,,,,,,{}ESProvinces,Province,,,,,,,,,,,
+addressProvince,bs,,property,region,,,Province (Optional),,,,,,,,,FALSE,,,,,,,,,,,,{}BSProvinces,Province,,,,,,,,,,,
+addressProvince,bz,,property,region,,,Province,,,,,,,,,FALSE,,,,,,,,,,,,{}BZProvinces,Province,,,,,,,,,,,
+addressProvince,cr,,property,region,,,Province,,,,,,,,,FALSE,,,,,,,,,,,,{}CRProvinces,Province,,,,,,,,,,,
+addressInlineGroupProvince,fr,,property,region,,,Department (Optional),,,,,,,,,FALSE,,,,,,,,,,,,{}FRProvinces,Department,,,,,,,,,,,
+addressInlineGroupProvince,NL,,property,region,,,State,,,,,,,,,FALSE,,,,,,,,,,,,{}NLStates,State,,,,,,,,,,,
+addressProvince,fr,,property,region,,,Department (Optional),,,,,,,,,FALSE,,,,,,,,,,,,{}FRProvinces,Department,,,,,,,,,,,
+addressProvince,hn,,property,region,,,Province,,,,,,,,,FALSE,,,,,,,,,,,,{}HNProvinces,Province,,,,,,,,,,,
+addressProvince,jm,,property,region,,,Province,,,,,,,,,FALSE,,,,,,,,,,,,{}JMProvinces,Province,,,,,,,,,,,
+addressProvince,tr,,property,region,,,Province (Optional),,,,,,,,,FALSE,,,,,,,,,,,,{}TRProvinces,Province,,,,,,,,,,,
+addressProvince,ve,,property,region,,,Province (Optional),,,,,,,,,FALSE,,,,,,,,,,,,{}VEProvinces,Province,,,,,,,,,,,
+addressPostalCode,{}AddressPostalCodeM,,property,postal_code,,,Postal Code,,,,,,,,,FALSE,,Zip Code,,,,,,,,,,,,,,,,,,,,,,
+addressPostalCodeSolo,{}AddressPostalCodeM,,property,postal_code,,,Postal Code,,,,,,,,,FALSE,,Zip Code,,,,,,,,,,,,,,,,,,,,,,
+addressPostalCodeSolo,{}CoPvCtDtA1A2Pc,,property,postal_code,,,Postal Code,,,,,,,,,FALSE,,Zip Code,,,,,,,,,,,,,,,,,,,,,,"width-half, padding-end-small"
+addressPostalCodeSolo,{}AddressPostalCodeO,,property,postal_code,,,Postal Code (Optional),,,,,,,,,FALSE,,Zip Code (Optional),,,,,,,,,,,,,,,,,,,,,,
+addressInlineGroupPostalCode,{}AddressPostalCodeM,,property,postal_code,,,Postal Code,,,,,,,,,FALSE,,Zip Code,,,,,,,,,,,,,,,,,,,,,,
+addressPostalCodeAfterCity,{}AddressPostalCodeM,,property,postal_code,,,Postal Code,,,,,,,,,FALSE,,Zip Code,,,,,,,,,,,,,,,,,,,,,,
+addressPostalCodeAfterCity,{}AddressPostalCodeO,,property,postal_code,,,Postal Code (Optional),,,,,,,,,FALSE,,Zip Code (Optional),,,,,,,,,,,,,,,,,,,,,,
+addressPostalCodeBeforeSetDefault,{}AddressPostalCodeM,,property,postal_code,,,Postal Code,,,,,,,,,FALSE,,Zip Code,,,,,,,,,,,,,,,,,,,,,,"width-half"
+addressPostalCode,{}AddressPostalCodeO,,property,postal_code,,,Postal Code (Optional),,,,,,,,,FALSE,,Postal Code (Optional),,,,,,,,,,,,,,,,,,,,,,
+addressPostalCode,US,,property,postal_code,,,Zip Code,,,,,,,,,FALSE,,Zip Code,,,,,,,,,,,,,,,,,,,,,,
+addressPostalCode,SE,,property,postal_code,,,Postal Code,,,,,,,,,FALSE,,Postal Code,,,,,,,,,,,,,,,,,,,,,,
+addressInlineGroupPostalCode,{}AddressPostalCodeO,,property,postal_code,,,Postal Code (Optional),,,,,,,,,FALSE,,Postal Code (Optional),,,,,,,,,,,,,,,,,,,,,,
+addressPostalCode,BR,,property,postal_code,,,Postal Code,,,,,,,,,FALSE,,Postal Code,,,,,,,,,,,,,,,,,,,,,,
+klarnaAddressPostalCode,,,property,postal_code,,,ZIP Code,,,,,,,,,TRUE,,,,,,,,,,,,,,,,,,,,,,,,
+addressCountry,,,property,country,,,Country/Region,,,TRUE,,,,,,FALSE,,Country/Region,,,,,,,,,,{}MarketsAll,Country,,,,,,,,,,,
+addressCountryAfterCity,,,property,country,,,Country/Region,,,TRUE,,,,,,FALSE,,Country/Region,,,,,,,,,,{}MarketsAll,Country,,,,,,,,,,,
+addressCountryBeforeCity,,,property,country,,,Country/Region,,,TRUE,,,,,,FALSE,,Country/Region,,,,,,,,,,{}MarketsAll,Country,,,,,,,,,,,
+addressStandAloneCountry,,,property,country,,,Country/Region,,,TRUE,,,,,,FALSE,,Country/Region,,,,,,,,,,{}MarketsAll,Country,,,,,,,,,,,
+shippingAddressStandAloneCountry,,,property,country,,,Country/Region,,,TRUE,,,,,,FALSE,,Country/Region,,,,,,,,,,{}MarketsAll,Country,,,,,,,,,,,
+addressCountryAfterState,,,property,country,,,Country/Region,,,TRUE,,,,,,FALSE,,Country/Region,,,,,,,,,,{}MarketsAll,Country,,,,,,,,,,,
+addressCountryBeforeSetDefault,,,property,country,,,Country/Region,,,TRUE,,,,,,FALSE,,Country/Region,,,,,,,,,,{}MarketsAll,Country,,,,,,,,,,,"width-half"
+addressCountrySolo,,,property,country,,,Country/Region,,,TRUE,,,,,,FALSE,,Country/Region,,,,,,,,,,{}MarketsAll,Country,,,,,,,,,,,"width-half, padding-end-small"
+submitButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,Submit,,,,submit,,,,,,,,,,,,,,,"width-lowerbound-small"
+modernSubmitButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,Next,,,,submit,,,,,,,,,,,,,,,
+saveButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,Save,,,,submit,,,,,,,,,,,,,,,"width-small"
+saveButtonHidden,,,button,,,,,,TRUE,,,,,,,,,,,,Save,,,,submit,,,,,,,,,,,,,,,
+saveNextButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,Next,,,,submit,,,,,,,,,,,,,,,"width-lowerbound-small"
+buyButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,Buy,,,,success,,,,,,,,,,,,,,,
+cancelButtonWidthLowerboundSmall,,,button,,,,,,,,,,TRUE,,,,,,,,Cancel,,,,gohome,,,,,,,,,,,,,,,"width-lowerbound-small"
+cancelButton,,,button,,,,,,,,,,TRUE,,,,,,,,Cancel,,,,gohome,,,,,,,,,,,,,,,"width-lowerbound-small"
+cancelBackButton,,,button,,,,,,,,,,TRUE,,,,,,,,Back,,,,gohome,,,,,,,,,,,,,,,"width-lowerbound-small"
+cancelButtonFullSize,,,button,,,,,,,,,,TRUE,,,,,,,,Cancel,,,,gohome,,,,,,,,,,,,,,,
+nextButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,Next,,,,moveNext,,,,,,,,,,,,,,,"width-small-200"
+nextModernValidateButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,Next,,,,moveNext,,,,,,,,,,,,,,,"width-lowerbound-small"
+previousButton,,,button,,,,,,,,,,TRUE,,,,,,,,Back,,,,movePrevious,,,,,,,,,,,,,,,"width-lowerbound-small"
+yesNextButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,Next,,,,success,,,,,,,,,,,,,,,
+okNextButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,Ok,,,,moveNext,,,,,,,,,,,,,,,
+okButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,Submit,,,,submit,,,,,,,,,,,,,,,"width-lowerbound-small"
+continueRedirectButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,Continue,,,,redirect,,,,,,,,,,,,,,,
+continueSubmitButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,Continue,,,,submit,,,,,,,,,,,,,,,
+confirmationButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,Confirm,,,,submit,,,,,,,,,,,,,,,"width-lowerbound-small"
+paypalRedirectHeading,,,heading,,,,,,,,,,,,,,,,,,Did you sign in to PayPal?,,,,,,,,,,,,,,,,,,,
+paypalRedirectText1,,,text,,,,,,,,,,,,,,,,,,"If you are not redirected automatically",,,,,,,,,,,,,,,,,,,
+paypalRedirectText2,,,text,,,,,,,,,,,,,,,,,,", ",,,,,,,,,,,,,,,,,,,
+paypalRedirectLink,,,hyperlink,,,,,,,,,,,,,,,,,,open PayPal,,,,redirect,,,,,,,,,,,,,,,
+paypalRedirectText3,,,text,,,,,,,,,,,,,,,,,,".",,,,,,,,,,,,,,,,,,,
+paypalRedirectMessage,,,text,,,,,,,,,,,,,,,,,,"If you've successfully signed in to PayPal's website, you can wrap up your purchase. If something kept you from signing in, you can try to sign in again.",,,,,,,,,,,,,,,,,,,
+paypalRetryHeading,,,heading,,,,,,,,,,,,,,,,,,Try signing in again,,,,,,,,,,,,,,,,,,,
+paypalRetryMessage,,,text,,,,,,,,,,,,,,,,,,"We checked with PayPal and couldn't find your account. You can try again, or use another way to pay.",,,,,,,,,,,,,,,,,,,
+taxCpfProperty,,,property,value,,,CPF (optional),,,,,,,,,FALSE,,CPF (optional),,,,,,,,,,,,,,,,,,,,,,"width-half"
+taxCnpjProperty,,,property,value,,,CNPJ,,,,,,,,,FALSE,,CNPJ,,,,,,,,,,,,,,,,,,,,,,"width-half"
+taxVatIdProperty,pt,,property,value,,,NIF,,,,,,,,,FALSE,,,,,,,,,,,,,,,,,,,,,,,,"width-half"
+taxVatIdProperty,tw,,property,value,,,Tax ID,,,,,,,,,FALSE,,TaxID,,,,,,,,,,,,,,,,,,,,,,"width-half"
+taxIndiaStateGstIdProperty,,,property,value,,,GST ID,,,,,,,,,FALSE,,GST ID,,,,,,,,,,,,,,,,,,,,,,
+taxIndiaPanIdProperty,,,property,value,,,PAN ID,,,,,,,,,FALSE,,PAN ID,,,,,,,,,,,,,,,,,,,,,,
+taxVatIdProperty,,,property,value,,,VAT ID,,,,,,,,,FALSE,,VAT ID,,,,,,,,,,,,,,,,,,,,,,"width-half"
+taxCanadianFederalExemptProperty,,,property,value,,,Canadian Federal Tax Exempt Certificate No.,,,,,,,,,TRUE,,,,,,,,,,,,,,,,,,,,,,,,
+taxCanadianProvinceExemptProperty,,,property,value,,,Canadian Province Tax Exempt Certificate No.,,,,,,,,,TRUE,,,,,,,,,,,,,,,,,,,,,,,,
+taxUsExemptProperty,,,property,value,,,US Tax Exempt Certificate No.,,,,,,,,,TRUE,,,,,,,,,,,,,,,,,,,,,,,,
+profileHeading,,,heading,,,,,,,,,,,,,,,,,,Before we get started…,,,,,,,,,,,,,,,,,,,
+profileSubheading,,,text,,,,,,,,,,,,,,,,,,Tell us a little about yourself,,,,,,,,,,,,,,,,,,,"margin-top-small, margin-bottom-x-small"
+firstName,,,property,first_name,,,First name,,,,,,,,,FALSE,,First Name,,,,,,,,,,,,,,,,,,,,,,
+lastName,,,property,last_name,,,Last name,,,,,,,,,FALSE,,Last Name,,,,,,,,,,,,,,,,,,,,,,
+emailAddress,,,property,email_address,,,Email address,,,,,,,,,FALSE,,Email Address,,,,,,,,,,,,,,,,,,,,,,"width-half, padding-end-small"
+taxVatIdProperty,au,,property,value,,,ABN,,,,,,,,,TRUE,,,,,,,,,,,,,,,,,,,,,,,,"width-half"
+taxVatIdProperty,nz,,property,value,,,GST Registration No.,,,,,,,,,TRUE,,,,,,,,,,,,,,,,,,,,,,,,"width-half"
+addDirectDebitAchHeading,,,heading,,,,,,,,,,,,,,,,,,Set up a bank account,,,,,,,,,,,,,,,,,,,
+directDebitAchAccountholderName,,,property,accountHolderName,,,Name on account,,,,,,,,,TRUE,,,,64,,,,,,,,,,,,,,,,,,,,
+directDebitAchAccountType,,,property,bankAccountType,,,Type,,,,,,,,,TRUE,,,,,,,,,,,,{}BankAccountType,,,,,,,,,,,,
+directDebitAchAccount,,,property,accountToken,,,Account number,,,,,,,,,TRUE,,,4,17,,,achAccountNumberHelpSequence,What's this?,,,,,,,,,,,,,,,,
+directDebitAchBankCode,,,property,bankCode,,,Routing number,,,,,,,,,TRUE,,,9,9,,,achRoutingNumberHelpSequence,What's this?,,,,,,,,,,,,,,,,
+directDebitAchSummaryPageHeading,,,heading,,,,,,,,,,,,,,,,,,Check your info,,,,,,,,,,,,,,,,,,,
+directDebitAchSummaryLine1,,,expression,,,,,,,,,,,,,,,,,,({accountHolderName}),,,,,,,,,,,,,,,,,,,
+directDebitAchSummaryLine2,,,expression,,,,,,,,,,,,,,,,,,Type: ({bankAccountType}),,,,,,,,,,,,,,,,,,,
+directDebitAchSummaryLine3,,,expression,,,,,,,,,,,,,,,,,,Account number: ({accountToken}),,,,,,,,,,,,,,,,,,,
+directDebitAchSummaryLine4,,,expression,,,,,,,,,,,,,,,,,,Routing number: ({bankCode}),,,,,,,,,,,,,,,,,,,
+directDebitAchSummaryLine5,,,expression,,,,,,,,,,,,,,,,,,({address_line1}),,,,,,,,,,,,,,,,,,,
+directDebitAchSummaryLine6,,,expression,,,,,,,,,,,,,,,,,,"({address_line2}, )({city} )({region} )({postal_code})",,,,,,,,,,,,,,,,,,,
+directDebitAchStaticPageHeading,,,heading,,,,,,,,,,,,,,,,,,Verify your bank account,,,,,,,,,,,,,,,,,,,
+directDebitAchStaticLine1,,,text,,,,,,,,,,,,,,,,,,We'll make a very small deposit into your bank account. Depending on your bank it can take up to 1-3 days.,,,,,,,,,,,,,,,,,,,
+directDebitAchStaticLine2,,,text,,,,,,,,,,,,,,,,,,"The deposit will include ""Microsoft"" in the description. Note the deposit amount, then:",,,,,,,,,,,,,,,,,,,
+directDebitAchStaticLine3,,,text,,,,,,,,,,,,,,,,,,1. Start your purchase again.,,,,,,,,,,,,,,,,,,,
+directDebitAchStaticLine4,,,text,,,,,,,,,,,,,,,,,,"2. When you see your Bank account, select ""Verify"".",,,,,,,,,,,,,,,,,,,
+directDebitAchStaticLine5,,,text,,,,,,,,,,,,,,,,,,"3. Enter the deposit amount and select ""Next"".",,,,,,,,,,,,,,,,,,,
+directDebitAchStaticLine6,,,text,,,,,,,,,,,,,,,,,,4. Complete your purchase.,,,,,,,,,,,,,,,,,,,
+directDebitChallengeSubheading,,,text,,,,,,,,,,,,,,,,,,"To verify your bank account, we made a small deposit. The description includes ""Microsoft"".",,,,,,,,,,,,,,,,,,,
+directDebitAchChallengeAmount,,,property,amount,,,Enter the deposit amount,,,,,,,,,TRUE,,,,,,,,,,,,,,,,,,,,,,,,
+directDebitChallengeLine1,,,text,,,,,,,,,,,,,,,,,,You have {0} tries remaining.,,,,,,,,,,,,,,,,,,,
+directDebitChallengeLine2,,,text,,,,,,,,,,,,,,,,,,"Careful, you only have 1 try remaining. If it fails, you'll have to start the verification process again.",,,,,,,,,,,,,,,,,,,
+achAccountNumberImage,,,image,,,,,,,,,,,,,,,,,,,,,,,,,,,/staticresourceservice/images/AccountNumber.png,,,,,,,,,,
+achRoutingNumberImage,,,image,,,,,,,,,,,,,,,,,,,,,,,,,,,/staticresourceservice/images/RoutingNumber.png,,,,,,,,,,
+achAccountNumberImageText,,,text,,,,,,,,,,,,,,,,,,This is the account number on the check.,,,,,,,,,,,,,,,,,,,
+achRoutingNumberImageText,,,text,,,,,,,,,,,,,,,,,,This is the routing number on the check.,,,,,,,,,,,,,,,,,,,
+achTermCheckbox,,,property,mandateSelected,,,"By registering or selecting your bank account as your payment method, you authorize Microsoft (or its agent) to initiate one or more debits for the total amount (including applicable taxes, fees and shipping costs) of your purchase or subscription charge (in accordance with the terms of your subscription service) from your bank account (and, if necessary, initiate one or more credits to your bank account to correct errors, issue a refund or similar purpose), and you authorize the financial institution that holds your bank account to deduct such debits or accept such credits.  You understand that this authorization will remain in full force and effect until you remove your bank account information from your Microsoft account or Skype account.",,,,,,,,,FALSE,,,,,,,,,,,,,,,,,,,,,,,,
+directDebitSepaAccountholderName,,,property,accountHolderName,,,Name on account,,,,,,,,,TRUE,,,,64,,,,,,,,,,,,,,,,,,,,
+directDebitSepaBankName,,,property,bankName,,,Bank name,,,,,,,,,TRUE,,,,64,,,,,,,,,,,,,,,,,,,,
+directDebitSepaBankCode,,,property,bankCode,,,BIC,,,,,,,,,TRUE,,,8,11,,,,,,,,,,,,,,,,,,,,
+directDebitSepaAccount,,,property,accountToken,,,IBAN number,,,,,,,,,TRUE,,,5,34,,,,,,,,,,,,,,,,,,,,
+directDebitSepaSummaryPageHeading,,,heading,,,,,,,,,,,,,,,,,,Check your info,,,,,,,,,,,,,,,,,,,
+directDebitSepaSummaryLine1,,,expression,,,,,,,,,,,,,,,,,,({accountHolderName}),,,,,,,,,,,,,,,,,,,
+directDebitSepaSummaryLine2,,,expression,,,,,,,,,,,,,,,,,,({bankName}),,,,,,,,,,,,,,,,,,,
+directDebitSepaSummaryLine3,,,expression,,,,,,,,,,,,,,,,,,BIC: ({bankCode}),,,,,,,,,,,,,,,,,,,
+directDebitSepaSummaryLine4,,,expression,,,,,,,,,,,,,,,,,,IBAN number: ({accountToken}),,,,,,,,,,,,,,,,,,,
+directDebitSepaSummaryLine5,,,expression,,,,,,,,,,,,,,,,,,({address_line1}),,,,,,,,,,,,,,,,,,,
+directDebitSepaSummaryLine6,,,expression,,,,,,,,,,,,,,,,,,"({city}, )({postal_code})",,,,,,,,,,,,,,,,,,,
+directDebitSepaSummaryLine7,,,expression,,,,,,,,,,,,,,,,,,({country}),,,,,,,,,,,,,,,,,,,
+noProfileAddressText,,,text,,,,,,TRUE,,,,,,,,,,,,This address will be saved with your Microsoft account.,,,,,,,,,,,,,,,,,,,
+directDebitSepaPopupText,,,text,,,,,,,,,,,,,,,,,,"To continue on to your payment provider's website, set your browser to allow popups.",,,,,,,,,,,,,,,,,,,
+directDebitSepaStaticPageHeading,,,heading,,,,,,,,,,,,,,,,,,Done signing?,,,,,,,,,,,,,,,,,,,
+directDebitSepaStaticLine1,,,text,,,,,,,,,,,,,,,,,,"If you're done signing, you can wrap it up. If you're not done, you can try again.",,,,,,,,,,,,,,,,,,,
+sepaYesButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,"Yes, let's wrap things up",,,,success,,,,,,,,,,,,,,,
+sepaTryAgainButton,,,button,,,,,,,,,,,,,,,,,,"No, I want to try again",,,,restartFlow,,,,,,,,,,,,,,,
+paypalYesButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,"Yes, let's wrap things up",,,,submit,,,,,,,,,,,,,,,
+paypalNoButton,,,button,,,,,,,,,,,,,,,,,,"No, I want to try again",,,,restartFlow,,,,,,,,,,,,,,,
+paypalTryAnotherWayButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,I'll use another way to pay,,,,gohome,,,,,,,,,,,,,,,
+paypalTryAgainButton,,,button,,,,,,,,,,,,,,,,,,I'll try signing in again,,,,restartFlow,,,,,,,,,,,,,,,
+directDebitSepaDocuSignText,,,text,,,,,,,,,,,,,,,,,,You'll be redirected to complete the signing process.,,,,,,,,,,,,,,,,,,,
+directDebitSepaChallengeAmount,,,property,amount,,,Enter the deposit amount,,,,,,,,,TRUE,,,,,,,,,,,,,,,,,,,,,,,,
+alipayQrCodeChallengeImage,,,image,,,,,,,,,,,,,,,,,,,,,,,,,,,qrCode-aliPayQrCodeChallenge,,,,,,,,,,"image-large, margin-top-small"
+alipayQrCodeChallengeText,,,subheading,,,,,,,,,,,,,,,,,,Scan the QR code with your Alipay wallet.,,,,,,,,,,,,,,,,,,,
+alipayQrCodeChallengeRedirectionLink,,,hyperlink,,,,,,,,,,,,,,,,,,Login to Alipay,,,,redirect,,,,,,,,,,,,,,,
+alipayQrCodeChallengeRedirectionText,,,text,,,,,,,,,,,,,,,,,, to add your Alipay account.,,,,,,,,,,,,,,,,,,,
+alipayContinueButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,Continue,,,,submit,,,,,,,,,,,,,,,
+paymentMethod,,,property,id,,,Payment Methods,,,,,,,,,FALSE,,,,,,,,,success,,,,,,,buttonList,,,,,,,,"layout-inline, alignment-vertical-center, padding-start-x-small"
+paymentMethodSelectHeading,,,heading,,,,,,,,,,,,,,,,,,Add a way to pay,,,,,,,,,,,,,,,,,,,
+paymentInstrument,,,property,id,,,Payment Instruments,,,,,,,,,FALSE,,,,,,,,,success,,,,,,,buttonList,,,,,,,,
+backupPaymentInstrument,,,property,backupId,,,Payment Instruments,,,,,,,,,FALSE,,,,,,,,,success,,,,,,,buttonList,,,,,,,,
+paymentInstrumentSelectHeading,,,heading,,,,,,,,,,,,,,,,,,Pick a way to pay,,,,,,,,,,,,,,,,,,,
+paymentInstrumentManageSelectHeading,,,heading,,,,,,,,,,,,,,,,,,Payment Options,,,,,,,,,,,,,,,,,,,
+paymentInstrumentEditInfo,,,text,,,,,,,,,,,,,,,,,,Edit Information,,,,,,,,,,,,,,,,,,,
+paymentInstrumentShowInfo,,,text,,,,,,,,,,,,,,,,,,Show Information,,,,,,,,,,,,,,,,,,,
+paymentInstrumentExpires,,,text,,,,,,,,,,,,,,,,,,Expires,,,,,,,,,,,,,,,,,,,
+paymentInstrumentExpired,,,text,,,,,,,,,,,,,,,,,,Expired,,,,,,,,,,,,,,,,,,,
+paymentInstrumentDelete,,,text,,,,,,,,,,,,,,,,,,Delete,,,,,,,,,,,,,,,,,,,
+paymentInstrumentSelectMessage,,,text,,,,,,,,,,,,,,,,,,"Due to recent changes in regulations for remote card transactions, you need to add the payment method before every transaction",,,,,,,,,,,,,,,,,,,
+backupPaymentSelectHeading,,,heading,,,,,,,,,,,,,,,,,,How do you want to pay the rest?,,,,,,,,,,,,,,,,,,,
+newPaymentMethodLink,,,button,,,,,,,,,,,,,,,,,,Add a new payment method,,,,success,,,,,,,,,,,,,,,
+paymentInstrumentSelection,,,property,id,,,Payment Selection,,,,,,,,,FALSE,,,,,,,,,success,,,,,,,buttonList,,,,,,,,
+backupPaymentInstrumentSelection,,,property,backupId,,,Backup Payment Selection,,,,,,,,,FALSE,,,,,,,,,success,,,,,,,buttonList,,,,,,,,
+pidlContainer,,,pidlContainer,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+profileAddressPageHeading,,,heading,,,,,,,,,,,,,,,,,,We need your profile address,,,,,,,,,,,,,,,,,,,
+profileAddressPageSubheading,,,text,,,,,,,,,,,,,,,,,,We'll update your Microsoft account profile with this address.,,,,,,,,,,,,,,,,,,,"margin-bottom-x-small"
+addKlarnaPageHeading,,,heading,,,,,,,,,,,,,,,,,,Add Klarna,,,,,,,,,,,,,,,,,,,
+addKlarnaSubHeading1,,,text,,,,,,,,,,,,,,,,,,Pay after delivery with Klarna.,,,,,,,,,,,,,,,,,,,
+addKlarnaSubHeading2,,,text,,,,,,,,,,,,,,,,,," Get your goods first and pay after delivery when you shop with us. No fees or interest, only pay for what you keep. Just select Klarna at checkout.",,,,,,,,,,,,,,,,,,,
+klarnaPersonalNumber,,,property,nationalIdentificationNumber,,,Personal number,,,,,,,,,TRUE,,,,,,,,,,,,,,,,,,,,,,,,
+klarnaPersonalNumber,se,,property,nationalIdentificationNumber,,,Personal number,,,,,,,,,TRUE,,YYMMDD-NNNN,,,,,,,,,,,,,,,,,,,,,,
+klarnaPersonalNumber,fi,,property,nationalIdentificationNumber,,,Personal number,,,,,,,,,TRUE,,DDMMYY-XXXX,,,,,,,,,,,,,,,,,,,,,,
+klarnaPersonalNumber,dk,,property,nationalIdentificationNumber,,,CPR-number (10 digits),,,,,,,,,TRUE,,DDMMYYXXXX,,,,,,,,,,,,,,,,,,,,,,
+klarnaPersonalNumber,no,,property,nationalIdentificationNumber,,,Personal number (11 digits),,,,,,,,,TRUE,,DDMMYYXXXXX,,,,,,,,,,,,,,,,,,,,,,
+klarnaPersonalNumber,{}KlarnaCountriesWithCheckboxAndGender,,property,nationalIdentificationNumber,,,Date of birth,,,,,,,,,TRUE,,TTMMJJJJ,,,,,,,,,,,,,,,,,,,,,,
+klarnaPersonalNumber,de,,property,nationalIdentificationNumber,,,Date of birth,,,,,,,,,TRUE,,DD.MM.YYYY,,,,,,,,,,,,,,,,,,,,,,
+klarnaPersonalNumber,nl,,property,nationalIdentificationNumber,,,Date of birth,,,,,,,,,TRUE,,ddmmjjjj,,,,,,,,,,,,,,,,,,,,,,
+klarnaPhoneNumber,,,property,phone,,,Phone number,,,,,,,,,TRUE,,,,,,,,,,,,,,,,,,,,,,,,
+klarnaEmailAddress,,,property,email,,,Email,,,,,,,,,TRUE,,,,,,,,,,,,,,,,,,,,,,,,
+klarnaGender,,,property,gender,,,Gender,,,,,,,,,TRUE,,,,,,,,,,,,{}KlarnaGender,--Select--,,,,,,,,,,,
+klarnaIpAddress,,,property,ipAddress,,,,,TRUE,,,,,,,FALSE,,,,,,,,,,,,,,,,,,,,,,,,
+klarnaTermCheckbox,,,property,mandateSelected,,,"When I use Klarna to pay for purchases, I agree that Microsoft can transfer to Klarna the data required to process my order which includes an identity and credit-worthiness check. I can revoke my consent at any time with effect for the future. Terms and conditions of the dealer also apply.",,,,,,,,,FALSE,,,,,,,,,,,,,,,,,,,,,,,,
+klarnaTermsText,,,text,,,,,,,,,,,,,,,,,,Link to ,,,,,,,,,,,,,,,,,,,
+klarnaConsentText,,,text,,,,,,,,,,,,,,,,,,Link to ,,,,,,,,,,,,,,,,,,,
+klarnaConsentLink,de,,hyperlink,,,,,,,,,,,,,,,,,,Klarna consent,,,,navigate,https://cdn.klarna.com/1.0/shared/content/legal/terms/123/de_de/consent,,,,https://cdn.klarna.com/1.0/shared/content/legal/terms/123/de_de/consent,,,,,,,,,,
+klarnaConsentLink,at,,hyperlink,,,,,,,,,,,,,,,,,,Klarna consent,,,,navigate,https://cdn.klarna.com/1.0/shared/content/legal/terms/123/de_at/consent,,,,https://cdn.klarna.com/1.0/shared/content/legal/terms/123/de_at/consent,,,,,,,,,,
+klarnaTermsLink,se,,hyperlink,,,,,,,,,,,,,,,,,,Klarna Terms and Conditions,,,,navigate,https://cdn.klarna.com/1.0/shared/content/legal/terms/123/sv_se/invoice,,,,https://cdn.klarna.com/1.0/shared/content/legal/terms/123/sv_se/invoice,,,,,,,,,,
+klarnaTermsLink,de,,hyperlink,,,,,,,,,,,,,,,,,,Klarna Terms and Conditions,,,,navigate,https://cdn.klarna.com/1.0/shared/content/legal/terms/123/de_de/invoice,,,,https://cdn.klarna.com/1.0/shared/content/legal/terms/123/de_de/invoice,,,,,,,,,,
+klarnaTermsLink,at,,hyperlink,,,,,,,,,,,,,,,,,,Klarna Terms and Conditions,,,,navigate,https://cdn.klarna.com/1.0/shared/content/legal/terms/123/de_at/invoice,,,,https://cdn.klarna.com/1.0/shared/content/legal/terms/123/de_at/invoice,,,,,,,,,,
+klarnaTermsLink,no,,hyperlink,,,,,,,,,,,,,,,,,,Klarna Terms and Conditions,,,,navigate,https://cdn.klarna.com/1.0/shared/content/legal/terms/123/nb_no/invoice,,,,https://cdn.klarna.com/1.0/shared/content/legal/terms/123/nb_no/invoice,,,,,,,,,,
+klarnaTermsLink,fi,,hyperlink,,,,,,,,,,,,,,,,,,Klarna Terms and Conditions,,,,navigate,https://cdn.klarna.com/1.0/shared/content/legal/terms/123/fi_fi/invoice,,,,https://cdn.klarna.com/1.0/shared/content/legal/terms/123/fi_fi/invoice,,,,,,,,,,
+klarnaTermsLink,dk,,hyperlink,,,,,,,,,,,,,,,,,,Klarna Terms and Conditions,,,,navigate,https://cdn.klarna.com/1.0/shared/content/legal/terms/123/da_dk/invoice,,,,https://cdn.klarna.com/1.0/shared/content/legal/terms/123/da_dk/invoice,,,,,,,,,,
+klarnaTermsLink,nl,,hyperlink,,,,,,,,,,,,,,,,,,Klarna Terms and Conditions,,,,navigate,https://cdn.klarna.com/1.0/shared/content/legal/terms/123/nl_nl/invoice,,,,https://cdn.klarna.com/1.0/shared/content/legal/terms/123/nl_nl/invoice,,,,,,,,,,
+klarnaSummaryPageHeading,,,heading,,,,,,,,,,,,,,,,,,Check your info,,,,,,,,,,,,,,,,,,,
+klarnaAddSummaryLine1,,,expression,,,,,,,,,,,,,,,,,,({firstname} )({lastname}),,,,,,,,,,,,,,,,,,,
+klarnaAddSummaryLine2,,,expression,,,,,,,,,,,,,,,,,,({nationalIdentificationNumber}),,,,,,,,,,,,,,,,,,,
+klarnaAddSummaryLine3,,,expression,,,,,,,,,,,,,,,,,,({gender}),,,,,,,,,,,,,,,,,,,
+klarnaAddSummaryLine4,,,expression,,,,,,,,,,,,,,,,,,({phone}),,,,,,,,,,,,,,,,,,,
+klarnaAddSummaryLine5,,,expression,,,,,,,,,,,,,,,,,,({email}),,,,,,,,,,,,,,,,,,,
+klarnaAddSummaryLine6,,,expression,,,,,,,,,,,,,,,,,,"({address_line1})(, {address_line2})",,,,,,,,,,,,,,,,,,,
+klarnaAddSummaryLine7,,,expression,,,,,,,,,,,,,,,,,,({city} - )({postal_code}),,,,,,,,,,,,,,,,,,,
+klarnaAddSummaryLine8,,,expression,,,,,,,,,,,,,,,,,,({country}),,,,,,,,,,,,,,,,,,,
+klarnaFirstName,,,property,firstname,,,First name,,,,,,,,,TRUE,,,,,,,,,,,,,,,,,,,,,,,,
+klarnaLastName,,,property,lastname,,,Last name,,,,,,,,,TRUE,,,,,,,,,,,,,,,,,,,,,,,,
+cvvChallengeHeading,,,heading,,,,,,,,,,,,,,,,,,{type placeholder} {lastFour placeholder} verification,,,,,,,,,,,,,,,,,,,"margin-bottom-small"
+cvvChallengeText,,,heading,,,,,,,,,,,,,,,,,,"Enter the CVV to verify your card:",,,,,,,,,,,,,,,,,,,"font-size-small, text-bold"
+klarnaLegalString,se,,text,,,,,,,,,,,,,,,,,,"We will ask you to pay 10 kr via Klarna in order to verify your account. The 10 kr will be refunded afterwards.",,,,,,,,,,,,,,,,,,,
+klarnaLegalString,de,,text,,,,,,,,,,,,,,,,,,"We will ask you to pay € 0,01 via Klarna in order to verify your account. The € 0,01 will be refunded afterwards.",,,,,,,,,,,,,,,,,,,
+klarnaLegalString,at,,text,,,,,,,,,,,,,,,,,,"We will ask you to pay € 0,01 via Klarna in order to verify your account. The € 0,01 will be refunded afterwards.",,,,,,,,,,,,,,,,,,,
+klarnaLegalString,no,,text,,,,,,,,,,,,,,,,,,"We will ask you to pay 10 kr via Klarna in order to verify your account. The 10 kr will be refunded afterwards.",,,,,,,,,,,,,,,,,,,
+klarnaLegalString,fi,,text,,,,,,,,,,,,,,,,,,"We will ask you to pay € 0,01 via Klarna in order to verify your account. The € 0,01 will be refunded afterwards.",,,,,,,,,,,,,,,,,,,
+klarnaLegalString,dk,,text,,,,,,,,,,,,,,,,,,"We will ask you to pay 10 kr via Klarna in order to verify your account. The 10 kr will be refunded afterwards.",,,,,,,,,,,,,,,,,,,
+klarnaLegalString,nl,,text,,,,,,,,,,,,,,,,,,"We will ask you to pay € 0,01 via Klarna in order to verify your account. The € 0,01 will be refunded afterwards.",,,,,,,,,,,,,,,,,,,
+klarnaCheckoutAddPageHeading,,,heading,,,,,,,,,,,,,,,,,,Setting up Klarna,,,,,,,,,,,,,,,,,,,
+klarnaCheckoutNextString,,,text,,,,,,,,,,,,,,,,,,When you select 'Next',,,,,,,,,,,,,,,,,,,
+klarnaCheckoutRedirectString,,,text,,,,,,,,,,,,,,,,,,", you'll be redirected to Klarna.com to verify you personal details.",,,,,,,,,,,,,,,,,,,
+klarnaLogo,,,logo,,,,,,,,,,,,,,,,,,,,,,,,,,,/staticresourceservice/images/v4/logo_klarna.svg,,,,,,,,,,
+klarnaCheckoutTermsText,,,text,,,,,,,,,,,,,,,,,,View the ,,,,,,,,,,,,,,,,,,,
+3dsChallengeHeading,,,heading,,,,,,,,,,,,,,,,,,One more step,,,,,,,,,,,,,,,,,,,
+3dsChallengeText1,,,text,,,,,,,,,,,,,,,,,,Your card issuer needs you to complete one more step. When you select ,,,,,,,,,,,,,,,,,,,
+3dsChallengeText2,,,text,,,,,,,,,,,,,,,,,,Continue,,,,,,,,,,,,,,,,,,,
+3dsChallengeText3,,,text,,,,,,,,,,,,,,,,,,", you'll be redirected to their website.",,,,,,,,,,,,,,,,,,,
+3dsPickAnotherWayText1,,,text,,,,,,,,,,,,,,,,,,"To pick another way to pay, select ",,,,,,,,,,,,,,,,,,,
+3dsPickAnotherWayText2,,,text,,,,,,,,,,,,,,,,,,Back,,,,,,,,,,,,,,,,,,,
+3dsRedirectHeading,,,heading,,,,,,,,,,,,,,,,,,Have you been to your card issuer's website?,,,,,,,,,,,,,,,,,,,
+3dsRedirectText,,,text,,,,,,,,,,,,,,,,,,"If not, wait a moment or two, you'll be redirected there.",,,,,,,,,,,,,,,,,,,
+addressGroup,,,property,id,,,AddressGroup,,,,,,,,,FALSE,,,,,,,,,success,,,,,,,buttonList,,,,,,,,
+shippingAddressPhoneNumber,,,property,phone_number,,,Phone Number,,,,,,,,,FALSE,,Phone Number,,,,,,,,,,,,,,,,,,,,,,
+shippingAddressPageHeader,,,heading,,,,,,,,,,,,,,,,,,Add a shipping address,,,,,,,,,,,,,,,,,,,
+billingAddressPageHeader,,,heading,,,,,,,,,,,,,,,,,,Add your billing address,,,,,,,,,,,,,,,,,,,
+profileAddressPageHeader,,,heading,,,,,,,,,,,,,,,,,,Enter your billing address,,,,,,,,,,,,,,,,,,,	
+addressPreviousButton,,,button,,,,,,,,,,,,,,,,,,Back,,,,movePrevious,,,,,,,,,,,,,,,"width-small"
+addressPreviousBillingButton,,,button,,,,,,,,,,,,,,,,,,Back,,,,gohome,,,,,,,,,,,,,,,"width-small"
+shippingAddressVerifyHeader,,,heading,,,,,,,,,,,,,,,,,,Verify your shipping address,,,,,,,,,,,,,,,,,,,"margin-top-medium, margin-start-small"
+billingAddressVerifyHeader,,,heading,,,,,,,,,,,,,,,,,,Verify your billing address,,,,,,,,,,,,,,,,,,,"margin-top-medium, margin-start-small"
+billingAddressVerifyPleaseVerifyHeader,,,heading,,,,,,,,,,,,,,,,,,Please verify your billing address,,,,,,,,,,,,,,,,,,,
+addressPage1BackButton,,,button,,,,,,,,,,,,,,,,,,Back,,,,gohome,,,,,,,,,,,,,,,"width-small"
+suggestAddressBackButton,,,button,,,,,,,,,,,,,,,,,,Back,,,,moveNext,,,,,,,,,,,,,,,"width-small"
+suggestAddressBackClosePageButton,,,button,,,,,,,,,,,,,,,,,,Back,,,,closePidlPage,,,,,,,,,,,,,,,"width-small"
+suggestedAddresses,,,property,id,,,Suggested Addresses,,,,,,,,,FALSE,,,,,,,,,success,,,,,,,buttonList,,,,,,,,"layout-inline, alignment-vertical-center, padding-horizontal-small"
+addressValidationMessage,,,text,,,,,,,,,,,,,,,,,,"""""",,,,,,,,,,,,,,,,,,,"margin-bottom-small, margin-start-small"
+setDefaultAddressCheckBox,,,property,set_as_default_shipping_address,,,Set as default shipping address,,FALSE,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,width-half
+setDefaultAddressCheckBoxAfterCountry,,,property,set_as_default_shipping_address,,,Set as default shipping address,,FALSE,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"width-third"
+listShippingAddressHeader,,,heading,,,,,,,,,,,,,,,,,,Change shipping address,,,,,,,,,,,,,,,,,,,"margin-start-medium, margin-top-medium, margin-bottom-small"
+listBillingAddressHeader,,,heading,,,,,,,,,,,,,,,,,,Change billing address,,,,,,,,,,,,,,,,,,,"margin-start-medium, margin-top-medium, margin-bottom-small"
+listAddresses,,,property,id,,,Address List,,,,,,,,,FALSE,,,,,,,,,success,,,,,,,buttonList,,,,,,,,"layout-inline, alignment-vertical-center, padding-horizontal-medium"
+setDefaultAddressCheckBoxAfterGroup,,,property,set_as_default_shipping_address,,,Set as default shipping address,,FALSE,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"width-third"
+setDefaultAddressCheckBoxAfterInlineGroup,,,property,set_as_default_shipping_address,,,Set as default shipping address,,FALSE,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"width-third"
+setDefaultAddressCheckBoxAfterPostalCode,,,property,set_as_default_shipping_address,,,Set as default shipping address,,FALSE,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"width-third"
+backCancelButton,,,button,,,,,,,,,,,,,,,,,,Back,,,,gohome,,,,,,,,,,,,,,,"width-lowerbound-small"
+globalPIQrCodeHeading,,,heading,,,,,,,,,,,,,,,,,,Use Paysafecard,,,,,,,,,,,,,,,,,,,
+globalPIQrCodeImage,,,image,,,,,,,,,,,,,,,,,,,,,,,,,,,{QRCodeURL placeholder},,,,,,,,,,"image-large, image-fit, image-height-half"
+globalPIQrCodeSecondImage,,,image,,,,,,,,,,,,,,,,,,,,,,,,,,,{QRCodeURL placeholder},,,,,,,,,,"image-large, image-fit, image-height-half"
+globalPIQrCodeLogo,,,image,,,,,,,,,,,,,,,,,,,,,,,,,,,/staticresourceservice/images/v4/v2_logo_paysafecard.svg,,,,,,,,,,"image-small-400, image-height-small, padding-3x-small, image-background-black"
+globalPIQrCodeCancelButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,Back,,,,gohome,,,,,,,,,,,,,,,"width-small, margin-top-small"
+globalPIQrCodeScanText,,,text,,,,,,,,,,,,,,,,,,"To complete your purchase, scan the QR code below using your phone's camera and a QR code reader app",,,,,,,,,,,,,,,,,,,"margin-bottom-x-small"
+globalPIQrCodeHintText,,,text,,,,,,,,,,,,,,,,,,"Once you've successfully purchased, this page will automatically refresh",,,,,,,,,,,,,,,,,,,"margin-top-x-small"
+globalPIQrCodeScannedText,,,text,,,,,,,,,,,,,,,,,,Scan successful! Continue the Paysafecard purchase on your mobile device,,,,,,,,,,,,,,,,,,,"margin-bottom-x-small"
+globalPIQrCodeRedirectText,,,text,,,,,,,,,,,,,,,,,,Don't have another device? Navigate to PaySafe here.,,,,,,,,,,,,,,,,,,,"font-size-2x-small, margin-bottom-small"
+globalPIQrCodeRedirectButton,,,button,,,,,,,,,,,,,,,,,,Go to Paysafe,,,,updatePollAndMoveLast,globalPIQrCodeChallengePage,globalPIQrCodeChallengePage3,,,,,,,,,,,,,
+globalPIQrCodeRedirectButtonPage2,,,button,,,,,,,,,,,,,,,,,,Go to Paysafe,,,,moveNext,,,,,,,,,,,,,,,
+globalPIQrCodeMovePrevCancelButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,Back,,,,movePrevious,,,,,,,,,,,,,,,"margin-top-small, width-small"
+kakaoHeading,,,heading,,,,,,,,,,,,,,,,,,Setting up ()PMDisplayName,,,,,,,,,,,,,,,,,,,
+kakaopayQrCodeHeading,,,heading,,,,,,,,,,,,,,,,,,Setting up 카카오페이,,,,,,,,,,,,,,,,,,,"margin-bottom-x-small"
+kakaoHitText,,,text,,,,,,,,,,,,,,,,,,When you select 'Next',,,,,,,,,,,,,,,,,,,"text-bold"
+kakaoText,,,text,,,,,,,,,,,,,,,,,,", you'll be redirected to ()PMDisplayName to verify you personal details.",,,,,,,,,,,,,,,,,,,
+paymentChangeSettingsKakaoStaticText,,,text,,,,,,,,,,,,,,,,,,"To change your settings, go to account.microsoft.com.",,,,,,,,,,,,,,,,,,,
+kakaopayQrCodeWebviewCancelButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,Cancel,,,,gohome,,,,,,,,,,,,,,,"width-small, margin-top-small"
+paypalQrCodeWebviewCancelButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,Back,,,,moveFirst,,,,,,,,,,,,,,,"width-small, margin-top-small"
+paypalQrCodeBackButton,,,button,,,,,,,,TRUE,TRUE,TRUE,,,,,,,,Back,,,,moveNext,,,,,,,,,,,,,,,"width-small"
+paypalQrCodeCancelButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,Back,,,,gohome,,,,,,,,,,,,,,,"width-small"
+paypalQrCodeRedirectButton,,,button,,,,,,,,,,,,,,,,,,Go to PayPal,,,,moveLast,,,,,,,,,,,,,,,"width-lowerbound-small, width-upperbound-small"
+paypalQrCodeUseBrowserText,,,text,,,,,,,,,,,,,,,,,,Don't have another device? Use Microsoft Edge to sign in.,,,,,,,,,,,,,,,,,,,"width-half, text-alignment-end"
+paypalQrCodeSignInButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,Next,,,,submit,,,,,,,,,,,,,,,"width-small"
+paypalQrCodeNextButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,Next,,,,movePrevious,,,,,,,,,,,,,,,"width-small, margin-end-small"
+paypalQrCodeHitText,,,text,,,,,,,,,,,,,,,,,,"When you hit ""Next"":",,,,,,,,,,,,,,,,,,,"text-bold, font-size-small, line-height-small, margin-bottom-small"
+paypalQrCodeText,,,text,,,,,,,,,,,,,,,,,,"You'll be given a couple options to verify your account on PayPal's website: a QR code you can scan on your phone that'll take you straight there, or a way to use the Microsoft Edge app to add PayPal.",,,,,,,,,,,,,,,,,,,
+paypalQrCodeImage,,,image,,,,,,,,,,,,,,,,,,,,,,,,,,,{QrCode placeholder},,,,,,,,,,"image-fill, image-fit"
+paypalQrCodeHeading,,,heading,,,,,,,,,,,,,,,,,,Add a PayPal Account,,,,,,,,,,,,,,,,,,,"width-fill"
+xboxCoBrandedCardQrCodeHeading,,,heading,,,,,,,,,,,,,,,,,,Apply now,,,,,,,,,,,,,,,,,,,"font-size-x-large, line-height-x-large, text-bold, text-semi-bold"
+xboxCoBrandedCardQrCodeSubheading,,,text,,,,,,,,,,,,,,,,,,"Xbox Mastercard",,,,,,,,,,,,,,,,,,,"font-size-medium, line-height-medium, text-semi-bold, margin-bottom-medium"
+xboxCoBrandedCardQrCodeOtherDeviceText,,,text,,,,,,,,,,,,,,,,,,"Don't have another device?",,,,,,,,,,,,,,,,,,,
+xboxCoBrandedCardQrCodeRedirectButton,,,button,,,,,,,,,,,,,,,,,,Apply on console,,,,updatePollAndMoveLast,xboxCoBrandedCardQrCodePage,xboxCoBrandedCardQrCodePage3,,,,,,,,,,,,,"margin-top-medium"
+xboxCoBrandedCardQrCodeBodyText,,,text,,,,,,,,,,,,,,,,,,"After signing in, you’ll be directed to Barclays website to apply for Xbox Mastercard",,,,,,,,,,,,,,,,,,,"font-size-small-400, line-height-small-600, text-dark, margin-top-large"
+xboxCoBrandedCardQrCodeDisclaimerText,,,text,,,,,,,,,,,,,,,,,,"*You have to be 18 years or older and reside in the United States to apply. We’ll collect your Xbox profile information, but won’t use it without your permission. Microsoft respects your privacy.",,,,,,,,,,,,,,,,,,,
+xboxCoBrandedCardQrCodeBackButton,,,button,,,,,,,,TRUE,TRUE,TRUE,,,,,,,,"No thanks",,,,gohome,,,,,,,,,,,,,,,
+warningImage,,,image,,,,,,,,,,,,,,,,,,,,,,,,,,,https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/warning_XboxCoBrandedCardApply_{themePlaceholder}.svg,,,,,,,,,,"image-x-small"
+infoImage,,,image,,,,,,,,,,,,,,,,,,,,,,,,,,,https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/info_XboxCoBrandedCardApply_{themePlaceholder}.svg,,,,,,,,,,"image-x-small"
+xboxCoBrandedCardCardImage,,,image,,,,,,,,,,,,,,,,,,,,,,,,,,,https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/cardImage_XboxCoBrandedCardApply.png,,,,,,,,,,"image-fill"
+xboxCardUpsellCardImage,,,image,,,,,,,,,,,,,,,,,,,,,,,,,,,https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/cardImage_XboxCoBrandedCardApply.png,,,,,,,,,,
+xboxCoBrandedCardPageBackgroundImage,,,image,,,,,,,,,,,,,,,,,,,,,,,,,,,https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/background_XboxCoBrandedCardApply_{themePlaceholder}.png,,,,,,,,,,"image-fill, dock-behind, top-none, left-none, image-cover"
+xboxCoBrandedCardPageBackgroundV2Image,,,image,,,,,,,,,,,,,,,,,,,,,,,,,,,https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/background_v2_XboxCoBrandedCardApply_{themePlaceholder}.png,,,,,,,,,,"image-fill, dock-behind, top-none, left-none, image-cover"
+xboxCoBrandedCardQrCodeImage,,,image,,,,,,,,,,,,,,,,,,,,,,,,,,,{QrCode placeholder},,,,,,,,,,"margin-top-medium, image-x-large, corners-round-medium"
+xboxCoBrandedCardQrCodeShortUrlText,,,text,,,,,,,,,,,,,,,,,,"or visit {shortUrlPlaceholder} on the web",,,,,,,,,,,,,,,,,,,
+xboxCoBrandedCardQrCodePage2Header,,,heading,,,,,,,,,,,,,,,,,,"Thanks for starting your application",,,,,,,,,,,,,,,,,,,"margin-bottom-small, text-semi-bold, font-size-small-400, line-height-small-600"
+xboxCoBrandedCardQrCodePage2BodyText,,,text,,,,,,,,,,,,,,,,,,"Once you’ve finished applying on the Barclays site, come back here to check the status of your credit card application​",,,,,,,,,,,,,,,,,,,"margin-bottom-large"
+xboxCoBrandedCardQrCodeText,,,text,,,,,,,,,,,,,,,,,,Scan the QR code to apply on mobile,,,,,,,,,,,,,,,,,,,"font-size-medium, line-height-medium, text-semi-bold, text-dark"
+xboxCoBrandedCardLoadingIndicator,,,spinner,,,,,,,,,,,,,,,,,,,,,,,,,,,{placeholder},,,,,,,,,,
+xboxCoBrandedCardQrCodeWebviewCancelButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,Back,,,,movePrevious,,,,,,,,,,,,,,,"width-small, margin-top-x-small"
+xboxCoBrandedCardProcessingText,,,text,,,,,,,,,,,,,,,,,,Processing your application status,,,,,,,,,,,,,,,,,,,"margin-top-large"
+xboxCardUpsellPaymentOptionsHeading,,,text,,,,,,,,,,,,,,,,,,"Xbox Mastercard",,,,,,,,,,,,,,,,,,,
+xboxCardUpsellPaymentOptionsSubheading,,,text,,,,,,,,,,,,,,,,,,"You're pre-selected!",,,,,,,,,,,,,,,,,,,
+xboxCardUpsellPaymentOptionsUsername,,,text,,,,,,,,,,,,,,,,,,"{0}",,,,,,,,,,,,,,,,,,,
+xboxCardUpsellPaymentOptionsApplyNowText,,,text,,,,,,,,,,,,,,,,,,"Apply now >",,,,,,,,,,,,,,,,,,,
+xboxCoBrandedCardApplyPendingHeading,,,heading,,,,,,,,,,,,,,,,,,We noticed you recently submitted an application,,,,,,,,,,,,,,,,,,,"text-semi-bold, font-size-large, line-height-large"
+xboxCoBrandedCardApplyPendingText,,,text,,,,,,,,,,,,,,,,,,"You can check the status of your application at myapplicationstatus.com. Do you still want to proceed?",,,,,,,,,,,,,,,,,,,"font-size-small-400, line-height-small-600, margin-top-x-small"
+xboxCardApplyCardAlreadyIssuedHeading,,,heading,,,,,,,,,,,,,,,,,,Welcome back!,,,,,,,,,,,,,,,,,,,"text-semi-bold, font-size-large, line-height-large"
+xboxCardApplyCardAlreadyIssuedText,,,text,,,,,,,,,,,,,,,,,,"Earn 5x card points for every $1 spent on eligible products at the digital Microsoft Store.{SuperscriptOne}",,,,,,,,,,,,,,,,,,,"font-size-small-400, line-height-small-600, margin-top-x-small"
+xboxCardApplyCardAlreadyIssuedSubtext,,,text,,,,,,,,,,,,,,,,,,"{SuperscriptOne}Please log in to your Xbox Mastercard account to view your Reward Rules for more information about the rewards associated with your account. Visit BarclaysUS.com/XboxMastercardRewards for the list of eligible products, stores, and services.",,,,,,,,,,,,,,,,,,,
+xboxCardApplyInternalErrorHeading,,,heading,,,,,,,,,,,,,,,,,,"Sorry, something went wrong",,,,,,,,,,,,,,,,,,,"text-semi-bold, font-size-large, line-height-large"
+xboxCardApplyInternalErrorText,,,text,,,,,,,,,,,,,,,,,,"Try again in a little while",,,,,,,,,,,,,,,,,,,"font-size-small-400, line-height-small-600, margin-top-x-small"
+xboxCardApplyNotEligibleHeading,,,heading,,,,,,,,,,,,,,,,,,"Sorry, you aren't eligible to apply",,,,,,,,,,,,,,,,,,,"text-semi-bold, font-size-large, line-height-large"
+xboxCardApplyNotEligibleText,,,text,,,,,,,,,,,,,,,,,,"Thank you for your interest in Xbox Mastercard. Unfortunately, you are not currently eligible.",,,,,,,,,,,,,,,,,,,"font-size-small-400, line-height-small-600, margin-top-x-small"
+xboxCardApplySuccessHeading,,,heading,,,,,,,,,,,,,,,,,,"Success!",,,,,,,,,,,,,,,,,,,"text-semi-bold, font-size-large, line-height-large"
+xboxCardApplySuccessSubheading,,,subheading,,,,,,,,,,,,,,,,,,"Your new Xbox Mastercard has been added to your account and is ready to use in the digital Microsoft Store",,,,,,,,,,,,,,,,,,,"font-size-small-400, line-height-small-600, margin-top-x-small"
+xboxCardApplySuccessText,,,text,,,,,,,,,,,,,,,,,,"Earn 5x card points for every $1 spent on eligible products at the digital Microsoft Store.{SuperscriptOne}",,,,,,,,,,,,,,,,,,,"font-size-small-400, line-height-small-600, margin-top-x-small"
+xboxCardApplySuccessSubtext,,,text,,,,,,,,,,,,,,,,,,"{SuperscriptOne}Please log in to your Xbox Mastercard account to view your Reward Rules for more information about the rewards associated with your account. Visit BarclaysUS.com/XboxMastercardRewards for the list of eligible products, stores, and services.",,,,,,,,,,,,,,,,,,,
+xboxCardApplicationDetailsPendingHeading,,,heading,,,,,,,,,,,,,,,,,,"Thanks for your application!",,,,,,,,,,,,,,,,,,,"text-semi-bold, font-size-large, line-height-large"
+xboxCardApplicationDetailsPendingText,,,text,,,,,,,,,,,,,,,,,,"Barclays will be in touch with you once they are done processing your application",,,,,,,,,,,,,,,,,,,"font-size-small-400, line-height-small-600, margin-top-x-small"
+xboxCardApplicationDetailsErrorHeading,,,heading,,,,,,,,,,,,,,,,,,"Something went wrong",,,,,,,,,,,,,,,,,,,"text-semi-bold, font-size-large, line-height-large"
+xboxCardApplicationDetailsErrorText,,,text,,,,,,,,,,,,,,,,,,"Sorry, that didn’t work. Please try again in a little while",,,,,,,,,,,,,,,,,,,"font-size-small-400, line-height-small-600, margin-top-x-small"
+xboxCardApprovedGiveFeedbackButton,,,button,,,,,,,,,,,,,,,,,,Give Feedback,,,,navigate,"ms-survey://?compassFileName=XmapCSATApproved",giveFeedback,,,,,,,,,,,,,
+xboxCardPendingGiveFeedbackButton,,,button,,,,,,,,,,,,,,,,,,Give Feedback,,,,navigate,"ms-survey://?compassFileName=XmapCSATPending",giveFeedback,,,,,,,,,,,,,
+xboxCardErrorIneligibleGiveFeedbackButton,,,button,,,,,,,,,,,,,,,,,,Give Feedback,,,,navigate,"ms-survey://?compassFileName=XmapCSATErrorIneligible",giveFeedback,,,,,,,,,,,,,
+xboxCardGoToStoreButton,,,button,,,,,,,,,,,,,,,,,,Visit Store,,,,navigate,"ms-windows-store://",goToStore,,,,,,,,,,,,,"width-small, margin-top-small"
+xboxCardGoToStoreSuccessButton,,,button,,,,,,,,,,,,,,,,,,Visit Store,,,,success,,,,,,,,,,,,,,,
+xboxCoBrandedCardApplyPendingBackButton,,,button,,,,,,,,,,,,,,,,,,Close,,,,gohome,,,,,,,,,,,,,,,
+xboxCoBrandedCardApplyPendingCheckStatusButton,,,button,,,,,,,,,,,,,,,,,,Check status,,,,navigate,http://www.myapplicationstatus.com,checkStatus,,,,,,,,,,,,,
+xboxCoBrandedCardApplyPendingContinueButton,,,button,,,,,,,,,,,,,,,,,,Continue,,,,navigate,http://www.myapplicationstatus.com,checkStatus,,,,,,,,,,,,,
+xboxCardApplyInternalErrorBackButton,,,button,,,,,,,,,,,,,,,,,,Back,,,,gohome,,,,,,,,,,,,,,,
+xboxCardApplyNotEligibleBackButton,,,button,,,,,,,,,,,,,,,,,,Back,,,,gohome,,,,,,,,,,,,,,,
+xboxCardApplyNotEligibleSeeFAQButton,,,button,,,,,,,,,,,,,,,,,,See FAQ,,,,navigate,ms-xcare://?relativeUrl=app-xbox-mastercard-faq,seeFAQ,,,,,,,,,,,,,
+xboxCardUpsellBuyNowButton,,,button,,,,,,,,,,,,,,,,,,"{0}",,,,success,,,,,,,,,,,,,,,
+paypalQrCodeChallengeText,,,text,,,,,,,,,,,,,,,,,,Scan the QR code below using your phone's camera or a QR code reader app.,,,,,,,,,,,,,,,,,,,
+paypalQrCodeWrapUpText,,,text,,,,,,,,,,,,,,,,,,"Once you've added your PayPal, this page will refresh. It may take a moment.",,,,,,,,,,,,,,,,,,,"width-half"
+paymentChangeSettingsPaypalQrCodeStaticText,,,text,,,,,,,,,,,,,,,,,,"To change the settings for this payment method in the future, go to Settings > Account.",,,,,,,,,,,,,,,,,,,
+paypalAccountHeading,,,heading,,,,,,,,,,,,,,,,,,Enter your PayPal account,,,,,,,,,,,,,,,,,,,
+paypalAccount,,,property,email,,,Email address,,,,,,,8,,FALSE,,Email Address,,,,,,,,,,,,,,,,,,,,,,
+paypalAccountMessage,,,text,,,,,,,,,,,,,,,,,,"Microsoft will collect your PayPal account info and check it with PayPal. Microsoft doesn't use it without your permission. See our privacy statement. If you don't have a PayPal account, create one at PayPal.com.",,,,,,,,,,,,,,,,,,,
+paypalPassword,,,property,encryptedPassword,,,Password,,,,,,,,TRUE,FALSE,,Password,,,,,,,,,,,,,,,,,,,,,,
+paypalTermMessage,,,text,,,,,,,,,,,,,,,,,,"Use PayPal for future payments to Microsoft Corporation. Payments will be made with your default payment method unless you select a preferred payment method. To make changes, go to your profile on PayPal.com and update your preapproved payments. See PayPal payment policies on PayPal.com.",,,,,,,,,,,,,,,,,,,
+paypalShowAccountInfoHeading,,,heading,,,,,,,,,,,,,,,,,,PayPal Account Information,,,,,,,,,,,,,,,,,,,
+paypalShowAccountEmail,,,expression,email,,,,,,,,,,,,,,,,,(Account e-mail: {email}),,,,,,,,,,,,,,,,,,,
+paypalShowAccountProperty,,,property,email,,,,,TRUE,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+paypalDeleteHeading,,,heading,,,,,,,,,,,,,,,,,,Delete Paypal?,,,,,,,,,,,,,,,,,,,
+paypalDeleteSubheading,,,text,,,,,,,,,,,,,,,,,,Are you sure you want to delete your paypal account?,,,,,,,,,,,,,,,,,,,"margin-top-small"
+paypalDeletePhoneNumber,,,expression,,,,,,,,,,,,,,,,,,({dataSources.paymentInstrument.details.email}),,,,,,,,,,,,,,,,,,,
+kakaopayDeleteHeading,,,heading,,,,,,,,,,,,,,,,,,Delete Kakaopay?,,,,,,,,,,,,,,,,,,,
+kakaopayDeleteSubheading,,,text,,,,,,,,,,,,,,,,,,Are you sure you want to delete your kakaopay account?,,,,,,,,,,,,,,,,,,,"margin-top-small"
+okActionButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,OK,,,,restAction,,,,,,,,,,,,,,,"width-lowerbound-small"
+smsExplanationText,,,text,,,,,,,,,,,,,,,,,,"To protect your mobile phone from unauthorized charges, we require you to enter the verification code sent to your phone.",,,,,,,,,,,,,,,,,,,"margin-vertical-small"
+smsMessageText,,,text,,,,,,,,,,,,,,,,,,Standard rates may apply to text messages.,,,,,,,,,,,,,,,,,,,"margin-bottom-medium"
+authorizeCvvHeader,,,heading,,,,,,,,,,,,,,,,,,Verify your card,,,,,,,,,,,,,,,,,,,
+enterCvvHeader,,,text,,,,,,,,,,,,,,,,,,Enter your CVV,,,,,,,,,,,,,,,,,,,
+regulationText,,,text,,,,,,,,,,,,,,,,,,"You'll be redirected to your bank's website for card verification. We'll collect your information but won't use it without your permission.",,,,,,,,,,,,,,,,,,,
+cvv3DSSubmitButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,Next,,,,submit,,,,,,,,,,,,,,,
+challengeCardName,,,text,,,,,,,,,,,,,,,,,,{name_placeholder},,,,,,,,,,,,,,,,,,,
+challengeCardLogo,,,image,,,,,,,,,,,,,,,,,,,,,,,,,,,{logo_placeholder},,,,,,,,,,
+challengeCardNumber,,,text,,,,,,,,,,,,,,,,,,{number_placeholder},,,,,,,,,,,,,,,,,,,
+challengeCardExpiry,,,text,,,,,,,,,,,,,,,,,,{expiry_placeholder},,,,,,,,,,,,,,,,,,,
+authenticateQrCodeInstructions,,,text,,,,,,,,,,,,,,,,,,"Use your phone to scan the QR code and complete verification.",,,,,,,,,,,,,,,,,,,
+ccThreeDSQrCodeImage,,,image,,,,,,,,,,,,,,,,,,,,,,,,,,,{QRCodeURL placeholder},,,,,,,,,,
+ccThreeDSRefreshText,,,text,,,,,,,,,,,,,,,,,,"This page will automatically refresh.",,,,,,,,,,,,,,,,,,,
+ccThreeDSWebviewInfoLine1Text,,,text,,,,,,,,,,,,,,,,,,Can't use your phone to scan?,,,,,,,,,,,,,,,,,,,
+ccThreeDSWebviewInfoLine2Text,,,text,,,,,,,,,,,,,,,,,,Go to the bank website for verification.,,,,,,,,,,,,,,,,,,,
+goToBankButton,,,button,,,,,,,,,,,,,,,,,,GO TO BANK,,,,moveNext,,,,,,,,,,,,,,,
+bankWebviewCancelButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,Back,,,,movePrevious,,,,,,,,,,,,,,,
+privacyWebviewBackButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,Back,,,,movePrevious,,,,,,,,,,,,,,,
+cc3DSPurchaseViewTermsButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,View Terms,,,,moveNext,,,,,,,,,,,,,,,
+moveNext2Button,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,Next,,,,moveNext,,,,,,,,,,,,,,,
+moveBack2Button,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,Back,,,,movePrevious,,,,,,,,,,,,,,,
+qrCodeInstructionLine1,,,text,,,,,,,,,,,,,,,,,,"Select Next and use your phone to scan the QR code that appears for card verification.",,,,,,,,,,,,,,,,,,,
+microsoftPrivacyText,,,text,,,,,,,,,,,,,,,,,,Microsoft respects your privacy. See our privacy statement.,,,,,,,,,,,,,,,,,,,
+successBackButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,Back,,,,success,,,,,,,,,,,,,,,
+cvv3HelpText,,,text,,,,,,,,,,,,,,,,,,3 digits on the back of your Visa or MasterCard,,,,,,,,,,,,,,,,,,,
+cvv4HelpText,,,text,,,,,,,,,,,,,,,,,,4 digits on the front of your American Express,,,,,,,,,,,,,,,,,,,
+creditCardVisaSummaryPageHeading,,,heading,,,,,,,,,,,,,,,,,,(Add Visa ending in {accountToken}),,,,,,,,,,,,,,,,,,,
+creditCardDiscoverSummaryPageHeading,,,heading,,,,,,,,,,,,,,,,,,(Add Discover ending in {accountToken}),,,,,,,,,,,,,,,,,,,
+creditCardAmexSummaryPageHeading,,,heading,,,,,,,,,,,,,,,,,,(Add American Express ending in {accountToken}),,,,,,,,,,,,,,,,,,,
+creditCardMCSummaryPageHeading,,,heading,,,,,,,,,,,,,,,,,,(Add Mastercard ending in {accountToken}),,,,,,,,,,,,,,,,,,,
+creditCardEloSummaryPageHeading,,,heading,,,,,,,,,,,,,,,,,,(Add Elo ending in {accountToken}),,,,,,,,,,,,,,,,,,,
+creditCardHipercardSummaryPageHeading,,,heading,,,,,,,,,,,,,,,,,,(Add Hipercard ending in {accountToken}),,,,,,,,,,,,,,,,,,,
+creditCardVerveSummaryPageHeading,,,heading,,,,,,,,,,,,,,,,,,(Add Verve ending in {accountToken}),,,,,,,,,,,,,,,,,,,
+creditCardJCBSummaryPageHeading,,,heading,,,,,,,,,,,,,,,,,,(Add JCB ending in {accountToken}),,,,,,,,,,,,,,,,,,,
+paymentMethodSubheading,,,subheading,,,,,,,,,,,,,,,,,,Payment method,,,,,,,,,,,,,,,,,,,
+billingAddressSubheading,,,subheading,,,,,,,,,,,,,,,,,,Billing address,,,,,,,,,,,,,,,,,,,
+creditCardAccountToken,,,subheading,,,,,,,,,,,,,,,,,,({accountToken} ),,,,,,,,,,,,,,,,,,,
+creditCardAccountHolderName,,,expression,,,,,,,,,,,,,,,,,,({accountHolderName}),,,,,,,,,,,,,,,,,,,
+creditCardBillingAddressAccountHolderName,,,expression,,,,,,,,,,,,,,,,,,({accountHolderName}),,,,,,,,,,,,,,,,,,,
+creditCardExpiration,,,expression,,,,,,,,,,,,,,,,,,Exp ({expiryMonth}/)({expiryYear}),,,,,,,,,,,,,,,,,,,
+creditCardAddressSummaryLine1,,,expression,,,,,,,,,,,,,,,,,,({address_line1}),,,,,,,,,,,,,,,,,,,
+creditCardAddressSummaryLine2,,,expression,,,,,,,,,,,,,,,,,,({address_line2}),,,,,,,,,,,,,,,,,,,
+creditCardAddressSummaryLine3,,,expression,,,,,,,,,,,,,,,,,,"({city}, )({region})( {postal_code})",,,,,,,,,,,,,,,,,,,
+csvPageHeading,,,heading,,,,,,,,,,,,,,,,,,Microsoft accounts available credit,,,,,,,,,,,,,,,,,,,
+csvPageAvailableText,,,text,,,,,,,,,,,,,,,,,,Available,,,,,,,,,,,,,,,,,,,
+csvPageMoreCurrenciesText,,,text,,,,,,,,,,,,,,,,,,+ more currencies,,,,,,,,,,,,,,,,,,,
+errorHeading,,,heading,,,,,,,,,,,,,,,,,,Error,,,,,,,,,,,,,,,,,,,"margin-bottom-small"
+deletionWithSubscriptionLine1,,,text,,,,,,,,,,,,,,,,,,You have subscriptions/orders that use this payment method. Please update the subscriptions/orders to use a different payment method before removing this one.,,,,,,,,,,,,,,,,,,,"margin-bottom-x-small"
+deletionWithSubscriptionLine2,,,text,,,,,,,,,,,,,,,,,,Please go to account.microsoft.com to manage.,,,,,,,,,,,,,,,,,,,"margin-bottom-x-small"
+indexOfTotal,,,text,,,,,,,,,,,,,,,,,,{0} of {1},,,,,,,,,,,,,,,,,,,
+cardPointsTemplateText,,,text,,,,,,,,,,,,,,,,,,"Card points: {0}",,,,,,,,,,,,,,,,,,,
+currencyValueTemplateText,,,text,,,,,,,,,,,,,,,,,,"({0})",,,,,,,,,,,,,,,,,,,
+blankPlaceholder,,,text,,,,,,,,,,,,,,,,,," ",,,,,,,,,,,,,,,,,,,
+indiaTokenConsentMessage,,,text,tokenizationConsentMessage,,,,,,,,,,,,,,,,,"By clicking the button below to continue, you consent to tokenize and save this card. You'll be redirected to your bank's website for verification.",,,,,,,,,,,,,,,,,,,"margin-bottom-small"
+indiaTokenConsentMessageHyperlink,,,button,tokenizationConsentMessageHyperlink,,,,,,,,,,,,,,,,,Learn more about tokenization,,,,navigate,https://go.microsoft.com/fwlink/?linkid=2206127,,,,https://go.microsoft.com/fwlink/?linkid=2206127,,,,,,,,,,
+venmoWebviewCancelButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,Back,,,,moveFirst,,,,,,,,,,,,,,,
+venmoQrCodeBackButton,,,button,,,,,,,,TRUE,TRUE,TRUE,,,,,,,,Back,,,,moveNext,,,,,,,,,,,,,,,"width-small"
+venmoCancelButton,,,button,,,,,,,,TRUE,TRUE,TRUE,,,,,,,,Back,,,,gohome,,,,,,,,,,,,,,,
+venmoQrCodeRedirectButton,,,button,,,,,,,,,,,,,,,,,,Go to Venmo,,,,moveLast,,,,,,,,,,,,,,,"width-lowerbound-small"
+venmoUseBrowserText,,,text,,,,,,,,,,,,,,,,,,Don't have another device? Use Microsoft Edge to sign in.,,,,,,,,,,,,,,,,,,,
+venmoSignInButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,Next,,,,submit,,,,,,,,,,,,,,,"width-small"
+venmoQrCodeNextButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,Next,,,,movePrevious,,,,,,,,,,,,,,,"width-small"
+venmoQrCodeHitText,,,text,,,,,,,,,,,,,,,,,,When you hit "Next":,,,,,,,,,,,,,,,,,,,"text-bold, font-size-small"
+venmoQrCodeText,,,text,,,,,,,,,,,,,,,,,,You'll see a QR code you can scan with your phone to verify your account on Venmo.,,,,,,,,,,,,,,,,,,,
+venmoQrCodeImage,,,image,,,,,,,,,,,,,,,,,,,,,,,,,,,{QrCode placeholder},,,,,,,,,,"image-fill, image-fit"
+venmoHeading,,,heading,,,,,,,,,,,,,,,,,,Add a Venmo Account,,,,,,,,,,,,,,,,,,,
+venmoQrCodeChallengeText,,,text,,,,,,,,,,,,,,,,,,Scan the QR code below using your phone's camera or a QR code reader app.,,,,,,,,,,,,,,,,,,,
+paymentChangeSettingsvenmoQrCodeStaticText,,,text,,,,,,,,,,,,,,,,,,"To change the settings for this payment method in the future, go to Settings > Account.",,,,,,,,,,,,,,,,,,,
+venmoQrCodeCancelButton,,,button,,,,,,,,TRUE,TRUE,TRUE,,,,,,,,Back,,,,gohome,,,,,,,,,,,,,,cancel,"width-small"
+venmoQrCodeWebviewCancelButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,Back,,,,moveFirst,,,,,,,,,,,,,,,"width-small, margin-top-small"
+venmoQrCodeUseBrowserText,,,text,,,,,,,,,,,,,,,,,,Don't have another device? Use Microsoft Edge to sign in.,,,,,,,,,,,,,,,,,,,"width-half, text-alignment-end"
+venmoQrCodeWrapUpText,,,text,,,,,,,,,,,,,,,,,,"Once you've added your Venmo, this page will refresh. It may take a moment.",,,,,,,,,,,,,,,,,,,"width-half"
+venmoShowAccountInfoHeading,,,heading,,,,,,,,,,,,,,,,,,Venmo Account Information,,,,,,,,,,,,,,,,,,,
+venmoShowAccountUserName,,,expression,userName,,,,,,,,,,,,,,,,,(Account Username: {userName}),,,,,,,,,,,,,,,,,,,
+venmoShowAccountProperty,,,property,userName,,,,,TRUE,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+venmoUserName,,,property,userName,,,UserName,,,,,,,8,,FALSE,,UserName,,,,,,,,,,,,,,,,,,,,,,
+venmoDeleteHeading,,,heading,,,,,,,,,,,,,,,,,,Delete Venmo?,,,,,,,,,,,,,,,,,,,
+venmoDeleteSubheading,,,text,,,,,,,,,,,,,,,,,,Are you sure you want to delete your Venmo account?,,,,,,,,,,,,,,,,,,,"margin-top-small"
+venmoDeleteUserName,,,expression,,,,,,,,,,,,,,,,,,({dataSources.paymentInstrument.details.userName}),,,,,,,,,,,,,,,,,,,
+csvRedeemAddTitle,,,heading,,,,,,,,,,,,,,,,,,Redeem your gift card,,,,,,,,,,,,,,,,,,,"margin-bottom-small"
+csvRedeemAddText,,,text,,,,,,,,,,,,,,,,,,"To redeem your Microsoft or Xbox gift card, please enter your 25-character code in the space below.",,,,,,,,,,,,,,,,,,,
+csvRedeemConfirmEmailText,,,text,,,,,,,,,,,,,,,,,,It'll be added to ()EmailAddress.,,,,,,,,,,,,,,,,,,,"margin-bottom-x-small"
+csvRedeemTokenIdentifierValue,,,property,tokenIdentifierValue,,,,Enter a 25-character code,,,,,,,,TRUE,,,29,29,,,,,,,,,,,,,,,,,,,,"width-half"
+csvRedeemLikeThisText,,,text,,,,,,,,,,,,,,,,,,"Like this: xxxxx-xxxxx-xxxxx-xxxxx-xxxxx",,,,,,,,,,,,,,,,,,,"text-subtext"
+csvConfirmRedeemAddText,,,text,,,,,,,,,,,,,,,,,,The following gift card will be added to your Microsoft Store account.,,,,,,,,,,,,,,,,,,,"margin-bottom-x-small"
+csvLogo,,,image,,,,,,,,,,,,,,,,,,,,,,,,,,,/staticresourceservice/images/v4/logo_microsoft.svg,,,,,,,,,,"image-medium"
+csvAmountText,,,text,,,,,,,,,,,,,,,,,,{0} Microsoft gift card,,,,,,,,,,,,,,,,,,,"margin-top-medium"
+giftCardToken,,,text,,,,,,,,,,,,,,,,,,{0},,,,,,,,,,,,,,,,,,,"text-subtext"
+saveConfirmButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,Confirm,,,,submit,,,,,,,,,,,,,,,"width-lowerbound-small"
+creditCardQrCodeSubheading,,,text,,,,,,,,,,,,,,,,,,Scan the QR code to add card on mobile,,,,,,,,,,,,,,,,,,,
+creditCardQrCodeImage,,,image,,,,,,,,,,,,,,,,,,,,,,,,,,,{QRCodeURL placeholder},,,,,,,,,,
+manualNextButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,Manually enter card details,,,,moveNext,,,,,,,,,,,,,,,
+creditCardQrCodeBody,,,text,,,,,,,,,,,,,,,,,,"After scanning the QR code, you'll be directed to a credit or debit card form on your mobile device.",,,,,,,,,,,,,,,,,,,
+directDebitSepaUpdateNewLine1,,,text,,,,,,,,,,,,,,,,,,"You'll be redirected to verify your bank account. After that step, you'll be redirected back to Microsoft. If verification is successful, sign the SEPA Direct Debit Mandate and you're done.",,,,,,,,,,,,,,,,,,,
+addDirectDebitSepaNewHeading,,,heading,,,,,,,,,,,,,,,,,,Set up to pay by SEPA direct debit,,,,,,,,,,,,,,,,,,,
+rewardsLogo,,,image,,,,,,,,,,,,,,,,,,,,,,,,,,,/staticresourceservice/images/v4/logo_microsoft.svg,,,,,,,,,,"image-small"
+redeemRewardsPointsHeading,,,heading,,,,,,,,,,,,,,,,,,Use Rewards points,,,,,,,,,,,,,,,,,,,
+rightArrowText,,,text,,,,,,,,,,,,,,,,,,{0},,,,,,,,,,,,,,,,,,,"font-family-segoe-mdl2-assets,font-size-medium,line-height-small,text-bold"
+rewardsPointsValueText,,,text,,,,,,,,,,,,,,,,,,{0},,,,,,,,,,,,,,,,,,,
+rewardsPointsStaticText,,,text,,,,,,,,,,,,,,,,,,Rewards points,,,,,,,,,,,,,,,,,,,
+currencyValueText,,,text,,,,,,,,,,,,,,,,,,{0},,,,,,,,,,,,,,,,,,,
+currencyStaticText,,,text,,,,,,,,,,,,,,,,,,Account balance,,,,,,,,,,,,,,,,,,,
+rewardPointsTermsText1,,,text,,,,,,,,,,,,,,,,,,"By selecting REDEEM, you agree to redeem Rewards points for a promotional Xbox Gift Card in the amounts shown, which will be immediately added to your Microsoft Account. Offer is valid for this transaction only. Rates are subject to change.",,,,,,,,,,,,,,,,,,,
+rewardPointsTermsText2,,,text,,,,,,,,,,,,,,,,,,"Spend within 90 days of deposit. Works with Microsoft Store digital storefronts. Subject to the Microsoft Gift Card terms. Except in the case of defect or as required by law, credit cannot be redeemed, returned, canceled, or exchanged for cash or Rewards points. Void where prohibited. Cards and codes issued by and ©/™/® Microsoft Corp, a Washington Corporation, and/or its affiliates.",,,,,,,,,,,,,,,,,,,
+redeemButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,Redeem,,,,submit,,,,,,,,,,,,,,,"width-lowerbound-small"
+rewardsViewTermsButton,,,button,,,,,,,,,,,,,,,,,,View terms,,,,navigate,https://support.microsoft.com/en-us/account-billing/microsoft-gift-cards-terms-and-conditions-94295a5a-a0bb-070e-1d15-2145344b741d,,,,https://support.microsoft.com/en-us/account-billing/microsoft-gift-cards-terms-and-conditions-94295a5a-a0bb-070e-1d15-2145344b741d,,,,,,,,,,"width-lowerbound-small"
+tryAgainText,,,text,,,,,,,,,,,,,,,,,,"We weren't able to verify your account. Try again or go to support.microsoft.com > Account and billing for help troubleshooting.",,,,,,,,,,,,,,,,,,,
+errorBadgeText,,,text,,,,,,,,,,,,,,,,,,{0},,,,,,,,,,,,,,,,,,,"font-family-segoe-mdl2-assets,font-size-medium,line-height-small,text-bold"
+msRewardsErrorHeading,,,heading,,,,,,,,,,,,,,,,,,Something went wrong,,,,,,,,,,,,,,,,,,,"margin-start-x-small"
+gotItButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,Got it,,,,submit,,,,,,,,,,,,,,,"width-lowerbound-small"

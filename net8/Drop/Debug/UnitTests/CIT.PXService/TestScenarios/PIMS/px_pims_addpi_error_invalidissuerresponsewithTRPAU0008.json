@@ -1,0 +1,19 @@
+{
+  "testScenarioName": "px.pims.addpi.error.invalidissuerresponsewithTRPAU0008",
+  "responsesPerApiCall": {
+    "addPI": {
+      "statusCode": 400,
+      "content": {
+        "ErrorCode": "InvalidIssuerResponseWithTRPAU0008",
+        "Message": "The card is not enabled for 3ds/otp authentication in India.",
+        "details": [
+          {
+            "ErrorCode": " InvalidIssuerResponseWithTRPAU0008",
+            "Target": "accountToken",
+            "Message": "The card is not enabled for 3ds/otp authentication in India."
+          }
+        ]
+      }
+    }
+  }
+}

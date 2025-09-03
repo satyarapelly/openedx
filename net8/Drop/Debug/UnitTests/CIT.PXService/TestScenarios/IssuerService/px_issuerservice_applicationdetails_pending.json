@@ -1,0 +1,48 @@
+{
+  "testScenarioName": "px.issuerservice.applicationdetails.pending",
+  "responsesPerApiCall": {
+    "apply": {
+      "statusCode": 200,
+      "content": {
+        "status": "Approved",
+        "redirectUrl": "https://www.microsoft.com/en-us/?paymentInstrumentId=1f0be090-77f2-41c5-a5b0-26b6f17f637a&type=issuerservice&token=PSS_0000ec836d5f2d98488f913e29e3872fe156"
+      }
+    },
+    "applyEligibility": {
+      "statusCode": 200,
+      "content": {
+        "status": "None",
+        "eligibleToApply": true,
+        "prescreened": true
+      }
+    },
+    "initialize": {
+      "statusCode": 200,
+      "content": {
+        "sessionId": "57fa10b2-2ca2-4f4e-8817-9c19379b1c29"
+      }
+    },
+    "applicationDetails": {
+      "statusCode": 200,
+      "content": [
+        {
+          "sessionId": "57fa10b2-2ca2-4f4e-8817-9c19379b1c29",
+          "customerPuid": null,
+          "jarvisAccountId": null,
+          "issuerCustomerId": null,
+          "cardProduct": null,
+          "channel": null,
+          "subChannel": null,
+          "market": null,
+          "issuerAccountId": null,
+          "lastFourDigits": null,
+          "paymentInstrumentId": "q62zBAAAAAAJAACA",
+          "status": "PendingOnApplication",
+          "errorDetails": null,
+          "createDate": null,
+          "modifiedDate": null
+        }
+      ]
+    }
+  }
+}

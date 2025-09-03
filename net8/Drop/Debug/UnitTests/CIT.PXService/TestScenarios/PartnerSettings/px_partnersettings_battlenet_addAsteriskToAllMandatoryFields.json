@@ -1,0 +1,176 @@
+{
+  "testScenarioName": "px.partnersettings.battlenet.addAsteriskToAllMandatoryFields",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "add": {
+          "template": "defaulttemplate",
+          "redirectionPattern": "inline",
+          "resources": null,
+          "features": {
+            "changeExpiryStyleToTextBox": {
+              "applicableMarkets": []
+            },
+            "customizeStructure": {
+              "applicableMarkets": [
+
+              ],
+              "displayCustomizationDetail": [
+                {
+                  "removeGroupForExpiryMonthAndYear": true
+                }
+              ]
+            },
+            "customizeDisplayContent": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "addAsteriskToAllMandatoryFields": true
+                }
+              ]
+            },
+            "removeElement": {
+              "applicableMarkets": [
+
+              ],
+              "displayCustomizationDetail": [
+                {
+                  "removeAddCreditDebitCardHeading": true,
+                  "removeStarRequiredTextGroup": true,
+                  "removeMicrosoftPrivacyTextGroup": true
+                }
+              ]
+            },
+            "hideElement": {
+              "applicableMarkets": [
+
+              ],
+              "displayCustomizationDetail": [
+                {
+                  "hideAcceptCardMessage": true,
+                  "hideCardLogos": true,
+                  "hideAddress": true,
+                  "hidepaymentOptionSaveText": true
+                }
+              ]
+            },
+            "singleMarketDirective": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": null
+            },
+            "enableElement": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "moveCardNumberBeforeCardHolderName": false,
+                  "moveOrganizationNameBeforeEmailAddress": false,
+                  "moveLastNameBeforeFirstName": null,
+                  "setSaveButtonDisplayContentAsNext": false,
+                  "removeStarRequiredTextGroup": null,
+                  "updateCvvChallengeTextForGCO": false,
+                  "enableIsSelectPMskippedValue": null,
+                  "enableCountryAddorUpdateCC": true,
+                  "hideCountryDropdown": null,
+                  "hideFirstAndLastNameForCompletePrerequisites": false,
+                  "hideAddCreditDebitCardHeading": false,
+                  "updatePaymentMethodHeadingTypeToText": null,
+                  "removeAddCreditDebitCardHeading": null,
+                  "setGroupedSelectOptionTextBeforeLogo": null,
+                  "setSelectPMWithLogo": null,
+                  "useTextForCVVHelpLink": null,
+                  "cvvDisplayHelpPosition": null,
+                  "matchSelectPMMainPageStructureForSubPage": null,
+                  "useFixedSVGForMC": null,
+                  "enableIndia3dsForNonZeroPaymentTransaction": null,
+                  "pxEnableIndia3DS1Challenge": null,
+                  "india3dsEnableForBilldesk": null,
+                  "usePSSForPXFeatureFlighting": null,
+                  "enableSecureFieldAddCC": false,
+                  "setSaveButtonDisplayContentAsBook": false,
+                  "removeCancelButton": false,
+                  "removeSelectPiEditButton": null,
+                  "removeSelectPiNewPaymentMethodLink": null,
+                  "removeSpaceInPrivacyTextGroup": null,
+                  "setBackButtonDisplayContentAsCancel": false,
+                  "setPrivacyStatementHyperLinkDisplayToButton": null,
+                  "hidePaymentSummaryText": false,
+                  "hidepaymentOptionSaveText": false,
+                  "addressType": null,
+                  "dataSource": null,
+                  "submitActionType": null,
+                  "fieldsToBeHidden": null,
+                  "fieldsToBeEnabled": null,
+                  "fieldsToMakeRequired": null,
+                  "fieldsToBeRemoved": null,
+                  "removeOptionalTextFromFields": null,
+                  "psd2IgnorePIAuthorization": null,
+                  "addressSuggestionMessage": false,
+                  "updateAccessibilityNameWithPosition": null,
+                  "disableSelectPiRadioOption": null,
+                  "updateSelectPiButtonText": null,
+                  "removeGroupForExpiryMonthAndYear": null,
+                  "useAddressDataSourceForUpdate": null,
+                  "disableCountryDropdown": null,
+                  "ungroupAddressFirstNameLastName": null,
+                  "endPoint": null,
+                  "operation": null,
+                  "profileType": null,
+                  "dataFieldsToRemoveFromPayload": null,
+                  "dataFieldsToRemoveFullPath": null,
+                  "convertProfileTypeTo": null,
+                  "fieldsToBeDisabled": null,
+                  "hidePaymentMethodHeading": null,
+                  "hideChangeSettingText": null,
+                  "removeEwalletYesButtons": null,
+                  "removeEwalletBackButtons": null,
+                  "removeDefaultStyleHints": null,
+                  "useSuggestAddressesTradeAVSV1Scenario": null,
+                  "addCCAddressValidationPidlModification": null,
+                  "convertPrivacyStatementTextGroupToInlineGroup": null,
+                  "convertAddressOptionsGroupToVerticalGroup": null,
+                  "verifyAddressPidlModification": null,
+                  "displayTagsToBeRemoved": null,
+                  "replaceContextInstanceWithPaymentInstrumentId": null,
+                  "enablePlaceholder": null,
+                  "hideAcceptCardMessage": null,
+                  "addAccessibilityNameExpressionToNegativeValue": null,
+                  "removeAnotherDeviceTextFromShortUrlInstruction": null,
+                  "displayShortUrlAsHyperlink": null,
+                  "hideAddressCheckBoxIfAddressIsNotPrefilledFromServer": null,
+                  "fieldsToSetIsSubmitGroupFalse": null
+                }
+              ]
+            }
+          }
+        },
+        "update": {
+          "template": "defaulttemplate",
+          "redirectionPattern": "inline",
+          "features": {
+            "threeDSOne": {
+              "applicableMarkets": [
+                "in"
+              ],
+              "displayCustomizationDetail": null
+            },
+            "customizeDisplayContent": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "addAsteriskToAllMandatoryFields": true
+                }
+              ]
+            }
+          }
+        },
+        "default": {
+          "template": "battlenet",
+          "redirectionPattern": null,
+          "resources": null,
+          "features": null
+        }
+      }
+    }
+  }
+}

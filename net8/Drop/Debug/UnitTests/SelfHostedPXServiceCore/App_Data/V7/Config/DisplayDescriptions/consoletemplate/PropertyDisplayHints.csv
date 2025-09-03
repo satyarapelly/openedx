@@ -1,0 +1,156 @@
+﻿PropertyHintId,CountryIds,FeatureNames,DisplayType,PropertyName,DependentPropertyName,DependentPropertyValueRegex,DisplayName,DisplayDescription,IsHidden,IsDisabled,IsHighlighted,IsDefault,IsBack,InputScope,MaskInput,ShowDisplayName,DisplayFormat,DisplayExample,MinLength,MaxLength,DisplayContent,DisplayContentDescription,DisplayHelpSequenceId,DisplayHelpSequenceText,ClientAction,Context,DestinationId,PossibleValues,DisplaySelectionText,SourceUrl,DisplayLogo,SelectType,MaskDisplay,DisplayConditionFunctionName,DataCollectionSource,DataCollectionFilterFunctionName,IsSelectFirstItem,DisplayImage,DisplayHelpPosition,StyleHints
+pidlContainer,,,pidlContainer,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+indiaTokenConsentMessage,,,text,tokenizationConsentMessage,,,,,,,,,,,,,,,,,"By clicking the button below to continue, you consent to tokenize and save this card. You'll be redirected to your bank's website for verification.",,,,,,,,,,,,,,,,,,,"margin-bottom-small"
+indiaTokenConsentMessageHyperlink,,,button,tokenizationConsentMessageHyperlink,,,,,,,,,,,,,,,,,Learn more about tokenization,,,,navigate,https://go.microsoft.com/fwlink/?linkid=2206127,,,,https://go.microsoft.com/fwlink/?linkid=2206127,,,,,,,,,,
+billingAddressSubheading,,,subheading,,,,,,,,,,,,,,,,,,Billing address,,,,,,,,,,,,,,,,,,,
+creditCardBillingAddressAccountHolderName,,,expression,,,,,,,,,,,,,,,,,,({accountHolderName}),,,,,,,,,,,,,,,,,,,
+creditCardAddressSummaryLine1,,,expression,,,,,,,,,,,,,,,,,,({address_line1}),,,,,,,,,,,,,,,,,,,
+creditCardAddressSummaryLine2,,,expression,,,,,,,,,,,,,,,,,,({address_line2}),,,,,,,,,,,,,,,,,,,
+creditCardAddressSummaryLine3,,,expression,,,,,,,,,,,,,,,,,,"({city}, )({region})( {postal_code})",,,,,,,,,,,,,,,,,,,
+add_credit_debit_heading,,,heading,,,,,,,,,,,,,,,,,,Add a credit card or debit card,,,,,,,,,,,,,,,,,,,
+add_credit_debit_heading,br,,heading,,,,,,,,,,,,,,,,,,Add a credit card,,,,,,,,,,,,,,,,,,,
+add_credit_debit_heading,se,,heading,,,,,,,,,,,,,,,,,,Add a debit card or credit card,,,,,,,,,,,,,,,,,,,
+requiredFieldText,,,text,,,,,,,,,,,,,,,,,,All fields are mandatory/required.,,,,,,,,,,,,,,,,,,,"margin-top-small"
+requiredFieldTextNoMargin,,,text,,,,,,,,,,,,,,,,,,All fields are mandatory/required.,,,,,,,,,,,,,,,,,,,
+cardNumber,,,property,accountToken,,,Card number,,,,,,,,,FALSE,,Card number,13,19,,,,,,,,,,,,,,,,,,,,
+cardNumberAmex,,,property,accountToken,,,Card number,,,,,,,,,FALSE,,Card number,15,17,,,,,,,,,,,,,,,,,,,,
+cardNumber,kr,,property,accountToken,,,Card number,,,,,,,,,FALSE,,Card number,13,24,,,,,,,,,,,,,,,,,,,,
+cardNumber,br,,property,accountToken,,,Card number,,,,,,,,,FALSE,,Card number,13,23,,,,,,,,,,,,,,,,,,,,
+cardNumberQrCode,,,property,accountToken,,,Card number,,,,,,,,,FALSE,,Card number,13,19,,,,,,,,,,,,,,,,,,,,
+cardNumberAmexQrCode,,,property,accountToken,,,Card number,,,,,,,,,FALSE,,Card number,15,17,,,,,,,,,,,,,,,,,,,,
+cardNumberQrCode,kr,,property,accountToken,,,Card number,,,,,,,,,FALSE,,Card number,13,24,,,,,,,,,,,,,,,,,,,,
+cardNumberQrCode,br,,property,accountToken,,,Card number,,,,,,,,,FALSE,,Card number,13,23,,,,,,,,,,,,,,,,,,,,
+cardholderName,,,property,accountHolderName,,,Cardholder Name,,,,,,,,,FALSE,,Cardholder Name,,64,,,,,,,,,,,,,,,,,,,,
+cardholderNameQrCode,,,property,accountHolderName,,,Cardholder Name,,,,,,,,,FALSE,,Cardholder Name,,64,,,,,,,,,,,,,,,,,,,,
+accept_card_message,,,text,,,,,,,,,,,,,,,,,,We accept the following cards CONSOLETEMPLATE,,,,,,,,,,,,,,,,,,,
+accept_card_message_qrCode,,,text,,,,,,,,,,,,,,,,,,We accept the following cards,,,,,,,,,,,,,,,,,,,"width-fill, height-fill, text-alignment-end, margin-top-negative-small"
+creditCardVisaImage,,,image,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_visa.svg,,,,,,,,,,"image-small"
+creditCardAmexImage,,,image,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_amex.svg,,,,,,,,,,"image-small"
+creditCardMCImage,,,image,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_mc_left_aligned.svg,,,,,,,,,,"image-small"
+creditCardDiscoverImage,,,image,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_discover.svg,,,,,,,,,,"image-small"
+creditCardJCBImage,,,image,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_jcb.svg,,,,,,,,,,"image-small"
+creditCardHipercardImage,,,image,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_hipercard.svg,,,,,,,,,,"image-small"
+creditCardEloImage,,,image,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_elo.svg,,,,,,,,,,"image-small"
+creditCardVerveImage,,,image,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/v2_logo_verve.png ,,,,,,,,,,"image-small"
+creditCardVisaLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_visa.svg,,,,,,,,,,"image-small, margin-end-x-small"
+creditCardAmexLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_amex.svg,,,,,,,,,,"image-small, margin-end-x-small"
+creditCardMCLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_mc_left_aligned.svg,,,,,,,,,,"image-small, margin-end-x-small"
+creditCardDiscoverLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_discover.svg,,,,,,,,,,"image-small, margin-end-x-small"
+creditCardJCBLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_jcb.svg,,,,,,,,,,"image-small, margin-end-x-small"
+creditCardHiperLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_hipercard.svg,,,,,,,,,,"image-small, margin-end-x-small"
+creditCardEloLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/logo_elo.svg,,,,,,,,,,"image-small, margin-end-x-small"
+creditCardVerveLogo,,,logo,,,,,,,,,,,,,,,,,,,,,More,,,,,,/staticresourceservice/images/v4/v2_logo_verve.png ,,,,,,,,,,"image-small, margin-end-x-small"
+expiryMonth,,,property,expiryMonth,,,Expiration month,,,,,,,,,FALSE,,,2,2,,,,,,,,{}Months,EXP MONTH,,,,,,,,,,,
+expiryYear,,,property,expiryYear,,,Expiration year,,,,,,,,,FALSE,,,2,2,,,,,,,,{}YearsExpiry,EXP YEAR,,,,,,,,,,,
+expiryMonthQrCode,,,property,expiryMonth,,,Expiration month,,,,,,,,,FALSE,,,2,2,,,,,,,,{}Months,EXP MONTH,,,,,,,,,,,
+expiryYearQrCode,,,property,expiryYear,,,Expiration year,,,,,,,,,FALSE,,,2,2,,,,,,,,{}YearsExpiry,EXP YEAR,,,,,,,,,,,
+cvv,,,property,cvvToken,,,CVV,,,,,,,,,FALSE,,CVV,3,4,,,cvvHelpSequence,What is a CVV?,,,,,,,,,,,,,,,,
+cvvQrCode,,,property,cvvToken,,,CVV,,,,,,,,,FALSE,,CVV,3,4,,,cvvHelpSequence,What is a CVV?,,,,,,,,,,,,,,,,"width-third"
+cvvWithHint,,,property,cvvToken,,,CVV,,,,,,,,,FALSE,,CVV,3,4,,,cvvHelpSequence,What is a CVV?,,,,,,,,,,,,,,,,
+cvvAmexWithHint,,,property,cvvToken,,,CVV,,,,,,,,,FALSE,,CVV,3,4,,,cvvHelpSequence,What is a CVV?,,,,,,,,,,,,,,,,
+creditCardsCVV3Text,,,subheading,,,,,,,,,,,,,,,,,,"VISA, MasterCard:",,,,,,,,,,,,,,,,,,,
+creditCardsCVV3Text,,,subheading,,,,,,,,,,,,,,,,,,"VISA, MasterCard:",,,,,,,,,,,,,,,,,,,
+creditCardsCVV3Text,{}DiscoverSupportedMarkets,,subheading,,,,,,,,,,,,,,,,,,"VISA, MasterCard, Discover:",,,,,,,,,,,,,,,,,,,
+creditCardsCVV3Text,{}JCBSupportedMarkets,,subheading,,,,,,,,,,,,,,,,,,"VISA, MasterCard, JCB:",,,,,,,,,,,,,,,,,,,
+creditCardsCVV3Text,{}HipercardAndEloSupportedMarkets,,subheading,,,,,,,,,,,,,,,,,,"VISA, MasterCard, Hipercard, Elo:",,,,,,,,,,,,,,,,,,,
+creditCardsCVV3Text,{}VerveSupportedMarkets,,subheading,,,,,,,,,,,,,,,,,,"VISA, MasterCard, Verve:",,,,,,,,,,,,,,,,,,,
+creditCardsCVV3Text,cn,,subheading,,,,,,,,,,,,,,,,,,UnionPay:,,,,,,,,,,,,,,,,,,,
+creditCardsCVV3LocationText,,,text,,,,,,,,,,,,,,,,,,The last 3 digits on the back.,,,,,,,,,,,,,,,,,,,
+creditCardsCVV3LocationTextNoLive,,,text,,,,,,,,,,,,,,,,,,The last 3 digits on the back.,,,,,,,,,,,,,,,,,,,
+creditCardsCVV3Image,,,image,,,,,,,,,,,,,,,,,,,,,,,,,,,/staticresourceservice/images/v4/cardHints_CVV_Back.png,,,,,,,,,,"image-small, margin-end-x-small"
+creditCardsCVV4Text,,,subheading,,,,,,,,,,,,,,,,,,American Express:,,,,,,,,,,,,,,,,,,,
+creditCardsCVV4LocationText,,,text,,,,,,,,,,,,,,,,,,The 4-digit code on the front.,,,,,,,,,,,,,,,,,,,
+creditCardsCVV4LocationTextNoLive,,,text,,,,,,,,,,,,,,,,,,The 4-digit code on the front.,,,,,,,,,,,,,,,,,,,
+creditCardsCVV4Image,,,image,,,,,,,,,,,,,,,,,,,,,,,,,,,/staticresourceservice/images/v4/cardHints_CVV_Front.png,,,,,,,,,,"image-small, margin-end-x-small"
+creditCardsWhereCVV,,,text,,,,,,,,,,,,,,,,,,Where is my CVV?,,,,,,,,,,,,,,,,,,,
+creditCardsWhereCVVNoLive,,,text,,,,,,,,,,,,,,,,,,Where is my CVV?,,,,,,,,,,,,,,,,,,,
+creditCardVisaSummaryPageHeading,,,heading,,,,,,,,,,,,,,,,,,(Add Visa ending in {accountToken}),,,,,,,,,,,,,,,,,,,
+creditCardDiscoverSummaryPageHeading,,,heading,,,,,,,,,,,,,,,,,,(Add Discover ending in {accountToken}),,,,,,,,,,,,,,,,,,,
+creditCardAmexSummaryPageHeading,,,heading,,,,,,,,,,,,,,,,,,(Add American Express ending in {accountToken}),,,,,,,,,,,,,,,,,,,
+creditCardMCSummaryPageHeading,,,heading,,,,,,,,,,,,,,,,,,(Add Mastercard ending in {accountToken}),,,,,,,,,,,,,,,,,,,
+creditCardEloSummaryPageHeading,,,heading,,,,,,,,,,,,,,,,,,(Add Elo ending in {accountToken}),,,,,,,,,,,,,,,,,,,
+creditCardHipercardSummaryPageHeading,,,heading,,,,,,,,,,,,,,,,,,(Add Hipercard ending in {accountToken}),,,,,,,,,,,,,,,,,,,
+creditCardVerveSummaryPageHeading,,,heading,,,,,,,,,,,,,,,,,,(Add Verve ending in {accountToken}),,,,,,,,,,,,,,,,,,,
+creditCardJCBSummaryPageHeading,,,heading,,,,,,,,,,,,,,,,,,(Add JCB ending in {accountToken}),,,,,,,,,,,,,,,,,,,
+paymentMethodSubheading,,,subheading,,,,,,,,,,,,,,,,,,Payment method,,,,,,,,,,,,,,,,,,,
+creditCardAccountHolderName,,,expression,,,,,,,,,,,,,,,,,,({accountHolderName}),,,,,,,,,,,,,,,,,,,
+creditCardExpiration,,,expression,,,,,,,,,,,,,,,,,,Exp ({expiryMonth}/)({expiryYear}),,,,,,,,,,,,,,,,,,,
+creditCardAccountToken,,,subheading,,,,,,,,,,,,,,,,,,({accountToken} ),,,,,,,,,,,,,,,,,,,
+creditCardQrCodeInfoOr,,,text,,,,,,,,,,,,,,,,,,"-OR-",,,,,,,,,,,,,,,,,,,"margin-bottom-medium, width-half, text-bold, text-alignment-center"
+creditCardQrCodeInfoBody,,,text,,,,,,,,,,,,,,,,,,"Scan the QR code to add from mobile",,,,,,,,,,,,,,,,,,,"margin-bottom-medium, width-half, text-bold, text-alignment-center"
+addCCQrCodeImage,,,image,,,,,,,,,,,,,,,,,,,,,,,,,,,{QrCode placeholder},,,,,,,,,,"image-half"
+billingAddressPageHeader,,,heading,,,,,,,,,,,,,,,,,,Add your billing address,,,,,,,,,,,,,,,,,,,
+addressLine1,,,property,address_line1,,,Address line 1,,,,,,,,,FALSE,,Address Line 1,25,30,,,,,,,,,,,,,,,,,,,,
+addressLine2,,,property,address_line2,,,Address line 2 (Optional),,,,,,,,,FALSE,,Address Line 2 (Optional),25,30,,,,,,,,,,,,,,,,,,,,
+addressLine3,,,property,address_line3,,,Address line 3 (Optional),,,,,,,,,FALSE,,Address Line 3 (Optional),25,30,,,,,,,,,,,,,,,,,,,,
+addressCity,{}AddressCityM,,property,city,,,City,,,,,,,,,FALSE,,City,,26,,,,,,,,,,,,,,,,,,,,
+addressCounty,,,property,region,,,County (Optional),,,,,,,,,FALSE,,County (Optional),,,,,,,,,,,,,,,,,,,,,,
+addressStandAloneCity,{}AddressCityM,,property,city,,,City,,,,,,,,,FALSE,,City,,26,,,,,,,,,,,,,,,,,,,,
+addressCitySolo,{}AddressCityM,,property,city,,,City,,,,,,,,,FALSE,,City,,26,,,,,,,,,,,,,,,,,,,,
+addressCityAfterPostal,{}AddressCityM,,property,city,,,City,,,,,,,,,FALSE,,City,,26,,,,,,,,,,,,,,,,,,,,
+addressCityBeforePostal,{}AddressCityM,,property,city,,,City,,,,,,,,,FALSE,,City,,26,,,,,,,,,,,,,,,,,,,,
+addressState,{}AddressStateM,,property,region,,,State,,,,,,,,,FALSE,,State,,,,,,,,,,,,,,,,,,,,,,
+addressState,{}AddressStateO,,property,region,,,State (Optional),,,,,,,,,FALSE,,State (Optional),,,,,,,,,,,,,,,,,,,,,,
+addressState,US,,property,region,,,State,,,,,,,,,FALSE,,,,,,,,,,,,{}USStates,State,,,,,,,,,,,
+addressState,AU,,property,region,,,State,,,,,,,,,FALSE,,,,,,,,,,,,{}AUStatesAndTerritories,State,,,,,,,,,,,
+addressState,BR,,property,region,,,State,,,,,,,,,FALSE,,,,,,,,,,,,{}BRStates,State,,,,,,,,,,,
+addressState,IN,,property,region,,,State,,,,,,,,,FALSE,,,,,,,,,,,,{}INStates,State,,,,,,,,,,,
+addressState,IT,,property,region,,,State,,,,,,,,,FALSE,,,,,,,,,,,,{}ITStates,State,,,,,,,,,,,
+addressState,JP,,property,region,,,State,,,,,,,,,FALSE,,,,,,,,,,,,{}JPStates,State,,,,,,,,,,,
+addressStateAfterPostalCode,JP,,property,region,,,State,,,,,,,,,FALSE,,,,,,,,,,,,{}JPStates,State,,,,,,,,,,,
+addressState,NL,,property,region,,,State,,,,,,,,,FALSE,,,,,,,,,,,,{}NLStates,State,,,,,,,,,,,
+addressStateAfterPostalCode,NL,,property,region,,,State,,,,,,,,,FALSE,,,,,,,,,,,,{}NLStates,State,,,,,,,,,,,
+addressState,MX,,property,region,,,State,,,,,,,,,FALSE,,,,,,,,,,,,{}MXStates,State,,,,,,,,,,,
+addressState,MY,,property,region,,,State,,,,,,,,,FALSE,,,,,,,,,,,,{}MYStates,State,,,,,,,,,,,
+addressState,AE,,property,region,,,State,,,,,,,,,FALSE,,,,,,,,,,,,{}UAEStates,State,,,,,,,,,,,
+addressProvince,{}AddressProvinceM,,property,region,,,Province,,,,,,,,,FALSE,,Province,,,,,,,,,,,,,,,,,,,,,,
+addressProvince,{}AddressProvinceO,,property,region,,,Province (Optional),,,,,,,,,FALSE,,Province (Optional),,,,,,,,,,,,,,,,,,,,,,
+addressProvince,CA,,property,region,,,Province,,,,,,,,,FALSE,,,,,,,,,,,,{}CAProvinces,Province,,,,,,,,,,,
+addressProvince,CN,,property,region,,,Province,,,,,,,,,FALSE,,,,,,,,,,,,{}CNProvinces,Province,,,,,,,,,,,
+addressProvinceAfterCountry,CN,,property,region,,,Province,,,,,,,,,FALSE,,,,,,,,,,,,{}CNProvinces,Province,,,,,,,,,,,
+addressProvince,ES,,property,region,,,Province,,,,,,,,,FALSE,,,,,,,,,,,,{}ESProvinces,Province,,,,,,,,,,,
+addressProvince,bs,,property,region,,,Province (Optional),,,,,,,,,FALSE,,,,,,,,,,,,{}BSProvinces,Province,,,,,,,,,,,
+addressProvince,bz,,property,region,,,Province,,,,,,,,,FALSE,,,,,,,,,,,,{}BZProvinces,Province,,,,,,,,,,,
+addressProvince,cr,,property,region,,,Province,,,,,,,,,FALSE,,,,,,,,,,,,{}CRProvinces,Province,,,,,,,,,,,
+addressInlineGroupProvince,fr,,property,region,,,Department (Optional),,,,,,,,,FALSE,,,,,,,,,,,,{}FRProvinces,Department,,,,,,,,,,,
+addressInlineGroupProvince,NL,,property,region,,,State,,,,,,,,,FALSE,,,,,,,,,,,,{}NLStates,State,,,,,,,,,,,
+addressProvince,fr,,property,region,,,Department (Optional),,,,,,,,,FALSE,,,,,,,,,,,,{}FRProvinces,Department,,,,,,,,,,,
+addressProvince,hn,,property,region,,,Province,,,,,,,,,FALSE,,,,,,,,,,,,{}HNProvinces,Province,,,,,,,,,,,
+addressProvince,jm,,property,region,,,Province,,,,,,,,,FALSE,,,,,,,,,,,,{}JMProvinces,Province,,,,,,,,,,,
+addressProvince,tr,,property,region,,,Province (Optional),,,,,,,,,FALSE,,,,,,,,,,,,{}TRProvinces,Province,,,,,,,,,,,
+addressProvince,ve,,property,region,,,Province (Optional),,,,,,,,,FALSE,,,,,,,,,,,,{}VEProvinces,Province,,,,,,,,,,,
+addressPostalCode,{}AddressPostalCodeM,,property,postal_code,,,Postal Code,,,,,,,,,FALSE,,Zip Code,,,,,,,,,,,,,,,,,,,,,,
+addressPostalCodeSolo,{}AddressPostalCodeM,,property,postal_code,,,Postal Code,,,,,,,,,FALSE,,Zip Code,,,,,,,,,,,,,,,,,,,,,,
+addressPostalCodeSolo,{}CoPvCtDtA1A2Pc,,property,postal_code,,,Postal Code,,,,,,,,,FALSE,,Zip Code,,,,,,,,,,,,,,,,,,,,,,"width-half, padding-end-small"
+addressPostalCodeSolo,{}AddressPostalCodeO,,property,postal_code,,,Postal Code (Optional),,,,,,,,,FALSE,,Zip Code (Optional),,,,,,,,,,,,,,,,,,,,,,
+addressInlineGroupPostalCode,{}AddressPostalCodeM,,property,postal_code,,,Postal Code,,,,,,,,,FALSE,,Zip Code,,,,,,,,,,,,,,,,,,,,,,
+addressPostalCodeAfterCity,{}AddressPostalCodeM,,property,postal_code,,,Postal Code,,,,,,,,,FALSE,,Zip Code,,,,,,,,,,,,,,,,,,,,,,
+addressPostalCodeAfterCity,{}AddressPostalCodeO,,property,postal_code,,,Postal Code (Optional),,,,,,,,,FALSE,,Zip Code (Optional),,,,,,,,,,,,,,,,,,,,,,
+addressPostalCode,{}AddressPostalCodeO,,property,postal_code,,,Postal Code (Optional),,,,,,,,,FALSE,,Postal Code (Optional),,,,,,,,,,,,,,,,,,,,,,
+addressPostalCode,US,,property,postal_code,,,Zip Code,,,,,,,,,FALSE,,Zip Code,,,,,,,,,,,,,,,,,,,,,,
+addressPostalCode,SE,,property,postal_code,,,Postal Code,,,,,,,,,FALSE,,Postal Code,,,,,,,,,,,,,,,,,,,,,,
+addressInlineGroupPostalCode,{}AddressPostalCodeO,,property,postal_code,,,Postal Code (Optional),,,,,,,,,FALSE,,Postal Code (Optional),,,,,,,,,,,,,,,,,,,,,,
+addressPostalCode,BR,,property,postal_code,,,Postal Code,,,,,,,,,FALSE,,Postal Code,,,,,,,,,,,,,,,,,,,,,,
+addressCountry,,,property,country,,,Country/Region,,,TRUE,,,,,,FALSE,,Country/Region,,,,,,,,,,{}MarketsAll,Country,,,,,,,,,,,
+addressCountryAfterCity,,,property,country,,,Country/Region,,,TRUE,,,,,,FALSE,,Country/Region,,,,,,,,,,{}MarketsAll,Country,,,,,,,,,,,
+addressCountryBeforeCity,,,property,country,,,Country/Region,,,TRUE,,,,,,FALSE,,Country/Region,,,,,,,,,,{}MarketsAll,Country,,,,,,,,,,,
+addressCountryAfterState,,,property,country,,,Country/Region,,,TRUE,,,,,,FALSE,,Country/Region,,,,,,,,,,{}MarketsAll,Country,,,,,,,,,,,
+addressCountrySolo,,,property,country,,,Country/Region,,,TRUE,,,,,,FALSE,,Country/Region,,,,,,,,,,{}MarketsAll,Country,,,,,,,,,,,"width-half, padding-end-small"
+nextModernValidateButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,Next,,,,moveNext,,,,,,,,,,,,,,,"width-lowerbound-small"
+nextButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,Next,,,,moveNext,,,,,,,,,,,,,,,"width-small-200"
+previousButton,,,button,,,,,,,,,,TRUE,,,,,,,,Back,,,,movePrevious,,,,,,,,,,,,,,,"width-lowerbound-small"
+cancelBackButton,,,button,,,,,,,,,,TRUE,,,,,,,,Back,,,,gohome,,,,,,,,,,,,,,,"width-lowerbound-small"
+saveButton,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,Save,,,,submit,,,,,,,,,,,,,,,"width-small"
+addressPreviousButton,,,button,,,,,,,,,,,,,,,,,,Back,,,,movePrevious,,,,,,,,,,,,,,,"width-small"
+saveButtonHidden,,,button,,,,,,TRUE,,,,,,,,,,,,Save,,,,submit,,,,,,,,,,,,,,,
+microsoft_privacy_text,,,text,,,,,,,,,,,,,,,,,,Microsoft respects your privacy. See our privacy statement.,,,,,,,,,,,,,,,,,,,"text-alignment-end"
+viewTermsButton,,,button,,,,,,,,,,,,,,,,,,View terms,,,,navigate,https://privacy.microsoft.com/en-us/privacystatement,,,,https://privacy.microsoft.com/en-us/privacystatement,,,,,,,,,,"width-lowerbound-small"
+billingAddressVerifyPleaseVerifyHeader,,,heading,,,,,,,,,,,,,,,,,,Please verify your billing address,,,,,,,,,,,,,,,,,,,
+billingAddressVerifyHeader,,,heading,,,,,,,,,,,,,,,,,,Verify your billing address,,,,,,,,,,,,,,,,,,,"margin-top-medium, margin-start-small"
+profileAddressPageHeader,,,heading,,,,,,,,,,,,,,,,,,Enter your billing address,,,,,,,,,,,,,,,,,,,	
+microsoft_privacy_static_text,,,text,,,,,,,,,,,,,,,,,,Microsoft respects your privacy. See our privacy statement.,,,,,,,,,,,,,,,,,,,
+addressValidationMessage,,,text,,,,,,,,,,,,,,,,,,"""""",,,,,,,,,,,,,,,,,,,"margin-bottom-small, margin-start-small"
+suggestedAddresses,,,property,id,,,Suggested Addresses,,,,,,,,,FALSE,,,,,,,,,success,,,,,,,buttonList,,,,,,,,"layout-inline, alignment-vertical-center, padding-horizontal-small"
+suggestAddressBackClosePageButton,,,button,,,,,,,,,,,,,,,,,,Back,,,,closePidlPage,,,,,,,,,,,,,,,"width-small"
+suggestAddressBackButton,,,button,,,,,,,,,,,,,,,,,,Back,,,,moveNext,,,,,,,,,,,,,,,"width-small"
+addressStandAloneCountry,,,property,country,,,Country/Region,,,TRUE,,,,,,FALSE,,Country/Region,,,,,,,,,,{}MarketsAll,Country,,,,,,,,,,,

@@ -1,0 +1,5 @@
+PropertyHintId,CountryIds,FeatureNames,DisplayType,PropertyName,DependentPropertyName,DependentPropertyValueRegex,DisplayName,DisplayDescription,IsHidden,IsDisabled,IsHighlighted,IsDefault,IsBack,InputScope,MaskInput,ShowDisplayName,DisplayFormat,DisplayExample,MinLength,MaxLength,DisplayContent,DisplayContentDescription,DisplayHelpSequenceId,DisplayHelpSequenceText,ClientAction,Context,DestinationId,PossibleValues,DisplaySelectionText,SourceUrl,DisplayLogo,SelectType,MaskDisplay,DisplayConditionFunctionName,DataCollectionSource,DataCollectionFilterFunctionName,IsSelectFirstItem,DisplayImage,DisplayHelpPosition,StyleHints
+paymentMethod,,,property,displayId,,,Select a payment type,,,,,,,,,FALSE,,,,,,,,,,,,,,,,dropDown,,,,,,,,"padding-vertical-small"
+paymentMethodSelectHeading,,,heading,,,,,,,,,,,,,,,,,,Select Payment Method,,,,,,,,,,,,,,,,,,,
+selectButtonPidlPayload,,,button,,,,,,,,TRUE,TRUE,,,,,,,,,Next,,,,successWithPidlPayload,,,,,,,,,,,,,,,width-fill
+cancelButton,,,button,,,,,,,,,,TRUE,,,,,,,,Cancel,,,,gohome,,,,,,,,,,,,,,,width-fill

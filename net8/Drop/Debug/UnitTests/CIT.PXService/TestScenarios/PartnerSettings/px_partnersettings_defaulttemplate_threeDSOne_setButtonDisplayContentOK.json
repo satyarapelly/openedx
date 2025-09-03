@@ -1,0 +1,52 @@
+{
+  "testScenarioName": "px.partnersettings.defaulttemplate.threeDSOne.setButtonDisplayContentOK",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "handlePurchaseRiskChallenge": {
+          "template": "defaulttemplate",
+          "redirectionPattern": "inline",
+          "features": {
+            "customizeDisplayContent": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "setButtonDisplayContent": {
+                    "cvv3DSSubmitButton": "OK"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "handlePaymentChallenge": {
+          "template": "defaulttemplate",
+          "redirectionPattern": "inline",
+          "features": {
+            "threeDSOne": {
+              "applicableMarkets": [
+                "in"
+              ],
+              "displayCustomizationDetail": [
+                {
+                  "enableIndia3dsForNonZeroPaymentTransaction": true
+                }
+              ]
+            },
+            "customizeDisplayContent": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "setButtonDisplayContent": {
+                    "cvv3DSSubmitButton": "OK"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

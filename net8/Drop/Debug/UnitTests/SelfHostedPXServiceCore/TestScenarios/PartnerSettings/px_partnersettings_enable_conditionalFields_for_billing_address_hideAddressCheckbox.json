@@ -1,0 +1,25 @@
+{
+  "testScenarioName": "px.partnersettings.enable.conditionalfields.for.billingaddress.hideaddresscheckbox",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "add": {
+          "template": "defaultTemplate",
+          "redirectionPattern": "fullPage",
+          "features": {
+            "enableConditionalFieldsForBillingAddress": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "usePSSForPXFeatureFlighting": true,
+                  "hideAddressCheckBoxIfAddressIsNotPrefilledFromServer": true
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

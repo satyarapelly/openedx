@@ -1,0 +1,13 @@
+{
+    "testScenarioName": "px.pims.ach.add.error.validationfailed",
+    "responsesPerApiCall": {
+        "addPI": {
+            "statusCode": 400,
+            "content": {"CorrelationId":"48bf7a3c-9eab-4a44-8dd0-edad238441ba","ErrorCode":"ValidationFailed","Message":"The payment instrument cannot be validated. Please contact the payment processor for help.","Details":[{"ErrorCode":"BDK_E_PI_VALIDATEION_FAILURE","Message":"Call legacy payment instrument service failed with error (ErrorCode: 30356. ErrorShortMessage: BDK_E_PI_VALIDATEION_FAILURE. ErrorLongMessage: Payment method validation failed.. SCS tracking GUID: 8f0e768f-8216-47b1-b5f9-583de96be7bf)","Target":""}]}
+        },
+        "getPM": {
+            "statusCode": 200,
+            "content": [{"paymentMethodFamily":"direct_debit","paymentMethodType":"ach","display":{"name":"Bank Account","logo":"https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_ach.png","logos":[{"mimeType":"image/png","url":"https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_ach.png"},{"mimeType":"image/svg+xml","url":"https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_ach.svg"}]},"properties":{"offlineRecurring":true,"userManaged":true,"soldToAddressRequired":true,"supportedOperations":["charge","refund","chargeback","credit","settlementReversal"],"taxable":false,"providerRemittable":false,"moBillingIdentityUrl":"","riskyPaymentMethod":true,"fundsAvailabilityWindow":14400,"multipleLineItemsSupported":true,"splitPaymentSupported":false,"purchaseWaitTime":0},"exclusionTags":["LegacySubscriptions","Perpetual","PhysicalGoods"]}]
+        }
+    }
+}

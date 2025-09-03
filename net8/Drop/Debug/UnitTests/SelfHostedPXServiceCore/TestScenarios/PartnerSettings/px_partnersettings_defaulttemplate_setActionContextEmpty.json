@@ -1,0 +1,38 @@
+{
+  "testScenarioName": "px.partnersettings.defaulttemplate.setActionContextEmpty",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "handlePurchaseRiskChallenge": {
+          "template": "defaulttemplate",
+          "redirectionPattern": "inline",
+          "features": {
+            "customizeActionContext": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "setActionContextEmpty": "true"
+                }
+              ]
+            }
+          }
+        },
+        "handlePaymentChallenge": {
+          "template": "defaulttemplate",
+          "redirectionPattern": "inline",
+          "features": {
+            "customizeActionContext": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "setActionContextEmpty": "true"
+                }
+              ]
+            }
+          }
+        },
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+PropertyHintId,CountryIds,TagKey,TagValue
+paymentSelectionChangeGroup,,pi-container,pi-container
+remainingBalanceText,,font,paragraph-5
+backupSelectionGroup,,pi-container,pi-container
+paymentSelectionImage,,paymentSelectionImage,payment-selection-image
+changeInstanceButton,,accessibilityName,Change
+,,action-trigger,action-trigger
+paymentInstrumentBalance,,font,paragraph-5
+paymentInstrument,,accessibilityName,Pick a way to pay
+,,theme,windows
+newPaymentMethodLink,,accessibilityName,Add a new payment method
+,,action-trigger,action-trigger
+selectPaymentMethodLink,,accessibilityName,Select a payment method
+useButtonNext,,accessibilityName,Use this payment method
+successButtonHidden,,accessibilityName,Save
+useButtonPidlPayload,,accessibilityName,Use this payment method
+backupPaymentInstrument,,accessibilityName,Payment Instruments
+paymentChangeButton,,accessibilityName,Change
+,,action-trigger,action-trigger
+paymentInstrumentSelection,,font,paragraph-5
+backupPaymentInstrumentSelection,,font,paragraph-5
+paymentInstrumentItemCCLogo,,accessibilityName,({contextData.paymentMethod.display.name})

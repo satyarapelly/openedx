@@ -1,0 +1,18 @@
+{
+  "testScenarioName": "px.partnersettings.selectpmradiobuttonlist.enablevirtualfamilypm",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "select": {
+          "template": "selectpmradiobuttonlist",
+          "features": {
+            "enableVirtualFamilyPM": {
+              "applicableMarkets": []
+            }
+          }
+        }
+      }
+    }
+  }
+}

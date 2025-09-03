@@ -1,0 +1,3 @@
+PropertyDescriptionId,CountryIds,PropertyType,DataType,DisplayProperty,IsKey,IsOptional,IsUpdatable,DataProtection,DefaultValue,PossibleValues,PidlDownloadEnabled,PidlDownloadParameter,DisplayOnly,Scenario
+cvv_3_update,,userData,string,,,,TRUE,cvv,,,,,,includecvv
+cvv_4_update,,userData,string,,,,TRUE,cvv,,,,,,includecvv

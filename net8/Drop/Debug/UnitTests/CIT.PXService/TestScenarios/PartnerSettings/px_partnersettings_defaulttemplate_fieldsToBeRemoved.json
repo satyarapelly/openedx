@@ -1,0 +1,80 @@
+{
+  "testScenarioName": "px.partnersettings.defaulttemplate.fieldstoberemoved",
+  "responsesPerApiCall": {
+    "getPartnerSettings": {
+      "statusCode": 200,
+      "content": {
+        "add": {
+          "template": "defaulttemplate",
+          "features": {
+            "customizeAddressForm": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "addressType": "shipping",
+                  "dataSource": "jarvisShipping",
+                  "fieldsToBeRemoved": [ "firstName", "lastName", "email", "phoneNumber" ]
+                },
+                {
+                  "addressType": "shipping_v3",
+                  "dataSource": "jarvisShippingV3",
+                  "fieldsToBeRemoved": [ "firstName", "lastName", "email", "phoneNumber" ]
+                },
+                {
+                  "addressType": "hapiV1SoldToIndividual",
+                  "dataSource": "hapi",
+                  "fieldsToBeRemoved": [ "companyName", "email", "phoneNumber", "pageTitle", "starRequiredTextGroup" ]
+                },
+                {
+                  "addressType": "billing",
+                  "dataSource": "jarvisBilling",
+                  "fieldsToBeRemoved": [ "country" ]
+                },
+                {
+                  "addressType": "orgaddress",
+                  "dataSource": "jarvisOrgAddress",
+                  "fieldsToBeRemoved": [ "orgEmail", "orgPhoneNumber" ]
+                }
+              ]
+            }
+          }
+        },
+        "update": {
+          "template": "defaulttemplate",
+          "features": {
+            "customizeAddressForm": {
+              "applicableMarkets": [],
+              "displayCustomizationDetail": [
+                {
+                  "addressType": "shipping",
+                  "dataSource": "jarvisShipping",
+                  "fieldsToBeRemoved": [ "firstName", "lastName", "email", "phoneNumber" ]
+                },
+                {
+                  "addressType": "shipping_v3",
+                  "dataSource": "jarvisShippingV3",
+                  "fieldsToBeRemoved": [ "firstName", "lastName", "email", "phoneNumber" ]
+                },
+                {
+                  "addressType": "hapiV1SoldToIndividual",
+                  "dataSource": "hapi",
+                  "fieldsToBeRemoved": [ "companyName", "email", "phoneNumber", "pageTitle", "starRequiredTextGroup" ]
+                },
+                {
+                  "addressType": "billing",
+                  "dataSource": "jarvisBilling",
+                  "fieldsToBeRemoved": [ "country" ]
+                },
+                {
+                  "addressType": "orgaddress",
+                  "dataSource": "jarvisOrgAddress",
+                  "fieldsToBeRemoved": [ "orgEmail", "orgPhoneNumber" ]
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

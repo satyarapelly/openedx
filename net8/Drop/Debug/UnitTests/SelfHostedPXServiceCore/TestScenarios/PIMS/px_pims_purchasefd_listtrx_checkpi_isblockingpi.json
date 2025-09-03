@@ -1,0 +1,77 @@
+﻿{
+  "testScenarioName": "px.pims.purchasefd.listtrx.checkpi.isblockingpi",
+  "responsesPerApiCall": {
+    "listPI": {
+      "statusCode": 200,
+      "content": [
+        {
+          "id": "-x6YWwAAAAAGAACA",
+          "accountId": "9e4e1b83-12c3-4a19-a9b5-bf28395e7b4d",
+          "status": "active",
+          "paymentMethod": {
+            "paymentMethodFamily": "credit_card",
+            "paymentMethodType": "visa",
+            "display": {
+              "name": "Visa",
+              "logo": "https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_visa_rect.png",
+              "logos": [
+                {
+                  "mimeType": "image/png",
+                  "url": "https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_visa_rect.png"
+                },
+                {
+                  "mimeType": "image/svg+xml",
+                  "url": "https://pmservices.cp.microsoft.com/staticresourceservice/images/v4/logo_visa.svg"
+                }
+              ]
+            },
+            "properties": {
+              "offlineRecurring": true,
+              "userManaged": true,
+              "soldToAddressRequired": true,
+              "supportedOperations": [ "authorize", "charge", "refund", "chargeback" ],
+              "taxable": false,
+              "providerRemittable": false,
+              "moBillingIdentityUrl": "",
+              "riskyPaymentMethod": false,
+              "authWindow": 10080,
+              "fundsAvailabilityWindow": 0,
+              "multipleLineItemsSupported": true,
+              "splitPaymentSupported": true,
+              "purchaseWaitTime": 0
+            }
+          },
+          "details": {
+            "accountHolderName": "John Test",
+            "expiryYear": "2033",
+            "expiryMonth": "10",
+            "address": {
+              "address_line1": "MASKED(20)",
+              "city": "San Bernardino",
+              "region": "ca",
+              "postal_code": "92410-1206",
+              "country": "US"
+            },
+            "lastFourDigits": "7984",
+            "exportable": true,
+            "cardType": "prepaid",
+            "legacyDetails": {
+              "registeredPaymentMethodId": 0,
+              "paymentMethodId": 0,
+              "banType": 0,
+              "banReasonCode": 0,
+              "accountType": "Personal",
+              "accountLevel": "Primary"
+            }
+          },
+          "creationDateTime": "2020-08-03T05:53:14.287",
+          "lastUpdatedDateTime": "2020-08-03T05:53:15.063",
+          "queryProperties": {
+            "temporaryDedupIdentity": "-2123201659",
+            "isPrimary": true
+          }
+        }
+      ]
+    }
+  }
+}

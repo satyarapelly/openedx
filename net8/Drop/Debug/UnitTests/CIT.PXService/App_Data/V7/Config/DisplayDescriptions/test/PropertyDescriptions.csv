@@ -1,0 +1,5 @@
+PropertyDescriptionId,CountryIds,PropertyType,DataType,DisplayProperty,IsKey,IsOptional,IsUpdatable,DataProtection,DefaultValue,PossibleValues,PidlDownloadEnabled,PidlDownloadParameter,DisplayOnly,Scenario
+address_line_2,us,userData,string,,,,TRUE,,default_address_line2,,,,,
+address_zip_postalcode,us,userData,string,,,TRUE,TRUE,,000000,,,,,
+address_state_state,us,userData,string,,,TRUE,TRUE,,,,,,,
+address_city,us,userData,string,,,TRUE,TRUE,,,,,,,us_optional_city_scenario

@@ -1,0 +1,2 @@
+PropertyDescriptionId,CountryIds,ValidationType,ValidationRegEx,UrlValidationType,ValidationFunction,ErrorId,ErrorMessage,ResolutionRegEx
+orgAddress_email,,regex,"^(?!.{129,})([\w _\!\#\$\%\&\'\*\-\/\=\?\^\`\{\|\}\~\.\+]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9_\-]+\.)+))([a-zA-Z]{2,}|[0-9]{1,3})$",,,invalid_email_address,Incorrectly formatted email address,
