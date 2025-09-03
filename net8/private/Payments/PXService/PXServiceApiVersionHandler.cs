@@ -1103,7 +1103,7 @@ namespace Microsoft.Commerce.Payments.PXService
             if (exposableFeatures != null
                 && exposableFeatures.Contains(Flighting.Features.PXReturn502ForMaliciousRequest, StringComparer.OrdinalIgnoreCase))
             {
-                HttpResponseMessage responseMessage = request.CreateResponse(HttpStatusCode.BadGateway);
+                HttpResponseMessage responseMessage = new HttpResponseMessage(HttpStatusCode.BadGateway);
                 responseMessage.Headers.Add(RetryOnServerErrorHeader, "false");
                 return;
             }

@@ -44,7 +44,7 @@
     <PackageVersion Include="Microsoft.Extensions.Options" Version="8.0.2" />
     <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Primitives" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.Identity.Client" Version="4.31.0" />
+    <PackageVersion Include="Microsoft.Identity.Client" Version="4.55.0" />
     <PackageVersion Include="Identity.MSA.Toolkit" Version="1.0.29" />
     <PackageVersion Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.3.0" />
     <PackageVersion Include="Microsoft.NET.Sdk.Functions" Version="1.0.29" />
