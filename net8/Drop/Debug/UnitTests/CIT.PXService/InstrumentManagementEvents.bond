@@ -1,0 +1,309 @@
+﻿import "Microsoft.Telemetry.bond"
+import "Ms.Qos.bond"
+import "Ms.Qos.OutgoingServiceRequest.bond"
+import "Ms.Qos.IncomingServiceRequest.bond"
+
+namespace Microsoft.Commerce.Tracing.Sll
+
+[Description("The operation details of an incoming request.")]
+struct InstrumentManagementIncomingOperation : Microsoft.Telemetry.Data<Ms.Qos.IncomingServiceRequest>
+{
+	// The service name;
+	10: required string ServiceName;
+	// The correlation id of this request.
+	20: required string RequestTraceId;
+	// The correlation id of the context of the service.
+	30: optional string ServerTraceId;
+	// The legacy tracking guid, if available.
+	40: optional string LegacyTrackingGuid;
+	// The account Id.
+	50: optional string AccountId;
+	// The response header.
+	60: optional string InstrumentId;
+	// The payment method family. 
+	70: optional string PaymentMethodFamily;
+	// The paymentMethod type. 
+	80: optional string PaymentMethodType;
+	// The country. 
+	90: optional string Country;
+	// PIMS standard error code.
+	100: optional string ErrorCode;
+	// error message.
+	110: optional string ErrorMessage;
+	// The request header.
+	120: optional string RequestHeader;
+	// The response header.
+	130: optional string ResponseHeader;
+	// The http request details. 
+	140: optional string RequestDetails;
+	// The http response details.
+	150: optional string ResponseDetails;
+	// Additional message to be logged.
+	160: optional string Message;
+	// StartTime of request.
+	170: optional string StartTime;
+	// Is the response from cache.
+	180: optional bool ResponseFromCache; 
+	// Is test scenario
+	190: optional bool IsTest;
+};
+
+[Description("The operation details of an incoming request.")]
+struct InstrumentManagementOutgoingOperation : Microsoft.Telemetry.Data<Ms.Qos.OutgoingServiceRequest>
+{
+	// The service name;
+	10: required string ServiceName;
+	// The correlation id of this request.
+	20: required string RequestTraceId;
+	// The legacy tracking guid, if available.
+	30: optional string LegacyTrackingGuid;
+	// The request header.
+	40: optional string RequestHeader;
+	// The response header.
+	50: optional string ResponseHeader;
+	// The http request details. 
+	60: optional string RequestDetails;
+	// The http response details.
+	70: optional string ResponseDetails;
+	// Additional message to be logged.
+	80: optional string Message;
+	// StartTime of request.
+	90: optional string StartTime;
+};
+
+[Description("Generic service message")]
+struct InstrumentOperationTrace : Microsoft.Telemetry.Data<Microsoft.Telemetry.Base>
+{
+	// The service name;
+	10: required string OperationName;
+	// The related account id
+	20: required string AccountId;
+	// The correlation id, i.e. the correlation vector value.
+	30: required string CorrelationId;
+	// The legacy tracking guid, if available.
+	40: optional string SessionId;
+	// Message to be logged by service
+	50: required string Message;
+}
+
+[Description("Generic service message")]
+struct InstrumentOperationFault : InstrumentOperationTrace
+{
+	// The fault target if any;
+	10: required string Target;
+	// The fault details;
+	20: required string Details;
+	// The exception stack trace;
+	30: required string StackTrace;
+}
+
+[Description("A generic message for ingestion service jobs.")]
+struct InstrumentManagementIngestionMessage : Microsoft.Telemetry.Data<Microsoft.Telemetry.Base>
+{
+	[Description("The service name.")]
+	10: required string ServiceName;
+	[Description("The correlation id of this request.")]
+	20: required string CorrelationId;
+	[Description("The name of the base ingestion job.")]
+	30: required string JobName;
+	[Description("The name of the subjob.")]
+	40: optional string SubJobName;
+	[Description("Message to be logged")]
+	50: required string Message;
+	[Description("Latency of operation")]
+	60: optional int64 LatencyMs;
+	[Description("Optional parameter to log details 1.")]
+	70: optional string Target1;
+	[Description("Optional parameter to log details 2.")]
+	80: optional string Target2;
+	[Description("Optional parameter to log details 3.")]
+	90: optional string Target3;
+};
+
+[Description("The trace message for instrument job state transitions.")]
+struct InstrumentJobStateChangeTrace : Microsoft.Telemetry.Data<Microsoft.Telemetry.Base>
+{
+	[Description("The job name")]
+	10: required string JobName;
+
+	[Description("The unique instance name")]
+	20: required string UniqueInstanceName;
+
+ 	[Description("The job event type.")]
+ 	30: required string EventType;
+ 	 	
+ 	[Description("The job event message.")]
+ 	40: required string Message;
+
+	[Description("The job old state.")]
+ 	50: optional string From;
+
+	[Description("The job new state.")]
+ 	60: optional string To;
+};
+
+[Description("The trace message for instrument job.")]
+struct InstrumentJobInformationTrace: Microsoft.Telemetry.Data<Microsoft.Telemetry.Base>
+{
+	[Description("The job name")]
+	10: required string JobName;
+
+	[Description("The unique instance name")]
+	20: required string UniqueInstanceName;
+
+ 	[Description("The job event type.")]
+ 	30: required string EventType;
+ 	 	
+ 	[Description("The job event message.")]
+ 	40: required string Message;
+};
+
+[Description("The trace message for instrument job.")]
+struct InstrumentJobErrorTrace: Microsoft.Telemetry.Data<Microsoft.Telemetry.Base>
+{
+	[Description("The job name")]
+	10: required string JobName;
+
+	[Description("The unique instance name")]
+	20: required string UniqueInstanceName;
+
+ 	[Description("The job event type.")]
+ 	30: required string EventType;
+ 	 	
+ 	[Description("The job event message.")]
+ 	40: required string Message;
+};
+
+[Description("The cycle message for instrument job core.")]
+struct InstrumentJobCoreCycleMessage : Microsoft.Telemetry.Data<Microsoft.Telemetry.Base>
+{
+ 	[Description("The job name.")]
+ 	10: required string JobName;
+ 	 	
+ 	[Description("The job instance name.")]
+ 	20: optional string JobInstanceName;
+ 	 	
+ 	[Description("Job status.")]
+ 	30: required string Status;
+ 	
+ 	[Description("The correlation id of this job.")]
+ 	40: required string CorrelationId;
+ 	
+ 	[Description("The correlation vector id of this job.")]
+ 	50: required string CorrelationVectorId;
+ 	
+ 	[Description("Unique instance id.")]
+ 	60: required string UniqueInstanceName;
+ 	
+ 	[Description("Request details")]
+ 	70: required string RequestDetails;
+ 	
+ 	[Description("Response details")]
+ 	80: required string ResponseDetails;
+ 	
+ 	[Description("Error code")]
+ 	90: optional string ErrorCode;
+ 	
+ 	[Description("Error message")]
+ 	100: optional string ErrorMessage;
+ 	
+ 	[Description("Message to be logged")]
+ 	110: optional string Message;
+ 	
+ 	[Description("Latency of operation")]
+ 	120: optional int64 LatencyMs;
+};
+
+[Description("The processor message for instrument job core.")]
+struct InstrumentJobCoreProcessMessage : Microsoft.Telemetry.Data<Microsoft.Telemetry.Base>
+{
+ 	[Description("The job name.")]
+ 	10: required string JobName;
+ 	 	
+ 	[Description("The job instance name.")]
+ 	20: required string JobInstanceName;
+ 	 	
+ 	[Description("Job status.")]
+ 	30: required string JobStatus;
+ 	
+ 	[Description("The correlation id of this job.")]
+ 	40: required string CorrelationId;
+ 	
+ 	[Description("The correlation vector id of this job.")]
+ 	50: required string CorrelationVectorId;
+ 	
+ 	[Description("Unique instance id.")]
+ 	60: required string UniqueInstanceName;
+ 	
+ 	[Description("Request details")]
+ 	70: required string RequestDetails;
+ 	
+ 	[Description("Response details")]
+ 	80: required string ResponseDetails;
+ 	
+ 	[Description("Error code")]
+ 	90: optional string ErrorCode;
+ 	
+ 	[Description("Error message")]
+ 	100: optional string ErrorMessage;
+ 	
+ 	[Description("Message to be logged")]
+ 	110: optional string Message;
+ 	
+ 	[Description("Latency of operation")]
+ 	120: optional int64 LatencyMs;
+};
+
+[Description("The outgoing message for instrument job store.")]
+struct InstrumentJobStoreOutgoingMessage : Microsoft.Telemetry.Data<Microsoft.Telemetry.Base>
+{
+ 	[Description("The store name.")]
+ 	10: required string StoreName;
+ 	 	
+ 	[Description("The store operation name.")]
+ 	20: required string OperationName;
+ 	 	
+ 	[Description("Outgoing call status.")]
+ 	30: required string Status;
+ 	
+ 	[Description("The correlation id of this job.")]
+ 	40: required string CorrelationId;
+ 	
+ 	[Description("The correlation vector id of this job.")]
+ 	50: required string CorrelationVectorId;
+ 	
+ 	[Description("Request details")]
+ 	70: required string RequestDetails;
+ 	
+ 	[Description("Response details")]
+ 	80: required string ResponseDetails;
+ 	
+ 	[Description("Error code")]
+ 	90: optional string ErrorCode;
+ 	
+ 	[Description("Error message")]
+ 	100: optional string ErrorMessage;
+ 	
+ 	[Description("Message to be logged")]
+ 	110: optional string Message;
+ 	
+ 	[Description("Latency of operation")]
+ 	120: optional int64 LatencyMs;
+};
+
+[Description("The delay from when the event is published to when it is uploaded to EventHub.")]
+struct EventHubUploaderMessageDelay : Microsoft.Telemetry.Data<Microsoft.Telemetry.Base>
+{
+ 	[Description("The unique identifier for the event.")]
+ 	10: required string EventId;
+ 	 	
+ 	[Description("The timestamp when the event was emitted by the publisher.")]
+ 	20: required string EventPublishTimestamp;
+ 	 	
+ 	[Description("The timestamp when the event was uploaded to event hub.")]
+ 	30: required string EventHubUploadTimestamp;
+ 	
+ 	[Description("The time difference in milliseconds between when the event was emitted by the publisher and when it was uploaded to eventhub.")]
+ 	40: required int64 DelayMs;
+};
+

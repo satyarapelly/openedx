@@ -1,0 +1,241 @@
+﻿import "Microsoft.Telemetry.bond"
+import "Ms.Qos.bond"
+import "Ms.Qos.OutgoingServiceRequest.bond"
+import "Ms.Qos.IncomingServiceRequest.bond"
+
+namespace Microsoft.Commerce.Tracing.Sll
+
+[Description("The operation details of an incoming request to PXService.")]
+struct PXServiceIncomingOperation : Microsoft.Telemetry.Data<Ms.Qos.IncomingServiceRequest>
+{
+	// The service name;
+	10: required string ServiceName;
+	// The correlation id of this request.
+	20: required string RequestTraceId;
+	// The correlation id of the context of the service.
+	30: optional string ServerTraceId;
+	// The account Id.
+	40: optional string AccountId;
+	// The response header.
+	50: optional string InstrumentId;
+	// The payment method family. 
+	60: optional string PaymentMethodFamily;
+	// The paymentMethod type. 
+	70: optional string PaymentMethodType;
+	// The country. 
+	80: optional string Country;
+	// PIMS standard error code.
+	90: optional string ErrorCode;
+	// error message.
+	100: optional string ErrorMessage;
+	// The request header.
+	110: optional string RequestHeader;
+	// The response header.
+	120: optional string ResponseHeader;
+	// The http request details. 
+	130: optional string RequestDetails;
+	// The http response details.
+	140: optional string ResponseDetails;
+	// Additional message to be logged.
+	150: optional string Message;
+	// StartTime of request.
+	160: optional string StartTime;
+	// Is test scenario
+	170: optional bool IsTest;
+	// Certificate authentication information
+	180: optional string AuthenticationInfo;
+	// The partner nomally calls PIDLSDK.
+	190: optional string Partner;
+	// The pidl operation name used in AddressDescription-GET, PaymentMethodDescription-GET etc.
+	200: optional string PidlOperation;
+	// The avsSuggest flag is true or not. It is used by address suggestion flow. Since doesn't want avsSuggest show up when flag isn't support, set it as string instead of bool. 
+	210: optional string AvsSuggest;
+};
+
+[Description("The operation details of an incoming request.")]
+struct PXServiceOutgoingOperation : Microsoft.Telemetry.Data<Ms.Qos.OutgoingServiceRequest>
+{
+	// The service name;
+	10: required string ServiceName;
+	// The correlation id of this request.
+	20: required string RequestTraceId;
+	// The request header.
+	30: optional string RequestHeader;
+	// The response header.
+	40: optional string ResponseHeader;
+	// The http request details. 
+	50: optional string RequestDetails;
+	// The http response details.
+	60: optional string ResponseDetails;
+	// Additional message to be logged.
+	70: optional string Message;
+	// StartTime of request.
+	80: optional string StartTime;
+	// Certificate information of request
+	90: optional string CertInfo;
+	// ServicePoint data from ServicePointManager
+	100: optional string ServicePointData;
+};
+
+[Description("The operation details of an outgoing request where a PI was added on offer aka incentive program.")]
+struct PXServicePIAddedOnOffer : Microsoft.Telemetry.Data<Microsoft.Telemetry.Base>
+{
+	// The service name;
+	10: required string serviceName;
+
+	// The correlation id of this request.
+	20: required string requestTraceId;
+
+	// ID of the newly created PI
+	30: required string paymentInstrumentId;
+
+	// Payment Method Family. e.g. credit_card
+	40: required string paymentMethodFamily;
+
+	// Payment Method Type. e.g. visa
+	50: required string paymentMethodType;
+
+	// Partner name where the user added this PI.  e.g. webblends
+	60: required string partner;
+
+	// Country where the user added this PI.
+	70: required string country;
+
+	// ID of the incentive offer
+	80: required string offerId;
+
+	// PUID of the user
+	90: required string puid;
+};
+
+[Description("Generic service message")]
+struct PXServiceOperationTrace : Microsoft.Telemetry.Data<Microsoft.Telemetry.Base>
+{
+	// The service name;
+	10: required string OperationName;
+	// The related account id
+	20: required string AccountId;
+	// The correlation id, i.e. the correlation vector value.
+	30: required string CorrelationId;
+	// The legacy tracking guid, if available.
+	40: optional string SessionId;
+	// Message to be logged by service
+	50: required string Message;
+}
+
+[Description("Generic service message")]
+struct PXServiceOperationFault : PXServiceOperationTrace
+{
+	// The fault target if any;
+	10: required string Target;
+	// The fault details;
+	20: required string Details;
+	// The exception stack trace;
+	30: required string StackTrace;
+}
+
+[Description("A generic message for ingestion service jobs.")]
+struct PXServiceIngestionMessage : Microsoft.Telemetry.Data<Microsoft.Telemetry.Base>
+{
+	[Description("The service name.")]
+	10: required string ServiceName;
+	[Description("The correlation id of this request.")]
+	20: required string CorrelationId;
+	[Description("The name of the base ingestion job.")]
+	30: required string JobName;
+	[Description("The name of the subjob.")]
+	40: optional string SubJobName;
+	[Description("Message to be logged")]
+	50: required string Message;
+	[Description("Latency of operation")]
+	60: optional int64 LatencyMs;
+	[Description("Optional parameter to log details 1.")]
+	70: optional string Target1;
+	[Description("Optional parameter to log details 2.")]
+	80: optional string Target2;
+	[Description("Optional parameter to log details 3.")]
+	90: optional string Target3;
+};
+
+[Description("For logging integration error of an incoming request to PXService.")]
+struct PXServiceIntegrationError : Microsoft.Telemetry.Data<Microsoft.Telemetry.Base>
+{
+	// The service name;
+	10: required string ServiceName;
+	// The correlation id of this request.
+	20: required string RequestTraceId;
+	// The correlation id of the context of the service.
+	30: optional string ServerTraceId;
+	// Integration Error Code.
+	40: required string IntegrationErrorCode;
+	// Error message.
+	50: required string Message;
+};
+
+[Description("For logging exceptions in PXService")]
+struct PXServiceTraceException : Microsoft.Telemetry.Data<Microsoft.Telemetry.Base>
+{
+	[Description("The service name.")]
+	10: required string ServiceName;
+	// The correlation id of this request.
+	20: required string RequestTraceId;
+	[Description("The status code in the response.")]
+	30: required string StatusCode;
+	[Description("The exception message")]
+	40: required string Exception;
+};
+
+[Description("For logging integration error of an incoming request to PXService with MISE framework.")]
+struct MISETokenValidationResult : Microsoft.Telemetry.Data<Microsoft.Telemetry.Base>
+{
+	// The authentication succeed or not
+	10: required bool Success;
+	// The authentication latency
+	20: required int64 Latency;
+	// The CV of incoming request;
+	30: optional string CV;
+	// The application id of incoming request
+	40: optional string ApplicationId;
+	// The exception message
+	50: optional string Exception;
+	// Authentication Error Code.
+	60: optional string AuthenticationErrorCode;
+	// The debug message 
+	70: optional string Message;
+	// The cloud instance
+	80: optional string CloudInstance;
+};
+
+[Description("For logging integration error of an token generation logic.")]
+struct TokenGenerationResult : Microsoft.Telemetry.Data<Microsoft.Telemetry.Base>
+{
+	// The token gneration succeed or not
+	10: required bool Success;
+	// Resource that required token
+	20: required string Resource;
+	// The client id of the token provider
+	30: required string ClientID;
+	// The authentication latency
+	40: required int64 Latency;
+	// The CV of incoming request;
+	50: optional string CV;
+	// The exception message
+	60: optional string Exception;
+	// The Token expiry date
+	70: optional string ExpiresOn;
+};
+
+[Description("For logging PX actions against database.")]
+struct DatabaseActionResult : Microsoft.Telemetry.Data<Microsoft.Telemetry.Base>
+{
+	// Database action succeed or not
+	10: required bool Success;
+	// Name of database
+	20: required string DatabaseName;
+	// Name of container within database
+	30: required string ContainerName;
+	// Action performed on the database
+	40: required string Action;
+	// The exception message
+	50: optional string Exception;
+};

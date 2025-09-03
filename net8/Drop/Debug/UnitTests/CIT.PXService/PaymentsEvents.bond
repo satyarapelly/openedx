@@ -1,0 +1,54 @@
+import "Microsoft.Telemetry.bond"
+import "Ms.Qos.bond"
+import "Ms.Qos.OutgoingServiceRequest.bond"
+import "Ms.Qos.IncomingServiceRequest.bond"
+
+namespace Microsoft.Commerce.Tracing.Sll
+
+[Description("The operation details of client request.")]
+struct OperationDetails : Microsoft.Telemetry.Data<Ms.Qos.IncomingServiceRequest>
+{
+	// The service name.
+	10: required string ServiceName;
+	// The client event trace activity id.
+	20: required string RequestTraceId;
+	// The server event trace activity id.
+	30: optional string ServerTraceId;
+	// The request header.
+	40: optional string RequestHeader;
+	// The response header.
+	50: optional string ResponseHeader;
+	// The http request details. 
+	60: optional string RequestDetails;
+	// The http response details.
+	70: optional string ResponseDetails;
+	// Additional message to be logged.
+	80: optional string Message;
+	// component name to be logged. keep lower case.
+	90: optional string component;
+	// scenarioId to be logged. keep lower case.
+	100: optional string scenarioId;
+	// Certificate thumbprint to be logged. keep lower case.
+	110: optional string Thumbprint;
+};
+
+[Description("The operation details of client request.")]
+struct ClientOperationDetails : Microsoft.Telemetry.Data<Ms.Qos.OutgoingServiceRequest>
+{
+	// The service name.
+	10: required string ServiceName;
+	// The client event trace activity id.
+	20: required string RequestTraceId;
+    // The server event trace activity id.
+	30: optional string ServerTraceId;
+	// The request header.
+	40: optional string RequestHeader;
+	// The response header.
+	50: optional string ResponseHeader;
+	// The http request details. 
+	60: optional string RequestDetails;
+	// The http response details.
+	70: optional string ResponseDetails;
+	// Additional message to be logged.
+	80: optional string Message;
+};

@@ -1,0 +1,35 @@
+import "Microsoft.Telemetry.bond"
+import "Ms.Qos.bond"
+
+namespace Microsoft.Commerce.Tracing.Sll
+
+[Description("The metrics result of recon activities")]
+struct MetricsDetails : Microsoft.Telemetry.Data<Microsoft.Telemetry.Base>
+{
+	// The service name.
+	10: required string ServiceName;
+	// The time of report
+	20: required string MetricsName;
+	// Error type
+	30: required string Status;
+	// DateTime of metrics
+	40: required string Timestamp;
+	// Measurement of metrics
+	50: required double Quantity;
+	// Description
+	60: optional string Description;
+	// The time of report
+	70: optional string Message;
+	// The provider name
+	80: optional string Provider;
+	// The MID
+	90: optional string MerchantId;
+	// Currency
+	100: optional string Currency;
+	// Advice file name
+	110: optional string IngestedFileName;
+	// Advice file version
+	120: optional string Version;
+	// Property bag for additional data
+	130: optional string AdditionalData;
+};

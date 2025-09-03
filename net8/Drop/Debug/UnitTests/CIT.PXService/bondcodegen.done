@@ -1,0 +1,6 @@
+#Ran codegen on the following files:
+BaseEvents.bond
+InstrumentManagementEvents.bond
+PaymentsEvents.bond
+PXServiceEvents.bond
+ReconEvents.bond
