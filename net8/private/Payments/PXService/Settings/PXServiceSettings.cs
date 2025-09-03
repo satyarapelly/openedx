@@ -353,23 +353,26 @@ namespace Microsoft.Commerce.Payments.PXService.Settings
 
         protected static LocalFeatureConfigs FetchStaticFeatureConfigs(string featureconfigPath, string testAccountConfigPath, string testGroup)
         {
-            string NormalizePath(string relativePath)
+            static string NormalizePath(string relativePath)
             {
-                return Path.Combine(
-                    AppDomain.CurrentDomain.BaseDirectory,
-                    relativePath.Replace('\\', Path.DirectorySeparatorChar));
+                if (string.IsNullOrEmpty(relativePath))
+                {
+                    return null;
+                }
+
+                return Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, relativePath));
             }
 
-            var rawFeatureConfigs = default(Dictionary<string, Dictionary<string, string>>);
+            Dictionary<string, Dictionary<string, string>> rawFeatureConfigs = null;
             string featureConfigFullPath = NormalizePath(featureconfigPath);
-            if (File.Exists(featureConfigFullPath))
+            if (!string.IsNullOrEmpty(featureConfigFullPath) && File.Exists(featureConfigFullPath))
             {
                 rawFeatureConfigs = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(File.ReadAllText(featureConfigFullPath));
             }
 
-            var testAccounts = default(Dictionary<string, List<string>>);
+            Dictionary<string, List<string>> testAccounts = null;
             string testAccountConfigFullPath = NormalizePath(testAccountConfigPath);
-            if (File.Exists(testAccountConfigFullPath))
+            if (!string.IsNullOrEmpty(testAccountConfigFullPath) && File.Exists(testAccountConfigFullPath))
             {
                 testAccounts = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(File.ReadAllText(testAccountConfigFullPath));
             }
