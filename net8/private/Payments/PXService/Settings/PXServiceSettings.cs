@@ -353,19 +353,37 @@ namespace Microsoft.Commerce.Payments.PXService.Settings
 
         protected static LocalFeatureConfigs FetchStaticFeatureConfigs(string featureconfigPath, string testAccountConfigPath, string testGroup)
         {
-            var rawFeatureConfigs = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(
-                File.ReadAllText(
-                    Path.Combine(
-                        AppDomain.CurrentDomain.BaseDirectory,
-                        featureconfigPath)));
+            static string NormalizePath(string relativePath)
+            {
+                if (string.IsNullOrEmpty(relativePath))
+                {
+                    return null;
+                }
 
-            var testAccounts = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(
-                File.ReadAllText(
-                    Path.Combine(
-                        AppDomain.CurrentDomain.BaseDirectory,
-                        testAccountConfigPath)));
+                return Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, relativePath));
+            }
 
-            return new LocalFeatureConfigs(rawFeatureConfigs, testAccounts[testGroup]);
+            Dictionary<string, Dictionary<string, string>> rawFeatureConfigs = null;
+            string featureConfigFullPath = NormalizePath(featureconfigPath);
+            if (!string.IsNullOrEmpty(featureConfigFullPath) && File.Exists(featureConfigFullPath))
+            {
+                rawFeatureConfigs = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(File.ReadAllText(featureConfigFullPath));
+            }
+
+            Dictionary<string, List<string>> testAccounts = null;
+            string testAccountConfigFullPath = NormalizePath(testAccountConfigPath);
+            if (!string.IsNullOrEmpty(testAccountConfigFullPath) && File.Exists(testAccountConfigFullPath))
+            {
+                testAccounts = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(File.ReadAllText(testAccountConfigFullPath));
+            }
+
+            List<string> testGroupAccounts = null;
+            if (testAccounts != null && testGroup != null)
+            {
+                testAccounts.TryGetValue(testGroup, out testGroupAccounts);
+            }
+
+            return new LocalFeatureConfigs(rawFeatureConfigs, testGroupAccounts);
         }
 
         protected static AzureActiveDirectoryTokenLoaderOption BuildAADTokenLoaderOption(string serviceName, string clientId, string resource, bool isMI)
