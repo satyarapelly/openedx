@@ -1,0 +1,51 @@
+{
+    "$schema": "http://schema.express.azure.com/schemas/2015-01-01-alpha/ServiceModel.json",
+    "contentVersion": "0.0.0.1",
+
+  "serviceMetadata": {
+    "serviceGroup": "PX", // use a service group name that represents your own service.
+    "environment": "INT"
+  },
+    
+    // note, ev2 is modelled around subscription-resourcegroup-resource deployments.
+    // This doesn't align with the extension model for deploying managed resource to non-ARM
+    // type deployments.
+    // This model makes more sense if customers add their workflows to their own repo,
+    // then rollout workflows via the Geneva Automation extension as part of their regular service deployment.
+    // In this example we provide an empty resource with arbitrary reesource group, location info.
+    "serviceResourceGroupDefinitions": [    
+        {
+            "name":"AutomationContainer",
+            "serviceResourceDefinitions": [
+                {
+                    "name":"AutomationResource",
+                    "composedOf":
+                    {
+                        // references the extensions allowed and the rollour parameters used for this "resourceGroup"
+                        "extension": {
+                            "rolloutParametersPath": "RolloutParameters\\WorkflowRolloutParameters.json",
+                            "allowedTypes": [
+                                { "Type": "{Microsoft.Geneva.Automation/ResourceDeploy}" }
+                            ]
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+
+    "serviceResourceGroups": [
+      {
+        "azureResourceGroupName": "Unused",
+        "location": "West US", // also unused, but must be a valid azure location.
+        "instanceOf": "AutomationContainer",
+        "azureSubscriptionId": "230ef3cc-8fdd-4f26-bf9c-10131b4080e5", // use your service's subscription (for workflow deployment this is unused, but may be used by Ev2 for access checks)
+        "serviceResources": [
+          {
+            "name": "AutomationResource",
+            "instanceOf": "AutomationResource"
+          }
+        ]
+      }
+    ]
+}

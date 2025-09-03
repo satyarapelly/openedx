@@ -1,0 +1,6 @@
+{
+    "instanceUrl":"https://microsoft.visualstudio.com",
+    "projectName":"OSGS",
+    "areaPath":"OSGS\\Store Core\\Payments\\PIDL",
+    "notificationAliases":["pxdevs@microsoft.com"]
+}

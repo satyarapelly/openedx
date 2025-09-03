@@ -1,0 +1,138 @@
+# This is a basic OneBranch YAML Release starter template to deploy using EV2 to Test/PPE environments
+# Documentation: https://aka.ms/onebranchrelease                                   
+# Samples: https://aka.ms/releaseyaml/samples             
+# Allowed Tasks: https://aka.ms/releaseyaml/supportedtasks                                                      
+# Support: https://aka.ms/onebranchsupport
+
+trigger: none
+
+schedules:
+- cron: '0 0,12 * * *'
+  displayName: Release Every 12 Hours
+  branches:
+    include:
+    - main
+  always: true
+
+parameters: # parameters are shown up in ADO UI in a build queue time
+- name: 'debug'
+  displayName: 'Enable debug output' 
+  type: boolean
+  default: false
+- name: 'ReleaseDescription'
+  displayName: 'Release Description'
+  type: object
+  default: INT Release
+- name: 'PipelineArtifactSource'
+  default: SC.CSPayments.PX-Build-Buddy-RA
+  values:
+    - SC.CSPayments.PX-Build-Buddy-RA
+- name: "rolloutType"
+  displayName: "SDP rollout type"
+  type: string
+  default: "normal"
+  values:
+    - normal
+    - emergency
+    - globaloutage
+- name: "overrideManagedValidationDuration"
+  displayName: "Override standard SDP duration?"
+  type: boolean
+  default: false
+- name: "managedValidationDurationInHours"
+  displayName: "Override standard SDP duration (in hours)"
+  type: number
+  default: 0
+- name: "icmIncidentId"
+  displayName: "IcM Incident Id"
+  type: number
+  default: 0
+- name: "ForceRegistration"
+  displayName: "Force Registration"
+  type: boolean
+  default: false
+
+variables:
+  CDP_DEFINITION_BUILD_COUNT: $[counter('', 0)] # needed for onebranch.pipeline.version task https://aka.ms/obpipelines/versioning
+  system.debug: ${{ parameters.debug }}  
+  ServiceRootPath: $(Pipeline.Workspace)/${{ parameters.PipelineArtifactSource }}/drop_build_main/Package/EV2-RA
+  EV2ServiceConnection: PX-Deployment-INT-PME
+  TestsFolder: $(Pipeline.Workspace)/${{ parameters.PipelineArtifactSource }}/drop_build_main/Debug/COT.PXService
+  Release.ReleaseDescription: ${{parameters.ReleaseDescription}}
+  WindowsContainerImage: 'onebranch.azurecr.io/windows/ltsc2019/vse2022:latest' # Docker image which is used to build the project https://aka.ms/obpipelines/containers
+  AzureSDPStandardStageMap: "Microsoft.Azure.SDP.Standard"
+  AzureSDPStandardStageMapVersion: "*"
+
+resources:
+  repositories: 
+    - repository: templates
+      type: git
+      name: OneBranch.Pipelines/GovernedTemplates
+      ref: refs/heads/main
+  pipelines:
+    - pipeline: SC.CSPayments.PX-Build-Buddy-RA
+      source: OneBranch\SC.CSPayments.PX-Build-Buddy-RA
+
+extends:
+  template: v2/OneBranch.NonOfficial.CrossPlat.yml@templates # https://aka.ms/obpipelines/templates
+  parameters:
+    featureFlags:
+      EnableCDPxPAT: false
+    cloudvault: # https://aka.ms/obpipelines/cloudvault
+      enabled: false
+    globalSdl: # https://aka.ms/obpipelines/sdl
+      asyncSdl:
+        enabled: true
+        tsaOptionsFile: .config/tsaoptions.json
+      policheck:
+        break: true # always break the build on policheck issues. You can disable it by setting to 'false'
+    ev2ManagedSdpRolloutConfig:
+      rolloutType: ${{parameters.rolloutType}}
+      overrideManagedValidationDuration: ${{parameters.overrideManagedValidationDuration}}
+      managedValidationOverrideDurationInHours: ${{parameters.managedValidationDurationInHours}}
+      icmIncidentId: ${{parameters.icmIncidentId}}
+    
+    stages:
+    # One-Time Bootstrap setup step
+    - template: SC.CSPayments.PX-Infra-RA.yml
+      parameters:
+        environment: Test
+        ev2ServiceConnection: $(EV2ServiceConnection)
+        pipelineArtifactName: ${{ parameters.PipelineArtifactSource }}
+        ServiceGroupOverride: Microsoft.CFS.PC.PX.INT
+        Select: regions(westus).steps(Rollout_Network)
+        ForceRegistration: ${{parameters.ForceRegistration}}
+        bootstrap: Bootstrap
+ 
+    # INT Infra Global Deployment
+    - template: SC.CSPayments.PX-Infra-RA.yml
+      parameters:
+        environment: Test
+        ev2ServiceConnection: $(EV2ServiceConnection)
+        pipelineArtifactName: ${{ parameters.PipelineArtifactSource }}
+        ServiceGroupOverride: Microsoft.CFS.PC.PX.INT
+        Select: regions(westus).steps(Rollout_GlobalResources, Rollout_GlobalResources_ShortUrlCosmosDb)
+        ForceRegistration: ${{parameters.ForceRegistration}}
+        bootstrap: Global
+
+    # INT Infra Deployment
+    - template: SC.CSPayments.PX-Infra-RA.yml
+      parameters:
+        environment: Test
+        ev2ServiceConnection: $(EV2ServiceConnection)
+        pipelineArtifactName: ${{ parameters.PipelineArtifactSource }}
+        ServiceGroupOverride: Microsoft.CFS.PC.PX.INT
+        Select: regions(westus).steps(Rollout_Network, Rollout_Main_KeyVault_Creation, Rollout_Main_KeyVault_CreateCert_PXTLS, Rollout_Main_KeyVault_CreateCert_PXGeneva, Rollout_Main_KeyVault_CreateCert_PXAAD, Rollout_Main_KeyVault_CreateCert_PXCTP, Rollout_Main_KeyVault_CreateCert_PXClientAuth, Rollout_Main, Rollout_App_PX, Rollout_App_PX_Rbac, Rollout_App_PX_Deploy, Rollout_PostTest_App_Swap, Rollout_App_PX_DependencyEmulators)
+        ForceRegistration: ${{parameters.ForceRegistration}}
+
+    #INT WUS region Deployment
+    - template: SC.CSPayments.PX-Region-Common-RA.yml
+      parameters:
+        environment: Test
+        ev2ServiceConnection: $(EV2ServiceConnection)
+        pipelineArtifactName: ${{ parameters.PipelineArtifactSource }}
+        runSettingFile: '$(TestsFolder)/RunSettings/PME/px-test-int-westus.runsettings'
+        ServiceGroupOverride: Microsoft.CFS.PC.PX.INT
+        Select: regions(westus).steps(Rollout_App_PX_Deploy, Rollout_App_PX_DependencyEmulators_Deploy)
+        ForceRegistration: ${{parameters.ForceRegistration}}
+        region: WestUS

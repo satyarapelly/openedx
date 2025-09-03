@@ -1,0 +1,232 @@
+parameters:
+- name: environment
+  values:
+    - Production
+    - Feature
+    - PPE
+    - INT
+- name: dependsOn
+  type: object
+  default: []
+- name: region
+- name: ev2ServiceConnection
+  default: ''
+- name: pipelineArtifactName  
+- name: serviceRootPath
+- name: stagingRolloutSpecPath
+- name: restartStagingRolloutSpecPath
+- name: swapRolloutSpecPath
+- name: serverFarmRolloutSpecPath
+- name: testRunSettingsFile
+# Each release stage must declare its environment by prefixing the stage name with the environment.
+# Production and PPE, we will treat as Prod. Stage name for Production would be Prod_<name> and for PPE it would be Prod_PPE_<name>
+- name: stagePrefix 
+  type: object
+  default:
+   Production: Prod
+   Feature: Prod_Feature
+   PPE: Prod_PPE
+   INT: Test_INT
+
+# Release environment to pass to onebranch(ob_release_environment)
+# We will treat both Production and PPE as Production.
+# OB supports only Production, PPE, Test(for INT)
+- name: ob_release_env
+  type: object
+  default:
+   Production: Production
+   Feature: Production
+   PPE: Production
+   INT: Test
+
+- name: testCategory
+  type: object
+  default:
+   Production: PRODContinuousTest
+   Feature: PRODContinuousTest
+   PPE: PPEContinuousTest
+   INT: INTContinuousTest
+
+stages:
+## Staging 
+- stage: ${{ parameters.stagePrefix[parameters.environment] }}_${{ parameters.region }}_Staging
+  ${{ if eq( parameters.environment, 'Production') }}:
+    dependsOn:
+     - Prod_Deployment_Approval
+     - ${{ parameters.dependsOn }}
+  ${{ else }}:
+    dependsOn: ${{ parameters.dependsOn }}
+  variables:
+    ob_release_environment: ${{ parameters.ob_release_env[parameters.environment] }}
+    ${{ if in(parameters.environment, 'Production', 'Feature') }}:  # Use deployment approval for PROD and Feature environments
+      ob_release_usedeploymentjob: true
+      ob_deploymentjob_environment: PaymentExperienceServices_Prod_Deployment
+  jobs:
+  - job: ${{ parameters.environment }}_${{ parameters.region }}_Staging
+    pool:
+      type: release
+    steps:
+    - download: ${{ parameters.pipelineArtifactName }}
+    - task: ExpressV2Internal@1
+      displayName: "${{ parameters.environment }} ${{ parameters.region }} - Staging Rollout"
+      inputs:
+        UseServerMonitorTask: true
+        EnableStrictValidation: false
+        ValidateOnly: false
+        # Approval service is supported only for Production environments, else we should use EV2 Service Connection.
+        # Since we are treating PPE as Production(and also setting ob_release_environment as Production), we are using it for PPE as well.
+        ${{ if eq( parameters.ob_release_env[parameters.environment], 'Production') }}:
+          EndpointProviderType:  'ApprovalService'
+          ApprovalServiceEnvironment: 'Production'
+        ${{ else }}:
+          EndpointProviderType: 'Ev2Endpoint'
+          ConnectedServiceName: ${{ parameters.ev2ServiceConnection }}
+        ServiceRootLocation: 'LinkedArtifact'
+        RolloutSpecType: 'RSPath'
+        ServiceRootPath: ${{ parameters.serviceRootPath }}
+        RolloutSpecPath: ${{parameters.stagingRolloutSpecPath}}
+
+## Restart staging slot 
+- stage: ${{ parameters.stagePrefix[parameters.environment] }}_${{ parameters.region }}_Restart_Staging
+  dependsOn: ${{ parameters.stagePrefix[parameters.environment] }}_${{ parameters.region }}_Staging
+  variables:
+    ob_release_environment: ${{ parameters.ob_release_env[parameters.environment] }}
+  jobs:
+  - job: ${{ parameters.environment }}_${{ parameters.region }}_Restart_Staging_Delay
+    pool:
+      type: server
+    steps:
+    - task: Delay@1
+      inputs:
+        delayForMinutes: '2'
+  - job: ${{ parameters.environment }}_${{ parameters.region }}_Restart_Staging
+    dependsOn: ${{ parameters.environment }}_${{ parameters.region }}_Restart_Staging_Delay
+    pool:
+      type: release
+    steps:
+    - download: ${{ parameters.pipelineArtifactName }}
+    - task: ExpressV2Internal@1
+      displayName: "${{ parameters.environment }} ${{ parameters.region }} - Staging Restart"
+      inputs:
+        UseServerMonitorTask: true
+        EnableStrictValidation: false
+        ValidateOnly: false
+        # Approval service is supported only for Production environments, else we should use EV2 Service Connection.
+        # Since we are treating PPE as Production(and also setting ob_release_environment as Production), we are using it for PPE as well.
+        ${{ if eq( parameters.ob_release_env[parameters.environment], 'Production') }}:
+          EndpointProviderType:  'ApprovalService'
+          ApprovalServiceEnvironment: 'Production'
+        ${{ else }}:
+          EndpointProviderType: 'Ev2Endpoint'
+          ConnectedServiceName: ${{ parameters.ev2ServiceConnection }}
+        ServiceRootLocation: 'LinkedArtifact'
+        RolloutSpecType: 'RSPath'
+        ServiceRootPath: ${{ parameters.serviceRootPath }}
+        RolloutSpecPath: ${{parameters.restartStagingRolloutSpecPath}}
+
+# SWAP
+- stage: ${{ parameters.stagePrefix[parameters.environment] }}_${{ parameters.region }}_SWAP
+  dependsOn: ${{ parameters.stagePrefix[parameters.environment] }}_${{ parameters.region }}_Restart_Staging
+  variables:
+    ob_release_environment: ${{ parameters.ob_release_env[parameters.environment] }}
+  jobs:
+  - job: ${{ parameters.environment }}_${{ parameters.region }}_SWAP
+    pool:
+      type: release
+    steps:
+    - download: ${{ parameters.pipelineArtifactName }}
+    - task: ExpressV2Internal@1
+      displayName: "${{ parameters.environment }} ${{ parameters.region }} - Swap"
+      inputs:
+        UseServerMonitorTask: true
+        EnableStrictValidation: false
+        ValidateOnly: false
+        # Approval service is supported only for Production environments, else we should use EV2 Service Connection.
+        # Since we are treating PPE as Production(and also setting ob_release_environment as Production), we are using it for PPE as well.
+        ${{ if eq( parameters.ob_release_env[parameters.environment], 'Production') }}:
+          EndpointProviderType:  'ApprovalService'
+          ApprovalServiceEnvironment: 'Production'
+        ${{ else }}:
+          EndpointProviderType: 'Ev2Endpoint'
+          ConnectedServiceName: ${{ parameters.ev2ServiceConnection }}
+        ServiceRootLocation: 'LinkedArtifact'
+        RolloutSpecType: 'RSPath'
+        ServiceRootPath: ${{ parameters.serviceRootPath }}
+        RolloutSpecPath: ${{ parameters.swapRolloutSpecPath }}
+
+# Verify
+- stage: ${{ parameters.stagePrefix[parameters.environment] }}_${{ parameters.region }}_Verify
+  dependsOn: ${{ parameters.stagePrefix[parameters.environment] }}_${{ parameters.region }}_SWAP
+  variables:
+    ob_release_environment: ${{ parameters.ob_release_env[parameters.environment] }}
+  jobs:
+  - job: ${{ parameters.environment }}_${{ parameters.region }}_Verify
+    pool:
+      type: windows
+      isCustom: true
+      name: PST-PX-Dev-Pool
+    steps:
+    - checkout: none
+    - download: ${{ parameters.pipelineArtifactName }}
+    - task: PowerShell@2
+      displayName: "${{ parameters.environment }} ${{ parameters.region }} - Sleep for 10 secs"
+      inputs:
+        targetType: 'inline'
+        script: 'Start-Sleep -s 10'
+    - task: VSTest@3
+      displayName: '${{ parameters.environment }} ${{ parameters.region }} - Test run for Test plans'
+      inputs:
+        testSelector: 'testAssemblies'
+        testAssemblyVer2: '**\*COT*.dll'
+        searchFolder: '$(Pipeline.Workspace)\drop_build_main\Debug\COT.PXService'
+        testFiltercriteria: 'TestCategory=${{ parameters.testCategory[parameters.environment] }}'
+        runSettingsFile: ${{ parameters.testRunSettingsFile }}
+        runInParallel: true
+        runTestsInIsolation: false
+        codeCoverageEnabled: false
+        rerunFailedTests: true
+      continueOnError: true
+
+# Serverfarm deployment
+- stage: ${{ parameters.stagePrefix[parameters.environment] }}_${{ parameters.region }}_Deploy_ServerFarm
+  ${{ if eq( parameters.environment, 'Production') }}:
+    dependsOn:
+     - Prod_Deployment_Approval
+     - ${{ parameters.dependsOn }}
+  ${{ else }}:
+    dependsOn: ${{ parameters.dependsOn }}
+  variables:
+    ob_release_environment: ${{ parameters.ob_release_env[parameters.environment] }}
+    ${{ if in(parameters.environment, 'Production', 'Feature') }}:  # Use deployment approval for PROD and Feature environments
+      ob_release_usedeploymentjob: true
+      ob_deploymentjob_environment: PaymentExperienceServices_Prod_Deployment
+  jobs:
+  - job: ${{ parameters.environment }}_${{ parameters.region }}_PreApproval_ServerFarm_Agent_Job
+    pool:
+      type: server
+    ${{ if in(parameters.environment, 'PPE', 'INT') }}: # Use manual validation for INT and PPE environments
+      steps:
+      - task: ManualValidation@0
+  - job: ${{ parameters.environment }}_${{ parameters.region }}_Deploy_ServerFarm_Agent_Job
+    dependsOn: ${{ parameters.environment }}_${{ parameters.region }}_PreApproval_ServerFarm_Agent_Job
+    pool:
+      type: release
+    steps:
+    - download: ${{ parameters.pipelineArtifactName }}
+    - task: ExpressV2Internal@1
+      inputs:
+        UseServerMonitorTask: true
+        EnableStrictValidation: false
+        ValidateOnly: false
+        ServiceRootLocation: LinkedArtifact
+        RolloutSpecType: RSPath
+        ServiceRootPath: $(ServiceRootPath)
+        RolloutSpecPath: ${{ parameters.serverFarmRolloutSpecPath }}
+        # Approval service is supported only for Production environments, else we should use EV2 Service Connection.
+        # Since we are treating PPE as Production(and also setting ob_release_environment as Production), we are using it for PPE as well.
+        ${{ if eq( parameters.ob_release_env[parameters.environment], 'Production') }}:
+          EndpointProviderType: 'ApprovalService'
+          ApprovalServiceEnvironment: 'Production'
+        ${{ else }}:
+          EndpointProviderType: 'Ev2Endpoint'
+          ConnectedServiceName: ${{ parameters.ev2ServiceConnection }}

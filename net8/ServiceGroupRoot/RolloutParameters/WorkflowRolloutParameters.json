@@ -1,0 +1,48 @@
+{
+    "$schema": "http://schema.express.azure.com/schemas/2015-01-01-alpha/RolloutParameters.json",
+    "contentVersion": "1.0.0.0",
+
+    "extensions": [
+    // defines an instance of our extension
+      {
+        // local name of this extension instance
+        "Name": "AutomationDeployment",
+        // the namespace/type of our registered ev2 extension
+        "Type": "Microsoft.Geneva.Automation/ResourceDeploy",
+        "Version": "v1",
+        "ConnectionProperties": {
+          "MaxExecutionTime": "PT30M",
+          "Authentication": {
+            "Type": "CertificateAuthentication",
+            "Reference": {
+              "Provider": "AzureKeyVault",
+              "Parameters": {
+                "SecretId": "https://px-kv-int.vault.azure.net/secrets/PX-GENEVA-ICM-AUTOMATION-MICROSOFT-COM"
+              }
+            }
+          }
+        },
+        // The parameters passed to the extension
+        "PayloadProperties": {
+          "workflowLocation": {
+            "reference": {
+              // relative path within "ServiceGroupRoot" to the build artifacts. Check the buil.cmd file for this location.
+              // Binaries need to be copied over to this location by the build.
+              "path": "GenevaAutomationResources\\workflows.zip"
+            }
+          },
+          // Note: if you are IcM Automation customer or your geneva account has been migrated to IcM Automation, Please remove "account" property above and define your target IcM service and IcM team. If there is back slash in your IcM public team id, make sure to use "double backward slash (\\)".
+          "icmServiceId": {
+            "value": "6efbfc5b-0731-4eb4-b180-8265edc307e9"
+          },
+          // Note: IcM team Id is optional. This value only needs to be filled when your workflows are hosted on team level.
+          "icmTeamId": {
+            "value": "PAYMENTSERVICESICMTENANT\\PX-PIDL-PAYEE"
+          },
+          "aadTenantName": {
+            "value": "PME"
+          }
+        }
+      }
+   ]
+}

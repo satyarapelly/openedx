@@ -1,0 +1,103 @@
+#################################################################################
+#                      OneBranch Pipelines - PR Build                           #
+# This pipeline was created by EasyStart from a sample located at:              #
+#   https://aka.ms/obpipelines/easystart/samples                                #
+# Documentation:  https://aka.ms/obpipelines                                    #
+# Yaml Schema:    https://aka.ms/obpipelines/yaml/schema                        #
+# Retail Tasks:   https://aka.ms/obpipelines/tasks                              #
+# Support:        https://aka.ms/onebranchsup                                   #
+#################################################################################
+
+trigger: none # https://aka.ms/obpipelines/triggers
+
+parameters: # parameters are shown up in ADO UI in a build queue time
+- name: 'debug'
+  displayName: 'Enable debug output'
+  type: boolean
+  default: false
+
+variables:
+  CDP_DEFINITION_BUILD_COUNT: $[counter('', 0)] # needed for onebranch.pipeline.version task https://aka.ms/obpipelines/versioning
+  system.debug: ${{ parameters.debug }}
+  ENABLE_PRS_DELAYSIGN: 0
+  ROOT: $(Build.SourcesDirectory)
+  REPOROOT: $(Build.SourcesDirectory)
+  OUTPUTROOT: $(REPOROOT)\out
+  NUGET_XMLDOC_MODE: none
+
+  WindowsContainerImage: 'onebranch.azurecr.io/windows/ltsc2022/vse2022:latest' # Docker image which is used to build the project https://aka.ms/obpipelines/containers
+
+resources:
+  repositories: 
+    - repository: templates
+      type: git
+      name: OneBranch.Pipelines/GovernedTemplates
+      ref: refs/heads/main
+
+extends:
+  template: v2/OneBranch.NonOfficial.CrossPlat.yml@templates # https://aka.ms/obpipelines/templates
+  parameters:
+    featureFlags:
+      EnableCDPxPAT: false
+      WindowsHostVersion: 1ESWindows2022
+    git:
+      fetchDepth: 50
+      fetchTags: true
+    globalSdl: # https://aka.ms/obpipelines/sdl
+      cg:
+        failOnAlert: false
+      tsa:
+        enabled: false # onebranch publish all sdl results to TSA. If TSA is disabled all SDL tools will forced into 'break' build mode.
+        break: false
+      credscan:
+        enabled: false
+        suppressionsFile: $(Build.SourcesDirectory)\.config\CredScanSuppressions.json
+      binskim:
+        enabled: false
+        break: false # always break the build on binskim issues. You can disable it by setting to 'false'
+      policheck:
+        enabled: false
+        break: false # always break the build on policheck issues. You can disable it by setting to 'false'
+      armory:
+        enabled: false
+      eslint:
+        enabled: false
+      moderncop:
+        enabled: false
+      # suppression:
+      #   suppressionFile: $(Build.SourcesDirectory)\.gdn\global.gdnsuppress
+
+    stages:
+    - stage: build
+      jobs:
+      - job: main
+        pool:
+          type: windows  # read more about custom job pool types at https://aka.ms/obpipelines/yaml/jobs
+        
+        variables: # More settings at https://aka.ms/obpipelines/yaml/jobs
+          ob_outputDirectory: '$(REPOROOT)\out' # this directory is uploaded to pipeline artifacts, reddog and cloudvault. More info at https://aka.ms/obpipelines/artifacts
+          ob_sdl_binskim_break: true # https://aka.ms/obpipelines/sdl
+
+          # ob_sdl_suppression_suppressionFile: $(Build.SourcesDirectory)\.gdn\build.nonofficial.gdnsuppress
+
+        steps:
+          - task: CmdLine@2
+            displayName: 'Restore'
+            inputs:
+              script: '$(Build.SourcesDirectory)\restore-ps.cmd'
+              workingDirectory: '$(Build.SourcesDirectory)'
+
+          - task: CmdLine@2
+            displayName: 'Build'
+            inputs:
+              script: '$(Build.SourcesDirectory)\build-ps.cmd'
+              workingDirectory: '$(Build.SourcesDirectory)'
+
+          - task: CmdLine@2
+            displayName: 'Test'
+            continueOnError: false
+            env:
+              SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+            inputs:
+              script: '$(Build.SourcesDirectory)\test-ps.cmd'
+              workingDirectory: '$(Build.SourcesDirectory)'

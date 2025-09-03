@@ -1,0 +1,3196 @@
+{
+  "version": "latest",
+  "baselines": {
+    "default": {
+      "name": "default",
+      "createdDate": "2021-08-23 18:38:47Z",
+      "lastUpdatedDate": "2021-08-23 18:38:47Z"
+    }
+  },
+  "results": {
+    "0141da1e4aef575fcd22e2b08909af7da119273a5f81972517cdd3fabb6f0afc": {
+      "signature": "0141da1e4aef575fcd22e2b08909af7da119273a5f81972517cdd3fabb6f0afc",
+      "alternativeSignatures": [
+        "cf4d2105c50edfa433763eab120246bfb194315d1d083af61e93d2d662a43b87"
+      ],
+      "target": "NugetPackages/CommonServiceLocator.1.3/lib/portable-net4+sl5+netcore45+wpa81+wp8/Microsoft.Practices.ServiceLocation.dll",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "binskim",
+      "ruleId": "BA2022",
+      "justification": null,
+      "createdDate": "2021-08-23 18:38:47Z",
+      "expirationDate": null,
+      "type": null
+    },
+    "d2f4e5d7cba7f662091f2ecaab3041091c7df5c1c25daba2efa451dd3c13891a": {
+      "signature": "d2f4e5d7cba7f662091f2ecaab3041091c7df5c1c25daba2efa451dd3c13891a",
+      "alternativeSignatures": [
+        "bdc70aa826d74ff1fca61745a3f22aaddab05c196f915751d121b91b864287ad"
+      ],
+      "target": "private/Payments/PXService/bin/Microsoft.Practices.ServiceLocation.dll",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "binskim",
+      "ruleId": "BA2022",
+      "justification": null,
+      "createdDate": "2021-08-23 18:38:47Z",
+      "expirationDate": null,
+      "type": null
+    },
+    "020e5c2f23d712e6e0d6406e8046dbf9c83e6ef8472573b2c87396034a79a792": {
+        "signature": "020e5c2f23d712e6e0d6406e8046dbf9c83e6ef8472573b2c87396034a79a792",
+        "alternativeSignatures": [
+            "e177de3fe0569c91d2ba3af9ff1ec1eb11c3b8129edbcea10119eddc77ae0973"
+        ],
+        "target": "Drop/Debug/COT.PXService/Bond.Attributes.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "577338ff76fd71dbf7cbd548006f98ebf6d797eb648b774a570bffb7f064cb14": {
+        "signature": "577338ff76fd71dbf7cbd548006f98ebf6d797eb648b774a570bffb7f064cb14",
+        "alternativeSignatures": [
+            "f3541df66893db44fc54b4d74773763916e5abe3fa934cedeb0bcd829be15694"
+        ],
+        "target": "Drop/Debug/COT.PXService/Bond.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "b59ae8b424a526fd5481e592370cd779ad252a6113a9331056ec4877eab666e6": {
+        "signature": "b59ae8b424a526fd5481e592370cd779ad252a6113a9331056ec4877eab666e6",
+        "alternativeSignatures": [
+            "562f312f2434393668d5f546670a3eadda25379c7325811c320f139249027827"
+        ],
+        "target": "Drop/Debug/COT.PXService/Bond.IO.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "961c881b3902d104a4ae102edc87cd20ee1228cb90ea46bc569f6daa79603f84": {
+        "signature": "961c881b3902d104a4ae102edc87cd20ee1228cb90ea46bc569f6daa79603f84",
+        "alternativeSignatures": [
+            "a29cc3212b91802aa74b946c5bbed06787f86667cd655706dfa82520463ad225"
+        ],
+        "target": "Drop/Debug/COT.PXService/Bond.JSON.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "5e1aceeb222bd6ff05809fc1ca96c1ef432e3d934ac8b8a1b6380990ed45e0d1": {
+        "signature": "5e1aceeb222bd6ff05809fc1ca96c1ef432e3d934ac8b8a1b6380990ed45e0d1",
+        "alternativeSignatures": [
+            "2a6c1fd22140ac15bf7e76d6a8e7ce58005d71bab891713ac68441c0f9c14b10"
+        ],
+        "target": "Drop/Debug/COT.PXService/Bond.Reflection.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "ebc220a175e12472dc23994d7661be9a44f951f25fcfee2236fb314bb9eff3f4": {
+        "signature": "ebc220a175e12472dc23994d7661be9a44f951f25fcfee2236fb314bb9eff3f4",
+        "alternativeSignatures": [
+            "1f73cef606788a95ff9f873e7f7d3b355d2b2751ac8c85d7eb12bfb085e58779"
+        ],
+        "target": "Drop/Debug/COT.PXService/Microsoft.CommonSchema.Services.Autopilot.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "cf4f2b4963eec5052765e0472c46282209497c27750520ca1e97b84236f2954a": {
+        "signature": "cf4f2b4963eec5052765e0472c46282209497c27750520ca1e97b84236f2954a",
+        "alternativeSignatures": [
+            "33a9061816741f1f61efe114f340e4f4af8b3f991c9609fae936f93ff9351d21"
+        ],
+        "target": "Drop/Debug/COT.PXService/Microsoft.CommonSchema.Services.Xpert.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "dc498d569a1591d14d3376efbec3d3421f931491f4718131319369a7b49f1062": {
+        "signature": "dc498d569a1591d14d3376efbec3d3421f931491f4718131319369a7b49f1062",
+        "alternativeSignatures": [
+            "4c28523aeca169f0ea9fb72bbfd803e65b769434274b939a2958a8c915af96a5"
+        ],
+        "target": "Drop/Debug/COT.PXService/Microsoft.IdentityModel.Clients.ActiveDirectory.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "20bdc5e6339559af262bc950431ed287483bbac732e20aff9c6abeed651db91d": {
+        "signature": "20bdc5e6339559af262bc950431ed287483bbac732e20aff9c6abeed651db91d",
+        "alternativeSignatures": [
+            "59b0f3a005825a048fe99acf283e84b15a75af216664e0c9488c8fcc2805ac43"
+        ],
+        "target": "Drop/Debug/COT.PXService/Microsoft.Practices.ServiceLocation.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "20d029d47ab190d40a600a00429fe8871e7a8125709365bd129980a9ad95465a": {
+        "signature": "20d029d47ab190d40a600a00429fe8871e7a8125709365bd129980a9ad95465a",
+        "alternativeSignatures": [
+            "1ddbf46876231a1c963bdd6e571d4db6bc15b85a031d43d00bae64c92f3758b0"
+        ],
+        "target": "NugetPackages/WinLiveIdToolkit.Library.16.3.1969.109/lib/Microsoft.WindowsLive.Test.WinLiveUser.AccountPoolClient.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "e5469ee7b9ad20d39acae4ceca8b72c298aa2ee1c922c6117e340294d03b89fd": {
+        "signature": "e5469ee7b9ad20d39acae4ceca8b72c298aa2ee1c922c6117e340294d03b89fd",
+        "alternativeSignatures": [
+            "7392963aba785ce4653a93b01ba7aea68c4dc2ff96c4cba9b8e72d366eaff977"
+        ],
+        "target": "NugetPackages/WinLiveIdToolkit.Library.16.3.1969.109/lib/Microsoft.WindowsLive.Test.WinLiveUser.AuthInterface.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "33de623a353ae3cf61a00df69594f4a48f43b8866ae261b4a04c73b5c748648a": {
+        "signature": "33de623a353ae3cf61a00df69594f4a48f43b8866ae261b4a04c73b5c748648a",
+        "alternativeSignatures": [
+            "4941cbba5ab6c23d0ef9edb0e8cfbdddc9fc222b64df8f0229642aa07de84a13"
+        ],
+        "target": "NugetPackages/WinLiveIdToolkit.Library.16.3.1969.109/lib/Microsoft.WindowsLive.Test.WinLiveUser.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "3ecb0eb6b0f35bd31038fe51a7b94dc5694a82665078952f53a53c77335a015e": {
+        "signature": "3ecb0eb6b0f35bd31038fe51a7b94dc5694a82665078952f53a53c77335a015e",
+        "alternativeSignatures": [
+            "6f984b76c2ba1ccea697ac378c1771117b31fa5c58ba4bb5bc4f5fb45d4b4a0b"
+        ],
+        "target": "NugetPackages/WinLiveIdToolkit.Library.16.3.1969.109/lib/Microsoft.WindowsLive.Test.WinLiveUser.WinLiveIdInterface.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "0bd639fd5a3bc1b0d97ce6c493f72da0eeb1338e9f150579adeea3396fecf3cd": {
+        "signature": "0bd639fd5a3bc1b0d97ce6c493f72da0eeb1338e9f150579adeea3396fecf3cd",
+        "alternativeSignatures": [
+            "cb586b71464132de9b93c6223c26527faa7f04138941ea70090d6ee02c513610"
+        ],
+        "target": "Drop/Debug/PXService/bin/Bond.Attributes.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "af037f49e4609c4b6da1f550e543bd570a0916bd4c2791fbcd67ad0f283df457": {
+        "signature": "af037f49e4609c4b6da1f550e543bd570a0916bd4c2791fbcd67ad0f283df457",
+        "alternativeSignatures": [
+            "e0047f6bedd9c78a787808070c6a19c8434cd237a09d51af8f10764b6f505244"
+        ],
+        "target": "Drop/Debug/PXService/bin/Bond.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "9cbe20bfb171693d6e59f9bbdea935fe6467e92eac272f7561cd4612636c116a": {
+        "signature": "9cbe20bfb171693d6e59f9bbdea935fe6467e92eac272f7561cd4612636c116a",
+        "alternativeSignatures": [
+            "58cbe1d4fdf6b3df04da333bc40a817bf5b33d1fe1e811a08bff5140c138194f"
+        ],
+        "target": "Drop/Debug/PXService/bin/Bond.IO.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "2aac4a36ae41b91db40010c1a2490dedc4610239072e8d7f6630a28ff74f4c44": {
+        "signature": "2aac4a36ae41b91db40010c1a2490dedc4610239072e8d7f6630a28ff74f4c44",
+        "alternativeSignatures": [
+            "d0e0ce94555e7b06030f434a32299a15c27cf464b7bb6f52bcc81fcfb4aa2f02"
+        ],
+        "target": "Drop/Debug/PXService/bin/Bond.JSON.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "18da030708e7374309610470573f50338d49e8c15e25fa0c4e2ed69eee851096": {
+        "signature": "18da030708e7374309610470573f50338d49e8c15e25fa0c4e2ed69eee851096",
+        "alternativeSignatures": [
+            "c6f4b7304bc9096d32e0a46ba730314c7c7fc7192d48d6d84234595e9b12ea46"
+        ],
+        "target": "Drop/Debug/PXService/bin/Bond.Reflection.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "4816294b7731c6de1eb3a08bbc676a51d6dea0f2a793b381a25de2da51b5bf04": {
+        "signature": "4816294b7731c6de1eb3a08bbc676a51d6dea0f2a793b381a25de2da51b5bf04",
+        "alternativeSignatures": [
+            "d99f7ed2c3fad738846d8c90ab6a903e1d37443fee75d1fa5b2c337b31b363dd"
+        ],
+        "target": "Drop/Debug/PXService/bin/Microsoft.CommonSchema.Services.Autopilot.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "65e6300c5d76c4ca4a7ed5473f08fcc49b99d1dd8dcc16299eac86d3c891bef6": {
+        "signature": "65e6300c5d76c4ca4a7ed5473f08fcc49b99d1dd8dcc16299eac86d3c891bef6",
+        "alternativeSignatures": [
+            "e27fab964a5d79dc2978062e02c50fceb9ae5b26dd4bd4aabe536c3f0114c387"
+        ],
+        "target": "Drop/Debug/PXService/bin/Microsoft.CommonSchema.Services.Xpert.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "8b1f231d97833a32b6c4ccafecb52c74f1bafa3283589a2db567d30e2594dbd8": {
+        "signature": "8b1f231d97833a32b6c4ccafecb52c74f1bafa3283589a2db567d30e2594dbd8",
+        "alternativeSignatures": [
+            "f728a31ebd5ca0f28cda07a76587c16a0d168eca034583a5d29233e1aac27add"
+        ],
+        "target": "Drop/Debug/PXService/bin/Microsoft.Practices.ServiceLocation.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "18240f29b4d7de2f6b4608fb8a627abdb15c8ac9491b81e45afd4f14d4b2aa64": {
+        "signature": "18240f29b4d7de2f6b4608fb8a627abdb15c8ac9491b81e45afd4f14d4b2aa64",
+        "alternativeSignatures": [
+            "ee2de87b85217a9c3b0297f102949cfed0bae8a55726b30ac6e534ac5f6623a0"
+        ],
+        "target": "Drop/Debug/UnitTests/CIT.Payments.Common/Microsoft.CommonSchema.Services.Autopilot.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "a7c9b3713067976b7dd408186ab469f81143cb391409f7dac0cded58381f5482": {
+        "signature": "a7c9b3713067976b7dd408186ab469f81143cb391409f7dac0cded58381f5482",
+        "alternativeSignatures": [
+            "271a4fd288fa24b0e7239449296a712683a5a6c72798d2b070a7f0f075af2ec5"
+        ],
+        "target": "Drop/Debug/UnitTests/CIT.Payments.Common/Microsoft.CommonSchema.Services.Xpert.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "c904da0d20bf001e0d07cc129b438bdcc03a32ff755a57fd7b62ef93acf42010": {
+        "signature": "c904da0d20bf001e0d07cc129b438bdcc03a32ff755a57fd7b62ef93acf42010",
+        "alternativeSignatures": [
+            "b271b25c5b271f0f773f0e25db628999f030cb8dee69f86ef87990d6a41d7aaf"
+        ],
+        "target": "Drop/Debug/UnitTests/CIT.PidlFactory/Bond.Attributes.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "9467e9698b0b0c50fa0ea37bcbec1f4b405d55b634627b07c245a0e0c52dfd2a": {
+        "signature": "9467e9698b0b0c50fa0ea37bcbec1f4b405d55b634627b07c245a0e0c52dfd2a",
+        "alternativeSignatures": [
+            "f75691856e59ec8daad041a284c54080a1658a6e1e9fd6b3d4981d19fe6f8bd7"
+        ],
+        "target": "Drop/Debug/UnitTests/CIT.PidlFactory/Bond.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "eb014f5e9f745e48a990864c4be96d34d63e8d9751b241f0113bbbc9711f6cba": {
+        "signature": "eb014f5e9f745e48a990864c4be96d34d63e8d9751b241f0113bbbc9711f6cba",
+        "alternativeSignatures": [
+            "3767eaa6856b18f56aa1dfd4c7faaa6321e0b6e2bef027538bb46bc32eb281a0"
+        ],
+        "target": "Drop/Debug/UnitTests/CIT.PidlFactory/Bond.IO.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "9dd73149ad5147ad7e6cce6a79b64ff08c62e80e08369bc20b11a38ee7d0accf": {
+        "signature": "9dd73149ad5147ad7e6cce6a79b64ff08c62e80e08369bc20b11a38ee7d0accf",
+        "alternativeSignatures": [
+            "8e778a4b4b3e02e889f6c618c620c7a9067ff1c3fc7a0579554e057a7c887b0d"
+        ],
+        "target": "Drop/Debug/UnitTests/CIT.PidlFactory/Bond.JSON.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "f572ad98ed4f627112961ca28b605501481f4c5c36ce4934df0f86e9dc14e2d6": {
+        "signature": "f572ad98ed4f627112961ca28b605501481f4c5c36ce4934df0f86e9dc14e2d6",
+        "alternativeSignatures": [
+            "848100ce75104a26091235d8f15dc64255eef89c8a68a8af6b5274cc570a315f"
+        ],
+        "target": "Drop/Debug/UnitTests/CIT.PidlFactory/Bond.Reflection.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "fd7f34c8dec101845ec949f7fc9c3ccee5e68827caf17f68f613ed9b3426c0c3": {
+        "signature": "fd7f34c8dec101845ec949f7fc9c3ccee5e68827caf17f68f613ed9b3426c0c3",
+        "alternativeSignatures": [
+            "b5eea27ade092bec6a3f6cdab2a235cf5e969c9573c3b5a6cd479d56391b5372"
+        ],
+        "target": "Drop/Debug/UnitTests/CIT.PidlFactory/Microsoft.CommonSchema.Services.Autopilot.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "363bd8fc6b59368a1749f1c219e048ab867f6ef1958c8c20ed22bd8ecb1fa07b": {
+        "signature": "363bd8fc6b59368a1749f1c219e048ab867f6ef1958c8c20ed22bd8ecb1fa07b",
+        "alternativeSignatures": [
+            "f801fe71ada4b7e7cb601332a42c62b5a6c7be0b68ed4250e7829a99705be61b"
+        ],
+        "target": "Drop/Debug/UnitTests/CIT.PidlFactory/Microsoft.CommonSchema.Services.Xpert.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "2edc9da1ed8156238c37960acc7a8d7a544d8d4564f9cf9445781e4dccd526f0": {
+        "signature": "2edc9da1ed8156238c37960acc7a8d7a544d8d4564f9cf9445781e4dccd526f0",
+        "alternativeSignatures": [
+            "350a9d818e8c17299d8376a1daacff02be39bf0d325ec331dc863c1ad7a26d79"
+        ],
+        "target": "Drop/Debug/UnitTests/CIT.PidlTest/Bond.Attributes.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "904456f7e018f742a3393470703aae3a475c612a5872514ec78153278425098a": {
+        "signature": "904456f7e018f742a3393470703aae3a475c612a5872514ec78153278425098a",
+        "alternativeSignatures": [
+            "4a66a9125ec39a4baf5ebddad169fc92e5b60fa3ecd753154b5ddfd6393869ce"
+        ],
+        "target": "Drop/Debug/UnitTests/CIT.PidlTest/Bond.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "14891f6b73c6ae79633210a37ad50aa46581713dd3a155bdf6488f0d78f2bc2a": {
+        "signature": "14891f6b73c6ae79633210a37ad50aa46581713dd3a155bdf6488f0d78f2bc2a",
+        "alternativeSignatures": [
+            "763754a50ea9c94fce5eec451edcbe2066da0801c0fa550da1f08c506cee7b10"
+        ],
+        "target": "Drop/Debug/UnitTests/CIT.PidlTest/Bond.Reflection.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "4084df26c7d56a6915d7ffbd44706d310b3c0783d2a5fc0514b639827fcba50b": {
+        "signature": "4084df26c7d56a6915d7ffbd44706d310b3c0783d2a5fc0514b639827fcba50b",
+        "alternativeSignatures": [
+            "98949d337e46ad54eabbc8f9337bcafa5e0a4d1dae23d94deafd1c307ee027c2"
+        ],
+        "target": "Drop/Debug/UnitTests/CIT.PidlTest/Microsoft.CommonSchema.Services.Autopilot.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "b17c7edbb11508e1b1507eb09257ebcd1193a9904ceffd9832e09d11a4e7a9f5": {
+        "signature": "b17c7edbb11508e1b1507eb09257ebcd1193a9904ceffd9832e09d11a4e7a9f5",
+        "alternativeSignatures": [
+            "4cc1ee1448555e7dcbfdfc780c7eda9ff57e3ac36a61af93eeb6d08bb720a947"
+        ],
+        "target": "Drop/Debug/UnitTests/CIT.PidlTest/Microsoft.CommonSchema.Services.Xpert.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "aaa99e176d6766c42e1f5fb56ffc8d91d92e537210eacdab2f15f86a0f0ef36e": {
+        "signature": "aaa99e176d6766c42e1f5fb56ffc8d91d92e537210eacdab2f15f86a0f0ef36e",
+        "alternativeSignatures": [
+            "f21be42f5a84f10e0534a34c4627157e5d3fd0d79fa252863134b1560e7ca53e"
+        ],
+        "target": "Drop/Debug/UnitTests/CIT.PidlTest/Microsoft.WindowsLive.Test.WinLiveUser.AuthInterface.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "28c0ddad7d161e8f3480d8a80aa038b9064090a5a18dc919ccd275bf1fb19e57": {
+        "signature": "28c0ddad7d161e8f3480d8a80aa038b9064090a5a18dc919ccd275bf1fb19e57",
+        "alternativeSignatures": [
+            "38dad463a2203bb878cefc27460421bc43061f2eebee39810192aa4195bd10f7"
+        ],
+        "target": "Drop/Debug/UnitTests/CIT.PidlTest/Microsoft.WindowsLive.Test.WinLiveUser.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "6667aba141ac35472908a0cc6a6fe515145aa3400eb5b09a010098c4122533be": {
+        "signature": "6667aba141ac35472908a0cc6a6fe515145aa3400eb5b09a010098c4122533be",
+        "alternativeSignatures": [
+            "74a9c1bd16248af9b550812af9c6e280c157f60c90d2eccefb637bcd15494724"
+        ],
+        "target": "Drop/Debug/UnitTests/CIT.PimsModel/Bond.Attributes.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "f8c4246e44dd4d16a8c03ce4aac8693ef6702e9a9ae0eefc855c1e9acc97857e": {
+        "signature": "f8c4246e44dd4d16a8c03ce4aac8693ef6702e9a9ae0eefc855c1e9acc97857e",
+        "alternativeSignatures": [
+            "8610634f5535fbbdf56d1c6f561ff6abda0c85924bbcdff324eb031da9cfa673"
+        ],
+        "target": "Drop/Debug/UnitTests/CIT.PimsModel/Bond.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "5b3dd422bd15e498d245e2e05dd3689984f46e320159845534509d4f90a1e0e1": {
+        "signature": "5b3dd422bd15e498d245e2e05dd3689984f46e320159845534509d4f90a1e0e1",
+        "alternativeSignatures": [
+            "a7de71d9a30c32cdc4a61486ce3297ef6018f0fea8fdecd99644a0e1875e783d"
+        ],
+        "target": "Drop/Debug/UnitTests/CIT.PimsModel/Bond.Reflection.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "00d78997e246608e3c5a6edf807dbd6b9b4de35a24f164be2d7f92a9780fa56d": {
+        "signature": "00d78997e246608e3c5a6edf807dbd6b9b4de35a24f164be2d7f92a9780fa56d",
+        "alternativeSignatures": [
+            "e80f4914160cb1e902a3b8ece4f878d2870c8ddc269c8f3ad517cb0ad57db647"
+        ],
+        "target": "Drop/Debug/UnitTests/CIT.PimsModel/Microsoft.CommonSchema.Services.Autopilot.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "3b4fb0cd0b96c5311a8067c5172058c693047169007b437773715d5fe5278728": {
+        "signature": "3b4fb0cd0b96c5311a8067c5172058c693047169007b437773715d5fe5278728",
+        "alternativeSignatures": [
+            "5f3702525e132403e82a3e2d8dd39acd53f59dda2c7834e470480e7ba00516d0"
+        ],
+        "target": "Drop/Debug/UnitTests/CIT.PimsModel/Microsoft.CommonSchema.Services.Xpert.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "4abf637ed91f98ac837c304858bda2e50b1adbe937b37117f5c5476b388b37ef": {
+        "signature": "4abf637ed91f98ac837c304858bda2e50b1adbe937b37117f5c5476b388b37ef",
+        "alternativeSignatures": [
+            "7d43bcb3cf83c3feff07583623d11f53b75725da5e6a69d6893a1d49e2be13cd"
+        ],
+        "target": "Drop/Debug/UnitTests/CIT.PXService/Bond.Attributes.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "56128f6ad9c824a2bc87b0ea79f78d274a44816883fad73d7e69c8ba2e81b3c0": {
+        "signature": "56128f6ad9c824a2bc87b0ea79f78d274a44816883fad73d7e69c8ba2e81b3c0",
+        "alternativeSignatures": [
+            "7ff47e4413e660b62f7fbd87f7a2160a4597025d16ef787cc904f7cb8c91db9f"
+        ],
+        "target": "Drop/Debug/UnitTests/CIT.PXService/Bond.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "7a26513976368fca6606456b52e15ee0fadae322736b1815df828a58018ea2cc": {
+        "signature": "7a26513976368fca6606456b52e15ee0fadae322736b1815df828a58018ea2cc",
+        "alternativeSignatures": [
+            "c74cc79fdaf5d1260fd61a3503476d0dcdc79c95107b3a93a686005c3fdc8a0d"
+        ],
+        "target": "Drop/Debug/UnitTests/CIT.PXService/Bond.IO.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "f4060f78e3c8abb1dccb5a4c12595f70b16881e22157ed6f24e615cf96a99ed0": {
+        "signature": "f4060f78e3c8abb1dccb5a4c12595f70b16881e22157ed6f24e615cf96a99ed0",
+        "alternativeSignatures": [
+            "607ae005787deb8ed6f667bf1b8a787fc86cd6b7dc704aad34463cbe01a70323"
+        ],
+        "target": "Drop/Debug/UnitTests/CIT.PXService/Bond.JSON.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "a4918059bad6b471403a7bda8d6f7ea8df9dfa96a11fed02c0a3e51d878f41a4": {
+        "signature": "a4918059bad6b471403a7bda8d6f7ea8df9dfa96a11fed02c0a3e51d878f41a4",
+        "alternativeSignatures": [
+            "e66a2603f2db50e20a71030e358c60b46d81aea83fea1d31811c83a28637680b"
+        ],
+        "target": "Drop/Debug/UnitTests/CIT.PXService/Bond.Reflection.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "e2810e76e8bd589abcf10f1d096cd8da643930228fdbe97b3728290a3d4a0d5b": {
+        "signature": "e2810e76e8bd589abcf10f1d096cd8da643930228fdbe97b3728290a3d4a0d5b",
+        "alternativeSignatures": [
+            "5e4459a2aac2b58f1e7b48580e2fb70e62b226884b21be7930d2427c47a24068"
+        ],
+        "target": "Drop/Debug/UnitTests/CIT.PXService/Microsoft.CommonSchema.Services.Autopilot.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "e7689cf3518894dff6ec3849032136af8557c733680c2481d78be516f49f8208": {
+        "signature": "e7689cf3518894dff6ec3849032136af8557c733680c2481d78be516f49f8208",
+        "alternativeSignatures": [
+            "6fc90c5b78aa517136f0ed313dcd4c1742fb75c176c9e380aa1432ed6a490561"
+        ],
+        "target": "Drop/Debug/UnitTests/CIT.PXService/Microsoft.CommonSchema.Services.Xpert.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "d67d3cd66de80b8efa44aceae16b19a0fdca5568997e1545b3add94e9a8931b4": {
+        "signature": "d67d3cd66de80b8efa44aceae16b19a0fdca5568997e1545b3add94e9a8931b4",
+        "alternativeSignatures": [
+            "e97a8052034c7d9615b7dfd6b6680b58fdc5c74a1dd527af79c7cf3958c4584a"
+        ],
+        "target": "Drop/Debug/UnitTests/CIT.PXService/Microsoft.Practices.ServiceLocation.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "1ff4d3ecbb71b2f7c2d35cb1f86792f3dccd7c42d3723fa13e834e02ed6fdcc9": {
+        "signature": "1ff4d3ecbb71b2f7c2d35cb1f86792f3dccd7c42d3723fa13e834e02ed6fdcc9",
+        "alternativeSignatures": [
+            "6dacc1f77d1be4a8a756fc0bf53997a225759837274b34fbb9956285e54e708f"
+        ],
+        "target": "Drop/Debug/UnitTests/CIT.PXService/Moq.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "b5f71616387b89e738cc2ce4552a40f4bd08e1f9e30e502bfba825f068347a1e": {
+        "signature": "b5f71616387b89e738cc2ce4552a40f4bd08e1f9e30e502bfba825f068347a1e",
+        "alternativeSignatures": [
+            "4c4ec8ce3c9f128c7afad4c596a2f54d64c00da0cbc4e05ce0933244dd00e0bb"
+        ],
+        "target": "Drop/Debug/UnitTests/CIT.PXService.ApiSurface/Bond.Attributes.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "9dfeeec1ee180a96fb4ea222ed4a593ed805ac99b65f8d1223e28e9f8f00bb04": {
+        "signature": "9dfeeec1ee180a96fb4ea222ed4a593ed805ac99b65f8d1223e28e9f8f00bb04",
+        "alternativeSignatures": [
+            "9db854aef64fd4c0c0329f878ae87d1df95f67af47dcb4c9937cccf55e11dd0c"
+        ],
+        "target": "Drop/Debug/UnitTests/CIT.PXService.ApiSurface/Bond.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "818f939829d88b612772001a9b11f2a0a280925978e674b085618a3fb7f5d0df": {
+        "signature": "818f939829d88b612772001a9b11f2a0a280925978e674b085618a3fb7f5d0df",
+        "alternativeSignatures": [
+            "70cd10103d7dca21b1d1492030172c78c8792ecb1f900d8a1391606b5518dff1"
+        ],
+        "target": "Drop/Debug/UnitTests/CIT.PXService.ApiSurface/Bond.Reflection.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "5e76fafeca436c4a228a60eb96e6185165d53484c408314724038859e9652259": {
+        "signature": "5e76fafeca436c4a228a60eb96e6185165d53484c408314724038859e9652259",
+        "alternativeSignatures": [
+            "8bbeff606ffcfc96738cbb273e3e382dd2c3f24e6edc728e047c80698a9ab054"
+        ],
+        "target": "Drop/Debug/UnitTests/CIT.PXService.ApiSurface/Microsoft.CommonSchema.Services.Autopilot.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "ea85d071ad80843a82c8d106f38dd0ab5b238494f39dc815c50850db8e735d9f": {
+        "signature": "ea85d071ad80843a82c8d106f38dd0ab5b238494f39dc815c50850db8e735d9f",
+        "alternativeSignatures": [
+            "2ecd4f6c69d1bf1febccc8d46c11678f08e35f39d33a588be070afb28656ad62"
+        ],
+        "target": "Drop/Debug/UnitTests/CIT.PXService.ApiSurface/Microsoft.CommonSchema.Services.Xpert.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "8196b3c22a6cf736748ed65991f61eaaca8616528f2e173f30a55a58eab539cb": {
+        "signature": "8196b3c22a6cf736748ed65991f61eaaca8616528f2e173f30a55a58eab539cb",
+        "alternativeSignatures": [
+            "6da42647f7e5fef96ecf0c2f39c315322626bb8a1263357eca2a39a9b1af884a"
+        ],
+        "target": "NugetPackages/ApSecretStore.1.13.0/lib/net40/ApSecretStoreManaged.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "2d7cbacac43f27f6a52e9710085868a805438b59787c1559b6636c16b9464043": {
+        "signature": "2d7cbacac43f27f6a52e9710085868a805438b59787c1559b6636c16b9464043",
+        "alternativeSignatures": [
+            "0687aecfe9e70b4bf4e49cbf4f72cafc424d4493e91e9ae46d2f90f0785dd59b"
+        ],
+        "target": "NugetPackages/Bond.Core.CSharp.9.0.3/lib/net45/Bond.Attributes.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "e55a7566d8f06e09f617ad6eac965e82fcf326ae86dc586376cb22322e1c256f": {
+        "signature": "e55a7566d8f06e09f617ad6eac965e82fcf326ae86dc586376cb22322e1c256f",
+        "alternativeSignatures": [
+            "6a5f2976b7fb64bf9e0402d716e2440e02adccb04b5b9f11a46a2741b544bb38"
+        ],
+        "target": "NugetPackages/Bond.Core.CSharp.9.0.3/lib/net45/Bond.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "f0b235eccb78449bdacc4a932e7bce2469231b93a03de5241445722576a211b8": {
+        "signature": "f0b235eccb78449bdacc4a932e7bce2469231b93a03de5241445722576a211b8",
+        "alternativeSignatures": [
+            "54b1ea0452fa5713d495c4acef66eb4f78ffeabd2cf7a8f3d141cefa4cd1347f"
+        ],
+        "target": "NugetPackages/Bond.Core.CSharp.9.0.3/lib/net45/Bond.IO.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "81b8ce2eca314535c28dc127a5f3f04647c2e9382883f6ea57f89bf2b4a25d4c": {
+        "signature": "81b8ce2eca314535c28dc127a5f3f04647c2e9382883f6ea57f89bf2b4a25d4c",
+        "alternativeSignatures": [
+            "90b04626cf23778e63a1617f4f821861ea57f81b1934fbf5929ba57a872ab6ca"
+        ],
+        "target": "NugetPackages/Bond.Core.CSharp.9.0.3/lib/net45/Bond.Reflection.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "f4585c772049104b5aba42ebeef0957dee0aa85ed7e5804f1daf9ea87e7db6c4": {
+        "signature": "f4585c772049104b5aba42ebeef0957dee0aa85ed7e5804f1daf9ea87e7db6c4",
+        "alternativeSignatures": [
+            "a9d390688f599fa3305e51e4ee3620582f5181add4e2221b84b63668e495dfaf"
+        ],
+        "target": "NugetPackages/Bond.Core.CSharp.9.0.3/lib/net46/Bond.Attributes.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "872ed14e24c83265dd3591d36be23b8c2464aa962c947934d7a29e2a8807edda": {
+        "signature": "872ed14e24c83265dd3591d36be23b8c2464aa962c947934d7a29e2a8807edda",
+        "alternativeSignatures": [
+            "fc26063a26faaf73fcdd9b8c0b1c3edb6e3279abac1be4330e852c8ff068953b"
+        ],
+        "target": "NugetPackages/Bond.Core.CSharp.9.0.3/lib/net46/Bond.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "386cd3552bf9c1f329a1317ffbd81a1148e57b0b6cd42274f051f8eca4fe6c34": {
+        "signature": "386cd3552bf9c1f329a1317ffbd81a1148e57b0b6cd42274f051f8eca4fe6c34",
+        "alternativeSignatures": [
+            "198e630d485ec7e46f231134dab2b63652d1bcec8e59159c154a008d68414393"
+        ],
+        "target": "NugetPackages/Bond.Core.CSharp.9.0.3/lib/net46/Bond.IO.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "0503dfaddd779d9615603cda077449c2a2151fdfb6389ec832d5dfe44f998ea3": {
+        "signature": "0503dfaddd779d9615603cda077449c2a2151fdfb6389ec832d5dfe44f998ea3",
+        "alternativeSignatures": [
+            "babe1515754b1911eea4f6cbe79636a0294cc0ba795c199f8f2382ffcab2f156"
+        ],
+        "target": "NugetPackages/Bond.Core.CSharp.9.0.3/lib/net46/Bond.Reflection.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "31da1c3fdc1b1628fd8dd45e6ada6d73daf8c4d1bb44ebafdf56282bebb2c232": {
+        "signature": "31da1c3fdc1b1628fd8dd45e6ada6d73daf8c4d1bb44ebafdf56282bebb2c232",
+        "alternativeSignatures": [
+            "3907dd02a0145b25f5979f3eafbc6c573e0cf5d6f1b50f52686d2c6fcc3ffd5c"
+        ],
+        "target": "NugetPackages/Bond.Core.CSharp.9.0.3/lib/netstandard1.0/Bond.Attributes.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "4d4c24cffff6394751a298a3d4795b0e74fcd14e62e621d5e33032b63dda643a": {
+        "signature": "4d4c24cffff6394751a298a3d4795b0e74fcd14e62e621d5e33032b63dda643a",
+        "alternativeSignatures": [
+            "3e95ddd4bd1b07955fc6f6c69955bb63aaca9b40ff50f5e229aa3d661feec67d"
+        ],
+        "target": "NugetPackages/Bond.Core.CSharp.9.0.3/lib/netstandard1.0/Bond.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "9ef49b190db31aa99d67cb5fe16935ca2edc5f9657238e4d34a77ee14da191a0": {
+        "signature": "9ef49b190db31aa99d67cb5fe16935ca2edc5f9657238e4d34a77ee14da191a0",
+        "alternativeSignatures": [
+            "44821500055a0bf477dd7301cb624d38c84db66e2ef20d1288a556687978e1cf"
+        ],
+        "target": "NugetPackages/Bond.Core.CSharp.9.0.3/lib/netstandard1.0/Bond.Reflection.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "20063344ecd0a841b546b1b31dcc53ec2bbe11f7b000c438182bb166d403fe39": {
+        "signature": "20063344ecd0a841b546b1b31dcc53ec2bbe11f7b000c438182bb166d403fe39",
+        "alternativeSignatures": [
+            "8a1b6388c3014b6a12b2fdceee0015070fc1f30a65b71f00bc3036ec43a972a5"
+        ],
+        "target": "NugetPackages/Bond.Core.CSharp.9.0.3/lib/netstandard1.3/Bond.Attributes.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "517abcf2df8c833ad6761061050ec7d4f099b0bb73a80525bd0c799e0b8a8d1c": {
+        "signature": "517abcf2df8c833ad6761061050ec7d4f099b0bb73a80525bd0c799e0b8a8d1c",
+        "alternativeSignatures": [
+            "a04404da58d5d614f2b315cd9771c204e0ccb01a4d41f8e9b727b20c640e2add"
+        ],
+        "target": "NugetPackages/Bond.Core.CSharp.9.0.3/lib/netstandard1.3/Bond.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "27efc9b6a7e77b0287c6c477ea59e9179d4818df8e5a36779a8c815f4dcd730f": {
+        "signature": "27efc9b6a7e77b0287c6c477ea59e9179d4818df8e5a36779a8c815f4dcd730f",
+        "alternativeSignatures": [
+            "e17ed384ace0609a53404c16dee26b6f8c702f5f153237287382334ca40907fe"
+        ],
+        "target": "NugetPackages/Bond.Core.CSharp.9.0.3/lib/netstandard1.3/Bond.IO.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "76a2cf58fc3fca1e0cc77597e62c95809f35088a0647796d2fed158574a4b95e": {
+        "signature": "76a2cf58fc3fca1e0cc77597e62c95809f35088a0647796d2fed158574a4b95e",
+        "alternativeSignatures": [
+            "9956e8dbe0330e8f837392b0700cc02a0ec92c4a03192c9c4f7455a12d7c3672"
+        ],
+        "target": "NugetPackages/Bond.Core.CSharp.9.0.3/lib/netstandard1.3/Bond.Reflection.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "90f21bf3c9d578d8921fe2670a766ca9e3f0b8ae63c2c5a74d58fb113017721b": {
+        "signature": "90f21bf3c9d578d8921fe2670a766ca9e3f0b8ae63c2c5a74d58fb113017721b",
+        "alternativeSignatures": [
+            "c5f43d01879ba7e6c344c029cd732a1649ff6a3a60a9fce0071e0e2356505ca2"
+        ],
+        "target": "NugetPackages/Bond.Core.CSharp.9.0.3/lib/netstandard1.6/Bond.Attributes.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "ea79b751e5ff5eb597ef176d712e7f4c7bbc0cdcb3ff8d2f1e7b0c7b83154e96": {
+        "signature": "ea79b751e5ff5eb597ef176d712e7f4c7bbc0cdcb3ff8d2f1e7b0c7b83154e96",
+        "alternativeSignatures": [
+            "1e012faa1c24c7ca39a326618292fb2465276820abdc2627ed3051ad9ab23703"
+        ],
+        "target": "NugetPackages/Bond.Core.CSharp.9.0.3/lib/netstandard1.6/Bond.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "f7430510141db35f7c9dae7becc5a24ed3c8e5a334b44807fae16d2783c3a35b": {
+        "signature": "f7430510141db35f7c9dae7becc5a24ed3c8e5a334b44807fae16d2783c3a35b",
+        "alternativeSignatures": [
+            "427ae8db883066e00fe10e0e27d120d358a9d3818dea28cb9b4ca43b51219dc2"
+        ],
+        "target": "NugetPackages/Bond.Core.CSharp.9.0.3/lib/netstandard1.6/Bond.IO.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "0eaff4b9380b320897123cf405ac8d8b3593aa627c0e0affc62c6f8afabef49f": {
+        "signature": "0eaff4b9380b320897123cf405ac8d8b3593aa627c0e0affc62c6f8afabef49f",
+        "alternativeSignatures": [
+            "5842d0d0655e60da2781189fe3630641aa4ab7a0928c1ef7064fc2790c900195"
+        ],
+        "target": "NugetPackages/Bond.Core.CSharp.9.0.3/lib/netstandard1.6/Bond.Reflection.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "802be6ce4e3fc13cfff644d500bc9da3bdb98627dd5507f5da391cbd0571a070": {
+        "signature": "802be6ce4e3fc13cfff644d500bc9da3bdb98627dd5507f5da391cbd0571a070",
+        "alternativeSignatures": [
+            "b940e6585c4f6ea05e2b256bc7c68dec9abada87c7b3ba85b7daec7c346f401e"
+        ],
+        "target": "NugetPackages/Bond.Runtime.CSharp.9.0.3/lib/net45/Bond.JSON.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "e3b2c32c91dcd8c549da739420707d4e4fd9c046c6dc67a947710dfc0453c44d": {
+        "signature": "e3b2c32c91dcd8c549da739420707d4e4fd9c046c6dc67a947710dfc0453c44d",
+        "alternativeSignatures": [
+            "5944b4136b950a3fb168efee5332f502fbe7b8fcdf4621da5ceb130f942b39f1"
+        ],
+        "target": "NugetPackages/Bond.Runtime.CSharp.9.0.3/lib/netstandard1.0/Bond.JSON.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "f12bdef4953c327d24f760a749e56ad58cd32464bcd5929b4c9ec182efb46f00": {
+        "signature": "f12bdef4953c327d24f760a749e56ad58cd32464bcd5929b4c9ec182efb46f00",
+        "alternativeSignatures": [
+            "ef7e0a5f9cb8d43c0a0c560e5f4f03e014152127b6ebfc9f0e043514d4644596"
+        ],
+        "target": "NugetPackages/Bond.Runtime.CSharp.9.0.3/lib/netstandard1.3/Bond.JSON.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "0cb3c6ec0f00a5f2cb14264ef854d3d5da5e0362d325ba08b81ddcdb3aa40b8c": {
+        "signature": "0cb3c6ec0f00a5f2cb14264ef854d3d5da5e0362d325ba08b81ddcdb3aa40b8c",
+        "alternativeSignatures": [
+            "8255ff76256e9fb121924a36770b9a8fa942b6cc98f7121c778927a7a0a35e3d"
+        ],
+        "target": "NugetPackages/Bond.Runtime.CSharp.9.0.3/lib/netstandard1.6/Bond.JSON.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "7a4dc0cb0228e50e553b76db22c287d2f77bc6f4b54c25596075e1a4538d0d07": {
+        "signature": "7a4dc0cb0228e50e553b76db22c287d2f77bc6f4b54c25596075e1a4538d0d07",
+        "alternativeSignatures": [
+            "178100ca145bf8fe0d4c2028d77d10b065446ed624e3e79d263e99de9630aa47"
+        ],
+        "target": "NugetPackages/CommonServiceLocator.1.3/lib/portable-net4+sl5+netcore45+wpa81+wp8/Microsoft.Practices.ServiceLocation.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "9928a62dbcf7642e4a30619e599eb7e2a6524a5939ff23a29d51a72cee11f312": {
+        "signature": "9928a62dbcf7642e4a30619e599eb7e2a6524a5939ff23a29d51a72cee11f312",
+        "alternativeSignatures": [
+            "7f783a6068cb598320e1ab9f1e1250ca9b5acd86cc97917decddb52b7786fc74"
+        ],
+        "target": "NugetPackages/Microsoft.CommonSchema.Services.4.0.0/lib/net45/Microsoft.CommonSchema.Services.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "69fcfbb5ea14ab042c3e175bb5a621de23cbb9c723f5bba78b5502c7c4a9ef82": {
+        "signature": "69fcfbb5ea14ab042c3e175bb5a621de23cbb9c723f5bba78b5502c7c4a9ef82",
+        "alternativeSignatures": [
+            "8bc774587bae6eb3bfc6f705dad0aa0c94e3ba7a8c4eb92385ed6ea56a5effa5"
+        ],
+        "target": "NugetPackages/Microsoft.CommonSchema.Services.Autopilot.5.0.17331.4/lib/net45/Microsoft.CommonSchema.Services.Autopilot.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "92c3f40cd3d49dbb636db7bffeb5a40a916e322ae9d93aadaaee255a00696064": {
+        "signature": "92c3f40cd3d49dbb636db7bffeb5a40a916e322ae9d93aadaaee255a00696064",
+        "alternativeSignatures": [
+            "84b7cab7583f133887791effee31cd067e2b6b541e5efe08876c74c5aad1c806"
+        ],
+        "target": "NugetPackages/Microsoft.CommonSchema.Services.Xpert.5.0.17331.4/lib/net45/Microsoft.CommonSchema.Services.Xpert.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "aa1539ce101036ddddc95e29b48a4acf50d1fbd4668f51a67134ac495213a13d": {
+        "signature": "aa1539ce101036ddddc95e29b48a4acf50d1fbd4668f51a67134ac495213a13d",
+        "alternativeSignatures": [
+            "b955f275463e980e72e86fc392494134287da3d47939ab9fc1cc061cf4248964"
+        ],
+        "target": "NugetPackages/Microsoft.IdentityModel.Clients.ActiveDirectory.5.2.0/lib/monoandroid81/Microsoft.IdentityModel.Clients.ActiveDirectory.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "5d9043d67acd18f6234e6009cc6abfc543a15705289aa386eb6899a477500de4": {
+        "signature": "5d9043d67acd18f6234e6009cc6abfc543a15705289aa386eb6899a477500de4",
+        "alternativeSignatures": [
+            "84fe1f60f6db09da6adf4d4ebe4812b6cf2f10945a867125eca64cc02fbe61dd"
+        ],
+        "target": "NugetPackages/Microsoft.IdentityModel.Clients.ActiveDirectory.5.2.0/lib/net45/Microsoft.IdentityModel.Clients.ActiveDirectory.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "7c9e7cbf530ca2850f02bdbe4fc094897b12cf492188bea9f2ac01314ae626d7": {
+        "signature": "7c9e7cbf530ca2850f02bdbe4fc094897b12cf492188bea9f2ac01314ae626d7",
+        "alternativeSignatures": [
+            "8dca44a2ee7d3adc44ae40384ecc79211a17a75b34b0d21aff37214b6e42ec52"
+        ],
+        "target": "NugetPackages/Microsoft.IdentityModel.Clients.ActiveDirectory.5.2.0/lib/netstandard1.3/Microsoft.IdentityModel.Clients.ActiveDirectory.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "0242574d24478547b3265fe96852398b02e46d83072f41b1315b99216320388a": {
+        "signature": "0242574d24478547b3265fe96852398b02e46d83072f41b1315b99216320388a",
+        "alternativeSignatures": [
+            "833ea30d918e7550087308512f1cd639d38f9e670b883df279c17e9a1639e2d2"
+        ],
+        "target": "NugetPackages/Microsoft.IdentityModel.Clients.ActiveDirectory.5.2.0/lib/uap10.0/Microsoft.IdentityModel.Clients.ActiveDirectory.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "9bc85f551ab533346877a76689d7f9583a3d8696328abe76647f337f7509223e": {
+        "signature": "9bc85f551ab533346877a76689d7f9583a3d8696328abe76647f337f7509223e",
+        "alternativeSignatures": [
+            "093420aab6548d3fbb71117cbc3d1760d83e798523e2405a25b8852662ef3d47"
+        ],
+        "target": "NugetPackages/Microsoft.IdentityModel.Clients.ActiveDirectory.5.2.0/lib/xamarinios10/Microsoft.IdentityModel.Clients.ActiveDirectory.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "4cfe49429edd758297b6c6e0ee69f4754fe0e33306a9c0f0f67f8ce40ef233bf": {
+        "signature": "4cfe49429edd758297b6c6e0ee69f4754fe0e33306a9c0f0f67f8ce40ef233bf",
+        "alternativeSignatures": [
+            "42969b2a5e2acedbef61da371e10c812d65664c002b2eb143b43aa76fba6f45a"
+        ],
+        "target": "NugetPackages/Moq.4.10.1/lib/net45/Moq.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "77c9598344db8e8e4b56b1d6d1b9bf96bdc3d79ac78fe4fffb63e9ff83801f1b": {
+        "signature": "77c9598344db8e8e4b56b1d6d1b9bf96bdc3d79ac78fe4fffb63e9ff83801f1b",
+        "alternativeSignatures": [
+            "3536da27c2e7ce09e0ce7a90576fb94a6d0d8d1c745a04ef34f3249b24a3540c"
+        ],
+        "target": "NugetPackages/Moq.4.10.1/lib/netstandard1.3/Moq.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "fee364d9829cd33eaa881e6dcb6899572c1aff5a893ccc8a7d0710f47bcdc9a9": {
+        "signature": "fee364d9829cd33eaa881e6dcb6899572c1aff5a893ccc8a7d0710f47bcdc9a9",
+        "alternativeSignatures": [
+            "2936b812e1b4aa0f53650b7fcda27795c283964a53f0f5eeb89487251e445aba"
+        ],
+        "target": "private/Payments/PXService/bin/Bond.Attributes.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "b2679e7f7ba5b4b9b7ae63b9da92d5611492f20ec6261884b12713211bd62f5a": {
+        "signature": "b2679e7f7ba5b4b9b7ae63b9da92d5611492f20ec6261884b12713211bd62f5a",
+        "alternativeSignatures": [
+            "9c8a28ed8700a62aa2bef56f5fddcb2b1bd19ae72e01196f3567c6ee3c714543"
+        ],
+        "target": "private/Payments/PXService/bin/Bond.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "d5b4d242395b9c6659b559b9599a8fd2df6c599e2d6ce8d3d9e9cc0ca15964e9": {
+        "signature": "d5b4d242395b9c6659b559b9599a8fd2df6c599e2d6ce8d3d9e9cc0ca15964e9",
+        "alternativeSignatures": [
+            "0f5027c58039d2610662e2efef48adcb26943c529ef8e71f2b5e6d7f8fa09a1c"
+        ],
+        "target": "private/Payments/PXService/bin/Bond.IO.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "9a0ad683398e9dee69f7e3016f8d28a8b065a93534b5288b984ea54ac70df70a": {
+        "signature": "9a0ad683398e9dee69f7e3016f8d28a8b065a93534b5288b984ea54ac70df70a",
+        "alternativeSignatures": [
+            "8458182118f823367e4e8775142052eeac04f3199c4f5b2cd73e9803f7b880ff"
+        ],
+        "target": "private/Payments/PXService/bin/Bond.JSON.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "a27087daa94fce7dfdf2915da7fd4e7033bbe84505b684423959d18e7b5e8186": {
+        "signature": "a27087daa94fce7dfdf2915da7fd4e7033bbe84505b684423959d18e7b5e8186",
+        "alternativeSignatures": [
+            "34981515f8edefe855f8903e86e296a1239bf7e8e9f5b33a28ed7b5ceac106f6"
+        ],
+        "target": "private/Payments/PXService/bin/Bond.Reflection.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "5b8850a9f462aac628013665b6860ab00d39bb8da6efe55dc21b65cb4f434c4e": {
+        "signature": "5b8850a9f462aac628013665b6860ab00d39bb8da6efe55dc21b65cb4f434c4e",
+        "alternativeSignatures": [
+            "b8039ef81ae4cb56d2fd1a2551562c8a7dd7d0fa96e818e696440ad173f313da"
+        ],
+        "target": "private/Payments/PXService/bin/Microsoft.CommonSchema.Services.Autopilot.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "4629ce2e01d0159561b06c76e4bb9c5b038df546caab5b353de8c19ba7ebad8a": {
+        "signature": "4629ce2e01d0159561b06c76e4bb9c5b038df546caab5b353de8c19ba7ebad8a",
+        "alternativeSignatures": [
+            "8cb3065a582c3d5ba5f27cdd8a662c275f72de39ef81c6139a35d8fad10b60dd"
+        ],
+        "target": "private/Payments/PXService/bin/Microsoft.CommonSchema.Services.Xpert.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "4e612f5619d371c9e52ace1945ea15d34b55a7e1ed08af110b427fd729cc1b08": {
+        "signature": "4e612f5619d371c9e52ace1945ea15d34b55a7e1ed08af110b427fd729cc1b08",
+        "alternativeSignatures": [
+            "f61aa985e200b4f66bd83a1e469e07388dc7c08a340eee5540355fd2d3bcbb61"
+        ],
+        "target": "private/Payments/PXService/bin/Microsoft.Practices.ServiceLocation.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "78149b985c31bc0abca7966aaab31bedbb516c2f2fb0349fbcf2e1aa97c08632": {
+        "signature": "78149b985c31bc0abca7966aaab31bedbb516c2f2fb0349fbcf2e1aa97c08632",
+        "alternativeSignatures": [
+            "098d2ffae8a0708f53502aa9e409f2aa53b2f47bdf8a24c52a042612ac08400f"
+        ],
+        "target": "NugetPackages/ApSecretStore.1.13.0/runtimes/win8-x64/native/ApSecretStoreInvoke.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "0509ba00849fab553d37aa8d97549b35d173fc686216a4828d37e0227fdd2cd0": {
+        "signature": "0509ba00849fab553d37aa8d97549b35d173fc686216a4828d37e0227fdd2cd0",
+        "alternativeSignatures": [
+            "a83eedd3b96b437c6206bc4fb3d55148c8f6a21773f4fe170403ce0f64eee8fd"
+        ],
+        "target": "NugetPackages/ApSecretStore.1.13.0/runtimes/win8-x64/native/ApSecretStoreInvoke.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2025",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "aea42e1c445e616372eeca9ea08ae5172f4b266668a90c900ca3ef2c65ed5686": {
+        "signature": "aea42e1c445e616372eeca9ea08ae5172f4b266668a90c900ca3ef2c65ed5686",
+        "alternativeSignatures": [
+            "3ade895a03d1587fc5b84148b7fade074bfdfb93af87659c1832472a8db97dc1"
+        ],
+        "target": "NugetPackages/ApSecretStore.1.13.0/runtimes/win8-x64/native/ApSecretStoreInvoke.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2026",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "43b2aef3b85cba1a7ab1ee5190ddd1f483a87e447208736fdcbdc3fda1a23a28": {
+        "signature": "43b2aef3b85cba1a7ab1ee5190ddd1f483a87e447208736fdcbdc3fda1a23a28",
+        "alternativeSignatures": [
+            "a589c1f1d7ac04c264675cc06505388ec3b4a91f1e07109e56136209bd74d340"
+        ],
+        "target": "private/Payments/Common/bin/Debug/Microsoft.CommonSchema.Services.Autopilot.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "c6e087fce21c1d89ac4f616597bb917e9b38e4e011b3d6a89390c90e7eacf095": {
+        "signature": "c6e087fce21c1d89ac4f616597bb917e9b38e4e011b3d6a89390c90e7eacf095",
+        "alternativeSignatures": [
+            "598e7495a624d6101a61c8f6555e844916efc3b19c9f7c97c8543a9488b30282"
+        ],
+        "target": "private/Payments/Common/bin/Debug/Microsoft.CommonSchema.Services.Xpert.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "38c6a2188241279e20e4810ec672a4c57026f773b3325838fdb5ffe9a476a480": {
+        "signature": "38c6a2188241279e20e4810ec672a4c57026f773b3325838fdb5ffe9a476a480",
+        "alternativeSignatures": [
+            "6be0f5ffcfdb7892fcb51bcd9d9264efd478ac23354395f05fa719900f6e89b9"
+        ],
+        "target": "private/Payments/Pidl/LifestyleMetadata/bin/Debug/Microsoft.CommonSchema.Services.Autopilot.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "9579f3be6543ad69c9a7ded497f4c1b6e3ca244f40fb93e0a665d5d72b8b2d98": {
+        "signature": "9579f3be6543ad69c9a7ded497f4c1b6e3ca244f40fb93e0a665d5d72b8b2d98",
+        "alternativeSignatures": [
+            "cfb734e97a6a3f7b1531547eed656ac6e8cd37929d2c56d19bbe3238f2ea682a"
+        ],
+        "target": "private/Payments/Pidl/LifestyleMetadata/bin/Debug/Microsoft.CommonSchema.Services.Xpert.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "e35ba111927bde7391bc70e034a2bc44920c76b4a2a9546528f36d1d431b0c44": {
+        "signature": "e35ba111927bde7391bc70e034a2bc44920c76b4a2a9546528f36d1d431b0c44",
+        "alternativeSignatures": [
+            "3fb0f2f864af374b910e474a17a8aae53b7ede19b4d1304086adf93af3e9c88f"
+        ],
+        "target": "private/Payments/Pidl/PidlFactory/bin/Debug/Bond.Attributes.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "ecf2d0a51729878759ce8da92620fe1c559d18ea1fef17e3a4fdf43f76f279ce": {
+        "signature": "ecf2d0a51729878759ce8da92620fe1c559d18ea1fef17e3a4fdf43f76f279ce",
+        "alternativeSignatures": [
+            "8f5a820110836bede175c38197952ea63d333182a976884ed81e805ef8bc57df"
+        ],
+        "target": "private/Payments/Pidl/PidlFactory/bin/Debug/Bond.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "58005c97b1e09dfe8dd5478be725e0b5b8cb83eccd64c621d5ebdcf38ef9adae": {
+        "signature": "58005c97b1e09dfe8dd5478be725e0b5b8cb83eccd64c621d5ebdcf38ef9adae",
+        "alternativeSignatures": [
+            "6de85a3345b3ccfd752191e378520cef257bdc97c300cd2ade95617623fff645"
+        ],
+        "target": "private/Payments/Pidl/PidlFactory/bin/Debug/Bond.Reflection.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "09829792091efb802c4a4a74039a72a4f05c230c5ec1eebd0c5145654e074fac": {
+        "signature": "09829792091efb802c4a4a74039a72a4f05c230c5ec1eebd0c5145654e074fac",
+        "alternativeSignatures": [
+            "56cb05d9d6dc84ba41e20045732ffeb3da8568d0a79c2a4c615e26a7be27f995"
+        ],
+        "target": "private/Payments/Pidl/PidlFactory/bin/Debug/Microsoft.CommonSchema.Services.Autopilot.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "df92b92fd9ae47f22b0af7cd7a5ebc7b8561c725bda853077495bd5bd93717af": {
+        "signature": "df92b92fd9ae47f22b0af7cd7a5ebc7b8561c725bda853077495bd5bd93717af",
+        "alternativeSignatures": [
+            "c13779066ac75134e558cb386f40ff9723355fa8b3b61797e8f62f99274b98ae"
+        ],
+        "target": "private/Payments/Pidl/PidlFactory/bin/Debug/Microsoft.CommonSchema.Services.Xpert.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "fb080db032bae001934c65fc3a873d20418c39f3489cb44fc98ebe5397a17c9c": {
+        "signature": "fb080db032bae001934c65fc3a873d20418c39f3489cb44fc98ebe5397a17c9c",
+        "alternativeSignatures": [
+            "2aa6373cdee7ac5bcdc15e525a8be6fb809a2536afb5a532b0ccd9c6596309e1"
+        ],
+        "target": "private/Payments/Pidl/PidlModel/bin/Debug/Bond.Attributes.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "594f2ea72b18eeeeb3f40c3d80159de1413bd1fb045e3f401060923d2bdcecf8": {
+        "signature": "594f2ea72b18eeeeb3f40c3d80159de1413bd1fb045e3f401060923d2bdcecf8",
+        "alternativeSignatures": [
+            "4b475f47ce85b1330413395184cd4258003f82cfdf8921286d37f1906e0df11f"
+        ],
+        "target": "private/Payments/Pidl/PidlModel/bin/Debug/Bond.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "13ebee02ee7dc25bd14bb03e77b7b532cec0ea857d2d727f4f74f8fdabc619cf": {
+        "signature": "13ebee02ee7dc25bd14bb03e77b7b532cec0ea857d2d727f4f74f8fdabc619cf",
+        "alternativeSignatures": [
+            "0bfc663f9549e046a699b67099eef0da2e77a4dd743e9b9b6510027b2e562853"
+        ],
+        "target": "private/Payments/Pidl/PidlModel/bin/Debug/Bond.Reflection.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "8b15bd3142ae8ddf9cc9a44abc4c88a0ae17f90cf577a87e13f23250b4569284": {
+        "signature": "8b15bd3142ae8ddf9cc9a44abc4c88a0ae17f90cf577a87e13f23250b4569284",
+        "alternativeSignatures": [
+            "608e28112f5047df5919a6df0ca089f6ccd0d102a521fabc29a997edacaf4482"
+        ],
+        "target": "private/Payments/Pidl/PidlModel/bin/Debug/Microsoft.CommonSchema.Services.Autopilot.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "6704154d936ca4e3123c1d45a1cee49af12967d5b22f77b817f4ee9c9257747b": {
+        "signature": "6704154d936ca4e3123c1d45a1cee49af12967d5b22f77b817f4ee9c9257747b",
+        "alternativeSignatures": [
+            "cb39c7e4a0c536ab2a9239c261234ad33ee925bcb9893fb98f9c528532d11b4f"
+        ],
+        "target": "private/Payments/Pidl/PidlModel/bin/Debug/Microsoft.CommonSchema.Services.Xpert.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "72ff4dd525e510e43167ff5a117fbfb3a763efcdb885cd9f8438d49c9658a3c9": {
+        "signature": "72ff4dd525e510e43167ff5a117fbfb3a763efcdb885cd9f8438d49c9658a3c9",
+        "alternativeSignatures": [
+            "aabf48547db1783dcf09dba159baafa55e09cffc4cb7e3630c1091dd53d15345"
+        ],
+        "target": "private/Payments/Pidl/PimsModel/bin/Debug/Bond.Attributes.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "31c076a90bc82f7f76458e5256e702fa97480432c1bbfd62c64df719f759a3a9": {
+        "signature": "31c076a90bc82f7f76458e5256e702fa97480432c1bbfd62c64df719f759a3a9",
+        "alternativeSignatures": [
+            "117c2dcf4428992973a9135f8c8c94f629a20b6fe9a0b26d182580f10c13cff0"
+        ],
+        "target": "private/Payments/Pidl/PimsModel/bin/Debug/Bond.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "ff40b9c5ccd2a792cd69742d2823c5517721dd920649dbfa466f6f5f7fd15bbb": {
+        "signature": "ff40b9c5ccd2a792cd69742d2823c5517721dd920649dbfa466f6f5f7fd15bbb",
+        "alternativeSignatures": [
+            "5587d50e55a061716d3de50c000b4be84e649048f28b90c89f6818473386b1db"
+        ],
+        "target": "private/Payments/Pidl/PimsModel/bin/Debug/Bond.Reflection.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "812a0177f772eee283b9a4abd1039670760ceb8f1a5910a8577413ea4e9adf98": {
+        "signature": "812a0177f772eee283b9a4abd1039670760ceb8f1a5910a8577413ea4e9adf98",
+        "alternativeSignatures": [
+            "4b12db1fbdd2715ae295c17e12d278852fb50efcea41be4d8a04e9b8a7e7b171"
+        ],
+        "target": "private/Payments/Pidl/PimsModel/bin/Debug/Microsoft.CommonSchema.Services.Autopilot.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "4beb549491f20f75b701d9095bd171027bb8f4d104eb8969030aff840f0d3f17": {
+        "signature": "4beb549491f20f75b701d9095bd171027bb8f4d104eb8969030aff840f0d3f17",
+        "alternativeSignatures": [
+            "6c62546772a21610bedec3ec99a2cc8b2ebd0805e4f0dedfd5f6c0d43b2e3d84"
+        ],
+        "target": "private/Payments/Pidl/PimsModel/bin/Debug/Microsoft.CommonSchema.Services.Xpert.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "56f9dc30450889792ab1e0bd58ed1660ca6e21fbeee92ee3c37d0207e98ceb6c": {
+        "signature": "56f9dc30450889792ab1e0bd58ed1660ca6e21fbeee92ee3c37d0207e98ceb6c",
+        "alternativeSignatures": [
+            "38ca0db134e6006100f185b73a5cc5a8875870aae0db16b1747f966ba49398dd"
+        ],
+        "target": "private/Payments/Pidl/PXCommon/bin/Debug/Bond.Attributes.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "888fe54a3b0daf97a2ee37f3ec4e883da978ea0543578d28f9bc8a3decc1ff63": {
+        "signature": "888fe54a3b0daf97a2ee37f3ec4e883da978ea0543578d28f9bc8a3decc1ff63",
+        "alternativeSignatures": [
+            "cba09b7fe24a89dfeaedf4aef77e634d6ea88bc3236003921bf9974cdec4bb14"
+        ],
+        "target": "private/Payments/Pidl/PXCommon/bin/Debug/Bond.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "6105afb141b0c619752a5394ef00e395e73c0372e33e7773020b3bf781d7dbb5": {
+        "signature": "6105afb141b0c619752a5394ef00e395e73c0372e33e7773020b3bf781d7dbb5",
+        "alternativeSignatures": [
+            "3e46d8493a952c075bf055724426d024c134aa5252c09f91e9353f2293db362d"
+        ],
+        "target": "private/Payments/Pidl/PXCommon/bin/Debug/Bond.IO.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "af2aaafd23e533b89fa40e2eedc4b67b3bff9dfdebd00311b87353c8b7a9e713": {
+        "signature": "af2aaafd23e533b89fa40e2eedc4b67b3bff9dfdebd00311b87353c8b7a9e713",
+        "alternativeSignatures": [
+            "9f2c0c7b3c792a597f5c17a94492ed9c7231be8e687ac99c603167d59c1337a7"
+        ],
+        "target": "private/Payments/Pidl/PXCommon/bin/Debug/Bond.JSON.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "efa6363058622337bbe445aca20bb211b629d9cb851c0e31d07a239d02de8741": {
+        "signature": "efa6363058622337bbe445aca20bb211b629d9cb851c0e31d07a239d02de8741",
+        "alternativeSignatures": [
+            "6c632ba6a62e3b4ac12e0d4c3b37bc4aaa9abe46a1548e393f866e26a1f96663"
+        ],
+        "target": "private/Payments/Pidl/PXCommon/bin/Debug/Bond.Reflection.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "653a0017bfc868058d03313b25a3db4fdd1591399ffc9ea6ec089f2062925f8a": {
+        "signature": "653a0017bfc868058d03313b25a3db4fdd1591399ffc9ea6ec089f2062925f8a",
+        "alternativeSignatures": [
+            "6dd8dede0a3eb6855e0dff356da03e79e6aac182777a2d8facb6ebdbba856f0a"
+        ],
+        "target": "private/Payments/Pidl/PXCommon/bin/Debug/Microsoft.CommonSchema.Services.Autopilot.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "84ccd74636ad472de47d425423a4a101364de193b2da78e84132a248cf65a41d": {
+        "signature": "84ccd74636ad472de47d425423a4a101364de193b2da78e84132a248cf65a41d",
+        "alternativeSignatures": [
+            "2aa92338aa20f589e10b3a90f67ba4af758ab2d1110b0028329eefe16f896cec"
+        ],
+        "target": "private/Payments/Pidl/PXCommon/bin/Debug/Microsoft.CommonSchema.Services.Xpert.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "d0b9eb441909a743330cb9298b0c5a29c2519cdf6381eaa53c9c5a9e41c2bd57": {
+        "signature": "d0b9eb441909a743330cb9298b0c5a29c2519cdf6381eaa53c9c5a9e41c2bd57",
+        "alternativeSignatures": [
+            "cbe0a98a06e845cea25adcfa9e393dfad4fd870d109fd0921b4cc9987442daab"
+        ],
+        "target": "private/Payments/Tests/CIT.Localization/bin/Release/Bond.Attributes.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "3580e78765f5014071387a52de468588e529bf1c87b11b4ba2ec21ba42a205ae": {
+        "signature": "3580e78765f5014071387a52de468588e529bf1c87b11b4ba2ec21ba42a205ae",
+        "alternativeSignatures": [
+            "b0020e73598da12924660cbecafabdd2565eb0d790424c141ad4377a1bf51bef"
+        ],
+        "target": "private/Payments/Tests/CIT.Localization/bin/Release/Bond.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "778ee54fb36a2c6cd6ccdf4d1fb27d89785e0319c8c944d5b21de2640d7b18e1": {
+        "signature": "778ee54fb36a2c6cd6ccdf4d1fb27d89785e0319c8c944d5b21de2640d7b18e1",
+        "alternativeSignatures": [
+            "b0744ad654a0a3ad39fa8a5af85973b1fb6f6c7f21f52b4c101f69af37b78aac"
+        ],
+        "target": "private/Payments/Tests/CIT.Localization/bin/Release/Bond.Reflection.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "ab5a04a7709dbeb09f515e8bf562d2bd7c7cd153b89b4c0fb965fe0b225dfb9e": {
+        "signature": "ab5a04a7709dbeb09f515e8bf562d2bd7c7cd153b89b4c0fb965fe0b225dfb9e",
+        "alternativeSignatures": [
+            "202d76aa151d274584867775570a250cc6f0e7a58facf148a01d9bfe63aebd1f"
+        ],
+        "target": "private/Payments/Tests/CIT.Localization/bin/Release/Microsoft.CommonSchema.Services.Autopilot.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "a8fbca9b703d2d070f02a5cd248948c465ad583d4c1f1088c690cbad18288e24": {
+        "signature": "a8fbca9b703d2d070f02a5cd248948c465ad583d4c1f1088c690cbad18288e24",
+        "alternativeSignatures": [
+            "c2c6809d50133dc9a23b27472986e4dac9bf6c9586130c42d537659c9013ba24"
+        ],
+        "target": "private/Payments/Tests/CIT.Localization/bin/Release/Microsoft.CommonSchema.Services.Xpert.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "1419bdf89d25b02b69be4d0f7ca82ca8514eb8b6e11ec13206f236fbbac71624": {
+        "signature": "1419bdf89d25b02b69be4d0f7ca82ca8514eb8b6e11ec13206f236fbbac71624",
+        "alternativeSignatures": [
+            "d39e4c8ec4f0dc5a51cf593fda3de88a74debf7d1eefbf7824ad570448aa6a02"
+        ],
+        "target": "private/Payments/Tests/PidlTest/bin/Debug/Microsoft.WindowsLive.Test.WinLiveUser.AccountPoolClient.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "a2831658fb5228f1dfd631f4b9dad8981881ff629b32374d902233913ddf573f": {
+        "signature": "a2831658fb5228f1dfd631f4b9dad8981881ff629b32374d902233913ddf573f",
+        "alternativeSignatures": [
+            "097f089109a67aab6f213c9277256af9e91d57b26ad92ed399127539b6c3eb35"
+        ],
+        "target": "private/Payments/Tests/PidlTest/bin/Debug/Microsoft.WindowsLive.Test.WinLiveUser.AuthInterface.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "f59cabbb3278b48ce4969aac88f1ecf754cdd5fc3505ea64727eef27d1434a2d": {
+        "signature": "f59cabbb3278b48ce4969aac88f1ecf754cdd5fc3505ea64727eef27d1434a2d",
+        "alternativeSignatures": [
+            "8babc6766463876bc49e4faf113253d24d227c2bd9e3e604d5b4af0d911de715"
+        ],
+        "target": "private/Payments/Tests/PidlTest/bin/Debug/Microsoft.WindowsLive.Test.WinLiveUser.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "7e896423b79db9c707c0725e8fd63499c7c3586ebc3e99f66df63cae349845a6": {
+        "signature": "7e896423b79db9c707c0725e8fd63499c7c3586ebc3e99f66df63cae349845a6",
+        "alternativeSignatures": [
+            "f1086580ca14ecb2dd2969250c5ba1baeaa929d214e9b4ed8752808323ec1840"
+        ],
+        "target": "private/Payments/Tests/PidlTest/bin/Debug/Microsoft.WindowsLive.Test.WinLiveUser.WinLiveIdInterface.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "e38b17322cef2d2cd19d00770180bff2f6ed23d95d5e08f34cf5a2ea14a5c254": {
+        "signature": "e38b17322cef2d2cd19d00770180bff2f6ed23d95d5e08f34cf5a2ea14a5c254",
+        "alternativeSignatures": [
+            "aea04af3595ccf1f4ef08fa1826bdfc59d9aa169129b40f925981dc3b7e8cb1d"
+        ],
+        "target": "private/Payments/Tests/Test.Common/bin/Debug/Bond.Attributes.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "3b5de0664966f5a1729e61c6747134efc71fd8cb012991dd9e4eb0ffc4525d00": {
+        "signature": "3b5de0664966f5a1729e61c6747134efc71fd8cb012991dd9e4eb0ffc4525d00",
+        "alternativeSignatures": [
+            "abfd8888f89b7c157c607c549937756fc4b78bc12c6562c151dacdc485e8b800"
+        ],
+        "target": "private/Payments/Tests/Test.Common/bin/Debug/Bond.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "a7fb100435750905d42a5d0e15a83ab42898033257f3b95a3a014c4a8f764330": {
+        "signature": "a7fb100435750905d42a5d0e15a83ab42898033257f3b95a3a014c4a8f764330",
+        "alternativeSignatures": [
+            "c2a7252e59f2a02a2cf6b4ffc5b7df5cbc043e257daf8b39a1523b80bcf99e55"
+        ],
+        "target": "private/Payments/Tests/Test.Common/bin/Debug/Bond.Reflection.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "6f67111309aa78da8d2ee286eabe6193f02174e56beb33e5c516fc88f9a664b9": {
+        "signature": "6f67111309aa78da8d2ee286eabe6193f02174e56beb33e5c516fc88f9a664b9",
+        "alternativeSignatures": [
+            "99b438dc61c0c55265db1b5910ee05e530b74bcb1a91f18309fc585d8ca6149d"
+        ],
+        "target": "private/Payments/Tests/Test.Common/bin/Debug/Microsoft.CommonSchema.Services.Autopilot.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "945101e0ab35c0c61536a83b9e06203f317015d2bc937ab2834b6f2b97af7eb7": {
+        "signature": "945101e0ab35c0c61536a83b9e06203f317015d2bc937ab2834b6f2b97af7eb7",
+        "alternativeSignatures": [
+            "ccb22b254358c5ba7f00e44d3ebe88ef0956e7af932125cdb3209b2e014ab1bc"
+        ],
+        "target": "private/Payments/Tests/Test.Common/bin/Debug/Microsoft.CommonSchema.Services.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "ceb328c01df2e388fd2427f95e9d748c142c59c91f5e6c79a69584834b76048e": {
+        "signature": "ceb328c01df2e388fd2427f95e9d748c142c59c91f5e6c79a69584834b76048e",
+        "alternativeSignatures": [
+            "eb550d024678a0df2bb048ff54d1619bc109e21bdda647e18d89673d1e3245d2"
+        ],
+        "target": "private/Payments/Tests/Test.Common/bin/Debug/Microsoft.CommonSchema.Services.Xpert.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "1615a945ae626c5fca44fe5ef9f0c416f038a7a147f34cc3616181999f540f16": {
+        "signature": "1615a945ae626c5fca44fe5ef9f0c416f038a7a147f34cc3616181999f540f16",
+        "alternativeSignatures": [
+            "c8d6bb170b22fb9b2995c2e2cb591902fd49c42a0addc73a01c82d649e88d5ae"
+        ],
+        "target": "private/Payments/Tools/InstallCertificates/bin/Debug/ApSecretStoreInvoke.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "78e0ea7b8f7610dfa3c771b5307fae6db1c76b270b290bb72b641fe881d72f97": {
+        "signature": "78e0ea7b8f7610dfa3c771b5307fae6db1c76b270b290bb72b641fe881d72f97",
+        "alternativeSignatures": [
+            "422a7047d99bbea784aaccef69e24f18ece64cbe8dc6edf3edcbbd9269c64bb2"
+        ],
+        "target": "private/Payments/Tools/InstallCertificates/bin/Debug/ApSecretStoreInvoke.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2025",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "171a327fb95449a3281bf73124d1b7e36e2e8b41a9a84fe27cef571c460baee9": {
+        "signature": "171a327fb95449a3281bf73124d1b7e36e2e8b41a9a84fe27cef571c460baee9",
+        "alternativeSignatures": [
+            "e3ec596e4b2b0341f6d1f9080fdd98f98a66950be39c80f6266466b0c0339e75"
+        ],
+        "target": "private/Payments/Tools/InstallCertificates/bin/Debug/ApSecretStoreInvoke.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2026",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "0b22dd386c74a45346796650468d46d0aa296e6748a2f0148a35c181e9d07d8e": {
+        "signature": "0b22dd386c74a45346796650468d46d0aa296e6748a2f0148a35c181e9d07d8e",
+        "alternativeSignatures": [
+            "4caa51cec36513e9431f002e6b4cf10e9e26c20051825fb88338653f45a8868f"
+        ],
+        "target": "private/Payments/Tools/InstallCertificates/bin/Debug/ApSecretStoreManaged.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "b46b25a622770a0921164a5ed681a4b60c63d1ffc58da68cafbaa8dfe5751f58": {
+        "signature": "b46b25a622770a0921164a5ed681a4b60c63d1ffc58da68cafbaa8dfe5751f58",
+        "alternativeSignatures": [
+            "62dbefe0436ad36311d10d4702ab496aad476b9ab76e1dedc3d892cd49e35513"
+        ],
+        "target": "private/Payments/Tools/InstallCertificates/bin/Debug/Bond.Attributes.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "b446f29798e3755b298b17e935711b120d8c33503e88f851e1c35364c2a3c72c": {
+        "signature": "b446f29798e3755b298b17e935711b120d8c33503e88f851e1c35364c2a3c72c",
+        "alternativeSignatures": [
+            "3adee268cfa7c92b7d18ba718ecf00c6bc4702cb411a276012dc37ce1aced61a"
+        ],
+        "target": "private/Payments/Tools/InstallCertificates/bin/Debug/Bond.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "519ab47e8c987fcf39bf20917b940e7567ba20b636182fb3b72faa753547bd1a": {
+        "signature": "519ab47e8c987fcf39bf20917b940e7567ba20b636182fb3b72faa753547bd1a",
+        "alternativeSignatures": [
+            "2eb4d0744941e6687006e433d80f4131515988c3c91b3374063905bf5baad11c"
+        ],
+        "target": "private/Payments/Tools/InstallCertificates/bin/Debug/Bond.IO.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "a468b300e9876658d10fc4403a630d402f590bd6db79d17ee2388d5d844cc317": {
+        "signature": "a468b300e9876658d10fc4403a630d402f590bd6db79d17ee2388d5d844cc317",
+        "alternativeSignatures": [
+            "93c7c34c09494248ed4684b54ad7591c85237732c6b01b31180075a280c8ffcd"
+        ],
+        "target": "private/Payments/Tools/InstallCertificates/bin/Debug/Bond.JSON.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "a1a3abc55a4f180d82ea41d56d9926f67b163d1ede39deeb422cb9d6a42a14a2": {
+        "signature": "a1a3abc55a4f180d82ea41d56d9926f67b163d1ede39deeb422cb9d6a42a14a2",
+        "alternativeSignatures": [
+            "0bc75496834d5fe23483ee2f0b558454c8c71fa6be41454e30d2c3f3aa5cf3b9"
+        ],
+        "target": "private/Payments/Tools/InstallCertificates/bin/Debug/Bond.Reflection.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "3bcc478f1a89818129f3a1512413e0150c7df6e43fdd67f96af603293e3f0228": {
+        "signature": "3bcc478f1a89818129f3a1512413e0150c7df6e43fdd67f96af603293e3f0228",
+        "alternativeSignatures": [
+            "2dea983bf3e433cd140d61059e74ea068a72cd1d2a585cea8c0e7bea936842b3"
+        ],
+        "target": "private/Payments/Tools/InstallCertificates/bin/Debug/Microsoft.CommonSchema.Services.Autopilot.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "6e95b1a18307796f9e7be5cef70949cd7bcd9451cc1b046ca3d71c9f5e4ccb7f": {
+        "signature": "6e95b1a18307796f9e7be5cef70949cd7bcd9451cc1b046ca3d71c9f5e4ccb7f",
+        "alternativeSignatures": [
+            "5e9b1ddfcaa5c846a6e73e54ff98a5de337537fe343b5ad508cd91fcf9e2d735"
+        ],
+        "target": "private/Payments/Tools/InstallCertificates/bin/Debug/Microsoft.CommonSchema.Services.Xpert.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "97532bdc704185551bdce12b34fe256608b8a35823dff9bbda7795761b181cde": {
+        "signature": "97532bdc704185551bdce12b34fe256608b8a35823dff9bbda7795761b181cde",
+        "alternativeSignatures": [
+            "e2140b80eabe713adc85564d301bef90b9e0455c80499a6c31fad594dcd85267"
+        ],
+        "target": "private/shared/Library/Tracing/SllLogging/bin/Debug/Bond.Attributes.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "4adcda8fe20ad42701f94b6de0d3eaf190c5f8d57416f924f78b1659fd5ea3df": {
+        "signature": "4adcda8fe20ad42701f94b6de0d3eaf190c5f8d57416f924f78b1659fd5ea3df",
+        "alternativeSignatures": [
+            "4d9813221d84b09598562de39b7691751e6a09e948bcde64f8fbf8fc9edc305b"
+        ],
+        "target": "private/shared/Library/Tracing/SllLogging/bin/Debug/Bond.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "2ca9f732b5000c329123f74aa78028296005a6503e9c4bd45ab0349a7ee3ef6b": {
+        "signature": "2ca9f732b5000c329123f74aa78028296005a6503e9c4bd45ab0349a7ee3ef6b",
+        "alternativeSignatures": [
+            "307afaee39f8926c0ccb5adfe4e06ce3df54e0ea8cc723d36446bd301244d1df"
+        ],
+        "target": "private/shared/Library/Tracing/SllLogging/bin/Debug/Bond.IO.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "3d05778aa8df3749732decaeddbf969288acb2088e46c984828f3d269df18ce8": {
+        "signature": "3d05778aa8df3749732decaeddbf969288acb2088e46c984828f3d269df18ce8",
+        "alternativeSignatures": [
+            "03c0983f8ef4fd4b6f0987a899365e60bf04c4475e41428638f5175ddf1965e9"
+        ],
+        "target": "private/shared/Library/Tracing/SllLogging/bin/Debug/Bond.JSON.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "0683bc281bf1035057b6c3cb3fc96a733b46c70d6b3c7c1ea2b58d38de015aab": {
+        "signature": "0683bc281bf1035057b6c3cb3fc96a733b46c70d6b3c7c1ea2b58d38de015aab",
+        "alternativeSignatures": [
+            "1ba8057af9c39f6eaa7b03446612f2f163a24e42127836dad94b659a913e948a"
+        ],
+        "target": "private/shared/Library/Tracing/SllLogging/bin/Debug/Bond.Reflection.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "89dfd1149ec684b59c598da65ce01815d26a416057a56c302d5c614cb0a4aa7e": {
+        "signature": "89dfd1149ec684b59c598da65ce01815d26a416057a56c302d5c614cb0a4aa7e",
+        "alternativeSignatures": [
+            "acf1cbdb1f16e2033f2af5fb4403310f5cc613df8c9a39c88e832e6e0508aff0"
+        ],
+        "target": "private/shared/Library/Tracing/SllLogging/bin/Debug/Microsoft.CommonSchema.Services.Autopilot.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "d2845159ff0b0fbc60c29e2b07f507abcba9d73c082f1573599c4cc8364cb8ee": {
+        "signature": "d2845159ff0b0fbc60c29e2b07f507abcba9d73c082f1573599c4cc8364cb8ee",
+        "alternativeSignatures": [
+            "3bc567650695cf501e547467b351bb1fb08567d40d4b232affacacdc07891509"
+        ],
+        "target": "private/shared/Library/Tracing/SllLogging/bin/Debug/Microsoft.CommonSchema.Services.Xpert.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "d78634836f787eaf4554bea371b354d7b245e6011cbdc37b51a641fd86b9c6e9": {
+        "signature": "d78634836f787eaf4554bea371b354d7b245e6011cbdc37b51a641fd86b9c6e9",
+        "alternativeSignatures": [
+            "d99ef1c0cabbead09af6eab31f97a73f9383b3b58d7a29099f689963dd5812e4"
+        ],
+        "target": "private/Payments/Tests/CIT.PidlFactory/obj/Debug/Fakes/mcppxc/b/Bond.Attributes.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "a03590a25faf594dc5f8548b5602699c90500b476922a74c8e2ff0280ebbdb1b": {
+        "signature": "a03590a25faf594dc5f8548b5602699c90500b476922a74c8e2ff0280ebbdb1b",
+        "alternativeSignatures": [
+            "239994d88a43a6cae26b0711ea91a1c686a346a533f48e52bba53b19010d6451"
+        ],
+        "target": "private/Payments/Tests/CIT.PidlFactory/obj/Debug/Fakes/mcppxc/b/Bond.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "e0a2a1b46b0772d044525e7a239445e3073aa9b04decd4cc8f99973cd8a1a688": {
+        "signature": "e0a2a1b46b0772d044525e7a239445e3073aa9b04decd4cc8f99973cd8a1a688",
+        "alternativeSignatures": [
+            "79a44450af1e12e73f8914fcedbde2aa192102b006da4e0ad1264cde686bafc5"
+        ],
+        "target": "private/Payments/Tests/CIT.PidlFactory/obj/Debug/Fakes/mcppxc/b/Bond.IO.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "daafb17c33025b1eb1c3aba654d5dced13500f5c9a183b49258ac1a49cd2756c": {
+        "signature": "daafb17c33025b1eb1c3aba654d5dced13500f5c9a183b49258ac1a49cd2756c",
+        "alternativeSignatures": [
+            "b6ffd40156f352eefd51ec91a8d30d1efc8af3ee24442689fc1d340b683876b3"
+        ],
+        "target": "private/Payments/Tests/CIT.PidlFactory/obj/Debug/Fakes/mcppxc/b/Bond.JSON.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "9ac99a7b0120a68f258af41ce5f6cc6ccc0e9cf7224da6eb75751940e81d0515": {
+        "signature": "9ac99a7b0120a68f258af41ce5f6cc6ccc0e9cf7224da6eb75751940e81d0515",
+        "alternativeSignatures": [
+            "5e1f342fbb57d3d43dbd05dbca72b7a55d73568d6e0fa4c0c0a6f00242a9b466"
+        ],
+        "target": "private/Payments/Tests/CIT.PidlFactory/obj/Debug/Fakes/mcppxc/b/Bond.Reflection.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "213bb9208ee9c07f6afefb54cf45754a3f31da51e2b9ba32eab30d131edbd51a": {
+        "signature": "213bb9208ee9c07f6afefb54cf45754a3f31da51e2b9ba32eab30d131edbd51a",
+        "alternativeSignatures": [
+            "e442866478eece05d9c172e52f1ec6643ff130bcf762b64ab895944000ba50b8"
+        ],
+        "target": "private/Payments/Tests/CIT.PidlFactory/obj/Debug/Fakes/mcppxc/b/Microsoft.CommonSchema.Services.Autopilot.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "f2fca2c3fbd72f282f71cafed2dac3317aab14483b0e20ad538bf4dd107ddf06": {
+        "signature": "f2fca2c3fbd72f282f71cafed2dac3317aab14483b0e20ad538bf4dd107ddf06",
+        "alternativeSignatures": [
+            "6e0664d1f9c04b86bbc75374bf8655776f1a279b17b206eed2b8d9e5ff5f5ab6"
+        ],
+        "target": "private/Payments/Tests/CIT.PidlFactory/obj/Debug/Fakes/mcppxc/b/Microsoft.CommonSchema.Services.Xpert.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "8bbcfe66f5974e82384269357c56743ae0967896af4fa51bb1de9c4d9916bd3b": {
+        "signature": "8bbcfe66f5974e82384269357c56743ae0967896af4fa51bb1de9c4d9916bd3b",
+        "alternativeSignatures": [
+            "8d7e67a0ec25d4a4fc51c773775fc2545bdf1dd4e1c05f9adb13e973fc75f8d3"
+        ],
+        "target": "private/Payments/Tests/CIT.PXService/obj/Debug/Fakes/mcppxs/b/Bond.Attributes.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "26007f62a3e4839525a3a480499683cfbf2360ccd15a72b5707a7a683a6f6881": {
+        "signature": "26007f62a3e4839525a3a480499683cfbf2360ccd15a72b5707a7a683a6f6881",
+        "alternativeSignatures": [
+            "adcfbc3eb185e60516f0b1d0ec75da04e564ecd4c1090c731e07d7b975780cee"
+        ],
+        "target": "private/Payments/Tests/CIT.PXService/obj/Debug/Fakes/mcppxs/b/Bond.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "6b07720cdba1761a51995c8fd0193b3ec855a7d8f97e51b5b9b2bda8db374874": {
+        "signature": "6b07720cdba1761a51995c8fd0193b3ec855a7d8f97e51b5b9b2bda8db374874",
+        "alternativeSignatures": [
+            "7ca9c66472a23c068394344f3e6bdfb4bb2bdda0e1ab0b8b93544c990b614aa1"
+        ],
+        "target": "private/Payments/Tests/CIT.PXService/obj/Debug/Fakes/mcppxs/b/Bond.IO.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "d4e97a4b63adadc7bbb9c2e503173fc888bc0a2a3dcce47573384777a461629a": {
+        "signature": "d4e97a4b63adadc7bbb9c2e503173fc888bc0a2a3dcce47573384777a461629a",
+        "alternativeSignatures": [
+            "0d415f4cfd84f7a18b79501b447a642cd97abd9490322e884ea5a39e67caafef"
+        ],
+        "target": "private/Payments/Tests/CIT.PXService/obj/Debug/Fakes/mcppxs/b/Bond.JSON.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "07be5e07f7f536f1f64e093e015890d4a47d8e76c1d0210620ff8eb10c98b458": {
+        "signature": "07be5e07f7f536f1f64e093e015890d4a47d8e76c1d0210620ff8eb10c98b458",
+        "alternativeSignatures": [
+            "8b5a6343f359ff1be68309d55d11dddcbdac3b93cb5cef3e1d35d56e2610b11c"
+        ],
+        "target": "private/Payments/Tests/CIT.PXService/obj/Debug/Fakes/mcppxs/b/Bond.Reflection.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "f139a1ac8e8b7398c7bd29df039e25c47e092616c310424d4f4aab0d3e4ebde4": {
+        "signature": "f139a1ac8e8b7398c7bd29df039e25c47e092616c310424d4f4aab0d3e4ebde4",
+        "alternativeSignatures": [
+            "4c7f6359011bee1581a9d68c87dcf5f5a788edae5eecd30dc2a99227a20e904f"
+        ],
+        "target": "private/Payments/Tests/CIT.PXService/obj/Debug/Fakes/mcppxs/b/Microsoft.CommonSchema.Services.Autopilot.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "b5231500b7df9db9627133b4a9c36bf0b1b8e89b781fa8e9d3c0d6fe9928bb3d": {
+        "signature": "b5231500b7df9db9627133b4a9c36bf0b1b8e89b781fa8e9d3c0d6fe9928bb3d",
+        "alternativeSignatures": [
+            "dab6327462e5558c21d0757a807db8197e805ccc014bae3b37e53d8ad6c4cf98"
+        ],
+        "target": "private/Payments/Tests/CIT.PXService/obj/Debug/Fakes/mcppxs/b/Microsoft.CommonSchema.Services.Xpert.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "f45bb701a5cfc3cc03c6ada21e59353f2bab14d56a43ead3c5d6b32410080ef4": {
+        "signature": "f45bb701a5cfc3cc03c6ada21e59353f2bab14d56a43ead3c5d6b32410080ef4",
+        "alternativeSignatures": [
+            "60669afeda0f16eacdafba1269c01de378a41d760f29c5f17cdc14ac19d5c558"
+        ],
+        "target": "private/Payments/Tests/CIT.PXService/obj/Debug/Fakes/mcppxs/b/Moq.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "53f1e5fad500dc3320d90ddc5a3022dcd48d89ae74ffdb0d15bb750fe9a27af6": {
+        "signature": "53f1e5fad500dc3320d90ddc5a3022dcd48d89ae74ffdb0d15bb750fe9a27af6",
+        "alternativeSignatures": [
+            "ed072979120d4e1082465c3c926809ca991e2a2c892033a651d379c6e2b54b5f"
+        ],
+        "target": "private/Payments/Tests/COT.PXService/obj/Debug/Fakes/mvstptf/b/Bond.Attributes.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "c8875b3f205997bcf81e1eb210fd6e01437f3f0101c72cc3ad4669bb93c3496b": {
+        "signature": "c8875b3f205997bcf81e1eb210fd6e01437f3f0101c72cc3ad4669bb93c3496b",
+        "alternativeSignatures": [
+            "3ca19ecf693525488d39870245d2899609f25042981fa60f9a6c65a2a2b98082"
+        ],
+        "target": "private/Payments/Tests/COT.PXService/obj/Debug/Fakes/mvstptf/b/Bond.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "ffa40221fcca4485c7312c834358a1162afd6f2fce403a409dab401f8f5f7431": {
+        "signature": "ffa40221fcca4485c7312c834358a1162afd6f2fce403a409dab401f8f5f7431",
+        "alternativeSignatures": [
+            "8fe0981e2142cbbcc9050a8ba9aecfb81370e1b4573c4db6a7627ec31909c7bb"
+        ],
+        "target": "private/Payments/Tests/COT.PXService/obj/Debug/Fakes/mvstptf/b/Bond.IO.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "0f79e0e37ea8b6f51bafff3ad927ad2096263899d5a97a3430ccdcce5232ccfa": {
+        "signature": "0f79e0e37ea8b6f51bafff3ad927ad2096263899d5a97a3430ccdcce5232ccfa",
+        "alternativeSignatures": [
+            "b8e51c055bb83010eaa104f2a00d0ec3b35d144fd23ff7ade8dcbfd9b666ffe7"
+        ],
+        "target": "private/Payments/Tests/COT.PXService/obj/Debug/Fakes/mvstptf/b/Bond.JSON.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "c63134e96ee4c8d8bd17e70eec49e39f4b2485980b7c126859644683c2f4bf17": {
+        "signature": "c63134e96ee4c8d8bd17e70eec49e39f4b2485980b7c126859644683c2f4bf17",
+        "alternativeSignatures": [
+            "8b72d6bc11a56a56010bac6b320bc07e52a76cd3e80f74051b2b93a1e95daa47"
+        ],
+        "target": "private/Payments/Tests/COT.PXService/obj/Debug/Fakes/mvstptf/b/Bond.Reflection.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "9d8fcd21a6af59c8158a2965fe5595e42ed216e554beda75dec942ffd4416c10": {
+        "signature": "9d8fcd21a6af59c8158a2965fe5595e42ed216e554beda75dec942ffd4416c10",
+        "alternativeSignatures": [
+            "1fd684588f304aad4eb8592d77f5740be9b9ac8d42d80b9cdf6f86590faf43b5"
+        ],
+        "target": "private/Payments/Tests/COT.PXService/obj/Debug/Fakes/mvstptf/b/Microsoft.CommonSchema.Services.Autopilot.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "ceae784cb7733982c2672c2e0d0d47d1b313cf5f736e7c3b20d82e37ef33d7b9": {
+        "signature": "ceae784cb7733982c2672c2e0d0d47d1b313cf5f736e7c3b20d82e37ef33d7b9",
+        "alternativeSignatures": [
+            "470a99bf7ea88137fbc8e15a16e0a9d28df293825cac2e200fbe5788b32a40e5"
+        ],
+        "target": "private/Payments/Tests/COT.PXService/obj/Debug/Fakes/mvstptf/b/Microsoft.CommonSchema.Services.Xpert.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "0a8d6ac397fc501aad1065d84db90fa1908ef1cf290c97b7ce29fc32eac60c37": {
+        "signature": "0a8d6ac397fc501aad1065d84db90fa1908ef1cf290c97b7ce29fc32eac60c37",
+        "alternativeSignatures": [
+            "1cd67a59325bbc8b4c67314f2fc82c317a299e2633359e8860b45f4fde0a5f06"
+        ],
+        "target": "private/Payments/Tests/COT.PXService/obj/Debug/Fakes/mvstptf/b/Microsoft.IdentityModel.Clients.ActiveDirectory.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "1c88f742d5fc2f24d17104959699cd772ba1ce6a9db1137eccb543c9f4abbc0d": {
+        "signature": "1c88f742d5fc2f24d17104959699cd772ba1ce6a9db1137eccb543c9f4abbc0d",
+        "alternativeSignatures": [
+            "e385d6275a1bce934dce57cc4f33116a5f1cc96d2366c284beb37ac85b6d473d"
+        ],
+        "target": "private/Payments/Tests/COT.PXService/obj/Debug/Fakes/mvstptfe/b/Bond.Attributes.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "20dea873361d0c0c4e0cf484068f7bb18ba6673a6d5e9b4c7fa14f7390b70431": {
+        "signature": "20dea873361d0c0c4e0cf484068f7bb18ba6673a6d5e9b4c7fa14f7390b70431",
+        "alternativeSignatures": [
+            "1ca5bce3dfce4c231aaf1660da5432155fd7f9239237c0cf811c8ab856fa4bbd"
+        ],
+        "target": "private/Payments/Tests/COT.PXService/obj/Debug/Fakes/mvstptfe/b/Bond.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "f817bacaadb8e69bca9805fc44ea5c0b48593ff944ff393b28dd9708f2ab7fa1": {
+        "signature": "f817bacaadb8e69bca9805fc44ea5c0b48593ff944ff393b28dd9708f2ab7fa1",
+        "alternativeSignatures": [
+            "1e7043f2cdc783acf78dcd85f3382b050384d49d36793e83c6918ba97b34c8ec"
+        ],
+        "target": "private/Payments/Tests/COT.PXService/obj/Debug/Fakes/mvstptfe/b/Bond.IO.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "3d6e9d7c587dedf3f68cee3c6325de4dab8162c6bf6e41d13806f61ed9c9721c": {
+        "signature": "3d6e9d7c587dedf3f68cee3c6325de4dab8162c6bf6e41d13806f61ed9c9721c",
+        "alternativeSignatures": [
+            "ae4dfe8fcacbc6792ec281514bb8a1b39293802b310413def0137e540c232485"
+        ],
+        "target": "private/Payments/Tests/COT.PXService/obj/Debug/Fakes/mvstptfe/b/Bond.JSON.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "b35b5ac68093ca0db4dba3eec8c0b804830661539370872aab964c8bf709268d": {
+        "signature": "b35b5ac68093ca0db4dba3eec8c0b804830661539370872aab964c8bf709268d",
+        "alternativeSignatures": [
+            "316fb8a87f0d335eeb195cf35fb2d0f4fada03c07ddf84746aa5d0f809a20977"
+        ],
+        "target": "private/Payments/Tests/COT.PXService/obj/Debug/Fakes/mvstptfe/b/Bond.Reflection.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "def0d15515ea217321d306d59327f821ca6c5d79d536fab370b19c0ea458757a": {
+        "signature": "def0d15515ea217321d306d59327f821ca6c5d79d536fab370b19c0ea458757a",
+        "alternativeSignatures": [
+            "6cde7cd93de03853b7bd6c45745f066b71b7d4f63a1dc1f9409f453baba0694d"
+        ],
+        "target": "private/Payments/Tests/COT.PXService/obj/Debug/Fakes/mvstptfe/b/Microsoft.CommonSchema.Services.Autopilot.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "4069f800b2dc3382ce8da03acfca0ef81d31ad7e99841230e9c5a93cc09316b2": {
+        "signature": "4069f800b2dc3382ce8da03acfca0ef81d31ad7e99841230e9c5a93cc09316b2",
+        "alternativeSignatures": [
+            "514aef4d1ef9c797ae0de7157a4c97c619bd130f0ee449a5fce43e30dbea1f5d"
+        ],
+        "target": "private/Payments/Tests/COT.PXService/obj/Debug/Fakes/mvstptfe/b/Microsoft.CommonSchema.Services.Xpert.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "0f0a2330f119bfbd6d45eb2998c388a65332f3326d42f9ebf0df08054700044c": {
+        "signature": "0f0a2330f119bfbd6d45eb2998c388a65332f3326d42f9ebf0df08054700044c",
+        "alternativeSignatures": [
+            "f18d4ec84b1c71da286865d21930e176d65e84e00d785ba070de9602b739beca"
+        ],
+        "target": "private/Payments/Tests/COT.PXService/obj/Debug/Fakes/mvstptfe/b/Microsoft.IdentityModel.Clients.ActiveDirectory.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2021-12-06 22:10:19Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "6a37dc6c1f1f85096313fb989ed21c46493b0dde0c3e749467e2f2f197c7733e": {
+        "signature": "6a37dc6c1f1f85096313fb989ed21c46493b0dde0c3e749467e2f2f197c7733e",
+        "alternativeSignatures": [
+          "b2ba449df7de559f1166ee4aceb077bdf3642741e261ae3dd316d07dee3f95f5"
+        ],
+        "target": "NugetPackages/ApSecretStore.1.13.0/runtimes/win8-x64/native/ApSecretStoreInvoke.dll",
+        "memberOf": [
+          "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2008",
+        "justification": null,
+        "createdDate": "2023-01-03 20:24:59Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "daa2e31398719025418e2f2f80381476766e3fec73353d218a1373c5195556e4": {
+        "signature": "daa2e31398719025418e2f2f80381476766e3fec73353d218a1373c5195556e4",
+        "alternativeSignatures": [
+          "1bd802d5711601922d2b733b38dd3b6116d17128986ea6733bffd2285b75334b"
+        ],
+        "target": "private/Payments/Tools/InstallCertificates/bin/Debug/ApSecretStoreInvoke.dll",
+        "memberOf": [
+          "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2008",
+        "justification": null,
+        "createdDate": "2023-01-03 20:24:59Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "e3f9eeb3244dc9be5f74d9a33c2f9ce506a23d3deacafcb42c10f5a12e8c57aa": {
+        "signature": "e3f9eeb3244dc9be5f74d9a33c2f9ce506a23d3deacafcb42c10f5a12e8c57aa",
+        "alternativeSignatures": [
+            "d3c1068494b51dfdfd01be9dcfb925e1ae9866fe56361032f36ac7d3ac306722"
+        ],
+        "target": "private/Payments/Pidl/PartnerSettingsModel/bin/Debug/Bond.Attributes.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2022-12-15 22:10:55Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "547b1e57abcd4fa6d1c3795998115876ea8209760a37dfd9ac8f4bf92328fe41": {
+        "signature": "547b1e57abcd4fa6d1c3795998115876ea8209760a37dfd9ac8f4bf92328fe41",
+        "alternativeSignatures": [
+            "9bfabf9b660df4805b61430a5f5494c9d11c71839108f87fe174c46825607e49"
+        ],
+        "target": "private/Payments/Pidl/PartnerSettingsModel/bin/Debug/Microsoft.CommonSchema.Services.Autopilot.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2022-12-15 22:10:55Z",
+        "expirationDate": null,
+        "type": null
+    },
+    "45e2213e03cf7a4bfdc66b5b9dd771946b384444e973296f3cf2a1d06830052f": {
+        "signature": "45e2213e03cf7a4bfdc66b5b9dd771946b384444e973296f3cf2a1d06830052f",
+        "alternativeSignatures": [
+            "27920f24bf9b703d0851c705e0afb829c72f165dcdd74e516d6937164b660b6a"
+        ],
+        "target": "private/Payments/Pidl/PartnerSettingsModel/bin/Debug/Microsoft.CommonSchema.Services.Xpert.dll",
+        "memberOf": [
+            "default"
+        ],
+        "tool": "binskim",
+        "ruleId": "BA2004",
+        "justification": null,
+        "createdDate": "2022-12-15 22:10:55Z",
+        "expirationDate": null,
+        "type": null
+    }
+  }
+}

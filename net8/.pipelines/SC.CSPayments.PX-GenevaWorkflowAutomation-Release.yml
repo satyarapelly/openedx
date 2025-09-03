@@ -1,0 +1,39 @@
+trigger: none
+resources:
+  repositories:
+  - repository: templates
+    type: git
+    name: OneBranch.Pipelines/GovernedTemplates
+    ref: refs/heads/main
+  pipelines:
+  - pipeline: _SC.csPayments.PX.GenevaWorkflowAutomation.SC-Official
+    source: OneBranch/SC.CSPayments.PX/SC.csPayments.PX.GenevaWorkflowAutomation.SC-Official
+extends:
+  template: v2/OneBranch.Official.CrossPlat.yml@templates # https://aka.ms/obpipelines/templates
+  parameters:
+    featureFlags:
+      EnableCDPxPAT: false
+    stages:
+    - stage: Prod_Deploy_Automation_Resources
+      displayName: 'Prod: Deploy Automation Resources'
+      variables:
+      - name: ob_release_environment
+        value: Production
+      jobs:
+      - job: agent_job
+        displayName: Agent job
+        pool:
+          type: release
+        steps:
+        - download: _SC.csPayments.PX.GenevaWorkflowAutomation.SC-Official
+        - task: ExpressV2Internal@1
+          inputs:
+            UseServerMonitorTask: true
+            EnableStrictValidation: false
+            ValidateOnly: false
+            EndpointProviderType: 'ApprovalService'
+            ApprovalServiceEnvironment: 'Production'
+            ServiceRootLocation: LinkedArtifact
+            RolloutSpecType: RSPath
+            ServiceRootPath: $(Pipeline.Workspace)/_SC.csPayments.PX.GenevaWorkflowAutomation.SC-Official/drop_build_main/ServiceGroupRoot
+            RolloutSpecPath: $(Pipeline.Workspace)/_SC.csPayments.PX.GenevaWorkflowAutomation.SC-Official/drop_build_main/ServiceGroupRoot/RolloutSpec/WorkflowRolloutSpec.json

@@ -1,0 +1,140 @@
+# This is a basic OneBranch YAML Release starter template to deploy using EV2 to Test/PPE environments
+# Documentation: https://aka.ms/onebranchrelease                                   
+# Samples: https://aka.ms/releaseyaml/samples             
+# Allowed Tasks: https://aka.ms/releaseyaml/supportedtasks                                                      
+# Support: https://aka.ms/onebranchsupport
+
+trigger: none
+
+parameters: # parameters are shown up in ADO UI in a build queue time
+- name: 'debug'
+  displayName: 'Enable debug output' 
+  type: boolean
+  default: false
+- name: 'ReleaseDescription'
+  displayName: 'Release Description'
+  type: object
+  default: PPE Release
+- name: 'PipelineArtifactSource'
+  default: SC.CSPayments.PX-Build-Official-RA
+  values:
+    - SC.CSPayments.PX-Build-Official-RA
+- name: "rolloutType"
+  displayName: "SDP rollout type"
+  type: string
+  default: "normal"
+  values:
+    - normal
+    - emergency
+    - globaloutage
+- name: "overrideManagedValidationDuration"
+  displayName: "Override standard SDP duration?"
+  type: boolean
+  default: false
+- name: "managedValidationDurationInHours"
+  displayName: "Override standard SDP duration (in hours)"
+  type: number
+  default: 0
+- name: "icmIncidentId"
+  displayName: "IcM Incident Id"
+  type: number
+  default: 0
+- name: "ForceRegistration"
+  displayName: "Force Registration"
+  type: boolean
+  default: false
+- name: "PPESelectRegions"
+  displayName: "PPE: Select regions"
+  type: string
+  default: "regions(eastus,westus)"
+- name: "PPEExceptRegions"
+  displayName: "PPE: Except regions"
+  type: string
+  default: " "
+# - name: "PPESelectSteps"
+#   displayName: "Select.Steps"
+#   type: string
+#   default: "Rollout_Main_KeyVault_Creation, Rollout_Main_KeyVault_CreateCert_MSPAYMENTSTLS, Rollout_Main, Rollout_Network_After_Main, Rollout_App_MSPayments, Rollout_App_MSPayments_Rbac"
+#   values: 
+#     - "Rollout_Main_KeyVault_Creation, Rollout_Main_KeyVault_CreateCert_MSPAYMENTSTLS, Rollout_Main_KeyVault_CreateCert_PXGeneva, Rollout_Main, Rollout_Network_After_Main, Rollout_App_MSPayments, Rollout_App_MSPayments_Rbac"
+#     - "Rollout_Main_KeyVault_Creation"
+#     - "Rollout_Main_KeyVault_CreateCert_MSPAYMENTSTLS"
+#     - "Rollout_Main_KeyVault_CreateCert_PXGeneva"
+#     - "Rollout_Main, Rollout_Network_After_Main"
+#     - "Rollout_App_MSPayments"
+#     - "Rollout_App_MSPayments_Rbac"
+
+variables:
+  CDP_DEFINITION_BUILD_COUNT: $[counter('', 0)] # needed for onebranch.pipeline.version task https://aka.ms/obpipelines/versioning
+  system.debug: ${{ parameters.debug }}  
+  ServiceRootPath: $(Pipeline.Workspace)/${{ parameters.PipelineArtifactSource }}/drop_build_main/Package/EV2-RA
+  EV2ServiceConnection: PX-Deployment-INT-PME
+  TestsFolder: $(Pipeline.Workspace)/${{ parameters.PipelineArtifactSource }}/drop_build_main/Debug/COT.PXService
+  Release.ReleaseDescription: ${{parameters.ReleaseDescription}}
+  WindowsContainerImage: 'onebranch.azurecr.io/windows/ltsc2019/vse2022:latest' # Docker image which is used to build the project https://aka.ms/obpipelines/containers
+  AzureSDPStandardStageMap: "Microsoft.Azure.SDP.Standard"
+  AzureSDPStandardStageMapVersion: "*"
+  ServiceTreeID: "e50abb8e-e976-4311-b12b-85156f4abc0e"
+
+resources:
+  repositories: 
+    - repository: templates
+      type: git
+      name: OneBranch.Pipelines/GovernedTemplates
+      ref: refs/heads/main
+  pipelines:
+    - pipeline: SC.CSPayments.PX-Build-Official-RA
+      source: OneBranch\SC.CSPayments.PX\SC.CSPayments.PX-Build-Official-RA
+      branch: master
+
+extends:
+  template: v2/OneBranch.Official.CrossPlat.yml@templates # https://aka.ms/obpipelines/templates
+  parameters:
+    featureFlags:
+      EnableCDPxPAT: false
+    cloudvault: # https://aka.ms/obpipelines/cloudvault
+      enabled: false
+    globalSdl: # https://aka.ms/obpipelines/sdl
+      asyncSdl:
+        enabled: true
+        tsaOptionsFile: .config/tsaoptions.json
+      policheck:
+        break: true # always break the build on policheck issues. You can disable it by setting to 'false'
+    ev2ManagedSdpRolloutConfig:
+      rolloutType: ${{parameters.rolloutType}}
+      overrideManagedValidationDuration: ${{parameters.overrideManagedValidationDuration}}
+      managedValidationOverrideDurationInHours: ${{parameters.managedValidationDurationInHours}}
+      icmIncidentId: ${{parameters.icmIncidentId}}
+ 
+    stages:
+    - stage: "PROD_PPE_Managed_SDP"
+      displayName: "PROD_PPE: Managed SDP"
+      variables:
+        ob_release_environment: Production
+        ob_release_servicetreeid: $(ServiceTreeID)
+        ob_release_usedeploymentjob: true
+        ob_deploymentjob_environment: PaymentExperienceServices_Prod_Deployment
+      jobs:
+        - job: PROD_PPE_Managed_SDP
+          displayName: "PROD_PPE_Managed_SDP"
+          pool:
+            type: release
+          steps:
+            - download: ${{ parameters.PipelineArtifactSource }}
+            - task: vsrm-ev2.ev2-rollout.ev2-rollout-task.Ev2RARollout@2
+              displayName: "Ev2 Managed SDP Rollout"
+              inputs:
+                EndpointProviderType: ApprovalService
+                ApprovalServiceEnvironment: Production
+                TaskAction: RegisterAndRollout
+                SkipRegistrationIfExists: true
+                ServiceRootPath: '$(Pipeline.Workspace)/${{ parameters.PipelineArtifactSource }}/drop_build_main/Package/EV2-RA'
+                RolloutSpecPath: '$(Pipeline.Workspace)/${{ parameters.PipelineArtifactSource }}/drop_build_main/Package/EV2-RA/RolloutSpec.RegionAgnostic.json'
+                StageMapName: "$(AzureSDPStandardStageMap)"
+                StageMapVersion: "$(AzureSDPStandardStageMapVersion)"
+                Select: "${{parameters.PPESelectRegions}}" 
+                # Select: regions("${{parameters.PPESelectRegions}}").steps("${{parameters.PPESelectSteps}}")
+                ServiceGroupOverride: Microsoft.CFS.PC.PX.PPE
+                ${{ if gt(length(parameters.PPEExceptRegions), 1) }}:
+                Except: "${{parameters.PPEExceptRegions}}"
+                ForceRegistration: ${{parameters.ForceRegistration}}

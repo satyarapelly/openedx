@@ -1,0 +1,94 @@
+parameters:
+- name: environment
+  values:
+    - PPE # Currently playwright automation tests run only in PPE
+- name: testName
+- name: testFilterCriteria
+- name: rerunMaxAttempts
+  type: number
+  default: 2
+- name: dependsOn
+  type: object
+  default: ''
+- name: runInParallel
+  type: boolean
+  default: false
+- name: parallelCount
+  type: number
+  default: 0
+
+# Each release stage must declare its environment by prefixing the stage name with the environment.
+# Production and PPE, we will treat as Prod. Stage name for Production would be Prod_<name> and for PPE it would be Prod_PPE_<name>
+- name: stagePrefix 
+  type: object
+  default:
+   Production: Prod
+   Feature: Prod_Feature
+   PPE: Prod_PPE
+   INT: Test_INT
+
+# Release environment to pass to onebranch(ob_release_environment)
+# We will treat both Production and PPE as Production.
+# OB supports only Production, PPE, Test(for INT)
+- name: ob_release_env
+  type: object
+  default:
+   Production: Production
+   Feature: Production
+   PPE: Production
+   INT: Test
+
+stages:
+- stage: ${{ parameters.stagePrefix[parameters.environment] }}_${{ replace(parameters.testName, ' ', '_') }}
+  dependsOn: ${{ parameters.dependsOn }}
+  variables:
+    ob_release_environment: ${{ parameters.ob_release_env[parameters.environment] }}
+  jobs:
+  - job: ${{ parameters.stagePrefix[parameters.environment] }}_${{ replace(parameters.testName, ' ', '_') }}Agent_Job
+    strategy:
+      parallel: ${{ parameters.parallelCount }}
+    pool:
+      type: windows
+    variables: # More settings at https://aka.ms/obpipelines/yaml/jobs
+      ob_outputDirectory: '$(Agent.TempDirectory)\TestResults' # this directory is uploaded to pipeline artifacts, reddog and cloudvault. More info at https://aka.ms/obpipelines/artifacts
+      ob_artifactSuffix: '$(agent.id)' # Use unique job folder name per agent so the agents don't all copy to the same location at once.
+    
+    steps:
+    - download: PlaywrightAutomationBuild
+    
+    - task: UseDotNet@2
+      displayName: 'Use .NET Core sdk 8.x'
+      inputs:
+        version: 8.x
+    
+    - task: PowerShell@2
+      displayName: 'Setup playwright'
+      inputs:
+        targetType: filePath
+        filePath: $(Pipeline.Workspace)/PlaywrightAutomationBuild/drop/playwright.ps1
+        arguments: install
+    
+    - task: PowerShell@2
+      displayName: Install Microsoft Edge
+      inputs:
+        filePath:  $(Pipeline.Workspace)/PlaywrightAutomationBuild/drop/playwright.ps1
+        arguments: install --force msedge
+        workingDirectory: '$(Pipeline.Workspace)/PlaywrightAutomationBuild/drop/'
+
+    - task: VSTest@3
+      displayName: 'VsTest - testAssemblies'
+      inputs:
+        testSelector: 'testAssemblies'
+        testAssemblyVer2: |
+            **\*PidlsdkPlaywrightTests*.dll
+            !**\*TestAdapter.dll
+            !**\obj\**
+        searchFolder: '$(Pipeline.Workspace)/PlaywrightAutomationBuild/drop/'
+        testFiltercriteria: ${{ parameters.testFilterCriteria }}
+        runSettingsFile: '$(Pipeline.Workspace)/PlaywrightAutomationBuild/drop/.runsettings'
+        testRunTitle: ${{ parameters.testName }}
+        runInParallel: ${{ parameters.runInParallel }}
+        rerunFailedTests: true
+        rerunType: basedOnTestFailureCount
+        rerunFailedTestCasesMaxLimit: 25
+        rerunMaxAttempts: ${{ parameters.rerunMaxAttempts }}

@@ -1,0 +1,14 @@
+trigger:
+  branches:
+    include:
+    - master
+    - main
+ 
+pool: { vmImage: ubuntu-latest }
+steps:
+- checkout: self
+  persistCredentials: true
+- script: |
+    git checkout $(Build.SourceBranchName)
+    git push origin HEAD:master HEAD:main
+  displayName: Mirror old and new default branches

@@ -1,0 +1,37 @@
+# DO NOT MODIFY THIS FILE
+environment:
+  host:
+    os: 'windows'
+  runtime:
+    provider: 'appcontainer'
+    image: 'cdpxwin1809.azurecr.io/global/vse2019:latest'
+
+
+signing_options:
+  profile: 'internal_azure_service'
+
+workspace_options:
+  enable_legacy_networking: false
+
+package_sources:
+  nuget:
+    config_files:
+      - include:
+        - "nuget.config"
+
+version:
+  name: 'version'
+  major: 1
+  minor: 0
+  system: 'patch'
+
+restore:
+ commands:
+   - !!defaultcommand
+     name: 'Bootstrap'
+     command: '.bootstrap\bootstrap.cmd'
+     arguments: ''
+
+static_analysis_options:
+  policheck_options:
+    scan_comments: false

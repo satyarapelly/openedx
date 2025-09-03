@@ -1,0 +1,27 @@
+{
+    // This rolloutspec is referenced in the release definition for these resources:
+    // https://msazure.visualstudio.com/One/_releaseDefinition?definitionId=20848&_a=environments-editor-preview
+    "$schema": "http://schema.express.azure.com/schemas/2015-01-01-alpha/RolloutSpec.json",
+    "contentVersion": "1.0.0.0",
+    "rolloutMetadata": {
+        "serviceModelPath": "ServiceModel\\WorkflowServiceModel.json",
+        "name": "Geneva Automation Resource deployment",
+        "rolloutType": "Major",
+        "buildSource": {
+            "parameters": {
+                // appears to be required by ev2 but is unused
+                "versionFile": "buildver.txt"
+            }
+        }
+    },
+
+    "orchestratedSteps": [
+        {
+            // Contains a single step to deploy workflows, contains a single action calling into our deployment extension
+            "name": "deploy workflows",
+            "targetType": "serviceResource",
+            "targetName": "AutomationResource",
+            "actions": [ "extension/AutomationDeployment" ]
+        }
+    ]
+}

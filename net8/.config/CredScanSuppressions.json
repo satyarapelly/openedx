@@ -1,0 +1,9 @@
+{
+  "tool": "Credential Scanner",
+  "suppressions": [
+    {
+		"hash": "BzjR2zYxdXBIieHrlhhXzW1Em8T8ZnPW4SfdwrpCO6w=",
+		"_justification": "This is a public key, so it is not a secret."
+	}
+  ]
+}

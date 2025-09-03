@@ -1,0 +1,69 @@
+parameters:
+- name: environment
+- name: region
+- name: dependsOn
+  type: object
+  default: ''
+- name: runSettingFile
+- name: pipelineArtifactName
+- name: release
+
+# Each release stage must declare its environment by prefixing the stage name with the environment.
+# Production and PPE, we will treat as Prod. Stage name for Production would be Prod_<name> and for PPE it would be Prod_PPE_<name>
+- name: stagePrefix 
+  type: object
+  default:
+   Production: Prod
+   PPE: Prod_PPE
+   Test: Test_INT
+
+# Release environment to pass to onebranch(ob_release_environment)
+# We will treat both Production and PPE as Production.
+# OB supports only Production, PPE, Test(for INT)
+- name: ob_release_env
+  type: object
+  default:
+   Production: Production
+   Feature: Production
+   PPE: Production
+   Test: Test
+
+- name: testCategory
+  type: object
+  default:
+   Production: PRODContinuousTest
+   Feature: PRODContinuousTest
+   PPE: PPEContinuousTest
+   Test: INTContinuousTest
+
+stages:
+# Verify
+- stage: ${{ parameters.stagePrefix[parameters.environment] }}_${{ parameters.release }}_${{ parameters.region }}_Verify
+  dependsOn: ${{ parameters.dependsOn }}
+  condition: and(succeeded(), ${{ ne(parameters.runSettingFile, '') }}) # Enable this stage only if testRunSettingsFile is set
+  variables:
+    ob_release_environment: ${{ parameters.ob_release_env[parameters.environment] }}
+  jobs:
+  - job: ${{ parameters.environment }}_${{ parameters.region }}_Verify
+    pool:
+      type: windows
+      isCustom: true
+      name: PST-PX-Dev-Pool
+    steps:
+    - checkout: none
+    - download: ${{ parameters.pipelineArtifactName }}
+    - task: VSTest@3
+      displayName: '${{ parameters.environment }} ${{ parameters.release }} ${{ parameters.region }} - Test run for Test plans'
+      inputs:
+        testAssemblyVer2: '**\*COT*.dll'
+        searchFolder: '$(Pipeline.Workspace)\${{ parameters.pipelineArtifactName }}\drop_build_main\Debug\COT.PXService'
+        runSettingsFile: ${{ parameters.runSettingFile }}
+        testFiltercriteria: 'TestCategory=${{ parameters.testCategory[parameters.environment] }}'
+        runInParallel: true
+        runTestsInIsolation: false
+        codeCoverageEnabled: false
+        rerunFailedTests: true
+        vsTestVersion: 17.0
+        diagnosticsEnabled: true
+        collectDumpOn: always
+      continueOnError: true

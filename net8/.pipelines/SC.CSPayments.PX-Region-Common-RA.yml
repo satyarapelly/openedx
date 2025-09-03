@@ -1,0 +1,91 @@
+parameters:
+- name: environment
+- name: ev2ServiceConnection
+  default: ''
+- name: pipelineArtifactName  
+- name: region
+- name: dependsOn
+  type: object
+  default: ''
+- name: runSettingFile
+- name: serviceGroupOverride
+  type: string
+- name: Select
+  type: string
+
+# Each release stage must declare its environment by prefixing the stage name with the environment.
+# Production and PPE, we will treat as Prod. Stage name for Production would be Prod_<name> and for PPE it would be Prod_PPE_<name>
+- name: stagePrefix 
+  type: object
+  default:
+   Production: Prod
+   PPE: Prod_PPE
+   Test: Test_INT
+
+# Release environment to pass to onebranch(ob_release_environment)
+# We will treat both Production and PPE as Production.
+- name: ob_release_env
+  type: object
+  default:
+   Production: Production
+   PPE: Production
+   Test: Test
+
+- name: "ForceRegistration"
+  displayName: "Force Registration"
+  type: boolean
+  default: false
+
+stages:
+- stage: ${{ parameters.stagePrefix[parameters.environment] }}_${{ parameters.region }}
+  dependsOn: ${{ parameters.dependsOn }}
+  variables:
+    ob_release_environment: ${{ parameters.ob_release_env[parameters.environment] }}
+    ${{ if eq( parameters.environment, 'Production') }}:
+      ob_release_usedeploymentjob: true
+      ob_deploymentjob_environment: PaymentExperienceServices_Prod_Deployment
+  jobs:
+  - job: ${{ parameters.environment }}_PreApproval_ServerFarm_Agent_Job
+    pool:
+      type: server
+    ${{ if in(parameters.environment, 'Test') }}: # Use manual validation for INT and PPE environments
+      steps:
+      - task: ManualValidation@0
+  - job: ${{ parameters.environment }}
+    dependsOn: ${{ parameters.environment }}_PreApproval_ServerFarm_Agent_Job
+    pool:
+      type: release
+    steps:
+    - download: ${{ parameters.pipelineArtifactName }}
+    - task: vsrm-ev2.ev2-rollout.ev2-rollout-task.Ev2RARollout@2
+      displayName: "${{ parameters.environment }} - Ev2 Managed SDP Rollout"
+      inputs:
+        UseServerMonitorTask: true
+        EnableStrictValidation: false
+        ValidateOnly: false
+        # Approval service is supported only for Production environments, else we should use EV2 Service Connection.
+        # Since we are treating PPE as Production(and also setting ob_release_environment as Production), we are using it for PPE as well.
+        ${{ if eq( parameters.ob_release_env[parameters.environment], 'Production') }}:
+          EndpointProviderType:  'ApprovalService'
+          ApprovalServiceEnvironment: 'Production'
+        ${{ else }}:
+          EndpointProviderType: 'Ev2Endpoint'
+          ConnectedServiceName: ${{ parameters.ev2ServiceConnection }}
+        TaskAction: RegisterAndRollout
+        SkipRegistrationIfExists: true
+        ServiceRootLocation: 'LinkedArtifact'
+        ServiceRootPath: '$(Pipeline.Workspace)/${{ parameters.pipelineArtifactName }}/drop_build_main/Package/EV2-RA'
+        RolloutSpecPath: '$(Pipeline.Workspace)/${{ parameters.pipelineArtifactName }}/drop_build_main/Package/EV2-RA/RolloutSpec.RegionAgnostic.json'
+        StageMapName: "$(AzureSDPStandardStageMap)"
+        ServiceGroupOverride: ${{parameters.serviceGroupOverride}}
+        StageMapVersion: "$(AzureSDPStandardStageMapVersion)"
+        Select: ${{parameters.Select}}
+        ForceRegistration: ${{parameters.ForceRegistration}}
+- template: SC.CSPayments.PX-COT-RA.yml
+  parameters:
+    environment: ${{ parameters.environment }}
+    release: appdeploy
+    region: ${{ parameters.region }}
+    dependsOn: ${{ parameters.stagePrefix[parameters.environment] }}_${{ parameters.region }}
+    runSettingFile: ${{ parameters.runSettingFile }}
+    pipelineArtifactName: ${{ parameters.pipelineArtifactName }}

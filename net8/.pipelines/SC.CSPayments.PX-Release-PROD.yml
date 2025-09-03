@@ -1,0 +1,295 @@
+#################################################################################
+#                         OneBranch Pipelines - Official                        #
+# This pipeline was created by EasyStart from a sample located at:              #
+#   https://aka.ms/obpipelines/easystart/samples                                #
+# Documentation:  https://aka.ms/obpipelines                                    #
+# Yaml Schema:    https://aka.ms/obpipelines/yaml/schema                        #
+# Retail Tasks:   https://aka.ms/obpipelines/tasks                              #
+# Support:        https://aka.ms/onebranchsup                                   #
+#################################################################################
+
+trigger: none # https://aka.ms/obpipelines/triggers
+
+parameters: # parameters are shown up in ADO UI in a build queue time
+- name: 'debug'
+  displayName: 'Enable debug output'
+  type: boolean
+  default: false
+- name: 'deploymentEnv'
+  displayName: 'Deployment Environment(PROD deployment includes PPE, Feature and PROD)'
+  default: PPE
+  values:
+    - PPE
+    - PROD
+- name: 'ReleaseDescription'
+  displayName: 'Release Description'
+  type: object
+  default: PPE/PROD Release
+
+variables:
+  CDP_DEFINITION_BUILD_COUNT: $[counter('', 0)] # needed for onebranch.pipeline.version task https://aka.ms/obpipelines/versioning
+  system.debug: ${{ parameters.debug }}
+  ENABLE_PRS_DELAYSIGN: 1
+  ROOT: $(Build.SourcesDirectory)
+  REPOROOT: $(Build.SourcesDirectory)
+  OUTPUTROOT: $(REPOROOT)\out
+  NUGET_XMLDOC_MODE: none
+  PipelineArtifactSource: current
+  WindowsContainerImage: 'onebranch.azurecr.io/windows/ltsc2022/vse2022:latest' # Docker image which is used to build the project https://aka.ms/obpipelines/containers
+  ServiceRootPath: '$(Pipeline.Workspace)/drop_build_main/Package/Ev2'
+  TestsFolder: $(Pipeline.Workspace)/drop_build_main/Debug/COT.PXService
+  Release.ReleaseDescription: ${{parameters.ReleaseDescription}}
+
+resources:
+  repositories: 
+    - repository: templates
+      type: git
+      name: OneBranch.Pipelines/GovernedTemplates
+      ref: refs/heads/main
+  pipelines:
+    - pipeline: PlaywrightAutomationBuild
+      source: 'OneBranch\pay.pidl.sdk\Automation Pipelines\pay.pidl.sdk-PlaywrightAutomationBuild'
+      branch: master
+
+extends:
+  template: v2/OneBranch.Official.CrossPlat.yml@templates # https://aka.ms/obpipelines/templates
+  parameters:
+    featureFlags:
+      WindowsHostVersion: 1ESWindows2022
+    cloudvault: # https://aka.ms/obpipelines/cloudvault
+      enabled: false
+    globalSdl: # https://aka.ms/obpipelines/sdl
+      asyncSdl:
+        enabled: true
+        tsaOptionsFile: .config/tsaoptions.json
+      tsa:
+        enabled: false # onebranch publish all sdl results to TSA. If TSA is disabled all SDL tools will forced into 'break' build mode.
+      binskim:
+        break: true # always break the build on binskim issues in addition to TSA upload
+      policheck:
+        break: true # always break the build on policheck issues. You can disable it by setting to 'false'
+
+    stages:
+## Build    
+    - template: OneBranch.Build.Common.yml # https://aka.ms/obpipelines/templates
+      parameters:
+        buildType: 'Official'
+        sign: true
+
+## PPE Deployment
+    # PPE WestUS region Deployment
+    - template: SC.CSPayments.PX-Release-Region-Common.yml
+      parameters:
+        environment: PPE
+        dependsOn: build
+        region: WestUS
+        pipelineArtifactName: ${{ variables.PipelineArtifactSource }}
+        serviceRootPath: $(ServiceRootPath)
+        stagingRolloutSpecPath: $(ServiceRootPath)/PPE/RolloutSpec.PPE.Staging.WestUS.json
+        restartStagingRolloutSpecPath: $(ServiceRootPath)/PPE/AppSettingRollouts/RolloutSpec.PPE.AppSetting.Staging.WestUS.json
+        swapRolloutSpecPath: $(ServiceRootPath)/PPE/RolloutSpec.PPE.Swap.WestUS.json
+        serverFarmRolloutSpecPath: $(ServiceRootPath)/PPE/RolloutSpec.PPE.ServerFarm.WestUS.json
+        testRunSettingsFile: $(TestsFolder)/RunSettings/PME/PXService.PpeWestUS.PME.runsettings
+
+    #PPE Global resources rollout
+    - template: SC.CSPayments.PX-Release-Global-Resources.yml
+      parameters:
+        environment: PPE
+        dependsOn: build
+        pipelineArtifactName: ${{ variables.PipelineArtifactSource }}
+        ev2ServiceConnection: PX-Deployment-INT-PME
+        serviceRootPath: $(ServiceRootPath)
+        gcsConfigRolloutSpecPath: $(ServiceRootPath)/PPE/Monitor.RolloutSpec.PPE.json
+
+    # Run Trade Avs Automation Tests after PPE WestUS deployment
+    - template: SC.CSPayments.PX-Release-Playwright-Test.yml
+      parameters:
+        dependsOn:
+         - Prod_PPE_WestUS_SWAP
+        testName: Trade Avs Automation
+        environment: PPE
+        testFilterCriteria: 'FullyQualifiedName~PidlsdkPlaywrightTests.UIAutomationTests.TradeAvsTests'
+        runInParallel: true
+        parallelCount: 10
+    
+    # Run Non-Trade Avs Automation Tests after PPE WestUS deployment
+    - template: SC.CSPayments.PX-Release-Playwright-Test.yml
+      parameters:
+        dependsOn:
+         - Prod_PPE_WestUS_SWAP
+        testName: Non Trade Avs Automation
+        environment: PPE
+        testFilterCriteria: 'FullyQualifiedName!=PidlsdkPlaywrightTests.UIAutomationTests.TradeAvsTests'
+
+## Feature Region Deployment
+    # Feature region WestCentralUS
+    - ${{ if eq(parameters.deploymentEnv, 'PROD') }}:
+      - template: SC.CSPayments.PX-Release-Region-Common.yml
+        parameters:
+          environment: Feature
+          dependsOn: build
+          region: WestCentralUS
+          pipelineArtifactName: ${{ variables.PipelineArtifactSource }}
+          serviceRootPath: $(ServiceRootPath)
+          stagingRolloutSpecPath: $(ServiceRootPath)/PROD/RolloutSpec.PROD.Staging.WestCentralUS.json
+          restartStagingRolloutSpecPath: $(ServiceRootPath)/PROD/AppSettingRollouts/RolloutSpec.PROD.AppSetting.Staging.WestCentralUS.json
+          swapRolloutSpecPath: $(ServiceRootPath)/PROD/RolloutSpec.PROD.Swap.WestCentralUS.json
+          serverFarmRolloutSpecPath: $(ServiceRootPath)/PROD/RolloutSpec.PROD.ServerFarm.WestCentralUS.json
+          testRunSettingsFile: $(TestsFolder)/RunSettings/PME/PXService.ProdWestCentralUS.PME.runsettings
+
+## Prod Deployment
+    - ${{ if eq(parameters.deploymentEnv, 'PROD') }}:
+      # SOX - Create work item for test evidence collection
+      - stage: Prod_SOX_Collect_Test_Evidence
+        displayName: 'SOX - Collect Test Evidence Work Item'
+        dependsOn: build
+        variables:
+          ob_release_environment: Production
+        jobs:
+        - job: SOX_Collect_Test_Evidence_Job
+          pool:
+            type: windows
+          variables: # More settings at https://aka.ms/obpipelines/yaml/jobs
+            ob_outputDirectory: $(OUTPUTROOT)
+          steps:
+          - task: CreateWorkItem@2
+            inputs:
+              teamProject: 'OSGS'
+              workItemType: 'Service Change'
+              title: 'SOX Record: Payment Experience Service(Release Number - $(Build.BuildNumber))'
+              assignedTo: '$(Build.RequestedForId)'
+              areaPath: 'OSGS\Store Core\Payments\PXS'
+              fieldMappings: |
+                Environment=Production
+                Type=Deployment
+              associate: true
+              authType: 'internal'
+
+      # PROD Deployment technical approval
+      - stage: Prod_Test_Evidence_Validation_Approval
+        displayName: 'Prod Deployment Technical Approval'
+        dependsOn: Prod_SOX_Collect_Test_Evidence
+        variables:
+          ob_release_environment: Production
+          ob_release_usedeploymentjob: true
+          ob_deploymentjob_environment: PaymentExperienceServices_Prod_Deployment
+        jobs:
+        - job: Test_Evidence_Validation_Approval # Empty job - needed for Test_Evidence_Validation_Approval
+          pool:
+            type: server
+          steps: []
+
+      # PROD Deployment leads approval
+      - stage: Prod_Deployment_Approval
+        displayName: 'Production deployment leads approval'
+        dependsOn: Prod_Test_Evidence_Validation_Approval
+        variables:
+          ob_release_environment: Production
+          ob_release_usedeploymentjob: true
+          ob_deploymentjob_environment: PaymentExperienceServices_Prod_Deploy_Leads_Approval
+        jobs:
+        - job: Prod_Deployment_Approval_Job # Empty job - needed for Prod_Deployment_Approval
+          pool:
+            type: server
+          steps: []
+
+      # PROD WestUS2 region Deployment
+      - template: SC.CSPayments.PX-Release-Region-Common.yml
+        parameters:
+          environment: Production
+          region: WestUS2
+          pipelineArtifactName: ${{ variables.PipelineArtifactSource }}
+          serviceRootPath: $(ServiceRootPath)
+          stagingRolloutSpecPath: $(ServiceRootPath)/PROD/RolloutSpec.PROD.Staging.WestUS2.json
+          restartStagingRolloutSpecPath: $(ServiceRootPath)/PROD/AppSettingRollouts/RolloutSpec.PROD.AppSetting.Staging.WestUS2.json
+          swapRolloutSpecPath: $(ServiceRootPath)/PROD/RolloutSpec.PROD.Swap.WestUS2.json
+          serverFarmRolloutSpecPath: $(ServiceRootPath)/PROD/RolloutSpec.PROD.ServerFarm.WestUS2.json
+          testRunSettingsFile: $(TestsFolder)/RunSettings/PME/PXService.ProdWestUS2.PME.runsettings
+
+      # PROD SCUS region Deployment
+      - template: SC.CSPayments.PX-Release-Region-Common.yml
+        parameters:
+          environment: Production
+          region: SCUS
+          pipelineArtifactName: ${{ variables.PipelineArtifactSource }}
+          serviceRootPath: $(ServiceRootPath)
+          stagingRolloutSpecPath: $(ServiceRootPath)/PROD/RolloutSpec.PROD.Staging.SouthCentralUS.json
+          restartStagingRolloutSpecPath: $(ServiceRootPath)/PROD/AppSettingRollouts/RolloutSpec.PROD.AppSetting.Staging.SouthCentralUS.json
+          swapRolloutSpecPath: $(ServiceRootPath)/PROD/RolloutSpec.PROD.Swap.SouthCentralUS.json
+          serverFarmRolloutSpecPath: $(ServiceRootPath)/PROD/RolloutSpec.PROD.ServerFarm.SouthCentralUS.json
+          testRunSettingsFile: $(TestsFolder)/RunSettings/PME/PXService.ProdSouthCentralUS.PME.runsettings
+
+      # PROD NCUS region Deployment
+      - template: SC.CSPayments.PX-Release-Region-Common.yml
+        parameters:
+          environment: Production
+          region: NCUS
+          pipelineArtifactName: ${{ variables.PipelineArtifactSource }}
+          serviceRootPath: $(ServiceRootPath)
+          stagingRolloutSpecPath: $(ServiceRootPath)/PROD/RolloutSpec.PROD.Staging.NorthCentralUS.json
+          restartStagingRolloutSpecPath: $(ServiceRootPath)/PROD/AppSettingRollouts/RolloutSpec.PROD.AppSetting.Staging.NorthCentralUS.json
+          swapRolloutSpecPath: $(ServiceRootPath)/PROD/RolloutSpec.PROD.Swap.NorthCentralUS.json
+          serverFarmRolloutSpecPath: $(ServiceRootPath)/PROD/RolloutSpec.PROD.ServerFarm.NorthCentralUS.json
+          testRunSettingsFile: $(TestsFolder)/RunSettings/PME/PXService.ProdNorthCentralUS.PME.runsettings
+
+      # PROD CentralUS region Deployment
+      - template: SC.CSPayments.PX-Release-Region-Common.yml
+        parameters:
+          environment: Production
+          region: CentralUS
+          pipelineArtifactName: ${{ variables.PipelineArtifactSource }}
+          serviceRootPath: $(ServiceRootPath)
+          stagingRolloutSpecPath: $(ServiceRootPath)/PROD/RolloutSpec.PROD.Staging.CentralUS.json
+          restartStagingRolloutSpecPath: $(ServiceRootPath)/PROD/AppSettingRollouts/RolloutSpec.PROD.AppSetting.Staging.CentralUS.json
+          swapRolloutSpecPath: $(ServiceRootPath)/PROD/RolloutSpec.PROD.Swap.CentralUS.json
+          serverFarmRolloutSpecPath: $(ServiceRootPath)/PROD/RolloutSpec.PROD.ServerFarm.CentralUS.json
+          testRunSettingsFile: $(TestsFolder)/RunSettings/PME/PXService.ProdCentralUS.PME.runsettings
+
+      # PROD EastUS2 region Deployment
+      - template: SC.CSPayments.PX-Release-Region-Common.yml
+        parameters:
+          environment: Production
+          region: EastUS2
+          pipelineArtifactName: ${{ variables.PipelineArtifactSource }}
+          serviceRootPath: $(ServiceRootPath)
+          stagingRolloutSpecPath: $(ServiceRootPath)/PROD/RolloutSpec.PROD.Staging.EastUS2.json
+          restartStagingRolloutSpecPath: $(ServiceRootPath)/PROD/AppSettingRollouts/RolloutSpec.PROD.AppSetting.Staging.EastUS2.json
+          swapRolloutSpecPath: $(ServiceRootPath)/PROD/RolloutSpec.PROD.Swap.EastUS2.json
+          serverFarmRolloutSpecPath: $(ServiceRootPath)/PROD/RolloutSpec.PROD.ServerFarm.EastUS2.json
+          testRunSettingsFile: $(TestsFolder)/RunSettings/PME/PXService.ProdEastUS2.PME.runsettings
+
+      # PROD EastUS region Deployment
+      - template: SC.CSPayments.PX-Release-Region-Common.yml
+        parameters:
+          environment: Production
+          region: EastUS
+          pipelineArtifactName: ${{ variables.PipelineArtifactSource }}
+          serviceRootPath: $(ServiceRootPath)
+          stagingRolloutSpecPath: $(ServiceRootPath)/PROD/RolloutSpec.PROD.Staging.EastUS.json
+          restartStagingRolloutSpecPath: $(ServiceRootPath)/PROD/AppSettingRollouts/RolloutSpec.PROD.AppSetting.Staging.EastUS.json
+          swapRolloutSpecPath: $(ServiceRootPath)/PROD/RolloutSpec.PROD.Swap.EastUS.json
+          serverFarmRolloutSpecPath: $(ServiceRootPath)/PROD/RolloutSpec.PROD.ServerFarm.EastUS.json
+          testRunSettingsFile: $(TestsFolder)/RunSettings/PME/PXService.ProdEastUS.PME.runsettings
+
+      # PROD WestUS region Deployment
+      - template: SC.CSPayments.PX-Release-Region-Common.yml
+        parameters:
+          environment: Production
+          region: WestUS
+          pipelineArtifactName: ${{ variables.PipelineArtifactSource }}
+          serviceRootPath: $(ServiceRootPath)
+          stagingRolloutSpecPath: $(ServiceRootPath)/PROD/RolloutSpec.PROD.Staging.WestUS.json
+          restartStagingRolloutSpecPath: $(ServiceRootPath)/PROD/AppSettingRollouts/RolloutSpec.PROD.AppSetting.Staging.WestUS.json
+          swapRolloutSpecPath: $(ServiceRootPath)/PROD/RolloutSpec.PROD.Swap.WestUS.json
+          serverFarmRolloutSpecPath: $(ServiceRootPath)/PROD/RolloutSpec.PROD.ServerFarm.WestUS.json
+          testRunSettingsFile: $(TestsFolder)/RunSettings/PME/PXService.ProdWestUS.PME.runsettings
+
+      #Production Global resources rollout
+      - template: SC.CSPayments.PX-Release-Global-Resources.yml
+        parameters:
+          environment: Production
+          pipelineArtifactName: ${{ variables.PipelineArtifactSource }}
+          serviceRootPath: $(ServiceRootPath)
+          gcsConfigRolloutSpecPath: $(ServiceRootPath)/PROD/Monitor.RolloutSpec.PROD.json
+          setupRolloutSpecPath: $(ServiceRootPath)/PROD/Setup.RolloutSpec.PROD.json
+          keyVaultRolloutSpecPath: $(ServiceRootPath)/PROD/RolloutSpec.PROD.KeyVault.json

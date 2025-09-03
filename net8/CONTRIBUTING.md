@@ -1,0 +1,1 @@
+See .\private\Payments\Docs\contribution-guidelines.md

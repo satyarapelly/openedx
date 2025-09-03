@@ -1,0 +1,169 @@
+parameters:
+- name: environment
+  values:
+    - Production
+    #- Feature - Since global resources are common for feature and production environments, it should be done using prod pipeline.
+    - PPE
+    - INT
+- name: dependsOn
+  type: object
+  default: []
+- name: ev2ServiceConnection
+  default: ''
+- name: pipelineArtifactName
+- name: serviceRootPath
+- name: gcsConfigRolloutSpecPath
+- name: setupRolloutSpecPath
+  default: ''
+- name: keyVaultRolloutSpecPath
+  default: ''
+
+# Each release stage must declare its environment by prefixing the stage name with the environment.
+# Production and PPE, we will treat as Prod. Stage name for Production would be Prod_<name> and for PPE it would be Prod_PPE_<name>
+- name: stagePrefix 
+  type: object
+  default:
+   Production: Prod
+   Feature: Prod_Feature
+   PPE: Prod_PPE
+   INT: Test_INT
+
+# Release environment to pass to onebranch(ob_release_environment)
+# We will treat both Production and PPE as Production.
+# OB supports only Production, PPE, Test(for INT)
+- name: ob_release_env
+  type: object
+  default:
+   Production: Production
+   Feature: Production
+   PPE: Production
+   INT: Test
+
+stages:
+# GCS Config Rollout
+- stage: ${{ parameters.stagePrefix[parameters.environment] }}_GCS_Config_Rollout
+  ${{ if eq( parameters.environment, 'Production') }}:
+    dependsOn:
+     - Prod_Deployment_Approval
+     - ${{ parameters.dependsOn }}
+  ${{ else }}:
+    dependsOn: ${{ parameters.dependsOn }}
+  variables:
+    ob_release_environment: ${{ parameters.ob_release_env[parameters.environment] }}
+    ${{ if in(parameters.environment, 'Production', 'PPE') }}:
+      ob_release_usedeploymentjob: true
+      ob_deploymentjob_environment: PaymentExperienceServices_Prod_Deployment
+  jobs:
+  - job: ${{ parameters.environment }}_PreApproval_GCS_Rollout
+    pool:
+      type: server
+    ${{ if in(parameters.environment, 'INT') }}: # Use manual validation for INT and PPE environments
+      steps:
+      - task: ManualValidation@0
+  - job: ${{ parameters.environment }}_GCS_Rollout
+    dependsOn: ${{ parameters.environment }}_PreApproval_GCS_Rollout
+    pool:
+      type: release
+    steps:
+    - download: ${{ parameters.pipelineArtifactName }}
+    - task: ExpressV2Internal@1
+      inputs:
+        UseServerMonitorTask: true
+        EnableStrictValidation: false
+        ValidateOnly: false
+        ServiceRootLocation: LinkedArtifact
+        RolloutSpecType: RSPath
+        ServiceRootPath: $(ServiceRootPath)
+        RolloutSpecPath: ${{ parameters.gcsConfigRolloutSpecPath }}
+        ${{ if eq( parameters.environment, 'Production') }}:
+          EndpointProviderType:  'ApprovalService'
+          ApprovalServiceEnvironment: 'Production'
+        ${{ else }}:
+          EndpointProviderType: 'Ev2Endpoint'
+          ConnectedServiceName: ${{ parameters.ev2ServiceConnection }}
+  
+# AKV and MI setup
+- ${{ if ne(parameters.setupRolloutSpecPath, '') }}: # Enable this stage only if setupRolloutSpecPath is set
+  - stage: ${{ parameters.stagePrefix[parameters.environment] }}_AKV_and_MI_Setup
+    ${{ if eq( parameters.environment, 'Production') }}:
+      dependsOn:
+       - Prod_Deployment_Approval
+       - ${{ parameters.dependsOn }}
+    ${{ else }}:
+      dependsOn: ${{ parameters.dependsOn }}
+    variables:
+      ob_release_environment: ${{ parameters.ob_release_env[parameters.environment] }}
+      ${{ if in(parameters.environment, 'Production', 'PPE') }}:
+        ob_release_usedeploymentjob: true
+        ob_deploymentjob_environment: PaymentExperienceServices_Prod_Deployment
+    jobs:
+    - job: ${{ parameters.environment }}_PreApproval_AKV_and_MI_Setup
+      pool:
+        type: server
+      ${{ if in(parameters.environment, 'INT') }}: # Use manual validation for INT and PPE environments
+        steps:
+        - task: ManualValidation@0
+    - job: ${{ parameters.environment }}_AKV_and_MI_Setup
+      dependsOn: ${{ parameters.environment }}_PreApproval_AKV_and_MI_Setup 
+      pool:
+        type: release
+      steps:
+      - download: ${{ parameters.pipelineArtifactName }}
+      - task: ExpressV2Internal@1
+        inputs:
+          UseServerMonitorTask: true
+          EnableStrictValidation: false
+          ValidateOnly: false
+          ServiceRootLocation: LinkedArtifact
+          RolloutSpecType: RSPath
+          ServiceRootPath: $(ServiceRootPath)
+          RolloutSpecPath: ${{ parameters.setupRolloutSpecPath }}
+          ${{ if eq( parameters.environment, 'Production') }}:
+            EndpointProviderType:  'ApprovalService'
+            ApprovalServiceEnvironment: 'Production'
+          ${{ else }}:
+            EndpointProviderType: 'Ev2Endpoint'
+            ConnectedServiceName: ${{ parameters.ev2ServiceConnection }}
+  
+# KeyVault Rollout
+- ${{ if ne(parameters.keyVaultRolloutSpecPath, '') }}: # Enable this stage only if keyVaultRolloutSpecPath is set
+  - stage: ${{ parameters.stagePrefix[parameters.environment] }}_KeyVault_Rollout
+    ${{ if eq( parameters.environment, 'Production') }}:
+      dependsOn:
+       - Prod_Deployment_Approval
+       - ${{ parameters.dependsOn }}
+    ${{ else }}:
+      dependsOn: ${{ parameters.dependsOn }}
+    variables:
+      ob_release_environment: ${{ parameters.ob_release_env[parameters.environment] }}
+      ${{ if in(parameters.environment, 'Production', 'PPE') }}:
+        ob_release_usedeploymentjob: true
+        ob_deploymentjob_environment: PaymentExperienceServices_Prod_Deployment
+    jobs:
+    - job: ${{ parameters.environment }}_PreApproval_KeyVault_Rollout
+      pool:
+        type: server
+      ${{ if in(parameters.environment, 'INT') }}: # Use manual validation for INT and PPE environments
+        steps:
+        - task: ManualValidation@0
+    - job: ${{ parameters.environment }}_KeyVault_Rollout
+      dependsOn: ${{ parameters.environment }}_PreApproval_KeyVault_Rollout
+      pool:
+        type: release
+      steps:
+      - download: ${{ parameters.pipelineArtifactName }}
+      - task: ExpressV2Internal@1
+        inputs:
+          UseServerMonitorTask: true
+          EnableStrictValidation: false
+          ValidateOnly: false
+          ServiceRootLocation: LinkedArtifact
+          RolloutSpecType: RSPath
+          ServiceRootPath: $(ServiceRootPath)
+          RolloutSpecPath: ${{ parameters.keyVaultRolloutSpecPath }}
+          ${{ if eq( parameters.environment, 'Production') }}:
+            EndpointProviderType:  'ApprovalService'
+            ApprovalServiceEnvironment: 'Production'
+          ${{ else }}:
+            EndpointProviderType: 'Ev2Endpoint'
+            ConnectedServiceName: ${{ parameters.ev2ServiceConnection }}
