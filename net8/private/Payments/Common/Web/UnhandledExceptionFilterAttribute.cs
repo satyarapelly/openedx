@@ -4,7 +4,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Commerce.Payments.Common.Tracing;
-using Microsoft.Commerce.Tracing;
 using Microsoft.Diagnostics.Tracing.Etlx;
 using System;
 using System.Net;

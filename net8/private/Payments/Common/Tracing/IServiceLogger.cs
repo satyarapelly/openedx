@@ -7,7 +7,7 @@ namespace Microsoft.Commerce.Payments.Common.Tracing
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
-    using Microsoft.Commerce.Tracing;
+    using Microsoft.Diagnostics.Tracing;
 
     public interface IServiceLogger
     {

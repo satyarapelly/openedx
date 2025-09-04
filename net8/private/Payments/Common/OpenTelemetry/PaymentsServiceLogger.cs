@@ -4,7 +4,7 @@ namespace Microsoft.Commerce.Payments.Common.OpenTelemetry
 {
     using System;
     using Microsoft.Commerce.Payments.Common.Tracing;
-    using Microsoft.Commerce.Tracing;
+    using Microsoft.Diagnostics.Tracing;
     using Microsoft.Extensions.Logging;
     using Newtonsoft.Json;
 
