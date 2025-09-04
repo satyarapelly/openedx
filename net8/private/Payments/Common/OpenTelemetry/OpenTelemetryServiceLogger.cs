@@ -8,7 +8,7 @@ namespace Microsoft.Commerce.Payments.Common.OpenTelemetry
     using System.Text;
     using System.Threading.Tasks;
     using Microsoft.Commerce.Payments.Common.Tracing;
-    using Microsoft.Commerce.Tracing;
+    using Microsoft.Diagnostics.Tracing;
     using Microsoft.Extensions.Logging;
 
     public class OpenTelemetryServiceLogger : IServiceLogger

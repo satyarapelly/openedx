@@ -1,89 +1,45 @@
-// <copyright file="SllLogger.cs" company="Microsoft">Copyright (c) Microsoft 2013. All rights reserved.</copyright>
-
 namespace Microsoft.Commerce.Payments.Common.Tracing
 {
-    using System;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Tracing;
-    using System.Net.Http;
-    using Microsoft.Commerce.Payments.Common;
-    using Microsoft.Commerce.Payments.Common.Web;
-    using Microsoft.Commerce.Tracing.Sll;
-    using Microsoft.CommonSchema.Services;
-    using Microsoft.CommonSchema.Services.Logging;
-    using Ms.Qos;
+    using Microsoft.Extensions.Logging;
     using Newtonsoft.Json;
+    using Ms.Qos;
+    using OtelSllLogger = Microsoft.Commerce.Payments.Common.OpenTelemetry.SllLogger;
 
     /// <summary>
-    /// The class of SllLogger.
+    /// Lightweight wrapper around OpenTelemetry SllLogger to preserve existing APIs
+    /// while removing the dependency on Microsoft.Commerce.Tracing.Sll.
     /// </summary>
     public static class SllLogger
     {
-        static SllLogger()
-        {
-            EnvironmentLogOption = LogOption.None;
-            Masker = new JsonDataMasker();
-        }
+        private const string SllLoggerMessageFormat =
+            "{ActivityId} {RelatedActivityId} {Component} {EventName} {Message} {Parameters}";
 
-        public static LogOption EnvironmentLogOption { get; private set; }
+        private static ILogger logger = LoggerFactory.Create(builder => { }).CreateLogger("SllLogger");
 
-        public static JsonDataMasker Masker { get; private set; }
+        public static LogOption EnvironmentLogOption { get; private set; } = LogOption.None;
 
-        public static void SetRealtimeLogging()
-        {
-            EnvironmentLogOption = LogOption.Realtime;
-        }
+        public static JsonDataMasker Masker { get; } = new JsonDataMasker();
 
         /// <summary>
-        /// Trace a general server message for debugging purpose. 
+        /// Allows consumers to provide their own logger instance.
         /// </summary>
-        /// <param name="message">The trace message.</param>
-        /// <param name="eventLevel">The event trace level. </param>
-        /// <param name="correlationId">The request correlation id, if it exists. </param>
-        /// <param name="trackingGuid">The request tracking guid, if it exists. </param>
-        public static void TraceMessage(string message, EventLevel eventLevel, string correlationId = null, string trackingGuid = null)
+        public static void Initialize(ILogger newLogger)
         {
-            ServerMessage serverMessage = new ServerMessage()
+            if (newLogger != null)
             {
-                CorrelationId = correlationId,
-                TrackingGuid = trackingGuid,
-                Message = Masker.MaskSingle(message)
-            };
-
-            serverMessage.Log(eventLevel, EnvironmentLogOption);
+                logger = newLogger;
+            }
         }
 
-        public static void TraceMetrics(
-            EventLevel eventLevel,
-            string serviceName, 
-            string metricsName, 
-            string status, 
-            string timestamp, 
-            double quantity,
-            string description = null,
-            string message = null,
-            string provider = null,
-            string merchantId = null,
-            string currency = null,
-            string filename = null)
-        {
-            MetricsDetails metrics = new MetricsDetails()
-            {
-                ServiceName = serviceName,
-                MetricsName = metricsName,
-                Status = status,
-                Timestamp = timestamp,
-                Quantity = quantity,
-                Description = description,
-                Message = message,
-                Provider = provider,
-                MerchantId = merchantId,
-                Currency = currency,
-                IngestedFileName = filename
-            };
+        public static void SetRealtimeLogging() => EnvironmentLogOption = LogOption.Realtime;
 
-            metrics.Log(eventLevel, EnvironmentLogOption);
+        /// <summary>
+        /// Trace a general server message for debugging purpose.
+        /// </summary>
+        public static void TraceMessage(string message, EventLevel eventLevel, string correlationId = null, string trackingGuid = null)
+        {
+            OtelSllLogger.TraceMessage(logger, message, eventLevel.ToQosEventLevel(), correlationId, trackingGuid);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801", Justification = "wfcRequest not yet used")]
@@ -105,29 +61,22 @@ namespace Microsoft.Commerce.Payments.Common.Tracing
             string flightingExperimentId,
             CommerceServiceRequestStatus serviceRequestStatus)
         {
-            TraceOutgoingServiceRequest(
+            OtelSllLogger.TraceServiceLoggingOutgoing(
+                logger,
                 dependencyServiceName,
-                dependencyServiceName,
-                "Service",
-                operationName,
                 operationName,
                 operationVersion,
-                requestTraceId,
-                serverTraceId,
                 remoteAddress,
                 protocol,
-                serviceRequestStatus != CommerceServiceRequestStatus.ServiceError ? "200" : "500",
-                "POST",
-                "application/xml",
-                null,
-                null,
+                wfcRequest,
+                wfcResponse,
                 requestPayload,
                 responsePayload,
-                string.IsNullOrEmpty(responsePayload) ? 0 : responsePayload.Length,
                 latencyMs,
+                requestTraceId,
+                serverTraceId,
                 message,
                 flightingExperimentId,
-                serviceRequestStatus != CommerceServiceRequestStatus.ServiceError,
                 serviceRequestStatus);
         }
 
@@ -156,54 +105,78 @@ namespace Microsoft.Commerce.Payments.Common.Tracing
             bool? success,
             CommerceServiceRequestStatus serviceRequestStatus)
         {
-            Ms.Qos.ServiceRequestStatus operationStatus;
-            if (!Enum.TryParse(serviceRequestStatus.ToString(), out operationStatus))
-            {
-                operationStatus = Ms.Qos.ServiceRequestStatus.Undefined;
-            }
+            OtelSllLogger.TraceOutgoingServiceRequest(
+                logger,
+                serviceName,
+                targetName,
+                targetType,
+                operationName,
+                targetOperationName,
+                targetOperationVersion,
+                requestTraceId,
+                serverTraceId,
+                targetUri,
+                protocol,
+                protocolStatusCode,
+                requestMethod,
+                responseContentType,
+                requestHeader,
+                responseHeader,
+                requestPayload,
+                responsePayload,
+                responseLength,
+                latencyMs,
+                message,
+                flightingExperimentId,
+                success,
+                serviceRequestStatus);
+        }
 
-            bool succeeded = success ?? operationStatus == Ms.Qos.ServiceRequestStatus.Success;
-
-            ClientOperationDetails operationDetails = new ClientOperationDetails()
+        public static void TraceMetrics(
+            EventLevel eventLevel,
+            string serviceName,
+            string metricsName,
+            string status,
+            string timestamp,
+            double quantity,
+            string description = null,
+            string message = null,
+            string provider = null,
+            string merchantId = null,
+            string currency = null,
+            string filename = null)
+        {
+            var level = eventLevel.ToQosEventLevel();
+            var payload = new
             {
                 ServiceName = serviceName,
-                RequestTraceId = requestTraceId,
-                ServerTraceId = serverTraceId,
-                RequestHeader = requestHeader,
-                ResponseHeader = responseHeader,
-                RequestDetails = Masker.MaskSingle((string)requestPayload),
-                ResponseDetails = Masker.MaskSingle((string)responsePayload),
+                MetricsName = metricsName,
+                Status = status,
+                Timestamp = timestamp,
+                Quantity = quantity,
+                Description = description,
                 Message = message,
-                baseData =
-                {
-                    operationName = operationName,
-                    latencyMs = latencyMs,
-                    serviceErrorCode = 0,
-                    protocol = protocol ?? string.Empty,
-                    protocolStatusCode = protocolStatusCode ?? string.Empty,
-                    requestMethod = requestMethod,
-                    responseContentType = responseContentType,
-                    requestStatus = operationStatus,
-                    succeeded = succeeded,
-                    targetUri = targetUri,
-                    dependencyName = targetName,
-                    dependencyOperationName = targetOperationName,
-                    dependencyOperationVersion = targetOperationVersion,
-                    dependencyType = targetType,
-                    responseSizeBytes = responseLength,
-                }
+                Provider = provider,
+                MerchantId = merchantId,
+                Currency = currency,
+                IngestedFileName = filename
             };
 
-            operationDetails.Log(
-                succeeded ? EventLevel.Informational : EventLevel.Error,
-                EnvironmentLogOption,
-                (envelope) =>
-                {
-                    if (!string.IsNullOrEmpty(flightingExperimentId))
-                    {
-                        envelope.SetApp(new Telemetry.Extensions.app { expId = flightingExperimentId.ToString() });
-                    }
-                });
+            switch (level)
+            {
+                case QosEventLevel.Error:
+                    logger.LogError(SllLoggerMessageFormat, string.Empty, string.Empty, serviceName, metricsName, message ?? string.Empty, JsonConvert.SerializeObject(payload));
+                    break;
+                case QosEventLevel.Warning:
+                    logger.LogWarning(SllLoggerMessageFormat, string.Empty, string.Empty, serviceName, metricsName, message ?? string.Empty, JsonConvert.SerializeObject(payload));
+                    break;
+                case QosEventLevel.Information:
+                    logger.LogInformation(SllLoggerMessageFormat, string.Empty, string.Empty, serviceName, metricsName, message ?? string.Empty, JsonConvert.SerializeObject(payload));
+                    break;
+                default:
+                    logger.LogTrace(SllLoggerMessageFormat, string.Empty, string.Empty, serviceName, metricsName, message ?? string.Empty, JsonConvert.SerializeObject(payload));
+                    break;
+            }
         }
     }
 }

@@ -66,10 +66,6 @@
                         <HintPath>..\..\nugets\net8.0\OpenTelemetry.Exporter.Geneva.dll</HintPath>
                         <Private>true</Private>
                 </Reference>
-                <Reference Include="Microsoft.CommonSchema.Bond">
-                        <HintPath>..\..\nugets\net8.0\Microsoft.CommonSchema.Bond.dll</HintPath>
-                        <Private>true</Private>
-                </Reference>
                 <Reference Include="Microsoft.Diagnostics.Tracing.TraceEvent">
                         <HintPath>..\..\nugets\net8.0\Microsoft.Diagnostics.Tracing.TraceEvent.dll</HintPath>
                         <Private>true</Private>

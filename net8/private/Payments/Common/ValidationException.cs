@@ -4,9 +4,8 @@ namespace Microsoft.Commerce.Payments.Common
 {
     using System;
     using System.Runtime.Serialization;
-    using Commerce.Tracing;
     using Microsoft.Commerce.Payments.Common.Tracing;
-    using Web;
+    using Microsoft.Commerce.Payments.Common.Web;
 
     [Serializable]
     public class ValidationException : Exception

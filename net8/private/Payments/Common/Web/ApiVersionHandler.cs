@@ -2,7 +2,6 @@
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.Commerce.Payments.Common.Tracing;
-using Microsoft.Commerce.Tracing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
