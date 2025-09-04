@@ -11,7 +11,6 @@ namespace Microsoft.Commerce.Payments.Common.Tracing
     using System.Text;
     using System.Threading.Tasks;
     using Microsoft.Commerce.Payments.Common.Web;
-    using Microsoft.Diagnostics.Tracing;
     using Newtonsoft.Json;
 
     public static class Logger

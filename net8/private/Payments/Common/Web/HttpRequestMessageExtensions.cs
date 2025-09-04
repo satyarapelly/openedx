@@ -6,7 +6,6 @@ namespace Microsoft.Commerce.Payments.Common.Web
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.WebUtilities;
     using Microsoft.Commerce.Payments.Common.Tracing;
-using Microsoft.Diagnostics.Tracing;
     using Microsoft.CommonSchema.Services.Logging;
     using Microsoft.Extensions.Primitives;
     using Newtonsoft.Json;

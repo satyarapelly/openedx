@@ -2,7 +2,6 @@
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Controllers;
-using Microsoft.Diagnostics.Tracing;
 using Microsoft.Commerce.Payments.Common.Tracing;
 using Microsoft.AspNetCore.Routing;
 using System;
