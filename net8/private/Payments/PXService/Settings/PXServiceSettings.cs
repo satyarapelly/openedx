@@ -30,7 +30,6 @@ namespace Microsoft.Commerce.Payments.PXService.Settings
     using Microsoft.Commerce.Payments.PXService.Accessors.TokenPolicyService;
     using Microsoft.Commerce.Payments.PXService.Accessors.TransactionDataService;
     using Microsoft.Commerce.Payments.PXService.Settings.FeatureConfig;
-    using Microsoft.Commerce.Tracing;
     using Microsoft.Identity.Web;
     using Newtonsoft.Json;
     using RiskService.V7;

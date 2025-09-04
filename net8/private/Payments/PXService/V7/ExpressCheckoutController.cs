@@ -14,7 +14,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using Microsoft.Commerce.Payments.PimsModel.V4;
     using Microsoft.Commerce.Payments.PXCommon;
     using Microsoft.Commerce.Payments.PXService.V7.PaymentClient;
-    using Microsoft.Commerce.Tracing;
     using Newtonsoft.Json;
     using static Microsoft.Commerce.Payments.PidlFactory.GlobalConstants.ServiceContextKeys;
     using PaymentInstrument = PimsModel.V4.PaymentInstrument;

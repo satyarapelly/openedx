@@ -10,7 +10,6 @@ namespace Microsoft.Commerce.Payments.PXService
     using Microsoft.Commerce.Payments.PXCommon;
     using Microsoft.Commerce.Payments.PXService.Model;
     using Microsoft.Commerce.Payments.PXService.V7.Contexts;
-    using Microsoft.Commerce.Tracing;
     using Microsoft.Extensions.Primitives;
     using Newtonsoft.Json;
     using System;

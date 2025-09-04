@@ -5,7 +5,6 @@ namespace Test.Common
     using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Commerce.Payments.Common.Transaction;
     using Microsoft.Commerce.Payments.Common.Web;
-    using Microsoft.Commerce.Tracing;
     using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;

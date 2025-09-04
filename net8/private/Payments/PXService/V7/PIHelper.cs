@@ -16,7 +16,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using Microsoft.Commerce.Payments.PXService.Model.PXInternal;
     using Microsoft.Commerce.Payments.PXService.Settings;
     using Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge;
-    using Microsoft.Commerce.Tracing;
 
     internal static class PIHelper
     {
