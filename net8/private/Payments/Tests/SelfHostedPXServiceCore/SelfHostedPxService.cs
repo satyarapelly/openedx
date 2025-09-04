@@ -86,6 +86,7 @@ namespace SelfHostedPXServiceCore
                 configureApp: app =>
                 {
                     app.UseMiddleware<PXServiceApiVersionHandler>();
+                    app.UseMiddleware<PXServiceFlightHandler>();
                     if (!WebHostingUtility.IsApplicationSelfHosted())
                     {
                       app.UseMiddleware<PXTraceCorrelationHandler>(
