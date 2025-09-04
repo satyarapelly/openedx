@@ -20,7 +20,6 @@ namespace Microsoft.Commerce.Payments.PXService.V7
     using Microsoft.Commerce.Payments.PXService.Model.WalletService;
     using Microsoft.Commerce.Payments.PXService.V7.PaymentChallenge.Model;
     using Newtonsoft.Json;
-    using Tracing;
     using static Microsoft.Commerce.Payments.PXService.V7.Constants;
 
     [ApiController]
