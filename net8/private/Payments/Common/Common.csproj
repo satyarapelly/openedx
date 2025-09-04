@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
         <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), build.root))\msbuild\Environment.props" />
         <Import Project="..\Payments.targets" />
 
@@ -70,10 +70,7 @@
                         <HintPath>..\..\nugets\net8.0\Microsoft.CommonSchema.Bond.dll</HintPath>
                         <Private>true</Private>
                 </Reference>
-                <Reference Include="Bond">
-                        <HintPath>..\..\nugets\net8.0\Bond.dll</HintPath>
-                        <Private>true</Private>
-                </Reference>
+               
                 <Reference Include="Bond.Attributes">
                         <HintPath>..\..\nugets\net8.0\Bond.Attributes.dll</HintPath>
                         <Private>true</Private>
