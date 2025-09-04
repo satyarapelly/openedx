@@ -29,49 +29,34 @@ namespace Microsoft.Commerce.Tracing.Sll
 {
     using System.Collections.Generic;
 
-    [global::Bond.Attribute("Description", "The metrics result of recon activities")]
-    [global::Bond.Schema]
     [System.CodeDom.Compiler.GeneratedCode("gbc", "0.13.0.0")]
     public partial class MetricsDetails
         : global::Microsoft.Telemetry.Data<global::Microsoft.Telemetry.Base>
     {
-        [global::Bond.Id(10), global::Bond.Required]
         public string ServiceName { get; set; }
 
-        [global::Bond.Id(20), global::Bond.Required]
         public string MetricsName { get; set; }
 
-        [global::Bond.Id(30), global::Bond.Required]
         public string Status { get; set; }
 
-        [global::Bond.Id(40), global::Bond.Required]
         public string Timestamp { get; set; }
 
-        [global::Bond.Id(50), global::Bond.Required]
         public double Quantity { get; set; }
 
-        [global::Bond.Id(60)]
         public string Description { get; set; }
 
-        [global::Bond.Id(70)]
         public string Message { get; set; }
 
-        [global::Bond.Id(80)]
         public string Provider { get; set; }
 
-        [global::Bond.Id(90)]
         public string MerchantId { get; set; }
 
-        [global::Bond.Id(100)]
         public string Currency { get; set; }
 
-        [global::Bond.Id(110)]
         public string IngestedFileName { get; set; }
 
-        [global::Bond.Id(120)]
         public string Version { get; set; }
 
-        [global::Bond.Id(130)]
         public string AdditionalData { get; set; }
 
         public MetricsDetails()

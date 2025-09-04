@@ -29,22 +29,16 @@ namespace Microsoft.Commerce.Tracing.Sll
 {
     using System.Collections.Generic;
 
-    [global::Bond.Attribute("Description", "Generic service message")]
-    [global::Bond.Schema]
     [System.CodeDom.Compiler.GeneratedCode("gbc", "0.13.0.0")]
     public partial class ServerMessage
         : global::Microsoft.Telemetry.Base
     {
-        [global::Bond.Id(10), global::Bond.Required]
         public string ServiceName { get; set; }
 
-        [global::Bond.Id(20), global::Bond.Required]
         public string CorrelationId { get; set; }
 
-        [global::Bond.Id(30)]
         public string TrackingGuid { get; set; }
 
-        [global::Bond.Id(40), global::Bond.Required]
         public string Message { get; set; }
 
         public ServerMessage()

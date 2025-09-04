@@ -29,43 +29,30 @@ namespace Microsoft.Commerce.Tracing.Sll
 {
     using System.Collections.Generic;
 
-    [global::Bond.Attribute("Description", "The operation details of client request.")]
-    [global::Bond.Schema]
     [System.CodeDom.Compiler.GeneratedCode("gbc", "0.13.0.0")]
     public partial class OperationDetails
         : global::Microsoft.Telemetry.Data<global::Ms.Qos.IncomingServiceRequest>
     {
-        [global::Bond.Id(10), global::Bond.Required]
         public string ServiceName { get; set; }
 
-        [global::Bond.Id(20), global::Bond.Required]
         public string RequestTraceId { get; set; }
 
-        [global::Bond.Id(30)]
         public string ServerTraceId { get; set; }
 
-        [global::Bond.Id(40)]
         public string RequestHeader { get; set; }
 
-        [global::Bond.Id(50)]
         public string ResponseHeader { get; set; }
 
-        [global::Bond.Id(60)]
         public string RequestDetails { get; set; }
 
-        [global::Bond.Id(70)]
         public string ResponseDetails { get; set; }
 
-        [global::Bond.Id(80)]
         public string Message { get; set; }
 
-        [global::Bond.Id(90)]
         public string component { get; set; }
 
-        [global::Bond.Id(100)]
         public string scenarioId { get; set; }
 
-        [global::Bond.Id(110)]
         public string Thumbprint { get; set; }
 
         public OperationDetails()
@@ -88,34 +75,24 @@ namespace Microsoft.Commerce.Tracing.Sll
         }
     }
 
-    [global::Bond.Attribute("Description", "The operation details of client request.")]
-    [global::Bond.Schema]
     [System.CodeDom.Compiler.GeneratedCode("gbc", "0.13.0.0")]
     public partial class ClientOperationDetails
         : global::Microsoft.Telemetry.Data<global::Ms.Qos.OutgoingServiceRequest>
     {
-        [global::Bond.Id(10), global::Bond.Required]
         public string ServiceName { get; set; }
 
-        [global::Bond.Id(20), global::Bond.Required]
         public string RequestTraceId { get; set; }
 
-        [global::Bond.Id(30)]
         public string ServerTraceId { get; set; }
 
-        [global::Bond.Id(40)]
         public string RequestHeader { get; set; }
 
-        [global::Bond.Id(50)]
         public string ResponseHeader { get; set; }
 
-        [global::Bond.Id(60)]
         public string RequestDetails { get; set; }
 
-        [global::Bond.Id(70)]
         public string ResponseDetails { get; set; }
 
-        [global::Bond.Id(80)]
         public string Message { get; set; }
 
         public ClientOperationDetails()

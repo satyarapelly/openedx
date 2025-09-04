@@ -29,73 +29,50 @@ namespace Microsoft.Commerce.Tracing.Sll
 {
     using System.Collections.Generic;
 
-    [global::Bond.Attribute("Description", "The operation details of an incoming request to PXService.")]
-    [global::Bond.Schema]
     [System.CodeDom.Compiler.GeneratedCode("gbc", "0.13.0.0")]
     public partial class PXServiceIncomingOperation
         : global::Microsoft.Telemetry.Data<global::Ms.Qos.IncomingServiceRequest>
     {
-        [global::Bond.Id(10), global::Bond.Required]
         public string ServiceName { get; set; }
 
-        [global::Bond.Id(20), global::Bond.Required]
         public string RequestTraceId { get; set; }
 
-        [global::Bond.Id(30)]
         public string ServerTraceId { get; set; }
 
-        [global::Bond.Id(40)]
         public string AccountId { get; set; }
 
-        [global::Bond.Id(50)]
         public string InstrumentId { get; set; }
 
-        [global::Bond.Id(60)]
         public string PaymentMethodFamily { get; set; }
 
-        [global::Bond.Id(70)]
         public string PaymentMethodType { get; set; }
 
-        [global::Bond.Id(80)]
         public string Country { get; set; }
 
-        [global::Bond.Id(90)]
         public string ErrorCode { get; set; }
 
-        [global::Bond.Id(100)]
         public string ErrorMessage { get; set; }
 
-        [global::Bond.Id(110)]
         public string RequestHeader { get; set; }
 
-        [global::Bond.Id(120)]
         public string ResponseHeader { get; set; }
 
-        [global::Bond.Id(130)]
         public string RequestDetails { get; set; }
 
-        [global::Bond.Id(140)]
         public string ResponseDetails { get; set; }
 
-        [global::Bond.Id(150)]
         public string Message { get; set; }
 
-        [global::Bond.Id(160)]
         public string StartTime { get; set; }
 
-        [global::Bond.Id(170)]
         public bool IsTest { get; set; }
 
-        [global::Bond.Id(180)]
         public string AuthenticationInfo { get; set; }
 
-        [global::Bond.Id(190)]
         public string Partner { get; set; }
 
-        [global::Bond.Id(200)]
         public string PidlOperation { get; set; }
 
-        [global::Bond.Id(210)]
         public string AvsSuggest { get; set; }
 
         public PXServiceIncomingOperation()
@@ -127,40 +104,28 @@ namespace Microsoft.Commerce.Tracing.Sll
         }
     }
 
-    [global::Bond.Attribute("Description", "The operation details of an incoming request.")]
-    [global::Bond.Schema]
     [System.CodeDom.Compiler.GeneratedCode("gbc", "0.13.0.0")]
     public partial class PXServiceOutgoingOperation
         : global::Microsoft.Telemetry.Data<global::Ms.Qos.OutgoingServiceRequest>
     {
-        [global::Bond.Id(10), global::Bond.Required]
         public string ServiceName { get; set; }
 
-        [global::Bond.Id(20), global::Bond.Required]
         public string RequestTraceId { get; set; }
 
-        [global::Bond.Id(30)]
         public string RequestHeader { get; set; }
 
-        [global::Bond.Id(40)]
         public string ResponseHeader { get; set; }
 
-        [global::Bond.Id(50)]
         public string RequestDetails { get; set; }
 
-        [global::Bond.Id(60)]
         public string ResponseDetails { get; set; }
 
-        [global::Bond.Id(70)]
         public string Message { get; set; }
 
-        [global::Bond.Id(80)]
         public string StartTime { get; set; }
 
-        [global::Bond.Id(90)]
         public string CertInfo { get; set; }
 
-        [global::Bond.Id(100)]
         public string ServicePointData { get; set; }
 
         public PXServiceOutgoingOperation()
@@ -182,37 +147,26 @@ namespace Microsoft.Commerce.Tracing.Sll
         }
     }
 
-    [global::Bond.Attribute("Description", "The operation details of an outgoing request where a PI was added on offer aka incentive program.")]
-    [global::Bond.Schema]
     [System.CodeDom.Compiler.GeneratedCode("gbc", "0.13.0.0")]
     public partial class PXServicePIAddedOnOffer
         : global::Microsoft.Telemetry.Data<global::Microsoft.Telemetry.Base>
     {
-        [global::Bond.Id(10), global::Bond.Required]
         public string serviceName { get; set; }
 
-        [global::Bond.Id(20), global::Bond.Required]
         public string requestTraceId { get; set; }
 
-        [global::Bond.Id(30), global::Bond.Required]
         public string paymentInstrumentId { get; set; }
 
-        [global::Bond.Id(40), global::Bond.Required]
         public string paymentMethodFamily { get; set; }
 
-        [global::Bond.Id(50), global::Bond.Required]
         public string paymentMethodType { get; set; }
 
-        [global::Bond.Id(60), global::Bond.Required]
         public string partner { get; set; }
 
-        [global::Bond.Id(70), global::Bond.Required]
         public string country { get; set; }
 
-        [global::Bond.Id(80), global::Bond.Required]
         public string offerId { get; set; }
 
-        [global::Bond.Id(90), global::Bond.Required]
         public string puid { get; set; }
 
         public PXServicePIAddedOnOffer()
@@ -233,25 +187,18 @@ namespace Microsoft.Commerce.Tracing.Sll
         }
     }
 
-    [global::Bond.Attribute("Description", "Generic service message")]
-    [global::Bond.Schema]
     [System.CodeDom.Compiler.GeneratedCode("gbc", "0.13.0.0")]
     public partial class PXServiceOperationTrace
         : global::Microsoft.Telemetry.Data<global::Microsoft.Telemetry.Base>
     {
-        [global::Bond.Id(10), global::Bond.Required]
         public string OperationName { get; set; }
 
-        [global::Bond.Id(20), global::Bond.Required]
         public string AccountId { get; set; }
 
-        [global::Bond.Id(30), global::Bond.Required]
         public string CorrelationId { get; set; }
 
-        [global::Bond.Id(40)]
         public string SessionId { get; set; }
 
-        [global::Bond.Id(50), global::Bond.Required]
         public string Message { get; set; }
 
         public PXServiceOperationTrace()
@@ -268,19 +215,14 @@ namespace Microsoft.Commerce.Tracing.Sll
         }
     }
 
-    [global::Bond.Attribute("Description", "Generic service message")]
-    [global::Bond.Schema]
     [System.CodeDom.Compiler.GeneratedCode("gbc", "0.13.0.0")]
     public partial class PXServiceOperationFault
         : PXServiceOperationTrace
     {
-        [global::Bond.Id(10), global::Bond.Required]
         public string Target { get; set; }
 
-        [global::Bond.Id(20), global::Bond.Required]
         public string Details { get; set; }
 
-        [global::Bond.Id(30), global::Bond.Required]
         public string StackTrace { get; set; }
 
         public PXServiceOperationFault()
@@ -295,46 +237,26 @@ namespace Microsoft.Commerce.Tracing.Sll
         }
     }
 
-    [global::Bond.Attribute("Description", "A generic message for ingestion service jobs.")]
-    [global::Bond.Schema]
     [System.CodeDom.Compiler.GeneratedCode("gbc", "0.13.0.0")]
     public partial class PXServiceIngestionMessage
         : global::Microsoft.Telemetry.Data<global::Microsoft.Telemetry.Base>
     {
-        [global::Bond.Attribute("Description", "The service name.")]
-        [global::Bond.Id(10), global::Bond.Required]
         public string ServiceName { get; set; }
 
-        [global::Bond.Attribute("Description", "The correlation id of this request.")]
-        [global::Bond.Id(20), global::Bond.Required]
         public string CorrelationId { get; set; }
 
-        [global::Bond.Attribute("Description", "The name of the base ingestion job.")]
-        [global::Bond.Id(30), global::Bond.Required]
         public string JobName { get; set; }
 
-        [global::Bond.Attribute("Description", "The name of the subjob.")]
-        [global::Bond.Id(40)]
         public string SubJobName { get; set; }
 
-        [global::Bond.Attribute("Description", "Message to be logged")]
-        [global::Bond.Id(50), global::Bond.Required]
         public string Message { get; set; }
 
-        [global::Bond.Attribute("Description", "Latency of operation")]
-        [global::Bond.Id(60)]
         public long LatencyMs { get; set; }
 
-        [global::Bond.Attribute("Description", "Optional parameter to log details 1.")]
-        [global::Bond.Id(70)]
         public string Target1 { get; set; }
 
-        [global::Bond.Attribute("Description", "Optional parameter to log details 2.")]
-        [global::Bond.Id(80)]
         public string Target2 { get; set; }
 
-        [global::Bond.Attribute("Description", "Optional parameter to log details 3.")]
-        [global::Bond.Id(90)]
         public string Target3 { get; set; }
 
         public PXServiceIngestionMessage()
@@ -354,25 +276,18 @@ namespace Microsoft.Commerce.Tracing.Sll
         }
     }
 
-    [global::Bond.Attribute("Description", "For logging integration error of an incoming request to PXService.")]
-    [global::Bond.Schema]
     [System.CodeDom.Compiler.GeneratedCode("gbc", "0.13.0.0")]
     public partial class PXServiceIntegrationError
         : global::Microsoft.Telemetry.Data<global::Microsoft.Telemetry.Base>
     {
-        [global::Bond.Id(10), global::Bond.Required]
         public string ServiceName { get; set; }
 
-        [global::Bond.Id(20), global::Bond.Required]
         public string RequestTraceId { get; set; }
 
-        [global::Bond.Id(30)]
         public string ServerTraceId { get; set; }
 
-        [global::Bond.Id(40), global::Bond.Required]
         public string IntegrationErrorCode { get; set; }
 
-        [global::Bond.Id(50), global::Bond.Required]
         public string Message { get; set; }
 
         public PXServiceIntegrationError()
@@ -389,25 +304,16 @@ namespace Microsoft.Commerce.Tracing.Sll
         }
     }
 
-    [global::Bond.Attribute("Description", "For logging exceptions in PXService")]
-    [global::Bond.Schema]
     [System.CodeDom.Compiler.GeneratedCode("gbc", "0.13.0.0")]
     public partial class PXServiceTraceException
         : global::Microsoft.Telemetry.Data<global::Microsoft.Telemetry.Base>
     {
-        [global::Bond.Attribute("Description", "The service name.")]
-        [global::Bond.Id(10), global::Bond.Required]
         public string ServiceName { get; set; }
 
-        [global::Bond.Id(20), global::Bond.Required]
         public string RequestTraceId { get; set; }
 
-        [global::Bond.Attribute("Description", "The status code in the response.")]
-        [global::Bond.Id(30), global::Bond.Required]
         public string StatusCode { get; set; }
 
-        [global::Bond.Attribute("Description", "The exception message")]
-        [global::Bond.Id(40), global::Bond.Required]
         public string Exception { get; set; }
 
         public PXServiceTraceException()
@@ -423,34 +329,24 @@ namespace Microsoft.Commerce.Tracing.Sll
         }
     }
 
-    [global::Bond.Attribute("Description", "For logging integration error of an incoming request to PXService with MISE framework.")]
-    [global::Bond.Schema]
     [System.CodeDom.Compiler.GeneratedCode("gbc", "0.13.0.0")]
     public partial class MISETokenValidationResult
         : global::Microsoft.Telemetry.Data<global::Microsoft.Telemetry.Base>
     {
-        [global::Bond.Id(10), global::Bond.Required]
         public bool Success { get; set; }
 
-        [global::Bond.Id(20), global::Bond.Required]
         public long Latency { get; set; }
 
-        [global::Bond.Id(30)]
         public string CV { get; set; }
 
-        [global::Bond.Id(40)]
         public string ApplicationId { get; set; }
 
-        [global::Bond.Id(50)]
         public string Exception { get; set; }
 
-        [global::Bond.Id(60)]
         public string AuthenticationErrorCode { get; set; }
 
-        [global::Bond.Id(70)]
         public string Message { get; set; }
 
-        [global::Bond.Id(80)]
         public string CloudInstance { get; set; }
 
         public MISETokenValidationResult()
@@ -468,31 +364,22 @@ namespace Microsoft.Commerce.Tracing.Sll
         }
     }
 
-    [global::Bond.Attribute("Description", "For logging integration error of an token generation logic.")]
-    [global::Bond.Schema]
     [System.CodeDom.Compiler.GeneratedCode("gbc", "0.13.0.0")]
     public partial class TokenGenerationResult
         : global::Microsoft.Telemetry.Data<global::Microsoft.Telemetry.Base>
     {
-        [global::Bond.Id(10), global::Bond.Required]
         public bool Success { get; set; }
 
-        [global::Bond.Id(20), global::Bond.Required]
         public string Resource { get; set; }
 
-        [global::Bond.Id(30), global::Bond.Required]
         public string ClientID { get; set; }
 
-        [global::Bond.Id(40), global::Bond.Required]
         public long Latency { get; set; }
 
-        [global::Bond.Id(50)]
         public string CV { get; set; }
 
-        [global::Bond.Id(60)]
         public string Exception { get; set; }
 
-        [global::Bond.Id(70)]
         public string ExpiresOn { get; set; }
 
         public TokenGenerationResult()

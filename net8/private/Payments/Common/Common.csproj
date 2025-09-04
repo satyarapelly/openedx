@@ -70,23 +70,6 @@
                         <HintPath>..\..\nugets\net8.0\Microsoft.CommonSchema.Bond.dll</HintPath>
                         <Private>true</Private>
                 </Reference>
-               
-                <Reference Include="Bond.Attributes">
-                        <HintPath>..\..\nugets\net8.0\Bond.Attributes.dll</HintPath>
-                        <Private>true</Private>
-                </Reference>
-                <Reference Include="Bond.IO">
-                        <HintPath>..\..\nugets\net8.0\Bond.IO.dll</HintPath>
-                        <Private>true</Private>
-                </Reference>
-                <Reference Include="Bond.JSON">
-                        <HintPath>..\..\nugets\net8.0\Bond.JSON.dll</HintPath>
-                        <Private>true</Private>
-                </Reference>
-                <Reference Include="Bond.Reflection">
-                        <HintPath>..\..\nugets\net8.0\Bond.Reflection.dll</HintPath>
-                        <Private>true</Private>
-                </Reference>
                 <Reference Include="Microsoft.Diagnostics.Tracing.TraceEvent">
                         <HintPath>..\..\nugets\net8.0\Microsoft.Diagnostics.Tracing.TraceEvent.dll</HintPath>
                         <Private>true</Private>
