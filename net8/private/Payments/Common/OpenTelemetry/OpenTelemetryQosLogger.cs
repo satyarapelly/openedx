@@ -11,7 +11,6 @@ namespace Microsoft.Commerce.Payments.Common.OpenTelemetry
     using System.Threading.Tasks;
     using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Commerce.Payments.Common.Web;
-    using Microsoft.Diagnostics.Tracing;
     using Microsoft.Extensions.Logging;
 
     public class OpenTelemetryQosLogger : IQosLogger

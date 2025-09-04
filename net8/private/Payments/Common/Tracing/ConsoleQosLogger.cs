@@ -6,7 +6,6 @@ namespace Microsoft.Commerce.Payments.Common.Tracing
 {
     using Microsoft.AspNetCore.Http;
     using Microsoft.Commerce.Payments.Common.Web;
-    using Microsoft.Diagnostics.Tracing;
     using Newtonsoft.Json;
     using System;
     using System.Diagnostics;

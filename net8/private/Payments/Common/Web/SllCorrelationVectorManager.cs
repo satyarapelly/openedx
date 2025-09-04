@@ -9,7 +9,6 @@ namespace Microsoft.Commerce.Payments.Common.Web
     using System.Web;
     using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.CommonSchema.Services.Logging;
-    using Microsoft.Diagnostics.Tracing;
 
     /// <summary>
     ///  The Sll correlation vector manager library.

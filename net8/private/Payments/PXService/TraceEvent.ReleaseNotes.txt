@@ -7,15 +7,7 @@ Version 1.0.0.3  - Initial release to NuGet, pre-release.
         has changed to help in this port.  
 
            * The DLL has been renamed from TraceEvent.dll to Microsoft.Diagnostics.Tracing.TraceEvent.dll
-           * The name spaces for all classes have been changed.   The easiest way to port is to simply place
-             the following using clauses at the top of any file that uses TraceEvent classes
-                       using Microsoft.Diagnostics.Symbols;
-               using Microsoft.Diagnostics.Tracing;
-               using Microsoft.Diagnostics.Tracing.Etlx;
-               using Microsoft.Diagnostics.Tracing.Parsers.Clr;
-               using Microsoft.Diagnostics.Tracing.Parsers.Kernel;
-               using Microsoft.Diagnostics.Tracing.Session;
-               using Microsoft.Diagnostics.Tracing.Stacks;
+           * The name spaces for all classes have been changed.
            * Any method with the name RelMSec in it has been changed to be RelativeMSec.   The easiest port is to
              simply globally rename RelMSec to RelativeMSec
            * Any property in the Trace* classes that has the form Max*Index  has been renamed to Count.  
