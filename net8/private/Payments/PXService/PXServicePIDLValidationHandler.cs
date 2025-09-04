@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Commerce.Payments.Common.Tracing;
 using Microsoft.Commerce.Payments.Common.Web;
 using Microsoft.Commerce.Payments.PXCommon;
-using Microsoft.Commerce.Tracing;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;

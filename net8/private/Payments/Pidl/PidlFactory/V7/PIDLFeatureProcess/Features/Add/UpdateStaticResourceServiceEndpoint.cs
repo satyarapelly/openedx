@@ -8,7 +8,6 @@ namespace Microsoft.Commerce.Payments.PidlFactory.V7.PIDLFeatureProcess
     using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Commerce.Payments.Common.Web;
     using Microsoft.Commerce.Payments.PidlModel.V7;
-    using Microsoft.Commerce.Tracing;
 
     /**
      * This feature is used to update all the logo urls in pidl display hints to point to staticresources CDN

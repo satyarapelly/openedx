@@ -7,7 +7,6 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.NetworkTokenizationSer
 	using Microsoft.Commerce.Payments.Common.Tracing;
     using Microsoft.Commerce.Payments.PimsModel.V4;
     using Microsoft.Commerce.Payments.PXService.Model.NetworkTokenizationService;
-    using Microsoft.Commerce.Tracing;
 
     public interface INetworkTokenizationServiceAccessor
     {

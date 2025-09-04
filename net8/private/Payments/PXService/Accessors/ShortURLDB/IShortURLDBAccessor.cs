@@ -9,7 +9,6 @@ namespace Microsoft.Commerce.Payments.PXService.Accessors.ShortURLDB
     using System.Threading.Tasks;
     using Microsoft.Commerce.Payments.PXService.Model.ShortURLDB;
     using Microsoft.Commerce.Payments.PXService.Model.ShortURLService;
-    using Microsoft.Commerce.Tracing;
 
     public interface IShortURLDBAccessor
     {

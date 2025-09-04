@@ -5,7 +5,6 @@ namespace Microsoft.Commerce.Payments.PXCommon
     using System;
     using System.Diagnostics;
     using Microsoft.Commerce.Payments.Common.Tracing;
-    using Microsoft.Commerce.Tracing;
 
     /// <summary>
     /// Performance Instrumentation/Tracing class to log the performance of all the 
@@ -19,16 +18,12 @@ namespace Microsoft.Commerce.Payments.PXCommon
 
         private Stopwatch stopwatch = null;
         private string eventName;
-        private EventTraceActivity traceActivityId;
         private string perfEventCorrelationId;
-
-        public PerformanceTracingScope(string eventName, EventTraceActivity traceActivityId)
+        public PerformanceTracingScope(string eventName)
         {
             ArgumentValidator.EnsureNotNullOrWhitespace(eventName, "eventName");
-            ArgumentValidator.EnsureNotNull(traceActivityId, "eventTraceActivity");
 
             this.eventName = eventName;
-            this.traceActivityId = traceActivityId;
             this.StartTracing();
         }
 

@@ -18,10 +18,6 @@
                         <HintPath>..\..\..\nugets\net8.0\Microsoft.CommonSchema.Services.dll</HintPath>
                         <Private>true</Private>
                 </Reference>
-                <Reference Include="Microsoft.CommonSchema.Bond">
-                        <HintPath>..\..\..\nugets\net8.0\Microsoft.CommonSchema.Bond.dll</HintPath>
-                        <Private>true</Private>
-                </Reference>
         </ItemGroup>
 
 	<ItemGroup>

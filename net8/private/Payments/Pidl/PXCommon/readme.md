@@ -104,11 +104,9 @@ Introduced a new Spin Operator for Correlation Vector.
             .LogSeqProcessStateCompleted(elapsed);
 ```
 ## Updated dependent packages
-    - Microsoft.CommonSchema.Bond v4.0.17331.1
     - Ms.Qos v4.0.17331.1
     - Ms.Qos.IncomingServiceRequest v4.0.17331.1
     - Ms.Qos.OutgoingServiceRequest v4.0.17331.1
-    - Bond.CSharp v7.0.1
     - NewtonSoft.Json v9.0.1
     - Microsoft.Diagnostics.Tracing.EventSource v1.1.28
 
